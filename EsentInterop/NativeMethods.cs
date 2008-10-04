@@ -92,21 +92,11 @@ namespace Esent.Interop
         [DllImport(EsentDLL)]
         public static extern int JetGotoBookmark(IntPtr sesid, IntPtr tableid, IntPtr pvBookmark, uint cbBookmark);
 
-        /*
-        JET_ERR JET_API JetRetrieveColumn(
-  __in          JET_SESID sesid,
-  __in          JET_TABLEID tableid,
-  __in          JET_COLUMNID columnid,
-  __out_opt     void* pvData,
-  __in          unsigned long cbData,
-  __out_opt     unsigned long* pcbActual,
-  __in          JET_GRBIT grbit,
-  __in_out_opt  JET_RETINFO* pretinfo
-);
-         */
-
         [DllImport(EsentDLL)]
         public static extern int JetRetrieveColumn(IntPtr sesid, IntPtr tableid, uint columnid, IntPtr pvData, uint cbData, ref uint cbActual, uint grbit, IntPtr pretinfo);
+
+        [DllImport(EsentDLL)]
+        public static extern int JetMove(IntPtr sesid, IntPtr tableid, int cRow, uint grbit);
 
         #endregion
 

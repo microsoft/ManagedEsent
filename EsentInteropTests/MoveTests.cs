@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="BasicTableTests.cs" company="Microsoft Corporation">
+// <copyright file="MoveTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
 //-----------------------------------------------------------------------
@@ -13,10 +13,10 @@ namespace InteropApiTests
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
-    /// Basic API tests
+    /// Test JetMove
     /// </summary>
     [TestClass]
-    public class BasicTableTests
+    public class MoveTests
     {
         /// <summary>
         /// The directory being used for the database and its files.
@@ -54,9 +54,14 @@ namespace InteropApiTests
         private JET_TABLEID tableid;
 
         /// <summary>
-        /// Columnid of the LongText column in the table.
+        /// Columnid of the Long column in the table.
         /// </summary>
-        private JET_COLUMNID columnidLongText;
+        private JET_COLUMNID columnidLong;
+
+        /// <summary>
+        /// Number of records inserted in the table.
+        /// </summary>
+        private readonly int numRecords = 5;
 
         /// <summary>
         /// Initialization method. Called once when the tests are started.
@@ -79,9 +84,17 @@ namespace InteropApiTests
             var columndef = new JET_COLUMNDEF()
             {
                 cp = JET_CP.Unicode,
-                coltyp = JET_coltyp.LongText,
+                coltyp = JET_coltyp.Long,
             };
-            API.JetAddColumn(this.sesid, this.tableid, "LongText", columndef, null, 0, out this.columnidLongText);
+            API.JetAddColumn(this.sesid, this.tableid, "Long", columndef, null, 0, out this.columnidLong);
+
+            for (int i = 0; i < this.numRecords; ++i)
+            {
+                API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+                API.JetSetColumn(this.sesid, this.tableid, this.columnidLong, BitConverter.GetBytes(i), 4, SetColumnGrbit.None, null);
+                int ignored;
+                API.JetUpdate(this.sesid, this.tableid, null, 0, out ignored);
+            }
 
             API.JetCloseTable(this.sesid, this.tableid);
             API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
@@ -101,90 +114,79 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Inserts a record and retrieve it.
+        /// Test moving to the first record.
         /// </summary>
         [TestMethod]
-        public void InsertRecordTest()
+        public void MoveFirstTest()
         {
-            string s = "a test string";
-
-            API.JetBeginTransaction(this.sesid);
-            API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
-            this.SetColumnFromString(s);
-            this.UpdateAndGotoBookmark();
-            Assert.AreEqual(s, this.RetrieveColumnAsString());
+            int expected = 0;
+            API.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
+            int actual = this.GetLongColumn();
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Test setting and retrieving a column with the ColumnStream class.
+        /// Test moving to the next record.
         /// </summary>
         [TestMethod]
-        public void ColumnStreamTest()
+        public void MoveNextTest()
         {
-            string s = "the string to be inserted";
-
-            API.JetBeginTransaction(this.sesid);
-            API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
-            using (var writer = new StreamWriter(new ColumnStream(this.sesid, this.tableid, this.columnidLongText)))
-            {
-                writer.WriteLine(s);
-            }
-
-            this.UpdateAndGotoBookmark();
-
-            using (var reader = new StreamReader(new ColumnStream(this.sesid, this.tableid, this.columnidLongText)))
-            {
-                string actual = reader.ReadLine();
-                Assert.AreEqual(s, actual);
-            }
+            int expected = 1;
+            API.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
+            API.JetMove(this.sesid, this.tableid, JET_Move.Next, MoveGrbit.None);
+            int actual = this.GetLongColumn();
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Insert a record and delete it.
+        /// Test moving several records.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(EsentException))]
-        public void InsertAndDeleteTest()
+        public void MoveTest()
         {
-            API.JetBeginTransaction(this.sesid);
-            API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
-            this.UpdateAndGotoBookmark();
-            API.JetDelete(this.sesid, this.tableid);
-            this.RetrieveColumnAsString();
+            int expected = 3;
+            API.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
+            API.JetMove(this.sesid, this.tableid, expected, MoveGrbit.None);
+            int actual = this.GetLongColumn();
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Update the cursor and goto the returned bookmark.
+        /// Test moving to the last record.
         /// </summary>
-        private void UpdateAndGotoBookmark()
+        [TestMethod]
+        public void MoveLastTest()
         {
-            byte[] bookmark = new byte[256];
-            int bookmarkSize;
-            API.JetUpdate(this.sesid, this.tableid, bookmark, bookmark.Length, out bookmarkSize);
-            API.JetGotoBookmark(this.sesid, this.tableid, bookmark, bookmarkSize);
+            int expected = this.numRecords-1;
+            API.JetMove(this.sesid, this.tableid, JET_Move.Last, MoveGrbit.None);
+            int actual = this.GetLongColumn();
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Sets the LongText column in the table from a string. An update must be prepared.
+        /// Test moving to the previous record.
         /// </summary>
-        /// <param name="s">The string to set.</param>
-        private void SetColumnFromString(string s)
+        [TestMethod]
+        public void MovePreviousTest()
         {
-            byte[] data = Encoding.Unicode.GetBytes(s);
-            API.JetSetColumn(this.sesid, this.tableid, this.columnidLongText, data, data.Length, SetColumnGrbit.None, null);
+            int expected = this.numRecords - 2;
+            API.JetMove(this.sesid, this.tableid, JET_Move.Last, MoveGrbit.None);
+            API.JetMove(this.sesid, this.tableid, JET_Move.Previous, MoveGrbit.None);
+            int actual = this.GetLongColumn();
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Returns the value in the LongText column as a string. The cursor must be on a record.
+        /// Return the value of the columnidLong of the current record.
         /// </summary>
-        /// <returns>The value of the LongText column as a string.</returns>
-        private string RetrieveColumnAsString()
+        /// <returns>The value of the columnid, converted to an int.</returns>
+        private int GetLongColumn()
         {
-            int retrievedSize;
-            API.JetRetrieveColumn(this.sesid, this.tableid, this.columnidLongText, null, 0, out retrievedSize, RetrieveColumnGrbit.None, null);
-            var buffer = new byte[retrievedSize];
-            API.JetRetrieveColumn(this.sesid, this.tableid, this.columnidLongText, buffer, buffer.Length, out retrievedSize, RetrieveColumnGrbit.None, null);
-            return Encoding.Unicode.GetString(buffer, 0, retrievedSize);
+            byte[] data = new byte[4];
+            int actualDataSize;
+            API.JetRetrieveColumn(this.sesid, this.tableid, this.columnidLong, data, data.Length, out actualDataSize, RetrieveColumnGrbit.None, null);
+            Assert.AreEqual(data.Length, actualDataSize);
+            return BitConverter.ToInt32(data, 0);
         }
     }
 }

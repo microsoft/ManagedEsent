@@ -320,6 +320,34 @@ namespace Esent.Interop
             Check(UncheckedApi.JetRetrieveColumn(sesid, tableid, columnid, data, dataSize, out actualDataSize, grbit, retinfo));
         }
 
+        /// <summary>
+        /// Navigate through an index. The cursor can be positioned at the start or
+        /// end of the index and moved backwards and forwards by a specified number
+        /// of index entries.
+        /// </summary>
+        /// <param name="sesid">The session to use for the call.</param>
+        /// <param name="tableid">The cursor to position.</param>
+        /// <param name="numRows">An offset which indicates how far to move the cursor.</param>
+        /// <param name="grbit">Move options.</param>
+        public static void JetMove(JET_SESID sesid, JET_TABLEID tableid, int numRows, MoveGrbit grbit)
+        {
+            Check(UncheckedApi.JetMove(sesid, tableid, numRows, grbit));
+        }
+
+        /// <summary>
+        /// Navigate through an index. The cursor can be positioned at the start or
+        /// end of the index and moved backwards and forwards by a specified number
+        /// of index entries.
+        /// </summary>
+        /// <param name="sesid">The session to use for the call.</param>
+        /// <param name="tableid">The cursor to position.</param>
+        /// <param name="numRows">An offset which indicates how far to move the cursor.</param>
+        /// <param name="grbit">Move options.</param>
+        public static void JetMove(JET_SESID sesid, JET_TABLEID tableid, JET_Move numRows, MoveGrbit grbit)
+        {
+            Check(UncheckedApi.JetMove(sesid, tableid, (int)numRows, grbit));
+        }
+
         #endregion
 
         #region DML

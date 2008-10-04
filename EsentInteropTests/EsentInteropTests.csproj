@@ -51,6 +51,7 @@
     <Compile Include="BasicTableTests.cs" />
     <Compile Include="ColumndefTests.cs" />
     <Compile Include="InstanceParameterTests.cs" />
+    <Compile Include="MoveTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="InitTermTests.cs" />
     <Compile Include="RetinfoTests.cs" />

@@ -217,6 +217,11 @@ namespace Esent.Interop
             return err;
         }
 
+        public static int JetMove(JET_SESID sesid, JET_TABLEID tableid, int numRows, MoveGrbit grbit)
+        {
+            return NativeMethods.JetMove(sesid.Value, tableid.Value, numRows, (uint)grbit);
+        }
+
         #endregion
 
         #region DML

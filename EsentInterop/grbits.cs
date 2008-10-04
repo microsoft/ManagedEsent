@@ -313,6 +313,25 @@ namespace Esent.Interop
     }
 
     /// <summary>
+    /// Options for JetMove
+    /// </summary>
+    public enum MoveGrbit : int
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None,
+
+        /// <summary>
+        /// Moves the cursor forward or backward by the number of index entries
+        /// required to skip the requested number of index key values encountered
+        /// in the index. This has the effect of collapsing index entries with
+        /// duplicate key values into a single index entry.
+        /// </summary>
+        MoveKeyNE = 0x1,
+    }
+
+    /// <summary>
     /// Options for the JET_COLUMNDEF structure.
     /// </summary>
     [Flags]
