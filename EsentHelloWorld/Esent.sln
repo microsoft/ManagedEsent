@@ -1,10 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "HelloWorld.csproj", "{CE455EB3-3C21-4A94-B091-2CB86725D0F6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteropApiTests", "..\InteropApiTests\InteropApiTests.csproj", "{85B2B7BB-BF95-42DF-8CBF-348AEF63BD1F}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{18B3E50E-454E-49DB-A92F-E1D7DAD2AF7D}"
 	ProjectSection(SolutionItems) = preProject
 		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
@@ -13,15 +9,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EsentInterop", "..\EsentInterop\EsentInterop.csproj", "{E929E163-52A0-4AAC-917B-6D7FAF70C45E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EsentHelloWorld", "EsentHelloWorld.csproj", "{CE455EB3-3C21-4A94-B091-2CB86725D0F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EsentInteropTests", "..\EsentInteropTests\EsentInteropTests.csproj", "{85B2B7BB-BF95-42DF-8CBF-348AEF63BD1F}"
+EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = managed_hello_word.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E929E163-52A0-4AAC-917B-6D7FAF70C45E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E929E163-52A0-4AAC-917B-6D7FAF70C45E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E929E163-52A0-4AAC-917B-6D7FAF70C45E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E929E163-52A0-4AAC-917B-6D7FAF70C45E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CE455EB3-3C21-4A94-B091-2CB86725D0F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CE455EB3-3C21-4A94-B091-2CB86725D0F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE455EB3-3C21-4A94-B091-2CB86725D0F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -30,10 +31,6 @@ Global
 		{85B2B7BB-BF95-42DF-8CBF-348AEF63BD1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85B2B7BB-BF95-42DF-8CBF-348AEF63BD1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{85B2B7BB-BF95-42DF-8CBF-348AEF63BD1F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E929E163-52A0-4AAC-917B-6D7FAF70C45E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E929E163-52A0-4AAC-917B-6D7FAF70C45E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E929E163-52A0-4AAC-917B-6D7FAF70C45E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E929E163-52A0-4AAC-917B-6D7FAF70C45E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
