@@ -1,0 +1,114 @@
+<stylecopresultscache>
+  <version>10</version>
+  <sourcecode name="BasicTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>07/21/2008 16:36:14</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>09/10/2008 23:21:25</timestamp>
+    <milliseconds>616</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="Setup.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>07/21/2008 16:36:14</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>09/10/2008 23:22:10</timestamp>
+    <milliseconds>803</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="InitTerm.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>07/21/2008 16:36:14</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>09/10/2008 23:24:56</timestamp>
+    <milliseconds>594</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="ColumndefTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>07/21/2008 16:36:14</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>09/14/2008 21:19:47</timestamp>
+    <milliseconds>266</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="BasicTableTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>07/21/2008 16:36:14</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>09/14/2008 21:18:10</timestamp>
+    <milliseconds>90</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="AssemblyInfo.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>07/21/2008 16:36:14</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>09/10/2008 23:06:11</timestamp>
+    <milliseconds>844</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="InitTermTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>07/21/2008 16:36:14</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>09/22/2008 23:49:08</timestamp>
+    <milliseconds>926</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="RetinfoTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>07/21/2008 16:36:14</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>09/14/2008 21:32:39</timestamp>
+    <milliseconds>386</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="SetupHelper.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>07/21/2008 16:36:14</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>09/10/2008 23:32:11</timestamp>
+    <milliseconds>142</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="SystemParameterTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>07/21/2008 16:36:14</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>09/26/2008 21:36:35</timestamp>
+    <milliseconds>792</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="SetGetSystemParameterTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>07/21/2008 16:36:14</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>09/26/2008 23:24:32</timestamp>
+    <milliseconds>659</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="InstanceParameterTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>07/21/2008 16:36:14</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>09/26/2008 23:41:20</timestamp>
+    <milliseconds>406</milliseconds>
+    <violations />
+  </sourcecode>
+  <project key="-149446997">
+    <configuration>DEBUG;TRACE</configuration>
+  </project>
+</stylecopresultscache>

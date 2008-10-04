@@ -1,0 +1,65 @@
+﻿ TODO
+  - Add XML headers to all functions/fields and re-enable StyleCop errors
+  - Namespace for utility/helper code
+  - ColumnStream property to give ideal buffer size
+      - Sample code that wraps the ColumnStream in a BufferedStream for performance
+  - JET_err exceptions
+  - JET_param parameters
+  - SystemParameters helper classes (SystemParameters, InstanceParameters)
+
+  TESTING
+  - JET_RETINFO
+  - JET_SETINFO
+  - Write tests that use all exposed APIs/grbits
+	- Update a record and rollback
+	- Create a database with overwrite existing
+	- Set/Retrieve multivalues
+	- Set a long-value at a different offset
+	- Exercise the ColumnStream more (seeking)
+	- Create a column with a default value
+	- Retrieve copy
+	- Create a column of every type
+	- Delete directories in init/term tests
+	
+ SAMPLES
+  - C#
+  - C++/CLI
+  - Visual Basic
+  - IronPython
+  - Eiffel
+  - F#
+
+  APIs to add
+  - JetMove
+  - JetCreateIndex
+  - JetSetCurrentIndex
+  - JetMakeKey
+  - JetSeek
+  - JetGetTableColumnInfo
+  - JetGetColumnInfo
+  - JetGetTableInfo
+  - JetGetRecordPosition
+  - JetGotoPosition
+  - JetIndexRecordCount
+  - JetEscrowUpdate
+  - JetAttachDatabase
+  - JetOpenDatabase
+  - JetCloseDatabase
+  - JetDetachDatabase
+  - JetDeleteTable
+  - JetDeleteIndex
+  - JetGetSystemParameter
+  - JetGetDatabaseInfo
+  - JetGetDatabaseFileInfo
+  - JetGetRecordSize
+  - JetIntersectIndexes
+  - JetRetrieveKey
+  - JetSetIndexRange
+  - JetGetLock
+  - JetGetObjectInfo
+  - JetSetTableSequential
+  - JetResetTableSequential
+  - JetGetTableIndexInfo
+
+  - Get managed User-Defined-Defaults working
+  RELEASE
