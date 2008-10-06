@@ -8,7 +8,7 @@ namespace InteropApiTests
 {
     using System;
     using System.IO;
-    using Esent.Interop;
+    using Microsoft.Isam.Esent.Interop;
 
     /// <summary>
     /// Create a directory and an instance pointed at the directory.

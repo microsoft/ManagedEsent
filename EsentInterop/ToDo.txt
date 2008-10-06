@@ -5,11 +5,8 @@
       - Sample code that wraps the ColumnStream in a BufferedStream for performance
   - JET_err exceptions
   - JET_param parameters
-  - SystemParameters helper classes (SystemParameters, InstanceParameters)
 
   TESTING
-  - JET_RETINFO
-  - JET_SETINFO
   - Write tests that use all exposed APIs/grbits
 	- Update a record and rollback
 	- Create a database with overwrite existing
@@ -26,11 +23,9 @@
   - C++/CLI
   - Visual Basic
   - IronPython
-  - Eiffel
   - F#
 
   APIs to add
-  - JetMove
   - JetCreateIndex
   - JetSetCurrentIndex
   - JetMakeKey

@@ -7,7 +7,7 @@
 namespace InteropApiTests
 {
     using System.IO;
-    using Esent.Interop;
+    using Microsoft.Isam.Esent.Interop;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -61,7 +61,7 @@ namespace InteropApiTests
         /// Initialize and terminate two instances
         /// </summary>
         [TestMethod]
-        public void InitAndTermOneTwoInstances()
+        public void InitAndTermTwoInstances()
         {    
             string dir1 = SetupHelper.CreateRandomDirectory();
             string dir2 = SetupHelper.CreateRandomDirectory();

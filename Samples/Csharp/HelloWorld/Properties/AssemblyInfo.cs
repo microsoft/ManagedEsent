@@ -1,10 +1,4 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="AssemblyInfo.cs" company="Microsoft Corporation">
-//     Copyright (c) Microsoft Corporation.
-// </copyright>
-//-----------------------------------------------------------------------
-
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -14,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("HelloWorld")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Microsoft")]
 [assembly: AssemblyProduct("HelloWorld")]
-[assembly: AssemblyCopyright("Copyright ©  2008")]
+[assembly: AssemblyCopyright("Copyright © Microsoft 2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -26,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("bca75f16-0dbd-491e-8c14-06564b0b3ffd")]
+[assembly: Guid("a9a15fa0-8a31-41f8-9768-617f963fac77")]
 
 // Version information for an assembly consists of the following four values:
 //

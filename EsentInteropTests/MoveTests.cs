@@ -9,7 +9,7 @@ namespace InteropApiTests
     using System;
     using System.IO;
     using System.Text;
-    using Esent.Interop;
+    using Microsoft.Isam.Esent.Interop;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>

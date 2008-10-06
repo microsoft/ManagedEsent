@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace Esent.Interop
+namespace Microsoft.Isam.Esent.Interop
 {
     using System;
 

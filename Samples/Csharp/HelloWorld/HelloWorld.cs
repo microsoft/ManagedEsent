@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Program.cs" company="Microsoft Corporation">
+// <copyright file="HelloWorld.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
 //-----------------------------------------------------------------------
@@ -8,7 +8,7 @@ namespace Esent.Sample.HelloWorld
 {
     using System;
     using System.Text;
-    using Esent.Interop;
+    using Microsoft.Isam.Esent.Interop;
 
     /// <summary>
     /// Contains the static Main method.
@@ -48,6 +48,7 @@ namespace Esent.Sample.HelloWorld
             byte[] bookmark = new byte[256];
             int bookmarkSize;
             API.JetUpdate(sesid, tableid, bookmark, bookmark.Length, out bookmarkSize);
+            API.JetCommitTransaction(sesid, CommitTransactionGrbit.None);
             API.JetGotoBookmark(sesid, tableid, bookmark, bookmarkSize);
 
             // Retrieve a column from the record

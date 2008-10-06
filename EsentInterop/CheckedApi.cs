@@ -3,10 +3,10 @@
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
 //-----------------------------------------------------------------------
-// The Esent.Interop namespace will be developed with these principles:
+// The Microsoft.Isam.Esent.Interop namespace will be developed with these principles:
 //  -   Full and complete documentation. Intellisense should be able to
 //      provide useful and extensive help.
-//  -   Minimal editorialization. Whenever possible the Esent.Interop API will
+//  -   Minimal editorialization. Whenever possible the Microsoft.Isam.Esent.Interop API will
 //      exactly match the ESENT API. In particular the names of structs, types
 //      and functions will not be changed. Except for:
 //  -   Cleaning up API constants. Instead of providing the constants from
@@ -28,7 +28,7 @@
 //      with IntPtr and other basic types as opposed to the managed types
 //      such as JET_TABLEID.
 
-namespace Esent.Interop
+namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
     /// Managed versions of the ESENT API. This class contains static methods corresponding
