@@ -1,60 +1,31 @@
 ﻿ TODO
   - Add XML headers to all functions/fields and re-enable StyleCop errors
   - Namespace for utility/helper code
-  - ColumnStream property to give ideal buffer size
-      - Sample code that wraps the ColumnStream in a BufferedStream for performance
-  - JET_err exceptions
-  - JET_param parameters
+  - Sample code that wraps the ColumnStream in a BufferedStream for performance
+  - More JET_param parameters
 
   TESTING
-  - Write tests that use all exposed APIs/grbits
-	- Update a record and rollback
-	- Create a database with overwrite existing
-	- Set/Retrieve multivalues
 	- Set a long-value at a different offset
 	- Exercise the ColumnStream more (seeking)
 	- Create a column with a default value
 	- Retrieve copy
 	- Create a column of every type
-	- Delete directories in init/term tests
 	
- SAMPLES
-  - C#
-  - C++/CLI
-  - Visual Basic
-  - IronPython
-  - F#
+  APIs to add (12)
 
-  APIs to add
+  - JetEscrowUpdate
+  
   - JetCreateIndex
-  - JetSetCurrentIndex
-  - JetMakeKey
-  - JetSeek
+  - JetGetRecordPosition
+  - JetGotoPosition
+  - JetIntersectIndexes
+  
   - JetGetTableColumnInfo
   - JetGetColumnInfo
   - JetGetTableInfo
-  - JetGetRecordPosition
-  - JetGotoPosition
-  - JetIndexRecordCount
-  - JetEscrowUpdate
-  - JetAttachDatabase
-  - JetOpenDatabase
-  - JetCloseDatabase
-  - JetDetachDatabase
-  - JetDeleteTable
-  - JetDeleteIndex
-  - JetGetSystemParameter
+  - JetGetObjectInfo
+  - JetGetTableIndexInfo
   - JetGetDatabaseInfo
   - JetGetDatabaseFileInfo
-  - JetGetRecordSize
-  - JetIntersectIndexes
-  - JetRetrieveKey
-  - JetSetIndexRange
-  - JetGetLock
-  - JetGetObjectInfo
-  - JetSetTableSequential
-  - JetResetTableSequential
-  - JetGetTableIndexInfo
-
-  - Get managed User-Defined-Defaults working
-  RELEASE
+ 
+  

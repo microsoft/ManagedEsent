@@ -18,7 +18,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentException class.
         /// </summary>
         /// <param name="err">The error code of the exception.</param>
-        internal EsentException(int err)
+        internal EsentException(JET_err err)
         {
             this.Error = err;
         }
@@ -30,13 +30,34 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                return String.Format("Error {0} (<unknown>)", this.Error);
+                return String.Format("Error {0} ({1})", this.Error, this.ErrorDescription);
+            }
+        }
+
+        /// <summary>
+        /// Gets a text description of the error.
+        /// </summary>
+        public string ErrorDescription
+        {
+            get
+            {
+                int errNum = (int)this.Error;
+                string description;
+                JET_err err = (JET_err)ErrApi.JetGetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.ErrorToString, ref errNum, out description, 1024);
+                if (JET_err.Success == err)
+                {
+                    return description;
+                }
+                else
+                {
+                    return "<unknown>";
+                }
             }
         }
 
         /// <summary>
         /// Gets the error code of the error.
         /// </summary>
-        public int Error { get; private set; }
+        public JET_err Error { get; private set; }
     }
 }

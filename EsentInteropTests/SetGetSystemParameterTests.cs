@@ -21,7 +21,7 @@ namespace InteropApiTests
         /// Test setting and retrieving the system path.
         /// </summary>
         [TestMethod]
-        public void SystemPathParameterTest()
+        public void SystemPathParameter()
         {
             this.PathParameterTest(JET_param.SystemPath, @"foo\system\");
         }
@@ -30,7 +30,7 @@ namespace InteropApiTests
         /// Test setting and retrieving the log path.
         /// </summary>
         [TestMethod]
-        public void LogPathParameterTest()
+        public void LogPathParameter()
         {
             this.PathParameterTest(JET_param.LogFilePath, @"foo\log\");
         }
@@ -39,7 +39,7 @@ namespace InteropApiTests
         /// Test setting and retrieving the temp path.
         /// </summary>
         [TestMethod]
-        public void TempPathParameterTest()
+        public void TempPathParameter()
         {
             this.PathParameterTest(JET_param.TempPath, @"foo\temp\");
         }
@@ -48,27 +48,36 @@ namespace InteropApiTests
         /// Test setting and retrieving the base name.
         /// </summary>
         [TestMethod]
-        public void BaseNameParameterTest()
+        public void BaseNameParameter()
         {
             this.StringParameterTest(JET_param.BaseName, @"foo");
         }
 
         /// <summary>
-        /// Test setting and retrieving the base name.
+        /// Test setting and retrieving the recovery parameter.
         /// </summary>
         [TestMethod]
-        public void RecoveryParameterTest()
+        public void RecoveryParameter()
         {
             this.StringParameterTest(JET_param.Recovery, @"off");
         }
 
         /// <summary>
-        /// Test setting and retrieving the base name.
+        /// Test setting and retrieving the circular logging setting.
         /// </summary>
         [TestMethod]
-        public void CircularLogParameterTest()
+        public void CircularLogParameter()
         {
-            this.StringParameterTest(JET_param.CircularLog, 1);
+            this.IntegerParameterTest(JET_param.CircularLog, 1);
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the index checking setting.
+        /// </summary>
+        [TestMethod]
+        public void EnableIndexCheckingParameter()
+        {
+            this.IntegerParameterTest(JET_param.EnableIndexChecking, 1);
         }
 
         /// <summary>
@@ -85,9 +94,9 @@ namespace InteropApiTests
             {
                 API.JetSetSystemParameter(instance, JET_SESID.Nil, param, 0, expected);
 
-                int ignored;
+                int ignored = 0;
                 string actual;
-                API.JetGetSystemParameter(instance, JET_SESID.Nil, param, out ignored, out actual, 256);
+                API.JetGetSystemParameter(instance, JET_SESID.Nil, param, ref ignored, out actual, 256);
 
                 Assert.AreEqual(Path.Combine(Environment.CurrentDirectory, expected), actual);
             }
@@ -110,9 +119,9 @@ namespace InteropApiTests
             {
                 API.JetSetSystemParameter(instance, JET_SESID.Nil, param, 0, expected);
 
-                int ignored;
+                int ignored = 0;
                 string actual;
-                API.JetGetSystemParameter(instance, JET_SESID.Nil, param, out ignored, out actual, 256);
+                API.JetGetSystemParameter(instance, JET_SESID.Nil, param, ref ignored, out actual, 256);
 
                 Assert.AreEqual(expected, actual);
             }
@@ -127,7 +136,7 @@ namespace InteropApiTests
         /// </summary>
         /// <param name="param">The parameter to set.</param>
         /// <param name="expected">The string to set it to.</param>
-        private void StringParameterTest(JET_param param, int expected)
+        private void IntegerParameterTest(JET_param param, int expected)
         {
             JET_INSTANCE instance;
             API.JetCreateInstance(out instance, "IntParameterTest");
@@ -135,9 +144,9 @@ namespace InteropApiTests
             {
                 API.JetSetSystemParameter(instance, JET_SESID.Nil, param, expected, null);
 
-                int actual;
+                int actual = 0;
                 string ignored;
-                API.JetGetSystemParameter(instance, JET_SESID.Nil, param, out actual, out ignored, 0);
+                API.JetGetSystemParameter(instance, JET_SESID.Nil, param, ref actual, out ignored, 0);
 
                 Assert.AreEqual(expected, actual);
             }

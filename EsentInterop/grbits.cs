@@ -38,6 +38,70 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Options for JetAttachDatabase
+    /// </summary>
+    [Flags]
+    public enum AttachDatabaseGrbit : int
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        ///  Prevents modifications to the database.
+        /// </summary>
+        ReadOnly = 0x1,
+
+        /// <summary>
+        /// If JET_paramEnableIndexChecking has been set, all indexes over Unicode
+        /// data will be deleted.
+        /// </summary>
+        DeleteCorruptIndexes = 0x10,
+ 
+         /// <summary>
+         /// All indexes over Unicode data will be deleted, regardless of the setting
+         /// of JET_paramEnableIndexChecking. Windows Server 2003 and up.
+         /// </summary>
+         DeleteUnicodeIndexes = 0x400,
+    }
+
+    /// <summary>
+    /// Options for JetOpenDatabase
+    /// </summary>
+    [Flags]
+    public enum OpenDatabaseGrbit : int
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// Prevents modifications to the database.
+        /// </summary>
+        ReadOnly = 0x1,
+
+        /// <summary>
+        /// Allows only a single session to attach a database.
+        /// Normally, several sessions can open a database.
+        /// </summary>
+        Exclusive = 0x2,
+    }
+
+    /// <summary>
+    /// Options for JetCloseDatabase
+    /// </summary>
+    [Flags]
+    public enum CloseDatabaseGrbit : int
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+    }
+
+    /// <summary>
     /// Options for JetCommitTransaction
     /// </summary>
     [Flags]
@@ -166,6 +230,17 @@ namespace Microsoft.Isam.Esent.Interop
         /// Request write access to the table.
         /// </summary>
         Updatable,
+    }
+
+    /// <summary>
+    /// Options for JetDupCursor.
+    /// </summary>
+    public enum DupCursorGrbit : int
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
     }
 
     /// <summary>
@@ -329,6 +404,234 @@ namespace Microsoft.Isam.Esent.Interop
         /// duplicate key values into a single index entry.
         /// </summary>
         MoveKeyNE = 0x1,
+    }
+
+    /// <summary>
+    /// Options for JetMakeKey
+    /// </summary>
+    [Flags]
+    public enum MakeKeyGrbit : int
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None,
+
+        /// <summary>
+        /// A new search key should be constructed. Any previously existing search
+        /// key is discarded.
+        /// </summary>
+        NewKey = 0x1,
+
+        /// <summary>
+        /// When this option is specified, all other options are ignored, any
+        /// previously existing search key is discarded, and the contents of the
+        /// input buffer are loaded as the new search key.
+        /// </summary>
+        NormalizedKey = 0x8,
+
+        /// <summary>
+        /// If the size of the input buffer is zero and the current key column
+        /// is a variable length column, this option indicates that the input
+        /// buffer contains a zero length value. Otherwise, an input buffer size
+        /// of zero would indicate a NULL value.
+        /// </summary>
+        KeyDataZeroLength = 0x10,
+
+        /// <summary>
+        /// This option indicates that the search key should be constructed
+        /// such that any key columns that come after the current key column
+        /// should be considered to be wildcards.
+        /// </summary>
+        StrLimit = 0x2,
+
+        /// <summary>
+        /// This option indicates that the search key should be constructed
+        /// such that the current key column is considered to be a prefix
+        /// wildcard and that any key columns that come after the current
+        /// key column should be considered to be wildcards.
+        /// </summary>
+        SubStrLimit = 0x4,
+
+        /// <summary>
+        /// The search key should be constructed such that any key columns
+        /// that come after the current key column should be considered to
+        /// be wildcards.
+        /// </summary>
+        FullColumnStartLimit = 0x100,
+
+        /// <summary>
+        /// The search key should be constructed in such a way that any key
+        /// columns that come after the current key column are considered to
+        /// be wildcards.
+        /// </summary>
+        FullColumnEndLimit = 0x200,
+
+        /// <summary>
+        /// The search key should be constructed such that the current key
+        /// column is considered to be a prefix wildcard and that any key
+        /// columns that come after the current key column should be considered
+        /// to be wildcards. 
+        /// </summary>
+        PartialColumnStartLimit = 0x400,
+
+        /// <summary>
+        /// The search key should be constructed such that the current key
+        /// column is considered to be a prefix wildcard and that any key
+        /// columns that come after the current key column should be considered
+        /// to be wildcards.
+        /// </summary>
+        PartialColumnEndLimit = 0x800,
+    }
+
+    /// <summary>
+    /// Options for JetRetrieveKey.
+    /// </summary>
+    public enum RetrieveKeyGrbit : int
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// Retrieve the currently constructed key.
+        /// </summary>
+        RetrieveCopy = 0x1,
+    }
+
+    /// <summary>
+    /// Options for JetSeek.
+    /// </summary>
+    [Flags]
+    public enum SeekGrbit : int
+    {
+        /// <summary>
+        /// The cursor will be positioned at the index entry closest to the
+        /// start of the index that exactly matches the search key.
+        /// </summary>
+        SeekEQ = 0x1,
+
+        /// <summary>
+        /// The cursor will be positioned at the index entry closest to the
+        /// end of the index that is less than an index entry that would
+        /// exactly match the search criteria.
+        /// </summary>
+        SeekLT = 0x2,
+
+        /// <summary>
+        /// The cursor will be positioned at the index entry closest to the
+        /// end of the index that is less than or equal to an index entry
+        /// that would exactly match the search criteria.
+        /// </summary>
+        SeekLE = 0x4,
+
+        /// <summary>
+        /// The cursor will be positioned at the index entry closest to the
+        /// start of the index that is greater than or equal to an index
+        /// entry that would exactly match the search criteria.
+        /// </summary>
+        SeekGE = 0x8,
+
+        /// <summary>
+        /// The cursor will be positioned at the index entry closest to the
+        /// start of the index that is greater than an index entry that
+        /// would exactly match the search criteria.
+        /// </summary>
+        SeekGT = 0x10,
+
+        /// <summary>
+        /// An index range will automatically be setup for all keys that
+        /// exactly match the search key. 
+        /// </summary>
+        SetIndexRange = 0x20,
+
+        /// <summary>
+        /// A special error code, JET_wrnUniqueKey, will be returned if
+        /// it can be cheaply determined that there is exactly one index
+        /// entry that matches the search key. 
+        /// This option is ignored unless JET_bitSeekEQ is also specified.
+        /// This option is only available on Windows Server 2003 and later releases.
+        /// </summary>
+        CheckUniqueness = 0x40,
+    }
+
+    /// <summary>
+    /// Options for JetSetIndexRange.
+    /// </summary>
+    [Flags]
+    public enum SetIndexRangeGrbit : int
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0x0,
+
+        /// <summary>
+        /// This option indicates that the limit of the index range is inclusive.
+        /// </summary>
+        RangeInclusive = 0x1,
+
+        /// <summary>
+        /// The search key in the cursor represents the search criteria for the
+        /// index entry closest to the end of the index that will match the index
+        /// range. 
+        /// </summary>
+        RangeUpperLimit = 0x2,
+
+        /// <summary>
+        /// The index range should be removed as soon as it has been established.
+        /// This is useful for testing for the existence of index entries that
+        /// match the search criteria.
+        /// </summary>
+        RangeInstantDuration = 0x4,
+
+        /// <summary>
+        /// Cancel and existing index range.
+        /// </summary>
+        RangeRemove = 0x8,
+    }
+
+    /// <summary>
+    /// Options for JetSetTableSequential.
+    /// </summary>
+    public enum SetTableSequentialGrbit : int
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+    }
+
+    /// <summary>
+    /// Options for JetResetTableSequential.
+    /// </summary>
+    public enum ResetTableSequentialGrbit : int
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+    }
+
+    /// <summary>
+    /// Options for JetGetLock.
+    /// </summary>
+    public enum GetLockGrbit : int
+    {
+        /// <summary>
+        /// Acquire a read lock on the current record. Read locks are incompatible with
+        /// write locks already held by other sessions but are compatible with read locks
+        /// held by other sessions.
+        /// </summary>
+        Read = 0x1,
+
+        /// <summary>
+        ///  Acquire a write lock on the current record. Write locks are not compatible
+        ///  with write or read locks held by other sessions but are compatible with
+        ///  read locks held by the same session.
+        /// </summary>
+        Write = 0x2,
     }
 
     /// <summary>

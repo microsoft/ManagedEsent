@@ -47,7 +47,39 @@ namespace Microsoft.Isam.Esent.Interop
             this.tableid = tableid;
             this.columnid = columnid;
             this.offset = 0;
+            this.Itag = 1;
         }
+
+        /// <summary>
+        /// Gets the chunk size a long-value is stored in. A column
+        /// stream should be buffered in multiples of this size.
+        /// </summary>
+        public int ChunkSize
+        {
+            get
+            {
+                int columnLVPageOverhead = 82;  // from esent.h
+                int pageSize = 0;
+                string ignored;
+                if (0 == ErrApi.JetGetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.DatabasePageSize, ref pageSize, out ignored, 0))
+                {
+                    return pageSize - columnLVPageOverhead;
+                }
+
+                // Assume 4kb pages
+                return 4096 - columnLVPageOverhead;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the itag of the column.
+        /// </summary>
+        public int Itag { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to retrieve data from the copy buffer.
+        /// </summary>
+        public bool RetrieveCopy { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether the stream supports reading.
@@ -107,8 +139,21 @@ namespace Microsoft.Isam.Esent.Interop
             get
             {
                 int size;
-                API.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, null, 0, out size, RetrieveColumnGrbit.None, null);
+                var retinfo = new JET_RETINFO() { itagSequence = this.Itag, ibLongValue = 0 };
+                API.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, null, 0, out size, this.RetrieveGrbit, retinfo);
                 return size;
+            }
+        }
+
+        /// <summary>
+        /// Gets the options that should be used with JetRetrieveColumn
+        /// </summary>
+        private RetrieveColumnGrbit RetrieveGrbit
+        {
+            get
+            {
+                var grbit = this.RetrieveCopy ? RetrieveColumnGrbit.RetrieveCopy : RetrieveColumnGrbit.None;
+                return grbit;
             }
         }
 
@@ -134,7 +179,7 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentException("buffer is not large enough");
             }
 
-            var setinfo = new JET_SETINFO() { itagSequence = 1, ibLongValue = this.offset };
+            var setinfo = new JET_SETINFO() { itagSequence = this.Itag, ibLongValue = this.offset };
             if (0 == offset)
             {
                 API.JetSetColumn(this.sesid, this.tableid, this.columnid, buffer, count, SetColumnGrbit.None, setinfo);
@@ -165,15 +210,15 @@ namespace Microsoft.Isam.Esent.Interop
             }
 
             int bytesRead;
-            var retinfo = new JET_RETINFO() { itagSequence = 1, ibLongValue = this.offset };
+            var retinfo = new JET_RETINFO() { itagSequence = this.Itag, ibLongValue = this.offset };
             if (0 == offset)
             {
-                API.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, buffer, count, out bytesRead, RetrieveColumnGrbit.None, retinfo);
+                API.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, buffer, count, out bytesRead, this.RetrieveGrbit, retinfo);
             }
             else
             {
                 byte[] offsetBuffer = new byte[count - offset];
-                API.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, offsetBuffer, count, out bytesRead, RetrieveColumnGrbit.None, retinfo);
+                API.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, offsetBuffer, count, out bytesRead, this.RetrieveGrbit, retinfo);
                 Array.Copy(offsetBuffer, 0, buffer, offset, bytesRead);
             }
 

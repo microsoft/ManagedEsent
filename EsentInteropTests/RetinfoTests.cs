@@ -19,7 +19,7 @@ namespace InteropApiTests
         /// Test conversion to the native stuct
         /// </summary>
         [TestMethod]
-        public void ConvertToNativeTest()
+        public void ConvertRetinfoToNative()
         {
             var retinfo = new JET_RETINFO();
             retinfo.ibLongValue = 1;
@@ -34,7 +34,7 @@ namespace InteropApiTests
         /// Test conversion from the native stuct
         /// </summary>
         [TestMethod]
-        public void ConvertFromNativeTest()
+        public void ConvertRetinfoFromNative()
         {
             var native = new NATIVE_RETINFO();
             native.columnidNextTagged = 257;
@@ -49,7 +49,7 @@ namespace InteropApiTests
         /// Test conversion to a native struct andback again
         /// </summary>
         [TestMethod]
-        public void RoundTripConversionTest()
+        public void ConvertRetinfo()
         {
             var retinfo = new JET_RETINFO();
             retinfo.ibLongValue = 1;

@@ -19,7 +19,7 @@ namespace InteropApiTests
         /// Test conversion to the native stuct
         /// </summary>
         [TestMethod]
-        public void ConvertToNativeTest()
+        public void ConvertColumndefToNative()
         {
             var columndef = new JET_COLUMNDEF();
             columndef.cbMax     = 0x1;

@@ -104,7 +104,7 @@ namespace InteropApiTests
         /// Inserts a record and retrieve it.
         /// </summary>
         [TestMethod]
-        public void InsertRecordTest()
+        public void InsertRecord()
         {
             string s = "a test string";
 
@@ -112,14 +112,127 @@ namespace InteropApiTests
             API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
             this.SetColumnFromString(s);
             this.UpdateAndGotoBookmark();
+            API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
             Assert.AreEqual(s, this.RetrieveColumnAsString());
+        }
+
+        /// <summary>
+        /// Inserts a record and retrieve its bookmark
+        /// </summary>
+        [TestMethod]
+        public void GetBookmark()
+        {
+            byte[] expectedBookmark = new byte[256];
+            int expectedBookmarkSize;
+
+            API.JetBeginTransaction(this.sesid);
+            API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            API.JetUpdate(this.sesid, this.tableid, expectedBookmark, expectedBookmark.Length, out expectedBookmarkSize);
+            API.JetGotoBookmark(this.sesid, this.tableid, expectedBookmark, expectedBookmarkSize);
+            API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            byte[] actualBookmark = new byte[256];
+            int actualBookmarkSize;
+            API.JetGetBookmark(this.sesid, this.tableid, actualBookmark, actualBookmark.Length, out actualBookmarkSize);
+
+            Assert.AreEqual(expectedBookmarkSize, actualBookmarkSize);
+            for (int i = 0; i < expectedBookmarkSize; ++i)
+            {
+                Assert.AreEqual(expectedBookmark[i], actualBookmark[i]);
+            }
+        }
+
+        /// <summary>
+        /// Inserts a record and update it.
+        /// </summary>
+        [TestMethod]
+        public void ReplaceRecord()
+        {
+            string before = "original";
+            string after = "new and improved";
+
+            API.JetBeginTransaction(this.sesid);
+            API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            this.SetColumnFromString(before);
+            this.UpdateAndGotoBookmark();
+            API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            API.JetBeginTransaction(this.sesid);
+            API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Replace);
+            this.SetColumnFromString(after);
+            this.UpdateAndGotoBookmark();
+            API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Assert.AreEqual(after, this.RetrieveColumnAsString());
+        }
+
+        /// <summary>
+        /// Inserts a record and update it.
+        /// </summary>
+        [TestMethod]
+        public void ReplaceAndRollback()
+        {
+            string before = "original";
+            string after = "new and improved";
+
+            API.JetBeginTransaction(this.sesid);
+            API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            this.SetColumnFromString(before);
+            this.UpdateAndGotoBookmark();
+            API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            API.JetBeginTransaction(this.sesid);
+            API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Replace);
+            this.SetColumnFromString(after);
+            this.UpdateAndGotoBookmark();
+            API.JetRollback(this.sesid, RollbackTransactionGrbit.None);
+
+            Assert.AreEqual(before, this.RetrieveColumnAsString());
+        }
+
+        /// <summary>
+        /// Insert a record and delete it.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(EsentException))]
+        public void InsertRecordAndDelete()
+        {
+            API.JetBeginTransaction(this.sesid);
+            API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            this.UpdateAndGotoBookmark();
+            API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            API.JetBeginTransaction(this.sesid);
+            API.JetDelete(this.sesid, this.tableid);
+            API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            this.RetrieveColumnAsString();
+        }
+
+        /// <summary>
+        /// Insert a record and delete it.
+        /// </summary>
+        [TestMethod]
+        public void GetLock()
+        {
+            API.JetBeginTransaction(this.sesid);
+            API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            this.UpdateAndGotoBookmark();
+            API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            API.JetBeginTransaction(this.sesid);
+            API.JetGetLock(this.sesid, this.tableid, GetLockGrbit.Read);
+            API.JetGetLock(this.sesid, this.tableid, GetLockGrbit.Write);
+            API.JetRollback(this.sesid, RollbackTransactionGrbit.None);
+
+            this.RetrieveColumnAsString();
         }
 
         /// <summary>
         /// Test setting and retrieving a column with the ColumnStream class.
         /// </summary>
         [TestMethod]
-        public void ColumnStreamTest()
+        public void ColumnStream()
         {
             string s = "the string to be inserted";
 
@@ -131,6 +244,7 @@ namespace InteropApiTests
             }
 
             this.UpdateAndGotoBookmark();
+            API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
             using (var reader = new StreamReader(new ColumnStream(this.sesid, this.tableid, this.columnidLongText)))
             {
@@ -140,17 +254,39 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Insert a record and delete it.
+        /// Test setting and retrieving a column with the ColumnStream class
+        /// and multivalues.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(EsentException))]
-        public void InsertAndDeleteTest()
+        public void ColumnStreamMultiValue()
         {
+            string[] data = { "this", "is", "a", "collection", "of", "multivalues" };                                
+
             API.JetBeginTransaction(this.sesid);
             API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            for (int i = 0; i < data.Length; ++i)
+            {
+                var column = new ColumnStream(this.sesid, this.tableid, this.columnidLongText);
+                column.Itag = i + 1;
+                using (var writer = new StreamWriter(column))
+                {
+                    writer.WriteLine(data[i]);
+                }
+            }
+
             this.UpdateAndGotoBookmark();
-            API.JetDelete(this.sesid, this.tableid);
-            this.RetrieveColumnAsString();
+            API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            for (int i = 0; i < data.Length; ++i)
+            {
+                var column = new ColumnStream(this.sesid, this.tableid, this.columnidLongText);
+                column.Itag = i + 1;
+                using (var reader = new StreamReader(column))
+                {
+                    string actual = reader.ReadLine();
+                    Assert.AreEqual(data[i], actual);
+                }
+            }
         }
 
         /// <summary>

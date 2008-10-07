@@ -56,7 +56,7 @@ namespace InteropApiTests
         /// Test the BaseName property.
         /// </summary>
         [TestMethod]
-        public void TestBaseNameProperty()
+        public void BaseNameProperty()
         {
             string expected = "abc";
             this.instanceParameters.BaseName = expected;
@@ -67,7 +67,7 @@ namespace InteropApiTests
         /// Test the CircularLog property.
         /// </summary>
         [TestMethod]
-        public void TestCircularLogProperty()
+        public void CircularLogProperty()
         {
             bool expected = true;
             this.instanceParameters.CircularLog = expected;
@@ -75,10 +75,21 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test the EnableIndexChecking property.
+        /// </summary>
+        [TestMethod]
+        public void EnableIndexCheckingProperty()
+        {
+            bool expected = true;
+            this.instanceParameters.EnableIndexChecking = expected;
+            Assert.AreEqual(expected, this.instanceParameters.EnableIndexChecking);
+        }
+
+        /// <summary>
         /// Test the Recovery property.
         /// </summary>
         [TestMethod]
-        public void TestRecoveryProperty()
+        public void RecoveryProperty()
         {
             bool expected = false;
             this.instanceParameters.Recovery = expected;

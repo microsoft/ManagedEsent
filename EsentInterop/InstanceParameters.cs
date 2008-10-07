@@ -140,6 +140,31 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether JetAttachDatabase will check for
+        /// indexes that were build using an older version of the NLS library in the
+        /// operating system.
+        /// </summary>
+        public bool EnableIndexChecking
+        {
+            get
+            {
+                return 0 != this.GetIntegerParameter(JET_param.EnableIndexChecking);
+            }
+
+            set
+            {
+                if (value)
+                {
+                    this.SetIntegerParameter(JET_param.EnableIndexChecking, 1);
+                }
+                else
+                {
+                    this.SetIntegerParameter(JET_param.EnableIndexChecking, 0);
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether crash recovery is on.
         /// </summary>
         public bool Recovery
@@ -179,9 +204,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The value of the parameter.</returns>
         private string GetStringParameter(JET_param param)
         {
-            int ignored;
+            int ignored = 0;
             string value;
-            API.JetGetSystemParameter(this.instance, this.sesid, param, out ignored, out value, 1024);
+            API.JetGetSystemParameter(this.instance, this.sesid, param, ref ignored, out value, 1024);
             return value;
         }
 
@@ -202,9 +227,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The value of the parameter.</returns>
         private int GetIntegerParameter(JET_param param)
         {
-            int value;
+            int value = 0;
             string ignored;
-            API.JetGetSystemParameter(this.instance, this.sesid, param, out value, out ignored, 0);
+            API.JetGetSystemParameter(this.instance, this.sesid, param, ref value, out ignored, 0);
             return value;
         }
     }

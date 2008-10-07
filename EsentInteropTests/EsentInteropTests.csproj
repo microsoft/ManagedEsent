@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="BasicTableTests.cs" />
     <Compile Include="ColumndefTests.cs" />
+    <Compile Include="DatabaseTests.cs" />
     <Compile Include="InstanceParameterTests.cs" />
     <Compile Include="MoveTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

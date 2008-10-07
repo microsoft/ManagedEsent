@@ -17,13 +17,12 @@
 //  -   Removing cbStruct from structures
 //  -   Removing unused/reserved entries from structures
 //  -   Throwing exceptions instead of returning errors
-//          (Need to work out what to do with APIs where errors are common)
 //  The API has three layers:
 //  -   API (public): this layer provides error-handling, turning errors
-//      returned by lower layers into exceptions.
-//  -   UNCHECKED_API (internal): this layer turns managed objects into
+//      returned by lower layers into exceptions and warnings.
+//  -   ErrApi (internal): this layer turns managed objects into
 //      objects which can be passed into the P/Invoke interop layer.
-//      Methods at this level return JET_ERR instead of throwing an exception.
+//      Methods at this level return an error instead of throwing an exception.
 //  -   NativeMethods: this is the P/Invoke interop layer. This layer deals
 //      with IntPtr and other basic types as opposed to the managed types
 //      such as JET_TABLEID.
@@ -45,7 +44,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="name">The name of the instance. Names must be unique.</param>
         public static void JetCreateInstance(out JET_INSTANCE instance, string name)
         {
-            Check(UncheckedApi.JetCreateInstance(out instance, name));
+            Check(ErrApi.JetCreateInstance(out instance, name));
         }
 
         /// <summary>
@@ -61,7 +60,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </remarks>
         public static void JetInit(ref JET_INSTANCE instance)
         {
-            Check(UncheckedApi.JetInit(ref instance));
+            Check(ErrApi.JetInit(ref instance));
         }
 
         /// <summary>
@@ -71,7 +70,104 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="instance">The instance to terminate.</param>
         public static void JetTerm(JET_INSTANCE instance)
         {
-            Check(UncheckedApi.JetTerm(instance));
+            Check(ErrApi.JetTerm(instance));
+        }
+
+        /// <summary>
+        /// Sets database configuration options.
+        /// </summary>
+        /// <param name="instance">The instance to set the option on or JET_INSTANCE.Nil to set the option on all instances.</param>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="paramid">The parameter to set.</param>
+        /// <param name="paramValue">The value of the parameter to set, if the parameter is an integer type.</param>
+        /// <param name="paramString">The value of the parameter to set, if the parameter is a string type.</param>
+        /// <returns>An ESENT warning code.</returns>
+        public static JET_wrn JetSetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, int paramValue, string paramString)
+        {
+            return Check(ErrApi.JetSetSystemParameter(instance, sesid, paramid, paramValue, paramString));
+        }
+
+        /// <summary>
+        /// Gets database configuration options.
+        /// </summary>
+        /// <param name="instance">The instance to retrieve the options from.</param>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="paramid">The parameter to get.</param>
+        /// <param name="paramValue">Returns the value of the parameter, if the value is an integer.</param>
+        /// <param name="paramString">Returns the value of the parameter, if the value is a string.</param>
+        /// <param name="maxParam">The maximum size of the parameter string.</param>
+        /// <returns>An ESENT warning code.</returns>
+        public static JET_wrn JetGetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, ref int paramValue, out string paramString, int maxParam)
+        {
+            return Check(ErrApi.JetGetSystemParameter(instance, sesid, paramid, ref paramValue, out paramString, maxParam));
+        }
+
+        #endregion
+
+        #region Databases
+
+        /// <summary>
+        /// Creates and attaches a database file.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="database">The path to the database file to create.</param>
+        /// <param name="connect">The parameter is not used.</param>
+        /// <param name="dbid">Returns the dbid of the new database.</param>
+        /// <param name="grbit">Database creation options.</param>
+        public static void JetCreateDatabase(JET_SESID sesid, string database, string connect, out JET_DBID dbid, CreateDatabaseGrbit grbit)
+        {
+            Check(ErrApi.JetCreateDatabase(sesid, database, connect, out dbid, grbit));
+        }
+
+        /// <summary>
+        /// Attaches a database file for use with a database instance. In order to use the
+        /// database, it will need to be subsequently opened with JetOpenDatabase.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="database">The database to attach.</param>
+        /// <param name="grbit">Attach options.</param>
+        /// <returns>An ESENT warning code.</returns>
+        public static JET_wrn JetAttachDatabase(JET_SESID sesid, string database, AttachDatabaseGrbit grbit)
+        {
+            return Check(ErrApi.JetAttachDatabase(sesid, database, grbit));
+        }
+
+        /// <summary>
+        /// Opens a previously attached database,using the JetAttachDatabase function,
+        /// for use with a database session. This function can be called multiple times
+        /// for the same database.
+        /// </summary>
+        /// <param name="sesid">The session that is opening the database.</param>
+        /// <param name="database">The database to open.</param>
+        /// <param name="connect">Reserved for future use.</param>
+        /// <param name="dbid">Returns the dbid of the attached database.</param>
+        /// <param name="grbit">Open database options.</param>
+        /// <returns>An ESENT warning code.</returns>
+        public static JET_wrn JetOpenDatabase(JET_SESID sesid, string database, string connect, out JET_DBID dbid, OpenDatabaseGrbit grbit)
+        {
+            return Check(ErrApi.JetOpenDatabase(sesid, database, connect, out dbid, grbit));
+        }
+
+        /// <summary>
+        /// Closes a database file that was previously opened with JetOpenDatabase or
+        /// created with JetCreateDatabase.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database to close.</param>
+        /// <param name="grbit">Close options.</param>
+        public static void JetCloseDatabase(JET_SESID sesid, JET_DBID dbid, CloseDatabaseGrbit grbit)
+        {
+            Check(ErrApi.JetCloseDatabase(sesid, dbid, grbit));
+        }
+
+        /// <summary>
+        /// Releases a database file that was previously attached to a database session.
+        /// </summary>
+        /// <param name="sesid">The database session to use.</param>
+        /// <param name="database">The database to detach.</param>
+        public static void JetDetachDatabase(JET_SESID sesid, string database)
+        {
+            Check(ErrApi.JetDetachDatabase(sesid, database));
         }
 
         #endregion
@@ -87,7 +183,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="password">The parameter is not used.</param>
         public static void JetBeginSession(JET_INSTANCE instance, out JET_SESID sesid, string username, string password)
         {
-            Check(UncheckedApi.JetBeginSession(instance, out sesid, username, password));
+            Check(ErrApi.JetBeginSession(instance, out sesid, username, password));
         }
 
         /// <summary>
@@ -97,34 +193,17 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">The parameter is not used.</param>
         public static void JetEndSession(JET_SESID sesid, EndSessionGrbit grbit)
         {
-            Check(UncheckedApi.JetEndSession(sesid, grbit));
+            Check(ErrApi.JetEndSession(sesid, grbit));
         }
 
         /// <summary>
-        /// Sets database configuration options.
+        /// Initialize a new ESE session in the same instance as the given sesid.
         /// </summary>
-        /// <param name="instance">The instance to set the option on or JET_INSTANCE.Nil to set the option on all instances.</param>
-        /// <param name="sesid">The session to use.</param>
-        /// <param name="paramid">The parameter to set.</param>
-        /// <param name="paramValue">The value of the parameter to set, if the parameter is an integer type.</param>
-        /// <param name="paramString">The value of the parameter to set, if the parameter is a string type.</param>
-        public static void JetSetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, int paramValue, string paramString)
+        /// <param name="sesid">The session to duplicate.</param>
+        /// <param name="newSesid">Returns the new session.</param>
+        public static void JetDupSession(JET_SESID sesid, out JET_SESID newSesid)
         {
-            Check(UncheckedApi.JetSetSystemParameter(instance, sesid, paramid, paramValue, paramString));
-        }
-       
-        /// <summary>
-        /// Gets database configuration options.
-        /// </summary>
-        /// <param name="instance">The instance to retrieve the options from.</param>
-        /// <param name="sesid">The session to use.</param>
-        /// <param name="paramid">The parameter to get.</param>
-        /// <param name="paramValue">Returns the value of the parameter, if the value is an integer.</param>
-        /// <param name="paramString">Returns the value of the parameter, if the value is a string.</param>
-        /// <param name="maxParam">The maximum size of the parameter string.</param>
-        public static void JetGetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, out int paramValue, out string paramString, int maxParam)
-        {
-            Check(UncheckedApi.JetGetSystemParameter(instance, sesid, paramid, out paramValue, out paramString, maxParam));
+            Check(ErrApi.JetDupSession(sesid, out newSesid));
         }
 
         #endregion
@@ -143,7 +222,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">Returns the opened table.</param>
         public static void JetOpenTable(JET_SESID sesid, JET_DBID dbid, string tablename, byte[] parameters, int parametersSize, OpenTableGrbit grbit, out JET_TABLEID tableid)
         {
-            Check(UncheckedApi.JetOpenTable(sesid, dbid, tablename, parameters, parametersSize, grbit, out tableid));
+            Check(ErrApi.JetOpenTable(sesid, dbid, tablename, parameters, parametersSize, grbit, out tableid));
         }
 
         /// <summary>
@@ -153,7 +232,26 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The table to close.</param>
         public static void JetCloseTable(JET_SESID sesid, JET_TABLEID tableid)
         {
-            Check(UncheckedApi.JetCloseTable(sesid, tableid));
+            Check(ErrApi.JetCloseTable(sesid, tableid));
+        }
+
+        /// <summary>
+        /// Duplicates an open cursor and returns a handle to the duplicated cursor.
+        /// If the cursor that was duplicated was a read-only cursor then the
+        /// duplicated cursor is also a read-only cursor.
+        /// Any state related to constructing a search key or updating a record is
+        /// not copied into the duplicated cursor. In addition, the location of the
+        /// original cursor is not duplicated into the duplicated cursor. The
+        /// duplicated cursor is always opened on the clustered index and its
+        /// location is always on the first row of the table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to duplicate.</param>
+        /// <param name="newTableid">The duplicated cursor.</param>
+        /// <param name="grbit">Reserved for future use.</param>
+        public static void JetDupCursor(JET_SESID sesid, JET_TABLEID tableid, out JET_TABLEID newTableid, DupCursorGrbit grbit)
+        {
+            Check(ErrApi.JetDupCursor(sesid, tableid, out newTableid, grbit));
         }
 
         #endregion
@@ -167,7 +265,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="sesid">The session to begin the transaction for.</param>
         public static void JetBeginTransaction(JET_SESID sesid)
         {
-            Check(UncheckedApi.JetBeginTransaction(sesid));
+            Check(ErrApi.JetBeginTransaction(sesid));
         }
 
         /// <summary>
@@ -180,7 +278,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Commit options.</param>
         public static void JetCommitTransaction(JET_SESID sesid, CommitTransactionGrbit grbit)
         {
-            Check(UncheckedApi.JetCommitTransaction(sesid, grbit));
+            Check(ErrApi.JetCommitTransaction(sesid, grbit));
         }
 
         /// <summary>
@@ -193,25 +291,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Rollback options.</param>
         public static void JetRollback(JET_SESID sesid, RollbackTransactionGrbit grbit)
         {
-            Check(UncheckedApi.JetRollback(sesid, grbit));
+            Check(ErrApi.JetRollback(sesid, grbit));
         }
 
         #endregion
 
         #region DDL
-
-        /// <summary>
-        /// Creates and attaches a database file.
-        /// </summary>
-        /// <param name="sesid">The session to use.</param>
-        /// <param name="database">The path to the database file to create.</param>
-        /// <param name="connect">The parameter is not used.</param>
-        /// <param name="dbid">Returns the dbid of the new database.</param>
-        /// <param name="grbit">Database creation options.</param>
-        public static void JetCreateDatabase(JET_SESID sesid, string database, string connect, out JET_DBID dbid, CreateDatabaseGrbit grbit)
-        {
-            Check(UncheckedApi.JetCreateDatabase(sesid, database, connect, out dbid, grbit));
-        }
 
         /// <summary>
         /// Create an empty table. The newly created table is opened exclusively.
@@ -226,7 +311,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">Returns the tableid of the new table.</param>
         public static void JetCreateTable(JET_SESID sesid, JET_DBID dbid, string table, int pages, int density, out JET_TABLEID tableid)
         {
-            Check(UncheckedApi.JetCreateTable(sesid, dbid, table, pages, density, out tableid));
+            Check(ErrApi.JetCreateTable(sesid, dbid, table, pages, density, out tableid));
         }
 
         /// <summary>
@@ -241,7 +326,40 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="columnid">Returns the columnid of the new column.</param>
         public static void JetAddColumn(JET_SESID sesid, JET_TABLEID tableid, string column, JET_COLUMNDEF columndef, byte[] defaultValue, int defaultValueSize, out JET_COLUMNID columnid)
         {
-            Check(UncheckedApi.JetAddColumn(sesid, tableid, column, columndef, defaultValue, defaultValueSize, out columnid));
+            Check(ErrApi.JetAddColumn(sesid, tableid, column, columndef, defaultValue, defaultValueSize, out columnid));
+        }
+
+        /// <summary>
+        /// Deletes a column from a database table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">A cursor on the table to delete the column from.</param>
+        /// <param name="column">The name of the column to be deleted.</param>
+        public static void JetDeleteColumn(JET_SESID sesid, JET_TABLEID tableid, string column)
+        {
+            Check(ErrApi.JetDeleteColumn(sesid, tableid, column));
+        }
+
+        /// <summary>
+        /// Deletes an index from a database table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">A cursor on the table to delete the index from.</param>
+        /// <param name="index">The name of the index to be deleted.</param>
+        public static void JetDeleteIndex(JET_SESID sesid, JET_TABLEID tableid, string index)
+        {
+            Check(ErrApi.JetDeleteIndex(sesid, tableid, index));
+        }
+
+        /// <summary>
+        /// Deletes a table from a database.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database to delete the table from.</param>
+        /// <param name="table">The name of the table to delete.</param>
+        public static void JetDeleteTable(JET_SESID sesid, JET_DBID dbid, string table)
+        {
+            Check(ErrApi.JetDeleteTable(sesid, dbid, table));
         }
 
         #endregion
@@ -260,22 +378,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="actualBookmarkSize">Returns the actual size of the bookmark.</param>
         public static void JetGetBookmark(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize, out int actualBookmarkSize)
         {
-            Check(UncheckedApi.JetGetBookmark(sesid, tableid, bookmark, bookmarkSize, out actualBookmarkSize));
-        }
-
-        /// <summary>
-        /// Retrieves the bookmark for the record that is associated with the index entry
-        /// at the current position of a cursor. This bookmark can then be used to
-        /// reposition that cursor back to the same record using JetGotoBookmark. 
-        /// </summary>
-        /// <param name="sesid">The session to use.</param>
-        /// <param name="tableid">The cursor to retrieve the bookmark from.</param>
-        /// <param name="bookmark">Buffer to contain the bookmark.</param>
-        /// <param name="bookmarkSize">Size of the bookmark buffer.</param>
-        public static void JetGetBookmark(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize)
-        {
-            int actualBookmarkSize;
-            Check(UncheckedApi.JetGetBookmark(sesid, tableid, bookmark, bookmarkSize, out actualBookmarkSize));
+            Check(ErrApi.JetGetBookmark(sesid, tableid, bookmark, bookmarkSize, out actualBookmarkSize));
         }
 
         /// <summary>
@@ -289,7 +392,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="bookmarkSize">The size of the bookmark.</param>
         public static void JetGotoBookmark(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize)
         {
-            Check(UncheckedApi.JetGotoBookmark(sesid, tableid, bookmark, bookmarkSize));
+            Check(ErrApi.JetGotoBookmark(sesid, tableid, bookmark, bookmarkSize));
         }
 
         /// <summary>
@@ -315,9 +418,10 @@ namespace Microsoft.Isam.Esent.Interop
         /// retrieve the first value of a multi-valued column, and to retrieve long data at
         /// offset 0 (zero).
         /// </param>
-        public static void JetRetrieveColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, out int actualDataSize, RetrieveColumnGrbit grbit, JET_RETINFO retinfo)
+        /// <returns>An ESENT warning code.</returns>
+        public static JET_wrn JetRetrieveColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, out int actualDataSize, RetrieveColumnGrbit grbit, JET_RETINFO retinfo)
         {
-            Check(UncheckedApi.JetRetrieveColumn(sesid, tableid, columnid, data, dataSize, out actualDataSize, grbit, retinfo));
+            return Check(ErrApi.JetRetrieveColumn(sesid, tableid, columnid, data, dataSize, out actualDataSize, grbit, retinfo));
         }
 
         /// <summary>
@@ -331,7 +435,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Move options.</param>
         public static void JetMove(JET_SESID sesid, JET_TABLEID tableid, int numRows, MoveGrbit grbit)
         {
-            Check(UncheckedApi.JetMove(sesid, tableid, numRows, grbit));
+            Check(ErrApi.JetMove(sesid, tableid, numRows, grbit));
         }
 
         /// <summary>
@@ -345,7 +449,261 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Move options.</param>
         public static void JetMove(JET_SESID sesid, JET_TABLEID tableid, JET_Move numRows, MoveGrbit grbit)
         {
-            Check(UncheckedApi.JetMove(sesid, tableid, (int)numRows, grbit));
+            Check(ErrApi.JetMove(sesid, tableid, (int)numRows, grbit));
+        }
+
+        /// <summary>
+        /// Constructs search keys that may then be used by JetSeek and JetSetIndexRange.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to create the key on.</param>
+        /// <param name="data">Column data for the current key column of the current index.</param>
+        /// <param name="dataSize">Size of the data.</param>
+        /// <param name="grbit">Key options.</param>
+        public static void JetMakeKey(JET_SESID sesid, JET_TABLEID tableid, byte[] data, int dataSize, MakeKeyGrbit grbit)
+        {
+            Check(ErrApi.JetMakeKey(sesid, tableid, data, dataSize, grbit));
+        }
+
+        /// <summary>
+        /// Retrieves the key for the index entry at the current position of a cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the key from.</param>
+        /// <param name="data">The buffer to retrieve the key into.</param>
+        /// <param name="dataSize">The size of the buffer.</param>
+        /// <param name="actualDataSize">Returns the actual size of the data.</param>
+        /// <param name="grbit">Retrieve key options.</param>
+        public static void JetRetrieveKey(JET_SESID sesid, JET_TABLEID tableid, byte[] data, int dataSize, out int actualDataSize, RetrieveKeyGrbit grbit)
+        {
+            Check(ErrApi.JetRetrieveKey(sesid, tableid, data, dataSize, out actualDataSize, grbit));
+        }
+
+        /// <summary>
+        /// Efficiently positions a cursor to an index entry that matches the search
+        /// criteria specified by the search key in that cursor and the specified
+        /// inequality. A search key must have been previously constructed using JetMakeKey.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to position.</param>
+        /// <param name="grbit">Seek options.</param>
+        /// <returns>An ESENT warning.</returns>
+        public static JET_wrn JetSeek(JET_SESID sesid, JET_TABLEID tableid, SeekGrbit grbit)
+        {
+            return Check(ErrApi.JetSeek(sesid, tableid, grbit));
+        }
+
+        /// <summary>
+        /// Temporarily limits the set of index entries that the cursor can walk using
+        /// JetMove to those starting from the current index entry and ending at the index
+        /// entry that matches the search criteria specified by the search key in that cursor
+        /// and the specified bound criteria. A search key must have been previously constructed
+        /// using JetMakeKey. 
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to set the index range on.</param>
+        /// <param name="grbit">Index range options.</param>
+        public static void JetSetIndexRange(JET_SESID sesid, JET_TABLEID tableid, SetIndexRangeGrbit grbit)
+        {
+            Check(ErrApi.JetSetIndexRange(sesid, tableid, grbit));
+        }
+
+        /// <summary>
+        /// Set the current index of a cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to set the index on.</param>
+        /// <param name="index">
+        /// The name of the index to be selected. If this is null or empty the primary
+        /// index will be selected.
+        /// </param>
+        public static void JetSetCurrentIndex(JET_SESID sesid, JET_TABLEID tableid, string index)
+        {
+            Check(ErrApi.JetSetCurrentIndex(sesid, tableid, index));
+        }
+
+        /// <summary>
+        /// Counts the number of entries in the current index from the current position forward.
+        /// The current position is included in the count. The count can be greater than the
+        /// total number of records in the table if the current index is over a multi-valued
+        /// column and instances of the column have multiple-values. If the table is empty,
+        /// then 0 will be returned for the count. 
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to count the records in.</param>
+        /// <param name="numRecords">Returns the number of records.</param>
+        /// <param name="maxRecordsToCount">
+        /// The maximum number of records to count. A value of 0 indicates that the count
+        /// is unlimited.
+        /// </param>
+        public static void JetIndexRecordCount(JET_SESID sesid, JET_TABLEID tableid, out int numRecords, int maxRecordsToCount)
+        {
+            Check(ErrApi.JetIndexRecordCount(sesid, tableid, out numRecords, maxRecordsToCount));
+        }
+
+        /// <summary>
+        /// Notifies the database engine that the application is scanning the entire
+        /// index that the cursor is positioned on. Consequently, the methods that
+        /// are used to access the index data will be tuned to make this scenario as
+        /// fast as possible. 
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor that will be accessing the data.</param>
+        /// <param name="grbit">Reserved for future use.</param>
+        public static void JetSetTableSequential(JET_SESID sesid, JET_TABLEID tableid, SetTableSequentialGrbit grbit)
+        {
+            Check(ErrApi.JetSetTableSequential(sesid, tableid, grbit));
+        }
+
+        /// <summary>
+        /// Notifies the database engine that the application is no longer scanning the
+        /// entire index the cursor is positioned on. This call reverses a notification
+        /// sent by JetSetTableSequential.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor that was accessing the data.</param>
+        /// <param name="grbit">Reserved for future use.</param>
+        public static void JetResetTableSequential(JET_SESID sesid, JET_TABLEID tableid, ResetTableSequentialGrbit grbit)
+        {
+            Check(ErrApi.JetResetTableSequential(sesid, tableid, grbit));
+        }
+
+        /// <summary>
+        /// Try to move to the first record in the table. If the table is empty this
+        /// returns false, if a different error is encountered an exception is thrown.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to position.</param>
+        /// <returns>True if the move was successful.</returns>
+        public static bool TryMoveFirst(JET_SESID sesid, JET_TABLEID tableid)
+        {
+            JET_err err = (JET_err)ErrApi.JetMove(sesid, tableid, (int)JET_Move.First, MoveGrbit.None);
+            if (JET_err.Success == err)
+            {
+                return true;
+            }
+            else if (JET_err.NoCurrentRecord == err)
+            {
+                return false;
+            }
+
+            throw new EsentException(err);
+        }
+
+        /// <summary>
+        /// Try to move to the last record in the table. If the table is empty this
+        /// returns false, if a different error is encountered an exception is thrown.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to position.</param>
+        /// <returns>True if the move was successful.</returns>
+        public static bool TryMoveLast(JET_SESID sesid, JET_TABLEID tableid)
+        {
+            JET_err err = (JET_err)ErrApi.JetMove(sesid, tableid, (int)JET_Move.Last, MoveGrbit.None);
+            if (JET_err.Success == err)
+            {
+                return true;
+            }
+            else if (JET_err.NoCurrentRecord == err)
+            {
+                return false;
+            }
+
+            throw new EsentException(err);
+        }
+
+        /// <summary>
+        /// Try to move to the next record in the table. If there is not a next record
+        /// this returns false, if a different error is encountered an exception is thrown.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to position.</param>
+        /// <returns>True if the move was successful.</returns>
+        public static bool TryMoveNext(JET_SESID sesid, JET_TABLEID tableid)
+        {
+            JET_err err = (JET_err)ErrApi.JetMove(sesid, tableid, (int)JET_Move.Next, MoveGrbit.None);
+            if (JET_err.Success == err)
+            {
+                return true;
+            }
+            else if (JET_err.NoCurrentRecord == err)
+            {
+                return false;
+            }
+
+            throw new EsentException(err);
+        }
+
+        /// <summary>
+        /// Try to move to the previous record in the table. If there is not a previous record
+        /// this returns false, if a different error is encountered an exception is thrown.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to position.</param>
+        /// <returns>True if the move was successful.</returns>
+        public static bool TryMovePrevious(JET_SESID sesid, JET_TABLEID tableid)
+        {
+            JET_err err = (JET_err)ErrApi.JetMove(sesid, tableid, (int)JET_Move.Previous, MoveGrbit.None);
+            if (JET_err.Success == err)
+            {
+                return true;
+            }
+            else if (JET_err.NoCurrentRecord == err)
+            {
+                return false;
+            }
+
+            throw new EsentException(err);
+        }
+
+        /// <summary>
+        /// Efficiently positions a cursor to an index entry that matches the search
+        /// criteria specified by the search key in that cursor and the specified
+        /// inequality. A search key must have been previously constructed using JetMakeKey.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to position.</param>
+        /// <param name="grbit">Seek option.</param>
+        /// <returns>True if a record matching the criteria was found.</returns>
+        public static bool TrySeek(JET_SESID sesid, JET_TABLEID tableid, SeekGrbit grbit)
+        {
+            JET_err err = (JET_err)ErrApi.JetSeek(sesid, tableid, grbit);
+            if (JET_err.Success == err)
+            {
+                return true;
+            }
+            else if (JET_err.NoCurrentRecord == err)
+            {
+                return false;
+            }
+
+            throw new EsentException(err);
+        }
+
+        /// <summary>
+        /// Temporarily limits the set of index entries that the cursor can walk using
+        /// JetMove to those starting from the current index entry and ending at the index
+        /// entry that matches the search criteria specified by the search key in that cursor
+        /// and the specified bound criteria. A search key must have been previously constructed
+        /// using JetMakeKey. Returns true if the index range is non-empty, false otherwise.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to position.</param>
+        /// <param name="grbit">Seek option.</param>
+        /// <returns>True if the seek was successful.</returns>
+        public static bool TrySetIndexRange(JET_SESID sesid, JET_TABLEID tableid, SetIndexRangeGrbit grbit)
+        {
+            JET_err err = (JET_err)ErrApi.JetSetIndexRange(sesid, tableid, grbit);
+            if (JET_err.Success == err)
+            {
+                return true;
+            }
+            else if (JET_err.NoCurrentRecord == err)
+            {
+                return false;
+            }
+
+            throw new EsentException(err);
         }
 
         #endregion
@@ -359,7 +717,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor on a database table. The current row will be deleted.</param>
         public static void JetDelete(JET_SESID sesid, JET_TABLEID tableid)
         {
-            Check(UncheckedApi.JetDelete(sesid, tableid));
+            Check(ErrApi.JetDelete(sesid, tableid));
         }
 
         /// <summary>
@@ -370,7 +728,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="prep">The type of update to prepare.</param>
         public static void JetPrepareUpdate(JET_SESID sesid, JET_TABLEID tableid, JET_prep prep)
         {
-            Check(UncheckedApi.JetPrepareUpdate(sesid, tableid, prep));
+            Check(ErrApi.JetPrepareUpdate(sesid, tableid, prep));
         }
 
         /// <summary>
@@ -390,7 +748,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </remarks>
         public static void JetUpdate(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize, out int actualBookmarkSize)
         {
-            Check(UncheckedApi.JetUpdate(sesid, tableid, bookmark, bookmarkSize, out actualBookmarkSize));
+            Check(ErrApi.JetUpdate(sesid, tableid, bookmark, bookmarkSize, out actualBookmarkSize));
         }
 
         /// <summary>
@@ -408,21 +766,40 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="setinfo">Used to specify itag or long-value offset.</param>
         public static void JetSetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, SetColumnGrbit grbit, JET_SETINFO setinfo)
         {
-            Check(UncheckedApi.JetSetColumn(sesid, tableid, columnid, data, dataSize, grbit, setinfo));
+            Check(ErrApi.JetSetColumn(sesid, tableid, columnid, data, dataSize, grbit, setinfo));
+        }
+
+        /// <summary>
+        /// Explicitly reserve the ability to update a row, write lock, or to explicitly prevent a row from
+        /// being updated by any other session, read lock. Normally, row write locks are acquired implicitly as a
+        /// result of updating rows. Read locks are usually not required because of record versioning. However,
+        /// in some cases a transaction may desire to explicitly lock a row to enforce serialization, or to ensure
+        /// that a subsequent operation will succeed. 
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to use. A lock will be acquired on the current record.</param>
+        /// <param name="grbit">Lock options, use this to specify which type of lock to obtain.</param>
+        public static void JetGetLock(JET_SESID sesid, JET_TABLEID tableid, GetLockGrbit grbit)
+        {
+            Check(ErrApi.JetGetLock(sesid, tableid, grbit));
         }
 
         #endregion
 
         /// <summary>
-        /// Throw an exception if the parameter is an ESE error.
+        /// Throw an exception if the parameter is an ESE error,
+        /// returns a JET_wrn otherwise.
         /// </summary>
         /// <param name="err">The error code to check.</param>
-        private static void Check(int err)
+        /// <returns>An ESENT warning code (possibly success).</returns>
+        private static JET_wrn Check(int err)
         {
             if (err < 0)
             {
-                throw new EsentException(err);
+                throw new EsentException((JET_err)err);
             }
+
+            return (JET_wrn)err;
         }
     }
 }

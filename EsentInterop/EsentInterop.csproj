@@ -47,6 +47,7 @@
     <Compile Include="InstanceParameters.cs" />
     <Compile Include="esent_exception.cs" />
     <Compile Include="grbits.cs" />
+    <Compile Include="jet_err.cs" />
     <Compile Include="jet_move.cs" />
     <Compile Include="jet_param.cs" />
     <Compile Include="jet_prep.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="jet_retinfo.cs" />
     <Compile Include="jet_setinfo.cs" />
     <Compile Include="ColumnStream.cs" />
+    <Compile Include="jet_wrn.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="Types.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

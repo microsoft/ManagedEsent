@@ -9,7 +9,7 @@ import clr
 clr.AddReferenceByPartialName('Esent.Interop')
 from System import Console
 from System.Text import Encoding
-from Esent.Interop import *
+from Microsoft.Isam.Esent.Interop import *
 
 # Initialize ESENT
 instance = API.JetInit(JET_INSTANCE.Nil)
@@ -37,7 +37,7 @@ API.JetGotoBookmark(sesid, tableid, bookmark, bookmarkSize)
 
 # Retrieve a column from the record
 buffer = System.Array.CreateInstance(System.Byte, 1024)
-retrievedSize = API.JetRetrieveColumn(sesid, tableid, columnid, buffer, buffer.Length, RetrieveColumnGrbit.None, None)
+(wrn, retrievedSize) = API.JetRetrieveColumn(sesid, tableid, columnid, buffer, buffer.Length, RetrieveColumnGrbit.None, None)
 Console.WriteLine('{0}', Encoding.ASCII.GetString(buffer, 0, retrievedSize))
 
 # Terminate ESENT

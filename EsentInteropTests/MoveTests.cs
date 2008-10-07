@@ -19,6 +19,11 @@ namespace InteropApiTests
     public class MoveTests
     {
         /// <summary>
+        /// Number of records inserted in the table.
+        /// </summary>
+        private readonly int numRecords = 5;
+
+        /// <summary>
         /// The directory being used for the database and its files.
         /// </summary>
         private string directory;
@@ -57,11 +62,6 @@ namespace InteropApiTests
         /// Columnid of the Long column in the table.
         /// </summary>
         private JET_COLUMNID columnidLong;
-
-        /// <summary>
-        /// Number of records inserted in the table.
-        /// </summary>
-        private readonly int numRecords = 5;
 
         /// <summary>
         /// Initialization method. Called once when the tests are started.
@@ -117,7 +117,7 @@ namespace InteropApiTests
         /// Test moving to the first record.
         /// </summary>
         [TestMethod]
-        public void MoveFirstTest()
+        public void MoveFirst()
         {
             int expected = 0;
             API.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
@@ -126,10 +126,22 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test moving previous to the first record.
+        /// This should generate an exception.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(EsentException))]
+        public void MoveBeforeFirst()
+        {
+            API.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
+            API.JetMove(this.sesid, this.tableid, JET_Move.Previous, MoveGrbit.None);
+        }
+
+        /// <summary>
         /// Test moving to the next record.
         /// </summary>
         [TestMethod]
-        public void MoveNextTest()
+        public void MoveNext()
         {
             int expected = 1;
             API.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
@@ -142,7 +154,7 @@ namespace InteropApiTests
         /// Test moving several records.
         /// </summary>
         [TestMethod]
-        public void MoveTest()
+        public void Move()
         {
             int expected = 3;
             API.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
@@ -155,23 +167,124 @@ namespace InteropApiTests
         /// Test moving to the last record.
         /// </summary>
         [TestMethod]
-        public void MoveLastTest()
+        public void MoveLast()
         {
-            int expected = this.numRecords-1;
+            int expected = this.numRecords - 1;
             API.JetMove(this.sesid, this.tableid, JET_Move.Last, MoveGrbit.None);
             int actual = this.GetLongColumn();
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
+        /// Test moving after the last record.
+        /// This should generate an exception.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(EsentException))]
+        public void MoveAfterLast()
+        {
+            API.JetMove(this.sesid, this.tableid, JET_Move.Last, MoveGrbit.None);
+            API.JetMove(this.sesid, this.tableid, JET_Move.Next, MoveGrbit.None);
+        }
+
+        /// <summary>
         /// Test moving to the previous record.
         /// </summary>
         [TestMethod]
-        public void MovePreviousTest()
+        public void MovePrevious()
         {
             int expected = this.numRecords - 2;
             API.JetMove(this.sesid, this.tableid, JET_Move.Last, MoveGrbit.None);
             API.JetMove(this.sesid, this.tableid, JET_Move.Previous, MoveGrbit.None);
+            int actual = this.GetLongColumn();
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Scan all the records
+        /// </summary>
+        [TestMethod]
+        public void ScanRecords()
+        {
+            API.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
+            API.JetSetTableSequential(this.sesid, this.tableid, SetTableSequentialGrbit.None);
+            for (int i = 0; i < this.numRecords - 1; ++i)
+            {
+                int actual = this.GetLongColumn();
+                Assert.AreEqual(i, actual);
+                API.JetMove(this.sesid, this.tableid, JET_Move.Next, MoveGrbit.None);
+            }
+
+            API.JetResetTableSequential(this.sesid, this.tableid, ResetTableSequentialGrbit.None);
+        }
+
+        /// <summary>
+        /// Try moving to the first record.
+        /// </summary>
+        [TestMethod]
+        public void TryMoveFirst()
+        {
+            int expected = 0;
+            Assert.AreEqual(true, API.TryMoveFirst(this.sesid, this.tableid));
+            int actual = this.GetLongColumn();
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Try moving previous to the first record.
+        /// </summary>
+        [TestMethod]
+        public void TryMoveBeforeFirst()
+        {
+            Assert.AreEqual(true, API.TryMoveFirst(this.sesid, this.tableid));
+            Assert.AreEqual(false, API.TryMovePrevious(this.sesid, this.tableid));
+        }
+
+        /// <summary>
+        /// Try moving to the next record.
+        /// </summary>
+        [TestMethod]
+        public void TryMoveNext()
+        {
+            int expected = 1;
+            Assert.AreEqual(true, API.TryMoveFirst(this.sesid, this.tableid));
+            Assert.AreEqual(true, API.TryMoveNext(this.sesid, this.tableid));
+            int actual = this.GetLongColumn();
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Try moving to the last record.
+        /// </summary>
+        [TestMethod]
+        public void TryMoveLast()
+        {
+            int expected = this.numRecords - 1;
+            Assert.AreEqual(true, API.TryMoveLast(this.sesid, this.tableid));
+            int actual = this.GetLongColumn();
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test moving after the last record.
+        /// This should generate an exception.
+        /// </summary>
+        [TestMethod]
+        public void TryMoveAfterLast()
+        {
+            Assert.AreEqual(true, API.TryMoveLast(this.sesid, this.tableid));
+            Assert.AreEqual(false, API.TryMoveNext(this.sesid, this.tableid));
+        }
+
+        /// <summary>
+        /// Test moving to the previous record.
+        /// </summary>
+        [TestMethod]
+        public void TryMovePrevious()
+        {
+            int expected = this.numRecords - 2;
+            Assert.AreEqual(true, API.TryMoveLast(this.sesid, this.tableid));
+            Assert.AreEqual(true, API.TryMovePrevious(this.sesid, this.tableid));
             int actual = this.GetLongColumn();
             Assert.AreEqual(expected, actual);
         }

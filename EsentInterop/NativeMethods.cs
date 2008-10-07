@@ -38,6 +38,25 @@ namespace Microsoft.Isam.Esent.Interop
 
         #endregion
 
+        #region Databases
+
+        [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
+        public static extern int JetCreateDatabase(IntPtr sesid, string szFilename, string szConnect, ref uint dbid, uint grbit);
+
+        [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
+        public static extern int JetAttachDatabase(IntPtr sesid, string szFilename, uint grbit);
+
+        [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
+        public static extern int JetDetachDatabase(IntPtr sesid, string szFilename);
+
+        [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
+        public static extern int JetOpenDatabase(IntPtr sesid, string database, string szConnect, ref uint dbid, uint grbit);
+
+        [DllImport(EsentDLL)]
+        public static extern int JetCloseDatabase(IntPtr sesid, uint dbid, uint grbit);
+
+        #endregion
+
         #region sessions
 
         [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
@@ -45,6 +64,9 @@ namespace Microsoft.Isam.Esent.Interop
 
         [DllImport(EsentDLL)]
         public static extern int JetEndSession(IntPtr sesid, uint grbit);
+
+        [DllImport(EsentDLL)]
+        public static extern int JetDupSession(IntPtr sesid, ref IntPtr newSesid);
 
         #endregion
 
@@ -55,6 +77,9 @@ namespace Microsoft.Isam.Esent.Interop
 
         [DllImport(EsentDLL)]
         public static extern int JetCloseTable(IntPtr sesid, IntPtr tableid);
+
+        [DllImport(EsentDLL)]
+        public static extern int JetDupCursor(IntPtr sesid, IntPtr tableid, ref IntPtr tableidNew, uint grbit);
 
         #endregion
 
@@ -74,13 +99,19 @@ namespace Microsoft.Isam.Esent.Interop
         #region DDL
 
         [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
-        public static extern int JetCreateDatabase(IntPtr sesid, string database, string connect, ref uint dbid, uint grbit);
-
-        [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
         public static extern int JetCreateTable(IntPtr sesid, uint dbid, string table, int pages, int density, ref IntPtr tableid);
 
         [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
         public static extern int JetAddColumn(IntPtr sesid, IntPtr tableid, string column, ref NATIVE_COLUMNDEF columndef, IntPtr pvDefault, uint cbDefault, ref uint columnid);
+
+        [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
+        public static extern int JetDeleteColumn(IntPtr sesid, IntPtr tableid, string szColumnName);
+
+        [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
+        public static extern int JetDeleteIndex(IntPtr sesid, IntPtr tableid, string szIndexName);
+
+        [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
+        public static extern int JetDeleteTable(IntPtr sesid, uint dbid, string szTableName);
 
         #endregion
 
@@ -98,6 +129,30 @@ namespace Microsoft.Isam.Esent.Interop
         [DllImport(EsentDLL)]
         public static extern int JetMove(IntPtr sesid, IntPtr tableid, int cRow, uint grbit);
 
+        [DllImport(EsentDLL)]
+        public static extern int JetMakeKey(IntPtr sesid, IntPtr tableid, IntPtr pvData, uint cbData, uint grbit);
+
+        [DllImport(EsentDLL)]
+        public static extern int JetRetrieveKey(IntPtr sesid, IntPtr tableid, IntPtr pvData, uint cbMax, ref uint cbActual, uint grbit);
+
+        [DllImport(EsentDLL)]
+        public static extern int JetSeek(IntPtr sesid, IntPtr tableid, uint grbit);
+
+        [DllImport(EsentDLL)]
+        public static extern int JetSetIndexRange(IntPtr sesid, IntPtr tableid, uint grbit);
+
+        [DllImport(EsentDLL)]
+        public static extern int JetSetCurrentIndex(IntPtr sesid, IntPtr tableid, string szIndexName);
+
+        [DllImport(EsentDLL)]
+        public static extern int JetIndexRecordCount(IntPtr sesid, IntPtr tableid, ref uint crec, uint crecMax);
+
+        [DllImport(EsentDLL)]
+        public static extern int JetSetTableSequential(IntPtr sesid, IntPtr tableid, uint grbit);
+
+        [DllImport(EsentDLL)]
+        public static extern int JetResetTableSequential(IntPtr sesid, IntPtr tableid, uint grbit);
+
         #endregion
 
         #region DML
@@ -113,6 +168,9 @@ namespace Microsoft.Isam.Esent.Interop
 
         [DllImport(EsentDLL)]
         public static extern int JetSetColumn(IntPtr sesid, IntPtr tableid, uint columnid, IntPtr pvData, uint cbData, uint grbit, IntPtr psetinfo);
+
+        [DllImport(EsentDLL)]
+        public static extern int JetGetLock(IntPtr sesid, IntPtr tableid, uint grbit);
 
         #endregion
     }

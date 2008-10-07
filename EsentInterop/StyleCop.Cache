@@ -91,132 +91,6 @@
   <project key="78156296">
     <configuration>DEBUG;TRACE</configuration>
   </project>
-  <sourcecode name="esent_exception.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
-    <settings>
-      <timestamp>09/12/2008 07:09:43</timestamp>
-      <milliseconds>418</milliseconds>
-    </settings>
-    <timestamp>09/05/2008 21:56:23</timestamp>
-    <milliseconds>379</milliseconds>
-    <violations />
-  </sourcecode>
-  <sourcecode name="jet_coltyp.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
-    <settings>
-      <timestamp>09/12/2008 07:09:43</timestamp>
-      <milliseconds>418</milliseconds>
-    </settings>
-    <timestamp>09/07/2008 00:44:03</timestamp>
-    <milliseconds>16</milliseconds>
-    <violations />
-  </sourcecode>
-  <sourcecode name="grbits.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
-    <settings>
-      <timestamp>09/12/2008 07:09:43</timestamp>
-      <milliseconds>418</milliseconds>
-    </settings>
-    <timestamp>09/10/2008 22:13:31</timestamp>
-    <milliseconds>245</milliseconds>
-    <violations />
-  </sourcecode>
-  <sourcecode name="jet_cp.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
-    <settings>
-      <timestamp>09/12/2008 07:09:43</timestamp>
-      <milliseconds>418</milliseconds>
-    </settings>
-    <timestamp>09/05/2008 22:04:54</timestamp>
-    <milliseconds>772</milliseconds>
-    <violations />
-  </sourcecode>
-  <sourcecode name="jet_param.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
-    <settings>
-      <timestamp>09/12/2008 07:09:43</timestamp>
-      <milliseconds>418</milliseconds>
-    </settings>
-    <timestamp>09/10/2008 22:44:05</timestamp>
-    <milliseconds>811</milliseconds>
-    <violations />
-  </sourcecode>
-  <sourcecode name="jet_columndef.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
-    <settings>
-      <timestamp>09/12/2008 07:09:43</timestamp>
-      <milliseconds>418</milliseconds>
-    </settings>
-    <timestamp>09/12/2008 07:05:45</timestamp>
-    <milliseconds>220</milliseconds>
-    <violations />
-  </sourcecode>
-  <sourcecode name="jet_prep.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
-    <settings>
-      <timestamp>09/12/2008 07:09:43</timestamp>
-      <milliseconds>418</milliseconds>
-    </settings>
-    <timestamp>09/14/2008 21:18:11</timestamp>
-    <milliseconds>587</milliseconds>
-    <violations />
-  </sourcecode>
-  <sourcecode name="jet_setinfo.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
-    <settings>
-      <timestamp>09/12/2008 07:09:43</timestamp>
-      <milliseconds>418</milliseconds>
-    </settings>
-    <timestamp>09/10/2008 22:23:43</timestamp>
-    <milliseconds>77</milliseconds>
-    <violations />
-  </sourcecode>
-  <sourcecode name="jet_retinfo.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
-    <settings>
-      <timestamp>09/12/2008 07:09:43</timestamp>
-      <milliseconds>418</milliseconds>
-    </settings>
-    <timestamp>09/10/2008 22:22:00</timestamp>
-    <milliseconds>113</milliseconds>
-    <violations />
-  </sourcecode>
-  <sourcecode name="AssemblyInfo.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
-    <settings>
-      <timestamp>09/12/2008 07:09:43</timestamp>
-      <milliseconds>418</milliseconds>
-    </settings>
-    <timestamp>09/12/2008 07:06:27</timestamp>
-    <milliseconds>561</milliseconds>
-    <violations />
-  </sourcecode>
-  <sourcecode name="Types.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
-    <settings>
-      <timestamp>09/12/2008 07:09:43</timestamp>
-      <milliseconds>418</milliseconds>
-    </settings>
-    <timestamp>09/10/2008 22:36:58</timestamp>
-    <milliseconds>466</milliseconds>
-    <violations />
-  </sourcecode>
-  <sourcecode name="NativeMethods.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
-    <settings>
-      <timestamp>09/12/2008 07:09:43</timestamp>
-      <milliseconds>418</milliseconds>
-    </settings>
-    <timestamp>09/22/2008 23:34:34</timestamp>
-    <milliseconds>980</milliseconds>
-    <violations />
-  </sourcecode>
-  <sourcecode name="CheckedApi.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
-    <settings>
-      <timestamp>09/12/2008 07:09:43</timestamp>
-      <milliseconds>418</milliseconds>
-    </settings>
-    <timestamp>09/26/2008 08:42:00</timestamp>
-    <milliseconds>641</milliseconds>
-    <violations />
-  </sourcecode>
-  <sourcecode name="UncheckedApi.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
-    <settings>
-      <timestamp>09/12/2008 07:09:43</timestamp>
-      <milliseconds>418</milliseconds>
-    </settings>
-    <timestamp>09/26/2008 08:44:10</timestamp>
-    <milliseconds>669</milliseconds>
-    <violations />
-  </sourcecode>
   <sourcecode name="SystemParameters.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
     <settings>
       <timestamp>09/12/2008 07:09:43</timestamp>
@@ -226,25 +100,185 @@
     <milliseconds>283</milliseconds>
     <violations />
   </sourcecode>
-  <sourcecode name="ColumnStream.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+  <project key="-2133436236">
+    <configuration>DEBUG;TRACE</configuration>
+  </project>
+  <sourcecode name="esent_exception.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
     <settings>
-      <timestamp>09/12/2008 07:09:43</timestamp>
-      <milliseconds>418</milliseconds>
+      <timestamp>09/12/2008 07:09:44</timestamp>
+      <milliseconds>0</milliseconds>
     </settings>
-    <timestamp>09/26/2008 23:18:11</timestamp>
-    <milliseconds>363</milliseconds>
+    <timestamp>10/07/2008 11:51:50</timestamp>
+    <milliseconds>629</milliseconds>
     <violations />
   </sourcecode>
   <sourcecode name="InstanceParameters.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
     <settings>
-      <timestamp>09/12/2008 07:09:43</timestamp>
-      <milliseconds>418</milliseconds>
+      <timestamp>09/12/2008 07:09:44</timestamp>
+      <milliseconds>0</milliseconds>
     </settings>
-    <timestamp>09/26/2008 23:40:28</timestamp>
+    <timestamp>10/07/2008 11:52:35</timestamp>
+    <milliseconds>628</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="ColumnStream.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>09/12/2008 07:09:44</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>10/07/2008 13:02:23</timestamp>
+    <milliseconds>914</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="jet_coltyp.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>09/12/2008 07:09:44</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>10/06/2008 16:13:23</timestamp>
+    <milliseconds>969</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="jet_cp.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>09/12/2008 07:09:44</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>10/06/2008 16:13:23</timestamp>
+    <milliseconds>935</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="jet_columndef.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>09/12/2008 07:09:44</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>10/06/2008 16:13:23</timestamp>
+    <milliseconds>950</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="jet_move.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>09/12/2008 07:09:44</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>10/06/2008 16:13:23</timestamp>
+    <milliseconds>921</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="jet_param.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>09/12/2008 07:09:44</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>10/06/2008 18:37:11</timestamp>
+    <milliseconds>415</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="jet_prep.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>09/12/2008 07:09:44</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>10/06/2008 16:13:23</timestamp>
+    <milliseconds>895</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="jet_setinfo.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>09/12/2008 07:09:44</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>10/06/2008 16:13:23</timestamp>
+    <milliseconds>869</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="jet_retinfo.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>09/12/2008 07:09:44</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>10/06/2008 16:13:23</timestamp>
+    <milliseconds>882</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="AssemblyInfo.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>09/12/2008 07:09:44</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>09/12/2008 07:06:28</timestamp>
+    <milliseconds>0</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="jet_wrn.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>09/12/2008 07:09:44</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>10/07/2008 13:02:54</timestamp>
+    <milliseconds>47</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="Types.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>09/12/2008 07:09:44</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>10/06/2008 16:13:23</timestamp>
+    <milliseconds>852</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="jet_err.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>09/12/2008 07:09:44</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>10/07/2008 13:00:53</timestamp>
+    <milliseconds>861</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="NativeMethods.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>09/12/2008 07:09:44</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>10/07/2008 13:06:52</timestamp>
     <milliseconds>536</milliseconds>
     <violations />
   </sourcecode>
-  <project key="-2133436236">
+  <sourcecode name="grbits.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>09/12/2008 07:09:44</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>10/07/2008 13:09:47</timestamp>
+    <milliseconds>119</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="CheckedApi.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>09/12/2008 07:09:44</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>10/07/2008 13:11:56</timestamp>
+    <milliseconds>831</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="UncheckedApi.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>09/12/2008 07:09:44</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>10/07/2008 13:10:03</timestamp>
+    <milliseconds>949</milliseconds>
+    <violations />
+  </sourcecode>
+  <project key="-1256483991">
+    <configuration>
+    </configuration>
+  </project>
+  <project key="1232914221">
     <configuration>DEBUG;TRACE</configuration>
   </project>
 </stylecopresultscache>
