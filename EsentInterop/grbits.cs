@@ -25,9 +25,6 @@ namespace Microsoft.Isam.Esent.Interop
         /// OverwriteExisting changes this behavior, and the old database
         /// will be overwritten with a new one.
         /// </summary>
-        /// <remarks>
-        /// Windows XP and later.
-        /// </remarks>
         OverwriteExisting = 0x200,
 
         /// <summary>
@@ -57,13 +54,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// If JET_paramEnableIndexChecking has been set, all indexes over Unicode
         /// data will be deleted.
         /// </summary>
-        DeleteCorruptIndexes = 0x10,
- 
-         /// <summary>
-         /// All indexes over Unicode data will be deleted, regardless of the setting
-         /// of JET_paramEnableIndexChecking. Windows Server 2003 and up.
-         /// </summary>
-         DeleteUnicodeIndexes = 0x400,
+        DeleteCorruptIndexes = 0x10, 
     }
 
     /// <summary>
@@ -122,18 +113,6 @@ namespace Microsoft.Isam.Esent.Interop
         /// are specified, this option is ignored.
         /// </summary>
         LazyFlush = 0x1,
-
-        /// <summary>
-        /// All transactions previously committed by any session that have not yet been
-        /// flushed to the transaction log file will be flushed immediately. This API
-        /// will wait until the transactions have been flushed before returning to the caller.
-        /// </summary>
-        /// <remarks>
-        /// This option may be used even if the session is not currently in a transaction.
-        /// This option cannot be used in combination with any other option.
-        /// This option is only available as of Windows Server 2003.
-        /// </remarks>
-        WaitAllLevel0Commit = 0x8,
 
         /// <summary>
         ///  If the session has previously committed any transactions and they have not yet
@@ -379,12 +358,6 @@ namespace Microsoft.Isam.Esent.Interop
         /// there are no set values for the column in the record. 
         /// </summary>
         RetrieveIgnoreDefault = 0x20,
-
-        /// <summary>
-        /// This flag will allow the retrieval of a tuple segment of the index.
-        /// This bit must be specified with RetrieveFromIndex. 
-        /// </summary>
-        RetrieveTuple = 0x800,
     }
 
     /// <summary>
@@ -545,15 +518,6 @@ namespace Microsoft.Isam.Esent.Interop
         /// exactly match the search key. 
         /// </summary>
         SetIndexRange = 0x20,
-
-        /// <summary>
-        /// A special error code, JET_wrnUniqueKey, will be returned if
-        /// it can be cheaply determined that there is exactly one index
-        /// entry that matches the search key. 
-        /// This option is ignored unless JET_bitSeekEQ is also specified.
-        /// This option is only available on Windows Server 2003 and later releases.
-        /// </summary>
-        CheckUniqueness = 0x40,
     }
 
     /// <summary>
@@ -679,9 +643,6 @@ namespace Microsoft.Isam.Esent.Interop
         /// contain the values { 1, 2, 6, 7, 8 }. This bit can only be used on columns of type
         /// JET_coltyp.Long or JET_coltyp.Currency.
         /// </summary>
-        /// <remarks>
-        /// Windows 2000:  In Windows 2000, this bit can only be used on columns of type JET_coltyp.Long. 
-        /// </remarks>
         ColumnAutoincrement = 0x10,
 
         /// <summary>
@@ -721,14 +682,5 @@ namespace Microsoft.Isam.Esent.Interop
         /// set to sizeof( JET_USERDEFINEDDEFAULT ).
         /// </summary>
         ColumnUserDefinedDefault = 0x8000,
-
-        /// <summary>
-        /// The column is an escrow update column, and when it reaches zero, the record will be
-        /// deleted. A common use for a column that can be finalized is to use it as a reference
-        /// count field, and when the field reaches zero the record gets deleted.
-        /// A Delete-on-zero column must be an escrow update column. 
-        /// ColumnDeleteOnZero cannot be a user defined default column.
-        /// </summary>
-        ColumnDeleteOnZero = 0x20000,
     }
 }

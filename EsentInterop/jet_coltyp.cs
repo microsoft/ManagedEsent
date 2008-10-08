@@ -75,25 +75,5 @@ namespace Microsoft.Isam.Esent.Interop
         /// Text data, up to 2GB
         /// </summary>
         LongText = 12,
-
-        /// <summary>
-        /// 4-byte unsigned integer
-        /// </summary>
-        UnsignedLong = 14,
-
-        /// <summary>
-        /// 8-byte signed integer
-        /// </summary>
-        LongLong = 15,
-
-        /// <summary>
-        /// 16-byte GUID
-        /// </summary>
-        GUID = 16,
-
-        /// <summary>
-        /// 2-byte unsigned integer
-        /// </summary>
-        UnsignedShort = 17,
     }
 }

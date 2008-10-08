@@ -4,6 +4,8 @@
 // </copyright>
 //-----------------------------------------------------------------------
 // The Microsoft.Isam.Esent.Interop namespace will be developed with these principles:
+//  -   Any program written with this API should work with the ESENT.dll from either
+//      Windows XP, Windows Server 2003, Windows Vista or Windows Server 2008.
 //  -   Full and complete documentation. Intellisense should be able to
 //      provide useful and extensive help.
 //  -   Minimal editorialization. Whenever possible the Microsoft.Isam.Esent.Interop API will
