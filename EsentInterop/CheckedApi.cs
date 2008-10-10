@@ -4,23 +4,24 @@
 // </copyright>
 //-----------------------------------------------------------------------
 // The Microsoft.Isam.Esent.Interop namespace will be developed with these principles:
-//  -   Any program written with this API should work with the ESENT.dll from either
+//  -   Any program written with this Api should work with the ESENT.dll from either
 //      Windows XP, Windows Server 2003, Windows Vista or Windows Server 2008.
+//  -   The Esent.Interop DLL should only require version 2.0 of the .NET Framework.
 //  -   Full and complete documentation. Intellisense should be able to
 //      provide useful and extensive help.
-//  -   Minimal editorialization. Whenever possible the Microsoft.Isam.Esent.Interop API will
-//      exactly match the ESENT API. In particular the names of structs, types
+//  -   Minimal editorialization. Whenever possible the Microsoft.Isam.Esent.Interop Api will
+//      exactly match the ESENT Api. In particular the names of structs, types
 //      and functions will not be changed. Except for:
-//  -   Cleaning up API constants. Instead of providing the constants from
+//  -   Cleaning up Api constants. Instead of providing the constants from
 //      esent.h they will be grouped into useful enumerations. This will
-//      eliminate a lot of common API errors.
+//      eliminate a lot of common Api errors.
 //  Changes that will be made are:
 //  -   Convert JET_coltyp etc. into real enumerations
 //  -   Removing cbStruct from structures
 //  -   Removing unused/reserved entries from structures
 //  -   Throwing exceptions instead of returning errors
-//  The API has three layers:
-//  -   API (public): this layer provides error-handling, turning errors
+//  The Api has three layers:
+//  -   Api (public): this layer provides error-handling, turning errors
 //      returned by lower layers into exceptions and warnings.
 //  -   ErrApi (internal): this layer turns managed objects into
 //      objects which can be passed into the P/Invoke interop layer.
@@ -32,10 +33,10 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
-    /// Managed versions of the ESENT API. This class contains static methods corresponding
-    /// with the unmanaged ESENT API. These methods throw exceptions when errors are returned.
+    /// Managed versions of the ESENT Api. This class contains static methods corresponding
+    /// with the unmanaged ESENT Api. These methods throw exceptions when errors are returned.
     /// </summary>
-    public static class API
+    public static class Api
     {
         #region init/term
 
@@ -99,6 +100,10 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="paramString">Returns the value of the parameter, if the value is a string.</param>
         /// <param name="maxParam">The maximum size of the parameter string.</param>
         /// <returns>An ESENT warning code.</returns>
+        /// <remarks>
+        /// JET_param.ErrorToString passes in the error number in the paramValue, which is why it is
+        /// a ref parameter and not an out parameter.
+        /// </remarks>
         public static JET_wrn JetGetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, ref int paramValue, out string paramString, int maxParam)
         {
             return Check(ErrApi.JetGetSystemParameter(instance, sesid, paramid, ref paramValue, out paramString, maxParam));

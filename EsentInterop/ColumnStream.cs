@@ -140,7 +140,7 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 int size;
                 var retinfo = new JET_RETINFO() { itagSequence = this.Itag, ibLongValue = 0 };
-                API.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, null, 0, out size, this.RetrieveGrbit, retinfo);
+                Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, null, 0, out size, this.RetrieveGrbit, retinfo);
                 return size;
             }
         }
@@ -182,13 +182,13 @@ namespace Microsoft.Isam.Esent.Interop
             var setinfo = new JET_SETINFO() { itagSequence = this.Itag, ibLongValue = this.offset };
             if (0 == offset)
             {
-                API.JetSetColumn(this.sesid, this.tableid, this.columnid, buffer, count, SetColumnGrbit.None, setinfo);
+                Api.JetSetColumn(this.sesid, this.tableid, this.columnid, buffer, count, SetColumnGrbit.None, setinfo);
             }
             else
             {
                 byte[] offsetBuffer = new byte[count - offset];
                 Array.Copy(buffer, offset, offsetBuffer, 0, count);
-                API.JetSetColumn(this.sesid, this.tableid, this.columnid, offsetBuffer, count, SetColumnGrbit.None, setinfo);
+                Api.JetSetColumn(this.sesid, this.tableid, this.columnid, offsetBuffer, count, SetColumnGrbit.None, setinfo);
             }
 
             this.offset += count;
@@ -213,12 +213,12 @@ namespace Microsoft.Isam.Esent.Interop
             var retinfo = new JET_RETINFO() { itagSequence = this.Itag, ibLongValue = this.offset };
             if (0 == offset)
             {
-                API.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, buffer, count, out bytesRead, this.RetrieveGrbit, retinfo);
+                Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, buffer, count, out bytesRead, this.RetrieveGrbit, retinfo);
             }
             else
             {
                 byte[] offsetBuffer = new byte[count - offset];
-                API.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, offsetBuffer, count, out bytesRead, this.RetrieveGrbit, retinfo);
+                Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, offsetBuffer, count, out bytesRead, this.RetrieveGrbit, retinfo);
                 Array.Copy(offsetBuffer, 0, buffer, offset, bytesRead);
             }
 
@@ -237,7 +237,7 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentOutOfRangeException("value", value, "A LongValueStream cannot be longer than 0x7FFFFFF bytes");
             }
 
-            API.JetSetColumn(this.sesid, this.tableid, this.columnid, null, (int)value, SetColumnGrbit.SizeLV, null);
+            Api.JetSetColumn(this.sesid, this.tableid, this.columnid, null, (int)value, SetColumnGrbit.SizeLV, null);
         }
 
         /// <summary>

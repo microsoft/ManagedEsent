@@ -38,7 +38,7 @@ namespace InteropApiTests
         [TestInitialize]
         public void Setup()
         {
-            API.JetCreateInstance(out this.instance, "InstanceParametersTest");
+            Api.JetCreateInstance(out this.instance, "InstanceParametersTest");
             this.sesid = JET_SESID.Nil;
             this.instanceParameters = new InstanceParameters(this.instance, this.sesid);
         }
@@ -49,7 +49,7 @@ namespace InteropApiTests
         [TestCleanup]
         public void Teardown()
         {
-            API.JetTerm(this.instance);
+            Api.JetTerm(this.instance);
         }
 
         /// <summary>

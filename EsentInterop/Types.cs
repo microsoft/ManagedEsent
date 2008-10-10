@@ -9,7 +9,7 @@ namespace Microsoft.Isam.Esent.Interop
     using System;
 
     /// <summary>
-    /// A JET_INSTANCE contains a handle to the instance of the database to use for calls to the JET API.
+    /// A JET_INSTANCE contains a handle to the instance of the database to use for calls to the JET Api.
     /// </summary>
     public struct JET_INSTANCE
     {
@@ -28,7 +28,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// A JET_SESID contains a handle to the session to use for calls to the JET API.
+    /// A JET_SESID contains a handle to the session to use for calls to the JET Api.
     /// </summary>
     public struct JET_SESID
     {
@@ -47,7 +47,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// A JET_TABLEID contains a handle to the database cursor to use for a call to the JET API.
+    /// A JET_TABLEID contains a handle to the database cursor to use for a call to the JET Api.
     /// A cursor can only be used with the session that was used to open that cursor.
     /// </summary>
     public struct JET_TABLEID

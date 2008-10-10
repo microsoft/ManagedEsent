@@ -46,10 +46,10 @@ namespace InteropApiTests
         public static JET_INSTANCE CreateNewInstance(string myDir)
         {
             JET_INSTANCE instance;
-            API.JetCreateInstance(out instance, InstanceName());
-            API.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.LogFilePath, 0, myDir);
-            API.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.SystemPath, 0, myDir);
-            API.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.TempPath, 0, myDir);
+            Api.JetCreateInstance(out instance, InstanceName());
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.LogFilePath, 0, myDir);
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.SystemPath, 0, myDir);
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.TempPath, 0, myDir);
             return instance;
         }
 

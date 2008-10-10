@@ -25,26 +25,26 @@ namespace InteropApiTests
         {
             string dir = SetupHelper.CreateRandomDirectory();
             JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
-            API.JetInit(ref instance);
+            Api.JetInit(ref instance);
             try
             {
                 string database = Path.Combine(dir, "test.db");
 
                 JET_SESID sesid;
                 JET_DBID dbid;
-                API.JetBeginSession(instance, out sesid, String.Empty, String.Empty);
-                API.JetCreateDatabase(sesid, database, String.Empty, out dbid, CreateDatabaseGrbit.None);
-                API.JetCloseDatabase(sesid, dbid, CloseDatabaseGrbit.None);
-                API.JetDetachDatabase(sesid, database);
+                Api.JetBeginSession(instance, out sesid, String.Empty, String.Empty);
+                Api.JetCreateDatabase(sesid, database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                Api.JetCloseDatabase(sesid, dbid, CloseDatabaseGrbit.None);
+                Api.JetDetachDatabase(sesid, database);
 
-                API.JetAttachDatabase(sesid, database, AttachDatabaseGrbit.None);
-                API.JetOpenDatabase(sesid, database, String.Empty, out dbid, OpenDatabaseGrbit.None);
-                API.JetCloseDatabase(sesid, dbid, CloseDatabaseGrbit.None);
-                API.JetDetachDatabase(sesid, database);
+                Api.JetAttachDatabase(sesid, database, AttachDatabaseGrbit.None);
+                Api.JetOpenDatabase(sesid, database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+                Api.JetCloseDatabase(sesid, dbid, CloseDatabaseGrbit.None);
+                Api.JetDetachDatabase(sesid, database);
             }
             finally
             {
-                API.JetTerm(instance);
+                Api.JetTerm(instance);
                 Directory.Delete(dir, true);
             }
         }
@@ -57,26 +57,26 @@ namespace InteropApiTests
         {
             string dir = SetupHelper.CreateRandomDirectory();
             JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
-            API.JetInit(ref instance);
+            Api.JetInit(ref instance);
             try
             {
                 string database = Path.Combine(dir, "test.db");
 
                 JET_SESID sesid;
                 JET_DBID dbid;
-                API.JetBeginSession(instance, out sesid, String.Empty, String.Empty);
-                API.JetCreateDatabase(sesid, database, String.Empty, out dbid, CreateDatabaseGrbit.None);
-                API.JetCloseDatabase(sesid, dbid, CloseDatabaseGrbit.None);
-                API.JetDetachDatabase(sesid, database);
+                Api.JetBeginSession(instance, out sesid, String.Empty, String.Empty);
+                Api.JetCreateDatabase(sesid, database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                Api.JetCloseDatabase(sesid, dbid, CloseDatabaseGrbit.None);
+                Api.JetDetachDatabase(sesid, database);
 
-                API.JetAttachDatabase(sesid, database, AttachDatabaseGrbit.ReadOnly);
-                API.JetOpenDatabase(sesid, database, String.Empty, out dbid, OpenDatabaseGrbit.ReadOnly);
-                API.JetCloseDatabase(sesid, dbid, CloseDatabaseGrbit.None);
-                API.JetDetachDatabase(sesid, database);
+                Api.JetAttachDatabase(sesid, database, AttachDatabaseGrbit.ReadOnly);
+                Api.JetOpenDatabase(sesid, database, String.Empty, out dbid, OpenDatabaseGrbit.ReadOnly);
+                Api.JetCloseDatabase(sesid, dbid, CloseDatabaseGrbit.None);
+                Api.JetDetachDatabase(sesid, database);
             }
             finally
             {
-                API.JetTerm(instance);
+                Api.JetTerm(instance);
                 Directory.Delete(dir, true);
             }
         }

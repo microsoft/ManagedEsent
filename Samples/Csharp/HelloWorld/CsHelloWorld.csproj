@@ -42,9 +42,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\EsentInterop\EsentInterop.csproj">
       <Project>{E929E163-52A0-4AAC-917B-6D7FAF70C45E}</Project>
       <Name>EsentInterop</Name>

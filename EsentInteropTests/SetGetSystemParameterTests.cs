@@ -89,20 +89,20 @@ namespace InteropApiTests
         private void PathParameterTest(JET_param param, string expected)
         {
             JET_INSTANCE instance;
-            API.JetCreateInstance(out instance, "PathParameterTest");
+            Api.JetCreateInstance(out instance, "PathParameterTest");
             try
             {
-                API.JetSetSystemParameter(instance, JET_SESID.Nil, param, 0, expected);
+                Api.JetSetSystemParameter(instance, JET_SESID.Nil, param, 0, expected);
 
                 int ignored = 0;
                 string actual;
-                API.JetGetSystemParameter(instance, JET_SESID.Nil, param, ref ignored, out actual, 256);
+                Api.JetGetSystemParameter(instance, JET_SESID.Nil, param, ref ignored, out actual, 256);
 
                 Assert.AreEqual(Path.Combine(Environment.CurrentDirectory, expected), actual);
             }
             finally
             {
-                API.JetTerm(instance);
+                Api.JetTerm(instance);
             }
         }
 
@@ -114,20 +114,20 @@ namespace InteropApiTests
         private void StringParameterTest(JET_param param, string expected)
         {
             JET_INSTANCE instance;
-            API.JetCreateInstance(out instance, "StringParameterTest");
+            Api.JetCreateInstance(out instance, "StringParameterTest");
             try
             {
-                API.JetSetSystemParameter(instance, JET_SESID.Nil, param, 0, expected);
+                Api.JetSetSystemParameter(instance, JET_SESID.Nil, param, 0, expected);
 
                 int ignored = 0;
                 string actual;
-                API.JetGetSystemParameter(instance, JET_SESID.Nil, param, ref ignored, out actual, 256);
+                Api.JetGetSystemParameter(instance, JET_SESID.Nil, param, ref ignored, out actual, 256);
 
                 Assert.AreEqual(expected, actual);
             }
             finally
             {
-                API.JetTerm(instance);
+                Api.JetTerm(instance);
             }
         }
 
@@ -139,20 +139,20 @@ namespace InteropApiTests
         private void IntegerParameterTest(JET_param param, int expected)
         {
             JET_INSTANCE instance;
-            API.JetCreateInstance(out instance, "IntParameterTest");
+            Api.JetCreateInstance(out instance, "IntParameterTest");
             try
             {
-                API.JetSetSystemParameter(instance, JET_SESID.Nil, param, expected, null);
+                Api.JetSetSystemParameter(instance, JET_SESID.Nil, param, expected, null);
 
                 int actual = 0;
                 string ignored;
-                API.JetGetSystemParameter(instance, JET_SESID.Nil, param, ref actual, out ignored, 0);
+                Api.JetGetSystemParameter(instance, JET_SESID.Nil, param, ref actual, out ignored, 0);
 
                 Assert.AreEqual(expected, actual);
             }
             finally
             {
-                API.JetTerm(instance);
+                Api.JetTerm(instance);
             }
         }
     }

@@ -2,11 +2,11 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="HelloWorld"
+	Name="CppHelloWorld"
 	ProjectGUID="{320DFC0A-1836-4986-94E7-2DE510560408}"
 	RootNamespace="HelloWorld"
 	Keyword="ManagedCProj"
-	TargetFrameworkVersion="196613"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -176,7 +176,7 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{E929E163-52A0-4AAC-917B-6D7FAF70C45E}"
-			RelativePathToProject="..\..\EsentInterop\EsentInterop.csproj"
+			RelativePathToProject=".\EsentInterop.csproj"
 		/>
 	</References>
 	<Files>

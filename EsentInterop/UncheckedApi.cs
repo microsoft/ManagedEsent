@@ -16,6 +16,12 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     internal static class ErrApi
     {
+        // This trace switch can be enabled by adding this to the configuration file:
+        //  <system.diagnostics>
+        //      <switches>
+        //          <add name="ESENT P/Invoke" value="4" />
+        //      </switches>
+        //  </system.diagnostics>
         private static TraceSwitch traceSwitch = new TraceSwitch("ESENT P/Invoke", "P/Invoke calls to ESENT");
 
         #region init/term

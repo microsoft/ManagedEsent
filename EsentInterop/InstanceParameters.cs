@@ -194,7 +194,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="value">The value to set.</param>
         private void SetStringParameter(JET_param param, string value)
         {
-            API.JetSetSystemParameter(this.instance, this.sesid, param, 0, value);
+            Api.JetSetSystemParameter(this.instance, this.sesid, param, 0, value);
         }
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             int ignored = 0;
             string value;
-            API.JetGetSystemParameter(this.instance, this.sesid, param, ref ignored, out value, 1024);
+            Api.JetGetSystemParameter(this.instance, this.sesid, param, ref ignored, out value, 1024);
             return value;
         }
 
@@ -217,7 +217,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="value">The value to set.</param>
         private void SetIntegerParameter(JET_param param, int value)
         {
-            API.JetSetSystemParameter(this.instance, this.sesid, param, value, null);
+            Api.JetSetSystemParameter(this.instance, this.sesid, param, value, null);
         }
 
         /// <summary>
@@ -229,7 +229,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             int value = 0;
             string ignored;
-            API.JetGetSystemParameter(this.instance, this.sesid, param, ref value, out ignored, 0);
+            Api.JetGetSystemParameter(this.instance, this.sesid, param, ref value, out ignored, 0);
             return value;
         }
     }

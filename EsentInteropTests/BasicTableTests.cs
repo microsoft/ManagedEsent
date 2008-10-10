@@ -13,7 +13,7 @@ namespace InteropApiTests
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
-    /// Basic API tests
+    /// Basic Api tests
     /// </summary>
     [TestClass]
     public class BasicTableTests
@@ -70,22 +70,22 @@ namespace InteropApiTests
             this.table = "table";
             this.instance = SetupHelper.CreateNewInstance(this.directory);
 
-            API.JetInit(ref this.instance);
-            API.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
-            API.JetCreateDatabase(this.sesid, this.database, String.Empty, out this.dbid, CreateDatabaseGrbit.None);
-            API.JetBeginTransaction(this.sesid);
-            API.JetCreateTable(this.sesid, this.dbid, this.table, 0, 100, out this.tableid);
+            Api.JetInit(ref this.instance);
+            Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
+            Api.JetCreateDatabase(this.sesid, this.database, String.Empty, out this.dbid, CreateDatabaseGrbit.None);
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetCreateTable(this.sesid, this.dbid, this.table, 0, 100, out this.tableid);
 
             var columndef = new JET_COLUMNDEF()
             {
                 cp = JET_CP.Unicode,
                 coltyp = JET_coltyp.LongText,
             };
-            API.JetAddColumn(this.sesid, this.tableid, "LongText", columndef, null, 0, out this.columnidLongText);
+            Api.JetAddColumn(this.sesid, this.tableid, "LongText", columndef, null, 0, out this.columnidLongText);
 
-            API.JetCloseTable(this.sesid, this.tableid);
-            API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-            API.JetOpenTable(this.sesid, this.dbid, this.table, null, 0, OpenTableGrbit.None, out this.tableid);
+            Api.JetCloseTable(this.sesid, this.tableid);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            Api.JetOpenTable(this.sesid, this.dbid, this.table, null, 0, OpenTableGrbit.None, out this.tableid);
         }
 
         /// <summary>
@@ -94,9 +94,9 @@ namespace InteropApiTests
         [TestCleanup]
         public void Teardown()
         {
-            API.JetCloseTable(this.sesid, this.tableid);
-            API.JetEndSession(this.sesid, EndSessionGrbit.None);
-            API.JetTerm(this.instance);
+            Api.JetCloseTable(this.sesid, this.tableid);
+            Api.JetEndSession(this.sesid, EndSessionGrbit.None);
+            Api.JetTerm(this.instance);
             Directory.Delete(this.directory, true);
         }
 
@@ -108,11 +108,11 @@ namespace InteropApiTests
         {
             string s = "a test string";
 
-            API.JetBeginTransaction(this.sesid);
-            API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
             this.SetColumnFromString(s);
             this.UpdateAndGotoBookmark();
-            API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
             Assert.AreEqual(s, this.RetrieveColumnAsString());
         }
 
@@ -125,15 +125,15 @@ namespace InteropApiTests
             byte[] expectedBookmark = new byte[256];
             int expectedBookmarkSize;
 
-            API.JetBeginTransaction(this.sesid);
-            API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
-            API.JetUpdate(this.sesid, this.tableid, expectedBookmark, expectedBookmark.Length, out expectedBookmarkSize);
-            API.JetGotoBookmark(this.sesid, this.tableid, expectedBookmark, expectedBookmarkSize);
-            API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.JetUpdate(this.sesid, this.tableid, expectedBookmark, expectedBookmark.Length, out expectedBookmarkSize);
+            Api.JetGotoBookmark(this.sesid, this.tableid, expectedBookmark, expectedBookmarkSize);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
             byte[] actualBookmark = new byte[256];
             int actualBookmarkSize;
-            API.JetGetBookmark(this.sesid, this.tableid, actualBookmark, actualBookmark.Length, out actualBookmarkSize);
+            Api.JetGetBookmark(this.sesid, this.tableid, actualBookmark, actualBookmark.Length, out actualBookmarkSize);
 
             Assert.AreEqual(expectedBookmarkSize, actualBookmarkSize);
             for (int i = 0; i < expectedBookmarkSize; ++i)
@@ -151,17 +151,17 @@ namespace InteropApiTests
             string before = "original";
             string after = "new and improved";
 
-            API.JetBeginTransaction(this.sesid);
-            API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
             this.SetColumnFromString(before);
             this.UpdateAndGotoBookmark();
-            API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
-            API.JetBeginTransaction(this.sesid);
-            API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Replace);
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Replace);
             this.SetColumnFromString(after);
             this.UpdateAndGotoBookmark();
-            API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
             Assert.AreEqual(after, this.RetrieveColumnAsString());
         }
@@ -175,17 +175,17 @@ namespace InteropApiTests
             string before = "original";
             string after = "new and improved";
 
-            API.JetBeginTransaction(this.sesid);
-            API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
             this.SetColumnFromString(before);
             this.UpdateAndGotoBookmark();
-            API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
-            API.JetBeginTransaction(this.sesid);
-            API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Replace);
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Replace);
             this.SetColumnFromString(after);
             this.UpdateAndGotoBookmark();
-            API.JetRollback(this.sesid, RollbackTransactionGrbit.None);
+            Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
 
             Assert.AreEqual(before, this.RetrieveColumnAsString());
         }
@@ -197,14 +197,14 @@ namespace InteropApiTests
         [ExpectedException(typeof(EsentException))]
         public void InsertRecordAndDelete()
         {
-            API.JetBeginTransaction(this.sesid);
-            API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
             this.UpdateAndGotoBookmark();
-            API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
-            API.JetBeginTransaction(this.sesid);
-            API.JetDelete(this.sesid, this.tableid);
-            API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetDelete(this.sesid, this.tableid);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
             this.RetrieveColumnAsString();
         }
@@ -215,15 +215,15 @@ namespace InteropApiTests
         [TestMethod]
         public void GetLock()
         {
-            API.JetBeginTransaction(this.sesid);
-            API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
             this.UpdateAndGotoBookmark();
-            API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
-            API.JetBeginTransaction(this.sesid);
-            API.JetGetLock(this.sesid, this.tableid, GetLockGrbit.Read);
-            API.JetGetLock(this.sesid, this.tableid, GetLockGrbit.Write);
-            API.JetRollback(this.sesid, RollbackTransactionGrbit.None);
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetGetLock(this.sesid, this.tableid, GetLockGrbit.Read);
+            Api.JetGetLock(this.sesid, this.tableid, GetLockGrbit.Write);
+            Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
 
             this.RetrieveColumnAsString();
         }
@@ -236,15 +236,15 @@ namespace InteropApiTests
         {
             string s = "the string to be inserted";
 
-            API.JetBeginTransaction(this.sesid);
-            API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
             using (var writer = new StreamWriter(new ColumnStream(this.sesid, this.tableid, this.columnidLongText)))
             {
                 writer.WriteLine(s);
             }
 
             this.UpdateAndGotoBookmark();
-            API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
             using (var reader = new StreamReader(new ColumnStream(this.sesid, this.tableid, this.columnidLongText)))
             {
@@ -262,8 +262,8 @@ namespace InteropApiTests
         {
             string[] data = { "this", "is", "a", "collection", "of", "multivalues" };                                
 
-            API.JetBeginTransaction(this.sesid);
-            API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
             for (int i = 0; i < data.Length; ++i)
             {
                 var column = new ColumnStream(this.sesid, this.tableid, this.columnidLongText);
@@ -275,7 +275,7 @@ namespace InteropApiTests
             }
 
             this.UpdateAndGotoBookmark();
-            API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
             for (int i = 0; i < data.Length; ++i)
             {
@@ -296,8 +296,8 @@ namespace InteropApiTests
         {
             byte[] bookmark = new byte[256];
             int bookmarkSize;
-            API.JetUpdate(this.sesid, this.tableid, bookmark, bookmark.Length, out bookmarkSize);
-            API.JetGotoBookmark(this.sesid, this.tableid, bookmark, bookmarkSize);
+            Api.JetUpdate(this.sesid, this.tableid, bookmark, bookmark.Length, out bookmarkSize);
+            Api.JetGotoBookmark(this.sesid, this.tableid, bookmark, bookmarkSize);
         }
 
         /// <summary>
@@ -307,7 +307,7 @@ namespace InteropApiTests
         private void SetColumnFromString(string s)
         {
             byte[] data = Encoding.Unicode.GetBytes(s);
-            API.JetSetColumn(this.sesid, this.tableid, this.columnidLongText, data, data.Length, SetColumnGrbit.None, null);
+            Api.JetSetColumn(this.sesid, this.tableid, this.columnidLongText, data, data.Length, SetColumnGrbit.None, null);
         }
 
         /// <summary>
@@ -317,9 +317,9 @@ namespace InteropApiTests
         private string RetrieveColumnAsString()
         {
             int retrievedSize;
-            API.JetRetrieveColumn(this.sesid, this.tableid, this.columnidLongText, null, 0, out retrievedSize, RetrieveColumnGrbit.None, null);
+            Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnidLongText, null, 0, out retrievedSize, RetrieveColumnGrbit.None, null);
             var buffer = new byte[retrievedSize];
-            API.JetRetrieveColumn(this.sesid, this.tableid, this.columnidLongText, buffer, buffer.Length, out retrievedSize, RetrieveColumnGrbit.None, null);
+            Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnidLongText, buffer, buffer.Length, out retrievedSize, RetrieveColumnGrbit.None, null);
             return Encoding.Unicode.GetString(buffer, 0, retrievedSize);
         }
     }

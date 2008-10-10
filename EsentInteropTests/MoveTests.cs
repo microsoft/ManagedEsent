@@ -75,30 +75,30 @@ namespace InteropApiTests
             this.table = "table";
             this.instance = SetupHelper.CreateNewInstance(this.directory);
 
-            API.JetInit(ref this.instance);
-            API.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
-            API.JetCreateDatabase(this.sesid, this.database, String.Empty, out this.dbid, CreateDatabaseGrbit.None);
-            API.JetBeginTransaction(this.sesid);
-            API.JetCreateTable(this.sesid, this.dbid, this.table, 0, 100, out this.tableid);
+            Api.JetInit(ref this.instance);
+            Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
+            Api.JetCreateDatabase(this.sesid, this.database, String.Empty, out this.dbid, CreateDatabaseGrbit.None);
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetCreateTable(this.sesid, this.dbid, this.table, 0, 100, out this.tableid);
 
             var columndef = new JET_COLUMNDEF()
             {
                 cp = JET_CP.Unicode,
                 coltyp = JET_coltyp.Long,
             };
-            API.JetAddColumn(this.sesid, this.tableid, "Long", columndef, null, 0, out this.columnidLong);
+            Api.JetAddColumn(this.sesid, this.tableid, "Long", columndef, null, 0, out this.columnidLong);
 
             for (int i = 0; i < this.numRecords; ++i)
             {
-                API.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
-                API.JetSetColumn(this.sesid, this.tableid, this.columnidLong, BitConverter.GetBytes(i), 4, SetColumnGrbit.None, null);
+                Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+                Api.JetSetColumn(this.sesid, this.tableid, this.columnidLong, BitConverter.GetBytes(i), 4, SetColumnGrbit.None, null);
                 int ignored;
-                API.JetUpdate(this.sesid, this.tableid, null, 0, out ignored);
+                Api.JetUpdate(this.sesid, this.tableid, null, 0, out ignored);
             }
 
-            API.JetCloseTable(this.sesid, this.tableid);
-            API.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-            API.JetOpenTable(this.sesid, this.dbid, this.table, null, 0, OpenTableGrbit.None, out this.tableid);
+            Api.JetCloseTable(this.sesid, this.tableid);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            Api.JetOpenTable(this.sesid, this.dbid, this.table, null, 0, OpenTableGrbit.None, out this.tableid);
         }
 
         /// <summary>
@@ -107,9 +107,9 @@ namespace InteropApiTests
         [TestCleanup]
         public void Teardown()
         {
-            API.JetCloseTable(this.sesid, this.tableid);
-            API.JetEndSession(this.sesid, EndSessionGrbit.None);
-            API.JetTerm(this.instance);
+            Api.JetCloseTable(this.sesid, this.tableid);
+            Api.JetEndSession(this.sesid, EndSessionGrbit.None);
+            Api.JetTerm(this.instance);
             Directory.Delete(this.directory, true);
         }
 
@@ -120,7 +120,7 @@ namespace InteropApiTests
         public void MoveFirst()
         {
             int expected = 0;
-            API.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
+            Api.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
             int actual = this.GetLongColumn();
             Assert.AreEqual(expected, actual);
         }
@@ -133,8 +133,8 @@ namespace InteropApiTests
         [ExpectedException(typeof(EsentException))]
         public void MoveBeforeFirst()
         {
-            API.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
-            API.JetMove(this.sesid, this.tableid, JET_Move.Previous, MoveGrbit.None);
+            Api.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
+            Api.JetMove(this.sesid, this.tableid, JET_Move.Previous, MoveGrbit.None);
         }
 
         /// <summary>
@@ -144,8 +144,8 @@ namespace InteropApiTests
         public void MoveNext()
         {
             int expected = 1;
-            API.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
-            API.JetMove(this.sesid, this.tableid, JET_Move.Next, MoveGrbit.None);
+            Api.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
+            Api.JetMove(this.sesid, this.tableid, JET_Move.Next, MoveGrbit.None);
             int actual = this.GetLongColumn();
             Assert.AreEqual(expected, actual);
         }
@@ -157,8 +157,8 @@ namespace InteropApiTests
         public void Move()
         {
             int expected = 3;
-            API.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
-            API.JetMove(this.sesid, this.tableid, expected, MoveGrbit.None);
+            Api.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
+            Api.JetMove(this.sesid, this.tableid, expected, MoveGrbit.None);
             int actual = this.GetLongColumn();
             Assert.AreEqual(expected, actual);
         }
@@ -170,7 +170,7 @@ namespace InteropApiTests
         public void MoveLast()
         {
             int expected = this.numRecords - 1;
-            API.JetMove(this.sesid, this.tableid, JET_Move.Last, MoveGrbit.None);
+            Api.JetMove(this.sesid, this.tableid, JET_Move.Last, MoveGrbit.None);
             int actual = this.GetLongColumn();
             Assert.AreEqual(expected, actual);
         }
@@ -183,8 +183,8 @@ namespace InteropApiTests
         [ExpectedException(typeof(EsentException))]
         public void MoveAfterLast()
         {
-            API.JetMove(this.sesid, this.tableid, JET_Move.Last, MoveGrbit.None);
-            API.JetMove(this.sesid, this.tableid, JET_Move.Next, MoveGrbit.None);
+            Api.JetMove(this.sesid, this.tableid, JET_Move.Last, MoveGrbit.None);
+            Api.JetMove(this.sesid, this.tableid, JET_Move.Next, MoveGrbit.None);
         }
 
         /// <summary>
@@ -194,8 +194,8 @@ namespace InteropApiTests
         public void MovePrevious()
         {
             int expected = this.numRecords - 2;
-            API.JetMove(this.sesid, this.tableid, JET_Move.Last, MoveGrbit.None);
-            API.JetMove(this.sesid, this.tableid, JET_Move.Previous, MoveGrbit.None);
+            Api.JetMove(this.sesid, this.tableid, JET_Move.Last, MoveGrbit.None);
+            Api.JetMove(this.sesid, this.tableid, JET_Move.Previous, MoveGrbit.None);
             int actual = this.GetLongColumn();
             Assert.AreEqual(expected, actual);
         }
@@ -206,16 +206,16 @@ namespace InteropApiTests
         [TestMethod]
         public void ScanRecords()
         {
-            API.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
-            API.JetSetTableSequential(this.sesid, this.tableid, SetTableSequentialGrbit.None);
+            Api.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
+            Api.JetSetTableSequential(this.sesid, this.tableid, SetTableSequentialGrbit.None);
             for (int i = 0; i < this.numRecords - 1; ++i)
             {
                 int actual = this.GetLongColumn();
                 Assert.AreEqual(i, actual);
-                API.JetMove(this.sesid, this.tableid, JET_Move.Next, MoveGrbit.None);
+                Api.JetMove(this.sesid, this.tableid, JET_Move.Next, MoveGrbit.None);
             }
 
-            API.JetResetTableSequential(this.sesid, this.tableid, ResetTableSequentialGrbit.None);
+            Api.JetResetTableSequential(this.sesid, this.tableid, ResetTableSequentialGrbit.None);
         }
 
         /// <summary>
@@ -225,7 +225,7 @@ namespace InteropApiTests
         public void TryMoveFirst()
         {
             int expected = 0;
-            Assert.AreEqual(true, API.TryMoveFirst(this.sesid, this.tableid));
+            Assert.AreEqual(true, Api.TryMoveFirst(this.sesid, this.tableid));
             int actual = this.GetLongColumn();
             Assert.AreEqual(expected, actual);
         }
@@ -236,8 +236,8 @@ namespace InteropApiTests
         [TestMethod]
         public void TryMoveBeforeFirst()
         {
-            Assert.AreEqual(true, API.TryMoveFirst(this.sesid, this.tableid));
-            Assert.AreEqual(false, API.TryMovePrevious(this.sesid, this.tableid));
+            Assert.AreEqual(true, Api.TryMoveFirst(this.sesid, this.tableid));
+            Assert.AreEqual(false, Api.TryMovePrevious(this.sesid, this.tableid));
         }
 
         /// <summary>
@@ -247,8 +247,8 @@ namespace InteropApiTests
         public void TryMoveNext()
         {
             int expected = 1;
-            Assert.AreEqual(true, API.TryMoveFirst(this.sesid, this.tableid));
-            Assert.AreEqual(true, API.TryMoveNext(this.sesid, this.tableid));
+            Assert.AreEqual(true, Api.TryMoveFirst(this.sesid, this.tableid));
+            Assert.AreEqual(true, Api.TryMoveNext(this.sesid, this.tableid));
             int actual = this.GetLongColumn();
             Assert.AreEqual(expected, actual);
         }
@@ -260,7 +260,7 @@ namespace InteropApiTests
         public void TryMoveLast()
         {
             int expected = this.numRecords - 1;
-            Assert.AreEqual(true, API.TryMoveLast(this.sesid, this.tableid));
+            Assert.AreEqual(true, Api.TryMoveLast(this.sesid, this.tableid));
             int actual = this.GetLongColumn();
             Assert.AreEqual(expected, actual);
         }
@@ -272,8 +272,8 @@ namespace InteropApiTests
         [TestMethod]
         public void TryMoveAfterLast()
         {
-            Assert.AreEqual(true, API.TryMoveLast(this.sesid, this.tableid));
-            Assert.AreEqual(false, API.TryMoveNext(this.sesid, this.tableid));
+            Assert.AreEqual(true, Api.TryMoveLast(this.sesid, this.tableid));
+            Assert.AreEqual(false, Api.TryMoveNext(this.sesid, this.tableid));
         }
 
         /// <summary>
@@ -283,8 +283,8 @@ namespace InteropApiTests
         public void TryMovePrevious()
         {
             int expected = this.numRecords - 2;
-            Assert.AreEqual(true, API.TryMoveLast(this.sesid, this.tableid));
-            Assert.AreEqual(true, API.TryMovePrevious(this.sesid, this.tableid));
+            Assert.AreEqual(true, Api.TryMoveLast(this.sesid, this.tableid));
+            Assert.AreEqual(true, Api.TryMovePrevious(this.sesid, this.tableid));
             int actual = this.GetLongColumn();
             Assert.AreEqual(expected, actual);
         }
@@ -297,7 +297,7 @@ namespace InteropApiTests
         {
             byte[] data = new byte[4];
             int actualDataSize;
-            API.JetRetrieveColumn(this.sesid, this.tableid, this.columnidLong, data, data.Length, out actualDataSize, RetrieveColumnGrbit.None, null);
+            Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnidLong, data, data.Length, out actualDataSize, RetrieveColumnGrbit.None, null);
             Assert.AreEqual(data.Length, actualDataSize);
             return BitConverter.ToInt32(data, 0);
         }

@@ -26,8 +26,8 @@ namespace InteropApiTests
             try
             {
                 JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
-                API.JetInit(ref instance);
-                API.JetTerm(instance);
+                Api.JetInit(ref instance);
+                Api.JetTerm(instance);
             }
             finally
             {
@@ -46,10 +46,10 @@ namespace InteropApiTests
             try
             {
                 JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
-                API.JetInit(ref instance);
-                API.JetTerm(instance);
-                API.JetInit(ref instance);
-                API.JetTerm(instance);
+                Api.JetInit(ref instance);
+                Api.JetTerm(instance);
+                Api.JetInit(ref instance);
+                Api.JetTerm(instance);
             }
             finally
             {
@@ -69,10 +69,10 @@ namespace InteropApiTests
             {
                 JET_INSTANCE instance1 = SetupHelper.CreateNewInstance(dir1);
                 JET_INSTANCE instance2 = SetupHelper.CreateNewInstance(dir2);
-                API.JetInit(ref instance1);
-                API.JetInit(ref instance2);
-                API.JetTerm(instance1);
-                API.JetTerm(instance2);
+                Api.JetInit(ref instance1);
+                Api.JetInit(ref instance2);
+                Api.JetTerm(instance1);
+                Api.JetTerm(instance2);
             }
             finally
             {

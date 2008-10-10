@@ -21,7 +21,7 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// By default, if JetCreateDatabase is called and the database already exists,
-        /// the API call will fail and the original database will not be overwritten.
+        /// the Api call will fail and the original database will not be overwritten.
         /// OverwriteExisting changes this behavior, and the old database
         /// will be overwritten with a new one.
         /// </summary>
@@ -104,7 +104,7 @@ namespace Microsoft.Isam.Esent.Interop
         None = 0,
 
         /// <summary>
-        /// The transaction is committed normally but this API does not wait for
+        /// The transaction is committed normally but this Api does not wait for
         /// the transaction to be flushed to the transaction log file before returning
         /// to the caller. This drastically reduces the duration of a commit operation
         /// at the cost of durability. Any transaction that is not flushed to the log
@@ -117,7 +117,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         ///  If the session has previously committed any transactions and they have not yet
         ///  been flushed to the transaction log file, they should be flushed immediately.
-        ///  This API will wait until the transactions have been flushed before returning
+        ///  This Api will wait until the transactions have been flushed before returning
         ///  to the caller. This is useful if the application has previously committed several
         ///  transactions using JET_bitCommitLazyFlush and now wants to flush all of them to disk.
         /// </summary>

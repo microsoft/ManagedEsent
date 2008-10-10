@@ -544,7 +544,7 @@ namespace Microsoft.Isam.Esent.Interop
         TermInProgress = -1000,
 
         /// <summary>
-        /// API not supported
+        /// Api not supported
         /// </summary>
         FeatureNotAvailable = -1001,
 
@@ -554,7 +554,7 @@ namespace Microsoft.Isam.Esent.Interop
         InvalidName = -1002,
 
         /// <summary>
-        /// Invalid API parameter
+        /// Invalid Api parameter
         /// </summary>
         InvalidParameter = -1003,
 
@@ -1554,7 +1554,7 @@ namespace Microsoft.Isam.Esent.Interop
         CallbackNotResolved = -2102,
 
         /// <summary>
-        /// OS Shadow copy API used in an invalid sequence
+        /// OS Shadow copy Api used in an invalid sequence
         /// </summary>
         OSSnapshotInvalidSequence = -2401,
 
