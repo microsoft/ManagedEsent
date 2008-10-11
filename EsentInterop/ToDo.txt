@@ -11,13 +11,11 @@
 	- Retrieve copy
 	- Create a column of every type
 	
-  APIs to add (12)
+  APIs to add (10)
 
   - JetEscrowUpdate
   
   - JetCreateIndex
-  - JetGetRecordPosition
-  - JetGotoPosition
   - JetIntersectIndexes
   
   - JetGetTableColumnInfo

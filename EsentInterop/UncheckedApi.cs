@@ -9,6 +9,7 @@ namespace Microsoft.Isam.Esent.Interop
     using System;
     using System.Diagnostics;
     using System.Runtime.InteropServices;
+    using System.Text;
 
     /// <summary>
     /// Calls to the ESENT interop layer. These calls take the managed types (e.g. JET_SESID) and
@@ -62,22 +63,13 @@ namespace Microsoft.Isam.Esent.Interop
         public static int JetGetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, ref int paramValue, out string paramString, int maxParam)
         {
             ErrApi.TraceFunctionCall("JetGetSystemParameter");
-            IntPtr stringValue = Marshal.AllocHGlobal(maxParam);
 
-            // Null terminate the string, in case ESENT doesn't set it
-            Marshal.WriteByte(stringValue, 0);
-            try
-            {
-                IntPtr intValue = (IntPtr)paramValue;
-                int err = Err(NativeMethods.JetGetSystemParameter(instance.Value, sesid.Value, (uint)paramid, ref intValue, stringValue, (uint)maxParam));
-                paramString = Marshal.PtrToStringAnsi(stringValue);
-                paramValue = intValue.ToInt32();
-                return err;
-            }
-            finally
-            {
-                Marshal.FreeHGlobal(stringValue);
-            }
+            IntPtr intValue = (IntPtr)paramValue;
+            StringBuilder sb = new StringBuilder(maxParam);
+            int err = Err(NativeMethods.JetGetSystemParameter(instance.Value, sesid.Value, (uint)paramid, ref intValue, sb, (uint)maxParam));
+            paramString = sb.ToString();
+            paramValue = intValue.ToInt32();
+            return err;
         }
 
         #endregion
@@ -362,6 +354,23 @@ namespace Microsoft.Isam.Esent.Interop
         {
             ErrApi.TraceFunctionCall("JetResetTableSequential");
             return Err(NativeMethods.JetResetTableSequential(sesid.Value, tableid.Value, (uint)grbit));
+        }
+
+        public static int JetGetRecordPosition(JET_SESID sesid, JET_TABLEID tableid, out JET_RECPOS recpos)
+        {
+            ErrApi.TraceFunctionCall("JetGetRecordPosition");
+            recpos = new JET_RECPOS();
+            var native = recpos.GetNativeRecpos();
+            int err = NativeMethods.JetGetRecordPosition(sesid.Value, tableid.Value, ref native, native.cbStruct);
+            recpos.SetFromNativeRecpos(native);
+            return err;
+        }
+
+        public static int JetGotoPosition(JET_SESID sesid, JET_TABLEID tableid, JET_RECPOS recpos)
+        {
+            ErrApi.TraceFunctionCall("JetGotoRecordPosition");
+            var native = recpos.GetNativeRecpos();
+            return NativeMethods.JetGotoPosition(sesid.Value, tableid.Value, ref native);
         }
 
         #endregion

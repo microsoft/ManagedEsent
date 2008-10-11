@@ -55,6 +55,7 @@
     <Compile Include="MoveTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="InitTermTests.cs" />
+    <Compile Include="RecposTests.cs" />
     <Compile Include="RetinfoTests.cs" />
     <Compile Include="SetupHelper.cs" />
     <Compile Include="SetGetSystemParameterTests.cs" />

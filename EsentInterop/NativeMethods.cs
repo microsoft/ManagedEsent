@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Runtime.InteropServices;
+    using System.Text;
 
     /// <summary>
     /// Native interop for functions in esent.dll.
@@ -34,7 +35,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static extern int JetSetSystemParameter(IntPtr pinstance, IntPtr sesid, uint paramid, IntPtr lParam, string szParam);
 
         [DllImport(EsentDLL)]
-        public static extern int JetGetSystemParameter(IntPtr instance, IntPtr sesid, uint paramid, ref IntPtr plParam, IntPtr szParam, uint cbMax);
+        public static extern int JetGetSystemParameter(IntPtr instance, IntPtr sesid, uint paramid, ref IntPtr plParam, StringBuilder szParam, uint cbMax);
 
         #endregion
 
@@ -152,6 +153,12 @@ namespace Microsoft.Isam.Esent.Interop
 
         [DllImport(EsentDLL)]
         public static extern int JetResetTableSequential(IntPtr sesid, IntPtr tableid, uint grbit);
+
+        [DllImport(EsentDLL)]
+        public static extern int JetGetRecordPosition(IntPtr sesid, IntPtr tableid, ref NATIVE_RECPOS precpos, uint cbRecpos);
+
+        [DllImport(EsentDLL)]
+        public static extern int JetGotoPosition(IntPtr sesid, IntPtr tableid, ref NATIVE_RECPOS precpos);
 
         #endregion
 

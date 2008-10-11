@@ -576,6 +576,30 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Returns the fractional position of the current record in the current index
+        /// in the form of a JET_RECPOS structure.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor positioned on the record.</param>
+        /// <param name="recpos">Returns the approximate fractional position of the record.</param>
+        public static void JetGetRecordPosition(JET_SESID sesid, JET_TABLEID tableid, out JET_RECPOS recpos)
+        {
+            Check(ErrApi.JetGetRecordPosition(sesid, tableid, out recpos));
+        }
+
+        /// <summary>
+        /// Moves a cursor to a new location that is a fraction of the way through
+        /// the current index. 
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to position.</param>
+        /// <param name="recpos">The approximate position to move to.</param>
+        public static void JetGotoPosition(JET_SESID sesid, JET_TABLEID tableid, JET_RECPOS recpos)
+        {
+            Check(ErrApi.JetGotoPosition(sesid, tableid, recpos));
+        }
+
+        /// <summary>
         /// Try to move to the first record in the table. If the table is empty this
         /// returns false, if a different error is encountered an exception is thrown.
         /// </summary>

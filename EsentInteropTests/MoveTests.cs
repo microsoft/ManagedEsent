@@ -201,6 +201,42 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test using JetGotoPosition to go to the first record
+        /// </summary>
+        [TestMethod]
+        public void GotoFirstPosition()
+        {
+            var recpos = new JET_RECPOS() { centriesLT = 0, centriesTotal = 10 };
+            Api.JetGotoPosition(this.sesid, this.tableid, recpos);
+            int actual = this.GetLongColumn();
+            Assert.AreEqual(0, actual);
+        }
+
+        /// <summary>
+        /// Test using JetGotoPosition to go to the last record
+        /// </summary>
+        [TestMethod]
+        public void GotoLastPosition()
+        {
+            var recpos = new JET_RECPOS() { centriesLT = 4, centriesTotal = 4 };
+            Api.JetGotoPosition(this.sesid, this.tableid, recpos);
+            int actual = this.GetLongColumn();
+            Assert.AreEqual(this.numRecords - 1, actual);
+        }
+
+        /// <summary>
+        /// Test using JetGetRecord position
+        /// </summary>
+        [TestMethod]
+        public void GetRecordPosition()
+        {
+            Api.JetMove(this.sesid, this.tableid, JET_Move.Last, MoveGrbit.None);
+            JET_RECPOS recpos;
+            Api.JetGetRecordPosition(this.sesid, this.tableid, out recpos);
+            Assert.AreEqual(recpos.centriesLT, recpos.centriesTotal - 1);
+        }
+
+        /// <summary>
         /// Scan all the records
         /// </summary>
         [TestMethod]

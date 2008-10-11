@@ -46,7 +46,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion to a native struct andback again
+        /// Test conversion to a native struct and back again
         /// </summary>
         [TestMethod]
         public void ConvertRetinfo()

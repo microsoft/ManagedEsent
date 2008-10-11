@@ -39,9 +39,6 @@
   <project key="-149446997">
     <configuration>DEBUG;TRACE</configuration>
   </project>
-  <project key="-2066261644">
-    <configuration>DEBUG;TRACE</configuration>
-  </project>
   <sourcecode name="ColumndefTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
     <settings>
       <timestamp>07/21/2008 16:36:14</timestamp>
@@ -96,15 +93,6 @@
     <milliseconds>347</milliseconds>
     <violations />
   </sourcecode>
-  <sourcecode name="RetinfoTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
-    <settings>
-      <timestamp>07/21/2008 16:36:14</timestamp>
-      <milliseconds>0</milliseconds>
-    </settings>
-    <timestamp>10/07/2008 11:05:54</timestamp>
-    <milliseconds>185</milliseconds>
-    <violations />
-  </sourcecode>
   <sourcecode name="SetGetSystemParameterTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
     <settings>
       <timestamp>07/21/2008 16:36:14</timestamp>
@@ -123,13 +111,34 @@
     <milliseconds>311</milliseconds>
     <violations />
   </sourcecode>
+  <project key="-2066261644">
+    <configuration>DEBUG;TRACE</configuration>
+  </project>
+  <sourcecode name="RecposTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>07/21/2008 16:36:14</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>10/09/2008 20:27:48</timestamp>
+    <milliseconds>522</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="RetinfoTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>07/21/2008 16:36:14</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>10/09/2008 20:25:14</timestamp>
+    <milliseconds>74</milliseconds>
+    <violations />
+  </sourcecode>
   <sourcecode name="MoveTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
     <settings>
       <timestamp>07/21/2008 16:36:14</timestamp>
       <milliseconds>0</milliseconds>
     </settings>
-    <timestamp>10/09/2008 11:21:50</timestamp>
-    <milliseconds>296</milliseconds>
+    <timestamp>10/10/2008 14:24:15</timestamp>
+    <milliseconds>18</milliseconds>
     <violations />
   </sourcecode>
 </stylecopresultscache>

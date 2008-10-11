@@ -54,6 +54,7 @@
     <Compile Include="jet_coltyp.cs" />
     <Compile Include="jet_columndef.cs" />
     <Compile Include="jet_cp.cs" />
+    <Compile Include="jet_recpos.cs" />
     <Compile Include="jet_retinfo.cs" />
     <Compile Include="jet_setinfo.cs" />
     <Compile Include="ColumnStream.cs" />
