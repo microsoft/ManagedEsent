@@ -57,15 +57,6 @@
     <milliseconds>298</milliseconds>
     <violations />
   </sourcecode>
-  <sourcecode name="BasicTableTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
-    <settings>
-      <timestamp>07/21/2008 16:36:14</timestamp>
-      <milliseconds>0</milliseconds>
-    </settings>
-    <timestamp>10/09/2008 11:21:50</timestamp>
-    <milliseconds>301</milliseconds>
-    <violations />
-  </sourcecode>
   <sourcecode name="InitTermTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
     <settings>
       <timestamp>07/21/2008 16:36:14</timestamp>
@@ -73,15 +64,6 @@
     </settings>
     <timestamp>10/09/2008 11:21:50</timestamp>
     <milliseconds>306</milliseconds>
-    <violations />
-  </sourcecode>
-  <sourcecode name="InstanceParameterTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
-    <settings>
-      <timestamp>07/21/2008 16:36:14</timestamp>
-      <milliseconds>0</milliseconds>
-    </settings>
-    <timestamp>10/09/2008 11:21:50</timestamp>
-    <milliseconds>308</milliseconds>
     <violations />
   </sourcecode>
   <sourcecode name="AssemblyInfo.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
@@ -93,15 +75,6 @@
     <milliseconds>347</milliseconds>
     <violations />
   </sourcecode>
-  <sourcecode name="SetGetSystemParameterTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
-    <settings>
-      <timestamp>07/21/2008 16:36:14</timestamp>
-      <milliseconds>0</milliseconds>
-    </settings>
-    <timestamp>10/09/2008 11:21:50</timestamp>
-    <milliseconds>284</milliseconds>
-    <violations />
-  </sourcecode>
   <sourcecode name="SetupHelper.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
     <settings>
       <timestamp>07/21/2008 16:36:14</timestamp>
@@ -111,9 +84,6 @@
     <milliseconds>311</milliseconds>
     <violations />
   </sourcecode>
-  <project key="-2066261644">
-    <configuration>DEBUG;TRACE</configuration>
-  </project>
   <sourcecode name="RecposTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
     <settings>
       <timestamp>07/21/2008 16:36:14</timestamp>
@@ -137,8 +107,38 @@
       <timestamp>07/21/2008 16:36:14</timestamp>
       <milliseconds>0</milliseconds>
     </settings>
-    <timestamp>10/10/2008 14:24:15</timestamp>
-    <milliseconds>18</milliseconds>
+    <timestamp>10/10/2008 14:27:16</timestamp>
+    <milliseconds>217</milliseconds>
     <violations />
   </sourcecode>
+  <sourcecode name="InstanceParameterTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>07/21/2008 16:36:14</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>10/13/2008 15:04:34</timestamp>
+    <milliseconds>854</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="SetGetSystemParameterTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>07/21/2008 16:36:14</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>10/13/2008 15:00:28</timestamp>
+    <milliseconds>523</milliseconds>
+    <violations />
+  </sourcecode>
+  <sourcecode name="BasicTableTests.cs" parser="Microsoft.StyleCop.CSharp.CsParser">
+    <settings>
+      <timestamp>07/21/2008 16:36:14</timestamp>
+      <milliseconds>0</milliseconds>
+    </settings>
+    <timestamp>10/13/2008 15:20:23</timestamp>
+    <milliseconds>447</milliseconds>
+    <violations />
+  </sourcecode>
+  <project key="-2066261644">
+    <configuration>DEBUG;TRACE</configuration>
+  </project>
 </stylecopresultscache>

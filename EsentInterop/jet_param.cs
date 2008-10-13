@@ -43,6 +43,61 @@ namespace Microsoft.Isam.Esent.Interop
         BaseName = 3,
 
         /// <summary>
+        /// This parameter supplies an application specific string that will be added to
+        /// any event log messages that are emitted by the database engine. This allows
+        /// easy correlation of event log messages with the source application. By default
+        /// the host application executable name will be used.
+        /// </summary>
+        EventSource = 4,
+
+        /// <summary>
+        /// This parameter reserves the requested number of session resources for use by an
+        /// instance. A session resource directly corresponds to a JET_SESID data type.
+        /// This setting will affect how many sessions can be used at the same time.
+        /// </summary>
+        MaxSessions = 5,
+
+        /// <summary>
+        /// This parameter reserves the requested number of B+ Tree resources for use by
+        /// an instance. This setting will affect how many tables can be used at the same time.
+        /// </summary>
+        MaxOpenTables = 6,
+
+        /// <summary>
+        /// This parameter reserves the requested number of cursor resources for use by an
+        /// instance. A cursor resource directly corresponds to a JET_TABLEID data type.
+        /// This setting will affect how many cursors can be used at the same time. A cursor
+        /// resource cannot be shared by different sessions so this parameter must be set to
+        /// a large enough value so that each session can use as many cursors as are required.
+        /// </summary>
+        MaxCursors = 8,
+
+        /// <summary>
+        /// This parameter reserves the requested number of version store pages for use by an instance.
+        /// </summary>
+        MaxVerPages = 9,
+
+        /// <summary>
+        /// This parameter reserves the requested number of temporary table resources for use
+        /// by an instance. This setting will affect how many temporary tables can be used at
+        /// the same time. If this system parameter is set to zero then no temporary database
+        /// will be created and any activity that requires use of the temporary database will
+        /// fail. This setting can be useful to avoid the I/O required to create the temporary
+        /// database if it is known that it will not be used.
+        /// </summary>
+        /// <remarks>
+        /// The use of a temporary table also requires a cursor resource.
+        /// </remarks>
+        MaxTemporaryTables = 10,
+
+        /// <summary>
+        /// This parameter will configure the size of the transaction log files. Each
+        /// transaction log file is a fixed size. The size is equal to the setting of
+        /// this system parameter in units of 1024 bytes.
+        /// </summary>
+        LogFileSize = 11,
+
+        /// <summary>
         /// This parameter configures how transaction log files are managed by the database
         /// engine. When circular logging is off, all transaction log files that are generated
         /// are retained on disk until they are no longer needed because a full backup of the
@@ -51,6 +106,24 @@ namespace Microsoft.Isam.Esent.Interop
         /// this mode is that backups are not required to retire old transaction log files. 
         /// </summary>
         CircularLog = 17,
+
+        /// <summary>
+        /// This parameter configures the maximum size of the database page cache. The size
+        /// is in database pages. If this parameter is left to its default value, then the
+        /// maximum size of the cache will be set to the size of physical memory when JetInit
+        /// is called.
+        /// </summary>
+        CacheSizeMax = 23,
+
+        /// <summary>
+        /// This parameter controls how aggressively database pages are flushed from the
+        /// database page cache to minimize the amount of time it will take to recover from a
+        /// crash. The parameter is a threshold in bytes for about how many transaction log
+        /// files will need to be replayed after a crash. If circular logging is enabled using
+        /// JET_param.CircularLog then this parameter will also control the approximate amount
+        /// of transaction log files that will be retained on disk.
+        /// </summary>
+        CheckpointDepthMax = 24,
 
         /// <summary>
         /// This parameter is the master switch that controls crash recovery for an instance.
@@ -62,6 +135,15 @@ namespace Microsoft.Isam.Esent.Interop
         /// then the contents of all databases in that instance will be corrupted.
         /// </summary>
         Recovery = 34,
+
+        /// <summary>
+        /// This parameter can be used to control the size of the database page cache at run time.
+        /// Ordinarily, the cache will automatically tune its size as a function of database and
+        /// machine activity levels. If the application sets this parameter to zero, then the cache
+        /// will tune its own size in this manner. However, if the application sets this parameter
+        /// to a non-zero value then the cache will adjust itself to that target size.
+        /// </summary>
+        CacheSize = 41,
 
         /// <summary>
         /// When this parameter is true, every database is checked at JetAttachDatabase time for
@@ -77,6 +159,17 @@ namespace Microsoft.Isam.Esent.Interop
         /// was not passed to JetAttachDatabase then the call will fail with JET_errSecondaryIndexCorrupted.
         /// </summary>
         EnableIndexChecking = 45,
+
+        /// <summary>
+        /// When this parameter is true, informational event log messages that would ordinarily be generated by
+        /// the database engine will be suppressed.
+        /// </summary>
+        NoInformationEvent = 50,
+
+        /// <summary>
+        /// This parameter configures the minimum size of the database page cache. The size is in database pages.
+        /// </summary>
+        CacheSizeMin = 60,
 
         /// <summary>
         /// This parameter configures the page size for the database. The page
@@ -97,5 +190,17 @@ namespace Microsoft.Isam.Esent.Interop
         /// This should only be used with JetGetSystemParameter.
         /// </summary>
         ErrorToString = 70,
+
+        /// <summary>
+        /// When this parameter is set to true then any folder that is missing in a file system path in use by
+        /// the database engine will be silently created. Otherwise, the operation that uses the missing file system
+        /// path will fail with JET_err.InvalidPath.
+        /// </summary>
+        CreatePathIfNotExist = 100,
+
+        /// <summary>
+        /// This parameter controls the maximum number of instances that can be created in a single process.
+        /// </summary>
+        MaxInstances = 104,
     }
 }

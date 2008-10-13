@@ -40,7 +40,7 @@ namespace InteropApiTests
         {
             Api.JetCreateInstance(out this.instance, "InstanceParametersTest");
             this.sesid = JET_SESID.Nil;
-            this.instanceParameters = new InstanceParameters(this.instance, this.sesid);
+            this.instanceParameters = new InstanceParameters(this.instance);
         }
 
         /// <summary>
@@ -64,6 +64,83 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test the event source property.
+        /// </summary>
+        [TestMethod]
+        public void EventSourceProperty()
+        {
+            string expected = "My Application";
+            this.instanceParameters.EventSource = expected;
+            Assert.AreEqual(expected, this.instanceParameters.EventSource);
+        }
+
+        /// <summary>
+        /// Test the MaxSessions property.
+        /// </summary>
+        [TestMethod]
+        public void MaxSessionsProperty()
+        {
+            int expected = 11;
+            this.instanceParameters.MaxSessions = expected;
+            Assert.AreEqual(expected, this.instanceParameters.MaxSessions);
+        }
+
+        /// <summary>
+        /// Test the MaxOpenTables property.
+        /// </summary>
+        [TestMethod]
+        public void MaxOpenTablesProperty()
+        {
+            int expected = 400;
+            this.instanceParameters.MaxOpenTables = expected;
+            Assert.AreEqual(expected, this.instanceParameters.MaxOpenTables);
+        }
+
+        /// <summary>
+        /// Test the MaxCursors property.
+        /// </summary>
+        [TestMethod]
+        public void MaxCursorsProperty()
+        {
+            int expected = 4000;
+            this.instanceParameters.MaxCursors = expected;
+            Assert.AreEqual(expected, this.instanceParameters.MaxCursors);
+        }
+
+        /// <summary>
+        /// Test the MaxVerPages property.
+        /// </summary>
+        [TestMethod]
+        public void MaxVerPagesProperty()
+        {
+            int expected = 128;
+            this.instanceParameters.MaxVerPages = expected;
+            Assert.AreEqual(expected, this.instanceParameters.MaxVerPages);
+        }
+
+        /// <summary>
+        /// Test the MaxTemporaryTables property.
+        /// </summary>
+        [TestMethod]
+        public void MaxTemporaryTablesProperty()
+        {
+            int expected = 7;
+            this.instanceParameters.MaxTemporaryTables = expected;
+            Assert.AreEqual(expected, this.instanceParameters.MaxTemporaryTables);
+        }
+
+        /// <summary>
+        /// Test the CircularLog property.
+        /// </summary>
+        [TestMethod]
+        public void LogFileSizeProperty()
+        {
+            int expected = 4096;
+            this.instanceParameters.LogFileSize = expected;
+            Assert.AreEqual(expected, this.instanceParameters.LogFileSize);
+        }
+
+        /// <summary>
         /// Test the CircularLog property.
         /// </summary>
         [TestMethod]
@@ -72,6 +149,28 @@ namespace InteropApiTests
             bool expected = true;
             this.instanceParameters.CircularLog = expected;
             Assert.AreEqual(expected, this.instanceParameters.CircularLog);
+        }
+
+        /// <summary>
+        /// Test the CheckpointDepthMax property.
+        /// </summary>
+        [TestMethod]
+        public void CheckpointDepthMaxProperty()
+        {
+            int expected = 30000;
+            this.instanceParameters.CheckpointDepthMax = expected;
+            Assert.AreEqual(expected, this.instanceParameters.CheckpointDepthMax);
+        }
+
+        /// <summary>
+        /// Test the Recovery property.
+        /// </summary>
+        [TestMethod]
+        public void RecoveryProperty()
+        {
+            bool expected = false;
+            this.instanceParameters.Recovery = expected;
+            Assert.AreEqual(expected, this.instanceParameters.Recovery);
         }
 
         /// <summary>
@@ -86,14 +185,25 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test the Recovery property.
+        /// Test the no information event.
         /// </summary>
         [TestMethod]
-        public void RecoveryProperty()
+        public void NoInformationEventProperty()
         {
-            bool expected = false;
-            this.instanceParameters.Recovery = expected;
-            Assert.AreEqual(expected, this.instanceParameters.Recovery);
+            bool expected = true;
+            this.instanceParameters.NoInformationEvent = expected;
+            Assert.AreEqual(expected, this.instanceParameters.NoInformationEvent);
+        }
+
+        /// <summary>
+        /// Test the create path if not exist property.
+        /// </summary>
+        [TestMethod]
+        public void CreatePathIfNotExistProperty()
+        {
+            bool expected = true;
+            this.instanceParameters.CreatePathIfNotExist = expected;
+            Assert.AreEqual(expected, this.instanceParameters.CreatePathIfNotExist);
         }
     }
 }

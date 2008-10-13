@@ -1,23 +1,24 @@
 ﻿ TODO
+ ----
   - Add XML headers to all functions/fields and re-enable StyleCop errors
-  - Namespace for utility/helper code
   - Sample code that wraps the ColumnStream in a BufferedStream for performance
   - More JET_param parameters
+	- JET_paramEventSourceKey
+	- JET_paramLogBuffers  
+  - Data conversion class
 
-  TESTING
-	- Set a long-value at a different offset
-	- Exercise the ColumnStream more (seeking)
-	- Create a column with a default value
-	- Retrieve copy
-	- Create a column of every type
+ TESTING
+ -------
+  - Set a long-value at a different offset
+  - Exercise the ColumnStream more (seeking)
+  - Create a column with a default value
+  - Retrieve copy
 	
-  APIs to add (10)
-
-  - JetEscrowUpdate
-  
+APIs to add (10)
+----------------
+  - JetEscrowUpdate  
   - JetCreateIndex
-  - JetIntersectIndexes
-  
+  - JetIntersectIndexes  
   - JetGetTableColumnInfo
   - JetGetColumnInfo
   - JetGetTableInfo

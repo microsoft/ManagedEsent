@@ -50,16 +50,70 @@ namespace InteropApiTests
         [TestMethod]
         public void BaseNameParameter()
         {
-            this.StringParameterTest(JET_param.BaseName, @"foo");
+            this.StringParameterTest(JET_param.BaseName, "foo");
         }
 
         /// <summary>
-        /// Test setting and retrieving the recovery parameter.
+        /// Test setting and retrieving the event source.
         /// </summary>
         [TestMethod]
-        public void RecoveryParameter()
+        public void EventSourceParameter()
         {
-            this.StringParameterTest(JET_param.Recovery, @"off");
+            this.StringParameterTest(JET_param.EventSource, "My source");
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the max sessions setting.
+        /// </summary>
+        [TestMethod]
+        public void MaxSessionsParameter()
+        {
+            this.IntegerParameterTest(JET_param.MaxSessions, 4);
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the max open tables setting.
+        /// </summary>
+        [TestMethod]
+        public void MaxOpenTablesParameter()
+        {
+            this.IntegerParameterTest(JET_param.MaxOpenTables, 100);
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the max cursors setting.
+        /// </summary>
+        [TestMethod]
+        public void MaxCursorsParameter()
+        {
+            this.IntegerParameterTest(JET_param.MaxCursors, 2500);
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the max ver pages setting.
+        /// </summary>
+        [TestMethod]
+        public void MaxVerPagesParameter()
+        {
+            this.IntegerParameterTest(JET_param.MaxVerPages, 100);
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the max temporary tables setting.
+        /// </summary>
+        [TestMethod]
+        public void MaxTemporaryTablesParameter()
+        {
+            this.IntegerParameterTest(JET_param.MaxTemporaryTables, 0);
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the logfile size setting.
+        /// </summary>
+        [TestMethod]
+        public void LogFileSizeParameter()
+        {
+            this.IntegerParameterTest(JET_param.LogFileSize, 2048);
         }
 
         /// <summary>
@@ -72,12 +126,48 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test setting and retrieving the checkpoint depth setting.
+        /// </summary>
+        [TestMethod]
+        public void CheckpointDepthMaxParameter()
+        {
+            this.IntegerParameterTest(JET_param.CheckpointDepthMax, 20000);
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the recovery parameter.
+        /// </summary>
+        [TestMethod]
+        public void RecoveryParameter()
+        {
+            this.StringParameterTest(JET_param.Recovery, "off");
+        }
+
+        /// <summary>
         /// Test setting and retrieving the index checking setting.
         /// </summary>
         [TestMethod]
         public void EnableIndexCheckingParameter()
         {
             this.IntegerParameterTest(JET_param.EnableIndexChecking, 1);
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the no information event setting.
+        /// </summary>
+        [TestMethod]
+        public void NoInformationEventParameter()
+        {
+            this.IntegerParameterTest(JET_param.NoInformationEvent, 1);
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the create path setting.
+        /// </summary>
+        [TestMethod]
+        public void CreatePathIfNotExistParameter()
+        {
+            this.IntegerParameterTest(JET_param.CreatePathIfNotExist, 1);
         }
 
         /// <summary>

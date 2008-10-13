@@ -81,7 +81,7 @@ namespace InteropApiTests
                 cp = JET_CP.Unicode,
                 coltyp = JET_coltyp.LongText,
             };
-            Api.JetAddColumn(this.sesid, this.tableid, "LongText", columndef, null, 0, out this.columnidLongText);
+            Api.JetAddColumn(this.sesid, this.tableid, "TestColumn", columndef, null, 0, out this.columnidLongText);
 
             Api.JetCloseTable(this.sesid, this.tableid);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
@@ -98,6 +98,26 @@ namespace InteropApiTests
             Api.JetEndSession(this.sesid, EndSessionGrbit.None);
             Api.JetTerm(this.instance);
             Directory.Delete(this.directory, true);
+        }
+
+        /// <summary>
+        /// Create one column of each type
+        /// </summary>
+        [TestMethod]
+        public void AddColumns()
+        {
+            Api.JetBeginTransaction(this.sesid);
+            foreach (JET_coltyp coltyp in Enum.GetValues(typeof(JET_coltyp)))
+            {
+                if (JET_coltyp.Nil != coltyp)
+                {
+                    var columndef = new JET_COLUMNDEF() { coltyp = coltyp };
+                    JET_COLUMNID columnid;
+                    Api.JetAddColumn(this.sesid, this.tableid, coltyp.ToString(), columndef, null, 0, out columnid);
+                }
+            }
+
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
         }
 
         /// <summary>
@@ -120,7 +140,7 @@ namespace InteropApiTests
         /// Inserts a record and retrieve its bookmark
         /// </summary>
         [TestMethod]
-        public void GetBookmark()
+        public void JetGetBookmark()
         {
             byte[] expectedBookmark = new byte[256];
             int expectedBookmarkSize;
@@ -140,6 +160,43 @@ namespace InteropApiTests
             {
                 Assert.AreEqual(expectedBookmark[i], actualBookmark[i]);
             }
+        }
+
+        /// <summary>
+        /// Inserts a record and retrieve its bookmark
+        /// </summary>
+        [TestMethod]
+        public void GetBookmark()
+        {
+            byte[] expectedBookmark = new byte[256];
+            int expectedBookmarkSize;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.JetUpdate(this.sesid, this.tableid, expectedBookmark, expectedBookmark.Length, out expectedBookmarkSize);
+            Api.JetGotoBookmark(this.sesid, this.tableid, expectedBookmark, expectedBookmarkSize);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            byte[] actualBookmark = Api.GetBookmark(this.sesid, this.tableid);
+
+            Assert.AreEqual(expectedBookmarkSize, actualBookmark.Length);
+            for (int i = 0; i < expectedBookmarkSize; ++i)
+            {
+                Assert.AreEqual(expectedBookmark[i], actualBookmark[i]);
+            }
+        }
+
+        /// <summary>
+        /// Insert a record and retrieve its key
+        /// </summary>
+        [TestMethod]
+        public void RetrieveKey()
+        {
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            this.UpdateAndGotoBookmark();
+
+            byte[] key = Api.RetrieveKey(this.sesid, this.tableid, RetrieveKeyGrbit.None);
         }
 
         /// <summary>
@@ -316,11 +373,8 @@ namespace InteropApiTests
         /// <returns>The value of the LongText column as a string.</returns>
         private string RetrieveColumnAsString()
         {
-            int retrievedSize;
-            Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnidLongText, null, 0, out retrievedSize, RetrieveColumnGrbit.None, null);
-            var buffer = new byte[retrievedSize];
-            Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnidLongText, buffer, buffer.Length, out retrievedSize, RetrieveColumnGrbit.None, null);
-            return Encoding.Unicode.GetString(buffer, 0, retrievedSize);
+            var buffer = Api.RetrieveColumn(this.sesid, this.tableid, this.columnidLongText, RetrieveColumnGrbit.None, null);
+            return (null == buffer) ? null : Encoding.Unicode.GetString(buffer);
         }
     }
 }
