@@ -224,6 +224,33 @@ namespace Microsoft.Isam.Esent.Interop
             return Err(NativeMethods.JetDeleteTable(sesid.Value, dbid.Value, table));
         }
 
+        public static int JetCreateIndex(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            string indexName,
+            CreateIndexGrbit grbit, 
+            string keyDescription,
+            int keyDescriptionLength,
+            int density)
+        {
+            ErrApi.TraceFunctionCall("JetCreateIndex");
+            ErrApi.CheckNotNegative(keyDescriptionLength, "keyDescriptionLength");
+            ErrApi.CheckNotNegative(density, "density");
+            if (keyDescriptionLength > keyDescription.Length)
+            {
+                throw new ArgumentException("keyDescriptionLength is greater than keyDescription", "keyDescriptionLength");
+            }
+
+            return Err(NativeMethods.JetCreateIndex(
+                sesid.Value,
+                tableid.Value,
+                indexName,
+                (uint)grbit,
+                keyDescription,
+                (uint)keyDescriptionLength,
+                (uint)density));
+        }
+
         #endregion
 
         #region Navigation
@@ -463,6 +490,22 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentException(
                     "dataSize cannot be greater than the length of the data",
                     "dataSize");
+            }
+        }
+
+        /// <summary>
+        /// Make sure the given integer isn't negative. If it is
+        /// then throw an ArgumentException.
+        /// </summary>
+        /// <param name="i">The integer to check.</param>
+        /// <param name="paramName">The name of the parameter.</param>
+        private static void CheckNotNegative(int i, string paramName)
+        {
+            if (i < 0)
+            {
+                throw new ArgumentException(
+                    String.Format("{0} cannot be less than zero", paramName),
+                    paramName);
             }
         }
 

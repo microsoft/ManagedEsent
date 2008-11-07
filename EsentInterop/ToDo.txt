@@ -14,10 +14,9 @@
   - Create a column with a default value
   - Retrieve copy
 	
-APIs to add (10)
+APIs to add (9)
 ----------------
   - JetEscrowUpdate  
-  - JetCreateIndex
   - JetIntersectIndexes  
   - JetGetTableColumnInfo
   - JetGetColumnInfo

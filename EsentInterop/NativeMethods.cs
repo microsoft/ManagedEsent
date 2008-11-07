@@ -114,6 +114,9 @@ namespace Microsoft.Isam.Esent.Interop
         [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
         public static extern int JetDeleteTable(IntPtr sesid, uint dbid, string szTableName);
 
+        [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
+        public static extern int JetCreateIndex(IntPtr sesid, IntPtr tableid, string szIndexName, uint grbit, string szKey, uint cbKey, uint lDensity);
+
         #endregion
 
         #region Navigation

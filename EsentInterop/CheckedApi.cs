@@ -369,6 +369,35 @@ namespace Microsoft.Isam.Esent.Interop
             Check(ErrApi.JetDeleteTable(sesid, dbid, table));
         }
 
+        /// <summary>
+        /// Creates an index over data in an ESE database. An index can be used to locate
+        /// specific data quickly.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to create the index on.</param>
+        /// <param name="indexName">
+        /// Pointer to a null-terminated string that specifies the name of the index to create. 
+        /// </param>
+        /// <param name="grbit">Index creation options.</param>
+        /// <param name="keyDescription">
+        /// Pointer to a double null-terminated string of null-delimited tokens.
+        /// </param>
+        /// <param name="keyDescriptionLength">
+        /// The length, in characters, of szKey including the two terminating nulls.
+        /// </param>
+        /// <param name="density">Initial B+ tree density.</param>
+        public static void JetCreateIndex(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            string indexName,
+            CreateIndexGrbit grbit,
+            string keyDescription,
+            int keyDescriptionLength,
+            int density)
+        {
+            Check(ErrApi.JetCreateIndex(sesid, tableid, indexName, grbit, keyDescription, keyDescriptionLength, density));
+        }
+
         #endregion
 
         #region Navigation
