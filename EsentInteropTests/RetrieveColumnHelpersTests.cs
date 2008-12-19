@@ -72,6 +72,8 @@ namespace InteropApiTests
             this.table = "table";
             this.instance = SetupHelper.CreateNewInstance(this.directory);
 
+            // turn off logging so initialization is faster
+            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetInit(ref this.instance);
             Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
             Api.JetCreateDatabase(this.sesid, this.database, String.Empty, out this.dbid, CreateDatabaseGrbit.None);
@@ -345,9 +347,22 @@ namespace InteropApiTests
         /// Iterate through the column information structures.
         /// </summary>
         [TestMethod]
-        public void GetTableColumnsTest()
+        public void GetTableColumnsFromTableidTest()
         {
             foreach (ColumnInfo col in Api.GetTableColumns(this.sesid, this.tableid))
+            {
+                Assert.AreEqual(this.columnidDict[col.Name], col.Columnid);
+            }
+        }
+
+        /// <summary>
+        /// Iterate through the column information structures, using
+        /// the dbid and tablename to specify the table.
+        /// </summary>
+        [TestMethod]
+        public void GetTableColumnsByTableNameTest()
+        {
+            foreach (ColumnInfo col in Api.GetTableColumns(this.sesid, this.dbid, this.table))
             {
                 Assert.AreEqual(this.columnidDict[col.Name], col.Columnid);
             }

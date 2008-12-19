@@ -191,6 +191,36 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Add a column and retrieve its information using JetGetColumnInfo
+        /// </summary>
+        [TestMethod]
+        public void JetGetColumnInfo()
+        {
+            string columnName = "column3";
+            Api.JetBeginTransaction(this.sesid);
+            var columndef = new JET_COLUMNDEF()
+            {
+                cbMax = 200,
+                cp = JET_CP.ASCII,
+                coltyp = JET_coltyp.LongText,
+                grbit = ColumndefGrbit.None,
+            };
+
+            JET_COLUMNID columnid;
+            Api.JetAddColumn(this.sesid, this.tableid, columnName, columndef, null, 0, out columnid);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            JET_COLUMNDEF retrievedColumndef;
+            Api.JetGetColumnInfo(this.sesid, this.dbid, this.table, columnName, out retrievedColumndef);
+
+            Assert.AreEqual(columndef.cbMax, retrievedColumndef.cbMax);
+            Assert.AreEqual(columndef.cp, retrievedColumndef.cp);
+            Assert.AreEqual(columndef.coltyp, retrievedColumndef.coltyp);
+            Assert.AreEqual(columnid, retrievedColumndef.columnid);
+
+            // The grbit isn't asserted as esent will add some options by default
+        }
+
+        /// <summary>
         /// Add a column and retrieve its information using GetColumnDictionary
         /// </summary>
         [TestMethod]

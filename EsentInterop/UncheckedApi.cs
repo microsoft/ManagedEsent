@@ -347,6 +347,59 @@ namespace Microsoft.Isam.Esent.Interop
             return err;
         }
 
+        public static int JetGetColumnInfo(
+                JET_SESID sesid,
+                JET_DBID dbid,
+                string tableName,
+                string columnName,
+                out JET_COLUMNDEF columndef)
+        {
+            ErrApi.TraceFunctionCall("JetGetColumnInfo");
+            columndef = new JET_COLUMNDEF();
+            ErrApi.CheckNotNull(tableName, "tableName");
+            ErrApi.CheckNotNull(columnName, "columnName");
+
+            var nativeColumndef = new NATIVE_COLUMNDEF();
+            nativeColumndef.cbStruct = (uint)Marshal.SizeOf(nativeColumndef);
+            int err = ErrApi.Err(NativeMethods.JetGetColumnInfo(
+               sesid.Value,
+               dbid.Value,
+               tableName,
+               columnName,
+               ref nativeColumndef,
+               nativeColumndef.cbStruct,
+               (uint)JET_ColInfo.Default));
+            columndef.SetFromNativeColumndef(nativeColumndef);
+
+            return err;
+        }
+
+        public static int JetGetColumnInfo(
+                JET_SESID sesid,
+                JET_DBID dbid,
+                string tableName,
+                string ignored,
+                out JET_COLUMNLIST columnlist)
+        {
+            ErrApi.TraceFunctionCall("JetGetColumnInfo");      
+            columnlist = new JET_COLUMNLIST();
+            ErrApi.CheckNotNull(tableName, "tableName");
+
+            var nativeColumnlist = new NATIVE_COLUMNLIST();
+            nativeColumnlist.cbStruct = (uint)Marshal.SizeOf(nativeColumnlist);
+            int err = ErrApi.Err(NativeMethods.JetGetColumnInfo(
+                sesid.Value,
+                dbid.Value,
+                tableName,
+                ignored,
+                ref nativeColumnlist,
+                nativeColumnlist.cbStruct,
+                (uint)JET_ColInfo.List));
+            columnlist.SetFromNativeColumnlist(nativeColumnlist);
+
+            return err;
+        }
+
         #endregion
 
         #region Navigation

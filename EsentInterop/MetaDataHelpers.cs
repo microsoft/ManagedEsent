@@ -81,6 +81,35 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Iterates over all the columns in the table, returning information about each one.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database containing the table.</param>
+        /// <param name="tableName">The name of the table.</param>
+        /// <returns>An iterator over ColumnInfo for each column in the table.</returns>
+        public static IEnumerable<ColumnInfo> GetTableColumns(JET_SESID sesid, JET_DBID dbid, string tableName)
+        {
+            JET_COLUMNLIST columnlist;
+            Api.JetGetColumnInfo(sesid, dbid, tableName, string.Empty, out columnlist);
+            try
+            {
+                if (Api.TryMoveFirst(sesid, columnlist.tableid))
+                {
+                    do
+                    {
+                        yield return GetColumnInfoFromColumnlist(sesid, columnlist);
+                    }
+                    while (Api.TryMoveNext(sesid, columnlist.tableid));
+                }
+            }
+            finally
+            {
+                // Close the temporary table used to return the results
+                Api.JetCloseTable(sesid, columnlist.tableid);
+            }
+        }
+
+        /// <summary>
         /// Create a ColumnInfo object from the data in the current JET_COLUMNLIST
         /// entry.
         /// </summary>

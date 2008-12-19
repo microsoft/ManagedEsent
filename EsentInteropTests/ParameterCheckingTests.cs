@@ -402,6 +402,45 @@ namespace InteropApiTests
             Api.JetGetTableColumnInfo(this.sesid, this.tableid, null, out columndef);
         }
 
+        /// <summary>
+        /// Check that an exception is thrown when JetGetColumnInfo gets a 
+        /// null table name.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetGetColumnInfoThrowsExceptionWhenTableNameIsNull()
+        {
+            JET_COLUMNDEF columndef;
+            Api.JetGetColumnInfo(this.sesid, this.dbid, null, "column", out columndef);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetGetColumnInfo gets a 
+        /// null column name.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetGetColumnInfoThrowsExceptionWhenColumnNameIsNull()
+        {
+            JET_COLUMNDEF columndef;
+            Api.JetGetColumnInfo(this.sesid, this.dbid, "table", null, out columndef);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetGetColumnInfo gets a 
+        /// null table name.
+        /// </summary>
+        /// <remarks>
+        /// This tests the version of the API that takes a JET_COLUMNLIST.
+        /// </remarks>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetGetColumnInfoThrowsExceptionWhenTableNameIsNull2()
+        {
+            JET_COLUMNLIST columnlist;
+            Api.JetGetColumnInfo(this.sesid, this.dbid, null, null, out columnlist);
+        }
+
         #endregion
 
         #region Navigation

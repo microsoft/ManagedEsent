@@ -446,6 +446,42 @@ namespace Microsoft.Isam.Esent.Interop
             Check(ErrApi.JetGetTableColumnInfo(sesid, tableid, columnName, out columnlist));
         }
 
+        /// <summary>
+        /// Retrieves information about a table column.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database that contains the table.</param>
+        /// <param name="tableName">The name of the table containing the column.</param>
+        /// <param name="columnName">The name of the column.</param>
+        /// <param name="columndef">Filled in with information about the column.</param>
+        public static void JetGetColumnInfo(
+                JET_SESID sesid,
+                JET_DBID dbid,
+                string tableName,
+                string columnName,
+                out JET_COLUMNDEF columndef)
+        {
+            Check(ErrApi.JetGetColumnInfo(sesid, dbid, tableName, columnName, out columndef));
+        }
+
+        /// <summary>
+        /// Retrieves information about all columns in a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database that contains the table.</param>
+        /// <param name="tableName">The name of the table containing the column.</param>
+        /// <param name="columnName">This parameter is ignored.</param>
+        /// <param name="columnlist">Filled in with information about the columns in the table.</param>
+        public static void JetGetColumnInfo(
+                JET_SESID sesid,
+                JET_DBID dbid,
+                string tableName,
+                string columnName,
+                out JET_COLUMNLIST columnlist)
+        {
+            Check(ErrApi.JetGetColumnInfo(sesid, dbid, tableName, columnName, out columnlist));
+        }
+
         #endregion
 
         #region Navigation
