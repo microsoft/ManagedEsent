@@ -111,7 +111,7 @@ namespace InteropApiTests
         /// Create one column of each type
         /// </summary>
         [TestMethod]
-        public void AddColumns()
+        public void CreateOneColumnOfEachType()
         {
             Api.JetBeginTransaction(this.sesid);
             foreach (JET_coltyp coltyp in Enum.GetValues(typeof(JET_coltyp)))
@@ -212,19 +212,93 @@ namespace InteropApiTests
 
             Dictionary<string, JET_COLUMNID> dict = Api.GetColumnDictionary(this.sesid, this.tableid);
             Assert.AreEqual(columnid, dict[columnName]);
-            Assert.AreEqual(columnid, dict[columnName.ToUpper()]);  // check case insensitive
         }
 
         /// <summary>
-        /// Creates and index
+        /// Check that the dictionary returned by GetColumnDictionary is case-insensitive
+        /// </summary>
+        [TestMethod]
+        public void GetColumnDictionaryIsCaseInsensitive()
+        {
+            Dictionary<string, JET_COLUMNID> dict = Api.GetColumnDictionary(this.sesid, this.tableid);
+            Assert.AreEqual(this.columnidLongText, dict["tEsTcOLuMn"]);
+        }
+
+        /// <summary>
+        /// Creates an index
         /// </summary>
         [TestMethod]
         public void CreateIndex()
         {
             string indexDescription = "+TestColumn\0";
+            string indexName = "new_index";
             Api.JetBeginTransaction(this.sesid);
-            Api.JetCreateIndex(this.sesid, this.tableid, "index1", CreateIndexGrbit.None, indexDescription, indexDescription.Length + 1, 100); 
+            Api.JetCreateIndex(this.sesid, this.tableid, indexName, CreateIndexGrbit.None, indexDescription, indexDescription.Length + 1, 100); 
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Api.JetSetCurrentIndex(this.sesid, this.tableid, indexName);
+        }
+
+        /// <summary>
+        /// Delete an index and make sure we can't use it afterwards
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(EsentException))]
+        public void DeleteIndex()
+        {
+            string indexDescription = "+TestColumn\0";
+            string indexName = "index_to_delete";
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetCreateIndex(this.sesid, this.tableid, indexName, CreateIndexGrbit.None, indexDescription, indexDescription.Length + 1, 100);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetDeleteIndex(this.sesid, this.tableid, indexName);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Api.JetSetCurrentIndex(this.sesid, this.tableid, indexName);
+        }
+
+        /// <summary>
+        /// Delete a column and make sure we can't see it afterwards
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(EsentException))]
+        public void DeleteColumn()
+        {
+            string columnName = "column_to_delete";
+            Api.JetBeginTransaction(this.sesid);
+            var columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Long };
+            JET_COLUMNID columnid;
+            Api.JetAddColumn(this.sesid, this.tableid, columnName, columndef, null, 0, out columnid);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetDeleteColumn(this.sesid, this.tableid, columnName);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Api.JetGetTableColumnInfo(this.sesid, this.tableid, columnName, out columndef);
+        }
+
+        /// <summary>
+        /// Delete a table and make sure we can't see it afterwards
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(EsentException))]
+        public void DeleteTable()
+        {
+            string tableName = "table_to_delete";
+            Api.JetBeginTransaction(this.sesid);
+            JET_TABLEID tableid;
+            Api.JetCreateTable(this.sesid, this.dbid, tableName, 16, 100, out tableid);
+            Api.JetCloseTable(this.sesid, tableid);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetDeleteTable(this.sesid, this.dbid, tableName);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Api.JetOpenTable(this.sesid, this.dbid, tableName, null, 0, OpenTableGrbit.None, out tableid);
         }
 
         #endregion DDL Tests
