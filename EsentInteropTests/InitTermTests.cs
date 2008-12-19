@@ -80,5 +80,30 @@ namespace InteropApiTests
                 Directory.Delete(dir2, true);
             }
         }
+
+        /// <summary>
+        /// Duplicate a session
+        /// </summary>
+        [TestMethod]
+        public void TestJetDupSession()
+        {
+            string dir = SetupHelper.CreateRandomDirectory();
+            try
+            {
+                JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
+                Api.JetInit(ref instance);
+                JET_SESID sesid;
+                Api.JetBeginSession(instance, out sesid, null, null);
+                JET_SESID sesidDup;
+                Api.JetDupSession(sesid, out sesidDup);
+                Assert.AreNotEqual(sesid, sesidDup);
+                Assert.AreNotEqual(sesidDup, JET_SESID.Nil);
+                Api.JetTerm(instance);
+            }
+            finally
+            {
+                Directory.Delete(dir, true);
+            }
+        }
     }
 }
