@@ -28,6 +28,8 @@
           <Value>cb</Value>
           <Value>ib</Value>
           <Value>w</Value>
+          <Value>c</Value>
+          <Value>sz</Value>
         </CollectionProperty>
       </AnalyzerSettings>
     </Analyzer>

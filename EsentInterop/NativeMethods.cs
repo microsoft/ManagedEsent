@@ -15,14 +15,38 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     internal static class NativeMethods
     {
+        #region Configuration Constants
+
         /// <summary>
         /// The name of the DLL that the methods should be loaded from.
         /// </summary>
         private const string EsentDLL = "esent.dll";
 
+        /// <summary>
+        /// The CharSet for the methods in the DLL.
+        /// </summary>
+        private const CharSet EsentCharSet = CharSet.Ansi;
+
+        /// <summary>
+        /// Initializes static members of the NativeMethods class.
+        /// </summary>
+        static NativeMethods()
+        {
+            // This must be changed when the CharSet is changed.
+            NativeMethods.Encoding = Encoding.ASCII;
+        }
+
+        /// <summary>
+        /// Gets encoding to be used when converting data to/from byte arrays.
+        /// This should match the CharSet above.
+        /// </summary>
+        public static Encoding Encoding { get; private set; }
+
+        #endregion Configuration Constants
+
         #region init/term
 
-        [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
+        [DllImport(EsentDLL, CharSet = EsentCharSet)]
         public static extern int JetCreateInstance(ref IntPtr instance, string szInstanceName);
 
         [DllImport(EsentDLL)]
@@ -31,7 +55,7 @@ namespace Microsoft.Isam.Esent.Interop
         [DllImport(EsentDLL)]
         public static extern int JetTerm(IntPtr instance);
 
-        [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
+        [DllImport(EsentDLL, CharSet = EsentCharSet)]
         public static extern int JetSetSystemParameter(IntPtr pinstance, IntPtr sesid, uint paramid, IntPtr lParam, string szParam);
 
         [DllImport(EsentDLL)]
@@ -41,16 +65,16 @@ namespace Microsoft.Isam.Esent.Interop
 
         #region Databases
 
-        [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
+        [DllImport(EsentDLL, CharSet = EsentCharSet)]
         public static extern int JetCreateDatabase(IntPtr sesid, string szFilename, string szConnect, ref uint dbid, uint grbit);
 
-        [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
+        [DllImport(EsentDLL, CharSet = EsentCharSet)]
         public static extern int JetAttachDatabase(IntPtr sesid, string szFilename, uint grbit);
 
-        [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
+        [DllImport(EsentDLL, CharSet = EsentCharSet)]
         public static extern int JetDetachDatabase(IntPtr sesid, string szFilename);
 
-        [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
+        [DllImport(EsentDLL, CharSet = EsentCharSet)]
         public static extern int JetOpenDatabase(IntPtr sesid, string database, string szConnect, ref uint dbid, uint grbit);
 
         [DllImport(EsentDLL)]
@@ -60,7 +84,7 @@ namespace Microsoft.Isam.Esent.Interop
 
         #region sessions
 
-        [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
+        [DllImport(EsentDLL, CharSet = EsentCharSet)]
         public static extern int JetBeginSession(IntPtr instance, ref IntPtr session, string username, string password);
 
         [DllImport(EsentDLL)]
@@ -99,23 +123,33 @@ namespace Microsoft.Isam.Esent.Interop
 
         #region DDL
 
-        [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
-        public static extern int JetCreateTable(IntPtr sesid, uint dbid, string table, int pages, int density, ref IntPtr tableid);
+        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        public static extern int JetCreateTable(IntPtr sesid, uint dbid, string szTableName, int pages, int density, ref IntPtr tableid);
 
-        [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
-        public static extern int JetAddColumn(IntPtr sesid, IntPtr tableid, string column, ref NATIVE_COLUMNDEF columndef, IntPtr pvDefault, uint cbDefault, ref uint columnid);
+        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        public static extern int JetAddColumn(IntPtr sesid, IntPtr tableid, string szColumnName, ref NATIVE_COLUMNDEF columndef, IntPtr pvDefault, uint cbDefault, ref uint columnid);
 
-        [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
+        [DllImport(EsentDLL, CharSet = EsentCharSet)]
         public static extern int JetDeleteColumn(IntPtr sesid, IntPtr tableid, string szColumnName);
 
-        [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
+        [DllImport(EsentDLL, CharSet = EsentCharSet)]
         public static extern int JetDeleteIndex(IntPtr sesid, IntPtr tableid, string szIndexName);
 
-        [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
+        [DllImport(EsentDLL, CharSet = EsentCharSet)]
         public static extern int JetDeleteTable(IntPtr sesid, uint dbid, string szTableName);
 
-        [DllImport(EsentDLL, CharSet = CharSet.Ansi)]
+        [DllImport(EsentDLL, CharSet = EsentCharSet)]
         public static extern int JetCreateIndex(IntPtr sesid, IntPtr tableid, string szIndexName, uint grbit, string szKey, uint cbKey, uint lDensity);
+        
+        // Overloads for the various different ways JetGetTableColumnInfo can be called
+        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        public static extern int JetGetTableColumnInfo(IntPtr sesid, IntPtr tableid, string szColumnName, ref NATIVE_COLUMNDEF columndef, uint cbMax, uint InfoLevel);
+
+        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        public static extern int JetGetTableColumnInfo(IntPtr sesid, IntPtr tableid, ref uint pcolumnid, ref NATIVE_COLUMNDEF columndef, uint cbMax, uint InfoLevel);
+
+        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        public static extern int JetGetTableColumnInfo(IntPtr sesid, IntPtr tableid, string szIgnored, ref NATIVE_COLUMNLIST columnlist, uint cbMax, uint InfoLevel);
 
         #endregion
 

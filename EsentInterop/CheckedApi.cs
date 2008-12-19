@@ -398,6 +398,54 @@ namespace Microsoft.Isam.Esent.Interop
             Check(ErrApi.JetCreateIndex(sesid, tableid, indexName, grbit, keyDescription, keyDescriptionLength, density));
         }
 
+        /// <summary>
+        /// Retrieves information about a table column.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table containing the column.</param>
+        /// <param name="columnName">The name of the column.</param>
+        /// <param name="columndef">Filled in with information about the column.</param>
+        public static void JetGetTableColumnInfo(
+                JET_SESID sesid,
+                JET_TABLEID tableid,
+                string columnName,
+                out JET_COLUMNDEF columndef)
+        {
+            Check(ErrApi.JetGetTableColumnInfo(sesid, tableid, columnName, out columndef));
+        }
+
+        /// <summary>
+        /// Retrieves information about a table column.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table containing the column.</param>
+        /// <param name="columnid">The columnid of the column.</param>
+        /// <param name="columndef">Filled in with information about the column.</param>
+        public static void JetGetTableColumnInfo(
+                JET_SESID sesid,
+                JET_TABLEID tableid,
+                JET_COLUMNID columnid,
+                out JET_COLUMNDEF columndef)
+        {
+            Check(ErrApi.JetGetTableColumnInfo(sesid, tableid, columnid, out columndef));
+        }
+
+        /// <summary>
+        /// Retrieves information about all columns in the table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table containing the column.</param>
+        /// <param name="columnName">The parameter is ignored.</param>
+        /// <param name="columnlist">Filled in with information about the columns in the table.</param>
+        public static void JetGetTableColumnInfo(
+                JET_SESID sesid,
+                JET_TABLEID tableid,
+                string columnName,
+                out JET_COLUMNLIST columnlist)
+        {
+            Check(ErrApi.JetGetTableColumnInfo(sesid, tableid, columnName, out columnlist));
+        }
+
         #endregion
 
         #region Navigation
@@ -708,6 +756,8 @@ namespace Microsoft.Isam.Esent.Interop
 
         #endregion
 
+        #region Error Handling
+
         /// <summary>
         /// Throw an exception if the parameter is an ESE error,
         /// returns a JET_wrn otherwise.
@@ -723,5 +773,7 @@ namespace Microsoft.Isam.Esent.Interop
 
             return (JET_wrn)err;
         }
+
+        #endregion Error Handling
     }
 }

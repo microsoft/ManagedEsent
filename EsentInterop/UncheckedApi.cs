@@ -203,7 +203,12 @@ namespace Microsoft.Isam.Esent.Interop
 
             var nativeColumndef = columndef.GetNativeColumndef();
             var gch = GCHandle.Alloc(defaultValue, GCHandleType.Pinned);
-            return Err(NativeMethods.JetAddColumn(sesid.Value, tableid.Value, column, ref nativeColumndef, gch.AddrOfPinnedObject(), (uint)defaultValueSize, ref columnid.Value));
+            int err = Err(NativeMethods.JetAddColumn(sesid.Value, tableid.Value, column, ref nativeColumndef, gch.AddrOfPinnedObject(), (uint)defaultValueSize, ref columnid.Value));
+           
+            // esent doesn't actually set the columnid member of the passed in JET_COLUMNDEF, but we will do that here for
+            // completeness.
+            columndef.columnid = new JET_COLUMNID() { Value = columnid.Value };
+            return err;
         }
 
         public static int JetDeleteColumn(JET_SESID sesid, JET_TABLEID tableid, string column)
@@ -236,7 +241,7 @@ namespace Microsoft.Isam.Esent.Interop
             ErrApi.TraceFunctionCall("JetCreateIndex");
             ErrApi.CheckNotNegative(keyDescriptionLength, "keyDescriptionLength");
             ErrApi.CheckNotNegative(density, "density");
-            if (keyDescriptionLength > keyDescription.Length)
+            if (keyDescriptionLength > keyDescription.Length + 1)
             {
                 throw new ArgumentException("keyDescriptionLength is greater than keyDescription", "keyDescriptionLength");
             }
@@ -249,6 +254,75 @@ namespace Microsoft.Isam.Esent.Interop
                 keyDescription,
                 (uint)keyDescriptionLength,
                 (uint)density));
+        }
+
+        public static int JetGetTableColumnInfo(
+                JET_SESID sesid,
+                JET_TABLEID tableid,
+                string columnName,
+                out JET_COLUMNDEF columndef)
+        {
+            ErrApi.TraceFunctionCall("JetGetTableColumnInfo");
+            columndef = new JET_COLUMNDEF();
+
+            var nativeColumndef = new NATIVE_COLUMNDEF();
+            nativeColumndef.cbStruct = (uint)Marshal.SizeOf(nativeColumndef);
+            int err = Err(NativeMethods.JetGetTableColumnInfo(
+                sesid.Value,
+                tableid.Value,
+                columnName,
+                ref nativeColumndef,
+                nativeColumndef.cbStruct,
+                (uint)JET_ColInfo.Default));
+            columndef.SetFromNativeColumndef(nativeColumndef);
+
+            return err;
+        }
+
+        public static int JetGetTableColumnInfo(
+                JET_SESID sesid,
+                JET_TABLEID tableid,
+                JET_COLUMNID columnid,
+                out JET_COLUMNDEF columndef)
+        {
+            ErrApi.TraceFunctionCall("JetGetTableColumnInfo");
+            columndef = new JET_COLUMNDEF();
+
+            var nativeColumndef = new NATIVE_COLUMNDEF();
+            nativeColumndef.cbStruct = (uint)Marshal.SizeOf(nativeColumndef);
+            int err = Err(NativeMethods.JetGetTableColumnInfo(
+                sesid.Value,
+                tableid.Value,
+                ref columnid.Value,
+                ref nativeColumndef,
+                nativeColumndef.cbStruct,
+                (uint)JET_ColInfo.ByColid));
+            columndef.SetFromNativeColumndef(nativeColumndef);
+
+            return err;
+        }
+
+        public static int JetGetTableColumnInfo(
+                JET_SESID sesid,
+                JET_TABLEID tableid,
+                string ignored,
+                out JET_COLUMNLIST columnlist)
+        {
+            ErrApi.TraceFunctionCall("JetGetTableColumnInfo");
+            columnlist = new JET_COLUMNLIST();
+
+            var nativeColumnlist = new NATIVE_COLUMNLIST();
+            nativeColumnlist.cbStruct = (uint)Marshal.SizeOf(nativeColumnlist);
+            int err = Err(NativeMethods.JetGetTableColumnInfo(
+                sesid.Value,
+                tableid.Value,
+                ignored,
+                ref nativeColumnlist,
+                nativeColumnlist.cbStruct,
+                (uint)JET_ColInfo.List));
+            columnlist.SetFromNativeColumnlist(nativeColumnlist);
+
+            return err;
         }
 
         #endregion
@@ -478,6 +552,8 @@ namespace Microsoft.Isam.Esent.Interop
 
         #endregion
 
+        #region Parameter Checking and Tracing
+
         /// <summary>
         /// Make sure the data and dataSize arguments match.
         /// </summary>
@@ -525,20 +601,22 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The error.</returns>
         private static int Err(int err)
         {
-            if (0 == err && ErrApi.traceSwitch.TraceVerbose)
+            if (0 == err)
             {
-                Trace.WriteLine("JET_err.Success");
+                Trace.WriteLineIf(ErrApi.traceSwitch.TraceVerbose, "JET_err.Success");
             }
-            else if (err > 0 && ErrApi.traceSwitch.TraceWarning)
+            else if (err > 0)
             {
-                Trace.WriteLine((JET_wrn)err);
+                Trace.WriteLineIf(ErrApi.traceSwitch.TraceWarning, (JET_wrn)err);
             }
-            else if (ErrApi.traceSwitch.TraceError)
+            else
             {
-                Trace.WriteLine((JET_err)err);
+                Trace.WriteLineIf(ErrApi.traceSwitch.TraceError, (JET_err)err);
             }
 
             return err;
         }
+
+        #endregion Parameter Checking and Tracing
     }
 }

@@ -7,6 +7,7 @@
 namespace InteropApiTests
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Text;
     using Microsoft.Isam.Esent.Interop;
@@ -114,9 +115,109 @@ namespace InteropApiTests
                     var columndef = new JET_COLUMNDEF() { coltyp = coltyp };
                     JET_COLUMNID columnid;
                     Api.JetAddColumn(this.sesid, this.tableid, coltyp.ToString(), columndef, null, 0, out columnid);
+                    Assert.AreEqual(columnid, columndef.columnid);
                 }
             }
 
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+        }
+
+        /// <summary>
+        /// Add a column and retrieve its information using JetGetTableColumnInfo
+        /// </summary>
+        [TestMethod]
+        public void JetGetTableColumnInfo()
+        {
+            string columnName = "column1";
+            Api.JetBeginTransaction(this.sesid);
+            var columndef = new JET_COLUMNDEF()
+            {
+                cbMax = 4096,
+                cp = JET_CP.Unicode,
+                coltyp = JET_coltyp.LongText,
+                grbit = ColumndefGrbit.None,                
+            };
+            
+            JET_COLUMNID columnid;
+            Api.JetAddColumn(this.sesid, this.tableid, columnName, columndef, null, 0, out columnid);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            JET_COLUMNDEF retrievedColumndef;
+            Api.JetGetTableColumnInfo(this.sesid, this.tableid, columnName, out retrievedColumndef);
+
+            Assert.AreEqual(columndef.cbMax, retrievedColumndef.cbMax);
+            Assert.AreEqual(columndef.cp, retrievedColumndef.cp);
+            Assert.AreEqual(columndef.coltyp, retrievedColumndef.coltyp);
+            Assert.AreEqual(columnid, retrievedColumndef.columnid);
+
+            // The grbit isn't asserted as esent will add some options by default
+        }
+
+        /// <summary>
+        /// Add a column and retrieve its information using JetGetTableColumnInfo
+        /// </summary>
+        [TestMethod]
+        public void JetGetTableColumnInfoByColumnid()
+        {
+            string columnName = "column2";
+            Api.JetBeginTransaction(this.sesid);
+            var columndef = new JET_COLUMNDEF()
+            {
+                cbMax = 8192,
+                cp = JET_CP.ASCII,
+                coltyp = JET_coltyp.LongText,
+                grbit = ColumndefGrbit.None,
+            };
+
+            JET_COLUMNID columnid;
+            Api.JetAddColumn(this.sesid, this.tableid, columnName, columndef, null, 0, out columnid);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            JET_COLUMNDEF retrievedColumndef;
+            Api.JetGetTableColumnInfo(this.sesid, this.tableid, columnid, out retrievedColumndef);
+
+            Assert.AreEqual(columndef.cbMax, retrievedColumndef.cbMax);
+            Assert.AreEqual(columndef.cp, retrievedColumndef.cp);
+            Assert.AreEqual(columndef.coltyp, retrievedColumndef.coltyp);
+            Assert.AreEqual(columnid, retrievedColumndef.columnid);
+
+            // The grbit isn't asserted as esent will add some options by default
+        }
+
+        /// <summary>
+        /// Add a column and retrieve its information using GetColumnDictionary
+        /// </summary>
+        [TestMethod]
+        public void GetColumnDictionary()
+        {
+            string columnName = "column4";
+            Api.JetBeginTransaction(this.sesid);
+            var columndef = new JET_COLUMNDEF()
+            {
+                cbMax = 10000,
+                cp = JET_CP.Unicode,
+                coltyp = JET_coltyp.LongText,
+                grbit = ColumndefGrbit.None,
+            };
+
+            JET_COLUMNID columnid;
+            Api.JetAddColumn(this.sesid, this.tableid, columnName, columndef, null, 0, out columnid);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Dictionary<string, JET_COLUMNID> dict = Api.GetColumnDictionary(this.sesid, this.tableid);
+            Assert.AreEqual(columnid, dict[columnName]);
+            Assert.AreEqual(columnid, dict[columnName.ToUpper()]);  // check case insensitive
+        }
+
+        /// <summary>
+        /// Creates and index
+        /// </summary>
+        [TestMethod]
+        public void CreateIndex()
+        {
+            string indexDescription = "+TestColumn\0";
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetCreateIndex(this.sesid, this.tableid, "index1", CreateIndexGrbit.None, indexDescription, indexDescription.Length + 1, 100); 
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
         }
 
@@ -267,7 +368,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Insert a record and delete it.
+        /// Test JetGetLock()
         /// </summary>
         [TestMethod]
         public void GetLock()
@@ -373,8 +474,7 @@ namespace InteropApiTests
         /// <returns>The value of the LongText column as a string.</returns>
         private string RetrieveColumnAsString()
         {
-            var buffer = Api.RetrieveColumn(this.sesid, this.tableid, this.columnidLongText, RetrieveColumnGrbit.None, null);
-            return (null == buffer) ? null : Encoding.Unicode.GetString(buffer);
+            return Api.RetrieveColumnAsString(this.sesid, this.tableid, this.columnidLongText, Encoding.Unicode);
         }
     }
 }

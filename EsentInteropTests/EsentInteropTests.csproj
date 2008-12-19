@@ -23,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile>bin\Debug\InteropApiTests.XML</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -48,8 +49,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Any.cs" />
     <Compile Include="BasicTableTests.cs" />
     <Compile Include="ColumndefTests.cs" />
+    <Compile Include="ColumnlistTests.cs" />
     <Compile Include="DatabaseTests.cs" />
     <Compile Include="InstanceParameterTests.cs" />
     <Compile Include="MoveTests.cs" />
@@ -57,8 +60,10 @@
     <Compile Include="InitTermTests.cs" />
     <Compile Include="RecposTests.cs" />
     <Compile Include="RetinfoTests.cs" />
+    <Compile Include="RetrieveColumnHelpersTests.cs" />
     <Compile Include="SetupHelper.cs" />
     <Compile Include="SetGetSystemParameterTests.cs" />
+    <Compile Include="TypesTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EsentInterop\EsentInterop.csproj">

@@ -54,6 +54,11 @@ namespace Microsoft.Isam.Esent.Interop
         public ColumndefGrbit grbit { get; set; }
 
         /// <summary>
+        /// Gets or sets the columnid.
+        /// </summary>
+        public JET_COLUMNID columnid { get; set; }
+
+        /// <summary>
         /// Returns the unmanaged columndef that represents this managed class.
         /// </summary>
         /// <returns>A native (interop) version of the JET_COLUMNDEF</returns>
@@ -66,6 +71,21 @@ namespace Microsoft.Isam.Esent.Interop
             columndef.grbit     = (uint)this.grbit;
             columndef.coltyp    = (uint)this.coltyp;
             return columndef;
+        }
+
+        /// <summary>
+        /// Sets the fields of the object from a native JET_COLUMNDEF struct.
+        /// </summary>
+        /// <param name="value">
+        /// The native columndef to set the values from.
+        /// </param>
+        internal void SetFromNativeColumndef(NATIVE_COLUMNDEF value)
+        {
+            this.coltyp = (JET_coltyp)value.coltyp;
+            this.cp = (JET_CP)value.cp;
+            this.cbMax = (int)value.cbMax;
+            this.grbit = (ColumndefGrbit)value.grbit;
+            this.columnid = new JET_COLUMNID() { Value = value.columnid };
         }
     }
 }

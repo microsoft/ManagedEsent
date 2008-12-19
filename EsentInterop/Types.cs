@@ -25,6 +25,15 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get { return new JET_INSTANCE(); }
         }
+
+        /// <summary>
+        /// Generate a string representation of the structure.
+        /// </summary>
+        /// <returns>The structure as a string.</returns>
+        public override string ToString()
+        {
+            return String.Format("JET_INSTANCE(0x{0:x})", this.Value.ToInt64());
+        }
     }
 
     /// <summary>
@@ -43,6 +52,15 @@ namespace Microsoft.Isam.Esent.Interop
         public static JET_SESID Nil
         {
             get { return new JET_SESID(); }
+        }
+
+        /// <summary>
+        /// Generate a string representation of the structure.
+        /// </summary>
+        /// <returns>The structure as a string.</returns>
+        public override string ToString()
+        {
+            return String.Format("JET_SESID(0x{0:x})", this.Value.ToInt64());
         }
     }
 
@@ -64,6 +82,15 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get { return new JET_TABLEID(); }
         }
+
+        /// <summary>
+        /// Generate a string representation of the structure.
+        /// </summary>
+        /// <returns>The structure as a string.</returns>
+        public override string ToString()
+        {
+            return String.Format("JET_TABLEID(0x{0:x})", this.Value.ToInt64());
+        }
     }
 
     /// <summary>
@@ -84,6 +111,15 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get { return new JET_DBID(); }
         }
+
+        /// <summary>
+        /// Generate a string representation of the structure.
+        /// </summary>
+        /// <returns>The structure as a string.</returns>
+        public override string ToString()
+        {
+            return String.Format("JET_DBID({0})", this.Value);
+        }
     }
 
     /// <summary>
@@ -102,6 +138,15 @@ namespace Microsoft.Isam.Esent.Interop
         public static JET_COLUMNID Nil
         { 
             get { return new JET_COLUMNID(); }
+        }
+
+        /// <summary>
+        /// Generate a string representation of the structure.
+        /// </summary>
+        /// <returns>The structure as a string.</returns>
+        public override string ToString()
+        {
+            return String.Format("JET_COLUMNID(0x{0:x})", this.Value);
         }
     }
 }

@@ -689,7 +689,12 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     [Flags]
     public enum CreateIndexGrbit : int
-    {
+    {        
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0x0,
+
         /// <summary>
         /// Duplicate index entries (keys) are disallowed. This is enforced when JetUpdate is called,
         /// not when JetSetColumn is called.

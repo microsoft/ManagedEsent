@@ -12,6 +12,11 @@ namespace Microsoft.Isam.Esent.Interop
     public enum JET_CP
     {
         /// <summary>
+        /// Code page for non-text columns.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
         /// Unicode encoding.
         /// </summary>
         Unicode = 1200,

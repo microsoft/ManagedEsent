@@ -7,7 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
-    /// Constatns for the ESENT API. 
+    /// Constants for the ESENT API. 
     /// </summary>
     public static partial class Api
     {

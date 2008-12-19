@@ -27,7 +27,7 @@ namespace Microsoft.Isam.Esent.Interop
         UnsignedByte = 2,
 
         /// <summary>
-        /// 2-byte integer, unsigned
+        /// 2-byte integer, signed
         /// </summary>
         Short = 3,
 
@@ -52,7 +52,7 @@ namespace Microsoft.Isam.Esent.Interop
         IEEEDouble = 7,
 
         /// <summary>
-        /// Integrat date, fractional time
+        /// Integral date, fractional time
         /// </summary>
         DateTime = 8,
 

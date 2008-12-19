@@ -28,6 +28,7 @@
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DocumentationFile>bin\Debug\Esent.Interop.XML</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -44,11 +45,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiConstants.cs" />
-    <Compile Include="ApiHelpers.cs" />
+    <Compile Include="RetrieveColumnHelpers.cs" />
     <Compile Include="CheckedApi.cs" />
+    <Compile Include="ColumnInfo.cs" />
+    <Compile Include="MoveHelpers.cs" />
     <Compile Include="InstanceParameters.cs" />
     <Compile Include="esent_exception.cs" />
     <Compile Include="grbits.cs" />
+    <Compile Include="jet_colinfo.cs" />
+    <Compile Include="jet_columnlist.cs" />
     <Compile Include="jet_err.cs" />
     <Compile Include="jet_move.cs" />
     <Compile Include="jet_param.cs" />
@@ -61,6 +66,7 @@
     <Compile Include="jet_setinfo.cs" />
     <Compile Include="ColumnStream.cs" />
     <Compile Include="jet_wrn.cs" />
+    <Compile Include="MetaDataHelpers.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="SystemParameters.cs" />
     <Compile Include="Types.cs" />

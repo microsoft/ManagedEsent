@@ -37,5 +37,29 @@ namespace InteropApiTests
             Assert.AreEqual<uint>(1, native.cbMax);
             Assert.AreEqual<uint>(0x10, native.grbit);
         }
+
+        /// <summary>
+        /// Test conversion from the native stuct
+        /// </summary>
+        [TestMethod]
+        public void ConvertColumndefFromNative()
+        {
+            var native = new NATIVE_COLUMNDEF()
+            {
+                cbMax = 1,
+                coltyp = (uint)JET_coltyp.LongText,
+                columnid = 0x100,
+                cp = 1200,
+                grbit = (uint)ColumndefGrbit.ColumnMultiValued,
+            };
+
+            var columndef = new JET_COLUMNDEF();
+            columndef.SetFromNativeColumndef(native);
+            Assert.AreEqual(1, columndef.cbMax);
+            Assert.AreEqual(JET_coltyp.LongText, columndef.coltyp);
+            Assert.AreEqual((uint)0x100, columndef.columnid.Value);
+            Assert.AreEqual(JET_CP.Unicode, columndef.cp);
+            Assert.AreEqual(ColumndefGrbit.ColumnMultiValued, columndef.grbit);
+        }
     }
 }
