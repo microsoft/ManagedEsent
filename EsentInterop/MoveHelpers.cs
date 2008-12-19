@@ -6,6 +6,8 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+
     /// <summary>
     /// Helper methods for the ESENT API. These aren't interop versions
     /// of the API, but encapsulate very common uses of the functions.
@@ -22,7 +24,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static bool TryMoveFirst(JET_SESID sesid, JET_TABLEID tableid)
         {
             JET_err err = (JET_err)ErrApi.JetMove(sesid, tableid, (int)JET_Move.First, MoveGrbit.None);
-            if (JET_err.Success == err)
+            if (err >= JET_err.Success)
             {
                 return true;
             }
@@ -31,7 +33,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return false;
             }
 
-            throw new EsentException(err);
+            Api.Check((int)err);
+            throw new Exception("Unreachable code");
         }
 
         /// <summary>
@@ -53,7 +56,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return false;
             }
 
-            throw new EsentException(err);
+            Api.Check((int)err);
+            throw new Exception("Unreachable code");
         }
 
         /// <summary>
@@ -75,7 +79,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return false;
             }
 
-            throw new EsentException(err);
+            Api.Check((int)err);
+            throw new Exception("Unreachable code");
         }
 
         /// <summary>
@@ -97,7 +102,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return false;
             }
 
-            throw new EsentException(err);
+            Api.Check((int)err);
+            throw new Exception("Unreachable code");
         }
 
         /// <summary>
@@ -121,7 +127,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return false;
             }
 
-            throw new EsentException(err);
+            Api.Check((int)err);
+            throw new Exception("Unreachable code");
         }
 
         /// <summary>
@@ -147,7 +154,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return false;
             }
 
-            throw new EsentException(err);
+            Api.Check((int)err);
+            throw new Exception("Unreachable code");
         }
     }
 }

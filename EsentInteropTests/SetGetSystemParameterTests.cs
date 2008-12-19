@@ -170,6 +170,8 @@ namespace InteropApiTests
             this.IntegerParameterTest(JET_param.CreatePathIfNotExist, 1);
         }
 
+        #region Helper Methods
+
         /// <summary>
         /// Test setting and retrieving a system parameter that uses a path. A relative
         /// path is set but a full path is retrieved.
@@ -245,5 +247,7 @@ namespace InteropApiTests
                 Api.JetTerm(instance);
             }
         }
+
+        #endregion Helper Methods
     }
 }

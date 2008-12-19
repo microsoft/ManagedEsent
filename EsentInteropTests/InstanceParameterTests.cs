@@ -146,7 +146,7 @@ namespace InteropApiTests
         [TestMethod]
         public void CircularLogProperty()
         {
-            bool expected = true;
+            bool expected = Any.Boolean;
             this.instanceParameters.CircularLog = expected;
             Assert.AreEqual(expected, this.instanceParameters.CircularLog);
         }
@@ -168,7 +168,7 @@ namespace InteropApiTests
         [TestMethod]
         public void RecoveryProperty()
         {
-            bool expected = false;
+            bool expected = Any.Boolean;
             this.instanceParameters.Recovery = expected;
             Assert.AreEqual(expected, this.instanceParameters.Recovery);
         }
@@ -179,7 +179,7 @@ namespace InteropApiTests
         [TestMethod]
         public void EnableIndexCheckingProperty()
         {
-            bool expected = true;
+            bool expected = Any.Boolean;
             this.instanceParameters.EnableIndexChecking = expected;
             Assert.AreEqual(expected, this.instanceParameters.EnableIndexChecking);
         }
@@ -190,7 +190,7 @@ namespace InteropApiTests
         [TestMethod]
         public void NoInformationEventProperty()
         {
-            bool expected = true;
+            bool expected = Any.Boolean;
             this.instanceParameters.NoInformationEvent = expected;
             Assert.AreEqual(expected, this.instanceParameters.NoInformationEvent);
         }
@@ -201,7 +201,7 @@ namespace InteropApiTests
         [TestMethod]
         public void CreatePathIfNotExistProperty()
         {
-            bool expected = true;
+            bool expected = Any.Boolean;
             this.instanceParameters.CreatePathIfNotExist = expected;
             Assert.AreEqual(expected, this.instanceParameters.CreatePathIfNotExist);
         }

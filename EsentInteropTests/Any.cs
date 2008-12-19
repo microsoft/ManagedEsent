@@ -155,9 +155,10 @@ namespace InteropApiTests
                 var sb = new StringBuilder();
                 for (int i = 0; i < length; ++i)
                 {
-                    char c = (char)Any.random.Next(32,127);
+                    char c = (char)Any.random.Next(32, 127);
                     sb.Append(c);
                 }
+
                 return sb.ToString();
             }
         }

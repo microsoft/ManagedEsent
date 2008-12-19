@@ -59,6 +59,8 @@ namespace InteropApiTests
         /// </summary>
         private JET_COLUMNID columnidLongText;
 
+        #region Setup/Teardown
+
         /// <summary>
         /// Initialization method. Called once when the tests are started.
         /// All DDL should be done in this method.
@@ -100,6 +102,10 @@ namespace InteropApiTests
             Api.JetTerm(this.instance);
             Directory.Delete(this.directory, true);
         }
+
+        #endregion Setup/Teardown
+
+        #region DDL Tests
 
         /// <summary>
         /// Create one column of each type
@@ -221,6 +227,10 @@ namespace InteropApiTests
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
         }
 
+        #endregion DDL Tests
+
+        #region DML Tests
+
         /// <summary>
         /// Inserts a record and retrieve it.
         /// </summary>
@@ -235,69 +245,6 @@ namespace InteropApiTests
             this.UpdateAndGotoBookmark();
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
             Assert.AreEqual(s, this.RetrieveColumnAsString());
-        }
-
-        /// <summary>
-        /// Inserts a record and retrieve its bookmark
-        /// </summary>
-        [TestMethod]
-        public void JetGetBookmark()
-        {
-            byte[] expectedBookmark = new byte[256];
-            int expectedBookmarkSize;
-
-            Api.JetBeginTransaction(this.sesid);
-            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
-            Api.JetUpdate(this.sesid, this.tableid, expectedBookmark, expectedBookmark.Length, out expectedBookmarkSize);
-            Api.JetGotoBookmark(this.sesid, this.tableid, expectedBookmark, expectedBookmarkSize);
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-
-            byte[] actualBookmark = new byte[256];
-            int actualBookmarkSize;
-            Api.JetGetBookmark(this.sesid, this.tableid, actualBookmark, actualBookmark.Length, out actualBookmarkSize);
-
-            Assert.AreEqual(expectedBookmarkSize, actualBookmarkSize);
-            for (int i = 0; i < expectedBookmarkSize; ++i)
-            {
-                Assert.AreEqual(expectedBookmark[i], actualBookmark[i]);
-            }
-        }
-
-        /// <summary>
-        /// Inserts a record and retrieve its bookmark
-        /// </summary>
-        [TestMethod]
-        public void GetBookmark()
-        {
-            byte[] expectedBookmark = new byte[256];
-            int expectedBookmarkSize;
-
-            Api.JetBeginTransaction(this.sesid);
-            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
-            Api.JetUpdate(this.sesid, this.tableid, expectedBookmark, expectedBookmark.Length, out expectedBookmarkSize);
-            Api.JetGotoBookmark(this.sesid, this.tableid, expectedBookmark, expectedBookmarkSize);
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-
-            byte[] actualBookmark = Api.GetBookmark(this.sesid, this.tableid);
-
-            Assert.AreEqual(expectedBookmarkSize, actualBookmark.Length);
-            for (int i = 0; i < expectedBookmarkSize; ++i)
-            {
-                Assert.AreEqual(expectedBookmark[i], actualBookmark[i]);
-            }
-        }
-
-        /// <summary>
-        /// Insert a record and retrieve its key
-        /// </summary>
-        [TestMethod]
-        public void RetrieveKey()
-        {
-            Api.JetBeginTransaction(this.sesid);
-            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
-            this.UpdateAndGotoBookmark();
-
-            byte[] key = Api.RetrieveKey(this.sesid, this.tableid, RetrieveKeyGrbit.None);
         }
 
         /// <summary>
@@ -386,6 +333,77 @@ namespace InteropApiTests
             this.RetrieveColumnAsString();
         }
 
+        #endregion DML Tests
+
+        #region Navigation Tests
+
+        /// <summary>
+        /// Inserts a record and retrieve its bookmark
+        /// </summary>
+        [TestMethod]
+        public void JetGetBookmark()
+        {
+            byte[] expectedBookmark = new byte[256];
+            int expectedBookmarkSize;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.JetUpdate(this.sesid, this.tableid, expectedBookmark, expectedBookmark.Length, out expectedBookmarkSize);
+            Api.JetGotoBookmark(this.sesid, this.tableid, expectedBookmark, expectedBookmarkSize);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            byte[] actualBookmark = new byte[256];
+            int actualBookmarkSize;
+            Api.JetGetBookmark(this.sesid, this.tableid, actualBookmark, actualBookmark.Length, out actualBookmarkSize);
+
+            Assert.AreEqual(expectedBookmarkSize, actualBookmarkSize);
+            for (int i = 0; i < expectedBookmarkSize; ++i)
+            {
+                Assert.AreEqual(expectedBookmark[i], actualBookmark[i]);
+            }
+        }
+
+        /// <summary>
+        /// Inserts a record and retrieve its bookmark
+        /// </summary>
+        [TestMethod]
+        public void GetBookmark()
+        {
+            byte[] expectedBookmark = new byte[256];
+            int expectedBookmarkSize;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.JetUpdate(this.sesid, this.tableid, expectedBookmark, expectedBookmark.Length, out expectedBookmarkSize);
+            Api.JetGotoBookmark(this.sesid, this.tableid, expectedBookmark, expectedBookmarkSize);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            byte[] actualBookmark = Api.GetBookmark(this.sesid, this.tableid);
+
+            Assert.AreEqual(expectedBookmarkSize, actualBookmark.Length);
+            for (int i = 0; i < expectedBookmarkSize; ++i)
+            {
+                Assert.AreEqual(expectedBookmark[i], actualBookmark[i]);
+            }
+        }
+
+        /// <summary>
+        /// Insert a record and retrieve its key
+        /// </summary>
+        [TestMethod]
+        public void RetrieveKey()
+        {
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            this.UpdateAndGotoBookmark();
+
+            byte[] key = Api.RetrieveKey(this.sesid, this.tableid, RetrieveKeyGrbit.None);
+        }
+
+        #endregion Navigation Tests
+
+        #region ColumnStream Tests
+
         /// <summary>
         /// Test setting and retrieving a column with the ColumnStream class.
         /// </summary>
@@ -447,6 +465,10 @@ namespace InteropApiTests
             }
         }
 
+        #endregion ColumnStream Tests
+
+        #region Helper Methods
+
         /// <summary>
         /// Update the cursor and goto the returned bookmark.
         /// </summary>
@@ -476,5 +498,7 @@ namespace InteropApiTests
         {
             return Api.RetrieveColumnAsString(this.sesid, this.tableid, this.columnidLongText, Encoding.Unicode);
         }
+
+        #endregion HelperMethods
     }
 }

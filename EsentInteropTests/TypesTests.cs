@@ -18,12 +18,6 @@ namespace InteropApiTests
     [TestClass]
     public class TypesTests
     {
-        // Instance
-        // Sesid
-        // Tableid
-        // Dbid
-        // Columnid
-
         /// <summary>
         /// Test JET_INSTANCE.ToString()
         /// </summary>

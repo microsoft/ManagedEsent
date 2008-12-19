@@ -12,11 +12,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("csharpinterop")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("EsentInterop")]
+[assembly: AssemblyDescription("Managed interop code for esent.dll")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("csharpinterop")]
+[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyProduct("EsentInterop")]
 [assembly: AssemblyCopyright("Copyright ©  2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

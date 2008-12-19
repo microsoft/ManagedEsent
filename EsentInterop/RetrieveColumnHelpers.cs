@@ -43,7 +43,7 @@ namespace Microsoft.Isam.Esent.Interop
             JET_err err = (JET_err)ErrApi.JetGetBookmark(sesid, tableid, null, 0, out bookmarkSize);
             if (err < JET_err.Success && JET_err.BufferTooSmall != err)
             {
-                throw new EsentException(err);
+                Api.Check((int)err);
             }
 
             byte[] bookmark = new byte[bookmarkSize];
@@ -148,6 +148,7 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 return null;
             }
+
             return encoding.GetString(data);
         }
 

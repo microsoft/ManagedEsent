@@ -92,7 +92,7 @@ namespace Microsoft.Isam.Esent.Interop
             string name = Api.RetrieveColumnAsString(sesid, columnlist.tableid, columnlist.columnidcolumnname, NativeMethods.Encoding);
             uint columnidValue = (uint)Api.RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcolumnid);
             uint coltypValue = (uint)Api.RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcoltyp);
-            uint cpValue = (ushort)Api.RetrieveColumnAsUInt16(sesid, columnlist.tableid, columnlist.columnidCp);
+            uint codepageValue = (ushort)Api.RetrieveColumnAsUInt16(sesid, columnlist.tableid, columnlist.columnidCp);
             uint maxLength = (uint)Api.RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcbMax);
             byte[] defaultValue = Api.RetrieveColumn(sesid, columnlist.tableid, columnlist.columnidDefault);
             uint grbitValue = (uint)Api.RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcbMax);
@@ -101,7 +101,7 @@ namespace Microsoft.Isam.Esent.Interop
                 name,
                 new JET_COLUMNID() { Value = columnidValue },
                 (JET_coltyp)coltypValue,
-                (JET_CP)cpValue,
+                (JET_CP)codepageValue,
                 (int)maxLength,
                 defaultValue,
                 (ColumndefGrbit)grbitValue);

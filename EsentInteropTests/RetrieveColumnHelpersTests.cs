@@ -111,8 +111,8 @@ namespace InteropApiTests
             columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.LongText, cp = JET_CP.Unicode };
             Api.JetAddColumn(this.sesid, this.tableid, "Unicode", columndef, null, 0, out columnid);
 
-            // Not all version of esent support these column types natively so we'll just use binary columns
-
+            // Not all version of esent support these column types natively so we'll just use binary columns.
+            // Starting with windows Vista esent provides support for these columns.  
             columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 2 };
             Api.JetAddColumn(this.sesid, this.tableid, "UInt16", columndef, null, 0, out columnid);
 
@@ -347,7 +347,7 @@ namespace InteropApiTests
         [TestMethod]
         public void GetTableColumnsTest()
         {
-            foreach(ColumnInfo col in Api.GetTableColumns(this.sesid, this.tableid))
+            foreach (ColumnInfo col in Api.GetTableColumns(this.sesid, this.tableid))
             {
                 Assert.AreEqual(this.columnidDict[col.Name], col.Columnid);
             }

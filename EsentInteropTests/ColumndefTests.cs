@@ -57,7 +57,7 @@ namespace InteropApiTests
             columndef.SetFromNativeColumndef(native);
             Assert.AreEqual(1, columndef.cbMax);
             Assert.AreEqual(JET_coltyp.LongText, columndef.coltyp);
-            Assert.AreEqual((uint)0x100, columndef.columnid.Value);
+            Assert.AreEqual<uint>(0x100, columndef.columnid.Value);
             Assert.AreEqual(JET_CP.Unicode, columndef.cp);
             Assert.AreEqual(ColumndefGrbit.ColumnMultiValued, columndef.grbit);
         }
