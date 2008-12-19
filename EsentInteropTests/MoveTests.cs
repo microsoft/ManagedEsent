@@ -21,7 +21,7 @@ namespace InteropApiTests
         /// <summary>
         /// Number of records inserted in the table.
         /// </summary>
-        private readonly int numRecords = 5;
+        private int numRecords;
 
         /// <summary>
         /// The directory being used for the database and its files.
@@ -63,6 +63,8 @@ namespace InteropApiTests
         /// </summary>
         private JET_COLUMNID columnidLong;
 
+        #region Setup/Teardown
+
         /// <summary>
         /// Initialization method. Called once when the tests are started.
         /// All DDL should be done in this method.
@@ -70,23 +72,27 @@ namespace InteropApiTests
         [TestInitialize]
         public void Setup()
         {
+            var random = new Random();
+            this.numRecords = random.Next(5, 20);
+
             this.directory = SetupHelper.CreateRandomDirectory();
             this.database = Path.Combine(this.directory, "database.edb");
             this.table = "table";
             this.instance = SetupHelper.CreateNewInstance(this.directory);
 
+            // turn off logging so initialization is faster
+            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetInit(ref this.instance);
             Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
             Api.JetCreateDatabase(this.sesid, this.database, String.Empty, out this.dbid, CreateDatabaseGrbit.None);
             Api.JetBeginTransaction(this.sesid);
             Api.JetCreateTable(this.sesid, this.dbid, this.table, 0, 100, out this.tableid);
 
-            var columndef = new JET_COLUMNDEF()
-            {
-                cp = JET_CP.Unicode,
-                coltyp = JET_coltyp.Long,
-            };
+            var columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Long };
             Api.JetAddColumn(this.sesid, this.tableid, "Long", columndef, null, 0, out this.columnidLong);
+
+            var indexDef = "+long\0\0";
+            Api.JetCreateIndex(this.sesid, this.tableid, "primary", CreateIndexGrbit.IndexPrimary, indexDef, indexDef.Length, 100);
 
             for (int i = 0; i < this.numRecords; ++i)
             {
@@ -112,6 +118,79 @@ namespace InteropApiTests
             Api.JetTerm(this.instance);
             Directory.Delete(this.directory, true);
         }
+
+        #endregion Setup/Teardown
+
+        #region JetSeek Tests
+
+        /// <summary>
+        /// Seek for a record with SeekLT
+        /// </summary>
+        [TestMethod]
+        public void SeekLT()
+        {
+            int expected = this.numRecords / 2;
+            this.MakeKeyForRecord(expected + 1);    // use the next higher key
+            Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekLT);
+            int actual = this.GetLongColumn();
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Seek for a record with SeekLE
+        /// </summary>
+        [TestMethod]
+        public void SeekLE()
+        {
+            int expected = this.numRecords / 2;
+            this.MakeKeyForRecord(expected);
+            Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekLE);
+            int actual = this.GetLongColumn();
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Seek for a record with SeekEQ
+        /// </summary>
+        [TestMethod]
+        public void SeekEQ()
+        {
+            int expected = this.numRecords / 2;
+            this.MakeKeyForRecord(expected);
+            Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekEQ);
+            int actual = this.GetLongColumn();
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Seek for a record with SeekGE
+        /// </summary>
+        [TestMethod]
+        public void SeekGE()
+        {
+            int expected = this.numRecords / 2;
+            this.MakeKeyForRecord(expected);
+            Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekGE);
+            int actual = this.GetLongColumn();
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Seek for a record with SeekGT
+        /// </summary>
+        [TestMethod]
+        public void SeekGT()
+        {
+            int expected = this.numRecords / 2;
+            this.MakeKeyForRecord(expected - 1);    // use the previous key
+            Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekGT);
+            int actual = this.GetLongColumn();
+            Assert.AreEqual(expected, actual);
+        }
+
+        #endregion JetSeek Tests
+
+        #region JetMove Tests
 
         /// <summary>
         /// Test moving to the first record.
@@ -200,6 +279,10 @@ namespace InteropApiTests
             Assert.AreEqual(expected, actual);
         }
 
+        #endregion JetMove Tests
+
+        #region JetGotoPosition Tests
+
         /// <summary>
         /// Test using JetGotoPosition to go to the first record
         /// </summary>
@@ -224,6 +307,155 @@ namespace InteropApiTests
             Assert.AreEqual(this.numRecords - 1, actual);
         }
 
+        #endregion JetGotoPosition Tests
+
+        #region JetSetIndexRange Tests
+
+        /// <summary>
+        /// Create an ascending inclusive index range
+        /// </summary>
+        [TestMethod]
+        public void AscendingInclusiveIndexRange()
+        {
+            int first = 1;
+            int last = this.numRecords - 1;
+
+            this.MakeKeyForRecord(first);
+            Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekEQ);
+
+            this.MakeKeyForRecord(last);
+            Api.JetSetIndexRange(this.sesid, this.tableid, SetIndexRangeGrbit.RangeUpperLimit | SetIndexRangeGrbit.RangeInclusive);
+
+            for (int i = first; i <= last; ++i)
+            {
+                int actual = this.GetLongColumn();
+                Assert.AreEqual(i, actual);
+                if (last != i)
+                {
+                    Api.JetMove(this.sesid, this.tableid, JET_Move.Next, MoveGrbit.None);
+                }
+            }
+
+            Assert.IsFalse(Api.TryMoveNext(this.sesid, this.tableid));
+        }
+
+        /// <summary>
+        /// Create an ascending exclusive index range
+        /// </summary>
+        [TestMethod]
+        public void AscendingExclusiveIndexRange()
+        {
+            int first = 1;
+            int last = this.numRecords - 1;
+
+            this.MakeKeyForRecord(first);
+            Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekEQ);
+
+            this.MakeKeyForRecord(last);
+            Api.JetSetIndexRange(this.sesid, this.tableid, SetIndexRangeGrbit.RangeUpperLimit);
+
+            for (int i = first; i < last; ++i)
+            {
+                int actual = this.GetLongColumn();
+                Assert.AreEqual(i, actual);
+                if (last - 1 != i)
+                {
+                    Api.JetMove(this.sesid, this.tableid, JET_Move.Next, MoveGrbit.None);
+                }
+            }
+
+            Assert.IsFalse(Api.TryMoveNext(this.sesid, this.tableid));
+        }
+
+        /// <summary>
+        /// Create a descending inclusive index range
+        /// </summary>
+        [TestMethod]
+        public void DescendingInclusiveIndexRange()
+        {
+            int first = 1;
+            int last = this.numRecords - 1;
+
+            this.MakeKeyForRecord(last);
+            Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekEQ);
+
+            this.MakeKeyForRecord(first);
+            Api.JetSetIndexRange(this.sesid, this.tableid, SetIndexRangeGrbit.RangeInclusive);
+
+            for (int i = last; i >= first; --i)
+            {
+                int actual = this.GetLongColumn();
+                Assert.AreEqual(i, actual);
+                if (first != i)
+                {
+                    Api.JetMove(this.sesid, this.tableid, JET_Move.Previous, MoveGrbit.None);
+                }
+            }
+
+            Assert.IsFalse(Api.TryMovePrevious(this.sesid, this.tableid));
+        }
+
+        /// <summary>
+        /// Create a descending exclusive index range
+        /// </summary>
+        [TestMethod]
+        public void DescendingExclusiveIndexRange()
+        {
+            int first = 1;
+            int last = this.numRecords - 1;
+
+            this.MakeKeyForRecord(last);
+            Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekEQ);
+
+            this.MakeKeyForRecord(first);
+            Api.JetSetIndexRange(this.sesid, this.tableid, SetIndexRangeGrbit.None);
+
+            for (int i = last; i > first; --i)
+            {
+                int actual = this.GetLongColumn();
+                Assert.AreEqual(i, actual);
+                if (first + 1 != i)
+                {
+                    Api.JetMove(this.sesid, this.tableid, JET_Move.Previous, MoveGrbit.None);
+                }
+            }
+
+            Assert.IsFalse(Api.TryMovePrevious(this.sesid, this.tableid));
+        }
+
+        /// <summary>
+        /// Count the records in an index range with JetGetIndexRecordCount
+        /// </summary>
+        [TestMethod]
+        public void CountIndexRangeRecords()
+        {
+            int first = 2;
+            int last = this.numRecords - 2;
+
+            this.MakeKeyForRecord(first);
+            Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekEQ);
+
+            this.MakeKeyForRecord(last);
+            Api.JetSetIndexRange(this.sesid, this.tableid, SetIndexRangeGrbit.RangeUpperLimit);
+
+            int countedRecords;
+            Api.JetIndexRecordCount(this.sesid, this.tableid, out countedRecords, 0);
+            Assert.AreEqual(last - first, countedRecords);
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Count the records in the table with JetIndexRecordCount
+        /// </summary>
+        [TestMethod]
+        public void GetIndexRecordCount()
+        {
+            int countedRecords;
+            Api.JetIndexRecordCount(this.sesid, this.tableid, out countedRecords, 0);
+            Assert.AreEqual(this.numRecords, countedRecords);
+        }
+
         /// <summary>
         /// Test using JetGetRecord position
         /// </summary>
@@ -244,15 +476,20 @@ namespace InteropApiTests
         {
             Api.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
             Api.JetSetTableSequential(this.sesid, this.tableid, SetTableSequentialGrbit.None);
-            for (int i = 0; i < this.numRecords - 1; ++i)
+            for (int i = 0; i < this.numRecords; ++i)
             {
                 int actual = this.GetLongColumn();
                 Assert.AreEqual(i, actual);
-                Api.JetMove(this.sesid, this.tableid, JET_Move.Next, MoveGrbit.None);
+                if (this.numRecords - 1 != i)
+                {
+                    Api.JetMove(this.sesid, this.tableid, JET_Move.Next, MoveGrbit.None);
+                }
             }
 
             Api.JetResetTableSequential(this.sesid, this.tableid, ResetTableSequentialGrbit.None);
         }
+
+        #region MoveHelper Tests
 
         /// <summary>
         /// Try moving to the first record.
@@ -325,6 +562,10 @@ namespace InteropApiTests
             Assert.AreEqual(expected, actual);
         }
 
+        #endregion MoveHelper Tests
+
+        #region Helper Methods
+
         /// <summary>
         /// Return the value of the columnidLong of the current record.
         /// </summary>
@@ -337,5 +578,17 @@ namespace InteropApiTests
             Assert.AreEqual(data.Length, actualDataSize);
             return BitConverter.ToInt32(data, 0);
         }
+
+        /// <summary>
+        /// Make a key for a record with the given ID
+        /// </summary>
+        /// <param name="id">The id of the record.</param>
+        private void MakeKeyForRecord(int id)
+        {
+            byte[] data = BitConverter.GetBytes(id);
+            Api.JetMakeKey(this.sesid, this.tableid, data, data.Length, MakeKeyGrbit.NewKey);
+        }
+
+        #endregion Helper Methods
     }
 }
