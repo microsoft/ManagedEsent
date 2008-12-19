@@ -24,5 +24,6 @@ APIs to add (8)
   - JetGetTableIndexInfo
   - JetGetDatabaseInfo
   - JetGetDatabaseFileInfo
+  - JetGetIndexInfo
  
   

@@ -132,6 +132,17 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Gets a random Guid.
+        /// </summary>
+        public static Guid Guid
+        {
+            get
+            {
+                return Guid.NewGuid();
+            }
+        }
+
+        /// <summary>
         /// Gets a random string. The string will only
         /// contain ASCII characters and will be 1 to
         /// 120 characters long.

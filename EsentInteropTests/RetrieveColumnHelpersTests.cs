@@ -9,6 +9,7 @@ namespace InteropApiTests
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Text;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -110,7 +111,7 @@ namespace InteropApiTests
             columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.LongText, cp = JET_CP.Unicode };
             Api.JetAddColumn(this.sesid, this.tableid, "Unicode", columndef, null, 0, out columnid);
 
-            // Not all version of esent support these natively so we'll just use binary columns
+            // Not all version of esent support these column types natively so we'll just use binary columns
 
             columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 2 };
             Api.JetAddColumn(this.sesid, this.tableid, "UInt16", columndef, null, 0, out columnid);
@@ -120,6 +121,9 @@ namespace InteropApiTests
 
             columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 8 };
             Api.JetAddColumn(this.sesid, this.tableid, "UInt64", columndef, null, 0, out columnid);
+
+            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 16 };
+            Api.JetAddColumn(this.sesid, this.tableid, "Guid", columndef, null, 0, out columnid);
 
             Api.JetCloseTable(this.sesid, this.tableid);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
@@ -272,6 +276,18 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Retrieve a column as a Guid.
+        /// </summary>
+        [TestMethod]
+        public void RetrieveAsGuid()
+        {
+            var columnid = this.columnidDict["Guid"];
+            var value = Any.Guid;
+            this.InsertRecord(columnid, value.ToByteArray());
+            Assert.AreEqual(value, Api.RetrieveColumnAsGuid(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
         /// Retrieve a column as ASCII
         /// </summary>
         [TestMethod]
@@ -311,6 +327,30 @@ namespace InteropApiTests
             this.UpdateAndGotoBookmark();
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
             Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, Encoding.Unicode));
+        }
+
+        /// <summary>
+        /// Search the column information structures with Linq.
+        /// </summary>
+        [TestMethod]
+        public void SearchColumnInfos()
+        {
+            var columnnames = from c in Api.GetTableColumns(this.sesid, this.tableid)
+                             where c.Coltyp == JET_coltyp.Long
+                             select c.Name;
+            Assert.AreEqual("Int32", columnnames.Single());
+        }
+
+        /// <summary>
+        /// Iterate through the column information structures.
+        /// </summary>
+        [TestMethod]
+        public void GetTableColumnsTest()
+        {
+            foreach(ColumnInfo col in Api.GetTableColumns(this.sesid, this.tableid))
+            {
+                Assert.AreEqual(this.columnidDict[col.Name], col.Columnid);
+            }
         }
 
         /// <summary>

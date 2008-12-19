@@ -249,6 +249,19 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to retrieve the column from.</param>
         /// <param name="columnid">The columnid to retrieve.</param>
+        /// <returns>The data retrieved from the column as a guid. Null if the column is null.</returns>
+        public static Guid? RetrieveColumnAsGuid(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
+        {
+            return RetrieveColumnAndConvert(sesid, tableid, columnid, data => new Guid(data));
+        }
+
+        /// <summary>
+        /// Retrieves a single column value from the current record. The record is that
+        /// record associated with the index entry at the current position of the cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the column from.</param>
+        /// <param name="columnid">The columnid to retrieve.</param>
         /// <returns>The data retrieved from the column as an UInt16. Null if the column is null.</returns>
         /// <remarks>Internal becaue unsigned types aren't CLS compliant.</remarks>
         internal static ushort? RetrieveColumnAsUInt16(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
