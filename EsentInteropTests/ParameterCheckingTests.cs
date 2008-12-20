@@ -108,6 +108,8 @@ namespace InteropApiTests
 
         #endregion Setup/Teardown
 
+        #region EsentException tests
+
         /// <summary>
         /// Check that an exception is thrown when an API calls fails
         /// </summary>
@@ -119,6 +121,26 @@ namespace InteropApiTests
             // generate an error.
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.None);
         }
+
+        /// <summary>
+        /// Check that an exception contains the right error code.
+        /// </summary>
+        [TestMethod]
+        public void EsentExceptionHasErrorCode()
+        {
+            try
+            {
+                JET_TABLEID tableid;
+                Api.JetOpenTable(this.sesid, this.dbid, "nosuchtable", null, 0, OpenTableGrbit.None, out tableid);
+                Assert.Fail("Should have thrown an exception");
+            }
+            catch (EsentException ex)
+            {
+                Assert.AreEqual(JET_err.ObjectNotFound, ex.Error);
+            }
+        }
+
+        #endregion EsentException tests
 
         #region Database API
 

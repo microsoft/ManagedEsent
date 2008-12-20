@@ -62,7 +62,7 @@
     <Compile Include="InitTermTests.cs" />
     <Compile Include="RecposTests.cs" />
     <Compile Include="RetinfoTests.cs" />
-    <Compile Include="RetrieveColumnHelpersTests.cs" />
+    <Compile Include="HelpersTests.cs" />
     <Compile Include="SetupHelper.cs" />
     <Compile Include="SetGetSystemParameterTests.cs" />
     <Compile Include="TypesTests.cs" />

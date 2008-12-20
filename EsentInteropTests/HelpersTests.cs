@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="RetrieveColumnHelpersTests.cs" company="Microsoft Corporation">
+// <copyright file="HelpersTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
 //-----------------------------------------------------------------------
@@ -15,7 +15,8 @@ namespace InteropApiTests
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
-    /// Tests for the various RetrieveColumn* methods.
+    /// Tests for the various RetrieveColumn* methods and
+    /// the helper methods that retrieve meta-data.
     /// </summary>
     [TestClass]
     public class RetrieveColumnHelpers
@@ -59,6 +60,8 @@ namespace InteropApiTests
         /// A dictionary that maps column names to column ids.
         /// </summary>
         private Dictionary<string, JET_COLUMNID> columnidDict;
+
+        #region Setup/Teardown
 
         /// <summary>
         /// Initialization method. Called once when the tests are started.
@@ -145,6 +148,10 @@ namespace InteropApiTests
             Api.JetTerm(this.instance);
             Directory.Delete(this.directory, true);
         }
+
+        #endregion Setup/Teardown
+
+        #region RetrieveColumnAs tests
 
         /// <summary>
         /// Check that retrieving a column returns null
@@ -331,6 +338,10 @@ namespace InteropApiTests
             Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, Encoding.Unicode));
         }
 
+        #endregion RetrieveColumnAs tests
+
+        #region MetaData helpers tests
+
         /// <summary>
         /// Test the helper method that gets table names.
         /// </summary>
@@ -378,6 +389,10 @@ namespace InteropApiTests
             }
         }
 
+        #endregion MetaData helpers tests
+
+        #region Helper methods
+
         /// <summary>
         /// Creates a record with the given column set to the specified value.
         /// The tableid is positioned on the new record.
@@ -403,5 +418,7 @@ namespace InteropApiTests
             Api.JetUpdate(this.sesid, this.tableid, bookmark, bookmark.Length, out bookmarkSize);
             Api.JetGotoBookmark(this.sesid, this.tableid, bookmark, bookmarkSize);
         }
+
+        #endregion Helper methods
     }
 }
