@@ -332,6 +332,16 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test the helper method that gets table names.
+        /// </summary>
+        [TestMethod]
+        public void GetTableNames()
+        {
+            string actual = Api.GetTableNames(this.sesid, this.dbid).Single();
+            Assert.AreEqual(this.table, actual);
+        }
+
+        /// <summary>
         /// Search the column information structures with Linq.
         /// </summary>
         [TestMethod]

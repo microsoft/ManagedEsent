@@ -48,6 +48,7 @@ namespace InteropApiTests
             columnlist.SetFromNativeColumnlist(native);
 
             Assert.AreEqual(tableid, columnlist.tableid);
+            Assert.AreEqual(100, columnlist.cRecord);
             Assert.AreEqual(col1, columnlist.columnidcolumnname);
             Assert.AreEqual(col2, columnlist.columnidcolumnid);
             Assert.AreEqual(col3, columnlist.columnidcoltyp);

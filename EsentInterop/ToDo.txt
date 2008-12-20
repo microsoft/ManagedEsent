@@ -16,14 +16,14 @@
 	
 APIs to add (8)
 ----------------
+  - JetGetObjectInfo
+  - JetGetIndexInfo
+  - JetGetTableIndexInfo
+
   - JetEscrowUpdate  
   - JetIntersectIndexes  
-  - JetGetColumnInfo
-  - JetGetTableInfo
-  - JetGetObjectInfo
-  - JetGetTableIndexInfo
   - JetGetDatabaseInfo
   - JetGetDatabaseFileInfo
-  - JetGetIndexInfo
+  - JetGetTableInfo
  
   

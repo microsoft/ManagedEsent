@@ -482,6 +482,17 @@ namespace Microsoft.Isam.Esent.Interop
             Check(ErrApi.JetGetColumnInfo(sesid, dbid, tableName, columnName, out columnlist));
         }
 
+        /// <summary>
+        /// Retrieves information about database objects.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database to use.</param>
+        /// <param name="objectlist">Filled in with information about the objects in the database.</param>
+        public static void JetGetObjectInfo(JET_SESID sesid, JET_DBID dbid, out JET_OBJECTLIST objectlist)
+        {
+            Check(ErrApi.JetGetObjectInfo(sesid, dbid, out objectlist));
+        }
+
         #endregion
 
         #region Navigation

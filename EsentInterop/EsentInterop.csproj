@@ -37,12 +37,18 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiConstants.cs" />
+    <Compile Include="jet_colinfo.cs" />
+    <Compile Include="jet_objectinfo.cs" />
+    <Compile Include="ObjectInfoFlags.cs" />
+    <Compile Include="jet_objtyp.cs" />
+    <Compile Include="jet_objectlist.cs" />
     <Compile Include="RetrieveColumnHelpers.cs" />
     <Compile Include="CheckedApi.cs" />
     <Compile Include="ColumnInfo.cs" />
@@ -50,7 +56,7 @@
     <Compile Include="InstanceParameters.cs" />
     <Compile Include="esent_exception.cs" />
     <Compile Include="grbits.cs" />
-    <Compile Include="jet_colinfo.cs" />
+    <Compile Include="jet_objinfo.cs" />
     <Compile Include="jet_columnlist.cs" />
     <Compile Include="jet_err.cs" />
     <Compile Include="jet_move.cs" />

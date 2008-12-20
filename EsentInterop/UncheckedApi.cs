@@ -124,7 +124,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             ErrApi.TraceFunctionCall("JetBeginSession");
             sesid = JET_SESID.Nil;
-            return ErrApi.Err(NativeMethods.JetBeginSession(instance.Value, ref sesid.Value, username, password));
+            return ErrApi.Err(NativeMethods.JetBeginSession(instance.Value, ref sesid.Value, null, null));
         }
 
         public static int JetEndSession(JET_SESID sesid, EndSessionGrbit grbit)
@@ -396,6 +396,27 @@ namespace Microsoft.Isam.Esent.Interop
                 nativeColumnlist.cbStruct,
                 (uint)JET_ColInfo.List));
             columnlist.SetFromNativeColumnlist(nativeColumnlist);
+
+            return err;
+        }
+
+        public static int JetGetObjectInfo(JET_SESID sesid, JET_DBID dbid, out JET_OBJECTLIST objectlist)
+        {
+            ErrApi.TraceFunctionCall("JetGetObjectInfo");
+            objectlist = new JET_OBJECTLIST();
+
+            var nativeObjectlist = new NATIVE_OBJECTLIST();
+            nativeObjectlist.cbStruct = (uint)Marshal.SizeOf(nativeObjectlist);
+            int err = ErrApi.Err(NativeMethods.JetGetObjectInfo(
+                sesid.Value,
+                dbid.Value,
+                (uint)JET_objtyp.Table,
+                null,
+                null,
+                ref nativeObjectlist,
+                nativeObjectlist.cbStruct,
+                (uint)JET_ObjInfo.ListNoStats));
+            objectlist.SetFromNativeObjectlist(nativeObjectlist);
 
             return err;
         }

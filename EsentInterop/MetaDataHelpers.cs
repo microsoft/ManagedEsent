@@ -110,6 +110,38 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Returns the names of the tables in the database.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database containing the table.</param>
+        /// <returns>An iterator over the names of the tables in the database.</returns>
+        public static IEnumerable<string> GetTableNames(JET_SESID sesid, JET_DBID dbid)
+        {
+            JET_OBJECTLIST objectlist;
+            Api.JetGetObjectInfo(sesid, dbid, out objectlist);
+            try
+            {
+                if (Api.TryMoveFirst(sesid, objectlist.tableid))
+                {
+                    do
+                    {
+                        uint flags = (uint)Api.RetrieveColumnAsUInt32(sesid, objectlist.tableid, objectlist.columnidflags);
+                        if (ObjectInfoFlags.System != ((ObjectInfoFlags)flags & ObjectInfoFlags.System))
+                        {
+                            yield return Api.RetrieveColumnAsString(sesid, objectlist.tableid, objectlist.columnidobjectname, NativeMethods.Encoding);
+                        }
+                    }
+                    while (Api.TryMoveNext(sesid, objectlist.tableid));
+                }
+            }
+            finally
+            {
+                // Close the temporary table used to return the results
+                Api.JetCloseTable(sesid, objectlist.tableid);
+            }
+        }
+
+        /// <summary>
         /// Create a ColumnInfo object from the data in the current JET_COLUMNLIST
         /// entry.
         /// </summary>
@@ -124,7 +156,7 @@ namespace Microsoft.Isam.Esent.Interop
             uint codepageValue = (ushort)Api.RetrieveColumnAsUInt16(sesid, columnlist.tableid, columnlist.columnidCp);
             uint maxLength = (uint)Api.RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcbMax);
             byte[] defaultValue = Api.RetrieveColumn(sesid, columnlist.tableid, columnlist.columnidDefault);
-            uint grbitValue = (uint)Api.RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcbMax);
+            uint grbitValue = (uint)Api.RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidgrbit);
 
             return new ColumnInfo(
                 name,

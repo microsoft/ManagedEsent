@@ -158,6 +158,9 @@ namespace Microsoft.Isam.Esent.Interop
         [DllImport(EsentDLL, CharSet = EsentCharSet)]
         public static extern int JetGetColumnInfo(IntPtr sesid, uint dbid, string szTableName, string szColumnName, ref NATIVE_COLUMNLIST columnlist, uint cbMax, uint InfoLevel);
 
+        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        public static extern int JetGetObjectInfo(IntPtr sesid, uint dbid, uint objtyp, string szContainerName, string szObjectName, ref NATIVE_OBJECTLIST objectlist, uint cbMax, uint InfoLevel);
+
         #endregion
 
         #region Navigation
