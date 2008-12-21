@@ -117,7 +117,7 @@ namespace InteropApiTests
             Api.JetAddColumn(this.sesid, this.tableid, "Unicode", columndef, null, 0, out columnid);
 
             // Not all version of esent support these column types natively so we'll just use binary columns.
-            // Starting with windows Vista esent provides support for these columns.  
+            // (Starting with windows Vista esent provides support for these columns.)  
             columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 2 };
             Api.JetAddColumn(this.sesid, this.tableid, "UInt16", columndef, null, 0, out columnid);
 
@@ -321,6 +321,18 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Retrieve a column as a (unicode) string
+        /// </summary>
+        [TestMethod]
+        public void RetrieveAsString()
+        {
+            var columnid = this.columnidDict["Unicode"];
+            var value = Any.String;
+            this.InsertRecord(columnid, Encoding.Unicode.GetBytes(value));
+            Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
         /// Retrieve an empty string to make sure
         /// it is handled differently from a null column.
         /// </summary>
@@ -339,6 +351,371 @@ namespace InteropApiTests
         }
 
         #endregion RetrieveColumnAs tests
+
+        #region SetColumn Tests
+
+        /// <summary>
+        /// Test setting a column from a unicode string.
+        /// </summary>
+        [TestMethod]
+        public void SetUnicodeString()
+        {
+            var columnid = this.columnidDict["unicode"];
+            var expected = Any.String;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, expected, Encoding.Unicode);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            
+            var actual = Encoding.Unicode.GetString(Api.RetrieveColumn(this.sesid, this.tableid, columnid));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test setting a column from a null string.
+        /// </summary>
+        [TestMethod]
+        public void SetNullString()
+        {
+            var columnid = this.columnidDict["unicode"];
+
+            this.InsertRecord(columnid, Encoding.Unicode.GetBytes(Any.String));
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Replace);
+            Api.SetColumn(this.sesid, this.tableid, columnid, null, Encoding.Unicode);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Assert.IsNull(Api.RetrieveColumn(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
+        /// Test setting a column from a boolean.
+        /// </summary>
+        [TestMethod]
+        public void SetBoolean()
+        {
+            var columnid = this.columnidDict["boolean"];
+            var expected = Any.Boolean;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, expected);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            var actual = BitConverter.ToBoolean(Api.RetrieveColumn(this.sesid, this.tableid, columnid), 0);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test setting a column from a boolean.
+        /// </summary>
+        [TestMethod]
+        public void SetByte()
+        {
+            var columnid = this.columnidDict["byte"];
+            var expected = Any.Byte;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, expected);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            byte actual = Api.RetrieveColumn(this.sesid, this.tableid, columnid)[0];
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test setting a column from a short.
+        /// </summary>
+        [TestMethod]
+        public void SetInt16()
+        {
+            var columnid = this.columnidDict["int16"];
+            var expected = Any.Int16;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, expected);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            var actual = BitConverter.ToInt16(Api.RetrieveColumn(this.sesid, this.tableid, columnid), 0);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test setting a column from an int.
+        /// </summary>
+        [TestMethod]
+        public void SetInt32()
+        {
+            var columnid = this.columnidDict["int32"];
+            var expected = Any.Int32;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, expected);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            var actual = BitConverter.ToInt32(Api.RetrieveColumn(this.sesid, this.tableid, columnid), 0);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test setting a column from a long.
+        /// </summary>
+        [TestMethod]
+        public void SetInt64()
+        {
+            var columnid = this.columnidDict["int64"];
+            var expected = Any.Int64;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, expected);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            var actual = BitConverter.ToInt64(Api.RetrieveColumn(this.sesid, this.tableid, columnid), 0);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test setting a column from a ushort.
+        /// </summary>
+        [TestMethod]
+        public void SetUInt16()
+        {
+            var columnid = this.columnidDict["uint16"];
+            var expected = Any.UInt16;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, expected);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            var actual = BitConverter.ToUInt16(Api.RetrieveColumn(this.sesid, this.tableid, columnid), 0);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test setting a column from a uint.
+        /// </summary>
+        [TestMethod]
+        public void SetUInt32()
+        {
+            var columnid = this.columnidDict["uint32"];
+            var expected = Any.UInt32;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, expected);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            var actual = BitConverter.ToUInt32(Api.RetrieveColumn(this.sesid, this.tableid, columnid), 0);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test setting a column from a ulong.
+        /// </summary>
+        [TestMethod]
+        public void SetUInt64()
+        {
+            var columnid = this.columnidDict["uint64"];
+            var expected = Any.UInt64;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, expected);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            var actual = BitConverter.ToUInt64(Api.RetrieveColumn(this.sesid, this.tableid, columnid), 0);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test setting a column from a float.
+        /// </summary>
+        [TestMethod]
+        public void SetFloat()
+        {
+            var columnid = this.columnidDict["float"];
+            var expected = Any.Float;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, expected);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            var actual = BitConverter.ToSingle(Api.RetrieveColumn(this.sesid, this.tableid, columnid), 0);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test setting a column from a double.
+        /// </summary>
+        [TestMethod]
+        public void SetDouble()
+        {
+            var columnid = this.columnidDict["double"];
+            var expected = Any.Double;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, expected);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            var actual = BitConverter.ToDouble(Api.RetrieveColumn(this.sesid, this.tableid, columnid), 0);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test setting a column from a guid.
+        /// </summary>
+        [TestMethod]
+        public void SetGuid()
+        {
+            var columnid = this.columnidDict["guid"];
+            var expected = Any.Guid;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, expected);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            var actual = new Guid(Api.RetrieveColumn(this.sesid, this.tableid, columnid));
+            Assert.AreEqual(expected, actual);
+        }
+
+        #endregion SetColumn Tests
+
+        #region MakeKey Tests
+
+        /// <summary>
+        /// Test make a key from a boolean.
+        /// </summary>
+        [TestMethod]
+        public void MakeKeyBoolean()
+        {
+            CreateIndexOnColumn("boolean");
+            Api.MakeKey(this.sesid, this.tableid, Any.Boolean, MakeKeyGrbit.NewKey);
+        }
+
+        /// <summary>
+        /// Test make a key from a byte.
+        /// </summary>
+        [TestMethod]
+        public void MakeKeyByte()
+        {
+            CreateIndexOnColumn("byte");
+            Api.MakeKey(this.sesid, this.tableid, Any.Byte, MakeKeyGrbit.NewKey);
+        }
+
+        /// <summary>
+        /// Test make a key from a short.
+        /// </summary>
+        [TestMethod]
+        public void MakeKeyInt16()
+        {
+            CreateIndexOnColumn("int16");
+            Api.MakeKey(this.sesid, this.tableid, Any.Int16, MakeKeyGrbit.NewKey);
+        }
+
+        /// <summary>
+        /// Test make a key from a ushort.
+        /// </summary>
+        [TestMethod]
+        public void MakeKeyUInt16()
+        {
+            CreateIndexOnColumn("uint16");
+            Api.MakeKey(this.sesid, this.tableid, Any.UInt16, MakeKeyGrbit.NewKey);
+        }
+
+        /// <summary>
+        /// Test make a key from an int.
+        /// </summary>
+        [TestMethod]
+        public void MakeKeyInt32()
+        {
+            CreateIndexOnColumn("int32");
+            Api.MakeKey(this.sesid, this.tableid, Any.Int32, MakeKeyGrbit.NewKey);
+        }
+
+        /// <summary>
+        /// Test make a key from a uint.
+        /// </summary>
+        [TestMethod]
+        public void MakeKeyUInt32()
+        {
+            CreateIndexOnColumn("uint32");
+            Api.MakeKey(this.sesid, this.tableid, Any.UInt32, MakeKeyGrbit.NewKey);
+        }
+
+        /// <summary>
+        /// Test make a key from a long.
+        /// </summary>
+        [TestMethod]
+        public void MakeKeyInt64()
+        {
+            CreateIndexOnColumn("int64");
+            Api.MakeKey(this.sesid, this.tableid, Any.Int64, MakeKeyGrbit.NewKey);
+        }
+
+        /// <summary>
+        /// Test make a key from a ulong.
+        /// </summary>
+        [TestMethod]
+        public void MakeKeyUInt64()
+        {
+            CreateIndexOnColumn("uint64");
+            Api.MakeKey(this.sesid, this.tableid, Any.UInt64, MakeKeyGrbit.NewKey);
+        }
+
+        /// <summary>
+        /// Test make a key from a float.
+        /// </summary>
+        [TestMethod]
+        public void MakeKeyFloat()
+        {
+            CreateIndexOnColumn("float");
+            Api.MakeKey(this.sesid, this.tableid, Any.Float, MakeKeyGrbit.NewKey);
+        }
+
+        /// <summary>
+        /// Test make a key from a double.
+        /// </summary>
+        [TestMethod]
+        public void MakeKeyDouble()
+        {
+            CreateIndexOnColumn("double");
+            Api.MakeKey(this.sesid, this.tableid, Any.Double, MakeKeyGrbit.NewKey);
+        }
+
+        /// <summary>
+        /// Test make a key from a guid.
+        /// </summary>
+        [TestMethod]
+        public void MakeKeyGuid()
+        {
+            CreateIndexOnColumn("guid");
+            Api.MakeKey(this.sesid, this.tableid, Any.Guid, MakeKeyGrbit.NewKey);
+        }
+
+        #endregion MakeKey Tests
 
         #region MetaData helpers tests
 
@@ -417,6 +794,22 @@ namespace InteropApiTests
             int bookmarkSize;
             Api.JetUpdate(this.sesid, this.tableid, bookmark, bookmark.Length, out bookmarkSize);
             Api.JetGotoBookmark(this.sesid, this.tableid, bookmark, bookmarkSize);
+        }
+
+        /// <summary>
+        /// Create an ascending index over the given column. The tableid will be
+        /// positioned to the new index.
+        /// </summary>
+        /// <param name="column">The name of the column to create the index on.</param>
+        private void CreateIndexOnColumn(string column)
+        {
+            var indexname = String.Format("index_{0}", column);
+            var indexdef = String.Format("+{0}\0\0", column);
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetCreateIndex(this.sesid, this.tableid, indexname, CreateIndexGrbit.None, indexdef, indexdef.Length, 100);
+            Api.JetSetCurrentIndex(this.sesid, this.tableid, indexname);
+            Api.JetCommitTransaction(sesid, CommitTransactionGrbit.None);
         }
 
         #endregion Helper methods

@@ -20,10 +20,10 @@ namespace Microsoft.Exchange.Isam.Utilities
         /// <summary>
         /// Maps a commad to the method that implements it.
         /// </summary>
-        Dictionary<string, Action<string[]>> actions;
+        private Dictionary<string, Action<string[]>> actions;
 
         /// <summary>
-        /// Create a new Dbutil object.
+        /// Initializes a new instance of the Dbutil class.
         /// </summary>
         public Dbutil()
         {
@@ -42,6 +42,7 @@ namespace Microsoft.Exchange.Isam.Utilities
             {
                 throw new ArgumentNullException("args");
             }
+
             if (args.Length < 1)
             {
                 throw new ArgumentException("specify arguments", "args");
@@ -64,7 +65,7 @@ namespace Microsoft.Exchange.Isam.Utilities
         /// <summary>
         /// Dump the meta-data of the table.
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="args">Arguments for the command.</param>
         private void DumpMetaData(string[] args)
         {
             if (args.Length != 1)
@@ -101,6 +102,7 @@ namespace Microsoft.Exchange.Isam.Utilities
                         {
                             Console.WriteLine("\t\tCode page:  {0}", column.Cp);
                         }
+
                         Console.WriteLine("\t\tMax length: {0}", column.MaxLength);
                         Console.WriteLine("\t\tGrbit:      {0}", column.Grbit);
                     }
@@ -115,7 +117,7 @@ namespace Microsoft.Exchange.Isam.Utilities
         /// <summary>
         /// Create a sample database
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="args">Arguments for the command.</param>
         private void CreateSampleDb(string[] args)
         {
             if (args.Length != 1)
@@ -188,11 +190,13 @@ namespace Microsoft.Exchange.Isam.Utilities
                 {
                     int ignored;
                     Api.JetPrepareUpdate(sesid, tableid, JET_prep.Insert);
-                    // TODO: insert data
+                    Api.SetColumn(sesid, tableid, columnidText, String.Format("Record {0}", i), Encoding.Unicode);
+                    Api.SetColumn(sesid, tableid, columnidDouble, (double)i * 1.1);
+                    Api.SetColumn(sesid, tableid, columnidLong, i);
                     Api.JetUpdate(sesid, tableid, null, 0, out ignored);
                 }
-                Api.JetCommitTransaction(sesid, CommitTransactionGrbit.None);
 
+                Api.JetCommitTransaction(sesid, CommitTransactionGrbit.None);
             }
             finally
             {

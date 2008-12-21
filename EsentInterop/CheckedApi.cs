@@ -20,7 +20,10 @@
 //  -   Removing cbStruct from structures
 //  -   Removing unused/reserved entries from structures
 //  -   Throwing exceptions instead of returning errors
-//  The Api has three layers:
+//  The Api has four layers:
+//  -   Helper methods (public): this layer provides data conversion and
+//      iteration for common API activities. These methods do not start
+//      with 'Jet' but are implemented using the Jet methods.
 //  -   Api (public): this layer provides error-handling, turning errors
 //      returned by lower layers into exceptions and warnings.
 //  -   ErrApi (internal): this layer turns managed objects into

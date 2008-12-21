@@ -12,6 +12,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Helper methods for the ESENT API. These aren't interop versions
     /// of the API, but encapsulate very common uses of the functions.
+    /// The methods that operate on unsigned numbers are
+    /// internal so that the public API remains CLS compliant.
     /// </summary>
     public static partial class Api
     {
@@ -150,6 +152,20 @@ namespace Microsoft.Isam.Esent.Interop
             }
 
             return encoding.GetString(data);
+        }
+
+        /// <summary>
+        /// Retrieves a single column value from the current record. The record is that
+        /// record associated with the index entry at the current position of the cursor.
+        /// The Unicode encoding is used.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the column from.</param>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <returns>The data retrieved from the column as a string. Null if the column is null.</returns>
+        public static string RetrieveColumnAsString(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
+        {
+            return Api.RetrieveColumnAsString(sesid, tableid, columnid, Encoding.Unicode);
         }
 
         /// <summary>

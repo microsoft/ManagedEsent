@@ -593,6 +593,41 @@ namespace InteropApiTests
         #region DML
 
         /// <summary>
+        /// Check that an exception is thrown when JetSetColumn gets a 
+        /// null buffer and non-null length (and SetSizeLV isn't specified).
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void JetSetColumnThrowsExceptionWhenDataIsNull()
+        {
+            Api.JetSetColumn(this.sesid, this.tableid, this.columnid, null, 1, SetColumnGrbit.None, null);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetSetColumn gets a 
+        /// negative data length.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void JetSetColumnThrowsExceptionWhenDataSizeIsNegative()
+        {
+            byte[] data = new byte[1];
+            Api.JetSetColumn(this.sesid, this.tableid, this.columnid, data, -1, SetColumnGrbit.None, null);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetSetColumn gets a 
+        /// negative data length.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void JetSetColumnThrowsExceptionWhenDataSizeIsTooLong()
+        {
+            byte[] data = new byte[1];
+            Api.JetSetColumn(this.sesid, this.tableid, this.columnid, data, data.Length + 1, SetColumnGrbit.None, null);
+        }
+
+        /// <summary>
         /// Check that an exception is thrown when JetRetrieveColumn gets a 
         /// null buffer and non-null length.
         /// </summary>

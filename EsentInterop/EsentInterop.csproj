@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiConstants.cs" />
+    <Compile Include="MakeKeyHelpers.cs" />
     <Compile Include="jet_colinfo.cs" />
     <Compile Include="jet_objectinfo.cs" />
     <Compile Include="ObjectInfoFlags.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="jet_wrn.cs" />
     <Compile Include="MetaDataHelpers.cs" />
     <Compile Include="NativeMethods.cs" />
+    <Compile Include="SetColumnHelpers.cs" />
     <Compile Include="SystemParameters.cs" />
     <Compile Include="Types.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

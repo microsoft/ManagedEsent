@@ -610,9 +610,10 @@ namespace Microsoft.Isam.Esent.Interop
         public static int JetSetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, SetColumnGrbit grbit, JET_SETINFO setinfo)
         {
             ErrApi.TraceFunctionCall("JetSetColumn");
+            ErrApi.CheckNotNegative(dataSize, "dataSize");
             if (null == data)
             {
-                if (data.Length > 0 && (SetColumnGrbit.SizeLV != (grbit & SetColumnGrbit.SizeLV)))
+                if (dataSize > 0 && (SetColumnGrbit.SizeLV != (grbit & SetColumnGrbit.SizeLV)))
                 {
                     throw new ArgumentException(
                         "dataSize cannot be greater than the length of the data (unless the SizeLV option is used)",

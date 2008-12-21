@@ -32,6 +32,19 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Gets a random byte.
+        /// </summary>
+        public static byte Byte
+        {
+            get
+            {
+                byte[] data = new byte[1];
+                Any.random.NextBytes(data);
+                return data[0];
+            }
+        }
+
+        /// <summary>
         /// Gets a random short.
         /// </summary>
         public static short Int16
