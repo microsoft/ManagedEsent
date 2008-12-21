@@ -18,6 +18,47 @@ namespace Microsoft.Exchange.Isam.Utilities
     internal partial class Dbutil
     {
         /// <summary>
+        /// Add a column to the table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to add the column to.</param>
+        /// <param name="name">The name of the column.</param>
+        /// <param name="coltyp">The type of the column.</param>
+        private void AddColumn(JET_SESID sesid, JET_TABLEID tableid, string name, JET_coltyp coltyp)
+        {
+            JET_COLUMNID ignored;
+            Api.JetAddColumn(
+                sesid,
+                tableid,
+                name,
+                new JET_COLUMNDEF() { coltyp = coltyp },
+                null,
+                0,
+                out ignored);
+        }
+
+        /// <summary>
+        /// Add a column to the table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to add the column to.</param>
+        /// <param name="name">The name of the column.</param>
+        /// <param name="coltyp">The type of the column.</param>
+        /// <param name="cp">The codepage to use.</param>
+        private void AddColumn(JET_SESID sesid, JET_TABLEID tableid, string name, JET_coltyp coltyp, JET_CP cp)
+        {
+            JET_COLUMNID ignored;
+            Api.JetAddColumn(
+                sesid,
+                tableid,
+                name,
+                new JET_COLUMNDEF() { coltyp = coltyp, cp = cp },
+                null,
+                0,
+                out ignored);
+        }
+
+        /// <summary>
         /// Create a sample database
         /// </summary>
         /// <param name="args">Arguments for the command.</param>
@@ -45,10 +86,6 @@ namespace Microsoft.Exchange.Isam.Utilities
                 Api.JetCreateTable(sesid, dbid, "table", 16, 100, out tableid);
 
                 JET_COLUMNID columnidAutoinc;
-                JET_COLUMNID columnidText;
-                JET_COLUMNID columnidDouble;
-                JET_COLUMNID columnidLong;
-
                 Api.JetAddColumn(
                     sesid,
                     tableid,
@@ -57,36 +94,25 @@ namespace Microsoft.Exchange.Isam.Utilities
                     null,
                     0,
                     out columnidAutoinc);
-                Api.JetAddColumn(
-                    sesid,
-                    tableid,
-                    "text",
-                    new JET_COLUMNDEF() { coltyp = JET_coltyp.LongText, cp = JET_CP.Unicode },
-                    null,
-                    0,
-                    out columnidText);
-                Api.JetAddColumn(
-                    sesid,
-                    tableid,
-                    "double",
-                    new JET_COLUMNDEF() { coltyp = JET_coltyp.IEEEDouble },
-                    null,
-                    0,
-                    out columnidDouble);
-                Api.JetAddColumn(
-                    sesid,
-                    tableid,
-                    "long",
-                    new JET_COLUMNDEF() { coltyp = JET_coltyp.Currency },
-                    null,
-                    0,
-                    out columnidLong);
+
+                this.AddColumn(sesid, tableid, "bit", JET_coltyp.Bit);
+                this.AddColumn(sesid, tableid, "byte", JET_coltyp.UnsignedByte);
+                this.AddColumn(sesid, tableid, "short", JET_coltyp.Short);
+                this.AddColumn(sesid, tableid, "long", JET_coltyp.Long);
+                this.AddColumn(sesid, tableid, "currency", JET_coltyp.Currency);
+                this.AddColumn(sesid, tableid, "single", JET_coltyp.IEEESingle);
+                this.AddColumn(sesid, tableid, "double", JET_coltyp.IEEEDouble);
+                this.AddColumn(sesid, tableid, "binary", JET_coltyp.LongBinary);
+                this.AddColumn(sesid, tableid, "ascii", JET_coltyp.LongText, JET_CP.ASCII);
+                this.AddColumn(sesid, tableid, "unicode", JET_coltyp.LongText, JET_CP.Unicode);
 
                 string indexdef1 = "+key\0\0";
                 Api.JetCreateIndex(sesid, tableid, "primary", CreateIndexGrbit.IndexPrimary, indexdef1, indexdef1.Length, 100);
 
-                string indexdef2 = "+double\0-text\0\0";
+                string indexdef2 = "+double\0-ascii\0\0";
                 Api.JetCreateIndex(sesid, tableid, "secondary", CreateIndexGrbit.None, indexdef2, indexdef2.Length, 100);
+
+                Dictionary<string, JET_COLUMNID> columnids = Api.GetColumnDictionary(sesid, tableid);
 
                 int ignored;
 
@@ -98,17 +124,24 @@ namespace Microsoft.Exchange.Isam.Utilities
 
                 // Record that requires CSV quoting
                 Api.JetPrepareUpdate(sesid, tableid, JET_prep.Insert);
-                Api.SetColumn(sesid, tableid, columnidText, " \"quoting\" ", Encoding.Unicode);
-                Api.SetColumn(sesid, tableid, columnidDouble, Math.PI);
-                Api.SetColumn(sesid, tableid, columnidLong, Int64.MinValue);
+                Api.SetColumn(sesid, tableid, columnids["bit"], true);
+                Api.SetColumn(sesid, tableid, columnids["byte"], (byte)0x1e);
+                Api.SetColumn(sesid, tableid, columnids["short"], (short)0);
+                Api.SetColumn(sesid, tableid, columnids["long"], 1);
+                Api.SetColumn(sesid, tableid, columnids["currency"], Int64.MinValue);
+                Api.SetColumn(sesid, tableid, columnids["single"], (float)Math.E);
+                Api.SetColumn(sesid, tableid, columnids["double"], Math.PI);
+                Api.SetColumn(sesid, tableid, columnids["binary"], new byte[] { 0x1, 0x2, 0xea, 0x4f, 0x0 });
+                Api.SetColumn(sesid, tableid, columnids["ascii"], ",", Encoding.ASCII);
+                Api.SetColumn(sesid, tableid, columnids["unicode"], " \"quoting\" ", Encoding.Unicode);
                 Api.JetUpdate(sesid, tableid, null, 0, out ignored);
 
                 for (int i = 0; i < 10; ++i)
                 {
                     Api.JetPrepareUpdate(sesid, tableid, JET_prep.Insert);
-                    Api.SetColumn(sesid, tableid, columnidText, String.Format("Record {0}", i), Encoding.Unicode);
-                    Api.SetColumn(sesid, tableid, columnidDouble, (double)i * 1.1);
-                    Api.SetColumn(sesid, tableid, columnidLong, (long)i);
+                    Api.SetColumn(sesid, tableid, columnids["unicode"], String.Format("Record {0}", i), Encoding.Unicode);
+                    Api.SetColumn(sesid, tableid, columnids["double"], (double)i * 1.1);
+                    Api.SetColumn(sesid, tableid, columnids["long"], i);
                     Api.JetUpdate(sesid, tableid, null, 0, out ignored);
                 }
 

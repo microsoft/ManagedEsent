@@ -27,6 +27,11 @@ namespace Microsoft.Exchange.Isam.Utilities
         /// </returns>
         internal static string QuoteForCsv(string s)
         {
+            if (null == s)
+            {
+                return null;
+            }
+
             // first, double any existing quotes
             if (s.Contains('"'))
             {

@@ -601,6 +601,42 @@ namespace InteropApiTests
             Assert.AreEqual(expected, actual);
         }
 
+        /// <summary>
+        /// Test setting a column from an array of bytes.
+        /// </summary>
+        [TestMethod]
+        public void SetBytes()
+        {
+            var columnid = this.columnidDict["binary"];
+            var expected = Any.Bytes;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, expected);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            var actual = Api.RetrieveColumn(this.sesid, this.tableid, columnid);
+            this.AssertAreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test setting a column from a null object.
+        /// </summary>
+        [TestMethod]
+        public void SetNullBytes()
+        {
+            var columnid = this.columnidDict["binary"];
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, null);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Assert.IsNull(Api.RetrieveColumn(this.sesid, this.tableid, columnid));
+        }
+
         #endregion SetColumn Tests
 
         #region MakeKey Tests
@@ -715,6 +751,46 @@ namespace InteropApiTests
             Api.MakeKey(this.sesid, this.tableid, Any.Guid, MakeKeyGrbit.NewKey);
         }
 
+        /// <summary>
+        /// Test make a key from a string.
+        /// </summary>
+        [TestMethod]
+        public void MakeKeyUnicode()
+        {
+            this.CreateIndexOnColumn("unicode");
+            Api.MakeKey(this.sesid, this.tableid, Any.String, Encoding.Unicode, MakeKeyGrbit.NewKey);
+        }
+
+        /// <summary>
+        /// Test make a key from a string.
+        /// </summary>
+        [TestMethod]
+        public void MakeKeyNullString()
+        {
+            this.CreateIndexOnColumn("unicode");
+            Api.MakeKey(this.sesid, this.tableid, null, Encoding.Unicode, MakeKeyGrbit.NewKey);
+        }
+
+        /// <summary>
+        /// Test make a key from an array of bytes.
+        /// </summary>
+        [TestMethod]
+        public void MakeKeyBinary()
+        {
+            this.CreateIndexOnColumn("binary");
+            Api.MakeKey(this.sesid, this.tableid, Any.Bytes, MakeKeyGrbit.NewKey);
+        }
+
+        /// <summary>
+        /// Test make a key from a null array of bytes.
+        /// </summary>
+        [TestMethod]
+        public void MakeKeyNullBinary()
+        {
+            this.CreateIndexOnColumn("binary");
+            Api.MakeKey(this.sesid, this.tableid, null, MakeKeyGrbit.NewKey);
+        }
+
         #endregion MakeKey Tests
 
         #region MetaData helpers tests
@@ -769,6 +845,21 @@ namespace InteropApiTests
         #endregion MetaData helpers tests
 
         #region Helper methods
+
+        /// <summary>
+        /// Assert that two byte arrays are equal to each other.
+        /// (Same length and contents).
+        /// </summary>
+        /// <param name="a">The first byte array.</param>
+        /// <param name="b">The second byte array.</param>
+        private void AssertAreEqual(byte[] a, byte[] b)
+        {
+            Assert.AreEqual(a.Length, b.Length);
+            for (int i = 0; i < a.Length; ++i)
+            {
+                Assert.AreEqual(a[i], b[i]);
+            }
+        }
 
         /// <summary>
         /// Creates a record with the given column set to the specified value.

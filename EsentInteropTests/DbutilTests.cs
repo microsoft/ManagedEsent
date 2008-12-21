@@ -37,6 +37,15 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test QuoteForCsv with text that is null
+        /// </summary>
+        [TestMethod()]
+        public void QuoteForCsvNullText()
+        {
+            Assert.IsNull(Dbutil.QuoteForCsv(null));
+        }
+
+        /// <summary>
         /// Test QuoteForCsv with text that doesn't need quoting
         /// </summary>
         [TestMethod()]

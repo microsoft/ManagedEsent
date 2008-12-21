@@ -175,5 +175,20 @@ namespace InteropApiTests
                 return sb.ToString();
             }
         }
+
+        /// <summary>
+        /// Gets a random array of bytes. The array will
+        /// be from 1 to 255 bytes.
+        /// </summary>
+        public static byte[] Bytes
+        {
+            get
+            {
+                int length = Any.random.Next(1, 255);
+                byte[] data = new byte[length];
+                Any.random.NextBytes(data);
+                return data;
+            }
+        }
     }
 }

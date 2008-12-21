@@ -10,20 +10,26 @@ rmdir /s /q bin\debug\%DBDIR%\ 2> nul
 mkdir bin\debug\test\
 pushd bin\debug\test
 
+echo Creating sample database...
 ..\DbUtil createsample %DATABASE%
 if NOT %ERRORLEVEL%==0 goto :Fail
 
+echo Dumping metadata...
 ..\Dbutil dumpmetadata %DATABASE% > metadata.txt
 if NOT %ERRORLEVEL%==0 goto :Fail
 
 echo n | comp /a metadata.txt ..\..\..\tests\expected_metadata.txt  1>nul 2>nul
 if NOT %ERRORLEVEL%==0 goto :Fail
 
-..\Dbutil dumptocsv %DATABASE% table
+echo Dumping table to csv format...
+..\Dbutil dumptocsv %DATABASE% table > table.csv
+echo n | comp /a table.csv ..\..\..\tests\expected_table.csv  1>nul 2>nul
+if NOT %ERRORLEVEL%==0 goto :Fail
 
 popd
 rmdir /s /q bin\debug\%DBDIR%\
 
+echo.
 echo **********************************
 echo Test Passed!
 echo **********************************

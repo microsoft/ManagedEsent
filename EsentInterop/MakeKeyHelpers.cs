@@ -22,6 +22,25 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to create the key on.</param>
         /// <param name="data">Column data for the current key column of the current index.</param>
+        /// <param name="grbit">Key options.</param>
+        public static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, byte[] data, MakeKeyGrbit grbit)
+        {
+            if (null == data)
+            {
+                Api.JetMakeKey(sesid, tableid, null, 0, grbit);
+            }
+            else
+            {
+                Api.JetMakeKey(sesid, tableid, data, data.Length, grbit);
+            }
+        }
+
+        /// <summary>
+        /// Constructs a search key that may then be used by JetSeek and JetSetIndexRange.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to create the key on.</param>
+        /// <param name="data">Column data for the current key column of the current index.</param>
         /// <param name="encoding">The encoding used to convert the string.</param>
         /// <param name="grbit">Key options.</param>
         public static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, string data, Encoding encoding, MakeKeyGrbit grbit)
