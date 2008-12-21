@@ -8,7 +8,7 @@ using namespace System;
 using namespace System::Text;
 using namespace Microsoft::Isam::Esent::Interop;
 
-int main(array<System::String ^> ^args)
+int main(array<System::String ^> ^)
 {
 	JET_INSTANCE instance;
 	JET_SESID sesid;

@@ -65,7 +65,7 @@ int main(int argc, char * argv[]) {
 	// time, the exact number depends on the database page size and the contents of the columns.
 	Call(JetBeginTransaction(sesid));
 	Call(JetPrepareUpdate(sesid, tableid, JET_prepInsert));
-	char * message = "Hello world";
+	char * message = "Hello World";
 	Call(JetSetColumn(sesid, tableid, columnid, message, strlen(message)+1, 0, NULL));
 	Call(JetUpdate(sesid, tableid, NULL, 0, NULL));
 	Call(JetCommitTransaction(sesid, 0));	// Use JetRollback() to abort the transaction
@@ -76,7 +76,7 @@ int main(int argc, char * argv[]) {
 	Call(JetMove(sesid, tableid, JET_MoveFirst, 0));
 	char buffer[1024];
 	Call(JetRetrieveColumn(sesid, tableid, columnid, buffer, sizeof(buffer), NULL, 0, NULL));
-	printf("%s", buffer);
+	printf("%s\n", buffer);
 
 	// Terminate ESENT. This performs a clean shutdown.
 	JetCloseTable(sesid, tableid);
