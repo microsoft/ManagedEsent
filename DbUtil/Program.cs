@@ -6,6 +6,8 @@
 
 namespace Microsoft.Exchange.Isam.Utilities
 {
+    using System;
+
     /// <summary>
     /// Contains the static method that starts the program
     /// </summary>
@@ -15,10 +17,22 @@ namespace Microsoft.Exchange.Isam.Utilities
         /// Main method, called when the program starts.
         /// </summary>
         /// <param name="args">Arguments to the program</param>
-        public static void Main(string[] args)
+        /// <returns>0 for success, non-zero for a failure</returns>
+        public static int Main(string[] args)
         {
             var dbutil = new Dbutil();
-            dbutil.Execute(args);
+            try
+            {
+                dbutil.Execute(args);
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine("Caught exception:");
+                Console.Error.WriteLine(ex.ToString());
+                return 1;
+            }
+
+            return 0;
         }
     }
 }

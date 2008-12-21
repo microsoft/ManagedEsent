@@ -611,7 +611,7 @@ namespace InteropApiTests
         [TestMethod]
         public void MakeKeyBoolean()
         {
-            CreateIndexOnColumn("boolean");
+            this.CreateIndexOnColumn("boolean");
             Api.MakeKey(this.sesid, this.tableid, Any.Boolean, MakeKeyGrbit.NewKey);
         }
 
@@ -621,7 +621,7 @@ namespace InteropApiTests
         [TestMethod]
         public void MakeKeyByte()
         {
-            CreateIndexOnColumn("byte");
+            this.CreateIndexOnColumn("byte");
             Api.MakeKey(this.sesid, this.tableid, Any.Byte, MakeKeyGrbit.NewKey);
         }
 
@@ -631,7 +631,7 @@ namespace InteropApiTests
         [TestMethod]
         public void MakeKeyInt16()
         {
-            CreateIndexOnColumn("int16");
+            this.CreateIndexOnColumn("int16");
             Api.MakeKey(this.sesid, this.tableid, Any.Int16, MakeKeyGrbit.NewKey);
         }
 
@@ -641,7 +641,7 @@ namespace InteropApiTests
         [TestMethod]
         public void MakeKeyUInt16()
         {
-            CreateIndexOnColumn("uint16");
+            this.CreateIndexOnColumn("uint16");
             Api.MakeKey(this.sesid, this.tableid, Any.UInt16, MakeKeyGrbit.NewKey);
         }
 
@@ -651,7 +651,7 @@ namespace InteropApiTests
         [TestMethod]
         public void MakeKeyInt32()
         {
-            CreateIndexOnColumn("int32");
+            this.CreateIndexOnColumn("int32");
             Api.MakeKey(this.sesid, this.tableid, Any.Int32, MakeKeyGrbit.NewKey);
         }
 
@@ -661,7 +661,7 @@ namespace InteropApiTests
         [TestMethod]
         public void MakeKeyUInt32()
         {
-            CreateIndexOnColumn("uint32");
+            this.CreateIndexOnColumn("uint32");
             Api.MakeKey(this.sesid, this.tableid, Any.UInt32, MakeKeyGrbit.NewKey);
         }
 
@@ -671,7 +671,7 @@ namespace InteropApiTests
         [TestMethod]
         public void MakeKeyInt64()
         {
-            CreateIndexOnColumn("int64");
+            this.CreateIndexOnColumn("int64");
             Api.MakeKey(this.sesid, this.tableid, Any.Int64, MakeKeyGrbit.NewKey);
         }
 
@@ -681,7 +681,7 @@ namespace InteropApiTests
         [TestMethod]
         public void MakeKeyUInt64()
         {
-            CreateIndexOnColumn("uint64");
+            this.CreateIndexOnColumn("uint64");
             Api.MakeKey(this.sesid, this.tableid, Any.UInt64, MakeKeyGrbit.NewKey);
         }
 
@@ -691,7 +691,7 @@ namespace InteropApiTests
         [TestMethod]
         public void MakeKeyFloat()
         {
-            CreateIndexOnColumn("float");
+            this.CreateIndexOnColumn("float");
             Api.MakeKey(this.sesid, this.tableid, Any.Float, MakeKeyGrbit.NewKey);
         }
 
@@ -701,7 +701,7 @@ namespace InteropApiTests
         [TestMethod]
         public void MakeKeyDouble()
         {
-            CreateIndexOnColumn("double");
+            this.CreateIndexOnColumn("double");
             Api.MakeKey(this.sesid, this.tableid, Any.Double, MakeKeyGrbit.NewKey);
         }
 
@@ -711,7 +711,7 @@ namespace InteropApiTests
         [TestMethod]
         public void MakeKeyGuid()
         {
-            CreateIndexOnColumn("guid");
+            this.CreateIndexOnColumn("guid");
             Api.MakeKey(this.sesid, this.tableid, Any.Guid, MakeKeyGrbit.NewKey);
         }
 
@@ -809,7 +809,7 @@ namespace InteropApiTests
             Api.JetBeginTransaction(this.sesid);
             Api.JetCreateIndex(this.sesid, this.tableid, indexname, CreateIndexGrbit.None, indexdef, indexdef.Length, 100);
             Api.JetSetCurrentIndex(this.sesid, this.tableid, indexname);
-            Api.JetCommitTransaction(sesid, CommitTransactionGrbit.None);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.None);
         }
 
         #endregion Helper methods

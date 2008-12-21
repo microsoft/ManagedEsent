@@ -16,9 +16,10 @@ if NOT %ERRORLEVEL%==0 goto :Fail
 ..\Dbutil dumpmetadata %DATABASE% > metadata.txt
 if NOT %ERRORLEVEL%==0 goto :Fail
 
-echo n | comp /a metadata.txt ..\..\..\tests\expected_metadata.txt
+echo n | comp /a metadata.txt ..\..\..\tests\expected_metadata.txt  1>nul 2>nul
 if NOT %ERRORLEVEL%==0 goto :Fail
-echo.
+
+..\Dbutil dumptocsv %DATABASE% table
 
 popd
 rmdir /s /q bin\debug\%DBDIR%\

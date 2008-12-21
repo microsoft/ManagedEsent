@@ -10,9 +10,9 @@ table
 		Max length: 4
 		Grbit:      ColumnFixed, ColumnAutoincrement
 	long
-		Coltyp:     Long
+		Coltyp:     Currency
 		Columnid:   JET_COLUMNID(0x3)
-		Max length: 4
+		Max length: 8
 		Grbit:      ColumnFixed
 	text
 		Coltyp:     LongText
