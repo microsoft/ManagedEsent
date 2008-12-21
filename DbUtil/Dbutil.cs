@@ -64,6 +64,66 @@ namespace Microsoft.Exchange.Isam.Utilities
         }
 
         /// <summary>
+        /// Quote a string for use in a CSV dump.
+        /// </summary>
+        /// <param name="s">The string.</param>
+        /// <returns>
+        /// A quoted version of the string, or the original string
+        /// if no quoting is needed.
+        /// </returns>
+        internal static string QuoteForCsv(string s)
+        {
+            // first, double any existing quotes
+            if (s.Contains('"'))
+            {
+                s = s.Replace("\"", "\"\"");
+            }
+
+            // check to see if we need to add quotes
+            // there are five cases where this is needed:
+            //  1. Value starts with whitespace
+            //  2. Value ends with whitespace
+            //  3. Value contains a comma
+            //  4. Value contains a newline
+            //  5. Value contains a quote
+            if (s.StartsWith(" ")
+                || s.StartsWith("\t")
+                || s.EndsWith(" ")
+                || s.EndsWith("\t")
+                || s.Contains(',')
+                || s.Contains("\"")
+                || s.Contains(Environment.NewLine))
+            {
+                s = String.Format("\"{0}\"", s);
+            }
+
+            return s;
+        }
+
+        /// <summary>
+        /// Return the string format of a byte array.
+        /// </summary>
+        /// <param name="data">The data to format.</param>
+        /// <returns>A string representation of the data.</returns>
+        internal static string FormatBytes(byte[] data)
+        {
+            if (null == data)
+            {
+                return null;
+            }
+            else
+            {
+                StringBuilder sb = new StringBuilder(data.Length * 2);
+                foreach (byte b in data)
+                {
+                    sb.AppendFormat("{0:x2}", b);
+                }
+
+                return sb.ToString();
+            }
+        }
+
+        /// <summary>
         /// Dump the meta-data of the table.
         /// </summary>
         /// <param name="args">Arguments for the command.</param>
@@ -113,57 +173,6 @@ namespace Microsoft.Exchange.Isam.Utilities
             {
                 Api.JetTerm(instance);
             }
-        }
-
-        /// <summary>
-        /// Quote a string for use in a CSV dump.
-        /// </summary>
-        /// <param name="s">The string.</param>
-        /// <returns>
-        /// A quoted version of the string, or the original string
-        /// if no quoting is needed.
-        /// </returns>
-        private string QuoteForCsv(string s)
-        {
-            // first, double any existing quotes
-            if (s.Contains('"'))
-            {
-                s = s.Replace("\"", "\"\"");
-            }
-
-            // check to see if we need to add quotes
-            // there are four cases where this is needed:
-            //  1. Value starts with whitespace
-            //  2. Value ends with whitespace
-            //  3. Value contains a comma
-            //  4. Value contains a newline
-            if (s.StartsWith(" ")
-                || s.StartsWith("\t")
-                || s.EndsWith(" ")
-                || s.EndsWith("\t")
-                || s.Contains(',')
-                || s.Contains(Environment.NewLine))
-            {
-                s = String.Format("\"{0}\"", s);
-            }
-
-            return s;
-        }
-
-        /// <summary>
-        /// Return the string format of a byte array.
-        /// </summary>
-        /// <param name="data">The data to format.</param>
-        /// <returns>A string representation of the data.</returns>
-        private string FormatBytes(byte[] data)
-        {
-            StringBuilder sb = new StringBuilder(data.Length * 2);
-            foreach (byte b in data)
-            {
-                sb.AppendFormat("{0:x2}", b);
-            }
-
-            return sb.ToString();
         }
 
         /// <summary>
@@ -236,7 +245,7 @@ namespace Microsoft.Exchange.Isam.Utilities
                         case JET_coltyp.LongBinary:
                         case JET_coltyp.DateTime:
                         default:
-                            columnFormatters.Add((s, t) => this.FormatBytes(Api.RetrieveColumn(s, t, columnid)));
+                            columnFormatters.Add((s, t) => Dbutil.FormatBytes(Api.RetrieveColumn(s, t, columnid)));
                             break;
                     }
                 }
@@ -254,7 +263,7 @@ namespace Microsoft.Exchange.Isam.Utilities
                         var recordBuilder = new StringBuilder();
                         foreach (var formatter in columnFormatters)
                         {
-                            recordBuilder.AppendFormat("{0},", this.QuoteForCsv(formatter(sesid, tableid)));
+                            recordBuilder.AppendFormat("{0},", Dbutil.QuoteForCsv(formatter(sesid, tableid)));
                         }
 
                         // remove the trailing comma (null columns can result in a comma
@@ -265,8 +274,8 @@ namespace Microsoft.Exchange.Isam.Utilities
                     }
                     while (Api.TryMoveNext(sesid, tableid));
                 }
-                Api.JetResetTableSequential(sesid, tableid, ResetTableSequentialGrbit.None);
 
+                Api.JetResetTableSequential(sesid, tableid, ResetTableSequentialGrbit.None);
             }
             finally
             {

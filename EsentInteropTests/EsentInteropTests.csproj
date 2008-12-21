@@ -78,6 +78,7 @@
     <Compile Include="BasicTableTests.cs" />
     <Compile Include="ColumndefTests.cs" />
     <Compile Include="ColumnlistTests.cs" />
+    <Compile Include="DbutilTests.cs" />
     <Compile Include="ObjectlistTests.cs" />
     <Compile Include="DatabaseTests.cs" />
     <Compile Include="InstanceParameterTests.cs" />
@@ -93,6 +94,10 @@
     <Compile Include="TypesTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DbUtil\DbUtil.csproj">
+      <Project>{E0B163B0-5AC6-4304-B932-BFC1F6A2A4EB}</Project>
+      <Name>DbUtil</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EsentInterop\EsentInterop.csproj">
       <Project>{E929E163-52A0-4AAC-917B-6D7FAF70C45E}</Project>
       <Name>EsentInterop</Name>
