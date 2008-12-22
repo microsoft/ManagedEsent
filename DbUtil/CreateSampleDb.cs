@@ -110,40 +110,40 @@ namespace Microsoft.Isam.Esent.Utilities
                     string indexdef2 = "+double\0-ascii\0\0";
                     Api.JetCreateIndex(session.JetSesid, tableid, "secondary", CreateIndexGrbit.None, indexdef2, indexdef2.Length, 100);
 
-                    Dictionary<string, JET_COLUMNID> columnids = Api.GetColumnDictionary(session.JetSesid, tableid);
-
-                    int ignored;
-
-                    Api.JetBeginTransaction(session.JetSesid);
-
-                    // Null record
-                    Api.JetPrepareUpdate(session.JetSesid, tableid, JET_prep.Insert);
-                    Api.JetUpdate(session.JetSesid, tableid, null, 0, out ignored);
-
-                    // Record that requires CSV quoting
-                    Api.JetPrepareUpdate(session.JetSesid, tableid, JET_prep.Insert);
-                    Api.SetColumn(session.JetSesid, tableid, columnids["bit"], true);
-                    Api.SetColumn(session.JetSesid, tableid, columnids["byte"], (byte)0x1e);
-                    Api.SetColumn(session.JetSesid, tableid, columnids["short"], (short)0);
-                    Api.SetColumn(session.JetSesid, tableid, columnids["long"], 1);
-                    Api.SetColumn(session.JetSesid, tableid, columnids["currency"], Int64.MinValue);
-                    Api.SetColumn(session.JetSesid, tableid, columnids["single"], (float)Math.E);
-                    Api.SetColumn(session.JetSesid, tableid, columnids["double"], Math.PI);
-                    Api.SetColumn(session.JetSesid, tableid, columnids["binary"], new byte[] { 0x1, 0x2, 0xea, 0x4f, 0x0 });
-                    Api.SetColumn(session.JetSesid, tableid, columnids["ascii"], ",", Encoding.ASCII);
-                    Api.SetColumn(session.JetSesid, tableid, columnids["unicode"], " \"quoting\" ", Encoding.Unicode);
-                    Api.JetUpdate(session.JetSesid, tableid, null, 0, out ignored);
-
-                    for (int i = 0; i < 10; ++i)
+                    using (Transaction transaction = new Transaction(session.JetSesid))
                     {
-                        Api.JetPrepareUpdate(session.JetSesid, tableid, JET_prep.Insert);
-                        Api.SetColumn(session.JetSesid, tableid, columnids["unicode"], String.Format("Record {0}", i), Encoding.Unicode);
-                        Api.SetColumn(session.JetSesid, tableid, columnids["double"], (double)i * 1.1);
-                        Api.SetColumn(session.JetSesid, tableid, columnids["long"], i);
-                        Api.JetUpdate(session.JetSesid, tableid, null, 0, out ignored);
-                    }
+                        Dictionary<string, JET_COLUMNID> columnids = Api.GetColumnDictionary(session.JetSesid, tableid);
+                        int ignored;
 
-                    Api.JetCommitTransaction(session.JetSesid, CommitTransactionGrbit.None);
+                        // Null record
+                        Api.JetPrepareUpdate(session.JetSesid, tableid, JET_prep.Insert);
+                        Api.JetUpdate(session.JetSesid, tableid, null, 0, out ignored);
+
+                        // Record that requires CSV quoting
+                        Api.JetPrepareUpdate(session.JetSesid, tableid, JET_prep.Insert);
+                        Api.SetColumn(session.JetSesid, tableid, columnids["bit"], true);
+                        Api.SetColumn(session.JetSesid, tableid, columnids["byte"], (byte)0x1e);
+                        Api.SetColumn(session.JetSesid, tableid, columnids["short"], (short)0);
+                        Api.SetColumn(session.JetSesid, tableid, columnids["long"], 1);
+                        Api.SetColumn(session.JetSesid, tableid, columnids["currency"], Int64.MinValue);
+                        Api.SetColumn(session.JetSesid, tableid, columnids["single"], (float)Math.E);
+                        Api.SetColumn(session.JetSesid, tableid, columnids["double"], Math.PI);
+                        Api.SetColumn(session.JetSesid, tableid, columnids["binary"], new byte[] { 0x1, 0x2, 0xea, 0x4f, 0x0 });
+                        Api.SetColumn(session.JetSesid, tableid, columnids["ascii"], ",", Encoding.ASCII);
+                        Api.SetColumn(session.JetSesid, tableid, columnids["unicode"], " \"quoting\" ", Encoding.Unicode);
+                        Api.JetUpdate(session.JetSesid, tableid, null, 0, out ignored);
+
+                        for (int i = 0; i < 10; ++i)
+                        {
+                            Api.JetPrepareUpdate(session.JetSesid, tableid, JET_prep.Insert);
+                            Api.SetColumn(session.JetSesid, tableid, columnids["unicode"], String.Format("Record {0}", i), Encoding.Unicode);
+                            Api.SetColumn(session.JetSesid, tableid, columnids["double"], (double)i * 1.1);
+                            Api.SetColumn(session.JetSesid, tableid, columnids["long"], i);
+                            Api.JetUpdate(session.JetSesid, tableid, null, 0, out ignored);
+                        }
+
+                        transaction.Commit(CommitTransactionGrbit.LazyFlush);
+                    }
                 }
             }
         }

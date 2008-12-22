@@ -36,6 +36,18 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Gets a value indicating whether the underlying resource
+        /// is currently allocated.
+        /// </summary>
+        protected bool HasResource
+        {
+            get
+            {
+                return this.hasResource;
+            }
+        }
+
+        /// <summary>
         /// Dispose of this object, releasing the underlying
         /// Esent resource.
         /// </summary>
@@ -67,6 +79,7 @@ namespace Microsoft.Isam.Esent.Interop
         protected void ResourceWasAllocated()
         {
             this.CheckObjectIsNotDisposed();
+            Debug.Assert(!this.hasResource, "Resource is already allocated");
             this.hasResource = true;
         }
 
@@ -75,6 +88,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         protected void ResourceWasReleased()
         {
+            Debug.Assert(this.hasResource, "Resource is not allocated");
             this.CheckObjectIsNotDisposed();
             this.hasResource = false;
         }

@@ -341,7 +341,7 @@ namespace InteropApiTests
         [TestMethod]
         public void InsertRecord()
         {
-            string s = "a test string";
+            string s = Any.String;
 
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
@@ -357,8 +357,8 @@ namespace InteropApiTests
         [TestMethod]
         public void ReplaceRecord()
         {
-            string before = "original";
-            string after = "new and improved";
+            string before = Any.String;
+            string after = Any.String;
 
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
@@ -376,13 +376,42 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Inserts a record and update it.
+        /// Inserts a record and update it. This uses the Transaction helper
+        /// class.
+        /// </summary>
+        [TestMethod]
+        public void ReplaceRecordWithTransactionClass()
+        {
+            string before = Any.String;
+            string after = Any.String;
+
+            using (Transaction transaction = new Transaction(this.sesid))
+            {
+                Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+                this.SetColumnFromString(before);
+                this.UpdateAndGotoBookmark();
+                transaction.Commit(CommitTransactionGrbit.LazyFlush);
+            }
+
+            using (Transaction transaction = new Transaction(this.sesid))
+            {
+                Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Replace);
+                this.SetColumnFromString(after);
+                this.UpdateAndGotoBookmark();
+                transaction.Commit(CommitTransactionGrbit.LazyFlush);
+            }
+
+            Assert.AreEqual(after, this.RetrieveColumnAsString());
+        }
+
+        /// <summary>
+        /// Inserts a record, update it and rollback the update.
         /// </summary>
         [TestMethod]
         public void ReplaceAndRollback()
         {
-            string before = "original";
-            string after = "new and improved";
+            string before = Any.String;
+            string after = Any.String;
 
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
@@ -395,6 +424,36 @@ namespace InteropApiTests
             this.SetColumnFromString(after);
             this.UpdateAndGotoBookmark();
             Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
+
+            Assert.AreEqual(before, this.RetrieveColumnAsString());
+        }
+
+        /// <summary>
+        /// Inserts a record, updates it and rollback the transaction.
+        /// This uses the Transaction helper class.
+        /// </summary>
+        [TestMethod]
+        public void ReplaceAndRollbackWithTransactionClass()
+        {
+            string before = Any.String;
+            string after = Any.String;
+
+            using (Transaction transaction = new Transaction(this.sesid))
+            {
+                Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+                this.SetColumnFromString(before);
+                this.UpdateAndGotoBookmark();
+                transaction.Commit(CommitTransactionGrbit.LazyFlush);
+            }
+
+            using (Transaction transaction = new Transaction(this.sesid))
+            {
+                Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Replace);
+                this.SetColumnFromString(after);
+                this.UpdateAndGotoBookmark();
+
+                // the transaction isn't committed
+            }
 
             Assert.AreEqual(before, this.RetrieveColumnAsString());
         }

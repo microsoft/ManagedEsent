@@ -89,6 +89,7 @@ namespace InteropApiTests
                 instance.Term();
                 Assert.AreEqual(JET_INSTANCE.Nil, instance.JetInstance);
             }
+
             Directory.Delete(dir, true);
         }
 
@@ -108,6 +109,7 @@ namespace InteropApiTests
                 instance.Term();
                 Assert.IsNull(instance.Parameters);
             }
+
             Directory.Delete(dir, true);
         }
 

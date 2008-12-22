@@ -34,6 +34,7 @@ namespace InteropApiTests
                     Api.JetBeginTransaction(session.JetSesid);
                     Api.JetCommitTransaction(session.JetSesid, CommitTransactionGrbit.None);
                 }
+
                 Api.JetTerm(instance);
             }
             finally
@@ -57,6 +58,7 @@ namespace InteropApiTests
                 {
                     session.End();
                 }
+
                 Api.JetTerm(instance);
             }
             finally
