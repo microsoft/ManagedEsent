@@ -19,32 +19,64 @@ namespace InteropApiTests
     public class TransactionTests
     {
         /// <summary>
+        /// The directory being used for the database and its files.
+        /// </summary>
+        private string directory;
+
+        /// <summary>
+        /// The instance used by the test.
+        /// </summary>
+        private JET_INSTANCE instance;
+
+        /// <summary>
+        /// The session used by the test.
+        /// </summary>
+        private JET_SESID sesid;
+
+        #region Setup/Teardown
+
+        /// <summary>
+        /// Initialization method. Called once when the tests are started.
+        /// All DDL should be done in this method.
+        /// </summary>
+        [TestInitialize]
+        public void Setup()
+        {
+            this.directory = SetupHelper.CreateRandomDirectory();
+            this.instance = SetupHelper.CreateNewInstance(this.directory);
+
+            // turn off logging so initialization is faster
+            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
+            Api.JetInit(ref this.instance);
+            Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
+        }
+
+        /// <summary>
+        /// Cleanup after all tests have run.
+        /// </summary>
+        [TestCleanup]
+        public void Teardown()
+        {
+            Api.JetEndSession(this.sesid, EndSessionGrbit.None);
+            Api.JetTerm(this.instance);
+            Directory.Delete(this.directory, true);
+        }
+
+        #endregion Setup/Teardown
+
+        /// <summary>
         /// Start a transaction, commit and restart.
         /// </summary>
         [TestMethod]
         public void CreateCommitAndBegin()
         {
-            string dir = SetupHelper.CreateRandomDirectory();
-            try
+            using (Transaction transaction = new Transaction(this.sesid)) 
             {
-                JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
-                Api.JetInit(ref instance);
-                JET_SESID sesid;
-                Api.JetBeginSession(instance, out sesid, null, null);
-                using (Transaction transaction = new Transaction(sesid)) 
-                {
-                    Assert.IsTrue(transaction.IsInTransaction);
-                    transaction.Commit(CommitTransactionGrbit.None);
-                    Assert.IsFalse(transaction.IsInTransaction);
-                    transaction.Begin();
-                    Assert.IsTrue(transaction.IsInTransaction);
-                }
-
-                Api.JetTerm(instance);
-            }
-            finally
-            {
-                Directory.Delete(dir, true);
+                Assert.IsTrue(transaction.IsInTransaction);
+                transaction.Commit(CommitTransactionGrbit.None);
+                Assert.IsFalse(transaction.IsInTransaction);
+                transaction.Begin();
+                Assert.IsTrue(transaction.IsInTransaction);
             }
         }
 
@@ -54,27 +86,13 @@ namespace InteropApiTests
         [TestMethod]
         public void CreateRollbackAndBegin()
         {
-            string dir = SetupHelper.CreateRandomDirectory();
-            try
+            using (Transaction transaction = new Transaction(this.sesid))
             {
-                JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
-                Api.JetInit(ref instance);
-                JET_SESID sesid;
-                Api.JetBeginSession(instance, out sesid, null, null);
-                using (Transaction transaction = new Transaction(sesid))
-                {
-                    Assert.IsTrue(transaction.IsInTransaction);
-                    transaction.Rollback();
-                    Assert.IsFalse(transaction.IsInTransaction);
-                    transaction.Begin();
-                    Assert.IsTrue(transaction.IsInTransaction);
-                }
-
-                Api.JetTerm(instance);
-            }
-            finally
-            {
-                Directory.Delete(dir, true);
+                Assert.IsTrue(transaction.IsInTransaction);
+                transaction.Rollback();
+                Assert.IsFalse(transaction.IsInTransaction);
+                transaction.Begin();
+                Assert.IsTrue(transaction.IsInTransaction);
             }
         }
 
@@ -85,23 +103,9 @@ namespace InteropApiTests
         [ExpectedException(typeof(InvalidOperationException))]
         public void TestDoubleTransactionBeginThrowsException()
         {
-            string dir = SetupHelper.CreateRandomDirectory();
-            JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
-            try
+            using (Transaction transaction = new Transaction(this.sesid))
             {
-                Api.JetInit(ref instance);
-                JET_SESID sesid;
-                Api.JetBeginSession(instance, out sesid, null, null);
-
-                using (Transaction transaction = new Transaction(sesid))
-                {
-                    transaction.Begin();
-                }
-            }
-            finally
-            {
-                Api.JetTerm(instance);
-                Directory.Delete(dir, true);
+                transaction.Begin();
             }
         }
 
@@ -112,24 +116,10 @@ namespace InteropApiTests
         [ExpectedException(typeof(InvalidOperationException))]
         public void TestDoubleTransactionCommitThrowsException()
         {
-            string dir = SetupHelper.CreateRandomDirectory();
-            JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
-            try
+            using (Transaction transaction = new Transaction(this.sesid))
             {
-                Api.JetInit(ref instance);
-                JET_SESID sesid;
-                Api.JetBeginSession(instance, out sesid, null, null);
-
-                using (Transaction transaction = new Transaction(sesid))
-                {
-                    transaction.Commit(CommitTransactionGrbit.None);
-                    transaction.Commit(CommitTransactionGrbit.None);
-                }
-            }
-            finally
-            {
-                Api.JetTerm(instance);
-                Directory.Delete(dir, true);
+                transaction.Commit(CommitTransactionGrbit.None);
+                transaction.Commit(CommitTransactionGrbit.None);
             }
         }
 
@@ -140,24 +130,10 @@ namespace InteropApiTests
         [ExpectedException(typeof(InvalidOperationException))]
         public void TestDoubleTransactionRollbackThrowsException()
         {
-            string dir = SetupHelper.CreateRandomDirectory();
-            JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
-            try
+            using (Transaction transaction = new Transaction(this.sesid))
             {
-                Api.JetInit(ref instance);
-                JET_SESID sesid;
-                Api.JetBeginSession(instance, out sesid, null, null);
-
-                using (Transaction transaction = new Transaction(sesid))
-                {
-                    transaction.Rollback();
-                    transaction.Rollback();
-                }
-            }
-            finally
-            {
-                Api.JetTerm(instance);
-                Directory.Delete(dir, true);
+                transaction.Rollback();
+                transaction.Rollback();
             }
         }
 
@@ -169,23 +145,9 @@ namespace InteropApiTests
         [ExpectedException(typeof(ObjectDisposedException))]
         public void TestBeginThrowsExceptionWhenDisposed()
         {
-            string dir = SetupHelper.CreateRandomDirectory();
-            JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
-            try
-            {
-                Api.JetInit(ref instance);
-                JET_SESID sesid;
-                Api.JetBeginSession(instance, out sesid, null, null);
-
-                Transaction transaction = new Transaction(sesid);
-                transaction.Dispose();
-                transaction.Begin();
-            }
-            finally
-            {
-                Api.JetTerm(instance);
-                Directory.Delete(dir, true);
-            }
+            Transaction transaction = new Transaction(this.sesid);
+            transaction.Dispose();
+            transaction.Begin();
         }
 
         /// <summary>
@@ -196,23 +158,9 @@ namespace InteropApiTests
         [ExpectedException(typeof(ObjectDisposedException))]
         public void TestCommitThrowsExceptionWhenDisposed()
         {
-            string dir = SetupHelper.CreateRandomDirectory();
-            JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
-            try
-            {
-                Api.JetInit(ref instance);
-                JET_SESID sesid;
-                Api.JetBeginSession(instance, out sesid, null, null);
-
-                Transaction transaction = new Transaction(sesid);
-                transaction.Dispose();
-                transaction.Commit(CommitTransactionGrbit.None);
-            }
-            finally
-            {
-                Api.JetTerm(instance);
-                Directory.Delete(dir, true);
-            }
+            Transaction transaction = new Transaction(this.sesid);
+            transaction.Dispose();
+            transaction.Commit(CommitTransactionGrbit.None);
         }
 
         /// <summary>
@@ -223,23 +171,9 @@ namespace InteropApiTests
         [ExpectedException(typeof(ObjectDisposedException))]
         public void TestRollbackThrowsExceptionWhenDisposed()
         {
-            string dir = SetupHelper.CreateRandomDirectory();
-            JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
-            try
-            {
-                Api.JetInit(ref instance);
-                JET_SESID sesid;
-                Api.JetBeginSession(instance, out sesid, null, null);
-
-                Transaction transaction = new Transaction(sesid);
-                transaction.Dispose();
-                transaction.Rollback();
-            }
-            finally
-            {
-                Api.JetTerm(instance);
-                Directory.Delete(dir, true);
-            }
+            Transaction transaction = new Transaction(this.sesid);
+            transaction.Dispose();
+            transaction.Rollback();
         }
 
         /// <summary>
@@ -250,23 +184,9 @@ namespace InteropApiTests
         [ExpectedException(typeof(ObjectDisposedException))]
         public void TestPropertyThrowsExceptionWhenDisposed()
         {
-            string dir = SetupHelper.CreateRandomDirectory();
-            JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
-            try
-            {
-                Api.JetInit(ref instance);
-                JET_SESID sesid;
-                Api.JetBeginSession(instance, out sesid, null, null);
-
-                Transaction transaction = new Transaction(sesid);
-                transaction.Dispose();
-                var x = transaction.IsInTransaction;
-            }
-            finally
-            {
-                Api.JetTerm(instance);
-                Directory.Delete(dir, true);
-            }
-        }
+            Transaction transaction = new Transaction(this.sesid);
+            transaction.Dispose();
+            var x = transaction.IsInTransaction;
+       }
     }
 }

@@ -18,28 +18,55 @@ namespace InteropApiTests
     public class SessionTests
     {
         /// <summary>
+        /// The directory being used for the database and its files.
+        /// </summary>
+        private string directory;
+
+        /// <summary>
+        /// The instance used by the test.
+        /// </summary>
+        private JET_INSTANCE instance;
+
+        #region Setup/Teardown
+
+        /// <summary>
+        /// Initialization method. Called once when the tests are started.
+        /// All DDL should be done in this method.
+        /// </summary>
+        [TestInitialize]
+        public void Setup()
+        {
+            this.directory = SetupHelper.CreateRandomDirectory();
+            this.instance = SetupHelper.CreateNewInstance(this.directory);
+
+            // turn off logging so initialization is faster
+            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
+            Api.JetInit(ref this.instance);
+        }
+
+        /// <summary>
+        /// Cleanup after all tests have run.
+        /// </summary>
+        [TestCleanup]
+        public void Teardown()
+        {
+            Api.JetTerm(this.instance);
+            Directory.Delete(this.directory, true);
+        }
+
+        #endregion Setup/Teardown
+
+        /// <summary>
         /// Allocate a session and let it be disposed.
         /// </summary>
         [TestMethod]
         public void CreateSession()
         {
-            string dir = SetupHelper.CreateRandomDirectory();
-            try
+           using (Session session = new Session(this.instance))
             {
-                JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
-                Api.JetInit(ref instance);
-                using (Session session = new Session(instance))
-                {
-                    Assert.AreNotEqual(JET_SESID.Nil, session.JetSesid);
-                    Api.JetBeginTransaction(session.JetSesid);
-                    Api.JetCommitTransaction(session.JetSesid, CommitTransactionGrbit.None);
-                }
-
-                Api.JetTerm(instance);
-            }
-            finally
-            {
-                Directory.Delete(dir, true);
+                Assert.AreNotEqual(JET_SESID.Nil, session.JetSesid);
+                Api.JetBeginTransaction(session.JetSesid);
+                Api.JetCommitTransaction(session.JetSesid, CommitTransactionGrbit.None);
             }
         }
 
@@ -49,21 +76,9 @@ namespace InteropApiTests
         [TestMethod]
         public void CreateAndEndSession()
         {
-            string dir = SetupHelper.CreateRandomDirectory();
-            try
+            using (Session session = new Session(this.instance))
             {
-                JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
-                Api.JetInit(ref instance);
-                using (Session session = new Session(instance))
-                {
-                    session.End();
-                }
-
-                Api.JetTerm(instance);
-            }
-            finally
-            {
-                Directory.Delete(dir, true);
+                session.End();
             }
         }
 
@@ -73,16 +88,9 @@ namespace InteropApiTests
         [TestMethod]
         public void CheckThatEndSessionZeroesJetSesid()
         {
-            string dir = SetupHelper.CreateRandomDirectory();
-            JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
-            Api.JetInit(ref instance);
-
-            Session session = new Session(instance);
+            Session session = new Session(this.instance);
             session.End();
             Assert.AreEqual(JET_SESID.Nil, session.JetSesid);
-
-            Api.JetTerm(instance);
-            Directory.Delete(dir, true);
         }
 
         /// <summary>
@@ -93,21 +101,9 @@ namespace InteropApiTests
         [ExpectedException(typeof(ObjectDisposedException))]
         public void EndThrowsExceptionWhenSessionIsDisposed()
         {
-            string dir = SetupHelper.CreateRandomDirectory();
-            JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
-            Api.JetInit(ref instance);
-
-            Session session = new Session(instance);
+            Session session = new Session(this.instance);
             session.Dispose();
-            try
-            {
-                session.End();
-            }
-            finally
-            {
-                Api.JetTerm(instance);
-                Directory.Delete(dir, true);
-            }
+            session.End();
         }
 
         /// <summary>
@@ -118,21 +114,9 @@ namespace InteropApiTests
         [ExpectedException(typeof(ObjectDisposedException))]
         public void JetSesidThrowsExceptionWhenSessionIsDisposed()
         {
-            string dir = SetupHelper.CreateRandomDirectory();
-            JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
-            Api.JetInit(ref instance);
-
-            Session session = new Session(instance);
+            Session session = new Session(this.instance);
             session.Dispose();
-            try
-            {
-                var x = session.JetSesid;
-            }
-            finally
-            {
-                Api.JetTerm(instance);
-                Directory.Delete(dir, true);
-            }
+            var x = session.JetSesid;
         }
     }
 }

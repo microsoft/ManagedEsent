@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiConstants.cs" />
+    <Compile Include="Table.cs" />
     <Compile Include="Transaction.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="EsentResource.cs" />

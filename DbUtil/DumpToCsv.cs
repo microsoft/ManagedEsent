@@ -94,7 +94,7 @@ namespace Microsoft.Isam.Esent.Utilities
             }
 
             string database = args[0];
-            string table = args[1];
+            string tableName = args[1];
 
             using (Instance instance = new Instance("dumptocsv"))
             {
@@ -110,7 +110,7 @@ namespace Microsoft.Isam.Esent.Utilities
                     List<Func<JET_SESID, JET_TABLEID, string>> columnFormatters = new List<Func<JET_SESID, JET_TABLEID, string>>();
 
                     StringBuilder sb = new StringBuilder();
-                    foreach (ColumnInfo column in Api.GetTableColumns(session.JetSesid, dbid, table))
+                    foreach (ColumnInfo column in Api.GetTableColumns(session.JetSesid, dbid, tableName))
                     {
                         sb.AppendFormat("{0},", column.Name);
 
@@ -156,34 +156,35 @@ namespace Microsoft.Isam.Esent.Utilities
                     // remove the trailing comma
                     Console.WriteLine(sb.ToString().TrimEnd(new char[] { ',' }));
 
-                    JET_TABLEID tableid;
-                    Api.JetOpenTable(session.JetSesid, dbid, table, null, 0, OpenTableGrbit.ReadOnly, out tableid);
-                    Api.JetSetTableSequential(session.JetSesid, tableid, SetTableSequentialGrbit.None);
-                    if (Api.TryMoveFirst(session.JetSesid, tableid))
+                    using (Table table = new Table(session.JetSesid, dbid, tableName, OpenTableGrbit.ReadOnly))
                     {
-                        do
+                        Api.JetSetTableSequential(session.JetSesid, table.JetTableid, SetTableSequentialGrbit.None);
+                        if (Api.TryMoveFirst(session.JetSesid, table.JetTableid))
                         {
-                            var recordBuilder = new StringBuilder();
-                            foreach (var formatter in columnFormatters)
+                            do
                             {
-                                recordBuilder.AppendFormat("{0},", Dbutil.QuoteForCsv(formatter(session.JetSesid, tableid)));
-                            }
+                                var recordBuilder = new StringBuilder();
+                                foreach (var formatter in columnFormatters)
+                                {
+                                    recordBuilder.AppendFormat("{0},", Dbutil.QuoteForCsv(formatter(session.JetSesid, table.JetTableid)));
+                                }
 
-                            // remove the trailing comma (null columns can result in a comma
-                            // as the first character or multiple trailing commas)
-                            string recordText = recordBuilder.ToString();
-                            if (String.Empty != recordText)
-                            {
-                                // the string could be empty if the table has no columns
-                                recordText = recordText.Substring(0, recordText.Length - 1);
-                            }
+                                // remove the trailing comma (null columns can result in a comma
+                                // as the first character or multiple trailing commas)
+                                string recordText = recordBuilder.ToString();
+                                if (String.Empty != recordText)
+                                {
+                                    // the string could be empty if the table has no columns
+                                    recordText = recordText.Substring(0, recordText.Length - 1);
+                                }
 
-                            Console.WriteLine(recordText);
+                                Console.WriteLine(recordText);
+                            }
+                            while (Api.TryMoveNext(session.JetSesid, table.JetTableid));
                         }
-                        while (Api.TryMoveNext(session.JetSesid, tableid));
-                    }
 
-                    Api.JetResetTableSequential(session.JetSesid, tableid, ResetTableSequentialGrbit.None);
+                        Api.JetResetTableSequential(session.JetSesid, table.JetTableid, ResetTableSequentialGrbit.None);
+                    }
                 }
             }
         }
