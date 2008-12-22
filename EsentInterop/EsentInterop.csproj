@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiConstants.cs" />
+    <Compile Include="Session.cs" />
     <Compile Include="EsentResource.cs" />
     <Compile Include="Instance.cs" />
     <Compile Include="MakeKeyHelpers.cs" />

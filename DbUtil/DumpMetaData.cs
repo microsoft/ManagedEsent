@@ -35,27 +35,28 @@ namespace Microsoft.Isam.Esent.Utilities
                 instance.Parameters.Recovery = false;
                 instance.Init();
 
-                JET_SESID sesid;
-                JET_DBID dbid;
-                Api.JetBeginSession(instance.JetInstance, out sesid, null, null);
-                Api.JetAttachDatabase(sesid, database, AttachDatabaseGrbit.ReadOnly);
-                Api.JetOpenDatabase(sesid, database, null, out dbid, OpenDatabaseGrbit.ReadOnly);
-
-                foreach (string table in Api.GetTableNames(sesid, dbid))
+                using (Session session = new Session(instance.JetInstance))
                 {
-                    Console.WriteLine(table);
-                    foreach (ColumnInfo column in Api.GetTableColumns(sesid, dbid, table))
-                    {
-                        Console.WriteLine("\t{0}", column.Name);
-                        Console.WriteLine("\t\tColtyp:     {0}", column.Coltyp);
-                        Console.WriteLine("\t\tColumnid:   {0}", column.Columnid);
-                        if (JET_coltyp.LongText == column.Coltyp || JET_coltyp.Text == column.Coltyp)
-                        {
-                            Console.WriteLine("\t\tCode page:  {0}", column.Cp);
-                        }
+                    JET_DBID dbid;
+                    Api.JetAttachDatabase(session.JetSesid, database, AttachDatabaseGrbit.ReadOnly);
+                    Api.JetOpenDatabase(session.JetSesid, database, null, out dbid, OpenDatabaseGrbit.ReadOnly);
 
-                        Console.WriteLine("\t\tMax length: {0}", column.MaxLength);
-                        Console.WriteLine("\t\tGrbit:      {0}", column.Grbit);
+                    foreach (string table in Api.GetTableNames(session.JetSesid, dbid))
+                    {
+                        Console.WriteLine(table);
+                        foreach (ColumnInfo column in Api.GetTableColumns(session.JetSesid, dbid, table))
+                        {
+                            Console.WriteLine("\t{0}", column.Name);
+                            Console.WriteLine("\t\tColtyp:     {0}", column.Coltyp);
+                            Console.WriteLine("\t\tColumnid:   {0}", column.Columnid);
+                            if (JET_coltyp.LongText == column.Coltyp || JET_coltyp.Text == column.Coltyp)
+                            {
+                                Console.WriteLine("\t\tCode page:  {0}", column.Cp);
+                            }
+
+                            Console.WriteLine("\t\tMax length: {0}", column.MaxLength);
+                            Console.WriteLine("\t\tGrbit:      {0}", column.Grbit);
+                        }
                     }
                 }
             }

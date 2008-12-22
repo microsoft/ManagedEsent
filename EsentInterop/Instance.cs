@@ -9,19 +9,19 @@ namespace Microsoft.Isam.Esent.Interop
     using System;
 
     /// <summary>
-    /// A class that encapsulated a JET_INSTANCE in a disposable object.
+    /// A class that encapsulates a JET_INSTANCE in a disposable object.
     /// </summary>
     public class Instance : EsentResource
     {
         /// <summary>
-        /// The underlying JET_INSTANCE.
-        /// </summary>
-        private JET_INSTANCE instance;
-
-        /// <summary>
         /// Parameters for the instance.
         /// </summary>
         private InstanceParameters parameters;
+
+        /// <summary>
+        /// The underlying JET_INSTANCE.
+        /// </summary>
+        private JET_INSTANCE instance;
 
         /// <summary>
         /// Initializes a new instance of the Instance class. The underlying
@@ -32,7 +32,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.JetCreateInstance(out this.instance, name);
             this.ResourceWasAllocated();
-            this.Parameters = new InstanceParameters(this.instance);
+            this.parameters = new InstanceParameters(this.instance);
         }
 
         /// <summary>
@@ -45,12 +45,6 @@ namespace Microsoft.Isam.Esent.Interop
                 this.CheckObjectIsNotDisposed();
                 return this.instance;
             }
-
-            private set
-            {
-                this.CheckObjectIsNotDisposed();
-                this.instance = value;
-            }
         }
 
         /// <summary>
@@ -62,12 +56,6 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 this.CheckObjectIsNotDisposed();
                 return this.parameters;
-            }
-
-            private set
-            {
-                this.CheckObjectIsNotDisposed();
-                this.parameters = value;
             }
         }
 
@@ -95,6 +83,8 @@ namespace Microsoft.Isam.Esent.Interop
         protected override void ReleaseResource()
         {
             Api.JetTerm(this.instance);
+            this.instance = JET_INSTANCE.Nil;
+            this.parameters = null;
             this.ResourceWasReleased();
         }
     }

@@ -101,89 +101,90 @@ namespace Microsoft.Isam.Esent.Utilities
                 instance.Parameters.Recovery = false;
                 instance.Init();
 
-                JET_SESID sesid;
-                JET_DBID dbid;
-                Api.JetBeginSession(instance.JetInstance, out sesid, null, null);
-                Api.JetAttachDatabase(sesid, database, AttachDatabaseGrbit.ReadOnly);
-                Api.JetOpenDatabase(sesid, database, null, out dbid, OpenDatabaseGrbit.ReadOnly);
-
-                List<Func<JET_SESID, JET_TABLEID, string>> columnFormatters = new List<Func<JET_SESID, JET_TABLEID, string>>();
-
-                StringBuilder sb = new StringBuilder();
-                foreach (ColumnInfo column in Api.GetTableColumns(sesid, dbid, table))
+                using (Session session = new Session(instance.JetInstance))
                 {
-                    sb.AppendFormat("{0},", column.Name);
+                    JET_DBID dbid;
+                    Api.JetAttachDatabase(session.JetSesid, database, AttachDatabaseGrbit.ReadOnly);
+                    Api.JetOpenDatabase(session.JetSesid, database, null, out dbid, OpenDatabaseGrbit.ReadOnly);
 
-                    // create a local variable that will be captured by the lambda functions below
-                    var columnid = column.Columnid;
-                    switch (column.Coltyp)
+                    List<Func<JET_SESID, JET_TABLEID, string>> columnFormatters = new List<Func<JET_SESID, JET_TABLEID, string>>();
+
+                    StringBuilder sb = new StringBuilder();
+                    foreach (ColumnInfo column in Api.GetTableColumns(session.JetSesid, dbid, table))
                     {
-                        case JET_coltyp.Bit:
-                            columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsBoolean(s, t, columnid)));
-                            break;
-                        case JET_coltyp.Currency:
-                            columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsInt64(s, t, columnid)));
-                            break;
-                        case JET_coltyp.IEEEDouble:
-                            columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsDouble(s, t, columnid)));
-                            break;
-                        case JET_coltyp.IEEESingle:
-                            columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsFloat(s, t, columnid)));
-                            break;
-                        case JET_coltyp.Long:
-                            columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsInt32(s, t, columnid)));
-                            break;
-                        case JET_coltyp.Text:
-                        case JET_coltyp.LongText:
-                            var encoding = (column.Cp == JET_CP.Unicode) ? Encoding.Unicode : Encoding.ASCII;
-                            columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsString(s, t, columnid, encoding)));
-                            break;
-                        case JET_coltyp.Short:
-                            columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsInt16(s, t, columnid)));
-                            break;
-                        case JET_coltyp.UnsignedByte:
-                            columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsByte(s, t, columnid)));
-                            break;
-                        case JET_coltyp.Binary:
-                        case JET_coltyp.LongBinary:
-                        case JET_coltyp.DateTime:
-                        default:
-                            columnFormatters.Add((s, t) => Dbutil.FormatBytes(Api.RetrieveColumn(s, t, columnid)));
-                            break;
+                        sb.AppendFormat("{0},", column.Name);
+
+                        // create a local variable that will be captured by the lambda functions below
+                        var columnid = column.Columnid;
+                        switch (column.Coltyp)
+                        {
+                            case JET_coltyp.Bit:
+                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsBoolean(s, t, columnid)));
+                                break;
+                            case JET_coltyp.Currency:
+                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsInt64(s, t, columnid)));
+                                break;
+                            case JET_coltyp.IEEEDouble:
+                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsDouble(s, t, columnid)));
+                                break;
+                            case JET_coltyp.IEEESingle:
+                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsFloat(s, t, columnid)));
+                                break;
+                            case JET_coltyp.Long:
+                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsInt32(s, t, columnid)));
+                                break;
+                            case JET_coltyp.Text:
+                            case JET_coltyp.LongText:
+                                var encoding = (column.Cp == JET_CP.Unicode) ? Encoding.Unicode : Encoding.ASCII;
+                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsString(s, t, columnid, encoding)));
+                                break;
+                            case JET_coltyp.Short:
+                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsInt16(s, t, columnid)));
+                                break;
+                            case JET_coltyp.UnsignedByte:
+                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsByte(s, t, columnid)));
+                                break;
+                            case JET_coltyp.Binary:
+                            case JET_coltyp.LongBinary:
+                            case JET_coltyp.DateTime:
+                            default:
+                                columnFormatters.Add((s, t) => Dbutil.FormatBytes(Api.RetrieveColumn(s, t, columnid)));
+                                break;
+                        }
                     }
-                }
 
-                // remove the trailing comma
-                Console.WriteLine(sb.ToString().TrimEnd(new char[] { ',' }));
+                    // remove the trailing comma
+                    Console.WriteLine(sb.ToString().TrimEnd(new char[] { ',' }));
 
-                JET_TABLEID tableid;
-                Api.JetOpenTable(sesid, dbid, table, null, 0, OpenTableGrbit.ReadOnly, out tableid);
-                Api.JetSetTableSequential(sesid, tableid, SetTableSequentialGrbit.None);
-                if (Api.TryMoveFirst(sesid, tableid))
-                {
-                    do
+                    JET_TABLEID tableid;
+                    Api.JetOpenTable(session.JetSesid, dbid, table, null, 0, OpenTableGrbit.ReadOnly, out tableid);
+                    Api.JetSetTableSequential(session.JetSesid, tableid, SetTableSequentialGrbit.None);
+                    if (Api.TryMoveFirst(session.JetSesid, tableid))
                     {
-                        var recordBuilder = new StringBuilder();
-                        foreach (var formatter in columnFormatters)
+                        do
                         {
-                            recordBuilder.AppendFormat("{0},", Dbutil.QuoteForCsv(formatter(sesid, tableid)));
-                        }
+                            var recordBuilder = new StringBuilder();
+                            foreach (var formatter in columnFormatters)
+                            {
+                                recordBuilder.AppendFormat("{0},", Dbutil.QuoteForCsv(formatter(session.JetSesid, tableid)));
+                            }
 
-                        // remove the trailing comma (null columns can result in a comma
-                        // as the first character or multiple trailing commas)
-                        string recordText = recordBuilder.ToString();
-                        if (String.Empty != recordText)
-                        {
-                            // the string could be empty if the table has no columns
-                            recordText = recordText.Substring(0, recordText.Length - 1);
-                        }
+                            // remove the trailing comma (null columns can result in a comma
+                            // as the first character or multiple trailing commas)
+                            string recordText = recordBuilder.ToString();
+                            if (String.Empty != recordText)
+                            {
+                                // the string could be empty if the table has no columns
+                                recordText = recordText.Substring(0, recordText.Length - 1);
+                            }
 
-                        Console.WriteLine(recordText);
+                            Console.WriteLine(recordText);
+                        }
+                        while (Api.TryMoveNext(session.JetSesid, tableid));
                     }
-                    while (Api.TryMoveNext(sesid, tableid));
-                }
 
-                Api.JetResetTableSequential(sesid, tableid, ResetTableSequentialGrbit.None);
+                    Api.JetResetTableSequential(session.JetSesid, tableid, ResetTableSequentialGrbit.None);
+                }
             }
         }
     }
