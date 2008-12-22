@@ -184,6 +184,10 @@ namespace CsStockSample
                 InsertOneStock(sesid, tableid, "IBM", "International Business Machines Corp.", 8352, 150);
                 InsertOneStock(sesid, tableid, "EBAY", "eBay Inc.", 1445, 0);
 
+                // Commit the transaction at the end of the using block
+                // If transaction.Commit isn't called then the transaction will 
+                // automatically rollback when disposed (throwing away
+                // the records that were just inserted).
                 transaction.Commit(CommitTransactionGrbit.None);
             }
         }
@@ -206,6 +210,7 @@ namespace CsStockSample
             int price,
             int sharesOwned)
         {
+            // Prepare an update, set some columns and the save the update
             using (Update update = new Update(sesid, tableid, JET_prep.Insert))
             {
                 Api.SetColumn(sesid, tableid, columnidSymbol, symbol, Encoding.Unicode);
@@ -218,8 +223,11 @@ namespace CsStockSample
                     Api.SetColumn(sesid, tableid, columnidShares, sharesOwned);
                 }
 
-                int ignored;
-                update.Save(null, 0, out ignored);
+                // Save the update at the end of the using block.
+                // If update.Save isn't called then the update will 
+                // be cancelled when disposed (and the record won't
+                // be inserted).
+                update.Save();
             }
         }
 
@@ -236,6 +244,8 @@ namespace CsStockSample
             string symbol,
             int shares)
         {
+            // Get the current value of the column, prepare an update,
+            // set the column to the new value and the save the update
             using (Transaction transaction = new Transaction(sesid))
             {
                 SeekToSymbol(sesid, tableid, symbol);
@@ -246,10 +256,17 @@ namespace CsStockSample
                 {
                     Api.SetColumn(sesid, tableid, columnidShares, newShares);
 
-                    int ignored;
-                    update.Save(null, 0, out ignored);
+                    // Save the update at the end of the using block.
+                    // If update.Save isn't called then the update will 
+                    // be cancelled when disposed (undoing the updates 
+                    // to the record).
+                    update.Save();
                 }
 
+                // Commit the transaction at the end of the using block
+                // If transaction.Commit isn't called then the transaction will 
+                // automatically rollback when disposed (throwing away
+                // the changes to the record).
                 transaction.Commit(CommitTransactionGrbit.None);
             }
         }
@@ -262,23 +279,28 @@ namespace CsStockSample
         /// <param name="symbol">The symbol to delete.</param>
         private static void DeleteStock(JET_SESID sesid, JET_TABLEID tableid, string symbol)
         {
+            // Seek to the record and delete it.
             using (Transaction transaction = new Transaction(sesid))
             {
                 SeekToSymbol(sesid, tableid, symbol);
                 Api.JetDelete(sesid, tableid);
+
+                // Commit the transaction at the end of the using block
+                // If transaction.Commit isn't called then the transaction will 
+                // automatically rollback when disposed (undeleting the record).
                 transaction.Commit(CommitTransactionGrbit.None);
             }
         }
 
         /// <summary>
-        /// Print all rows in the table.
+        /// Find the record with the given stock symbol.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The table to dump the records from.</param>
         /// <param name="symbol">The symbol to seek for.</param>
         private static void SeekToSymbol(JET_SESID sesid, JET_TABLEID tableid, string symbol)
         {
-            // We have to be on the primary index
+            // We need to be on the primary index (which is over the 'symbol' column
             Api.JetSetCurrentIndex(sesid, tableid, null);
             Api.MakeKey(sesid, tableid, symbol, Encoding.Unicode, MakeKeyGrbit.NewKey);
 

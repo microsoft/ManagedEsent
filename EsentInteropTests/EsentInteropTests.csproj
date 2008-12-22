@@ -78,7 +78,9 @@
     <Compile Include="BasicTableTests.cs" />
     <Compile Include="ColumndefTests.cs" />
     <Compile Include="ColumnlistTests.cs" />
+    <Compile Include="SeekTests.cs" />
     <Compile Include="TableTests.cs" />
+    <Compile Include="UpdateTests.cs" />
     <Compile Include="TransactionTests.cs" />
     <Compile Include="SessionTests.cs" />
     <Compile Include="DbutilTests.cs" />

@@ -47,7 +47,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static bool TryMoveLast(JET_SESID sesid, JET_TABLEID tableid)
         {
             JET_err err = (JET_err)ErrApi.JetMove(sesid, tableid, (int)JET_Move.Last, MoveGrbit.None);
-            if (JET_err.Success == err)
+            if (err >= JET_err.Success)
             {
                 return true;
             }
@@ -70,7 +70,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static bool TryMoveNext(JET_SESID sesid, JET_TABLEID tableid)
         {
             JET_err err = (JET_err)ErrApi.JetMove(sesid, tableid, (int)JET_Move.Next, MoveGrbit.None);
-            if (JET_err.Success == err)
+            if (err >= JET_err.Success)
             {
                 return true;
             }
@@ -93,7 +93,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static bool TryMovePrevious(JET_SESID sesid, JET_TABLEID tableid)
         {
             JET_err err = (JET_err)ErrApi.JetMove(sesid, tableid, (int)JET_Move.Previous, MoveGrbit.None);
-            if (JET_err.Success == err)
+            if (err >= JET_err.Success)
             {
                 return true;
             }
@@ -118,11 +118,11 @@ namespace Microsoft.Isam.Esent.Interop
         public static bool TrySeek(JET_SESID sesid, JET_TABLEID tableid, SeekGrbit grbit)
         {
             JET_err err = (JET_err)ErrApi.JetSeek(sesid, tableid, grbit);
-            if (JET_err.Success == err)
+            if (err >= JET_err.Success)
             {
                 return true;
             }
-            else if (JET_err.NoCurrentRecord == err)
+            else if (JET_err.RecordNotFound == err)
             {
                 return false;
             }
@@ -145,7 +145,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static bool TrySetIndexRange(JET_SESID sesid, JET_TABLEID tableid, SetIndexRangeGrbit grbit)
         {
             JET_err err = (JET_err)ErrApi.JetSetIndexRange(sesid, tableid, grbit);
-            if (JET_err.Success == err)
+            if (err >= JET_err.Success)
             {
                 return true;
             }

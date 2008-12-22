@@ -768,7 +768,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// JetUpdate is the final step in performing an insert or an update. The update is begun by
         /// calling JetPrepareUpdate and then by calling JetSetColumn or JetSetColumns one or more times
         /// to set the record state. Finally, JetUpdate is called to complete the update operation.
-        /// Indexes are updated only by JetUpdate or JetUpdate2, and not during JetSetColumn or JetSetColumns
+        /// Indexes are updated only by JetUpdate or and not during JetSetColumn or JetSetColumns
         /// </remarks>
         public static void JetUpdate(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize, out int actualBookmarkSize)
         {

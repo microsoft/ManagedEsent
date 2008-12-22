@@ -116,33 +116,39 @@ namespace Microsoft.Isam.Esent.Utilities
                         using (Transaction transaction = new Transaction(session.JetSesid))
                         {
                             Dictionary<string, JET_COLUMNID> columnids = Api.GetColumnDictionary(session.JetSesid, table.JetTableid);
-                            int ignored;
 
                             // Null record
+                            int ignored;
                             Api.JetPrepareUpdate(session.JetSesid, table.JetTableid, JET_prep.Insert);
                             Api.JetUpdate(session.JetSesid, table.JetTableid, null, 0, out ignored);
 
                             // Record that requires CSV quoting
-                            Api.JetPrepareUpdate(session.JetSesid, table.JetTableid, JET_prep.Insert);
-                            Api.SetColumn(session.JetSesid, table.JetTableid, columnids["bit"], true);
-                            Api.SetColumn(session.JetSesid, table.JetTableid, columnids["byte"], (byte)0x1e);
-                            Api.SetColumn(session.JetSesid, table.JetTableid, columnids["short"], (short)0);
-                            Api.SetColumn(session.JetSesid, table.JetTableid, columnids["long"], 1);
-                            Api.SetColumn(session.JetSesid, table.JetTableid, columnids["currency"], Int64.MinValue);
-                            Api.SetColumn(session.JetSesid, table.JetTableid, columnids["single"], (float)Math.E);
-                            Api.SetColumn(session.JetSesid, table.JetTableid, columnids["double"], Math.PI);
-                            Api.SetColumn(session.JetSesid, table.JetTableid, columnids["binary"], new byte[] { 0x1, 0x2, 0xea, 0x4f, 0x0 });
-                            Api.SetColumn(session.JetSesid, table.JetTableid, columnids["ascii"], ",", Encoding.ASCII);
-                            Api.SetColumn(session.JetSesid, table.JetTableid, columnids["unicode"], " \"quoting\" ", Encoding.Unicode);
-                            Api.JetUpdate(session.JetSesid, table.JetTableid, null, 0, out ignored);
+                            using (Update update = new Update(session.JetSesid, table.JetTableid, JET_prep.Insert))
+                            {
+                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["bit"], true);
+                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["byte"], (byte)0x1e);
+                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["short"], (short)0);
+                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["long"], 1);
+                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["currency"], Int64.MinValue);
+                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["single"], (float)Math.E);
+                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["double"], Math.PI);
+                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["binary"], new byte[] { 0x1, 0x2, 0xea, 0x4f, 0x0 });
+                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["ascii"], ",", Encoding.ASCII);
+                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["unicode"], " \"quoting\" ", Encoding.Unicode);
+
+                                update.Save();
+                            }
 
                             for (int i = 0; i < 10; ++i)
                             {
-                                Api.JetPrepareUpdate(session.JetSesid, table.JetTableid, JET_prep.Insert);
-                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["unicode"], String.Format("Record {0}", i), Encoding.Unicode);
-                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["double"], (double)i * 1.1);
-                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["long"], i);
-                                Api.JetUpdate(session.JetSesid, table.JetTableid, null, 0, out ignored);
+                                using (Update update = new Update(session.JetSesid, table.JetTableid, JET_prep.Insert))
+                                {
+                                    Api.SetColumn(session.JetSesid, table.JetTableid, columnids["unicode"], String.Format("Record {0}", i), Encoding.Unicode);
+                                    Api.SetColumn(session.JetSesid, table.JetTableid, columnids["double"], (double)i * 1.1);
+                                    Api.SetColumn(session.JetSesid, table.JetTableid, columnids["long"], i);
+
+                                    update.Save();
+                                }
                             }
 
                             transaction.Commit(CommitTransactionGrbit.LazyFlush);
