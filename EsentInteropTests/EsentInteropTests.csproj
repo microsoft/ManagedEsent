@@ -79,6 +79,8 @@
     <Compile Include="ColumndefTests.cs" />
     <Compile Include="ColumnlistTests.cs" />
     <Compile Include="DbutilTests.cs" />
+    <Compile Include="EsentResourceTests.cs" />
+    <Compile Include="InstanceTests.cs" />
     <Compile Include="ObjectlistTests.cs" />
     <Compile Include="DatabaseTests.cs" />
     <Compile Include="InstanceParameterTests.cs" />

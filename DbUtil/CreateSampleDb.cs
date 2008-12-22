@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace Microsoft.Exchange.Isam.Utilities
+namespace Microsoft.Isam.Esent.Utilities
 {
     using System;
     using System.Collections.Generic;
@@ -71,15 +71,13 @@ namespace Microsoft.Exchange.Isam.Utilities
 
             string database = args[0];
 
-            JET_INSTANCE instance;
-            Api.JetCreateInstance(out instance, "createsampledb");
-
-            Api.JetInit(ref instance);
-            try
+            using (Instance instance = new Instance("createsampledb"))
             {
+                instance.Init();
+
                 JET_SESID sesid;
                 JET_DBID dbid;
-                Api.JetBeginSession(instance, out sesid, null, null);
+                Api.JetBeginSession(instance.JetInstance, out sesid, null, null);
                 Api.JetCreateDatabase(sesid, database, null, out dbid, CreateDatabaseGrbit.None);
 
                 JET_TABLEID tableid;
@@ -146,10 +144,6 @@ namespace Microsoft.Exchange.Isam.Utilities
                 }
 
                 Api.JetCommitTransaction(sesid, CommitTransactionGrbit.None);
-            }
-            finally
-            {
-                Api.JetTerm(instance);
             }
         }
     }

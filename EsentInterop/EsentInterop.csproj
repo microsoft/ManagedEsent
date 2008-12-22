@@ -68,9 +68,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiConstants.cs" />
+    <Compile Include="EsentResource.cs" />
+    <Compile Include="Instance.cs" />
     <Compile Include="MakeKeyHelpers.cs" />
     <Compile Include="jet_colinfo.cs" />
     <Compile Include="jet_objectinfo.cs" />

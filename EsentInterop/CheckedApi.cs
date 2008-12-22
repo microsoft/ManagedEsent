@@ -9,29 +9,33 @@
 //  -   The Esent.Interop DLL should only require version 2.0 of the .NET Framework.
 //  -   Full and complete documentation. Intellisense should be able to
 //      provide useful and extensive help.
-//  -   Minimal editorialization. Whenever possible the Microsoft.Isam.Esent.Interop Api will
+//  -   Minimal editorialization. Whenever possible the Microsoft.Isam.Esent.Interop Jet* api will
 //      exactly match the ESENT Api. In particular the names of structs, types
 //      and functions will not be changed. Except for:
 //  -   Cleaning up Api constants. Instead of providing the constants from
 //      esent.h they will be grouped into useful enumerations. This will
 //      eliminate a lot of common Api errors.
+//  -   Provide helper methods/objects for common operations. These will be layered
+//      on top of the ESENT Api.
 //  Changes that will be made are:
 //  -   Convert JET_coltyp etc. into real enumerations
 //  -   Removing cbStruct from structures
 //  -   Removing unused/reserved entries from structures
 //  -   Throwing exceptions instead of returning errors
 //  The Api has four layers:
-//  -   Helper methods (public): this layer provides data conversion and
-//      iteration for common API activities. These methods do not start
-//      with 'Jet' but are implemented using the Jet methods.
-//  -   Api (public): this layer provides error-handling, turning errors
-//      returned by lower layers into exceptions and warnings.
+//  -   NativeMethods (internal): this is the P/Invoke interop layer. This layer deals
+//      with IntPtr and other basic types as opposed to the managed types
+//      such as JET_TABLEID.
 //  -   ErrApi (internal): this layer turns managed objects into
 //      objects which can be passed into the P/Invoke interop layer.
 //      Methods at this level return an error instead of throwing an exception.
-//  -   NativeMethods: this is the P/Invoke interop layer. This layer deals
-//      with IntPtr and other basic types as opposed to the managed types
-//      such as JET_TABLEID.
+//  -   Api (public): this layer provides error-handling, turning errors
+//      returned by lower layers into exceptions and warnings.
+//  -   Helper methods (public): this layer provides data conversion and
+//      iteration for common API activities. These methods do not start
+//      with 'Jet' but are implemented using the Jet methods.
+//  -   Disposable objects (public): these disposable object automatically
+//      release esent resources (instances, sessions, tables and transactions). 
 
 namespace Microsoft.Isam.Esent.Interop
 {

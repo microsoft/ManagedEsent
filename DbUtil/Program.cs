@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace Microsoft.Exchange.Isam.Utilities
+namespace Microsoft.Isam.Esent.Utilities
 {
     using System;
 

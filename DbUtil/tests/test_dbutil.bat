@@ -10,6 +10,10 @@ rmdir /s /q bin\debug\%DBDIR%\ 2> nul
 mkdir bin\debug\test\
 pushd bin\debug\test
 
+echo Passing in bad argumnts...
+..\DbUtil nosuchcommand 2>nul
+if %ERRORLEVEL%==0 goto :Fail
+
 echo Creating sample database...
 ..\DbUtil createsample %DATABASE%
 if NOT %ERRORLEVEL%==0 goto :Fail

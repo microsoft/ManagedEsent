@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace Microsoft.Exchange.Isam.Utilities
+namespace Microsoft.Isam.Esent.Utilities
 {
     using System;
     using System.Collections.Generic;
@@ -96,18 +96,14 @@ namespace Microsoft.Exchange.Isam.Utilities
             string database = args[0];
             string table = args[1];
 
-            JET_INSTANCE instance;
-            Api.JetCreateInstance(out instance, "dumptocsv");
-
-            InstanceParameters parameters = new InstanceParameters(instance);
-            parameters.Recovery = false;
-
-            Api.JetInit(ref instance);
-            try
+            using (Instance instance = new Instance("dumptocsv"))
             {
+                instance.Parameters.Recovery = false;
+                instance.Init();
+
                 JET_SESID sesid;
                 JET_DBID dbid;
-                Api.JetBeginSession(instance, out sesid, null, null);
+                Api.JetBeginSession(instance.JetInstance, out sesid, null, null);
                 Api.JetAttachDatabase(sesid, database, AttachDatabaseGrbit.ReadOnly);
                 Api.JetOpenDatabase(sesid, database, null, out dbid, OpenDatabaseGrbit.ReadOnly);
 
@@ -188,10 +184,6 @@ namespace Microsoft.Exchange.Isam.Utilities
                 }
 
                 Api.JetResetTableSequential(sesid, tableid, ResetTableSequentialGrbit.None);
-            }
-            finally
-            {
-                Api.JetTerm(instance);
             }
         }
     }
