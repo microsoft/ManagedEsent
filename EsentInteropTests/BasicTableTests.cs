@@ -105,6 +105,44 @@ namespace InteropApiTests
 
         #endregion Setup/Teardown
 
+        #region JetDupCursor
+
+        /// <summary>
+        /// JetDupCursor should return a different tableid.
+        /// </summary>
+        [TestMethod]
+        public void JetDupCursorReturnsDifferentTableid()
+        {
+            JET_TABLEID newTableid;
+            Api.JetDupCursor(this.sesid, this.tableid, out newTableid, DupCursorGrbit.None);
+            Assert.AreNotEqual(newTableid, this.tableid);
+            Api.JetCloseTable(this.sesid, newTableid);
+        }
+
+        /// <summary>
+        /// JetDupCursor should return a tableid on the same table.
+        /// </summary>
+        [TestMethod]
+        public void JetDupCursorReturnsCursorOnSameTable()
+        {
+            string expected = Any.String;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            this.SetColumnFromString(expected);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            JET_TABLEID newTableid;
+            Api.JetDupCursor(this.sesid, this.tableid, out newTableid, DupCursorGrbit.None);
+            Api.JetMove(this.sesid, newTableid, JET_Move.First, MoveGrbit.None);
+            string actual = Api.RetrieveColumnAsString(this.sesid, newTableid, this.columnidLongText, Encoding.Unicode);
+            Assert.AreEqual(expected, actual);
+            Api.JetCloseTable(this.sesid, newTableid);
+        }
+
+        #endregion JetDupCursor
+
         #region DDL Tests
 
         /// <summary>
@@ -462,7 +500,6 @@ namespace InteropApiTests
         /// Insert a record and delete it.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(EsentException))]
         public void InsertRecordAndDelete()
         {
             Api.JetBeginTransaction(this.sesid);
@@ -474,7 +511,15 @@ namespace InteropApiTests
             Api.JetDelete(this.sesid, this.tableid);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
-            this.RetrieveColumnAsString();
+            try
+            {
+                var x = this.RetrieveColumnAsString();
+                Assert.Fail("Expected an EsentException");
+            }
+            catch (EsentException ex)
+            {
+                Assert.AreEqual(JET_err.RecordDeleted, ex.Error);
+            }
         }
 
         /// <summary>
@@ -492,8 +537,53 @@ namespace InteropApiTests
             Api.JetGetLock(this.sesid, this.tableid, GetLockGrbit.Read);
             Api.JetGetLock(this.sesid, this.tableid, GetLockGrbit.Write);
             Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
+        }
 
-            this.RetrieveColumnAsString();
+        /// <summary>
+        /// Test that JetGetLock throws an exception when incompatible
+        /// locks are requested.
+        /// </summary>
+        [TestMethod]
+        public void GetLockThrowsExceptionOnWriteConflict()
+        {
+            byte[] bookmark = new byte[Api.BookmarkMost];
+            int bookmarkSize;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.JetUpdate(this.sesid, this.tableid, bookmark, bookmark.Length, out bookmarkSize);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            JET_SESID otherSesid;
+            JET_DBID otherDbid;
+            JET_TABLEID otherTableid;
+            Api.JetDupSession(this.sesid, out otherSesid);
+            Api.JetOpenDatabase(otherSesid, this.database, null, out otherDbid, OpenDatabaseGrbit.None);
+            Api.JetOpenTable(otherSesid, otherDbid, this.table, null, 0, OpenTableGrbit.None, out otherTableid);
+
+            Api.JetGotoBookmark(this.sesid, this.tableid, bookmark, bookmarkSize);
+            Api.JetGotoBookmark(otherSesid, otherTableid, bookmark, bookmarkSize);
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetBeginTransaction(otherSesid);
+
+            Api.JetGetLock(this.sesid, this.tableid, GetLockGrbit.Read);
+            try
+            {
+                Api.JetGetLock(otherSesid, otherTableid, GetLockGrbit.Write);
+                Assert.Fail("Expected an EsentException");
+            }
+            catch (EsentException ex)
+            {
+                Assert.AreEqual(JET_err.WriteConflict, ex.Error);
+            }
+
+            Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
+            Api.JetRollback(otherSesid, RollbackTransactionGrbit.None);
+
+            Api.JetCloseTable(otherSesid, otherTableid);
+            Api.JetCloseDatabase(otherSesid, otherDbid, CloseDatabaseGrbit.None);
+            Api.JetEndSession(otherSesid, EndSessionGrbit.None);
         }
 
         #endregion DML Tests
@@ -637,7 +727,7 @@ namespace InteropApiTests
         /// </summary>
         private void UpdateAndGotoBookmark()
         {
-            byte[] bookmark = new byte[256];
+            byte[] bookmark = new byte[Api.BookmarkMost];
             int bookmarkSize;
             Api.JetUpdate(this.sesid, this.tableid, bookmark, bookmark.Length, out bookmarkSize);
             Api.JetGotoBookmark(this.sesid, this.tableid, bookmark, bookmarkSize);

@@ -35,16 +35,16 @@ namespace Microsoft.Isam.Esent.Utilities
                 instance.Parameters.Recovery = false;
                 instance.Init();
 
-                using (Session session = new Session(instance.JetInstance))
+                using (Session session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetAttachDatabase(session.JetSesid, database, AttachDatabaseGrbit.ReadOnly);
-                    Api.JetOpenDatabase(session.JetSesid, database, null, out dbid, OpenDatabaseGrbit.ReadOnly);
+                    Api.JetAttachDatabase(session, database, AttachDatabaseGrbit.ReadOnly);
+                    Api.JetOpenDatabase(session, database, null, out dbid, OpenDatabaseGrbit.ReadOnly);
 
-                    foreach (string table in Api.GetTableNames(session.JetSesid, dbid))
+                    foreach (string table in Api.GetTableNames(session, dbid))
                     {
                         Console.WriteLine(table);
-                        foreach (ColumnInfo column in Api.GetTableColumns(session.JetSesid, dbid, table))
+                        foreach (ColumnInfo column in Api.GetTableColumns(session, dbid, table))
                         {
                             Console.WriteLine("\t{0}", column.Name);
                             Console.WriteLine("\t\tColtyp:     {0}", column.Coltyp);

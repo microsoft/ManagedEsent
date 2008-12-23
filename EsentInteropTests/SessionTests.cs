@@ -71,6 +71,19 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test that a Session can be converted to a JET_SESID
+        /// </summary>
+        [TestMethod]
+        public void SessionCanConvertToJetSesid()
+        {
+            using (Session session = new Session(this.instance))
+            {
+                JET_SESID sesid = session;
+                Assert.AreEqual(sesid, session.JetSesid);
+            }
+        }
+
+        /// <summary>
         /// Allocate a session and end it.
         /// </summary>
         [TestMethod]

@@ -33,6 +33,19 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Check that disposing the object twice works.
+        /// </summary>
+        [TestMethod]
+        public void EsentResourceDisposeTwice()
+        {
+            MockEsesntResource r = new MockEsesntResource();
+            r.Open();
+            r.Dispose();
+            r.Dispose();
+            Assert.IsTrue(r.WasReleaseResourceCalled);
+        }
+
+        /// <summary>
         /// Check that disposing the object does not free a
         /// resource that was never opened.
         /// </summary>

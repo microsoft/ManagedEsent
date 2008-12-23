@@ -71,6 +71,17 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Implicit conversion operator from a Table to a JET_TABLEID. This
+        /// allows a Table to be used with APIs which expect a JET_TABLEID.
+        /// </summary>
+        /// <param name="table">The table to convert.</param>
+        /// <returns>The JET_TABLEID of the table.</returns>
+        public static implicit operator JET_TABLEID(Table table)
+        {
+            return table.JetTableid;
+        }
+
+        /// <summary>
         /// Close the table.
         /// </summary>
         public void Close()

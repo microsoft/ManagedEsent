@@ -27,13 +27,16 @@ namespace Microsoft.Isam.Esent.Utilities
         /// </returns>
         internal static string QuoteForCsv(string s)
         {
-            if (null == s)
+            if (String.IsNullOrEmpty(s))
             {
-                return null;
+                return s;
             }
 
+            char quote = '"';
+            char comma = ',';
+
             // first, double any existing quotes
-            if (s.Contains('"'))
+            if (s.Contains(quote))
             {
                 s = s.Replace("\"", "\"\"");
             }
@@ -45,12 +48,11 @@ namespace Microsoft.Isam.Esent.Utilities
             //  3. Value contains a comma
             //  4. Value contains a newline
             //  5. Value contains a quote
-            if (s.StartsWith(" ")
-                || s.StartsWith("\t")
-                || s.EndsWith(" ")
-                || s.EndsWith("\t")
-                || s.Contains(',')
-                || s.Contains("\"")
+            if (Char.IsWhiteSpace(s[0])
+                || Char.IsWhiteSpace(s[s.Length - 1])
+                || s.Contains(quote)
+                || s.Contains(comma)
+                || s.Contains(quote)
                 || s.Contains(Environment.NewLine))
             {
                 s = String.Format("\"{0}\"", s);
@@ -96,23 +98,25 @@ namespace Microsoft.Isam.Esent.Utilities
             string database = args[0];
             string tableName = args[1];
 
+            string comma = ",";
+
             using (Instance instance = new Instance("dumptocsv"))
             {
                 instance.Parameters.Recovery = false;
                 instance.Init();
 
-                using (Session session = new Session(instance.JetInstance))
+                using (Session session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetAttachDatabase(session.JetSesid, database, AttachDatabaseGrbit.ReadOnly);
-                    Api.JetOpenDatabase(session.JetSesid, database, null, out dbid, OpenDatabaseGrbit.ReadOnly);
+                    Api.JetAttachDatabase(session, database, AttachDatabaseGrbit.ReadOnly);
+                    Api.JetOpenDatabase(session, database, null, out dbid, OpenDatabaseGrbit.ReadOnly);
 
-                    List<Func<JET_SESID, JET_TABLEID, string>> columnFormatters = new List<Func<JET_SESID, JET_TABLEID, string>>();
+                    var columnFormatters = new List<Func<JET_SESID, JET_TABLEID, string>>();
+                    var columnNames = new List<string>();
 
-                    StringBuilder sb = new StringBuilder();
-                    foreach (ColumnInfo column in Api.GetTableColumns(session.JetSesid, dbid, tableName))
+                    foreach (ColumnInfo column in Api.GetTableColumns(session, dbid, tableName))
                     {
-                        sb.AppendFormat("{0},", column.Name);
+                        columnNames.Add(column.Name);
 
                         // create a local variable that will be captured by the lambda functions below
                         var columnid = column.Columnid;
@@ -153,37 +157,23 @@ namespace Microsoft.Isam.Esent.Utilities
                         }
                     }
 
-                    // remove the trailing comma
-                    Console.WriteLine(sb.ToString().TrimEnd(new char[] { ',' }));
+                    Console.WriteLine(String.Join(comma, columnNames.ToArray()));
 
-                    using (Table table = new Table(session.JetSesid, dbid, tableName, OpenTableGrbit.ReadOnly))
+                    using (Table table = new Table(session, dbid, tableName, OpenTableGrbit.ReadOnly))
                     {
-                        Api.JetSetTableSequential(session.JetSesid, table.JetTableid, SetTableSequentialGrbit.None);
-                        if (Api.TryMoveFirst(session.JetSesid, table.JetTableid))
+                        Api.JetSetTableSequential(session, table, SetTableSequentialGrbit.None);
+                        if (Api.TryMoveFirst(session, table))
                         {
                             do
                             {
-                                var recordBuilder = new StringBuilder();
-                                foreach (var formatter in columnFormatters)
-                                {
-                                    recordBuilder.AppendFormat("{0},", Dbutil.QuoteForCsv(formatter(session.JetSesid, table.JetTableid)));
-                                }
-
-                                // remove the trailing comma (null columns can result in a comma
-                                // as the first character or multiple trailing commas)
-                                string recordText = recordBuilder.ToString();
-                                if (String.Empty != recordText)
-                                {
-                                    // the string could be empty if the table has no columns
-                                    recordText = recordText.Substring(0, recordText.Length - 1);
-                                }
-
-                                Console.WriteLine(recordText);
+                                var columnData = from formatter in columnFormatters
+                                                 select Dbutil.QuoteForCsv(formatter(session, table));
+                                Console.WriteLine(String.Join(comma, columnData.ToArray()));
                             }
-                            while (Api.TryMoveNext(session.JetSesid, table.JetTableid));
+                            while (Api.TryMoveNext(session, table));
                         }
 
-                        Api.JetResetTableSequential(session.JetSesid, table.JetTableid, ResetTableSequentialGrbit.None);
+                        Api.JetResetTableSequential(session, table, ResetTableSequentialGrbit.None);
                     }
                 }
             }

@@ -42,6 +42,17 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Implicit conversion operator from a Session to a JET_SESID. This
+        /// allows a Session to be used with APIs which expect a JET_SESID.
+        /// </summary>
+        /// <param name="session">The session to convert.</param>
+        /// <returns>The JET_SESID of the session.</returns>
+        public static implicit operator JET_SESID(Session session)
+        {
+            return session.JetSesid;
+        }
+
+        /// <summary>
         /// Terminate the session.
         /// </summary>
         public void End()

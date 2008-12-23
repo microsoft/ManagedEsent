@@ -60,6 +60,7 @@ namespace Microsoft.Isam.Esent.Interop
             }
 
             this.isDisposed = true;
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>

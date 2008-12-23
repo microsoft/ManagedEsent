@@ -38,6 +38,22 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test implicit conversion to a JET_INSTANCE
+        /// </summary>
+        [TestMethod]
+        public void InstanceCanConvertToJetInstance()
+        {
+            string dir = SetupHelper.CreateRandomDirectory();
+            using (Instance instance = new Instance("theinstance"))
+            {
+                JET_INSTANCE jetinstance = instance;
+                Assert.AreEqual(jetinstance, instance.JetInstance);
+            }
+
+            Directory.Delete(dir, true);
+        }
+
+        /// <summary>
         /// Allocate an instance and initialize it.
         /// </summary>
         [TestMethod]

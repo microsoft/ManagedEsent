@@ -130,6 +130,7 @@ namespace InteropApiTests
             {
                 update.Save(bookmark, bookmark.Length, out bookmarkSize);
             }
+
             Api.JetGotoBookmark(this.sesid, this.tableid, bookmark, bookmarkSize);
         }
 

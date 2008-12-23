@@ -112,6 +112,19 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// A Table object can be implicitly converted to a JET_TABLEID
+        /// </summary>
+        [TestMethod]
+        public void TestTableCanConvertToJetTableid()
+        {
+            using (Table table = new Table(this.sesid, this.dbid, this.tableName, OpenTableGrbit.None))
+            {
+                JET_TABLEID tableid = table;
+                Assert.AreEqual(tableid, table.JetTableid);
+            }
+        }
+
+        /// <summary>
         /// Allocate a table and close it.
         /// </summary>
         [TestMethod]

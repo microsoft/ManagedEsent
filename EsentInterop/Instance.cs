@@ -60,6 +60,18 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Provide implicit conversion of an Instance object to a JET_INSTANCE
+        /// structure. This is done so that an Instance can be used anywhere a
+        /// JET_INSTANCE is required.
+        /// </summary>
+        /// <param name="instance">The instance to convert.</param>
+        /// <returns>The JET_INSTANCE wrapped by the instance.</returns>
+        public static implicit operator JET_INSTANCE(Instance instance)
+        {
+            return instance.JetInstance;
+        }
+
+        /// <summary>
         /// Initialize the JET_INSTANCE.
         /// </summary>
         public void Init()

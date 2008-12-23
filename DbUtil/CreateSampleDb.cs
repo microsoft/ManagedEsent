@@ -75,17 +75,17 @@ namespace Microsoft.Isam.Esent.Utilities
             {
                 instance.Init();
 
-                using (Session session = new Session(instance.JetInstance))
+                using (Session session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session.JetSesid, database, null, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, database, null, out dbid, CreateDatabaseGrbit.None);
 
                     // Creating a table opens it exclusively. That is when we can define the primary index.
                     JET_TABLEID tableid;
-                    Api.JetCreateTable(session.JetSesid, dbid, "table", 16, 100, out tableid);
+                    Api.JetCreateTable(session, dbid, "table", 16, 100, out tableid);
                     JET_COLUMNID columnidAutoinc;
                     Api.JetAddColumn(
-                        session.JetSesid,
+                        session,
                         tableid,
                         "key",
                         new JET_COLUMNDEF() { coltyp = JET_coltyp.Long, grbit = ColumndefGrbit.ColumnAutoincrement },
@@ -93,59 +93,59 @@ namespace Microsoft.Isam.Esent.Utilities
                         0,
                         out columnidAutoinc);
                     string indexdef1 = "+key\0\0";
-                    Api.JetCreateIndex(session.JetSesid, tableid, "primary", CreateIndexGrbit.IndexPrimary, indexdef1, indexdef1.Length, 100);
-                    Api.JetCloseTable(session.JetSesid, tableid);
+                    Api.JetCreateIndex(session, tableid, "primary", CreateIndexGrbit.IndexPrimary, indexdef1, indexdef1.Length, 100);
+                    Api.JetCloseTable(session, tableid);
 
-                    using (Table table = new Table(session.JetSesid, dbid, "table", OpenTableGrbit.None))
+                    using (Table table = new Table(session, dbid, "table", OpenTableGrbit.None))
                     {
                         // Columns and secondary indexes can be added while the table is opened normally
-                        this.AddColumn(session.JetSesid, table.JetTableid, "bit", JET_coltyp.Bit);
-                        this.AddColumn(session.JetSesid, table.JetTableid, "byte", JET_coltyp.UnsignedByte);
-                        this.AddColumn(session.JetSesid, table.JetTableid, "short", JET_coltyp.Short);
-                        this.AddColumn(session.JetSesid, table.JetTableid, "long", JET_coltyp.Long);
-                        this.AddColumn(session.JetSesid, table.JetTableid, "currency", JET_coltyp.Currency);
-                        this.AddColumn(session.JetSesid, table.JetTableid, "single", JET_coltyp.IEEESingle);
-                        this.AddColumn(session.JetSesid, table.JetTableid, "double", JET_coltyp.IEEEDouble);
-                        this.AddColumn(session.JetSesid, table.JetTableid, "binary", JET_coltyp.LongBinary);
-                        this.AddColumn(session.JetSesid, table.JetTableid, "ascii", JET_coltyp.LongText, JET_CP.ASCII);
-                        this.AddColumn(session.JetSesid, table.JetTableid, "unicode", JET_coltyp.LongText, JET_CP.Unicode);
+                        this.AddColumn(session, table, "bit", JET_coltyp.Bit);
+                        this.AddColumn(session, table, "byte", JET_coltyp.UnsignedByte);
+                        this.AddColumn(session, table, "short", JET_coltyp.Short);
+                        this.AddColumn(session, table, "long", JET_coltyp.Long);
+                        this.AddColumn(session, table, "currency", JET_coltyp.Currency);
+                        this.AddColumn(session, table, "single", JET_coltyp.IEEESingle);
+                        this.AddColumn(session, table, "double", JET_coltyp.IEEEDouble);
+                        this.AddColumn(session, table, "binary", JET_coltyp.LongBinary);
+                        this.AddColumn(session, table, "ascii", JET_coltyp.LongText, JET_CP.ASCII);
+                        this.AddColumn(session, table, "unicode", JET_coltyp.LongText, JET_CP.Unicode);
 
                         string indexdef2 = "+double\0-ascii\0\0";
-                        Api.JetCreateIndex(session.JetSesid, table.JetTableid, "secondary", CreateIndexGrbit.None, indexdef2, indexdef2.Length, 100);
+                        Api.JetCreateIndex(session, table, "secondary", CreateIndexGrbit.None, indexdef2, indexdef2.Length, 100);
 
-                        using (Transaction transaction = new Transaction(session.JetSesid))
+                        using (Transaction transaction = new Transaction(session))
                         {
-                            Dictionary<string, JET_COLUMNID> columnids = Api.GetColumnDictionary(session.JetSesid, table.JetTableid);
+                            Dictionary<string, JET_COLUMNID> columnids = Api.GetColumnDictionary(session, table);
 
                             // Null record
                             int ignored;
-                            Api.JetPrepareUpdate(session.JetSesid, table.JetTableid, JET_prep.Insert);
-                            Api.JetUpdate(session.JetSesid, table.JetTableid, null, 0, out ignored);
+                            Api.JetPrepareUpdate(session, table, JET_prep.Insert);
+                            Api.JetUpdate(session, table, null, 0, out ignored);
 
                             // Record that requires CSV quoting
-                            using (Update update = new Update(session.JetSesid, table.JetTableid, JET_prep.Insert))
+                            using (Update update = new Update(session, table, JET_prep.Insert))
                             {
-                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["bit"], true);
-                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["byte"], (byte)0x1e);
-                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["short"], (short)0);
-                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["long"], 1);
-                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["currency"], Int64.MinValue);
-                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["single"], (float)Math.E);
-                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["double"], Math.PI);
-                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["binary"], new byte[] { 0x1, 0x2, 0xea, 0x4f, 0x0 });
-                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["ascii"], ",", Encoding.ASCII);
-                                Api.SetColumn(session.JetSesid, table.JetTableid, columnids["unicode"], " \"quoting\" ", Encoding.Unicode);
+                                Api.SetColumn(session, table, columnids["bit"], true);
+                                Api.SetColumn(session, table, columnids["byte"], (byte)0x1e);
+                                Api.SetColumn(session, table, columnids["short"], (short)0);
+                                Api.SetColumn(session, table, columnids["long"], 1);
+                                Api.SetColumn(session, table, columnids["currency"], Int64.MinValue);
+                                Api.SetColumn(session, table, columnids["single"], (float)Math.E);
+                                Api.SetColumn(session, table, columnids["double"], Math.PI);
+                                Api.SetColumn(session, table, columnids["binary"], new byte[] { 0x1, 0x2, 0xea, 0x4f, 0x0 });
+                                Api.SetColumn(session, table, columnids["ascii"], ",", Encoding.ASCII);
+                                Api.SetColumn(session, table, columnids["unicode"], " \"quoting\" ", Encoding.Unicode);
 
                                 update.Save();
                             }
 
                             for (int i = 0; i < 10; ++i)
                             {
-                                using (Update update = new Update(session.JetSesid, table.JetTableid, JET_prep.Insert))
+                                using (Update update = new Update(session, table, JET_prep.Insert))
                                 {
-                                    Api.SetColumn(session.JetSesid, table.JetTableid, columnids["unicode"], String.Format("Record {0}", i), Encoding.Unicode);
-                                    Api.SetColumn(session.JetSesid, table.JetTableid, columnids["double"], (double)i * 1.1);
-                                    Api.SetColumn(session.JetSesid, table.JetTableid, columnids["long"], i);
+                                    Api.SetColumn(session, table, columnids["unicode"], String.Format("Record {0}", i), Encoding.Unicode);
+                                    Api.SetColumn(session, table, columnids["double"], (double)i * 1.1);
+                                    Api.SetColumn(session, table, columnids["long"], i);
 
                                     update.Save();
                                 }

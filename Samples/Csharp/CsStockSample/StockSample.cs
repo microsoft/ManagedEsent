@@ -60,6 +60,10 @@ namespace CsStockSample
             CreateDatabase(databaseName);
 
             // Now the database has been created we can attach to it
+            // An instance object is disposable so the underlying esent resource
+            // can be freed. The disposable objects wrapped around esent resources
+            // _must_ be disposed properly. Esent resources must be freed in a
+            // specific order, which the finalizer doesn't necessarily respect.
             using (Instance instance = new Instance("stocksample"))
             {
                 // Creating an Instance object doesn't call JetInit. 
@@ -71,22 +75,32 @@ namespace CsStockSample
                 // should use it.
                 instance.Parameters.CircularLog = true;
 
+                // Initialize the instance. This creates the logs and temporary database.
+                // If logs are present in the log directory then recovery will run
+                // automatically.
                 instance.Init();
-                using (Session session = new Session(instance.JetInstance))
+
+                // Create a disposable wrapper around the JET_SESID.
+                using (Session session = new Session(instance))
                 {
                     JET_DBID dbid;
 
                     // The database only has to be attached once per instance, but each
                     // session has to open the database. Redundant JetAttachDatabase calls
                     // are safe to make though.
-                    Api.JetAttachDatabase(session.JetSesid, databaseName, AttachDatabaseGrbit.None);
-                    Api.JetOpenDatabase(session.JetSesid, databaseName, null, out dbid, OpenDatabaseGrbit.None);
+                    // Here we use the fact that Instance, Session and Table object all have
+                    // implicit conversions to the underlying JET_* types. This allows the
+                    // disposable wrappers to be used with any APIs that expect the JET_*
+                    // structures.
+                    Api.JetAttachDatabase(session, databaseName, AttachDatabaseGrbit.None);
+                    Api.JetOpenDatabase(session, databaseName, null, out dbid, OpenDatabaseGrbit.None);
 
-                    using (Table table = new Table(session.JetSesid, dbid, tableName, OpenTableGrbit.None))
+                    // Create a disposable wrapper around the JET_TABLEID.
+                    using (Table table = new Table(session, dbid, tableName, OpenTableGrbit.None))
                     {
                         // Load the columnids from the table. This should be done each time the database is attached
                         // as an offline defrag (esentutl /d) can change the name => columnid mapping.
-                        Dictionary<string, JET_COLUMNID> columnids = Api.GetColumnDictionary(session.JetSesid, table.JetTableid);
+                        Dictionary<string, JET_COLUMNID> columnids = Api.GetColumnDictionary(session, table);
                         columnidSymbol = columnids["symbol"];
                         columnidName = columnids["name"];
                         columnidPrice = columnids["price"];
@@ -94,58 +108,58 @@ namespace CsStockSample
 
                         // Dump records by the primary index, this will be stock symbol order
                         Console.WriteLine("** Populating the table");
-                        PopulateTable(session.JetSesid, table.JetTableid);
-                        DumpByIndex(session.JetSesid, table.JetTableid, null);
+                        PopulateTable(session, table);
+                        DumpByIndex(session, table, null);
 
                         // The shares index is sparse, it only contains records where the
                         // shares_owned column is non null.
                         Console.WriteLine("** Owned shares");
-                        DumpByIndex(session.JetSesid, table.JetTableid, "shares");
+                        DumpByIndex(session, table, "shares");
 
                         // Use the price index to find stocks sorted by price
                         Console.WriteLine("** Sorted by price");
-                        DumpByIndex(session.JetSesid, table.JetTableid, "price");
+                        DumpByIndex(session, table, "price");
 
                         // Seek and update an existing record
                         Console.WriteLine("** Updating owned shares");
-                        BuyShares(session.JetSesid, table.JetTableid, "SBUX", 50);
-                        BuyShares(session.JetSesid, table.JetTableid, "MSFT", 100);
-                        DumpByIndex(session.JetSesid, table.JetTableid, "shares");
+                        BuyShares(session, table, "SBUX", 50);
+                        BuyShares(session, table, "MSFT", 100);
+                        DumpByIndex(session, table, "shares");
 
                         // Delete a record
                         Console.WriteLine("** Deleting EBAY");
-                        DeleteStock(session.JetSesid, table.JetTableid, "EBAY");
-                        DumpByIndex(session.JetSesid, table.JetTableid, "name");
+                        DeleteStock(session, table, "EBAY");
+                        DumpByIndex(session, table, "name");
 
                         // Create an index range over a prefix
                         Console.WriteLine("** Company names starting with 'app'");
-                        DumpByNamePrefix(session.JetSesid, table.JetTableid, "app");
+                        DumpByNamePrefix(session, table, "app");
 
                         // An empty index range
                         Console.WriteLine("** Company names starting with 'xyz'");
-                        DumpByNamePrefix(session.JetSesid, table.JetTableid, "xyz");
+                        DumpByNamePrefix(session, table, "xyz");
 
                         // An index range over multiple records
                         Console.WriteLine("** Company names starting with 'm'");
-                        DumpByNamePrefix(session.JetSesid, table.JetTableid, "m");
+                        DumpByNamePrefix(session, table, "m");
 
                         // Move to the start of an index
                         Console.WriteLine("** Lowest price");
-                        Api.JetSetCurrentIndex(session.JetSesid, table.JetTableid, "price");
-                        Api.JetMove(session.JetSesid, table.JetTableid, JET_Move.First, MoveGrbit.None);
-                        PrintOneRow(session.JetSesid, table.JetTableid);
+                        Api.JetSetCurrentIndex(session, table, "price");
+                        Api.JetMove(session, table, JET_Move.First, MoveGrbit.None);
+                        PrintOneRow(session, table);
                         Console.WriteLine();
 
                         // Move to the end of an index
                         Console.WriteLine("** Highest price");
-                        Api.JetSetCurrentIndex(session.JetSesid, table.JetTableid, "price");
-                        Api.JetMove(session.JetSesid, table.JetTableid, JET_Move.Last, MoveGrbit.None);
-                        PrintOneRow(session.JetSesid, table.JetTableid);
+                        Api.JetSetCurrentIndex(session, table, "price");
+                        Api.JetMove(session, table, JET_Move.Last, MoveGrbit.None);
+                        PrintOneRow(session, table);
                         Console.WriteLine();
 
                         // Create a range between two values
                         Console.WriteLine("** Prices fom $10-$20");
-                        DumpPriceRange(session.JetSesid, table.JetTableid, 1000, 2000);
+                        DumpPriceRange(session, table, 1000, 2000);
                     }
                 }
             }
@@ -171,6 +185,7 @@ namespace CsStockSample
         /// <param name="tableid">The table to use.</param>
         private static void PopulateTable(JET_SESID sesid, JET_TABLEID tableid)
         {
+            // Create a disposable wrapper around JetBeginTransaction and JetCommitTransaction
             using (Transaction transaction = new Transaction(sesid))
             {
                 InsertOneStock(sesid, tableid, "SBUX", "Starbucks Corp.", 988, 0);
@@ -211,6 +226,7 @@ namespace CsStockSample
             int sharesOwned)
         {
             // Prepare an update, set some columns and the save the update
+            // First, create a disposable wrapper around JetPrepareUpdate and JetUpdate
             using (Update update = new Update(sesid, tableid, JET_prep.Insert))
             {
                 Api.SetColumn(sesid, tableid, columnidSymbol, symbol, Encoding.Unicode);
@@ -428,20 +444,20 @@ namespace CsStockSample
             using (Instance instance = new Instance("createdatabase"))
             {
                 instance.Init();
-                using (Session session = new Session(instance.JetInstance))
+                using (Session session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session.JetSesid, database, null, out dbid, CreateDatabaseGrbit.None);
-                    using (Transaction transaction = new Transaction(session.JetSesid))
+                    Api.JetCreateDatabase(session, database, null, out dbid, CreateDatabaseGrbit.None);
+                    using (Transaction transaction = new Transaction(session))
                     {
                         // A newly created table is opened exclusively. This is necessary to add
                         // a primary index to the table (a primary index can only be added if the table
                         // is empty and opened exclusively). Columns and indexes can be added to a 
                         // table which is opened normally.
                         JET_TABLEID tableid;
-                        Api.JetCreateTable(session.JetSesid, dbid, tableName, 16, 100, out tableid);
-                        CreateColumnsAndIndexes(session.JetSesid, tableid);
-                        Api.JetCloseTable(session.JetSesid, tableid);
+                        Api.JetCreateTable(session, dbid, tableName, 16, 100, out tableid);
+                        CreateColumnsAndIndexes(session, tableid);
+                        Api.JetCloseTable(session, tableid);
 
                         transaction.Commit(CommitTransactionGrbit.LazyFlush);
                     }

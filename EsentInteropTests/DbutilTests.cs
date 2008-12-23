@@ -6,6 +6,7 @@
 
 namespace InteropApiTests
 {
+    using System;
     using Microsoft.Isam.Esent.Utilities;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
         
@@ -28,12 +29,24 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test FormatBytes will null data
+        /// Test FormatBytes with null data
         /// </summary>
         [TestMethod()]
         public void FormatBytesWithNullData()
         {
             Assert.IsNull(Dbutil.FormatBytes(null));
+        }
+
+        /// <summary>
+        /// Test FormatBytes with zero-length data
+        /// </summary>
+        [TestMethod()]
+        public void FormatBytesWithZeroLengthData()
+        {
+            byte[] data = new byte[0];
+            string expected = String.Empty;
+            string actual = Dbutil.FormatBytes(data);
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -43,6 +56,15 @@ namespace InteropApiTests
         public void QuoteForCsvNullText()
         {
             Assert.IsNull(Dbutil.QuoteForCsv(null));
+        }
+
+        /// <summary>
+        /// Test QuoteForCsv with text that is null
+        /// </summary>
+        [TestMethod()]
+        public void QuoteForCsvEmptyText()
+        {
+            Assert.AreEqual(String.Empty, Dbutil.QuoteForCsv(String.Empty));
         }
 
         /// <summary>
