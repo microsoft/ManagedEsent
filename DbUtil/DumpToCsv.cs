@@ -46,11 +46,10 @@ namespace Microsoft.Isam.Esent.Utilities
             //  1. Value starts with whitespace
             //  2. Value ends with whitespace
             //  3. Value contains a comma
-            //  4. Value contains a newline
-            //  5. Value contains a quote
+            //  4. Value contains a quote
+            //  5. Value contains a newline
             if (Char.IsWhiteSpace(s[0])
                 || Char.IsWhiteSpace(s[s.Length - 1])
-                || s.Contains(quote)
                 || s.Contains(comma)
                 || s.Contains(quote)
                 || s.Contains(Environment.NewLine))

@@ -65,6 +65,7 @@ namespace InteropApiTests
                 instance.Parameters.LogFilePath = dir;
                 instance.Parameters.SystemPath = dir;
                 instance.Parameters.TempPath = dir;
+                instance.Parameters.NoInformationEvent = true;
                 instance.Init();
             }
 
@@ -83,6 +84,7 @@ namespace InteropApiTests
                 instance.Parameters.LogFilePath = dir;
                 instance.Parameters.SystemPath = dir;
                 instance.Parameters.TempPath = dir;
+                instance.Parameters.NoInformationEvent = true;
                 instance.Init();
                 instance.Term();
                 Directory.Delete(dir, true);    // only works if the instance is terminated
@@ -101,6 +103,7 @@ namespace InteropApiTests
                 instance.Parameters.LogFilePath = dir;
                 instance.Parameters.SystemPath = dir;
                 instance.Parameters.TempPath = dir;
+                instance.Parameters.NoInformationEvent = true;
                 instance.Init();
                 instance.Term();
                 Assert.AreEqual(JET_INSTANCE.Nil, instance.JetInstance);
@@ -121,6 +124,7 @@ namespace InteropApiTests
                 instance.Parameters.LogFilePath = dir;
                 instance.Parameters.SystemPath = dir;
                 instance.Parameters.TempPath = dir;
+                instance.Parameters.NoInformationEvent = true;
                 instance.Init();
                 instance.Term();
                 Assert.IsNull(instance.Parameters);

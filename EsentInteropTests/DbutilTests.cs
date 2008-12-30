@@ -77,6 +77,15 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test QuoteForCsv with text that is a single character
+        /// </summary>
+        [TestMethod()]
+        public void QuoteForCsvSingleChar()
+        {
+            Assert.AreEqual("Q", Dbutil.QuoteForCsv("Q"));
+        }
+
+        /// <summary>
         /// Test QuoteForCsv with text that contains quotes
         /// </summary>
         [TestMethod()]
