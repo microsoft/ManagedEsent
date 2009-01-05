@@ -149,6 +149,37 @@ namespace InteropApiTests
             Directory.Delete(this.directory, true);
         }
 
+        /// <summary>
+        /// Verify that the test class has setup the test fixture properly.
+        /// </summary>
+        [TestMethod]
+        public void VerifyFixtureSetup()
+        {
+            Assert.IsNotNull(this.table);
+            Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
+            Assert.AreNotEqual(JET_SESID.Nil, this.sesid);
+            Assert.AreNotEqual(JET_DBID.Nil, this.dbid);
+            Assert.AreNotEqual(JET_TABLEID.Nil, this.tableid);
+            Assert.IsNotNull(this.columnidDict);
+
+            Assert.IsTrue(this.columnidDict.ContainsKey("boolean"));
+            Assert.IsTrue(this.columnidDict.ContainsKey("byte"));
+            Assert.IsTrue(this.columnidDict.ContainsKey("int16"));
+            Assert.IsTrue(this.columnidDict.ContainsKey("int32"));
+            Assert.IsTrue(this.columnidDict.ContainsKey("int64"));
+            Assert.IsTrue(this.columnidDict.ContainsKey("float"));
+            Assert.IsTrue(this.columnidDict.ContainsKey("double"));
+            Assert.IsTrue(this.columnidDict.ContainsKey("binary"));
+            Assert.IsTrue(this.columnidDict.ContainsKey("ascii"));
+            Assert.IsTrue(this.columnidDict.ContainsKey("unicode"));
+            Assert.IsTrue(this.columnidDict.ContainsKey("guid"));
+            Assert.IsTrue(this.columnidDict.ContainsKey("uint16"));
+            Assert.IsTrue(this.columnidDict.ContainsKey("uint32"));
+            Assert.IsTrue(this.columnidDict.ContainsKey("uint64"));
+
+            Assert.IsFalse(this.columnidDict.ContainsKey("nosuchcolumn"));
+        }
+
         #endregion Setup/Teardown
 
         #region RetrieveColumnAs tests

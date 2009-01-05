@@ -99,6 +99,7 @@
     <Compile Include="SetupHelper.cs" />
     <Compile Include="SetGetSystemParameterTests.cs" />
     <Compile Include="TypesTests.cs" />
+    <Compile Include="UtilityMethodsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DbUtil\DbUtil.csproj">

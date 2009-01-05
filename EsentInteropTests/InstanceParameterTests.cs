@@ -23,11 +23,6 @@ namespace InteropApiTests
         private JET_INSTANCE instance;
 
         /// <summary>
-        /// Session to use.
-        /// </summary>
-        private JET_SESID sesid;
-
-        /// <summary>
         /// The InstanceParameters class to use for testing.
         /// </summary>
         private InstanceParameters instanceParameters;
@@ -39,7 +34,6 @@ namespace InteropApiTests
         public void Setup()
         {
             Api.JetCreateInstance(out this.instance, "InstanceParametersTest");
-            this.sesid = JET_SESID.Nil;
             this.instanceParameters = new InstanceParameters(this.instance);
         }
 
@@ -50,6 +44,16 @@ namespace InteropApiTests
         public void Teardown()
         {
             Api.JetTerm(this.instance);
+        }
+
+        /// <summary>
+        /// Verify that the test class has setup the test fixture properly.
+        /// </summary>
+        [TestMethod]
+        public void VerifyFixtureSetup()
+        {
+            Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
+            Assert.IsNotNull(this.instanceParameters);
         }
 
         /// <summary>

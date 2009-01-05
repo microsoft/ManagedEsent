@@ -103,6 +103,24 @@ namespace InteropApiTests
             Directory.Delete(this.directory, true);
         }
 
+        /// <summary>
+        /// Verify that the test class has setup the test fixture properly.
+        /// </summary>
+        [TestMethod]
+        public void VerifyFixtureSetup()
+        {
+            Assert.IsNotNull(this.table);
+            Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
+            Assert.AreNotEqual(JET_SESID.Nil, this.sesid);
+            Assert.AreNotEqual(JET_DBID.Nil, this.dbid);
+            Assert.AreNotEqual(JET_TABLEID.Nil, this.tableid);
+            Assert.AreNotEqual(JET_COLUMNID.Nil, this.columnidLongText);
+
+            JET_COLUMNDEF columndef;
+            Api.JetGetTableColumnInfo(this.sesid, this.tableid, this.columnidLongText, out columndef);
+            Assert.AreEqual(JET_coltyp.LongText, columndef.coltyp);
+        }
+
         #endregion Setup/Teardown
 
         #region JetDupCursor

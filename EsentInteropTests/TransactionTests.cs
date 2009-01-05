@@ -62,6 +62,16 @@ namespace InteropApiTests
             Directory.Delete(this.directory, true);
         }
 
+        /// <summary>
+        /// Verify that the test class has setup the test fixture properly.
+        /// </summary>
+        [TestMethod]
+        public void VerifyFixtureSetup()
+        {
+            Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
+            Assert.AreNotEqual(JET_SESID.Nil, this.sesid);
+        }
+
         #endregion Setup/Teardown
 
         /// <summary>

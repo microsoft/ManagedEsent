@@ -55,7 +55,7 @@ namespace InteropApiTests
         private JET_TABLEID tableid;
 
         /// <summary>
-        /// Columnid of the LongText column in the table.
+        /// Columnid of the Long column in the table.
         /// </summary>
         private JET_COLUMNID columnid;
 
@@ -82,11 +82,8 @@ namespace InteropApiTests
             Api.JetBeginTransaction(this.sesid);
             Api.JetCreateTable(this.sesid, this.dbid, this.table, 0, 100, out this.tableid);
 
-            var columndef = new JET_COLUMNDEF()
-            {
-                cp = JET_CP.Unicode,
-                coltyp = JET_coltyp.Long,
-            };
+            var columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Long };
+
             Api.JetAddColumn(this.sesid, this.tableid, "column", columndef, null, 0, out this.columnid);
 
             Api.JetCloseTable(this.sesid, this.tableid);
@@ -104,6 +101,21 @@ namespace InteropApiTests
             Api.JetEndSession(this.sesid, EndSessionGrbit.None);
             Api.JetTerm(this.instance);
             Directory.Delete(this.directory, true);
+        }
+
+        /// <summary>
+        /// Verify that the test class has setup the test fixture properly.
+        /// </summary>
+        [TestMethod]
+        public void VerifyFixtureSetup()
+        {
+            Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
+            Assert.AreNotEqual(JET_SESID.Nil, this.sesid);
+            Assert.AreNotEqual(JET_COLUMNID.Nil, this.columnid);
+
+            JET_COLUMNDEF columndef;
+            Api.JetGetTableColumnInfo(this.sesid, this.tableid, this.columnid, out columndef);
+            Assert.AreEqual(JET_coltyp.Long, columndef.coltyp);
         }
 
         #endregion Setup/Teardown
