@@ -41,7 +41,29 @@ namespace InteropApiTests
         [TestMethod]
         public void TempPathParameter()
         {
-            this.PathParameterTest(JET_param.TempPath, @"foo\temp\");
+            string dir = @"foo\temp\";
+
+            JET_INSTANCE instance;
+            Api.JetCreateInstance(out instance, "TempPathParameterTest");
+            try
+            {
+                Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.TempPath, 0, dir);
+
+                int ignored = 0;
+                string actual;
+                Api.JetGetSystemParameter(instance, JET_SESID.Nil, JET_param.TempPath, ref ignored, out actual, 256);
+
+                // Older versions of esent (e.g. Windows XP) return the name of the temporary database
+                // even when the temp path is configured as a directory. This means that setting
+                // "temp\" will give back "temp\tmp.edb". Here we just assert that the returned string
+                // starts with the expected value.
+                string expected = Path.Combine(Environment.CurrentDirectory, dir);
+                Assert.IsTrue(actual.StartsWith(expected));
+            }
+            finally
+            {
+                Api.JetTerm(instance);
+            }
         }
 
         /// <summary>
@@ -158,7 +180,10 @@ namespace InteropApiTests
         [TestMethod]
         public void NoInformationEventParameter()
         {
-            this.IntegerParameterTest(JET_param.NoInformationEvent, 1);
+            // Older versions of esent (e.g. Windows XP) return -1
+            // for any non-zero value when retrieving this parameter,
+            // so we use -1 as the test value
+            this.IntegerParameterTest(JET_param.NoInformationEvent, -1);
         }
 
         /// <summary>
@@ -167,7 +192,10 @@ namespace InteropApiTests
         [TestMethod]
         public void CreatePathIfNotExistParameter()
         {
-            this.IntegerParameterTest(JET_param.CreatePathIfNotExist, 1);
+            // Older versions of esent (e.g. Windows XP) return -1
+            // for any non-zero value when retrieving this parameter,
+            // so we use -1 as the test value
+            this.IntegerParameterTest(JET_param.CreatePathIfNotExist, -1);
         }
 
         #region Helper Methods

@@ -676,6 +676,13 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         public static void JetIndexRecordCount(JET_SESID sesid, JET_TABLEID tableid, out int numRecords, int maxRecordsToCount)
         {
+            if (0 == maxRecordsToCount)
+            {
+                // Older versions of esent (e.g. Windows XP) don't use 0 as an unlimited count,
+                // instead they simply count zero records (which isn't very useful). To make
+                // sure this API works as advertised we will increase the maximum record count.
+                maxRecordsToCount = int.MaxValue;
+            }
             Check(ErrApi.JetIndexRecordCount(sesid, tableid, out numRecords, maxRecordsToCount));
         }
 

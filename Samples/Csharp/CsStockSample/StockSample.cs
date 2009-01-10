@@ -447,7 +447,7 @@ namespace CsStockSample
                 using (Session session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, database, null, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, database, null, out dbid, CreateDatabaseGrbit.OverwriteExisting);
                     using (Transaction transaction = new Transaction(session))
                     {
                         // A newly created table is opened exclusively. This is necessary to add
@@ -483,7 +483,6 @@ namespace CsStockSample
                 columndef = new JET_COLUMNDEF();
                 columndef.coltyp = JET_coltyp.LongText;
                 columndef.cp = JET_CP.Unicode;
-                columndef.grbit = ColumndefGrbit.ColumnNotNULL;
                 Api.JetAddColumn(sesid, tableid, "symbol", columndef, null, 0, out columnid);
 
                 // Name of the company : text column
