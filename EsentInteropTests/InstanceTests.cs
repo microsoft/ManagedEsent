@@ -29,9 +29,9 @@ namespace InteropApiTests
                 Assert.AreNotEqual(JET_INSTANCE.Nil, instance.JetInstance);
                 Assert.IsNotNull(instance.Parameters);
 
-                instance.Parameters.LogFilePath = dir;
-                instance.Parameters.SystemPath = dir;
-                instance.Parameters.TempPath = dir;
+                instance.Parameters.LogFileDirectory = dir;
+                instance.Parameters.SystemDirectory = dir;
+                instance.Parameters.TempDirectory = dir;
             }
 
             Directory.Delete(dir, true);
@@ -62,9 +62,9 @@ namespace InteropApiTests
             string dir = SetupHelper.CreateRandomDirectory();
             using (Instance instance = new Instance("theinstance"))
             {
-                instance.Parameters.LogFilePath = dir;
-                instance.Parameters.SystemPath = dir;
-                instance.Parameters.TempPath = dir;
+                instance.Parameters.LogFileDirectory = dir;
+                instance.Parameters.SystemDirectory = dir;
+                instance.Parameters.TempDirectory = dir;
                 instance.Parameters.NoInformationEvent = true;
                 instance.Init();
             }
@@ -81,9 +81,9 @@ namespace InteropApiTests
             string dir = SetupHelper.CreateRandomDirectory();
             using (Instance instance = new Instance("theinstance"))
             {
-                instance.Parameters.LogFilePath = dir;
-                instance.Parameters.SystemPath = dir;
-                instance.Parameters.TempPath = dir;
+                instance.Parameters.LogFileDirectory = dir;
+                instance.Parameters.SystemDirectory = dir;
+                instance.Parameters.TempDirectory = dir;
                 instance.Parameters.NoInformationEvent = true;
                 instance.Init();
                 instance.Term();
@@ -100,9 +100,9 @@ namespace InteropApiTests
             string dir = SetupHelper.CreateRandomDirectory();
             using (Instance instance = new Instance("theinstance"))
             {
-                instance.Parameters.LogFilePath = dir;
-                instance.Parameters.SystemPath = dir;
-                instance.Parameters.TempPath = dir;
+                instance.Parameters.LogFileDirectory = dir;
+                instance.Parameters.SystemDirectory = dir;
+                instance.Parameters.TempDirectory = dir;
                 instance.Parameters.NoInformationEvent = true;
                 instance.Init();
                 instance.Term();
@@ -121,9 +121,9 @@ namespace InteropApiTests
             string dir = SetupHelper.CreateRandomDirectory();
             using (Instance instance = new Instance("theinstance"))
             {
-                instance.Parameters.LogFilePath = dir;
-                instance.Parameters.SystemPath = dir;
-                instance.Parameters.TempPath = dir;
+                instance.Parameters.LogFileDirectory = dir;
+                instance.Parameters.SystemDirectory = dir;
+                instance.Parameters.TempDirectory = dir;
                 instance.Parameters.NoInformationEvent = true;
                 instance.Init();
                 instance.Term();

@@ -605,7 +605,7 @@ namespace InteropApiTests
         /// negative bookmark length.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void JetIndexRecordCountThrowsExceptionWhenMaxRecordsIsNegative()
         {
             int numRecords;

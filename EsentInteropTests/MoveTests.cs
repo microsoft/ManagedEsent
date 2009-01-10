@@ -501,6 +501,18 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Count the records in the table with JetIndexRecordCount, with
+        /// the maximum number of records constrained.
+        /// </summary>
+        [TestMethod]
+        public void GetIndexRecordCountConstrained()
+        {
+            int countedRecords;
+            Api.JetIndexRecordCount(this.sesid, this.tableid, out countedRecords, this.numRecords - 1);
+            Assert.AreEqual(this.numRecords - 1, countedRecords);
+        }
+
+        /// <summary>
         /// Test using JetGetRecord position
         /// </summary>
         [TestMethod]

@@ -511,6 +511,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static int JetIndexRecordCount(JET_SESID sesid, JET_TABLEID tableid, out int numRecords, int maxRecordsToCount)
         {
             ErrApi.TraceFunctionCall("JetIndexRecordCount");
+            ErrApi.CheckNotNegative(maxRecordsToCount, "maxRecordsToCount");
             numRecords = 0;
             uint crec = 0;
             int err = ErrApi.Err(NativeMethods.JetIndexRecordCount(sesid.Value, tableid.Value, ref crec, (uint)maxRecordsToCount));

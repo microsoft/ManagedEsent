@@ -50,7 +50,7 @@ namespace InteropApiTests
         /// Verify that the test class has setup the test fixture properly.
         /// </summary>
         [TestMethod]
-        public void VerifyFixtureSetup()
+        public void VerifyInstanceParametersFixtureSetup()
         {
             Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
             Assert.IsNotNull(this.instanceParameters);
@@ -60,7 +60,7 @@ namespace InteropApiTests
         /// Test the BaseName property.
         /// </summary>
         [TestMethod]
-        public void BaseNameProperty()
+        public void SetAndRetrieveInstanceParametersBaseName()
         {
             string expected = "abc";
             this.instanceParameters.BaseName = expected;
@@ -71,7 +71,7 @@ namespace InteropApiTests
         /// Test the event source property.
         /// </summary>
         [TestMethod]
-        public void EventSourceProperty()
+        public void SetAndRetrieveInstanceParametersEventSource()
         {
             string expected = "My Application";
             this.instanceParameters.EventSource = expected;
@@ -82,7 +82,7 @@ namespace InteropApiTests
         /// Test the MaxSessions property.
         /// </summary>
         [TestMethod]
-        public void MaxSessionsProperty()
+        public void SetAndRetrieveInstanceParametersMaxSessions()
         {
             int expected = 11;
             this.instanceParameters.MaxSessions = expected;
@@ -93,7 +93,7 @@ namespace InteropApiTests
         /// Test the MaxOpenTables property.
         /// </summary>
         [TestMethod]
-        public void MaxOpenTablesProperty()
+        public void SetAndRetrieveInstanceParametersMaxOpenTables()
         {
             int expected = 400;
             this.instanceParameters.MaxOpenTables = expected;
@@ -104,7 +104,7 @@ namespace InteropApiTests
         /// Test the MaxCursors property.
         /// </summary>
         [TestMethod]
-        public void MaxCursorsProperty()
+        public void SetAndRetrieveInstanceParametersMaxCursors()
         {
             int expected = 4000;
             this.instanceParameters.MaxCursors = expected;
@@ -115,7 +115,7 @@ namespace InteropApiTests
         /// Test the MaxVerPages property.
         /// </summary>
         [TestMethod]
-        public void MaxVerPagesProperty()
+        public void SetAndRetrieveInstanceParametersMaxVerPages()
         {
             int expected = 128;
             this.instanceParameters.MaxVerPages = expected;
@@ -126,7 +126,7 @@ namespace InteropApiTests
         /// Test the MaxTemporaryTables property.
         /// </summary>
         [TestMethod]
-        public void MaxTemporaryTablesProperty()
+        public void SetAndRetrieveInstanceParametersMaxTemporaryTables()
         {
             int expected = 7;
             this.instanceParameters.MaxTemporaryTables = expected;
@@ -137,7 +137,7 @@ namespace InteropApiTests
         /// Test the CircularLog property.
         /// </summary>
         [TestMethod]
-        public void LogFileSizeProperty()
+        public void SetAndRetrieveInstanceParametersLogFileSize()
         {
             int expected = 4096;
             this.instanceParameters.LogFileSize = expected;
@@ -148,7 +148,7 @@ namespace InteropApiTests
         /// Test the CircularLog property.
         /// </summary>
         [TestMethod]
-        public void CircularLogProperty()
+        public void SetAndRetrieveInstanceParametersCircularLog()
         {
             bool expected = Any.Boolean;
             this.instanceParameters.CircularLog = expected;
@@ -159,7 +159,7 @@ namespace InteropApiTests
         /// Test the CheckpointDepthMax property.
         /// </summary>
         [TestMethod]
-        public void CheckpointDepthMaxProperty()
+        public void SetAndRetrieveInstanceParametersCheckpointDepthMax()
         {
             int expected = 30000;
             this.instanceParameters.CheckpointDepthMax = expected;
@@ -170,7 +170,7 @@ namespace InteropApiTests
         /// Test the Recovery property.
         /// </summary>
         [TestMethod]
-        public void RecoveryProperty()
+        public void SetAndRetrieveInstanceParametersRecovery()
         {
             bool expected = Any.Boolean;
             this.instanceParameters.Recovery = expected;
@@ -181,7 +181,7 @@ namespace InteropApiTests
         /// Test the EnableIndexChecking property.
         /// </summary>
         [TestMethod]
-        public void EnableIndexCheckingProperty()
+        public void SetAndRetrieveInstanceParametersEnableIndexChecking()
         {
             bool expected = Any.Boolean;
             this.instanceParameters.EnableIndexChecking = expected;
@@ -192,7 +192,7 @@ namespace InteropApiTests
         /// Test the no information event.
         /// </summary>
         [TestMethod]
-        public void NoInformationEventProperty()
+        public void SetAndRetrieveInstanceParametersNoInformationEvent()
         {
             bool expected = Any.Boolean;
             this.instanceParameters.NoInformationEvent = expected;
@@ -203,11 +203,55 @@ namespace InteropApiTests
         /// Test the create path if not exist property.
         /// </summary>
         [TestMethod]
-        public void CreatePathIfNotExistProperty()
+        public void SetAndRetrieveInstanceParametersCreatePathIfNotExist()
         {
             bool expected = Any.Boolean;
             this.instanceParameters.CreatePathIfNotExist = expected;
             Assert.AreEqual(expected, this.instanceParameters.CreatePathIfNotExist);
+        }
+
+        /// <summary>
+        /// Test the temporary directory property.
+        /// </summary>
+        [TestMethod]
+        public void SetAndRetrieveInstanceParametersTempDirectory()
+        {
+            string dir = @"c:\foo\";
+            this.instanceParameters.TempDirectory = dir;
+            Assert.AreEqual(dir, this.instanceParameters.TempDirectory);
+        }
+
+        /// <summary>
+        /// Test the temporary directory property without a trailing slash.
+        /// Make sure the slash is added when retrieving it.
+        /// </summary>
+        [TestMethod]
+        public void SetAndRetrieveInstanceParametersTempDirectoryAddsSeparatorChar()
+        {
+            this.instanceParameters.TempDirectory = @"c:\bar\baz";
+            Assert.AreEqual(@"c:\bar\baz\", this.instanceParameters.TempDirectory);
+        }
+
+        /// <summary>
+        /// Test the log directory property. The trailing slash will be added.
+        /// </summary>
+        [TestMethod]
+        public void SetAndRetrieveInstanceParametersLogFileDirectory()
+        {
+            string dir = @"d:\logs";
+            this.instanceParameters.LogFileDirectory = dir;
+            Assert.AreEqual(@"d:\logs\", this.instanceParameters.LogFileDirectory);
+        }
+
+        /// <summary>
+        /// Test the system directory property.
+        /// </summary>
+        [TestMethod]
+        public void SetAndRetrieveInstanceParametersSystemDirectory()
+        {
+            string dir = @"d:\a\b\c\system\";
+            this.instanceParameters.SystemDirectory = dir;
+            Assert.AreEqual(@"d:\a\b\c\system\", this.instanceParameters.SystemDirectory);
         }
     }
 }

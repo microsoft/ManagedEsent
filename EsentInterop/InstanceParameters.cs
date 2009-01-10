@@ -37,58 +37,56 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// Gets or sets the relative or absolute file system path of the
-        /// folder that will contain the checkpoint file for the instance. The path
-        /// must be terminated with a backslash character, which indicates that the
-        /// target path is a folder. 
+        /// folder that will contain the checkpoint file for the instance.
         /// </summary>
-        public string SystemPath
+        public string SystemDirectory
         {
             get
             {
-                return this.GetStringParameter(JET_param.SystemPath);
+                return this.AddTrailingDirectorySeparator(this.GetStringParameter(JET_param.SystemPath));
             }
 
             set
             {
-                this.SetStringParameter(JET_param.SystemPath, value);
+                this.SetStringParameter(JET_param.SystemPath, this.AddTrailingDirectorySeparator(value));
             }
         }
 
         /// <summary>
         /// Gets or sets the relative or absolute file system path of
-        /// the folder or file that will contain the temporary database for the instance.
-        /// If the path is to a folder that will contain the temporary database then it
-        /// must be terminated with a backslash character.
+        /// the folder that will contain the temporary database for the instance.
         /// </summary>
-        public string TempPath
+        public string TempDirectory
         {
             get
             {
-                return this.GetStringParameter(JET_param.TempPath);
+                // Older versions of Esent (e.g. Windows XP) will return the
+                // full path of the temporary database. Extract the directory name.
+                string path = this.GetStringParameter(JET_param.TempPath);
+                string dir = Path.GetDirectoryName(path);
+                return this.AddTrailingDirectorySeparator(dir);
             }
 
             set
             {
-                this.SetStringParameter(JET_param.TempPath, value);
+                this.SetStringParameter(JET_param.TempPath, this.AddTrailingDirectorySeparator(value));
             }
         }
 
         /// <summary>
         /// Gets or sets the relative or absolute file system path of the
-        /// folder that will contain the transaction logs for the instance. The path must
-        /// be terminated with a backslash character, which indicates that the target path
-        /// is a folder.
+        /// folder that will contain the transaction logs for the instance.
         /// </summary>
-        public string LogFilePath
+        public string LogFileDirectory
         {
             get
             {
-                return this.GetStringParameter(JET_param.LogFilePath);
+                return this.AddTrailingDirectorySeparator(this.GetStringParameter(JET_param.LogFilePath));
             }
 
             set
             {
-                this.SetStringParameter(JET_param.LogFilePath, value);
+                this.SetStringParameter(JET_param.LogFilePath, this.AddTrailingDirectorySeparator(value));
             }
         }
 
@@ -352,6 +350,17 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 this.SetBoolParameter(JET_param.CreatePathIfNotExist, value);
             }
+        }
+
+        /// <summary>
+        /// Add a trailing directory separator character to the string.
+        /// </summary>
+        /// <param name="dir">The directory.</param>
+        /// <returns>The directory with a separator character added (if necesary).</returns>
+        private string AddTrailingDirectorySeparator(string dir)
+        {
+            char[] sepChars = new char[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar };
+            return string.Concat(dir.TrimEnd(sepChars), Path.DirectorySeparatorChar);
         }
 
         /// <summary>
