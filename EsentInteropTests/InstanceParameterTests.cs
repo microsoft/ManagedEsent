@@ -68,14 +68,36 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test setting the BaseName property sets the parameter on the instance.
+        /// </summary>
+        [TestMethod]
+        public void VerifySetInstanceParametersBaseName()
+        {
+            string expected = "xyz";
+            this.instanceParameters.BaseName = expected;
+            Assert.AreEqual(expected, this.GetStringParameter(JET_param.BaseName));
+        }
+
+        /// <summary>
         /// Test the event source property.
         /// </summary>
         [TestMethod]
         public void SetAndRetrieveInstanceParametersEventSource()
         {
-            string expected = "My Application";
+            string expected = Any.String;
             this.instanceParameters.EventSource = expected;
             Assert.AreEqual(expected, this.instanceParameters.EventSource);
+        }
+
+        /// <summary>
+        /// Test setting the EventSource property sets the parameter on the instance.
+        /// </summary>
+        [TestMethod]
+        public void VerifySetInstanceParametersEventSource()
+        {
+            string expected = Any.String;
+            this.instanceParameters.EventSource = expected;
+            Assert.AreEqual(expected, this.GetStringParameter(JET_param.EventSource));
         }
 
         /// <summary>
@@ -90,6 +112,18 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Setting the MaxSessions property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        public void VerifySetInstanceParametersMaxSessions()
+        {
+            int expected = 40;
+            this.instanceParameters.MaxSessions = expected;
+            Assert.AreEqual(expected, this.GetIntegerParameter(JET_param.MaxSessions));
+        }
+
+        /// <summary>
         /// Test the MaxOpenTables property.
         /// </summary>
         [TestMethod]
@@ -98,6 +132,18 @@ namespace InteropApiTests
             int expected = 400;
             this.instanceParameters.MaxOpenTables = expected;
             Assert.AreEqual(expected, this.instanceParameters.MaxOpenTables);
+        }
+
+        /// <summary>
+        /// Setting the MaxOpenTables property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        public void VerifySetInstanceParametersMaxOpenTables()
+        {
+            int expected = 100;
+            this.instanceParameters.MaxOpenTables = expected;
+            Assert.AreEqual(expected, this.GetIntegerParameter(JET_param.MaxOpenTables));
         }
 
         /// <summary>
@@ -112,6 +158,18 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Setting the MaxCursors property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        public void VerifySetInstanceParametersMaxCursors()
+        {
+            int expected = 64;
+            this.instanceParameters.MaxCursors = expected;
+            Assert.AreEqual(expected, this.GetIntegerParameter(JET_param.MaxCursors));
+        }
+
+        /// <summary>
         /// Test the MaxVerPages property.
         /// </summary>
         [TestMethod]
@@ -120,6 +178,18 @@ namespace InteropApiTests
             int expected = 128;
             this.instanceParameters.MaxVerPages = expected;
             Assert.AreEqual(expected, this.instanceParameters.MaxVerPages);
+        }
+
+        /// <summary>
+        /// Setting the MaxVerPages property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        public void VerifySetInstanceParametersMaxVerPages()
+        {
+            int expected = 128;
+            this.instanceParameters.MaxVerPages = expected;
+            Assert.AreEqual(expected, this.GetIntegerParameter(JET_param.MaxVerPages));
         }
 
         /// <summary>
@@ -134,6 +204,18 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Setting the MaxTemporaryTables property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        public void VerifySetInstanceParametersMaxTemporaryTables()
+        {
+            int expected = 99;
+            this.instanceParameters.MaxTemporaryTables = expected;
+            Assert.AreEqual(expected, this.GetIntegerParameter(JET_param.MaxTemporaryTables));
+        }
+
+        /// <summary>
         /// Test the CircularLog property.
         /// </summary>
         [TestMethod]
@@ -142,6 +224,18 @@ namespace InteropApiTests
             int expected = 4096;
             this.instanceParameters.LogFileSize = expected;
             Assert.AreEqual(expected, this.instanceParameters.LogFileSize);
+        }
+
+        /// <summary>
+        /// Setting the LogFileSize property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        public void VerifySetInstanceParametersLogFileSize()
+        {
+            int expected = 2048;
+            this.instanceParameters.LogFileSize = expected;
+            Assert.AreEqual(expected, this.GetIntegerParameter(JET_param.LogFileSize));
         }
 
         /// <summary>
@@ -164,6 +258,18 @@ namespace InteropApiTests
             int expected = 30000;
             this.instanceParameters.CheckpointDepthMax = expected;
             Assert.AreEqual(expected, this.instanceParameters.CheckpointDepthMax);
+        }
+
+        /// <summary>
+        /// Setting the CheckpointDepthMax property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        public void VerifySetInstanceParametersCheckpointDepthMax()
+        {
+            int expected = 10000000;
+            this.instanceParameters.CheckpointDepthMax = expected;
+            Assert.AreEqual(expected, this.GetIntegerParameter(JET_param.CheckpointDepthMax));
         }
 
         /// <summary>
@@ -252,6 +358,34 @@ namespace InteropApiTests
             string dir = @"d:\a\b\c\system\";
             this.instanceParameters.SystemDirectory = dir;
             Assert.AreEqual(@"d:\a\b\c\system\", this.instanceParameters.SystemDirectory);
+        }
+
+        /// <summary>
+        /// Retrieve a string parameter.
+        /// </summary>
+        /// <param name="param">The parameter to retrieve.</param>
+        /// <returns>The parameter value.</returns>
+        private string GetStringParameter(JET_param param)
+        {
+            int ignored = 0;
+            string value;
+
+            Api.JetGetSystemParameter(this.instance, JET_SESID.Nil, param, ref ignored, out value, 1024);
+            return value;
+        }
+
+        /// <summary>
+        /// Retrieve an integer parameter.
+        /// </summary>
+        /// <param name="param">The parameter to retrieve.</param>
+        /// <returns>The parameter value.</returns>
+        private int GetIntegerParameter(JET_param param)
+        {
+            int value = 0;
+            string ignored;
+
+            Api.JetGetSystemParameter(this.instance, JET_SESID.Nil, param, ref value, out ignored, 0);
+            return value;
         }
     }
 }
