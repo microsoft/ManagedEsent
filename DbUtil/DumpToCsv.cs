@@ -161,15 +161,13 @@ namespace Microsoft.Isam.Esent.Utilities
                     using (Table table = new Table(session, dbid, tableName, OpenTableGrbit.ReadOnly))
                     {
                         Api.JetSetTableSequential(session, table, SetTableSequentialGrbit.None);
-                        if (Api.TryMoveFirst(session, table))
+
+                        Api.MoveBeforeFirst(session, table);                        
+                        while (Api.TryMoveNext(session, table))
                         {
-                            do
-                            {
-                                var columnData = from formatter in columnFormatters
-                                                 select Dbutil.QuoteForCsv(formatter(session, table));
-                                Console.WriteLine(String.Join(comma, columnData.ToArray()));
-                            }
-                            while (Api.TryMoveNext(session, table));
+                            var columnData = from formatter in columnFormatters
+                                             select Dbutil.QuoteForCsv(formatter(session, table));
+                            Console.WriteLine(String.Join(comma, columnData.ToArray()));
                         }
 
                         Api.JetResetTableSequential(session, table, ResetTableSequentialGrbit.None);

@@ -78,6 +78,8 @@
     <Compile Include="BasicTableTests.cs" />
     <Compile Include="ColumndefTests.cs" />
     <Compile Include="ColumnlistTests.cs" />
+    <Compile Include="EmptyDatabaseFixture.cs" />
+    <Compile Include="EmptyTableFixture.cs" />
     <Compile Include="SeekTests.cs" />
     <Compile Include="TableTests.cs" />
     <Compile Include="UpdateTests.cs" />

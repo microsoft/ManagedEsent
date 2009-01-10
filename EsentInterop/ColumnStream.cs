@@ -77,11 +77,6 @@ namespace Microsoft.Isam.Esent.Interop
         public int Itag { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to retrieve data from the copy buffer.
-        /// </summary>
-        public bool RetrieveCopy { get; set; }
-
-        /// <summary>
         /// Gets a value indicating whether the stream supports reading.
         /// </summary>
         public override bool CanRead
@@ -119,7 +114,7 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 if (value < 0 || value > 0x7fffffff)
                 {
-                    throw new ArgumentException("invalid position");
+                    throw new ArgumentOutOfRangeException("position", value, "A long-value offset has to be between 0 and 0x7fffffff bytes");
                 }
 
                 if (value > this.Length)
@@ -152,8 +147,10 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                var grbit = this.RetrieveCopy ? RetrieveColumnGrbit.RetrieveCopy : RetrieveColumnGrbit.None;
-                return grbit;
+                // Always use the RetrieveCopy options. This makes the ColumnStream work
+                // well when setting a column. If we don't always use RetrieveCopy then
+                // things like seeking from the end of a column might not work properly.
+                return RetrieveColumnGrbit.RetrieveCopy;
             }
         }
 
@@ -232,9 +229,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="value">The desired length, in bytes.</param>
         public override void SetLength(long value)
         {
-            if (value > 0x7FFFFFFF)
+            if (value > 0x7FFFFFFF || value < 0)
             {
-                throw new ArgumentOutOfRangeException("value", value, "A LongValueStream cannot be longer than 0x7FFFFFF bytes");
+                throw new ArgumentOutOfRangeException("value", value, "A LongValueStream cannot be longer than 0x7FFFFFF or less than 0 bytes");
             }
 
             Api.JetSetColumn(this.sesid, this.tableid, this.columnid, null, (int)value, SetColumnGrbit.SizeLV, null);
@@ -266,7 +263,12 @@ namespace Microsoft.Isam.Esent.Interop
 
             if (newOffset < 0 || newOffset > 0x7fffffff)
             {
-                throw new ArgumentException("invalid offset/origin combination");
+                throw new ArgumentOutOfRangeException("offset", offset, "invalid offset/origin combination");
+            }
+
+            if (newOffset > this.Length)
+            {
+                this.SetLength(newOffset);
             }
 
             this.offset = (int)newOffset;

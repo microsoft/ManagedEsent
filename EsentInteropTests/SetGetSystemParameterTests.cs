@@ -180,10 +180,7 @@ namespace InteropApiTests
         [TestMethod]
         public void NoInformationEventParameter()
         {
-            // Older versions of esent (e.g. Windows XP) return -1
-            // for any non-zero value when retrieving this parameter,
-            // so we use -1 as the test value
-            this.IntegerParameterTest(JET_param.NoInformationEvent, -1);
+            this.BooleanParameterTest(JET_param.NoInformationEvent, Any.Boolean);
         }
 
         /// <summary>
@@ -192,10 +189,7 @@ namespace InteropApiTests
         [TestMethod]
         public void CreatePathIfNotExistParameter()
         {
-            // Older versions of esent (e.g. Windows XP) return -1
-            // for any non-zero value when retrieving this parameter,
-            // so we use -1 as the test value
-            this.IntegerParameterTest(JET_param.CreatePathIfNotExist, -1);
+            this.BooleanParameterTest(JET_param.CreatePathIfNotExist, Any.Boolean);
         }
 
         #region Helper Methods
@@ -252,7 +246,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test setting and retrieving an integer system parameter..
+        /// Test setting and retrieving an integer system parameter.
         /// </summary>
         /// <param name="param">The parameter to set.</param>
         /// <param name="expected">The string to set it to.</param>
@@ -269,6 +263,41 @@ namespace InteropApiTests
                 Api.JetGetSystemParameter(instance, JET_SESID.Nil, param, ref actual, out ignored, 0);
 
                 Assert.AreEqual(expected, actual);
+            }
+            finally
+            {
+                Api.JetTerm(instance);
+            }
+        }
+
+        /// <summary>
+        /// Test setting and retrieving an integer system parameter which
+        /// is treated as a boolean.
+        /// </summary>
+        /// <param name="param">The parameter to set.</param>
+        /// <param name="expected">The string to set it to.</param>
+        private void BooleanParameterTest(JET_param param, bool expected)
+        {
+            int value = expected ? 1 : 0;
+
+            JET_INSTANCE instance;
+            Api.JetCreateInstance(out instance, "BoolParameterTest");
+            try
+            {
+                Api.JetSetSystemParameter(instance, JET_SESID.Nil, param, value, null);
+
+                int actual = 0;
+                string ignored;
+                Api.JetGetSystemParameter(instance, JET_SESID.Nil, param, ref actual, out ignored, 0);
+
+                if (expected)
+                {
+                    Assert.AreNotEqual(0, actual);
+                }
+                else
+                {
+                    Assert.AreEqual(0, actual);
+                }
             }
             finally
             {

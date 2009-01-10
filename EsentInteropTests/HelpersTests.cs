@@ -673,13 +673,23 @@ namespace InteropApiTests
         #region MakeKey Tests
 
         /// <summary>
+        /// Test make a key from true.
+        /// </summary>
+        [TestMethod]
+        public void MakeKeyBooleanTrue()
+        {
+            this.CreateIndexOnColumn("boolean");
+            Api.MakeKey(this.sesid, this.tableid, true, MakeKeyGrbit.NewKey);
+        }
+
+        /// <summary>
         /// Test make a key from a boolean.
         /// </summary>
         [TestMethod]
-        public void MakeKeyBoolean()
+        public void MakeKeyBooleanFalse()
         {
             this.CreateIndexOnColumn("boolean");
-            Api.MakeKey(this.sesid, this.tableid, Any.Boolean, MakeKeyGrbit.NewKey);
+            Api.MakeKey(this.sesid, this.tableid, false, MakeKeyGrbit.NewKey);
         }
 
         /// <summary>

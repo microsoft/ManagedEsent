@@ -676,12 +676,83 @@ namespace InteropApiTests
         #region ColumnStream Tests
 
         /// <summary>
+        /// Test that a ColumnStream supports reading.
+        /// </summary>
+        [TestMethod]
+        public void ColumnStreamSupportsRead()
+        {
+            using (var t = new Transaction(this.sesid))
+            using (var u = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                Assert.IsTrue(stream.CanRead);
+            }
+        }
+
+        /// <summary>
+        /// Test that a ColumnStream supports writing.
+        /// </summary>
+        [TestMethod]
+        public void ColumnStreamSupportsWrite()
+        {
+            using (var t = new Transaction(this.sesid))
+            using (var u = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                Assert.IsTrue(stream.CanWrite);
+            }
+        }
+
+        /// <summary>
+        /// Test that a ColumnStream supports seeking.
+        /// </summary>
+        [TestMethod]
+        public void ColumnStreamSupportsSeek()
+        {
+            using (var t = new Transaction(this.sesid))
+            using (var u = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                Assert.IsTrue(stream.CanSeek);
+            }
+        }
+
+        /// <summary>
+        /// Test setting the length of a ColumnStream.
+        /// </summary>
+        [TestMethod]
+        public void SetColumnStreamLength()
+        {
+            byte[] bookmark = new byte[Api.BookmarkMost];
+            int bookmarkSize;
+
+            long length = 1345;
+
+            using (var transaction = new Transaction(this.sesid))
+            using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                stream.SetLength(length);
+                Assert.AreEqual(length, stream.Length);
+
+                update.Save(bookmark, bookmark.Length, out bookmarkSize);
+                transaction.Commit(CommitTransactionGrbit.LazyFlush);
+            }
+
+            Api.JetGotoBookmark(this.sesid, this.tableid, bookmark, bookmarkSize);
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                Assert.AreEqual(length, stream.Length);
+            }
+        }
+
+        /// <summary>
         /// Test setting and retrieving a column with the ColumnStream class.
         /// </summary>
         [TestMethod]
-        public void ColumnStream()
+        public void SetAndRetrieveColumnStream()
         {
-            string s = "the string to be inserted";
+            string s = Any.String;
 
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
@@ -701,13 +772,37 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test that seeking beyond the length of the stream grows the stream.
+        /// </summary>
+        [TestMethod]
+        public void SeekingPastEndOfColumnStreamGrowsStream()
+        {
+            int offset = 1200;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                stream.Seek(offset, SeekOrigin.Begin);
+            }
+
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                Assert.AreEqual(offset, stream.Length);
+            }
+        }
+
+        /// <summary>
         /// Test setting and retrieving a column with the ColumnStream class
         /// and multivalues.
         /// </summary>
         [TestMethod]
-        public void ColumnStreamMultiValue()
+        public void SetAndRetrieveMultiValueColumnStream()
         {
-            string[] data = { "this", "is", "a", "collection", "of", "multivalues" };                                
+            string[] data = { Any.String, Any.String, Any.String, Any.String, Any.String, Any.String };                                
 
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
@@ -733,6 +828,51 @@ namespace InteropApiTests
                     string actual = reader.ReadLine();
                     Assert.AreEqual(data[i], actual);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Trying to seek to an invalid offset generates an exception.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void ColumnStreamThrowsExceptionWhenSeekOffsetIsTooLarge()
+        {
+            using (var t = new Transaction(this.sesid))
+            using (var u = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                stream.Seek(0x800000000, SeekOrigin.Begin);
+            }
+        }
+
+        /// <summary>
+        /// Setting the size past the maximum LV size generates an exception.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void ColumnStreamSetLengthThrowsExceptionWhenLengthIsTooLong()
+        {
+            using (var t = new Transaction(this.sesid))
+            using (var u = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                stream.SetLength(0x800000000);
+            }
+        }
+
+        /// <summary>
+        /// Setting the size to a negative number generates an exception.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void ColumnStreamSetLengthThrowsExceptionWhenLengthIsNegative()
+        {
+            using (var t = new Transaction(this.sesid))
+            using (var u = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                stream.SetLength(-1);
             }
         }
 

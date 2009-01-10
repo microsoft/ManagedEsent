@@ -15,6 +15,32 @@ namespace Microsoft.Isam.Esent.Interop
     public static partial class Api
     {
         /// <summary>
+        /// Position the cursor before the first record in the table. A 
+        /// subsequent move next will position the cursor on the first
+        /// record.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to position.</param>
+        public static void MoveBeforeFirst(JET_SESID sesid, JET_TABLEID tableid)
+        {
+            Api.TryMoveFirst(sesid, tableid);
+            Api.TryMovePrevious(sesid, tableid);
+        }
+
+        /// <summary>
+        /// Position the cursor after the last record in the table. A 
+        /// subsequent move previous will position the cursor on the
+        /// last record.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to position.</param>
+        public static void MoveAfterLast(JET_SESID sesid, JET_TABLEID tableid)
+        {
+            Api.TryMoveLast(sesid, tableid);
+            Api.TryMoveNext(sesid, tableid);
+        }
+
+        /// <summary>
         /// Try to move to the first record in the table. If the table is empty this
         /// returns false, if a different error is encountered an exception is thrown.
         /// </summary>

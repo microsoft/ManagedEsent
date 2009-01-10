@@ -226,7 +226,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(EsentException))]
-        public void MoveBeforeFirst()
+        public void MovingBeforeFirstThrowsException()
         {
             Api.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
             Api.JetMove(this.sesid, this.tableid, JET_Move.Previous, MoveGrbit.None);
@@ -249,7 +249,7 @@ namespace InteropApiTests
         /// Test moving several records.
         /// </summary>
         [TestMethod]
-        public void Move()
+        public void MoveForwardSeveralRecords()
         {
             int expected = 3;
             Api.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
@@ -276,7 +276,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(EsentException))]
-        public void MoveAfterLast()
+        public void MovingAfterLastThrowsException()
         {
             Api.JetMove(this.sesid, this.tableid, JET_Move.Last, MoveGrbit.None);
             Api.JetMove(this.sesid, this.tableid, JET_Move.Next, MoveGrbit.None);
@@ -440,6 +440,34 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Create a descending exclusive index range with TrySetIndexRange
+        /// </summary>
+        [TestMethod]
+        public void TryCreateDescendingExclusiveIndexRange()
+        {
+            int first = 1;
+            int last = this.numRecords - 1;
+
+            this.MakeKeyForRecord(last);
+            Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekEQ);
+
+            this.MakeKeyForRecord(first);
+            Assert.IsTrue(Api.TrySetIndexRange(this.sesid, this.tableid, SetIndexRangeGrbit.None));
+
+            for (int i = last; i > first; --i)
+            {
+                int actual = this.GetLongColumn();
+                Assert.AreEqual(i, actual);
+                if (first + 1 != i)
+                {
+                    Api.JetMove(this.sesid, this.tableid, JET_Move.Previous, MoveGrbit.None);
+                }
+            }
+
+            Assert.IsFalse(Api.TryMovePrevious(this.sesid, this.tableid));
+        }
+
+        /// <summary>
         /// Count the records in an index range with JetGetIndexRecordCount
         /// </summary>
         [TestMethod]
@@ -523,10 +551,32 @@ namespace InteropApiTests
         /// Try moving previous to the first record.
         /// </summary>
         [TestMethod]
-        public void TryMoveBeforeFirst()
+        public void TryMovePreviousReturnsFalseWhenOnFirstRecord()
         {
             Assert.AreEqual(true, Api.TryMoveFirst(this.sesid, this.tableid));
             Assert.AreEqual(false, Api.TryMovePrevious(this.sesid, this.tableid));
+        }
+
+        /// <summary>
+        /// Move before the first record
+        /// </summary>
+        [TestMethod]
+        public void MoveBeforeFirst()
+        {
+            Api.MoveBeforeFirst(this.sesid, this.tableid);
+            Api.JetMove(this.sesid, this.tableid, JET_Move.Next, MoveGrbit.None);
+            this.AssertOnRecord(0);
+        }
+
+        /// <summary>
+        /// Move after the last record
+        /// </summary>
+        [TestMethod]
+        public void MoveAfterLast()
+        {
+            Api.MoveAfterLast(this.sesid, this.tableid);
+            Api.JetMove(this.sesid, this.tableid, JET_Move.Previous, MoveGrbit.None);
+            this.AssertOnRecord(this.numRecords - 1);
         }
 
         /// <summary>
@@ -559,7 +609,7 @@ namespace InteropApiTests
         /// This should generate an exception.
         /// </summary>
         [TestMethod]
-        public void TryMoveAfterLast()
+        public void TryMoveNextReturnsFalseWhenOnLastRecord()
         {
             Assert.AreEqual(true, Api.TryMoveLast(this.sesid, this.tableid));
             Assert.AreEqual(false, Api.TryMoveNext(this.sesid, this.tableid));
@@ -581,6 +631,16 @@ namespace InteropApiTests
         #endregion MoveHelper Tests
 
         #region Helper Methods
+
+        /// <summary>
+        /// Assert that we are currently positioned on the given record.
+        /// </summary>
+        /// <param name="recordId">The expected record ID.</param>
+        private void AssertOnRecord(int recordId)
+        {
+            int actualId = this.GetLongColumn();
+            Assert.AreEqual(recordId, actualId);
+        }
 
         /// <summary>
         /// Return the value of the columnidLong of the current record.

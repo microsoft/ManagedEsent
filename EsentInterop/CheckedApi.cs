@@ -683,6 +683,7 @@ namespace Microsoft.Isam.Esent.Interop
                 // sure this API works as advertised we will increase the maximum record count.
                 maxRecordsToCount = int.MaxValue;
             }
+
             Check(ErrApi.JetIndexRecordCount(sesid, tableid, out numRecords, maxRecordsToCount));
         }
 

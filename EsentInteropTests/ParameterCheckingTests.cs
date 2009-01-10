@@ -600,6 +600,18 @@ namespace InteropApiTests
             Api.JetRetrieveKey(this.sesid, this.tableid, data, data.Length + 1, out actualSize, RetrieveKeyGrbit.None);
         }
 
+        /// <summary>
+        /// Check that an exception is thrown when Jet gets a 
+        /// negative bookmark length.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetIndexRecordCountThrowsExceptionWhenMaxRecordsIsNegative()
+        {
+            int numRecords;
+            Api.JetIndexRecordCount(this.sesid, this.tableid, out numRecords, -1);
+        }
+
         #endregion
 
         #region DML

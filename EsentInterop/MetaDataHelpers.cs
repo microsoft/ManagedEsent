@@ -31,8 +31,8 @@ namespace Microsoft.Isam.Esent.Interop
                 var dict = new Dictionary<string, JET_COLUMNID>(columnlist.cRecord, StringComparer.InvariantCultureIgnoreCase);
                 if (columnlist.cRecord > 0)
                 {
-                    Api.JetMove(sesid, columnlist.tableid, JET_Move.First, MoveGrbit.None);
-                    do
+                    Api.MoveBeforeFirst(sesid, columnlist.tableid);
+                    while (Api.TryMoveNext(sesid, columnlist.tableid))
                     {
                         string name = Api.RetrieveColumnAsString(sesid, columnlist.tableid, columnlist.columnidcolumnname, NativeMethods.Encoding);
                         uint columnidValue = (uint)Api.RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcolumnid);
@@ -40,7 +40,6 @@ namespace Microsoft.Isam.Esent.Interop
                         var columnid = new JET_COLUMNID() { Value = columnidValue };
                         dict.Add(name, columnid);
                     } 
-                    while (Api.TryMoveNext(sesid, columnlist.tableid));
                 }
            
                 return dict;
@@ -64,13 +63,10 @@ namespace Microsoft.Isam.Esent.Interop
             Api.JetGetTableColumnInfo(sesid, tableid, string.Empty, out columnlist);
             try
             {
-                if (Api.TryMoveFirst(sesid, columnlist.tableid))
+                Api.MoveBeforeFirst(sesid, columnlist.tableid);
+                while (Api.TryMoveNext(sesid, columnlist.tableid))
                 {
-                    do
-                    {
-                        yield return GetColumnInfoFromColumnlist(sesid, columnlist);
-                    }
-                    while (Api.TryMoveNext(sesid, columnlist.tableid));
+                    yield return GetColumnInfoFromColumnlist(sesid, columnlist);
                 }
             }
             finally
@@ -93,13 +89,10 @@ namespace Microsoft.Isam.Esent.Interop
             Api.JetGetColumnInfo(sesid, dbid, tableName, string.Empty, out columnlist);
             try
             {
-                if (Api.TryMoveFirst(sesid, columnlist.tableid))
+                Api.MoveBeforeFirst(sesid, columnlist.tableid);
+                while (Api.TryMoveNext(sesid, columnlist.tableid))
                 {
-                    do
-                    {
-                        yield return GetColumnInfoFromColumnlist(sesid, columnlist);
-                    }
-                    while (Api.TryMoveNext(sesid, columnlist.tableid));
+                    yield return GetColumnInfoFromColumnlist(sesid, columnlist);
                 }
             }
             finally
@@ -121,17 +114,14 @@ namespace Microsoft.Isam.Esent.Interop
             Api.JetGetObjectInfo(sesid, dbid, out objectlist);
             try
             {
-                if (Api.TryMoveFirst(sesid, objectlist.tableid))
+                Api.MoveBeforeFirst(sesid, objectlist.tableid);
+                while (Api.TryMoveNext(sesid, objectlist.tableid))
                 {
-                    do
+                    uint flags = (uint)Api.RetrieveColumnAsUInt32(sesid, objectlist.tableid, objectlist.columnidflags);
+                    if (ObjectInfoFlags.System != ((ObjectInfoFlags)flags & ObjectInfoFlags.System))
                     {
-                        uint flags = (uint)Api.RetrieveColumnAsUInt32(sesid, objectlist.tableid, objectlist.columnidflags);
-                        if (ObjectInfoFlags.System != ((ObjectInfoFlags)flags & ObjectInfoFlags.System))
-                        {
-                            yield return Api.RetrieveColumnAsString(sesid, objectlist.tableid, objectlist.columnidobjectname, NativeMethods.Encoding);
-                        }
+                        yield return Api.RetrieveColumnAsString(sesid, objectlist.tableid, objectlist.columnidobjectname, NativeMethods.Encoding);
                     }
-                    while (Api.TryMoveNext(sesid, objectlist.tableid));
                 }
             }
             finally
