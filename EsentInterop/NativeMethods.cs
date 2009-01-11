@@ -15,16 +15,6 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     internal static class NativeMethods
     {
-        #region Win32 Constants
-
-        public const uint NORM_IGNORECASE = 0x00000001;  // ignore case
-        public const uint NORM_IGNORENONSPACE = 0x00000002;  // ignore nonspacing chars
-        public const uint NORM_IGNORESYMBOLS = 0x00000004;  // ignore symbols
-        public const uint NORM_IGNOREKANATYPE = 0x00010000;  // ignore kanatype
-        public const uint NORM_IGNOREWIDTH = 0x00020000;  // ignore width
-
-        #endregion Win32 Constants
-
         #region Configuration Constants
 
         /// <summary>

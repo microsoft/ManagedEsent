@@ -35,11 +35,11 @@ namespace Microsoft.Isam.Esent.Interop
             // Rather than creating both dictionaries, define one as the inverse of the other.
             Conversions.compareOptionsToLcmapFlags = new Dictionary<CompareOptions, uint>()
             {
-                { CompareOptions.IgnoreCase, NativeMethods.NORM_IGNORECASE },
-                { CompareOptions.IgnoreKanaType, NativeMethods.NORM_IGNOREKANATYPE },
-                { CompareOptions.IgnoreNonSpace, NativeMethods.NORM_IGNORENONSPACE },
-                { CompareOptions.IgnoreSymbols, NativeMethods.NORM_IGNORESYMBOLS },
-                { CompareOptions.IgnoreWidth, NativeMethods.NORM_IGNOREWIDTH },
+                { CompareOptions.IgnoreCase, Conversions.NativeMethods.NORM_IGNORECASE },
+                { CompareOptions.IgnoreKanaType, Conversions.NativeMethods.NORM_IGNOREKANATYPE },
+                { CompareOptions.IgnoreNonSpace, Conversions.NativeMethods.NORM_IGNORENONSPACE },
+                { CompareOptions.IgnoreSymbols, Conversions.NativeMethods.NORM_IGNORESYMBOLS },
+                { CompareOptions.IgnoreWidth, Conversions.NativeMethods.NORM_IGNOREWIDTH },
             };
 
             Conversions.lcmapFlagsToCompareOptions = Conversions.InvertDictionary(Conversions.compareOptionsToLcmapFlags);
@@ -102,6 +102,22 @@ namespace Microsoft.Isam.Esent.Interop
             }
 
             return invertedDict;
+        }
+
+        /// <summary>
+        /// This class contains the unmanaged constants used in the conversion.
+        /// </summary>
+        private static class NativeMethods
+        {
+            #region Win32 Constants
+
+            public const uint NORM_IGNORECASE = 0x00000001;  // ignore case
+            public const uint NORM_IGNORENONSPACE = 0x00000002;  // ignore nonspacing chars
+            public const uint NORM_IGNORESYMBOLS = 0x00000004;  // ignore symbols
+            public const uint NORM_IGNOREKANATYPE = 0x00010000;  // ignore kanatype
+            public const uint NORM_IGNOREWIDTH = 0x00020000;  // ignore width
+
+            #endregion Win32 Constants
         }
     }
 }

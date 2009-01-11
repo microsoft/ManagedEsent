@@ -12,7 +12,7 @@ namespace Microsoft.Isam.Esent.Interop
     public class IndexSegment
     {
         /// <summary>
-        /// Constructs a new IndexSegmet.
+        /// Initializes a new instance of the IndexSegment class.
         /// </summary>
         /// <param name="name">The name of the indexed column.</param>
         /// <param name="coltyp">The type of the column.</param>
@@ -46,7 +46,7 @@ namespace Microsoft.Isam.Esent.Interop
         public bool IsAscending { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating wheher the index segment is over an ASCII text
+        /// Gets a value indicating whether the index segment is over an ASCII text
         /// column. This value is only meaningful for text column segments.
         /// </summary>
         public bool IsASCII { get; private set; }
