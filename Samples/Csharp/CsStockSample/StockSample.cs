@@ -447,7 +447,7 @@ namespace CsStockSample
                 using (Session session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, database, null, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, database, null, out dbid, CreateDatabaseGrbit.OverwriteExisting);
                     using (Transaction transaction = new Transaction(session))
                     {
                         // A newly created table is opened exclusively. This is necessary to add

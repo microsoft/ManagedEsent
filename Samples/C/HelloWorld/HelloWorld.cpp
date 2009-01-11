@@ -22,7 +22,7 @@ int main(int argc, char * argv[]) {
 	JET_COLUMNDEF columndef = {0};
 	JET_COLUMNID columnid;
 
-	char * message = "Hello world";
+	char * message = "Hello World";
 
 	/* Initialize ESENT */
 	Call(JetInit(&instance));
@@ -51,7 +51,7 @@ int main(int argc, char * argv[]) {
 	Call(JetMove(sesid, tableid, JET_MoveFirst, 0));
 	Call(JetRetrieveColumn(sesid, tableid, columnid, buffer, sizeof(buffer), &retrievedSize, 0, NULL));
 	buffer[retrievedSize] = 0;
-	printf("%s", buffer);
+	printf("%s\n", buffer);
 
     /* Terminate ESENT */
     JetCloseTable(sesid, tableid);
