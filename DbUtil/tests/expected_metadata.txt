@@ -56,3 +56,39 @@ table
 		Code page:  Unicode
 		Max length: 0
 		Grbit:      ColumnTagged
+	primary
+		Grbit:          IndexUnique, IndexPrimary
+		CultureInfo:    en-US
+		CompareOptions: IgnoreCase, IgnoreKanaType, IgnoreWidth
+			key
+				Coltyp:      Long
+				IsAscending: True
+				IsASCII:     False
+	secondary
+		Grbit:          None
+		CultureInfo:    en-US
+		CompareOptions: IgnoreCase, IgnoreKanaType, IgnoreWidth
+			double
+				Coltyp:      IEEEDouble
+				IsAscending: True
+				IsASCII:     False
+			ascii
+				Coltyp:      LongText
+				IsAscending: False
+				IsASCII:     True
+	unique_secondary
+		Grbit:          IndexUnique
+		CultureInfo:    en-US
+		CompareOptions: IgnoreCase, IgnoreKanaType, IgnoreWidth
+			unicode
+				Coltyp:      LongText
+				IsAscending: False
+				IsASCII:     False
+			binary
+				Coltyp:      LongBinary
+				IsAscending: True
+				IsASCII:     False
+			key
+				Coltyp:      Long
+				IsAscending: True
+				IsASCII:     False

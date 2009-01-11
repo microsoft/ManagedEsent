@@ -74,6 +74,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiConstants.cs" />
+    <Compile Include="Conversions.cs" />
+    <Compile Include="IndexSegment.cs" />
+    <Compile Include="IndexInfo.cs" />
+    <Compile Include="jet_idxinfo.cs" />
+    <Compile Include="jet_indexlist.cs" />
     <Compile Include="Update.cs" />
     <Compile Include="Table.cs" />
     <Compile Include="Transaction.cs" />

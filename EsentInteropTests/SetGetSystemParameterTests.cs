@@ -139,6 +139,15 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test setting and retrieving the log buffers setting.
+        /// </summary>
+        [TestMethod]
+        public void LogBuffersParameter()
+        {
+            this.IntegerParameterTest(JET_param.LogBuffers, 128);
+        }
+
+        /// <summary>
         /// Test setting and retrieving the circular logging setting.
         /// </summary>
         [TestMethod]

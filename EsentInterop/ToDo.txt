@@ -4,7 +4,6 @@
   - Sample code that wraps the ColumnStream in a BufferedStream for performance
   - More JET_param parameters
 	- JET_paramEventSourceKey
-	- JET_paramLogBuffers  
   - Data conversion class
 
  TESTING
@@ -14,12 +13,8 @@
   - Create a column with a default value
   - Retrieve copy
 	
-APIs to add (8)
+APIs to add (5)
 ----------------
-  - JetGetObjectInfo
-  - JetGetIndexInfo
-  - JetGetTableIndexInfo
-
   - JetEscrowUpdate  
   - JetIntersectIndexes  
   - JetGetDatabaseInfo

@@ -15,6 +15,16 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     internal static class NativeMethods
     {
+        #region Win32 Constants
+
+        public const uint NORM_IGNORECASE = 0x00000001;  // ignore case
+        public const uint NORM_IGNORENONSPACE = 0x00000002;  // ignore nonspacing chars
+        public const uint NORM_IGNORESYMBOLS = 0x00000004;  // ignore symbols
+        public const uint NORM_IGNOREKANATYPE = 0x00010000;  // ignore kanatype
+        public const uint NORM_IGNOREWIDTH = 0x00020000;  // ignore width
+
+        #endregion Win32 Constants
+
         #region Configuration Constants
 
         /// <summary>
@@ -141,7 +151,6 @@ namespace Microsoft.Isam.Esent.Interop
         [DllImport(EsentDLL, CharSet = EsentCharSet)]
         public static extern int JetCreateIndex(IntPtr sesid, IntPtr tableid, string szIndexName, uint grbit, string szKey, uint cbKey, uint lDensity);
         
-        // Overloads for the different ways JetGetTableColumnInfo can be called
         [DllImport(EsentDLL, CharSet = EsentCharSet)]
         public static extern int JetGetTableColumnInfo(IntPtr sesid, IntPtr tableid, string szColumnName, ref NATIVE_COLUMNDEF columndef, uint cbMax, uint InfoLevel);
 
@@ -151,7 +160,6 @@ namespace Microsoft.Isam.Esent.Interop
         [DllImport(EsentDLL, CharSet = EsentCharSet)]
         public static extern int JetGetTableColumnInfo(IntPtr sesid, IntPtr tableid, string szIgnored, ref NATIVE_COLUMNLIST columnlist, uint cbMax, uint InfoLevel);
 
-        // Overloads for the different ways JetGetColumnInfo can be called
         [DllImport(EsentDLL, CharSet = EsentCharSet)]
         public static extern int JetGetColumnInfo(IntPtr sesid, uint dbid, string szTableName, string szColumnName, ref NATIVE_COLUMNDEF columndef, uint cbMax, uint InfoLevel);
 
@@ -160,6 +168,12 @@ namespace Microsoft.Isam.Esent.Interop
 
         [DllImport(EsentDLL, CharSet = EsentCharSet)]
         public static extern int JetGetObjectInfo(IntPtr sesid, uint dbid, uint objtyp, string szContainerName, string szObjectName, ref NATIVE_OBJECTLIST objectlist, uint cbMax, uint InfoLevel);
+
+        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        public static extern int JetGetIndexInfo(IntPtr sesid, uint dbid, string szTableName, string szIndexName, ref NATIVE_INDEXLIST indexlist, uint cbResult, uint InfoLevel);
+
+        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        public static extern int JetGetTableIndexInfo(IntPtr sesid, IntPtr tableid, string szIndexName, ref NATIVE_INDEXLIST indexlist, uint cbResult, uint InfoLevel);
 
         #endregion
 

@@ -8,6 +8,7 @@ namespace InteropApiTests
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -881,6 +882,44 @@ namespace InteropApiTests
             {
                 Assert.AreEqual(this.columnidDict[col.Name], col.Columnid);
             }
+        }
+
+        /// <summary>
+        /// Get index information when there are no indexes on the table.
+        /// </summary>
+        [TestMethod]
+        public void GetIndexInformationNoIndexes()
+        {
+            IEnumerable<IndexInfo> indexes = Api.GetTableIndexes(this.sesid, this.tableid);
+            Assert.AreEqual(0, indexes.Count());
+        }
+
+        /// <summary>
+        /// Get index information for one index
+        /// </summary>
+        [TestMethod]
+        public void GetIndexInformationOneIndex()
+        {
+            var indexname = "myindex";
+            var indexdef = "+ascii\0\0";
+            var grbit = CreateIndexGrbit.IndexUnique;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetCreateIndex(this.sesid, this.tableid, indexname, grbit, indexdef, indexdef.Length, 100);
+            IEnumerable<IndexInfo> indexes = Api.GetTableIndexes(this.sesid, this.tableid);
+
+            // There should be only one index
+            IndexInfo info = indexes.Single();
+            Assert.AreEqual(indexname, info.Name);
+            Assert.AreEqual(grbit, info.Grbit);
+
+            Assert.AreEqual(1, info.IndexSegments.Length);
+            Assert.IsTrue(0 == string.Compare("ascii", info.IndexSegments[0].ColumnName, true));
+            Assert.IsTrue(info.IndexSegments[0].IsAscending);
+            Assert.AreEqual(JET_coltyp.LongText, info.IndexSegments[0].Coltyp);
+            Assert.IsTrue(info.IndexSegments[0].IsASCII);
+
+            Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
         }
 
         #endregion MetaData helpers tests

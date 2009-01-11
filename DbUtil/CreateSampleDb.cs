@@ -113,6 +113,9 @@ namespace Microsoft.Isam.Esent.Utilities
                         string indexdef2 = "+double\0-ascii\0\0";
                         Api.JetCreateIndex(session, table, "secondary", CreateIndexGrbit.None, indexdef2, indexdef2.Length, 100);
 
+                        string indexdef3 = "-unicode\0+binary\0+key\0\0";
+                        Api.JetCreateIndex(session, table, "unique_secondary", CreateIndexGrbit.IndexUnique, indexdef3, indexdef3.Length, 100);
+
                         using (Transaction transaction = new Transaction(session))
                         {
                             Dictionary<string, JET_COLUMNID> columnids = Api.GetColumnDictionary(session, table);

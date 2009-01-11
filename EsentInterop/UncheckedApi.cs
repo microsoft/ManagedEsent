@@ -421,6 +421,55 @@ namespace Microsoft.Isam.Esent.Interop
             return err;
         }
 
+        public static int JetGetIndexInfo(
+                JET_SESID sesid,
+                JET_DBID dbid,
+                string tableName,
+                string ignored,
+                out JET_INDEXLIST indexlist)
+        {
+            ErrApi.TraceFunctionCall("JetGetIndexInfo");
+            indexlist = new JET_INDEXLIST();
+            ErrApi.CheckNotNull(tableName, "tableName");
+
+            var nativeIndexlist = new NATIVE_INDEXLIST();
+            nativeIndexlist.cbStruct = (uint)Marshal.SizeOf(nativeIndexlist);
+            int err = ErrApi.Err(NativeMethods.JetGetIndexInfo(
+                sesid.Value,
+                dbid.Value,
+                tableName,
+                ignored,
+                ref nativeIndexlist,
+                nativeIndexlist.cbStruct,
+                (uint)JET_IdxInfo.InfoList));
+            indexlist.SetFromNativeIndexlist(nativeIndexlist);
+
+            return err;
+        }
+
+        public static int JetGetTableIndexInfo(
+                JET_SESID sesid,
+                JET_TABLEID tableid,
+                string ignored,
+                out JET_INDEXLIST indexlist)
+        {
+            ErrApi.TraceFunctionCall("JetGetTableIndexInfo");
+            indexlist = new JET_INDEXLIST();
+
+            var nativeIndexlist = new NATIVE_INDEXLIST();
+            nativeIndexlist.cbStruct = (uint)Marshal.SizeOf(nativeIndexlist);
+            int err = ErrApi.Err(NativeMethods.JetGetTableIndexInfo(
+                sesid.Value,
+                tableid.Value,
+                ignored,
+                ref nativeIndexlist,
+                nativeIndexlist.cbStruct,
+                (uint)JET_IdxInfo.InfoList));
+            indexlist.SetFromNativeIndexlist(nativeIndexlist);
+
+            return err;
+        }
+
         #endregion
 
         #region Navigation

@@ -57,6 +57,30 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify that the helper method to return a string system parameter works.
+        /// </summary>
+        [TestMethod]
+        public void VerifyGetStringParameterHelperGetsParameter()
+        {
+            string expected = Any.String;
+            JET_param param = JET_param.EventSource;
+            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, param, 0, expected);
+            Assert.AreEqual(expected, this.GetStringParameter(param));
+        }
+
+        /// <summary>
+        /// Verify that the helper method to return an integer system parameter works.
+        /// </summary>
+        [TestMethod]
+        public void VerifyGetIntegerParameterHelperGetsParameter()
+        {
+            int expected = 100;
+            JET_param param = JET_param.MaxOpenTables;
+            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, param, expected, string.Empty);
+            Assert.AreEqual(expected, this.GetIntegerParameter(param));
+        }
+
+        /// <summary>
         /// Test the BaseName property.
         /// </summary>
         [TestMethod]
@@ -216,7 +240,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test the CircularLog property.
+        /// Test the LogFileSize property.
         /// </summary>
         [TestMethod]
         public void SetAndRetrieveInstanceParametersLogFileSize()
@@ -236,6 +260,29 @@ namespace InteropApiTests
             int expected = 2048;
             this.instanceParameters.LogFileSize = expected;
             Assert.AreEqual(expected, this.GetIntegerParameter(JET_param.LogFileSize));
+        }
+
+        /// <summary>
+        /// Test the LogBuffers property.
+        /// </summary>
+        [TestMethod]
+        public void SetAndRetrieveInstanceParametersLogBuffers()
+        {
+            int expected = 100;
+            this.instanceParameters.LogBuffers = expected;
+            Assert.AreEqual(expected, this.instanceParameters.LogBuffers);
+        }
+
+        /// <summary>
+        /// Setting the LogBuffers property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        public void VerifySetInstanceParametersLogBuffers()
+        {
+            int expected = 20;
+            this.instanceParameters.LogBuffers = expected;
+            Assert.AreEqual(expected, this.GetIntegerParameter(JET_param.LogBuffers));
         }
 
         /// <summary>
@@ -295,7 +342,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test the no information event.
+        /// Test the no information event property.
         /// </summary>
         [TestMethod]
         public void SetAndRetrieveInstanceParametersNoInformationEvent()
@@ -360,6 +407,8 @@ namespace InteropApiTests
             Assert.AreEqual(@"d:\a\b\c\system\", this.instanceParameters.SystemDirectory);
         }
 
+        #region Helper Methods
+
         /// <summary>
         /// Retrieve a string parameter.
         /// </summary>
@@ -387,5 +436,7 @@ namespace InteropApiTests
             Api.JetGetSystemParameter(this.instance, JET_SESID.Nil, param, ref value, out ignored, 0);
             return value;
         }
+
+        #endregion Helper Methods
     }
 }

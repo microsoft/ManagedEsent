@@ -57,6 +57,22 @@ namespace Microsoft.Isam.Esent.Utilities
                             Console.WriteLine("\t\tMax length: {0}", column.MaxLength);
                             Console.WriteLine("\t\tGrbit:      {0}", column.Grbit);
                         }
+
+                        foreach (IndexInfo index in Api.GetTableIndexes(session, dbid, table))
+                        {
+                            Console.WriteLine("\t{0}", index.Name);
+                            Console.WriteLine("\t\tGrbit:          {0}", index.Grbit);
+                            Console.WriteLine("\t\tCultureInfo:    {0}", index.CultureInfo);
+                            Console.WriteLine("\t\tCompareOptions: {0}", index.CompareOptions);
+
+                            foreach (IndexSegment segment in index.IndexSegments)
+                            {
+                                Console.WriteLine("\t\t\t{0}", segment.ColumnName);
+                                Console.WriteLine("\t\t\t\tColtyp:      {0}", segment.Coltyp);
+                                Console.WriteLine("\t\t\t\tIsAscending: {0}", segment.IsAscending);
+                                Console.WriteLine("\t\t\t\tIsASCII:     {0}", segment.IsASCII);
+                            }
+                        }
                     }
                 }
             }

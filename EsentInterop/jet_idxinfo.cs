@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="jet_objinfo.cs" company="Microsoft Corporation">
+// <copyright file="jet_idxinfo.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
 //-----------------------------------------------------------------------
@@ -7,14 +7,13 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
-    /// Info levels for retrieving object info.
+    /// Info levels for retrieving information about indexes.
     /// </summary>
-    internal enum JET_ObjInfo
+    internal enum JET_IdxInfo
     {
         /// <summary>
-        /// Retrieve a JET_OBJINFOLIST containing information
-        /// about all object in the table.
+        /// Retrieve a <see cref="JET_INDEXLIST"/> containing a list of the indexes.
         /// </summary>
-        ListNoStats = 1,
+        InfoList = 1,
     }
 }

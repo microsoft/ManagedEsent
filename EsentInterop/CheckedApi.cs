@@ -500,6 +500,40 @@ namespace Microsoft.Isam.Esent.Interop
             Check(ErrApi.JetGetObjectInfo(sesid, dbid, out objectlist));
         }
 
+        /// <summary>
+        /// Retrieves information about indexes on a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database to use.</param>
+        /// <param name="tableName">The name of the table to retrieve index information about.</param>
+        /// <param name="ignored">This parameter is ignored</param>
+        /// <param name="indexlist">Filled in with information about indexes on the table.</param>
+        public static void JetGetIndexInfo(
+                JET_SESID sesid,
+                JET_DBID dbid,
+                string tableName,
+                string ignored,
+                out JET_INDEXLIST indexlist)
+        {
+            Check(ErrApi.JetGetIndexInfo(sesid, dbid, tableName, ignored, out indexlist));
+        }
+
+        /// <summary>
+        /// Retrieves information about indexes on a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to retrieve index information about.</param>
+        /// <param name="ignored">This parameter is ignored</param>
+        /// <param name="indexlist">Filled in with information about indexes on the table.</param>
+        public static void JetGetTableIndexInfo(
+                JET_SESID sesid,
+                JET_TABLEID tableid,
+                string ignored,
+                out JET_INDEXLIST indexlist)
+        {
+            Check(ErrApi.JetGetTableIndexInfo(sesid, tableid, ignored, out indexlist));
+        }
+
         #endregion
 
         #region Navigation

@@ -762,4 +762,21 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         IndexSortNullsHigh = 0x400,
     }
+
+    /// <summary>
+    /// Key definition grbits. Used when retrieving information about an index.
+    /// </summary>
+    [Flags]
+    public enum IndexKeyGrbit : int
+    {
+        /// <summary>
+        /// Key segment is ascending.
+        /// </summary>
+        Ascending = 0x0,
+
+        /// <summary>
+        /// Key segment is descending.
+        /// </summary>
+        Descending = 0x1,
+    }
 }
