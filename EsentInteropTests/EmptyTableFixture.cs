@@ -97,10 +97,6 @@ namespace InteropApiTests
             Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
             Assert.AreNotEqual(JET_SESID.Nil, this.sesid);
             Assert.AreNotEqual(JET_TABLEID.Nil, this.tableid);
-
-            int actualRecords;
-            Api.JetIndexRecordCount(this.sesid, this.tableid, out actualRecords, 0);
-            Assert.AreEqual(0, actualRecords);
         }
 
         #endregion Setup/Teardown

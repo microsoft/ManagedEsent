@@ -268,7 +268,7 @@ namespace InteropApiTests
         [TestMethod]
         public void SetAndRetrieveInstanceParametersLogBuffers()
         {
-            int expected = 100;
+            int expected = 128;
             this.instanceParameters.LogBuffers = expected;
             Assert.AreEqual(expected, this.instanceParameters.LogBuffers);
         }
@@ -280,7 +280,7 @@ namespace InteropApiTests
         [TestMethod]
         public void VerifySetInstanceParametersLogBuffers()
         {
-            int expected = 20;
+            int expected = 256;
             this.instanceParameters.LogBuffers = expected;
             Assert.AreEqual(expected, this.GetIntegerParameter(JET_param.LogBuffers));
         }
