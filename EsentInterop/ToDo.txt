@@ -8,17 +8,41 @@
 
  TESTING
  -------
+  - JetRetrieveKey
   - Set a long-value at a different offset
   - Exercise the ColumnStream more (seeking)
   - Create a column with a default value
   - Retrieve copy
 	
-APIs to add (5)
-----------------
-  - JetEscrowUpdate  
-  - JetIntersectIndexes  
+Pri 1 APIs: New functionality
+------------------------------
   - JetGetDatabaseInfo
   - JetGetDatabaseFileInfo
   - JetGetTableInfo
- 
+  - JetOpenTempTable3
+  - JetEscrowUpdate  
+  - JetFreeBuffer (just interop, not in checkedapi)
+  - JetGetCurrentIndex
+  - JetGetInstanceInfo
+  - JetGetSecondaryIndexBookmark
+  - JetGetVersion
+  - JetGotoSecondaryIndexBookmark 
+  - JetGrowDatabase
+  - JetIdle
+  - JetIntersectIndexes  
+  - JetResetSessionContext
+  - JetSetColumnDefaultValue
+  - JetSetDatabaseSize
+  - JetSetSessionContext
+
+Pri 2 APIs: Extending functionality
+-----------------------------------
+  - JetSetColumns
+  - JetRetrieveColumns
+  - JetCreateTableColumnIndex2
+  - JetEnumerateColumns
+  - JetSetCurrentIndex2
+  - JetSetCurrentIndex3
+  - JetSetCurrentIndex4
+  - JetTerm2
   
