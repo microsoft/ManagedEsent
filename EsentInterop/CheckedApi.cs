@@ -864,7 +864,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             if (err < 0)
             {
-                throw new EsentException((JET_err)err);
+                throw new EsentErrorException((JET_err)err);
             }
 
             return (JET_wrn)err;

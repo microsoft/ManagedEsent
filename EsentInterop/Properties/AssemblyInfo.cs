@@ -45,3 +45,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("InteropApiTests")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("EseQuery")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("EseQueryTests")]

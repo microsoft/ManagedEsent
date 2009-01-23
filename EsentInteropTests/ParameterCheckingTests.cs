@@ -120,13 +120,13 @@ namespace InteropApiTests
 
         #endregion Setup/Teardown
 
-        #region EsentException tests
+        #region EsentErrorException tests
 
         /// <summary>
         /// Check that an exception is thrown when an API calls fails
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(EsentException))]
+        [ExpectedException(typeof(EsentErrorException))]
         public void EsentExceptionIsThrownOnApiError()
         {
             // The session shouldn't be in a transaction so this will
@@ -146,13 +146,13 @@ namespace InteropApiTests
                 Api.JetOpenTable(this.sesid, this.dbid, "nosuchtable", null, 0, OpenTableGrbit.None, out tableid);
                 Assert.Fail("Should have thrown an exception");
             }
-            catch (EsentException ex)
+            catch (EsentErrorException ex)
             {
                 Assert.AreEqual(JET_err.ObjectNotFound, ex.Error);
             }
         }
 
-        #endregion EsentException tests
+        #endregion EsentErrorException tests
 
         #region Database API
 

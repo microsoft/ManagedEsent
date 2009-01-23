@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="esent_exception.cs" company="Microsoft Corporation">
+// <copyright file="EsentErrorException.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
 //-----------------------------------------------------------------------
@@ -7,20 +7,21 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using Microsoft.Isam.Esent;
 
     /// <summary>
     /// Base class for ESENT exceptions
     /// </summary>
     [Serializable]
-    public class EsentException : Exception
+    public class EsentErrorException : EsentException
     {
         /// <summary>
-        /// Initializes a new instance of the EsentException class.
+        /// Initializes a new instance of the EsentErrorException class.
         /// </summary>
         /// <param name="err">The error code of the exception.</param>
-        internal EsentException(JET_err err)
+        internal EsentErrorException(JET_err err)
         {
-            this.Error = err;
+            this.Data["error"] = err;
         }
 
         /// <summary>
@@ -41,7 +42,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                int errNum = (int)this.Error;
+                int errNum = (int)this.Data["error"];
                 string description;
                 JET_err err = (JET_err)ErrApi.JetGetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.ErrorToString, ref errNum, out description, 1024);
                 if (JET_err.Success == err)
@@ -56,8 +57,14 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Gets the error code of the error.
+        /// Gets the underlying Esent error for this exception.
         /// </summary>
-        public JET_err Error { get; private set; }
+        public JET_err Error
+        {
+            get
+            {
+                return (JET_err)this.Data["error"];
+            }
+        }
     }
 }

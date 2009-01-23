@@ -329,7 +329,7 @@ namespace InteropApiTests
         /// Delete an index and make sure we can't use it afterwards
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(EsentException))]
+        [ExpectedException(typeof(EsentErrorException))]
         public void DeleteIndex()
         {
             string indexDescription = "+TestColumn\0";
@@ -349,7 +349,7 @@ namespace InteropApiTests
         /// Delete a column and make sure we can't see it afterwards
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(EsentException))]
+        [ExpectedException(typeof(EsentErrorException))]
         public void DeleteColumn()
         {
             string columnName = "column_to_delete";
@@ -370,7 +370,7 @@ namespace InteropApiTests
         /// Delete a table and make sure we can't see it afterwards
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(EsentException))]
+        [ExpectedException(typeof(EsentErrorException))]
         public void DeleteTable()
         {
             string tableName = "table_to_delete";
@@ -532,9 +532,9 @@ namespace InteropApiTests
             try
             {
                 var x = this.RetrieveColumnAsString();
-                Assert.Fail("Expected an EsentException");
+                Assert.Fail("Expected an EsentErrorException");
             }
-            catch (EsentException ex)
+            catch (EsentErrorException ex)
             {
                 Assert.AreEqual(JET_err.RecordDeleted, ex.Error);
             }
@@ -589,9 +589,9 @@ namespace InteropApiTests
             try
             {
                 Api.JetGetLock(otherSesid, otherTableid, GetLockGrbit.Write);
-                Assert.Fail("Expected an EsentException");
+                Assert.Fail("Expected an EsentErrorException");
             }
-            catch (EsentException ex)
+            catch (EsentErrorException ex)
             {
                 Assert.AreEqual(JET_err.WriteConflict, ex.Error);
             }

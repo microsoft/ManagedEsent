@@ -168,7 +168,7 @@ namespace InteropApiTests
         /// returns an unexpected error;
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(EsentException))]
+        [ExpectedException(typeof(EsentErrorException))]
         public void TrySetIndexRangeThrowsExceptionOnError()
         {
             // No key has been made so this call will fail

@@ -225,7 +225,7 @@ namespace InteropApiTests
         /// This should generate an exception.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(EsentException))]
+        [ExpectedException(typeof(EsentErrorException))]
         public void MovingBeforeFirstThrowsException()
         {
             Api.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
@@ -275,7 +275,7 @@ namespace InteropApiTests
         /// This should generate an exception.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(EsentException))]
+        [ExpectedException(typeof(EsentErrorException))]
         public void MovingAfterLastThrowsException()
         {
             Api.JetMove(this.sesid, this.tableid, JET_Move.Last, MoveGrbit.None);

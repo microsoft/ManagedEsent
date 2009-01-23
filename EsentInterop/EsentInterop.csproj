@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="ApiConstants.cs" />
     <Compile Include="Conversions.cs" />
+    <Compile Include="EsentException.cs" />
     <Compile Include="IndexSegment.cs" />
     <Compile Include="IndexInfo.cs" />
     <Compile Include="jet_idxinfo.cs" />
@@ -96,7 +97,7 @@
     <Compile Include="ColumnInfo.cs" />
     <Compile Include="MoveHelpers.cs" />
     <Compile Include="InstanceParameters.cs" />
-    <Compile Include="esent_exception.cs" />
+    <Compile Include="EsentErrorException.cs" />
     <Compile Include="grbits.cs" />
     <Compile Include="jet_objinfo.cs" />
     <Compile Include="jet_columnlist.cs" />

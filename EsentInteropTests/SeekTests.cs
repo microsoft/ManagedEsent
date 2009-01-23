@@ -145,9 +145,9 @@ namespace InteropApiTests
             try
             {
                 Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekLT);
-                Assert.Fail("Expected an EsentException");
+                Assert.Fail("Expected an EsentErrorException");
             }
-            catch (EsentException ex)
+            catch (EsentErrorException ex)
             {
                 Assert.AreEqual(JET_err.RecordNotFound, ex.Error);
             }
@@ -195,9 +195,9 @@ namespace InteropApiTests
             try
             {
                 Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekLE);
-                Assert.Fail("Expected an EsentException");
+                Assert.Fail("Expected an EsentErrorException");
             }
-            catch (EsentException ex)
+            catch (EsentErrorException ex)
             {
                 Assert.AreEqual(JET_err.RecordNotFound, ex.Error);
             }
@@ -267,9 +267,9 @@ namespace InteropApiTests
             try
             {
                 Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekEQ);
-                Assert.Fail("Expected an EsentException");
+                Assert.Fail("Expected an EsentErrorException");
             }
-            catch (EsentException ex)
+            catch (EsentErrorException ex)
             {
                 Assert.AreEqual(JET_err.RecordNotFound, ex.Error);
             }
@@ -317,9 +317,9 @@ namespace InteropApiTests
             try
             {
                 Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekGE);
-                Assert.Fail("Expected an EsentException");
+                Assert.Fail("Expected an EsentErrorException");
             }
-            catch (EsentException ex)
+            catch (EsentErrorException ex)
             {
                 Assert.AreEqual(JET_err.RecordNotFound, ex.Error);
             }
@@ -389,9 +389,9 @@ namespace InteropApiTests
             try
             {
                 Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekGT);
-                Assert.Fail("Expected an EsentException");
+                Assert.Fail("Expected an EsentErrorException");
             }
-            catch (EsentException ex)
+            catch (EsentErrorException ex)
             {
                 Assert.AreEqual(JET_err.RecordNotFound, ex.Error);
             }
@@ -446,9 +446,9 @@ namespace InteropApiTests
             try
             {
                 Api.JetSetIndexRange(this.sesid, this.tableid, SetIndexRangeGrbit.None);
-                Assert.Fail("Expected an EsentException");
+                Assert.Fail("Expected an EsentErrorException");
             }
-            catch (EsentException ex)
+            catch (EsentErrorException ex)
             {
                 Assert.AreEqual(JET_err.NoCurrentRecord, ex.Error);
             }
