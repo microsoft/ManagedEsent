@@ -758,6 +758,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Trace a call to an ESENT function.
         /// </summary>
         /// <param name="function">The name of the function being called.</param>
+        [Conditional("TRACE")]
         private static void TraceFunctionCall(string function)
         {
             Trace.WriteLineIf(ErrApi.traceSwitch.TraceInfo, function);

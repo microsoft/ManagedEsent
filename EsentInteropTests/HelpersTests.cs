@@ -12,11 +12,12 @@ namespace InteropApiTests
     using System.IO;
     using System.Linq;
     using System.Text;
+    using Microsoft.Isam.Esent;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
-    /// Tests for the various RetrieveColumn* methods and
+    /// Tests for the various Set/RetrieveColumn* methods and
     /// the helper methods that retrieve meta-data.
     /// </summary>
     [TestClass]
@@ -387,7 +388,7 @@ namespace InteropApiTests
         #region SetColumn Tests
 
         /// <summary>
-        /// Test setting a column from a unicode string.
+        /// Test setting a unicode column from a string.
         /// </summary>
         [TestMethod]
         public void SetUnicodeString()
@@ -401,6 +402,65 @@ namespace InteropApiTests
             this.UpdateAndGotoBookmark();
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
             
+            var actual = Encoding.Unicode.GetString(Api.RetrieveColumn(this.sesid, this.tableid, columnid));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test setting an ASCII column from a string.
+        /// </summary>
+        [TestMethod]
+        public void SetASCIIString()
+        {
+            var columnid = this.columnidDict["ascii"];
+            var expected = Any.String;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, expected, Encoding.ASCII);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            var actual = Encoding.ASCII.GetString(Api.RetrieveColumn(this.sesid, this.tableid, columnid));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Using an encoding which is neither ASCII nor Unicode should thrown an exception.
+        /// </summary>
+        [TestMethod]
+        public void VerifySetStringWithInvalidEncodingThrowsException()
+        {
+            var columnid = this.columnidDict["unicode"];
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+
+            try
+            {
+                Api.SetColumn(this.sesid, this.tableid, columnid, Any.String, Encoding.UTF8);
+                Assert.Fail("Expected an ESENT exception");
+            }
+            catch (EsentException)
+            {
+            }
+        }
+
+        /// <summary>
+        /// Test setting a column from an empty string.
+        /// </summary>
+        [TestMethod]
+        public void SetEmptyString()
+        {
+            var columnid = this.columnidDict["unicode"];
+            var expected = string.Empty;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, expected, Encoding.Unicode);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
             var actual = Encoding.Unicode.GetString(Api.RetrieveColumn(this.sesid, this.tableid, columnid));
             Assert.AreEqual(expected, actual);
         }
@@ -653,7 +713,24 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test setting a column from a null object.
+        /// Test setting a binary column from a zero-length array.
+        /// </summary>
+        [TestMethod]
+        public void SetZeroLengthBytes()
+        {
+            var columnid = this.columnidDict["binary"];
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, new byte[0]);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Assert.AreEqual(0, Api.RetrieveColumn(this.sesid, this.tableid, columnid).Length);
+        }
+
+        /// <summary>
+        /// Test setting a binary column from a null object.
         /// </summary>
         [TestMethod]
         public void SetNullBytes()
@@ -801,6 +878,44 @@ namespace InteropApiTests
         {
             this.CreateIndexOnColumn("unicode");
             Api.MakeKey(this.sesid, this.tableid, Any.String, Encoding.Unicode, MakeKeyGrbit.NewKey);
+        }
+
+        /// <summary>
+        /// Test make a key from a string.
+        /// </summary>
+        [TestMethod]
+        public void MakeKeyASCII()
+        {
+            this.CreateIndexOnColumn("ascii");
+            Api.MakeKey(this.sesid, this.tableid, Any.String, Encoding.ASCII, MakeKeyGrbit.NewKey);
+        }
+
+        /// <summary>
+        /// Making a key with an invalid encoding throws an exception.
+        /// </summary>
+        [TestMethod]
+        public void VerifyMakeKeyWithInvalidEncodingThrowsException()
+        {
+            this.CreateIndexOnColumn("unicode");
+
+            try
+            {
+                Api.MakeKey(this.sesid, this.tableid, Any.String, Encoding.UTF32, MakeKeyGrbit.NewKey);
+                Assert.Fail("Expected an EsentException");
+            }
+            catch (EsentException)
+            {
+            }
+        }
+
+        /// <summary>
+        /// Test make a key from an empty string.
+        /// </summary>
+        [TestMethod]
+        public void MakeKeyEmptyString()
+        {
+            this.CreateIndexOnColumn("unicode");
+            Api.MakeKey(this.sesid, this.tableid, string.Empty, Encoding.Unicode, MakeKeyGrbit.NewKey | MakeKeyGrbit.KeyDataZeroLength);
         }
 
         /// <summary>

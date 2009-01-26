@@ -28,6 +28,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="encoding">The encoding used to convert the string.</param>
         public static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, string data, Encoding encoding)
         {
+            CheckEncodingIsValid(encoding);
+
             if (null == data)
             {
                 Api.JetSetColumn(sesid, tableid, columnid, null, 0, SetColumnGrbit.None, null);
@@ -35,7 +37,8 @@ namespace Microsoft.Isam.Esent.Interop
             else
             {
                 byte[] bytes = encoding.GetBytes(data);
-                Api.JetSetColumn(sesid, tableid, columnid, bytes, bytes.Length, SetColumnGrbit.None, null);
+                SetColumnGrbit grbit = (0 == bytes.Length) ? SetColumnGrbit.ZeroLength : SetColumnGrbit.None;
+                Api.JetSetColumn(sesid, tableid, columnid, bytes, bytes.Length, grbit, null);
             }
         }
 
@@ -49,8 +52,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="data">The data to set.</param>
         public static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data)
         {
+            SetColumnGrbit grbit = ((null != data) && (0 == data.Length)) ? SetColumnGrbit.ZeroLength : SetColumnGrbit.None;
             int dataLength = (null == data) ? 0 : data.Length;
-            Api.JetSetColumn(sesid, tableid, columnid, data, dataLength, SetColumnGrbit.None, null);
+            Api.JetSetColumn(sesid, tableid, columnid, data, dataLength, grbit, null);
         }
 
         /// <summary>
@@ -205,6 +209,20 @@ namespace Microsoft.Isam.Esent.Interop
         {
             byte[] bytes = BitConverter.GetBytes(data);
             Api.JetSetColumn(sesid, tableid, columnid, bytes, bytes.Length, SetColumnGrbit.None, null);
+        }
+
+        /// <summary>
+        /// Verifies that the given encoding is valid for setting/retrieving data. Only
+        /// the ASCII and Unicode encodings are allowed. An EsentException is thrown if
+        /// the encoding isn't valid.
+        /// </summary>
+        /// <param name="encoding">The encoding to check.</param>
+        private static void CheckEncodingIsValid(Encoding encoding)
+        {
+            if (!((encoding is ASCIIEncoding) || (encoding is UnicodeEncoding)))
+            {
+                throw new EsentException("Invalid Encoding type. Only ASCII and Unicode encodings are allowed");
+            }
         }
     }
 }

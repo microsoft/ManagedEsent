@@ -45,6 +45,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Key options.</param>
         public static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, string data, Encoding encoding, MakeKeyGrbit grbit)
         {
+            CheckEncodingIsValid(encoding);
+
             if (null == data)
             {
                 Api.JetMakeKey(sesid, tableid, null, 0, grbit);

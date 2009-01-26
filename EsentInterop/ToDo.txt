@@ -4,7 +4,6 @@
   - Sample code that wraps the ColumnStream in a BufferedStream for performance
   - More JET_param parameters
 	- JET_paramEventSourceKey
-  - Data conversion class
 
  TESTING
  -------

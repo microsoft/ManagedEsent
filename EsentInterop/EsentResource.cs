@@ -31,7 +31,7 @@ namespace Microsoft.Isam.Esent.Interop
                 // up being freed in the wrong order (e.g. JetEndSession is
                 // called before JetCloseTable). Freeing esent resources
                 // in the wrong order will generate EsentExceptions.
-                throw new InvalidOperationException("EsentResource was not disposed");
+                Trace.TraceWarning("Non-finalized ESENT resource {0}", this);
             }
         }
 

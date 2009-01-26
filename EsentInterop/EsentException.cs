@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="EsentErrorException.cs" company="Microsoft Corporation">
+// <copyright file="EsentException.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
 //-----------------------------------------------------------------------
@@ -16,7 +16,7 @@ namespace Microsoft.Isam.Esent
     public class EsentException : Exception
     {
         /// <summary>
-        /// Initializes a new instance of the EsentErrorException class.
+        /// Initializes a new instance of the EsentException class.
         /// </summary>
         public EsentException()
         {
