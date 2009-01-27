@@ -71,12 +71,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="dbid">The database containing the table.</param>
-        /// <param name="tableName">The name of the table.</param>
+        /// <param name="tablename">The name of the table.</param>
         /// <returns>An iterator over ColumnInfo for each column in the table.</returns>
-        public static IEnumerable<ColumnInfo> GetTableColumns(JET_SESID sesid, JET_DBID dbid, string tableName)
+        public static IEnumerable<ColumnInfo> GetTableColumns(JET_SESID sesid, JET_DBID dbid, string tablename)
         {
             JET_COLUMNLIST columnlist;
-            Api.JetGetColumnInfo(sesid, dbid, tableName, string.Empty, out columnlist);
+            Api.JetGetColumnInfo(sesid, dbid, tablename, string.Empty, out columnlist);
             return EnumerateColumnInfos(sesid, columnlist);
         }
 
@@ -98,12 +98,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="dbid">The database containing the table.</param>
-        /// <param name="tableName">The name of the table.</param>
+        /// <param name="tablename">The name of the table.</param>
         /// <returns>An iterator over an IndexInfo for each index in the table.</returns>
-        public static IEnumerable<IndexInfo> GetTableIndexes(JET_SESID sesid, JET_DBID dbid, string tableName)
+        public static IEnumerable<IndexInfo> GetTableIndexes(JET_SESID sesid, JET_DBID dbid, string tablename)
         {
             JET_INDEXLIST indexlist;
-            Api.JetGetIndexInfo(sesid, dbid, tableName, string.Empty, out indexlist);
+            Api.JetGetIndexInfo(sesid, dbid, tablename, string.Empty, out indexlist);
             return EnumerateIndexInfos(sesid, indexlist);
         }
 

@@ -350,13 +350,13 @@ namespace Microsoft.Isam.Esent.Interop
         public static int JetGetColumnInfo(
                 JET_SESID sesid,
                 JET_DBID dbid,
-                string tableName,
+                string tablename,
                 string columnName,
                 out JET_COLUMNDEF columndef)
         {
             ErrApi.TraceFunctionCall("JetGetColumnInfo");
             columndef = new JET_COLUMNDEF();
-            ErrApi.CheckNotNull(tableName, "tableName");
+            ErrApi.CheckNotNull(tablename, "tablename");
             ErrApi.CheckNotNull(columnName, "columnName");
 
             var nativeColumndef = new NATIVE_COLUMNDEF();
@@ -364,7 +364,7 @@ namespace Microsoft.Isam.Esent.Interop
             int err = ErrApi.Err(NativeMethods.JetGetColumnInfo(
                sesid.Value,
                dbid.Value,
-               tableName,
+               tablename,
                columnName,
                ref nativeColumndef,
                nativeColumndef.cbStruct,
@@ -377,20 +377,20 @@ namespace Microsoft.Isam.Esent.Interop
         public static int JetGetColumnInfo(
                 JET_SESID sesid,
                 JET_DBID dbid,
-                string tableName,
+                string tablename,
                 string ignored,
                 out JET_COLUMNLIST columnlist)
         {
             ErrApi.TraceFunctionCall("JetGetColumnInfo");      
             columnlist = new JET_COLUMNLIST();
-            ErrApi.CheckNotNull(tableName, "tableName");
+            ErrApi.CheckNotNull(tablename, "tablename");
 
             var nativeColumnlist = new NATIVE_COLUMNLIST();
             nativeColumnlist.cbStruct = (uint)Marshal.SizeOf(nativeColumnlist);
             int err = ErrApi.Err(NativeMethods.JetGetColumnInfo(
                 sesid.Value,
                 dbid.Value,
-                tableName,
+                tablename,
                 ignored,
                 ref nativeColumnlist,
                 nativeColumnlist.cbStruct,
@@ -424,20 +424,20 @@ namespace Microsoft.Isam.Esent.Interop
         public static int JetGetIndexInfo(
                 JET_SESID sesid,
                 JET_DBID dbid,
-                string tableName,
+                string tablename,
                 string ignored,
                 out JET_INDEXLIST indexlist)
         {
             ErrApi.TraceFunctionCall("JetGetIndexInfo");
             indexlist = new JET_INDEXLIST();
-            ErrApi.CheckNotNull(tableName, "tableName");
+            ErrApi.CheckNotNull(tablename, "tablename");
 
             var nativeIndexlist = new NATIVE_INDEXLIST();
             nativeIndexlist.cbStruct = (uint)Marshal.SizeOf(nativeIndexlist);
             int err = ErrApi.Err(NativeMethods.JetGetIndexInfo(
                 sesid.Value,
                 dbid.Value,
-                tableName,
+                tablename,
                 ignored,
                 ref nativeIndexlist,
                 nativeIndexlist.cbStruct,

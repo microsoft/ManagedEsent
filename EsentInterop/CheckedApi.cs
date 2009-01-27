@@ -458,17 +458,17 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="dbid">The database that contains the table.</param>
-        /// <param name="tableName">The name of the table containing the column.</param>
+        /// <param name="tablename">The name of the table containing the column.</param>
         /// <param name="columnName">The name of the column.</param>
         /// <param name="columndef">Filled in with information about the column.</param>
         public static void JetGetColumnInfo(
                 JET_SESID sesid,
                 JET_DBID dbid,
-                string tableName,
+                string tablename,
                 string columnName,
                 out JET_COLUMNDEF columndef)
         {
-            Check(ErrApi.JetGetColumnInfo(sesid, dbid, tableName, columnName, out columndef));
+            Check(ErrApi.JetGetColumnInfo(sesid, dbid, tablename, columnName, out columndef));
         }
 
         /// <summary>
@@ -476,17 +476,17 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="dbid">The database that contains the table.</param>
-        /// <param name="tableName">The name of the table containing the column.</param>
+        /// <param name="tablename">The name of the table containing the column.</param>
         /// <param name="columnName">This parameter is ignored.</param>
         /// <param name="columnlist">Filled in with information about the columns in the table.</param>
         public static void JetGetColumnInfo(
                 JET_SESID sesid,
                 JET_DBID dbid,
-                string tableName,
+                string tablename,
                 string columnName,
                 out JET_COLUMNLIST columnlist)
         {
-            Check(ErrApi.JetGetColumnInfo(sesid, dbid, tableName, columnName, out columnlist));
+            Check(ErrApi.JetGetColumnInfo(sesid, dbid, tablename, columnName, out columnlist));
         }
 
         /// <summary>
@@ -505,17 +505,17 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="dbid">The database to use.</param>
-        /// <param name="tableName">The name of the table to retrieve index information about.</param>
+        /// <param name="tablename">The name of the table to retrieve index information about.</param>
         /// <param name="ignored">This parameter is ignored</param>
         /// <param name="indexlist">Filled in with information about indexes on the table.</param>
         public static void JetGetIndexInfo(
                 JET_SESID sesid,
                 JET_DBID dbid,
-                string tableName,
+                string tablename,
                 string ignored,
                 out JET_INDEXLIST indexlist)
         {
-            Check(ErrApi.JetGetIndexInfo(sesid, dbid, tableName, ignored, out indexlist));
+            Check(ErrApi.JetGetIndexInfo(sesid, dbid, tablename, ignored, out indexlist));
         }
 
         /// <summary>
