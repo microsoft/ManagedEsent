@@ -77,7 +77,14 @@ class EsedbSingleDBFixture(unittest.TestCase):
 		self._db['key'] = 'value'
 		del self._db['key']
 		self.assertEqual(False, self._db.has_key('key'))
-		
+
+	def testDeleteRaisesKeyErrorWhenKeyNotPresent(self):
+		try:
+			del self._db['key']
+			self.fail('expected a KeyError')
+		except KeyError:
+			pass
+	
 	def testSetLocationFindsExactMatch(self):
 		self._db['key'] = 'value'
 		self.assertEqual(('key', 'value'), self._db.set_location('key'))
@@ -113,7 +120,7 @@ class EsedbSingleDBFixture(unittest.TestCase):
 		
 		
 class EsedbIterationFixture(unittest.TestCase):
-	"""Iterationn tests for esedb. This fixture creates a database with a
+	"""Iteration tests for esedb. This fixture creates a database with a
 	fixed set of records and iterates over them.
 	
 	"""
@@ -141,7 +148,7 @@ class EsedbIterationFixture(unittest.TestCase):
 	def testFirstReturnsFirstRecord(self):
 		self.assertEqual(('a', '1'), self._db.first())
 
-	def testLastReturnsFirstRecord(self):
+	def testLastReturnsLastRecord(self):
 		self.assertEqual(('d', '4'), self._db.last())
 
 	def testNextReturnsNextRecord(self):
@@ -186,17 +193,37 @@ class EsedbFixture(unittest.TestCase):
 		db.close()
 		db.close()
 
-	def testMultipleCursors(self):
+	def testMultipleCursorsInsertAndDelete(self):
 		db1 = esedb.open(self._makeDatabasePath('test.edb'), 'n')
 		db2 = esedb.open(self._makeDatabasePath('test.edb'), 'c')
 		db3 = esedb.open(self._makeDatabasePath('test.edb'), 'w')
 		db_ro = esedb.open(self._makeDatabasePath('test.edb'), 'r')
 		
 		db1['hello'] = 'world'
+
+		self.assertEqual('world', db1['hello'])
 		self.assertEqual('world', db2['hello'])
+		self.assertEqual('world', db3['hello'])
+		self.assertEqual('world', db_ro['hello'])
+
 		del db3['hello']
-		self.assertEqual(False, db3.has_key('hello'))
 		
+		self.assertEqual(False, db1.has_key('hello'))
+		self.assertEqual(False, db2.has_key('hello'))
+		self.assertEqual(False, db3.has_key('hello'))
+		self.assertEqual(False, db_ro.has_key('hello'))
+
+		db1.close()
+		db2.close()		
+		db3.close()		
+		db_ro.close()
+		
+	def testMultipleCursors(self):
+		db1 = esedb.open(self._makeDatabasePath('test.edb'), 'n')
+		db2 = esedb.open(self._makeDatabasePath('test.edb'), 'c')
+		db3 = esedb.open(self._makeDatabasePath('test.edb'), 'w')
+		db_ro = esedb.open(self._makeDatabasePath('test.edb'), 'r')
+				
 		db1['foo'] = 123
 		db2['bar'] = 456
 		db3['baz'] = 789		

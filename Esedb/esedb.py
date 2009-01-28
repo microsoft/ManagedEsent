@@ -23,7 +23,6 @@
 #	- compare against in-memory dictionary
 # 	- performance
 #	- stress
-#	- testDeleteRaisesKeyErrorWhenKeyNotPresent
 #	- delete records when iterating
 # Write-lock keys in memory when updating
 #	- use a hash
@@ -572,7 +571,7 @@ class EseDBCursor(object):
 		>>> x['c'] = 64
 		>>> x['b'] = 128
 		>>> x['a'] = 256
-		>>> for k in x.keys():
+		>>> for k in x.iterkeys():
 		...		print k	
 		...		
 		a
@@ -607,7 +606,7 @@ class EseDBCursor(object):
 		>>> x['c'] = 64
 		>>> x['b'] = 128
 		>>> x['a'] = 256
-		>>> for k in x.values():
+		>>> for k in x.itervalues():
 		...		print k	
 		...		
 		256
@@ -728,15 +727,22 @@ class EseDBCursor(object):
 
 	def first(self):
 		"""Sets the cursor to the first record in the database and returns
-		a (key, value) for the record. If the table is empty a KeyError is
-		raised.
+		a (key, value) for the record.
 		
 		>>> x = open('wdbtest.db', mode='n')
-		>>> x['c'] = 64
 		>>> x['b'] = 128
 		>>> x['a'] = 256
 		>>> x.first()
 		('a', '256')
+		>>> x.close()			
+		
+		If the database is empty a KeyError is raised.
+
+		>>> x = open('wdbtest.db', mode='n')
+		>>> x.first()
+		Traceback (most recent call last):
+		...
+		KeyError: database is empty
 		>>> x.close()			
 		
 		"""
@@ -748,15 +754,22 @@ class EseDBCursor(object):
 	
 	def last(self):
 		"""Sets the cursor to the last record in the database and returns
-		a (key, value) for the record. If the table is empty a KeyError is
-		raised.
+		a (key, value) for the record.
 
 		>>> x = open('wdbtest.db', mode='n')
 		>>> x['c'] = 64
 		>>> x['b'] = 128
-		>>> x['a'] = 256
 		>>> x.last()
 		('c', '64')
+		>>> x.close()			
+
+		If the database is empty a KeyError is raised.
+
+		>>> x = open('wdbtest.db', mode='n')
+		>>> x.last()
+		Traceback (most recent call last):
+		...
+		KeyError: database is empty
 		>>> x.close()			
 		
 		"""
@@ -768,9 +781,20 @@ class EseDBCursor(object):
 
 	def next(self):
 		"""Sets the cursor to the next record in the database and returns
-		a (key, value) for the record. A KeyError is raised when the end
-		of the table is reached.
-		
+		a (key, value) for the record.
+
+		>>> x = open('wdbtest.db', mode='n')
+		>>> x['b'] = 128
+		>>> x['a'] = 256
+		>>> x.first()
+		('a', '256')
+		>>> x.next()
+		('b', '128')
+		>>> x.close()			
+
+		A KeyError is raised when the end of the table is reached or if 
+		the table is empty.
+	
 		"""
 		self._checkNotClosed()
 		with _EseTransaction(self._sesid):		
@@ -780,8 +804,19 @@ class EseDBCursor(object):
 		
 	def previous(self):
 		"""Sets the cursor to the previous item in the database and returns
-		a (key, value) for the record. A KeyError is raised when the end of
-		the table is reached.
+		a (key, value) for the record.
+		
+		>>> x = open('wdbtest.db', mode='n')
+		>>> x['c'] = 64
+		>>> x['b'] = 128
+		>>> x.last()
+		('c', '64')
+		>>> x.previous()
+		('b', '128')
+		>>> x.close()			
+
+		A KeyError is raised when the end of the table is reached or if 
+		the table is empty.
 		
 		"""
 		self._checkNotClosed()
@@ -927,6 +962,8 @@ if __name__ == '__main__':
 	__test__['set_location'] = EseDBCursor.set_location
 	__test__['first'] = EseDBCursor.first
 	__test__['last'] = EseDBCursor.last
+	__test__['next'] = EseDBCursor.next
+	__test__['previous'] = EseDBCursor.previous
 	import doctest
 	doctest.testmod()
 	
