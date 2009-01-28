@@ -180,7 +180,7 @@ namespace InteropApiTests
         [TestMethod]
         public void EnableIndexCheckingParameter()
         {
-            this.IntegerParameterTest(JET_param.EnableIndexChecking, 1);
+            this.BooleanParameterTest(JET_param.EnableIndexChecking, Any.Boolean);
         }
 
         /// <summary>
