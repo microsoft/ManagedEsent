@@ -9,6 +9,7 @@ namespace InteropApiTests
     using System;
     using System.IO;
     using Microsoft.Isam.Esent.Interop;
+    using Vista = Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -199,6 +200,30 @@ namespace InteropApiTests
         public void CreatePathIfNotExistParameter()
         {
             this.BooleanParameterTest(JET_param.CreatePathIfNotExist, Any.Boolean);
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the Configuration parameter (if the OS supports it)
+        /// </summary>
+        [TestMethod]
+        public void ConfigurationVistaParameter()
+        {
+            if (Environment.OSVersion.Version.Major >= 6)
+            {
+                this.IntegerParameterTest(Vista.VistaParam.Configuration, 1);
+            }
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the EnableAdvanced parameter (if the OS supports it)
+        /// </summary>
+        [TestMethod]
+        public void EnableAdvancedVistaParameter()
+        {
+            if (Environment.OSVersion.Version.Major >= 6)
+            {
+                this.BooleanParameterTest(Vista.VistaParam.EnabledAdvanced, Any.Boolean);
+            }
         }
 
         #region Helper Methods

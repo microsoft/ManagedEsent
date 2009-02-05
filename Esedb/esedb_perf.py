@@ -10,7 +10,7 @@ import random
 
 from System.Diagnostics import Stopwatch
 
-database = 'perf.db'
+database = 'wdbperf.db'
 
 def insertTest(keys):
 	db = esedb.open(database, 'n', True)

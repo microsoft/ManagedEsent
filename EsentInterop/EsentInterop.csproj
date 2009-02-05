@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="ApiConstants.cs" />
     <Compile Include="Conversions.cs" />
+    <Compile Include="VistaParam.cs" />
     <Compile Include="EsentException.cs" />
     <Compile Include="IndexSegment.cs" />
     <Compile Include="IndexInfo.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="Types.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UncheckedApi.cs" />
+    <Compile Include="VistaColtyp.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ToDo.txt" />
