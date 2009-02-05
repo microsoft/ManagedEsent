@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Runtime.Serialization;
     using Microsoft.Isam.Esent;
 
     /// <summary>
@@ -22,6 +23,17 @@ namespace Microsoft.Isam.Esent.Interop
         internal EsentErrorException(JET_err err)
         {
             this.Data["error"] = err;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentErrorException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        protected EsentErrorException(SerializationInfo info, StreamingContext context) :
+                base(info, context)
+        {
         }
 
         /// <summary>

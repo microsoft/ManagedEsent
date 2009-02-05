@@ -7,7 +7,7 @@
 namespace Microsoft.Isam.Esent
 {
     using System;
-    using Microsoft.Isam.Esent;
+    using System.Runtime.Serialization;
 
     /// <summary>
     /// Base class for ESENT exceptions
@@ -42,6 +42,17 @@ namespace Microsoft.Isam.Esent
         /// </param>
         public EsentException(string message, Exception innerException)
             : base(message, innerException)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        protected EsentException(SerializationInfo info, StreamingContext context) :
+                base(info, context)
         {
         }
     }

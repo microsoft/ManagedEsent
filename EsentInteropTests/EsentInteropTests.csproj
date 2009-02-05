@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{85B2B7BB-BF95-42DF-8CBF-348AEF63BD1F}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -80,6 +80,7 @@
     <Compile Include="ColumnlistTests.cs" />
     <Compile Include="ColumnStreamTests.cs" />
     <Compile Include="ConversionsTests.cs" />
+    <Compile Include="ExceptionTests.cs" />
     <Compile Include="IndexlistTests.cs" />
     <Compile Include="EmptyTableFixture.cs" />
     <Compile Include="SeekTests.cs" />

@@ -9,8 +9,8 @@ namespace InteropApiTests
     using System;
     using System.IO;
     using Microsoft.Isam.Esent.Interop;
-    using Vista = Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Vista = Microsoft.Isam.Esent.Interop.Vista;
 
     /// <summary>
     /// Jet{Get,Set}SystemParameter tests
