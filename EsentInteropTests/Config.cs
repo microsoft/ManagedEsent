@@ -13,6 +13,10 @@ namespace InteropApiTests
     /// </summary>
     public static class Config
     {
+        /// <summary>
+        /// Gets a value specifying whether the version of Esent being tested supports
+        /// Vista-only features.
+        /// </summary>
         public static bool SupportsVistaFeatures
         {
             get
