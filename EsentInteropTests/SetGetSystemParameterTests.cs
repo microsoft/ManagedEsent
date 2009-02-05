@@ -208,7 +208,7 @@ namespace InteropApiTests
         [TestMethod]
         public void ConfigurationVistaParameter()
         {
-            if (Environment.OSVersion.Version.Major >= 6)
+            if (Config.SupportsVistaFeatures)
             {
                 this.IntegerParameterTest(Vista.VistaParam.Configuration, 1);
             }
@@ -220,7 +220,7 @@ namespace InteropApiTests
         [TestMethod]
         public void EnableAdvancedVistaParameter()
         {
-            if (Environment.OSVersion.Version.Major >= 6)
+            if (Config.SupportsVistaFeatures)
             {
                 this.BooleanParameterTest(Vista.VistaParam.EnabledAdvanced, Any.Boolean);
             }

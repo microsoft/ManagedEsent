@@ -15,6 +15,7 @@ namespace InteropApiTests
     using Microsoft.Isam.Esent;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Vista = Microsoft.Isam.Esent.Interop.Vista;
 
     /// <summary>
     /// Tests for the various Set/RetrieveColumn* methods and
@@ -118,19 +119,34 @@ namespace InteropApiTests
             columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.LongText, cp = JET_CP.Unicode };
             Api.JetAddColumn(this.sesid, this.tableid, "Unicode", columndef, null, 0, out columnid);
 
-            // Not all version of esent support these column types natively so we'll just use binary columns.
-            // (Starting with windows Vista esent provides support for these columns.)  
-            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 2 };
-            Api.JetAddColumn(this.sesid, this.tableid, "UInt16", columndef, null, 0, out columnid);
+            if (Config.SupportsVistaFeatures)
+            {
+                // Starting with windows Vista esent provides support for these columns.) 
+                columndef = new JET_COLUMNDEF() { coltyp = Vista.VistaColtyp.UnsignedShort };
+                Api.JetAddColumn(this.sesid, this.tableid, "UInt16", columndef, null, 0, out columnid);
 
-            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 4 };
-            Api.JetAddColumn(this.sesid, this.tableid, "UInt32", columndef, null, 0, out columnid);
+                columndef = new JET_COLUMNDEF() { coltyp = Vista.VistaColtyp.UnsignedLong };
+                Api.JetAddColumn(this.sesid, this.tableid, "UInt32", columndef, null, 0, out columnid);
 
+                columndef = new JET_COLUMNDEF() { coltyp = Vista.VistaColtyp.GUID };
+                Api.JetAddColumn(this.sesid, this.tableid, "Guid", columndef, null, 0, out columnid);
+            }
+            else
+            {
+                // Older version of esent support these column types natively so we'll just use binary columns.
+                columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 2 };
+                Api.JetAddColumn(this.sesid, this.tableid, "UInt16", columndef, null, 0, out columnid);
+
+                columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 4 };
+                Api.JetAddColumn(this.sesid, this.tableid, "UInt32", columndef, null, 0, out columnid);
+
+                columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 16 };
+                Api.JetAddColumn(this.sesid, this.tableid, "Guid", columndef, null, 0, out columnid);
+            }
+
+            // Not natively supported by any version of Esent
             columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 8 };
             Api.JetAddColumn(this.sesid, this.tableid, "UInt64", columndef, null, 0, out columnid);
-
-            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 16 };
-            Api.JetAddColumn(this.sesid, this.tableid, "Guid", columndef, null, 0, out columnid);
 
             Api.JetCloseTable(this.sesid, this.tableid);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
