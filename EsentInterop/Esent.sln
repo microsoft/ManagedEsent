@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{18B3E50E-454E-49DB-A92F-E1D7DAD2AF7D}"
 	ProjectSection(SolutionItems) = preProject
-		Esent1.vsmdi = Esent1.vsmdi
+		Esent.vsmdi = Esent.vsmdi
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EsentInterop", "EsentInterop.csproj", "{E929E163-52A0-4AAC-917B-6D7FAF70C45E}"
@@ -24,7 +24,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PixieConsole", "..\PixieSam
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = Esent1.vsmdi
+		CategoryFile = Esent.vsmdi
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
