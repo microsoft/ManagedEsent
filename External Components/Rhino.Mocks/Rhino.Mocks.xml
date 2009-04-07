@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>Rhino.Mocks</name>
+        <name>Rhino.Mocks.Partial</name>
     </assembly>
     <members>
         <member name="T:Rhino.Mocks.Constraints.AbstractConstraint">
