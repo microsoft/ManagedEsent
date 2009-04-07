@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+using System.Diagnostics;
+
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
-    using System.Diagnostics;
-
     /// <summary>
     /// This is the base class for all esent resource objects.
     /// Subclasses of this class can allocate and release unmanaged

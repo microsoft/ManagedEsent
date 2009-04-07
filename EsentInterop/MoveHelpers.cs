@@ -4,10 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
-
     /// <summary>
     /// Helper methods for the ESENT API. These aren't interop versions
     /// of the API, but encapsulate very common uses of the functions.
@@ -49,7 +50,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the move was successful.</returns>
         public static bool TryMoveFirst(JET_SESID sesid, JET_TABLEID tableid)
         {
-            JET_err err = (JET_err)ErrApi.JetMove(sesid, tableid, (int)JET_Move.First, MoveGrbit.None);
+            var err = (JET_err)ErrApi.JetMove(sesid, tableid, (int)JET_Move.First, MoveGrbit.None);
             if (err >= JET_err.Success)
             {
                 return true;
@@ -72,7 +73,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the move was successful.</returns>
         public static bool TryMoveLast(JET_SESID sesid, JET_TABLEID tableid)
         {
-            JET_err err = (JET_err)ErrApi.JetMove(sesid, tableid, (int)JET_Move.Last, MoveGrbit.None);
+            var err = (JET_err)ErrApi.JetMove(sesid, tableid, (int)JET_Move.Last, MoveGrbit.None);
             if (err >= JET_err.Success)
             {
                 return true;
@@ -95,7 +96,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the move was successful.</returns>
         public static bool TryMoveNext(JET_SESID sesid, JET_TABLEID tableid)
         {
-            JET_err err = (JET_err)ErrApi.JetMove(sesid, tableid, (int)JET_Move.Next, MoveGrbit.None);
+            var err = (JET_err)ErrApi.JetMove(sesid, tableid, (int)JET_Move.Next, MoveGrbit.None);
             if (err >= JET_err.Success)
             {
                 return true;
@@ -118,7 +119,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the move was successful.</returns>
         public static bool TryMovePrevious(JET_SESID sesid, JET_TABLEID tableid)
         {
-            JET_err err = (JET_err)ErrApi.JetMove(sesid, tableid, (int)JET_Move.Previous, MoveGrbit.None);
+            var err = (JET_err)ErrApi.JetMove(sesid, tableid, (int)JET_Move.Previous, MoveGrbit.None);
             if (err >= JET_err.Success)
             {
                 return true;
@@ -143,7 +144,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if a record matching the criteria was found.</returns>
         public static bool TrySeek(JET_SESID sesid, JET_TABLEID tableid, SeekGrbit grbit)
         {
-            JET_err err = (JET_err)ErrApi.JetSeek(sesid, tableid, grbit);
+            var err = (JET_err)ErrApi.JetSeek(sesid, tableid, grbit);
             if (err >= JET_err.Success)
             {
                 return true;
@@ -170,7 +171,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the seek was successful.</returns>
         public static bool TrySetIndexRange(JET_SESID sesid, JET_TABLEID tableid, SetIndexRangeGrbit grbit)
         {
-            JET_err err = (JET_err)ErrApi.JetSetIndexRange(sesid, tableid, grbit);
+            var err = (JET_err)ErrApi.JetSetIndexRange(sesid, tableid, grbit);
             if (err >= JET_err.Success)
             {
                 return true;
@@ -182,6 +183,38 @@ namespace Microsoft.Isam.Esent.Interop
 
             Api.Check((int)err);
             throw new Exception("Unreachable code");
+        }
+
+        /// <summary>
+        /// Intersect a group of index ranges and return the bookmarks of the records which are found
+        /// in all the index ranges.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableids">
+        /// The tableids to use. Each tableid must be from a different index on the same table and
+        /// have an active index range.
+        /// </param>
+        /// <returns>
+        /// The bookmarks of the records which are found in all the index ranges. The bookmarks 
+        /// are returned in primary key order.
+        /// </returns>
+        public static IEnumerable<byte[]> IntersectIndexes(JET_SESID sesid, JET_TABLEID[] tableids)
+        {
+            JET_RECORDLIST recordlist;
+            Api.JetIntersectIndexes(sesid, tableids, tableids.Length, out recordlist, IntersectIndexesGrbit.None);
+
+            try
+            {
+                Api.MoveBeforeFirst(sesid, recordlist.tableid);
+                while(Api.TryMoveNext(sesid, recordlist.tableid))
+                {
+                    yield return Api.RetrieveColumn(sesid, recordlist.tableid, recordlist.columnidBookmark);   
+                }
+            }
+            finally
+            {
+                Api.JetCloseTable(sesid, recordlist.tableid);
+            }
         }
     }
 }

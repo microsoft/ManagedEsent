@@ -4,13 +4,13 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Globalization;
-
     /// <summary>
     /// Helper methods for the ESENT API. These methods deal with database
     /// meta-data.
@@ -37,7 +37,7 @@ namespace Microsoft.Isam.Esent.Interop
                     while (Api.TryMoveNext(sesid, columnlist.tableid))
                     {
                         string name = Api.RetrieveColumnAsString(sesid, columnlist.tableid, columnlist.columnidcolumnname, NativeMethods.Encoding);
-                        uint columnidValue = (uint)Api.RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcolumnid);
+                        var columnidValue = (uint)Api.RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcolumnid);
 
                         var columnid = new JET_COLUMNID() { Value = columnidValue };
                         dict.Add(name, columnid);
@@ -122,7 +122,7 @@ namespace Microsoft.Isam.Esent.Interop
                 Api.MoveBeforeFirst(sesid, objectlist.tableid);
                 while (Api.TryMoveNext(sesid, objectlist.tableid))
                 {
-                    uint flags = (uint)Api.RetrieveColumnAsUInt32(sesid, objectlist.tableid, objectlist.columnidflags);
+                    var flags = (uint)Api.RetrieveColumnAsUInt32(sesid, objectlist.tableid, objectlist.columnidflags);
                     if (ObjectInfoFlags.System != ((ObjectInfoFlags)flags & ObjectInfoFlags.System))
                     {
                         yield return Api.RetrieveColumnAsString(sesid, objectlist.tableid, objectlist.columnidobjectname, NativeMethods.Encoding);
@@ -169,11 +169,11 @@ namespace Microsoft.Isam.Esent.Interop
         private static IndexInfo GetIndexInfoFromIndexlist(JET_SESID sesid, JET_INDEXLIST indexlist)
         {
             string name = Api.RetrieveColumnAsString(sesid, indexlist.tableid, indexlist.columnidindexname, NativeMethods.Encoding);
-            int lcid = (int)Api.RetrieveColumnAsInt16(sesid, indexlist.tableid, indexlist.columnidLangid);
+            var lcid = (int)Api.RetrieveColumnAsInt16(sesid, indexlist.tableid, indexlist.columnidLangid);
             var cultureInfo = new CultureInfo(lcid); 
-            uint lcmapFlags = (uint)Api.RetrieveColumnAsUInt32(sesid, indexlist.tableid, indexlist.columnidLCMapFlags);
+            var lcmapFlags = (uint)Api.RetrieveColumnAsUInt32(sesid, indexlist.tableid, indexlist.columnidLCMapFlags);
             CompareOptions compareOptions = Conversions.CompareOptionsFromLCmapFlags(lcmapFlags);
-            uint grbit = (uint)Api.RetrieveColumnAsUInt32(sesid, indexlist.tableid, indexlist.columnidgrbitIndex);
+            var grbit = (uint)Api.RetrieveColumnAsUInt32(sesid, indexlist.tableid, indexlist.columnidgrbitIndex);
 
             IndexSegment[] segments = Api.GetIndexSegmentsFromIndexlist(sesid, indexlist);
 
@@ -193,17 +193,17 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>An array of IndexSegment objects containing the information for the current index.</returns>
         private static IndexSegment[] GetIndexSegmentsFromIndexlist(JET_SESID sesid, JET_INDEXLIST indexlist)
         {
-            int numSegments = (int)Api.RetrieveColumnAsInt32(sesid, indexlist.tableid, indexlist.columnidcColumn);
+            var numSegments = (int)Api.RetrieveColumnAsInt32(sesid, indexlist.tableid, indexlist.columnidcColumn);
             Debug.Assert(numSegments > 0, "Index has zero index segments");
 
-            IndexSegment[] segments = new IndexSegment[numSegments];
+            var segments = new IndexSegment[numSegments];
             for (int i = 0; i < numSegments; ++i)
             {
                 string columnName = Api.RetrieveColumnAsString(sesid, indexlist.tableid, indexlist.columnidcolumnname, NativeMethods.Encoding);
-                int coltyp = (int)Api.RetrieveColumnAsInt32(sesid, indexlist.tableid, indexlist.columnidcoltyp);
-                IndexKeyGrbit grbit = (IndexKeyGrbit)Api.RetrieveColumnAsInt32(sesid, indexlist.tableid, indexlist.columnidgrbitColumn);
+                var coltyp = (int)Api.RetrieveColumnAsInt32(sesid, indexlist.tableid, indexlist.columnidcoltyp);
+                var grbit = (IndexKeyGrbit)Api.RetrieveColumnAsInt32(sesid, indexlist.tableid, indexlist.columnidgrbitColumn);
                 bool isAscending = IndexKeyGrbit.Ascending == grbit;
-                JET_CP cp = (JET_CP)Api.RetrieveColumnAsInt16(sesid, indexlist.tableid, indexlist.columnidCp);
+                var cp = (JET_CP)Api.RetrieveColumnAsInt16(sesid, indexlist.tableid, indexlist.columnidCp);
                 bool isASCII = JET_CP.ASCII == cp;
 
                 segments[i] = new IndexSegment(columnName, (JET_coltyp)coltyp, isAscending, isASCII);
@@ -251,12 +251,12 @@ namespace Microsoft.Isam.Esent.Interop
         private static ColumnInfo GetColumnInfoFromColumnlist(JET_SESID sesid, JET_COLUMNLIST columnlist)
         {
             string name = Api.RetrieveColumnAsString(sesid, columnlist.tableid, columnlist.columnidcolumnname, NativeMethods.Encoding);
-            uint columnidValue = (uint)Api.RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcolumnid);
-            uint coltypValue = (uint)Api.RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcoltyp);
+            var columnidValue = (uint)Api.RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcolumnid);
+            var coltypValue = (uint)Api.RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcoltyp);
             uint codepageValue = (ushort)Api.RetrieveColumnAsUInt16(sesid, columnlist.tableid, columnlist.columnidCp);
-            uint maxLength = (uint)Api.RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcbMax);
+            var maxLength = (uint)Api.RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcbMax);
             byte[] defaultValue = Api.RetrieveColumn(sesid, columnlist.tableid, columnlist.columnidDefault);
-            uint grbitValue = (uint)Api.RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidgrbit);
+            var grbitValue = (uint)Api.RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidgrbit);
 
             return new ColumnInfo(
                 name,

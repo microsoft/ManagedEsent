@@ -4,12 +4,12 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+using System.Runtime.InteropServices;
+using System.Text;
+
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
-    using System.Runtime.InteropServices;
-    using System.Text;
-
     /// <summary>
     /// Native interop for functions in esent.dll.
     /// </summary>
@@ -55,6 +55,9 @@ namespace Microsoft.Isam.Esent.Interop
         [DllImport(EsentDLL)]
         public static extern int JetTerm(IntPtr instance);
 
+        [DllImport(EsentDLL)]
+        public static extern int JetTerm2(IntPtr instance, uint grbit);
+
         [DllImport(EsentDLL, CharSet = EsentCharSet)]
         public static extern int JetSetSystemParameter(IntPtr pinstance, IntPtr sesid, uint paramid, IntPtr lParam, string szParam);
 
@@ -86,6 +89,12 @@ namespace Microsoft.Isam.Esent.Interop
 
         [DllImport(EsentDLL, CharSet = EsentCharSet)]
         public static extern int JetBeginSession(IntPtr instance, ref IntPtr session, string username, string password);
+
+        [DllImport(EsentDLL)]
+        public static extern int JetSetSessionContext(IntPtr session, IntPtr context);
+
+        [DllImport(EsentDLL)]
+        public static extern int JetResetSessionContext(IntPtr session);
 
         [DllImport(EsentDLL)]
         public static extern int JetEndSession(IntPtr sesid, uint grbit);
@@ -160,6 +169,9 @@ namespace Microsoft.Isam.Esent.Interop
         public static extern int JetGetObjectInfo(IntPtr sesid, uint dbid, uint objtyp, string szContainerName, string szObjectName, ref NATIVE_OBJECTLIST objectlist, uint cbMax, uint InfoLevel);
 
         [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        public static extern int JetGetCurrentIndex(IntPtr sesid, IntPtr tableid, StringBuilder szIndexName, uint cchIndexName);
+
+        [DllImport(EsentDLL, CharSet = EsentCharSet)]
         public static extern int JetGetIndexInfo(IntPtr sesid, uint dbid, string szTableName, string szIndexName, ref NATIVE_INDEXLIST indexlist, uint cbResult, uint InfoLevel);
 
         [DllImport(EsentDLL, CharSet = EsentCharSet)]
@@ -192,6 +204,9 @@ namespace Microsoft.Isam.Esent.Interop
 
         [DllImport(EsentDLL)]
         public static extern int JetSetIndexRange(IntPtr sesid, IntPtr tableid, uint grbit);
+
+        [DllImport(EsentDLL)]
+        public static extern int JetIntersectIndexes(IntPtr sesid, IntPtr rgindexrange, uint cindexrange, ref NATIVE_RECORDLIST recordlist, uint grbit);
 
         [DllImport(EsentDLL)]
         public static extern int JetSetCurrentIndex(IntPtr sesid, IntPtr tableid, string szIndexName);
@@ -229,6 +244,18 @@ namespace Microsoft.Isam.Esent.Interop
 
         [DllImport(EsentDLL)]
         public static extern int JetGetLock(IntPtr sesid, IntPtr tableid, uint grbit);
+
+        [DllImport(EsentDLL)]
+        public static extern int JetEscrowUpdate(
+            IntPtr sesid,
+            IntPtr tableid,
+            uint columnid,
+            IntPtr pv,
+            uint cbMax,
+            IntPtr pvOld,
+            uint cbOldMax,
+            ref uint cbOldActual,
+            uint grbit);
 
         #endregion
     }

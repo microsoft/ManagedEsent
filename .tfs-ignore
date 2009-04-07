@@ -14,4 +14,5 @@
   <add recursive='true'>app.manifest</add>
   <add recursive='true'>*.ncb</add>
   <add recursive='true'>*.vsmdi</add>
+  <add recursive='true'>*.lst</add>
 </ignore>

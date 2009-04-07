@@ -6,8 +6,6 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
-
     /// <summary>
     /// A class that encapsulates a JET_TABLEID in a disposable object.
     /// This opens an existing table. To create a table use the 

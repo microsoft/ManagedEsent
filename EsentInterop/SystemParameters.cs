@@ -6,9 +6,6 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
-    using System.IO;
-
     /// <summary>
     /// This class provides static properties to set and get
     /// global ESENT system parameters

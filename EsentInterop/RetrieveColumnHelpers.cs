@@ -4,11 +4,12 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+using System.Diagnostics;
+using System.Text;
+
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
-    using System.Text;
-
     /// <summary>
     /// Helper methods for the ESENT API. These aren't interop versions
     /// of the API, but encapsulate very common uses of the functions.
@@ -25,8 +26,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>An object of type TRresult</returns>
         /// <remarks>
         /// We create this delegate here, instead of using the built-in
-        /// Func generic to avoid taking a dependency on a higher version
-        /// of the CLR.
+        /// Func/Converter generics to avoid taking a dependency on 
+        /// a higher version (3.5) of the CLR.
         /// </remarks>
         private delegate TResult ConversionFunc<TResult>(byte[] data);
 
@@ -42,13 +43,13 @@ namespace Microsoft.Isam.Esent.Interop
         {
             // Get the size of the bookmark, allocate memory, retrieve the bookmark.
             int bookmarkSize;
-            JET_err err = (JET_err)ErrApi.JetGetBookmark(sesid, tableid, null, 0, out bookmarkSize);
+            var err = (JET_err)ErrApi.JetGetBookmark(sesid, tableid, null, 0, out bookmarkSize);
             if (err < JET_err.Success && JET_err.BufferTooSmall != err)
             {
                 Api.Check((int)err);
             }
 
-            byte[] bookmark = new byte[bookmarkSize];
+            var bookmark = new byte[bookmarkSize];
             Api.JetGetBookmark(sesid, tableid, bookmark, bookmark.Length, out bookmarkSize);
 
             return bookmark;
@@ -67,7 +68,7 @@ namespace Microsoft.Isam.Esent.Interop
             int keySize;
             Api.JetRetrieveKey(sesid, tableid, null, 0, out keySize, grbit);
 
-            byte[] key = new byte[keySize];
+            var key = new byte[keySize];
             Api.JetRetrieveKey(sesid, tableid, key, key.Length, out keySize, grbit);
 
             return key;
@@ -96,26 +97,36 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The data retrieved from the column. Null if the column is null.</returns>
         public static byte[] RetrieveColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit, JET_RETINFO retinfo)
         {
-            // Get the size of the column, allocate memory, retrieve the column.
+            // We expect most column values retrieved this way to be small (retrieving a 1GB LV as one
+            // chunk is a bit extreme!). Allocate a small buffer and use that, allocating a larger one
+            // if needed. This also works around the problem of getting an error when retrieving an
+            // escrow-update column with no buffer.
+            var data = new byte[256];
             int dataSize;
-            JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, null, 0, out dataSize, grbit, retinfo);
+            JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, data, data.Length, out dataSize, grbit, retinfo);
 
-            byte[] data;
             if (JET_wrn.ColumnNull == wrn)
             {
                 // null column
                 data = null;
             }
-            else if (0 == dataSize)
-            {
-                // zero-length column
-                data = new byte[0];
-            }
             else
             {
-                // there is data to retrieve
-                data = new byte[dataSize];
-                Api.JetRetrieveColumn(sesid, tableid, columnid, data, data.Length, out dataSize, grbit, retinfo);
+                Array.Resize(ref data, dataSize);
+                if (JET_wrn.BufferTruncated == wrn)
+                {
+                    // there is more data to retrieve
+                    JET_wrn wrn2 = Api.JetRetrieveColumn(sesid, tableid, columnid, data, data.Length, out dataSize, grbit, retinfo);
+                    if (JET_wrn.Success != wrn2)
+                    {
+                        string error = String.Format(
+                            "Column size changed from {0} to {1}. The record was probably updated by another thread.",
+                            data.Length,
+                            dataSize);
+                        Trace.TraceError(error);
+                        throw new InvalidOperationException(error);
+                    }
+                }                
             }
 
             return data;
@@ -135,7 +146,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Retrieves a single column value from the current record. The record is that
+        /// Retrieves a string column value from the current record. The record is that
         /// record associated with the index entry at the current position of the cursor.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
@@ -169,7 +180,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Retrieves a single column value from the current record. The record is that
+        /// Retrieves an int16 column value from the current record. The record is that
         /// record associated with the index entry at the current position of the cursor.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
@@ -182,7 +193,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Retrieves a single column value from the current record. The record is that
+        /// Retrieves an int32 column value from the current record. The record is that
         /// record associated with the index entry at the current position of the cursor.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
@@ -208,7 +219,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Retrieves a single column value from the current record. The record is that
+        /// Retrieves a float column value from the current record. The record is that
         /// record associated with the index entry at the current position of the cursor.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
@@ -221,7 +232,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Retrieves a single column value from the current record. The record is that
+        /// Retrieves a double column value from the current record. The record is that
         /// record associated with the index entry at the current position of the cursor.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
@@ -234,7 +245,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Retrieves a single column value from the current record. The record is that
+        /// Retrieves a boolean column value from the current record. The record is that
         /// record associated with the index entry at the current position of the cursor.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
@@ -247,7 +258,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Retrieves a single column value from the current record. The record is that
+        /// Retrieves a byte column value from the current record. The record is that
         /// record associated with the index entry at the current position of the cursor.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
@@ -260,7 +271,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Retrieves a single column value from the current record. The record is that
+        /// Retrieves a guid column value from the current record. The record is that
         /// record associated with the index entry at the current position of the cursor.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
@@ -273,7 +284,25 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Retrieves a single column value from the current record. The record is that
+        /// Retrieves a datetime column value from the current record. The record is that
+        /// record associated with the index entry at the current position of the cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the column from.</param>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <returns>The data retrieved from the column as a datetime. Null if the column is null.</returns>
+        public static DateTime? RetrieveColumnAsDateTime(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
+        {
+            // Internally DateTime is stored in OLE Automation format
+            return RetrieveColumnAndConvert(
+                    sesid, 
+                    tableid, 
+                    columnid,
+                    data => DateTime.FromOADate(BitConverter.ToDouble(data, 0)));
+        }
+
+        /// <summary>
+        /// Retrieves a uint16 column value from the current record. The record is that
         /// record associated with the index entry at the current position of the cursor.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
@@ -287,7 +316,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Retrieves a single column value from the current record. The record is that
+        /// Retrieves a uint32 column value from the current record. The record is that
         /// record associated with the index entry at the current position of the cursor.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
@@ -301,7 +330,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Retrieves a single column value from the current record. The record is that
+        /// Retrieves a uint64 column value from the current record. The record is that
         /// record associated with the index entry at the current position of the cursor.
         /// </summary>
         /// <param name="sesid">The session to use.</param>

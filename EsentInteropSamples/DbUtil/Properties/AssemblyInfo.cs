@@ -4,18 +4,17 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EsentInterop")]
-[assembly: AssemblyDescription("Managed interop code for esent.dll")]
+[assembly: AssemblyTitle("DbUtil")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("EsentInterop")]
+[assembly: AssemblyProduct("DbUtil")]
 [assembly: AssemblyCopyright("Copyright ©  2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -25,10 +24,8 @@ using System.Runtime.InteropServices;
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
-[assembly: CLSCompliant(true)]
-
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("42936797-40d5-4f03-ab6d-dae6418fb0d4")]
+[assembly: Guid("e100851f-8342-408d-8c80-b79b0c8387df")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -44,5 +41,3 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("InteropApiTests")]
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Pixie")]
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("PixieTests")]

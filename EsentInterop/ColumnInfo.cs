@@ -6,8 +6,6 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System.Text;
-
     /// <summary>
     /// Information about one esent column. This is not an interop
     /// class, but is used by the meta-data helper methods.

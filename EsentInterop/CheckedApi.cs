@@ -37,6 +37,8 @@
 //  -   Disposable objects (public): these disposable object automatically
 //      release esent resources (instances, sessions, tables and transactions). 
 
+using System;
+
 namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
@@ -81,6 +83,17 @@ namespace Microsoft.Isam.Esent.Interop
         public static void JetTerm(JET_INSTANCE instance)
         {
             Check(ErrApi.JetTerm(instance));
+        }
+
+        /// <summary>
+        /// Terminate an instance that was created with JetInit or
+        /// JetCreateInstance.
+        /// </summary>
+        /// <param name="instance">The instance to terminate.</param>
+        /// <param name="grbit">Termination options.</param>
+        public static void JetTerm2(JET_INSTANCE instance, TermGrbit grbit)
+        {
+            Check(ErrApi.JetTerm2(instance, grbit));
         }
 
         /// <summary>
@@ -198,6 +211,29 @@ namespace Microsoft.Isam.Esent.Interop
         public static void JetBeginSession(JET_INSTANCE instance, out JET_SESID sesid, string username, string password)
         {
             Check(ErrApi.JetBeginSession(instance, out sesid, username, password));
+        }
+
+        /// <summary>
+        /// Associates a session with the current thread using the given context
+        /// handle. This association overrides the default engine requirement
+        /// that a transaction for a given session must occur entirely on the
+        /// same thread. 
+        /// </summary>
+        /// <param name="sesid">The session to set the context on.</param>
+        /// <param name="context">The context to set.</param>
+        public static void JetSetSessionContext(JET_SESID sesid, IntPtr context)
+        {
+            Check(ErrApi.JetSetSessionContext(sesid, context));
+        }
+
+        /// <summary>
+        /// Disassociates a session from the current thread. This should be
+        /// used in conjunction with JetSetSessionContext.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        public static void JetResetSessionContext(JET_SESID sesid)
+        {
+            Check(ErrApi.JetResetSessionContext(sesid));
         }
 
         /// <summary>
@@ -501,6 +537,25 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// JetGetCurrentIndex function determines the name of the current
+        /// index of a given cursor. This name is also used to later re-select
+        /// that index as the current index using JetSetCurrentIndex. It can
+        /// also be used to discover the properties of that index using
+        /// JetGetTableIndexInfo.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to get the index name for.</param>
+        /// <param name="indexName">Returns the name of the index.</param>
+        /// <param name="maxNameLength">
+        /// The maximum length of the index name. Index names are no more than 
+        /// Api.MaxNameLength characters.
+        /// </param>
+        public static void JetGetCurrentIndex(JET_SESID sesid, JET_TABLEID tableid, out string indexName, int maxNameLength)
+        {
+            Check(ErrApi.JetGetCurrentIndex(sesid, tableid, out indexName, maxNameLength));
+        }
+
+        /// <summary>
         /// Retrieves information about indexes on a table.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
@@ -681,6 +736,32 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Computes the intersection between multiple sets of index entries from different secondary
+        /// indices over the same table. This operation is useful for finding the set of records in a
+        /// table that match two or more criteria that can be expressed using index ranges. 
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableids">
+        /// An array of tableids to intersect. The tableids must have index ranges set on them.
+        /// </param>
+        /// <param name="numTableids">
+        /// The number of tableids.
+        /// </param>
+        /// <param name="recordlist">
+        /// Returns information about the temporary table containing the intersection results.
+        /// </param>
+        /// <param name="grbit">Intersection options.</param>
+        public static void JetIntersectIndexes(
+            JET_SESID sesid,
+            JET_TABLEID[] tableids,
+            int numTableids,
+            out JET_RECORDLIST recordlist,
+            IntersectIndexesGrbit grbit)
+        {
+            Check(ErrApi.JetIntersectIndexes(sesid, tableids, numTableids, out recordlist, grbit));
+        }
+
+        /// <summary>
         /// Set the current index of a cursor.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
@@ -818,6 +899,25 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// The JetUpdate function performs an update operation including inserting a new row into
+        /// a table or updating an existing row. Deleting a table row is performed by calling JetDelete.
+        /// </summary>
+        /// <param name="sesid">The session which started the update.</param>
+        /// <param name="tableid">The cursor to update. An update should be prepared.</param>
+        /// <remarks>
+        /// JetUpdate is the final step in performing an insert or an update. The update is begun by
+        /// calling JetPrepareUpdate and then by calling JetSetColumn or JetSetColumns one or more times
+        /// to set the record state. Finally, JetUpdate is called to complete the update operation.
+        /// Indexes are updated only by JetUpdate or and not during JetSetColumn or JetSetColumns.
+        /// This overload exists for callers who don't want the bookmark.
+        /// </remarks>
+        public static void JetUpdate(JET_SESID sesid, JET_TABLEID tableid)
+        {
+            int ignored;
+            Check(ErrApi.JetUpdate(sesid, tableid, null, 0, out ignored));
+        }
+
+        /// <summary>
         /// The JetSetColumn function modifies a single column value in a modified record to be inserted or to
         /// update the current record. It can overwrite an existing value, add a new value to a sequence of
         /// values in a multi-valued column, remove a value from a sequence of values in a multi-valued column,
@@ -848,6 +948,49 @@ namespace Microsoft.Isam.Esent.Interop
         public static void JetGetLock(JET_SESID sesid, JET_TABLEID tableid, GetLockGrbit grbit)
         {
             Check(ErrApi.JetGetLock(sesid, tableid, grbit));
+        }
+
+        /// <summary>
+        /// Performs an atomic addition operation on one column. This function allows
+        /// multiple sessions to update the same record concurrently without conflicts.
+        /// </summary>
+        /// <param name="sesid">
+        /// The session to use. The session must be in a transaction.
+        /// </param>
+        /// <param name="tableid">The cursor to update.</param>
+        /// <param name="columnid">
+        /// The column to update. This must be an escrow updatable column.
+        /// </param>
+        /// <param name="delta">The buffer containing the addend.</param>
+        /// <param name="deltaSize">The size of the addend.</param>
+        /// <param name="previousValue">
+        /// An output buffer that will recieve the current value of the column. This buffer
+        /// can be null.
+        /// </param>
+        /// <param name="previousValueLength">The size of the previousValue buffer.</param>
+        /// <param name="actualPreviousValueLength">Returns the actual size of the previousValue.</param>
+        /// <param name="grbit">Escrow update options.</param>
+        public static void JetEscrowUpdate(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            JET_COLUMNID columnid,
+            byte[] delta,
+            int deltaSize,
+            byte[] previousValue,
+            int previousValueLength,
+            out int actualPreviousValueLength,
+            EscrowUpdateGrbit grbit)
+        {
+            Check(ErrApi.JetEscrowUpdate(
+                sesid,
+                tableid,
+                columnid,
+                delta,
+                deltaSize,
+                previousValue,
+                previousValueLength,
+                out actualPreviousValueLength,
+                grbit));
         }
 
         #endregion

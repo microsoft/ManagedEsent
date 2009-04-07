@@ -6,8 +6,6 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
-
     /// <summary>
     /// A class that encapsulates a JET_SESID in a disposable object.
     /// </summary>

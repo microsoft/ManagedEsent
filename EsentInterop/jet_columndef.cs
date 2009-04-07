@@ -4,10 +4,10 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System.Runtime.InteropServices;
+
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System.Runtime.InteropServices;
-
     /// <summary>
     /// The native version of the JET_COLUMNDEF structure.
     /// </summary>
@@ -85,7 +85,7 @@ namespace Microsoft.Isam.Esent.Interop
             this.cp = (JET_CP)value.cp;
             this.cbMax = (int)value.cbMax;
             this.grbit = (ColumndefGrbit)value.grbit;
-            this.columnid = new JET_COLUMNID() { Value = value.columnid };
+            this.columnid = new JET_COLUMNID { Value = value.columnid };
         }
     }
 }

@@ -4,10 +4,10 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
-
     /// <summary>
     /// A JET_INSTANCE contains a handle to the instance of the database to use for calls to the JET Api.
     /// </summary>
@@ -109,7 +109,10 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public static JET_DBID Nil
         {
-            get { return new JET_DBID(); }
+            get
+            {
+                return new JET_DBID { Value = 0xffffffff };
+            }
         }
 
         /// <summary>

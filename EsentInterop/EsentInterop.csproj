@@ -75,6 +75,8 @@
   <ItemGroup>
     <Compile Include="ApiConstants.cs" />
     <Compile Include="Conversions.cs" />
+    <Compile Include="jet_indexrange.cs" />
+    <Compile Include="jet_recordlist.cs" />
     <Compile Include="VistaParam.cs" />
     <Compile Include="EsentException.cs" />
     <Compile Include="IndexSegment.cs" />

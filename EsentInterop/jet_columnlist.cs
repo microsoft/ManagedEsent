@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+using System.Runtime.InteropServices;
+
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
-    using System.Runtime.InteropServices;
-
     /// <summary>
     /// The native version of the JET_COLUMNLIST structure.
     /// </summary>
@@ -101,15 +101,15 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         internal void SetFromNativeColumnlist(NATIVE_COLUMNLIST value)
         {
-            this.tableid = new JET_TABLEID() { Value = value.tableid };
+            this.tableid = new JET_TABLEID { Value = value.tableid };
             this.cRecord = (int)value.cRecord;
-            this.columnidcolumnname = new JET_COLUMNID() { Value = value.columnidcolumnname };
-            this.columnidcolumnid = new JET_COLUMNID() { Value = value.columnidcolumnid };
-            this.columnidcoltyp = new JET_COLUMNID() { Value = value.columnidcoltyp };
-            this.columnidCp = new JET_COLUMNID() { Value = value.columnidCp };
-            this.columnidcbMax = new JET_COLUMNID() { Value = value.columnidcbMax };
-            this.columnidgrbit = new JET_COLUMNID() { Value = value.columnidgrbit };
-            this.columnidDefault = new JET_COLUMNID() { Value = value.columnidDefault };
+            this.columnidcolumnname = new JET_COLUMNID { Value = value.columnidcolumnname };
+            this.columnidcolumnid = new JET_COLUMNID { Value = value.columnidcolumnid };
+            this.columnidcoltyp = new JET_COLUMNID { Value = value.columnidcoltyp };
+            this.columnidCp = new JET_COLUMNID { Value = value.columnidCp };
+            this.columnidcbMax = new JET_COLUMNID { Value = value.columnidcbMax };
+            this.columnidgrbit = new JET_COLUMNID { Value = value.columnidgrbit };
+            this.columnidDefault = new JET_COLUMNID { Value = value.columnidDefault };
         }
     }
 }

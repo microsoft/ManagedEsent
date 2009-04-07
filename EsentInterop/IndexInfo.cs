@@ -4,11 +4,10 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System.Globalization;
+
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System.Globalization;
-    using System.Text;
-
     /// <summary>
     /// Information about one esent index. This is not an interop
     /// class, but is used by the meta-data helper methods.

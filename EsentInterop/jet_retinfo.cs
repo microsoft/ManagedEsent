@@ -4,10 +4,10 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System.Runtime.InteropServices;
+
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System.Runtime.InteropServices;
-
     /// <summary>
     /// The native version of the JET_RETINFO structure.
     /// </summary>
@@ -68,7 +68,7 @@ namespace Microsoft.Isam.Esent.Interop
             this.ibLongValue = (int)value.ibLongValue;
             this.itagSequence = (int)value.itagSequence;
 
-            JET_COLUMNID columnid = new JET_COLUMNID();
+            var columnid = new JET_COLUMNID();
             columnid.Value = value.columnidNextTagged;
             this.columnidNextTagged = columnid;
         }

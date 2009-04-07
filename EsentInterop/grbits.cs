@@ -4,15 +4,15 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
-
     /// <summary>
     /// Options for JetCreateDatabase
     /// </summary>
     [Flags]
-    public enum CreateDatabaseGrbit : int
+    public enum CreateDatabaseGrbit
     {
         /// <summary>
         /// Default options.
@@ -38,7 +38,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// Options for JetAttachDatabase
     /// </summary>
     [Flags]
-    public enum AttachDatabaseGrbit : int
+    public enum AttachDatabaseGrbit
     {
         /// <summary>
         /// Default options.
@@ -61,7 +61,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// Options for JetOpenDatabase
     /// </summary>
     [Flags]
-    public enum OpenDatabaseGrbit : int
+    public enum OpenDatabaseGrbit
     {
         /// <summary>
         /// Default options.
@@ -84,7 +84,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// Options for JetCloseDatabase
     /// </summary>
     [Flags]
-    public enum CloseDatabaseGrbit : int
+    public enum CloseDatabaseGrbit
     {
         /// <summary>
         /// Default options.
@@ -93,10 +93,35 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Options for JetTerm2
+    /// </summary>
+    public enum TermGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+        
+        /// <summary>
+        /// Requests that the instance be shut down cleanly. Any optional
+        /// cleanup work that would ordinarily be done in the background at
+        /// run time is completed immediately.
+        /// </summary>
+        Complete = 1,
+
+        /// <summary>
+        /// Requests that the instance be shut down as quickly as possible.
+        /// Any optional work that would ordinarily be done in the
+        /// background at run time is abandoned. 
+        /// </summary>
+        Abrupt = 2,
+    }
+
+    /// <summary>
     /// Options for JetCommitTransaction
     /// </summary>
     [Flags]
-    public enum CommitTransactionGrbit : int
+    public enum CommitTransactionGrbit
     {
         /// <summary>
         /// Default options.
@@ -131,7 +156,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetRollbackTransaction
     /// </summary>
-    public enum RollbackTransactionGrbit : int
+    public enum RollbackTransactionGrbit
     {
         /// <summary>
         /// Default options.
@@ -149,7 +174,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetEndSession
     /// </summary>
-    public enum EndSessionGrbit : int
+    public enum EndSessionGrbit
     {
         /// <summary>
         /// Default options.
@@ -161,7 +186,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// Options for JetOpenTable.
     /// </summary>
     [Flags]
-    public enum OpenTableGrbit : int
+    public enum OpenTableGrbit
     {
         /// <summary>
         /// Default options.
@@ -214,7 +239,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetDupCursor.
     /// </summary>
-    public enum DupCursorGrbit : int
+    public enum DupCursorGrbit
     {
         /// <summary>
         /// Default options.
@@ -226,7 +251,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// Options for JetSetColumn.
     /// </summary>
     [Flags]
-    public enum SetColumnGrbit : int
+    public enum SetColumnGrbit
     {
         /// <summary>
         /// Default options.
@@ -307,7 +332,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// Options for JetRetrieveColumn.
     /// </summary>
     [Flags]
-    public enum RetrieveColumnGrbit : int
+    public enum RetrieveColumnGrbit
     {
         /// <summary>
         /// Default options.
@@ -363,7 +388,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetMove
     /// </summary>
-    public enum MoveGrbit : int
+    public enum MoveGrbit
     {
         /// <summary>
         /// Default options.
@@ -383,7 +408,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// Options for JetMakeKey
     /// </summary>
     [Flags]
-    public enum MakeKeyGrbit : int
+    public enum MakeKeyGrbit
     {
         /// <summary>
         /// Default options.
@@ -460,7 +485,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetRetrieveKey.
     /// </summary>
-    public enum RetrieveKeyGrbit : int
+    public enum RetrieveKeyGrbit
     {
         /// <summary>
         /// Default options.
@@ -477,7 +502,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// Options for JetSeek.
     /// </summary>
     [Flags]
-    public enum SeekGrbit : int
+    public enum SeekGrbit
     {
         /// <summary>
         /// The cursor will be positioned at the index entry closest to the
@@ -524,7 +549,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// Options for JetSetIndexRange.
     /// </summary>
     [Flags]
-    public enum SetIndexRangeGrbit : int
+    public enum SetIndexRangeGrbit
     {
         /// <summary>
         /// Default options.
@@ -557,9 +582,20 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Options for JetIntersectIndexes.
+    /// </summary>
+    public enum IntersectIndexesGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+    }
+
+    /// <summary>
     /// Options for JetSetTableSequential.
     /// </summary>
-    public enum SetTableSequentialGrbit : int
+    public enum SetTableSequentialGrbit
     {
         /// <summary>
         /// Default options.
@@ -570,7 +606,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetResetTableSequential.
     /// </summary>
-    public enum ResetTableSequentialGrbit : int
+    public enum ResetTableSequentialGrbit
     {
         /// <summary>
         /// Default options.
@@ -581,7 +617,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetGetLock.
     /// </summary>
-    public enum GetLockGrbit : int
+    public enum GetLockGrbit
     {
         /// <summary>
         /// Acquire a read lock on the current record. Read locks are incompatible with
@@ -599,10 +635,28 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Options for JetEscrowUpdate.
+    /// </summary>
+    public enum EscrowUpdateGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// Even if the session performing the escrow update has its transaction rollback
+        /// this update will not be undone. As the log records may not be flushed to disk,
+        /// recent escrow updates done with this flag may be lost if there is a crash.
+        /// </summary>
+        NoRollback = 0x1,
+    }
+
+    /// <summary>
     /// Options for the JET_COLUMNDEF structure.
     /// </summary>
     [Flags]
-    public enum ColumndefGrbit : int
+    public enum ColumndefGrbit
     {
         /// <summary>
         /// Default options.
@@ -624,7 +678,8 @@ namespace Microsoft.Isam.Esent.Interop
         ColumnTagged = 0x2,
 
         /// <summary>
-        /// The column must never be set to a NULL value.
+        /// The column must never be set to a NULL value. On Windows XP this can only be applied to
+        /// fixed columns (bit, byte, integer, etc).
         /// </summary>
         ColumnNotNULL = 0x4,
 
@@ -662,7 +717,7 @@ namespace Microsoft.Isam.Esent.Interop
         ///  transactional consistency. An escrow update column must also meet the following conditions:
         ///  An escrow update column can be created only when the table is empty. 
         ///  An escrow update column must be of type JET_coltypLong. 
-        ///  An escrow update column must have a default value (that is cbDefault must be positive). 
+        ///  An escrow update column must have a default value.
         ///  JET_bitColumnEscrowUpdate cannot be used in conjunction with ColumnTagged,
         ///  ColumnVersion, or ColumnAutoincrement. 
         /// </summary>
@@ -688,7 +743,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// Options for JetCreateIndex
     /// </summary>
     [Flags]
-    public enum CreateIndexGrbit : int
+    public enum CreateIndexGrbit
     {        
         /// <summary>
         /// Default options.
@@ -767,7 +822,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// Key definition grbits. Used when retrieving information about an index.
     /// </summary>
     [Flags]
-    public enum IndexKeyGrbit : int
+    public enum IndexKeyGrbit
     {
         /// <summary>
         /// Key segment is ascending.

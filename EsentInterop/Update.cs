@@ -4,11 +4,10 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
-    using System.Diagnostics;
-
     /// <summary>
     /// A class that encapsulates an update on a JET_TABLEID
     /// </summary>

@@ -4,11 +4,12 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+using System.Diagnostics;
+using System.Text;
+
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
-    using System.Text;
-
     /// <summary>
     /// Helper methods for the ESENT API. These do data conversion for
     /// setting columns.
@@ -81,7 +82,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="data">The data to set.</param>
         public static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte data)
         {
-            byte[] bytes = new byte[] { data };
+            var bytes = new[] { data };
             Api.JetSetColumn(sesid, tableid, columnid, bytes, bytes.Length, SetColumnGrbit.None, null);
         }
 
@@ -149,6 +150,20 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor to update. An update should be prepared.</param>
         /// <param name="columnid">The columnid to set.</param>
         /// <param name="data">The data to set.</param>
+        public static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, DateTime data)
+        {
+            byte[] bytes = BitConverter.GetBytes(data.ToOADate());
+            Api.JetSetColumn(sesid, tableid, columnid, bytes, bytes.Length, SetColumnGrbit.None, null);
+        }
+
+        /// <summary>
+        /// Modifies a single column value in a modified record to be inserted or to
+        /// update the current record.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to update. An update should be prepared.</param>
+        /// <param name="columnid">The columnid to set.</param>
+        /// <param name="data">The data to set.</param>
         public static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, float data)
         {
             byte[] bytes = BitConverter.GetBytes(data);
@@ -167,6 +182,36 @@ namespace Microsoft.Isam.Esent.Interop
         {
             byte[] bytes = BitConverter.GetBytes(data);
             Api.JetSetColumn(sesid, tableid, columnid, bytes, bytes.Length, SetColumnGrbit.None, null);
+        }
+
+        /// <summary>
+        /// Perform atomic addition on one column. The column must be of type
+        /// JET_coltyp.Long. This function allows multiple sessions to update the
+        /// same record concurrently without conflicts.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to update.</param>
+        /// <param name="columnid">The column to update. This must be an escrow-updatable column.</param>
+        /// <param name="delta">The delta to apply to the column.</param>
+        /// <returns>The current value of the column as stored in the database (versioning is ignored).</returns>
+        public static int EscrowUpdate(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, int delta)
+        {
+            var previousValue = new byte[4];
+            int actualPreviousValueLength;
+            Api.JetEscrowUpdate(
+                sesid, 
+                tableid, 
+                columnid, 
+                BitConverter.GetBytes(delta), 
+                4, 
+                previousValue, 
+                previousValue.Length, 
+                out actualPreviousValueLength, 
+                EscrowUpdateGrbit.None);
+            Debug.Assert(
+                previousValue.Length == actualPreviousValueLength,
+                "Unexpected previous value length. Expected an Int32");
+            return BitConverter.ToInt32(previousValue, 0);
         }
 
         /// <summary>

@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+using System.Runtime.InteropServices;
+
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
-    using System.Runtime.InteropServices;
-
     /// <summary>
     /// The native version of the JET_OBJECTLIST structure.
     /// </summary>
@@ -91,15 +91,15 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         internal void SetFromNativeObjectlist(NATIVE_OBJECTLIST value)
         {
-            this.tableid = new JET_TABLEID() { Value = value.tableid };
+            this.tableid = new JET_TABLEID { Value = value.tableid };
             this.cRecord = (int)value.cRecord;
 
-            this.columnidobjectname = new JET_COLUMNID() { Value = value.columnidobjectname };
-            this.columnidobjtyp = new JET_COLUMNID() { Value = value.columnidobjtyp };
-            this.columnidgrbit = new JET_COLUMNID() { Value = value.columnidgrbit };
-            this.columnidflags = new JET_COLUMNID() { Value = value.columnidflags };
-            this.columnidcRecord = new JET_COLUMNID() { Value = value.columnidcRecord };
-            this.columnidcPage = new JET_COLUMNID() { Value = value.columnidcPage };
+            this.columnidobjectname = new JET_COLUMNID { Value = value.columnidobjectname };
+            this.columnidobjtyp = new JET_COLUMNID { Value = value.columnidobjtyp };
+            this.columnidgrbit = new JET_COLUMNID { Value = value.columnidgrbit };
+            this.columnidflags = new JET_COLUMNID { Value = value.columnidflags };
+            this.columnidcRecord = new JET_COLUMNID { Value = value.columnidcRecord };
+            this.columnidcPage = new JET_COLUMNID { Value = value.columnidcPage };
         }
     }
 }

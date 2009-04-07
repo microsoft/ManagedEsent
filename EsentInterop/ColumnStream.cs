@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+using System.IO;
+
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
-    using System.IO;
-
     /// <summary>
     /// This class provides a streaming interface to a long-value column
     /// (i.e. a column of type JET_coltyp.LongBinary or JET_coltyp.LongText).
@@ -58,16 +58,16 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                int columnLVPageOverhead = 82;  // from esent.h
+                const int ColumnLVPageOverhead = 82;
                 int pageSize = 0;
                 string ignored;
                 if (0 == ErrApi.JetGetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.DatabasePageSize, ref pageSize, out ignored, 0))
                 {
-                    return pageSize - columnLVPageOverhead;
+                    return pageSize - ColumnLVPageOverhead;
                 }
 
                 // Assume 4kb pages
-                return 4096 - columnLVPageOverhead;
+                return 4096 - ColumnLVPageOverhead;
             }
         }
 
@@ -135,7 +135,7 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 int size;
                 var retinfo = new JET_RETINFO() { itagSequence = this.Itag, ibLongValue = 0 };
-                Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, null, 0, out size, this.RetrieveGrbit, retinfo);
+                Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, null, 0, out size, RetrieveGrbit, retinfo);
                 return size;
             }
         }
@@ -143,7 +143,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets the options that should be used with JetRetrieveColumn
         /// </summary>
-        private RetrieveColumnGrbit RetrieveGrbit
+        private static RetrieveColumnGrbit RetrieveGrbit
         {
             get
             {
@@ -176,14 +176,14 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentException("buffer is not large enough");
             }
 
-            var setinfo = new JET_SETINFO() { itagSequence = this.Itag, ibLongValue = this.offset };
+            var setinfo = new JET_SETINFO { itagSequence = this.Itag, ibLongValue = this.offset };
             if (0 == offset)
             {
                 Api.JetSetColumn(this.sesid, this.tableid, this.columnid, buffer, count, SetColumnGrbit.None, setinfo);
             }
             else
             {
-                byte[] offsetBuffer = new byte[count - offset];
+                var offsetBuffer = new byte[count - offset];
                 Array.Copy(buffer, offset, offsetBuffer, 0, count);
                 Api.JetSetColumn(this.sesid, this.tableid, this.columnid, offsetBuffer, count, SetColumnGrbit.None, setinfo);
             }
@@ -207,15 +207,15 @@ namespace Microsoft.Isam.Esent.Interop
             }
 
             int bytesRead;
-            var retinfo = new JET_RETINFO() { itagSequence = this.Itag, ibLongValue = this.offset };
+            var retinfo = new JET_RETINFO { itagSequence = this.Itag, ibLongValue = this.offset };
             if (0 == offset)
             {
-                Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, buffer, count, out bytesRead, this.RetrieveGrbit, retinfo);
+                Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, buffer, count, out bytesRead, RetrieveGrbit, retinfo);
             }
             else
             {
-                byte[] offsetBuffer = new byte[count - offset];
-                Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, offsetBuffer, count, out bytesRead, this.RetrieveGrbit, retinfo);
+                var offsetBuffer = new byte[count - offset];
+                Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, offsetBuffer, count, out bytesRead, RetrieveGrbit, retinfo);
                 Array.Copy(offsetBuffer, 0, buffer, offset, bytesRead);
             }
 

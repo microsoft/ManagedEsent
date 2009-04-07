@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+using System.Runtime.InteropServices;
+
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
-    using System.Runtime.InteropServices;
-
     /// <summary>
     /// The native version of the JET_INDEXLIST structure.
     /// </summary>
@@ -138,7 +138,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         internal void SetFromNativeIndexlist(NATIVE_INDEXLIST value)
         {
-            this.tableid = new JET_TABLEID() { Value = value.tableid };
+            this.tableid = new JET_TABLEID { Value = value.tableid };
             this.cRecord = (int)value.cRecord;
             this.columnidindexname = new JET_COLUMNID { Value = value.columnidindexname };
             this.columnidgrbitIndex = new JET_COLUMNID { Value = value.columnidgrbitIndex };

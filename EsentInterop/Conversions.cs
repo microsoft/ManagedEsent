@@ -4,12 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System.Collections.Generic;
+using System.Globalization;
+
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Text;
-
     /// <summary>
     /// Provide methods to convert data and flags between 
     /// Win32 and the .NET Framework.
@@ -55,7 +54,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             // This should be a template, but there isn't an elegant way to express than with C# generics
             CompareOptions options = CompareOptions.None;
-            foreach (var flag in Conversions.lcmapFlagsToCompareOptions.Keys)
+            foreach (uint flag in Conversions.lcmapFlagsToCompareOptions.Keys)
             {
                 if (flag == (lcmapFlags & flag))
                 {
@@ -75,7 +74,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             // This should be a template, but there isn't an elegant way to express than with C# generics
             uint flags = 0;
-            foreach (var option in Conversions.compareOptionsToLcmapFlags.Keys)
+            foreach (CompareOptions option in Conversions.compareOptionsToLcmapFlags.Keys)
             {
                 if (option == (compareOptions & option))
                 {
@@ -96,7 +95,7 @@ namespace Microsoft.Isam.Esent.Interop
         private static Dictionary<TKey, TValue> InvertDictionary<TValue, TKey>(Dictionary<TValue, TKey> dict)
         {
             var invertedDict = new Dictionary<TKey, TValue>();
-            foreach (var entry in dict)
+            foreach (KeyValuePair<TValue, TKey> entry in dict)
             {
                 invertedDict.Add(entry.Value, entry.Key);
             }

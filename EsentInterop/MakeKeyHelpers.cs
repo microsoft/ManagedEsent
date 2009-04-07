@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+using System.Text;
+
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
-    using System.Text;
-
     /// <summary>
     /// Helper methods for the ESENT API. These do data conversion for
     /// JetMakeKey. The methods that operate on unsigned numbers are
@@ -80,7 +80,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Key options.</param>
         public static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, byte data, MakeKeyGrbit grbit)
         {
-            byte[] bytes = new byte[] { data };
+            var bytes = new[] { data };
             Api.JetMakeKey(sesid, tableid, bytes, bytes.Length, grbit);
         }
 
@@ -133,6 +133,19 @@ namespace Microsoft.Isam.Esent.Interop
         public static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, Guid data, MakeKeyGrbit grbit)
         {
             byte[] bytes = data.ToByteArray();
+            Api.JetMakeKey(sesid, tableid, bytes, bytes.Length, grbit);
+        }
+
+        /// <summary>
+        /// Constructs a search key that may then be used by JetSeek and JetSetIndexRange.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to create the key on.</param>
+        /// <param name="data">Column data for the current key column of the current index.</param>
+        /// <param name="grbit">Key options.</param>
+        public static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, DateTime data, MakeKeyGrbit grbit)
+        {
+            byte[] bytes = BitConverter.GetBytes(data.ToOADate());
             Api.JetMakeKey(sesid, tableid, bytes, bytes.Length, grbit);
         }
 

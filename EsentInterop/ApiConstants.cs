@@ -63,5 +63,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// Maximum number of tagged columns allowed in a table.
         /// </summary>
         public const int ColumnsTaggedMost = 64993;
+
+        /// <summary>
+        /// The number of pages that gives the smallest possible
+        /// temporary database.
+        /// </summary>
+        public const int PageTempDBSmallest = 14;
     }
 }

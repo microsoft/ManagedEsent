@@ -4,26 +4,21 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Text;
+
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
-    using System.Diagnostics;
-    using System.Runtime.InteropServices;
-    using System.Text;
-
     /// <summary>
     /// Calls to the ESENT interop layer. These calls take the managed types (e.g. JET_SESID) and
     /// return errors.
     /// </summary>
     internal static class ErrApi
     {
-        // This trace switch can be enabled by adding this to the configuration file:
-        //  <system.diagnostics>
-        //      <switches>
-        //          <add name="ESENT P/Invoke" value="4" />
-        //      </switches>
-        //  </system.diagnostics>
-        private static TraceSwitch traceSwitch = new TraceSwitch("ESENT P/Invoke", "P/Invoke calls to ESENT");
+        private static readonly TraceSwitch traceSwitch = new TraceSwitch("ESENT P/Invoke", "P/Invoke calls to ESENT");
 
         #region init/term
 
@@ -46,6 +41,12 @@ namespace Microsoft.Isam.Esent.Interop
             return ErrApi.Err(NativeMethods.JetTerm(instance.Value));
         }
 
+        public static int JetTerm2(JET_INSTANCE instance, TermGrbit grbit)
+        {
+            ErrApi.TraceFunctionCall("JetTerm2");
+            return ErrApi.Err(NativeMethods.JetTerm2(instance.Value, (uint)grbit));
+        }
+
         public static int JetSetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, int paramValue, string paramString)
         {
             ErrApi.TraceFunctionCall("JetSetSystemParameter");
@@ -56,7 +57,14 @@ namespace Microsoft.Isam.Esent.Interop
             else
             {
                 GCHandle instanceHandle = GCHandle.Alloc(instance, GCHandleType.Pinned);
-                return ErrApi.Err(NativeMethods.JetSetSystemParameter(instanceHandle.AddrOfPinnedObject(), sesid.Value, (uint)paramid, (IntPtr)paramValue, paramString));
+                try
+                {
+                    return ErrApi.Err(NativeMethods.JetSetSystemParameter(instanceHandle.AddrOfPinnedObject(), sesid.Value, (uint)paramid, (IntPtr)paramValue, paramString));
+                }
+                finally
+                {
+                    instanceHandle.Free();
+                }
             }
         }
 
@@ -64,8 +72,8 @@ namespace Microsoft.Isam.Esent.Interop
         {
             ErrApi.TraceFunctionCall("JetGetSystemParameter");
 
-            IntPtr intValue = (IntPtr)paramValue;
-            StringBuilder sb = new StringBuilder(maxParam);
+            var intValue = (IntPtr)paramValue;
+            var sb = new StringBuilder(maxParam);
             int err = ErrApi.Err(NativeMethods.JetGetSystemParameter(instance.Value, sesid.Value, (uint)paramid, ref intValue, sb, (uint)maxParam));
             paramString = sb.ToString();
             paramValue = intValue.ToInt32();
@@ -125,6 +133,33 @@ namespace Microsoft.Isam.Esent.Interop
             ErrApi.TraceFunctionCall("JetBeginSession");
             sesid = JET_SESID.Nil;
             return ErrApi.Err(NativeMethods.JetBeginSession(instance.Value, ref sesid.Value, null, null));
+        }
+
+        /// <summary>
+        /// Associates a session with the current thread using the given context
+        /// handle. This association overrides the default engine requirement
+        /// that a transaction for a given session must occur entirely on the
+        /// same thread. 
+        /// </summary>
+        /// <param name="sesid">The session to set the context on.</param>
+        /// <param name="context">The context to set.</param>
+        /// <returns>An error if the call fails.</returns>
+        public static int JetSetSessionContext(JET_SESID sesid, IntPtr context)
+        {
+            ErrApi.TraceFunctionCall("JetSetSessionContext");
+            return ErrApi.Err(NativeMethods.JetSetSessionContext(sesid.Value, context));
+        }
+
+        /// <summary>
+        /// Disassociates a session from the current thread. This should be
+        /// used in conjunction with JetSetSessionContext.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <returns>An error if the call fails.</returns>
+        public static int JetResetSessionContext(JET_SESID sesid)
+        {
+            ErrApi.TraceFunctionCall("JetResetSessionContext");
+            return ErrApi.Err(NativeMethods.JetResetSessionContext(sesid.Value));
         }
 
         public static int JetEndSession(JET_SESID sesid, EndSessionGrbit grbit)
@@ -215,13 +250,28 @@ namespace Microsoft.Isam.Esent.Interop
                     "defaultValueSize");
             }
 
-            var nativeColumndef = columndef.GetNativeColumndef();
-            var gch = GCHandle.Alloc(defaultValue, GCHandleType.Pinned);
-            int err = ErrApi.Err(NativeMethods.JetAddColumn(sesid.Value, tableid.Value, column, ref nativeColumndef, gch.AddrOfPinnedObject(), (uint)defaultValueSize, ref columnid.Value));
-           
+            NATIVE_COLUMNDEF nativeColumndef = columndef.GetNativeColumndef();
+            int err;
+            GCHandle gch = GCHandle.Alloc(defaultValue, GCHandleType.Pinned);
+            try
+            {
+                err = ErrApi.Err(NativeMethods.JetAddColumn(
+                        sesid.Value, 
+                        tableid.Value, 
+                        column, 
+                        ref nativeColumndef,
+                        gch.AddrOfPinnedObject(), 
+                        (uint) defaultValueSize,
+                        ref columnid.Value));
+            }
+            finally
+            {
+                gch.Free();
+            }
+
             // esent doesn't actually set the columnid member of the passed in JET_COLUMNDEF, but we will do that here for
             // completeness.
-            columndef.columnid = new JET_COLUMNID() { Value = columnid.Value };
+            columndef.columnid = new JET_COLUMNID { Value = columnid.Value };
             return err;
         }
 
@@ -421,6 +471,32 @@ namespace Microsoft.Isam.Esent.Interop
             return err;
         }
 
+        /// <summary>
+        /// JetGetCurrentIndex function determines the name of the current
+        /// index of a given cursor. This name is also used to later re-select
+        /// that index as the current index using JetSetCurrentIndex. It can
+        /// also be used to discover the properties of that index using
+        /// JetGetTableIndexInfo.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to get the index name for.</param>
+        /// <param name="indexName">Returns the name of the index.</param>
+        /// <param name="maxNameLength">
+        /// The maximum length of the index name. Index names are no more than 
+        /// Api.MaxNameLength characters.
+        /// </param>
+        /// <returns>An error if the call fails.</returns>
+        public static int JetGetCurrentIndex(JET_SESID sesid, JET_TABLEID tableid, out string indexName, int maxNameLength)
+        {
+            ErrApi.TraceFunctionCall("JetGetCurrentIndex");
+            ErrApi.CheckNotNegative(maxNameLength, "maxNameLength");
+
+            var name = new StringBuilder(maxNameLength);
+            int err = ErrApi.Err(NativeMethods.JetGetCurrentIndex(sesid.Value, tableid.Value, name, (uint)maxNameLength));
+            indexName = name.ToString();
+            return err;
+        }
+
         public static int JetGetIndexInfo(
                 JET_SESID sesid,
                 JET_DBID dbid,
@@ -487,8 +563,17 @@ namespace Microsoft.Isam.Esent.Interop
             }
 
             uint cbActual = 0;
-            var bookmarkHandle = GCHandle.Alloc(bookmark, GCHandleType.Pinned);
-            int err = ErrApi.Err(NativeMethods.JetGetBookmark(sesid.Value, tableid.Value, bookmarkHandle.AddrOfPinnedObject(), (uint)bookmarkSize, ref cbActual));
+            int err;
+            GCHandle bookmarkHandle = GCHandle.Alloc(bookmark, GCHandleType.Pinned);
+            try
+            {
+                err = ErrApi.Err(NativeMethods.JetGetBookmark(sesid.Value, tableid.Value, bookmarkHandle.AddrOfPinnedObject(), (uint)bookmarkSize, ref cbActual));
+            }
+            finally
+            {
+                bookmarkHandle.Free();
+            }
+
             actualBookmarkSize = (int)cbActual;
             return err;
         }
@@ -505,8 +590,15 @@ namespace Microsoft.Isam.Esent.Interop
                     "bookmarkSize");
             }
 
-            var bookmarkHandle = GCHandle.Alloc(bookmark, GCHandleType.Pinned);
-            return ErrApi.Err(NativeMethods.JetGotoBookmark(sesid.Value, tableid.Value, bookmarkHandle.AddrOfPinnedObject(), (uint)bookmarkSize));
+            GCHandle bookmarkHandle = GCHandle.Alloc(bookmark, GCHandleType.Pinned);
+            try
+            {
+                return ErrApi.Err(NativeMethods.JetGotoBookmark(sesid.Value, tableid.Value, bookmarkHandle.AddrOfPinnedObject(), (uint)bookmarkSize));
+            }
+            finally
+            {
+                bookmarkHandle.Free();
+            }
         }
 
         public static int JetMakeKey(JET_SESID sesid, JET_TABLEID tableid, byte[] data, int dataSize, MakeKeyGrbit grbit)
@@ -514,8 +606,15 @@ namespace Microsoft.Isam.Esent.Interop
             ErrApi.TraceFunctionCall("JetMakeKey");
             ErrApi.CheckDataSize(data, dataSize);
 
-            var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            return ErrApi.Err(NativeMethods.JetMakeKey(sesid.Value, tableid.Value, dataHandle.AddrOfPinnedObject(), (uint)dataSize, (uint)grbit));
+            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            try
+            {
+                return ErrApi.Err(NativeMethods.JetMakeKey(sesid.Value, tableid.Value, dataHandle.AddrOfPinnedObject(), (uint)dataSize, (uint)grbit));
+            }
+            finally
+            {
+                dataHandle.Free();
+            }
         }
 
         public static int JetRetrieveKey(JET_SESID sesid, JET_TABLEID tableid, byte[] data, int dataSize, out int actualDataSize, RetrieveKeyGrbit grbit)
@@ -525,8 +624,17 @@ namespace Microsoft.Isam.Esent.Interop
             ErrApi.CheckDataSize(data, dataSize);
 
             uint cbActual = 0;
-            var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            int err = ErrApi.Err(NativeMethods.JetRetrieveKey(sesid.Value, tableid.Value, dataHandle.AddrOfPinnedObject(), (uint)dataSize, ref cbActual, (uint)grbit));
+            int err;
+            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            try
+            {
+                err = ErrApi.Err(NativeMethods.JetRetrieveKey(sesid.Value, tableid.Value, dataHandle.AddrOfPinnedObject(), (uint)dataSize, ref cbActual, (uint)grbit));
+            }
+            finally
+            {
+                dataHandle.Free();
+            }
+
             actualDataSize = (int)cbActual;
             return err;
         }
@@ -549,6 +657,67 @@ namespace Microsoft.Isam.Esent.Interop
             return ErrApi.Err(NativeMethods.JetSetIndexRange(sesid.Value, tableid.Value, (uint)grbit));
         }
 
+        /// <summary>
+        /// Computes the intersection between multiple sets of index entries from different secondary
+        /// indices over the same table. This operation is useful for finding the set of records in a
+        /// table that match two or more criteria that can be expressed using index ranges. 
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableids">
+        /// An array of tableids to intersect. The tableids must have index ranges set on them.
+        /// </param>
+        /// <param name="numTableids">
+        /// The number of tableids.
+        /// </param>
+        /// <param name="recordlist">
+        /// Returns information about the temporary table containing the intersection results.
+        /// </param>
+        /// <param name="grbit">Intersection options.</param>
+        /// <returns>An error if the call fails.</returns>
+        public static int JetIntersectIndexes(
+            JET_SESID sesid,
+            JET_TABLEID[] tableids,
+            int numTableids,
+            out JET_RECORDLIST recordlist,
+            IntersectIndexesGrbit grbit)
+        {
+            ErrApi.TraceFunctionCall("JetIntersectIndexes");
+            ErrApi.CheckNotNull(tableids, "tableids");
+            ErrApi.CheckDataSize(tableids, numTableids);
+            if (numTableids < 2)
+            {
+                throw new ArgumentException("JetIntersectIndexes requires at least two tables.", "numTableids");
+            }
+
+            var indexRanges = new NATIVE_INDEXRANGE[numTableids];
+            for (int i = 0; i < numTableids; ++i)
+            {
+                indexRanges[i] = NATIVE_INDEXRANGE.MakeIndexRangeFromTableid(tableids[i]);
+            }
+
+            var nativeRecordlist = new NATIVE_RECORDLIST();
+            nativeRecordlist.cbStruct = (uint)Marshal.SizeOf(nativeRecordlist);
+
+            GCHandle ranges = GCHandle.Alloc(indexRanges, GCHandleType.Pinned);
+            try
+            {
+                int err = ErrApi.Err(
+                            NativeMethods.JetIntersectIndexes(
+                                sesid.Value,
+                                ranges.AddrOfPinnedObject(),
+                                (uint) numTableids,
+                                ref nativeRecordlist,
+                                (uint) grbit));
+                recordlist = new JET_RECORDLIST();
+                recordlist.SetFromNativeRecordlist(nativeRecordlist);
+                return err;
+            }
+            finally
+            {
+                ranges.Free();
+            }
+        }
+
         public static int JetSetCurrentIndex(JET_SESID sesid, JET_TABLEID tableid, string index)
         {
             ErrApi.TraceFunctionCall("JetSetCurrentIndex");
@@ -561,7 +730,6 @@ namespace Microsoft.Isam.Esent.Interop
         {
             ErrApi.TraceFunctionCall("JetIndexRecordCount");
             ErrApi.CheckNotNegative(maxRecordsToCount, "maxRecordsToCount");
-            numRecords = 0;
             uint crec = 0;
             int err = ErrApi.Err(NativeMethods.JetIndexRecordCount(sesid.Value, tableid.Value, ref crec, (uint)maxRecordsToCount));
             numRecords = (int)crec;
@@ -584,7 +752,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             ErrApi.TraceFunctionCall("JetGetRecordPosition");
             recpos = new JET_RECPOS();
-            var native = recpos.GetNativeRecpos();
+            NATIVE_RECPOS native = recpos.GetNativeRecpos();
             int err = NativeMethods.JetGetRecordPosition(sesid.Value, tableid.Value, ref native, native.cbStruct);
             recpos.SetFromNativeRecpos(native);
             return err;
@@ -593,7 +761,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static int JetGotoPosition(JET_SESID sesid, JET_TABLEID tableid, JET_RECPOS recpos)
         {
             ErrApi.TraceFunctionCall("JetGotoRecordPosition");
-            var native = recpos.GetNativeRecpos();
+            NATIVE_RECPOS native = recpos.GetNativeRecpos();
             return NativeMethods.JetGotoPosition(sesid.Value, tableid.Value, ref native);
         }
 
@@ -609,17 +777,48 @@ namespace Microsoft.Isam.Esent.Interop
 
             int err;
             uint cbActual = 0;
-            var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            if (null != retinfo)
+            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            try
             {
-                var nativeRetinfo = retinfo.GetNativeRetinfo();
-                var retinfoHandle = GCHandle.Alloc(nativeRetinfo, GCHandleType.Pinned);
-                err = ErrApi.Err(NativeMethods.JetRetrieveColumn(sesid.Value, tableid.Value, columnid.Value, dataHandle.AddrOfPinnedObject(), (uint)dataSize, ref cbActual, (uint)grbit, retinfoHandle.AddrOfPinnedObject()));
+                if (null != retinfo)
+                {
+                    NATIVE_RETINFO nativeRetinfo = retinfo.GetNativeRetinfo();
+                    GCHandle retinfoHandle = GCHandle.Alloc(nativeRetinfo, GCHandleType.Pinned);
+                    try
+                    {
+                        err = ErrApi.Err(NativeMethods.JetRetrieveColumn(
+                                sesid.Value, 
+                                tableid.Value, 
+                                columnid.Value,
+                                dataHandle.AddrOfPinnedObject(), 
+                                (uint) dataSize,
+                                ref cbActual, 
+                                (uint) grbit,
+                                retinfoHandle.AddrOfPinnedObject()));
+                    }
+                    finally
+                    {
+                        retinfoHandle.Free();
+                    }
+
                 retinfo.SetFromNativeRetinfo(nativeRetinfo);
+                }
+                else
+                {
+                    err = ErrApi.Err(NativeMethods.JetRetrieveColumn(
+                            sesid.Value, 
+                            tableid.Value, 
+                            columnid.Value,
+                            dataHandle.AddrOfPinnedObject(), 
+                            (uint) dataSize,
+                            ref cbActual, 
+                            (uint) grbit, 
+                            IntPtr.Zero));
+                }
             }
-            else
+            finally
             {
-                err = ErrApi.Err(NativeMethods.JetRetrieveColumn(sesid.Value, tableid.Value, columnid.Value, dataHandle.AddrOfPinnedObject(), (uint)dataSize, ref cbActual, (uint)grbit, IntPtr.Zero));
+                dataHandle.Free();
             }
 
             actualDataSize = (int)cbActual;
@@ -651,8 +850,17 @@ namespace Microsoft.Isam.Esent.Interop
             }
 
             uint cbActual = 0;
-            var gch = GCHandle.Alloc(bookmark, GCHandleType.Pinned);
-            int err = ErrApi.Err(NativeMethods.JetUpdate(sesid.Value, tableid.Value, gch.AddrOfPinnedObject(), (uint)bookmarkSize, ref cbActual));
+            int err;
+            GCHandle gch = GCHandle.Alloc(bookmark, GCHandleType.Pinned);
+            try
+            {
+                err = ErrApi.Err(NativeMethods.JetUpdate(sesid.Value, tableid.Value, gch.AddrOfPinnedObject(), (uint)bookmarkSize, ref cbActual));
+            }
+            finally
+            {
+                gch.Free();
+            }
+
             actualBookmarkSize = (int)cbActual;
             return err;
         }
@@ -680,16 +888,30 @@ namespace Microsoft.Isam.Esent.Interop
                 }
             }
 
-            var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            if (null != setinfo)
+            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            try
             {
-                var nativeSetinfo = setinfo.GetNativeSetinfo();
-                var setinfoHandle = GCHandle.Alloc(nativeSetinfo, GCHandleType.Pinned);
-                return ErrApi.Err(NativeMethods.JetSetColumn(sesid.Value, tableid.Value, columnid.Value, dataHandle.AddrOfPinnedObject(), (uint)dataSize, (uint)grbit, setinfoHandle.AddrOfPinnedObject()));
+                if (null != setinfo)
+                {
+                    NATIVE_SETINFO nativeSetinfo = setinfo.GetNativeSetinfo();
+                    GCHandle setinfoHandle = GCHandle.Alloc(nativeSetinfo, GCHandleType.Pinned);
+                    try
+                    {
+                        return ErrApi.Err(NativeMethods.JetSetColumn(sesid.Value, tableid.Value, columnid.Value, dataHandle.AddrOfPinnedObject(), (uint)dataSize, (uint)grbit, setinfoHandle.AddrOfPinnedObject()));
+                    }
+                    finally
+                    {
+                        setinfoHandle.Free();
+                    }
+                }
+                else
+                {
+                    return ErrApi.Err(NativeMethods.JetSetColumn(sesid.Value, tableid.Value, columnid.Value, dataHandle.AddrOfPinnedObject(), (uint)dataSize, (uint)grbit, IntPtr.Zero));
+                }
             }
-            else
+            finally
             {
-                return ErrApi.Err(NativeMethods.JetSetColumn(sesid.Value, tableid.Value, columnid.Value, dataHandle.AddrOfPinnedObject(), (uint)dataSize, (uint)grbit, IntPtr.Zero));
+                dataHandle.Free();
             }
         }
 
@@ -697,6 +919,69 @@ namespace Microsoft.Isam.Esent.Interop
         {
             ErrApi.TraceFunctionCall("JetGetLock");
             return ErrApi.Err(NativeMethods.JetGetLock(sesid.Value, tableid.Value, (uint)grbit));
+        }
+
+        /// <summary>
+        /// Performs an atomic addition operation on one column. This function allows
+        /// multiple sessions to update the same record concurrently without conflicts.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to update.</param>
+        /// <param name="columnid">
+        /// The column to update. This must be an escrow updatable column.
+        /// </param>
+        /// <param name="delta">The buffer containing the addend.</param>
+        /// <param name="deltaSize">The size of the addend.</param>
+        /// <param name="previousValue">
+        /// An output buffer that will recieve the current value of the column. This buffer
+        /// can be null.
+        /// </param>
+        /// <param name="previousValueLength">The size of the previousValue buffer.</param>
+        /// <param name="actualPreviousValueLength">Returns the actual size of the previousValue.</param>
+        /// <param name="grbit">Escrow update options.</param>
+        /// <returns>An error code if the operation fails.</returns>
+        public static int JetEscrowUpdate(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            JET_COLUMNID columnid,
+            byte[] delta,
+            int deltaSize,
+            byte[] previousValue,
+            int previousValueLength,
+            out int actualPreviousValueLength,
+            EscrowUpdateGrbit grbit)
+        {
+            ErrApi.TraceFunctionCall("JetEscrowUpdate");
+            ErrApi.CheckNotNull(delta, "delta");
+            ErrApi.CheckDataSize(delta, deltaSize);
+            ErrApi.CheckDataSize(previousValue, previousValueLength);
+
+            actualPreviousValueLength = 0;
+
+            GCHandle deltaHandle = GCHandle.Alloc(delta, GCHandleType.Pinned);
+            GCHandle valueHandle = GCHandle.Alloc(previousValue, GCHandleType.Pinned);
+
+            try
+            {
+                uint cbOldActual = 0;
+                int err = ErrApi.Err(NativeMethods.JetEscrowUpdate(
+                                      sesid.Value,
+                                      tableid.Value,
+                                      columnid.Value,
+                                      deltaHandle.AddrOfPinnedObject(),
+                                      (uint)deltaSize,
+                                      valueHandle.AddrOfPinnedObject(),
+                                      (uint)previousValueLength,
+                                      ref cbOldActual,
+                                      (uint)grbit));
+                actualPreviousValueLength = (int)cbOldActual;
+                return err;
+            }
+            finally
+            {
+                deltaHandle.Free();
+                valueHandle.Free();
+            }
         }
 
         #endregion
@@ -708,10 +993,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="data">The data buffer.</param>
         /// <param name="dataSize">The size of the data.</param>
-        private static void CheckDataSize(byte[] data, int dataSize)
+        /// <typeparam name="T">The type of the data.</typeparam>
+        private static void CheckDataSize<T>(ICollection<T> data, int dataSize)
         {
             ErrApi.CheckNotNegative(dataSize, "dataSize");
-            if ((null == data && 0 != dataSize) || (null != data && dataSize > data.Length))
+            if ((null == data && 0 != dataSize) || (null != data && dataSize > data.Count))
             {
                 Trace.WriteLineIf(ErrApi.traceSwitch.TraceError, "CheckDataSize failed");
                 throw new ArgumentException(

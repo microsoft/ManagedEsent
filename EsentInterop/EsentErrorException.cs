@@ -4,12 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+using System.Runtime.Serialization;
+
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
-    using System.Runtime.Serialization;
-    using Microsoft.Isam.Esent;
-
     /// <summary>
     /// Base class for ESENT exceptions
     /// </summary>
@@ -54,9 +53,9 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                int errNum = (int)this.Data["error"];
+                var errNum = (int)this.Data["error"];
                 string description;
-                JET_err err = (JET_err)ErrApi.JetGetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.ErrorToString, ref errNum, out description, 1024);
+                var err = (JET_err)ErrApi.JetGetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.ErrorToString, ref errNum, out description, 1024);
                 if (JET_err.Success == err)
                 {
                     return description;
