@@ -10,7 +10,6 @@
   <add recursive='true'>Debug</add>
   <add recursive='true'>Release</add>
   <add recursive='true'>TestResults</add>
-  <add recursive='true'>app.config</add>
   <add recursive='true'>app.manifest</add>
   <add recursive='true'>*.ncb</add>
   <add recursive='true'>*.vsmdi</add>

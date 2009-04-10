@@ -64,6 +64,9 @@ namespace Microsoft.Isam.Esent.Interop
         [DllImport(EsentDLL)]
         public static extern int JetGetSystemParameter(IntPtr instance, IntPtr sesid, uint paramid, ref IntPtr plParam, StringBuilder szParam, uint cbMax);
 
+        [DllImport(EsentDLL)]
+        public static extern int JetGetVersion(IntPtr sesid, ref uint dwVersion);
+
         #endregion
 
         #region Databases

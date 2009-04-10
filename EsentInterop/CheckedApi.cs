@@ -129,6 +129,16 @@ namespace Microsoft.Isam.Esent.Interop
             return Check(ErrApi.JetGetSystemParameter(instance, sesid, paramid, ref paramValue, out paramString, maxParam));
         }
 
+        /// <summary>
+        /// Retrieves the version of the database engine.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="version">Returns the version number of the database engine.</param>
+        public static void JetGetVersion(JET_SESID sesid, out int version)
+        {
+            Check(ErrApi.JetGetVersion(sesid, out version));
+        }
+
         #endregion
 
         #region Databases

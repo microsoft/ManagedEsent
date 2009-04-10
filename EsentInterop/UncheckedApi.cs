@@ -80,6 +80,21 @@ namespace Microsoft.Isam.Esent.Interop
             return err;
         }
 
+        /// <summary>
+        /// Retrieves the version of the database engine.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="version">Returns the version number of the database engine.</param>
+        /// <returns>An error code if the call fails.</returns>
+        public static int JetGetVersion(JET_SESID sesid, out int version)
+        {
+            ErrApi.TraceFunctionCall("JetGetVersion");
+            uint nativeVersion = 0;
+            int err = ErrApi.Err(NativeMethods.JetGetVersion(sesid.Value, ref nativeVersion));
+            version = checked((int) nativeVersion);
+            return err;
+        }
+
         #endregion
 
         #region Databases

@@ -17,6 +17,32 @@ namespace InteropApiTests
     public class InitTermTests
     {
         /// <summary>
+        /// Verify that the version returned by JetGetVersion is not zero
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyJetVersionIsNotZero()
+        {
+            JET_INSTANCE instance;
+            JET_SESID sesid;
+            int version;
+
+            Api.JetCreateInstance(out instance, "JetGetVersion");
+            
+            var parameters = new InstanceParameters(instance);
+            parameters.Recovery = false;
+            parameters.MaxTemporaryTables = 0;
+
+            Api.JetInit(ref instance);
+            Api.JetBeginSession(instance, out sesid, string.Empty, string.Empty);
+            Api.JetGetVersion(sesid, out version);
+            Api.JetTerm(instance);
+
+            Assert.AreNotEqual(0, version);
+            System.Console.WriteLine("Version = 0x{0:X}", version);
+        }
+
+        /// <summary>
         /// Initialize and terminate one instance.
         /// </summary>
         [TestMethod]
