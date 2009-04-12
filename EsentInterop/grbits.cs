@@ -9,6 +9,18 @@ using System;
 namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
+    /// Options for JetCreateInstance2
+    /// </summary>
+    [Flags]
+    public enum CreateInstanceGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0
+    }
+
+    /// <summary>
     /// Options for JetCreateDatabase
     /// </summary>
     [Flags]

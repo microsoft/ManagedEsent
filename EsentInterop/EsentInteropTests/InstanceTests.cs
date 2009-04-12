@@ -76,6 +76,21 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Allocate an instance with a display name.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void CreateInstanceWithDisplayName()
+        {
+            using (var instance = new Instance(Guid.NewGuid().ToString(), "Friendly Display Name"))
+            {
+                instance.Parameters.MaxTemporaryTables = 0;
+                instance.Parameters.Recovery = false;
+                instance.Init();
+            }
+        }
+
+        /// <summary>
         /// Allocate an instance and initialize it and then terminate.
         /// </summary>
         [TestMethod]

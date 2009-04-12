@@ -25,10 +25,32 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the Instance class. The underlying
         /// JET_INSTANCE is allocated, but not initialized.
         /// </summary>
-        /// <param name="name">The name of the instance.</param>
+        /// <param name="name">
+        /// The name of the instance. This string must be unique within a
+        /// given process hosting the database engine
+        /// </param>
         public Instance(string name)
         {
             Api.JetCreateInstance(out this.instance, name);
+            this.ResourceWasAllocated();
+            this.parameters = new InstanceParameters(this.instance);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Instance class. The underlying
+        /// JET_INSTANCE is allocated, but not initialized.
+        /// </summary>
+        /// <param name="name">
+        /// The name of the instance. This string must be unique within a
+        /// given process hosting the database engine
+        /// </param>
+        /// <param name="displayName">
+        /// A display name for the instance. This will be used in eventlog
+        /// entries.
+        /// </param>
+        public Instance(string name, string displayName)
+        {
+            Api.JetCreateInstance2(out this.instance, name, displayName, CreateInstanceGrbit.None);
             this.ResourceWasAllocated();
             this.parameters = new InstanceParameters(this.instance);
         }

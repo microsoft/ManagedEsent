@@ -60,6 +60,26 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Allocate a new instance of the database engine for use in a single
+        /// process, with a display name specified.
+        /// </summary>
+        /// <param name="instance">Returns the newly create instance.</param>
+        /// <param name="name">
+        /// Specifies a unique string identifier for the instance to be created.
+        /// This string must be unique within a given process hosting the
+        /// database engine.
+        /// </param>
+        /// <param name="displayName">
+        /// A display name for the instance to be created. This will be used
+        /// in eventlog entries.
+        /// </param>
+        /// <param name="grbit">Creation options.</param>
+        public static void JetCreateInstance2(out JET_INSTANCE instance, string name, string displayName, CreateInstanceGrbit grbit)
+        {
+            Check(ErrApi.JetCreateInstance2(out instance, name, displayName, grbit));
+        }
+
+        /// <summary>
         /// Initialize the ESENT database engine.
         /// </summary>
         /// <param name="instance">

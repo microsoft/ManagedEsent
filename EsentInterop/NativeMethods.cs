@@ -49,6 +49,9 @@ namespace Microsoft.Isam.Esent.Interop
         [DllImport(EsentDLL, CharSet = EsentCharSet)]
         public static extern int JetCreateInstance(ref IntPtr instance, string szInstanceName);
 
+        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        public static extern int JetCreateInstance2(ref IntPtr instance, string szInstanceName, string szDisplayName, uint grbit);
+
         [DllImport(EsentDLL)]
         public static extern int JetInit(ref IntPtr instance);
 

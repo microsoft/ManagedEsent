@@ -4,6 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
 using System.IO;
 using Microsoft.Isam.Esent.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -32,6 +33,7 @@ namespace InteropApiTests
             var parameters = new InstanceParameters(instance);
             parameters.Recovery = false;
             parameters.MaxTemporaryTables = 0;
+            parameters.NoInformationEvent = true;
 
             Api.JetInit(ref instance);
             Api.JetBeginSession(instance, out sesid, string.Empty, string.Empty);
@@ -40,6 +42,27 @@ namespace InteropApiTests
 
             Assert.AreNotEqual(0, version);
             System.Console.WriteLine("Version = 0x{0:X}", version);
+        }
+
+
+        /// <summary>
+        /// Initialize and terminate one instance. The instance is allocated
+        /// with JetCreateInstance2.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void CreateInstanceWithJetCreateInstance2()
+        {
+            JET_INSTANCE instance;
+            Api.JetCreateInstance2(out instance, Guid.NewGuid().ToString(), "Instance Display Name", CreateInstanceGrbit.None);
+
+            var systemParameters = new InstanceParameters(instance);
+            systemParameters.MaxTemporaryTables = 0;
+            systemParameters.Recovery = false;
+            systemParameters.NoInformationEvent = true;
+
+            Api.JetInit(ref instance);
+            Api.JetTerm(instance);
         }
 
         /// <summary>
