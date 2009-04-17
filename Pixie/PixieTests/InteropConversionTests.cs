@@ -372,7 +372,7 @@ namespace PixieTests
             {
                 if (expected.DefaultValue.GetType() == typeof(byte[]))
                 {
-                    Assert.IsTrue(((byte[]) expected.DefaultValue).SequenceEqual((byte[]) actual.DefaultValue));
+                    CollectionAssert.AreEqual((byte[]) expected.DefaultValue, (byte[]) actual.DefaultValue);
                 }
                 else
                 {

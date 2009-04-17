@@ -414,6 +414,10 @@ namespace Microsoft.Isam.Esent
             {
                 Api.JetSetColumn(this.sesid, this.tableid, columnid, null, 0, grbit, null);                
             }
+            else if (data.Length == 0)
+            {
+                Api.JetSetColumn(this.sesid, this.tableid, columnid, null, 0, grbit | SetColumnGrbit.ZeroLength, null);
+            }
             else
             {
                 Api.JetSetColumn(this.sesid, this.tableid, columnid, data, data.Length, grbit, null);                

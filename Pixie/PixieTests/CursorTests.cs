@@ -170,7 +170,7 @@ namespace PixieTests
             JET_COLUMNID columnid;
             cursor.AddColumn("column_with_default", columndef, defaultValue, out columnid);
             cursor.MoveFirst();
-            Assert.IsTrue(defaultValue.SequenceEqual(cursor.RetrieveColumn(columnid, RetrieveColumnGrbit.None)));
+            CollectionAssert.AreEqual(defaultValue, cursor.RetrieveColumn(columnid, RetrieveColumnGrbit.None));
         }
 
         [TestMethod]
@@ -330,6 +330,21 @@ namespace PixieTests
 
             this.AssertOnRecord(cursor, key);
             Assert.IsNull(cursor.RetrieveColumn(this.columnidText, RetrieveColumnGrbit.None));
+        }
+
+        [TestMethod]
+        [Priority(1)]
+        public void VerifySetColumnWithZeroLengthSetsColumnToZeroLength()
+        {
+            int key = Any.Int32;
+            Cursor cursor = this.OpenCursor();
+            cursor.PrepareUpdate(JET_prep.Insert);
+            cursor.SetColumn(this.columnidLong, BitConverter.GetBytes(key), SetColumnGrbit.None);
+            cursor.SetColumn(this.columnidText, new byte[0], SetColumnGrbit.None);
+            cursor.Update();
+
+            this.AssertOnRecord(cursor, key);    
+            Assert.AreEqual(0, cursor.RetrieveColumn(this.columnidText, RetrieveColumnGrbit.None).Length);
         }
 
         [TestMethod]

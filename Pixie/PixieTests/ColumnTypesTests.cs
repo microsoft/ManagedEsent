@@ -725,7 +725,7 @@ namespace PixieTests
             r["binary"] = new byte[0];
             r.Save();
 
-            Assert.IsTrue(new byte[0].SequenceEqual((byte[])r["binary"]));
+            CollectionAssert.AreEqual(new byte[0], (byte[]) r["binary"]);
         }
 
         /// <summary>
@@ -741,7 +741,7 @@ namespace PixieTests
             r["binary"] = expected;
             r.Save();
 
-            Assert.IsTrue(expected.SequenceEqual((byte[])r["binary"]));
+            CollectionAssert.AreEqual(expected, (byte[])r["binary"]);
         }
 
         #endregion Binary
@@ -798,7 +798,7 @@ namespace PixieTests
             Assert.AreEqual(datetime, record["datetime"]);
             Assert.AreEqual(text, record["text"]);
             Assert.AreEqual(ascii, record["asciitext"]);
-            Assert.IsTrue(binary.SequenceEqual((byte[])record["binary"]));
+            CollectionAssert.AreEqual(binary, (byte[])record["binary"]);
         }
 
         /// <summary>

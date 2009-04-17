@@ -315,18 +315,7 @@ namespace Microsoft.Isam.Esent
                     metadata.SetColumn = (cursor, obj) =>
                     {
                         byte[] data = metadata.ObjectToBytesConverter(metadata.ObjectConverter(obj));
-                        if (null == data)
-                        {
-                            cursor.SetColumn(metadata.Columnid, null, SetColumnGrbit.None);
-                        }
-                        else if (data.Length == 0)
-                        {
-                            cursor.SetColumn(metadata.Columnid, null, SetColumnGrbit.ZeroLength);
-                        }
-                        else
-                        {
-                            cursor.SetColumn(metadata.Columnid, data, SetColumnGrbit.None);
-                        }
+                        cursor.SetColumn(metadata.Columnid, data, SetColumnGrbit.None);
                     };
 
                     metadata.MakeKey = (cursor, obj, grbit) =>
