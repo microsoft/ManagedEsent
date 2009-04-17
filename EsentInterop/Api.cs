@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="CheckedApi.cs" company="Microsoft Corporation">
+// <copyright file="Api.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
 //-----------------------------------------------------------------------
@@ -26,9 +26,12 @@
 //  -   NativeMethods (internal): this is the P/Invoke interop layer. This layer deals
 //      with IntPtr and other basic types as opposed to the managed types
 //      such as JET_TABLEID.
-//  -   ErrApi (internal): this layer turns managed objects into
+//  -   JetApi (internal): this layer turns managed objects into
 //      objects which can be passed into the P/Invoke interop layer.
 //      Methods at this level return an error instead of throwing an exception.
+//      This layer is implemented as an object with an interface. This allows
+//      the actual implementation to be replaced at runtime, either for testing
+//      or to use a different DLL.
 //  -   Api (public): this layer provides error-handling, turning errors
 //      returned by lower layers into exceptions and warnings.
 //  -   Helper methods (public): this layer provides data conversion and
@@ -38,6 +41,7 @@
 //      release esent resources (instances, sessions, tables and transactions). 
 
 using System;
+using Microsoft.Isam.Esent.Interop.Implementation;
 
 namespace Microsoft.Isam.Esent.Interop
 {
@@ -47,6 +51,32 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     public static partial class Api
     {
+        /// <summary>
+        /// Initializes static members of the Api class.
+        /// </summary>
+        static Api()
+        {
+            Api.Impl = new JetApi();
+        }
+
+        /// <summary>
+        /// Delegate for exception translation code.
+        /// </summary>
+        /// <param name="ex">The EsentException about to be thrown.</param>
+        /// <returns>An exception to be thrown instead.</returns>
+        internal delegate Exception ExceptionHandler(EsentException ex);
+
+        /// <summary>
+        /// Gets or sets the ExceptionHandler for all EsentExceptions. This can
+        /// be used for logging or to translate exceptions.
+        /// </summary>
+        internal static event ExceptionHandler HandleException;
+        
+        /// <summary>
+        /// Gets or sets the IJetApi this is called for all functions.
+        /// </summary>
+        internal static IJetApi Impl { get; set; }
+
         #region init/term
 
         /// <summary>
@@ -56,7 +86,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="name">The name of the instance. Names must be unique.</param>
         public static void JetCreateInstance(out JET_INSTANCE instance, string name)
         {
-            Check(ErrApi.JetCreateInstance(out instance, name));
+            Api.Check(Impl.JetCreateInstance(out instance, name));
         }
 
         /// <summary>
@@ -76,7 +106,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Creation options.</param>
         public static void JetCreateInstance2(out JET_INSTANCE instance, string name, string displayName, CreateInstanceGrbit grbit)
         {
-            Check(ErrApi.JetCreateInstance2(out instance, name, displayName, grbit));
+            Api.Check(Impl.JetCreateInstance2(out instance, name, displayName, grbit));
         }
 
         /// <summary>
@@ -92,7 +122,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </remarks>
         public static void JetInit(ref JET_INSTANCE instance)
         {
-            Check(ErrApi.JetInit(ref instance));
+            Api.Check(Impl.JetInit(ref instance));
         }
 
         /// <summary>
@@ -102,7 +132,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="instance">The instance to terminate.</param>
         public static void JetTerm(JET_INSTANCE instance)
         {
-            Check(ErrApi.JetTerm(instance));
+            Api.Check(Impl.JetTerm(instance));
         }
 
         /// <summary>
@@ -113,7 +143,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Termination options.</param>
         public static void JetTerm2(JET_INSTANCE instance, TermGrbit grbit)
         {
-            Check(ErrApi.JetTerm2(instance, grbit));
+            Api.Check(Impl.JetTerm2(instance, grbit));
         }
 
         /// <summary>
@@ -127,7 +157,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>An ESENT warning code.</returns>
         public static JET_wrn JetSetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, int paramValue, string paramString)
         {
-            return Check(ErrApi.JetSetSystemParameter(instance, sesid, paramid, paramValue, paramString));
+            return Api.Check(Impl.JetSetSystemParameter(instance, sesid, paramid, paramValue, paramString));
         }
 
         /// <summary>
@@ -146,7 +176,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </remarks>
         public static JET_wrn JetGetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, ref int paramValue, out string paramString, int maxParam)
         {
-            return Check(ErrApi.JetGetSystemParameter(instance, sesid, paramid, ref paramValue, out paramString, maxParam));
+            return Api.Check(Impl.JetGetSystemParameter(instance, sesid, paramid, ref paramValue, out paramString, maxParam));
         }
 
         /// <summary>
@@ -156,7 +186,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="version">Returns the version number of the database engine.</param>
         public static void JetGetVersion(JET_SESID sesid, out int version)
         {
-            Check(ErrApi.JetGetVersion(sesid, out version));
+            Api.Check(Impl.JetGetVersion(sesid, out version));
         }
 
         #endregion
@@ -173,7 +203,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Database creation options.</param>
         public static void JetCreateDatabase(JET_SESID sesid, string database, string connect, out JET_DBID dbid, CreateDatabaseGrbit grbit)
         {
-            Check(ErrApi.JetCreateDatabase(sesid, database, connect, out dbid, grbit));
+            Api.Check(Impl.JetCreateDatabase(sesid, database, connect, out dbid, grbit));
         }
 
         /// <summary>
@@ -186,7 +216,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>An ESENT warning code.</returns>
         public static JET_wrn JetAttachDatabase(JET_SESID sesid, string database, AttachDatabaseGrbit grbit)
         {
-            return Check(ErrApi.JetAttachDatabase(sesid, database, grbit));
+            return Api.Check(Impl.JetAttachDatabase(sesid, database, grbit));
         }
 
         /// <summary>
@@ -202,7 +232,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>An ESENT warning code.</returns>
         public static JET_wrn JetOpenDatabase(JET_SESID sesid, string database, string connect, out JET_DBID dbid, OpenDatabaseGrbit grbit)
         {
-            return Check(ErrApi.JetOpenDatabase(sesid, database, connect, out dbid, grbit));
+            return Api.Check(Impl.JetOpenDatabase(sesid, database, connect, out dbid, grbit));
         }
 
         /// <summary>
@@ -214,7 +244,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Close options.</param>
         public static void JetCloseDatabase(JET_SESID sesid, JET_DBID dbid, CloseDatabaseGrbit grbit)
         {
-            Check(ErrApi.JetCloseDatabase(sesid, dbid, grbit));
+            Api.Check(Impl.JetCloseDatabase(sesid, dbid, grbit));
         }
 
         /// <summary>
@@ -224,7 +254,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="database">The database to detach.</param>
         public static void JetDetachDatabase(JET_SESID sesid, string database)
         {
-            Check(ErrApi.JetDetachDatabase(sesid, database));
+            Api.Check(Impl.JetDetachDatabase(sesid, database));
         }
 
         #endregion
@@ -240,7 +270,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="password">The parameter is not used.</param>
         public static void JetBeginSession(JET_INSTANCE instance, out JET_SESID sesid, string username, string password)
         {
-            Check(ErrApi.JetBeginSession(instance, out sesid, username, password));
+            Api.Check(Impl.JetBeginSession(instance, out sesid, username, password));
         }
 
         /// <summary>
@@ -253,7 +283,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="context">The context to set.</param>
         public static void JetSetSessionContext(JET_SESID sesid, IntPtr context)
         {
-            Check(ErrApi.JetSetSessionContext(sesid, context));
+            Api.Check(Impl.JetSetSessionContext(sesid, context));
         }
 
         /// <summary>
@@ -263,7 +293,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="sesid">The session to use.</param>
         public static void JetResetSessionContext(JET_SESID sesid)
         {
-            Check(ErrApi.JetResetSessionContext(sesid));
+            Api.Check(Impl.JetResetSessionContext(sesid));
         }
 
         /// <summary>
@@ -273,7 +303,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">The parameter is not used.</param>
         public static void JetEndSession(JET_SESID sesid, EndSessionGrbit grbit)
         {
-            Check(ErrApi.JetEndSession(sesid, grbit));
+            Api.Check(Impl.JetEndSession(sesid, grbit));
         }
 
         /// <summary>
@@ -283,7 +313,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="newSesid">Returns the new session.</param>
         public static void JetDupSession(JET_SESID sesid, out JET_SESID newSesid)
         {
-            Check(ErrApi.JetDupSession(sesid, out newSesid));
+            Api.Check(Impl.JetDupSession(sesid, out newSesid));
         }
 
         #endregion
@@ -302,7 +332,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">Returns the opened table.</param>
         public static void JetOpenTable(JET_SESID sesid, JET_DBID dbid, string tablename, byte[] parameters, int parametersSize, OpenTableGrbit grbit, out JET_TABLEID tableid)
         {
-            Check(ErrApi.JetOpenTable(sesid, dbid, tablename, parameters, parametersSize, grbit, out tableid));
+            Api.Check(Impl.JetOpenTable(sesid, dbid, tablename, parameters, parametersSize, grbit, out tableid));
         }
 
         /// <summary>
@@ -312,7 +342,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The table to close.</param>
         public static void JetCloseTable(JET_SESID sesid, JET_TABLEID tableid)
         {
-            Check(ErrApi.JetCloseTable(sesid, tableid));
+            Api.Check(Impl.JetCloseTable(sesid, tableid));
         }
 
         /// <summary>
@@ -331,7 +361,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Reserved for future use.</param>
         public static void JetDupCursor(JET_SESID sesid, JET_TABLEID tableid, out JET_TABLEID newTableid, DupCursorGrbit grbit)
         {
-            Check(ErrApi.JetDupCursor(sesid, tableid, out newTableid, grbit));
+            Api.Check(Impl.JetDupCursor(sesid, tableid, out newTableid, grbit));
         }
 
         #endregion
@@ -345,7 +375,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="sesid">The session to begin the transaction for.</param>
         public static void JetBeginTransaction(JET_SESID sesid)
         {
-            Check(ErrApi.JetBeginTransaction(sesid));
+            Api.Check(Impl.JetBeginTransaction(sesid));
         }
 
         /// <summary>
@@ -358,7 +388,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Commit options.</param>
         public static void JetCommitTransaction(JET_SESID sesid, CommitTransactionGrbit grbit)
         {
-            Check(ErrApi.JetCommitTransaction(sesid, grbit));
+            Api.Check(Impl.JetCommitTransaction(sesid, grbit));
         }
 
         /// <summary>
@@ -371,7 +401,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Rollback options.</param>
         public static void JetRollback(JET_SESID sesid, RollbackTransactionGrbit grbit)
         {
-            Check(ErrApi.JetRollback(sesid, grbit));
+            Api.Check(Impl.JetRollback(sesid, grbit));
         }
 
         #endregion
@@ -391,7 +421,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">Returns the tableid of the new table.</param>
         public static void JetCreateTable(JET_SESID sesid, JET_DBID dbid, string table, int pages, int density, out JET_TABLEID tableid)
         {
-            Check(ErrApi.JetCreateTable(sesid, dbid, table, pages, density, out tableid));
+            Api.Check(Impl.JetCreateTable(sesid, dbid, table, pages, density, out tableid));
         }
 
         /// <summary>
@@ -406,7 +436,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="columnid">Returns the columnid of the new column.</param>
         public static void JetAddColumn(JET_SESID sesid, JET_TABLEID tableid, string column, JET_COLUMNDEF columndef, byte[] defaultValue, int defaultValueSize, out JET_COLUMNID columnid)
         {
-            Check(ErrApi.JetAddColumn(sesid, tableid, column, columndef, defaultValue, defaultValueSize, out columnid));
+            Api.Check(Impl.JetAddColumn(sesid, tableid, column, columndef, defaultValue, defaultValueSize, out columnid));
         }
 
         /// <summary>
@@ -417,7 +447,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="column">The name of the column to be deleted.</param>
         public static void JetDeleteColumn(JET_SESID sesid, JET_TABLEID tableid, string column)
         {
-            Check(ErrApi.JetDeleteColumn(sesid, tableid, column));
+            Api.Check(Impl.JetDeleteColumn(sesid, tableid, column));
         }
 
         /// <summary>
@@ -428,7 +458,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="index">The name of the index to be deleted.</param>
         public static void JetDeleteIndex(JET_SESID sesid, JET_TABLEID tableid, string index)
         {
-            Check(ErrApi.JetDeleteIndex(sesid, tableid, index));
+            Api.Check(Impl.JetDeleteIndex(sesid, tableid, index));
         }
 
         /// <summary>
@@ -439,7 +469,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="table">The name of the table to delete.</param>
         public static void JetDeleteTable(JET_SESID sesid, JET_DBID dbid, string table)
         {
-            Check(ErrApi.JetDeleteTable(sesid, dbid, table));
+            Api.Check(Impl.JetDeleteTable(sesid, dbid, table));
         }
 
         /// <summary>
@@ -468,7 +498,7 @@ namespace Microsoft.Isam.Esent.Interop
             int keyDescriptionLength,
             int density)
         {
-            Check(ErrApi.JetCreateIndex(sesid, tableid, indexName, grbit, keyDescription, keyDescriptionLength, density));
+            Api.Check(Impl.JetCreateIndex(sesid, tableid, indexName, grbit, keyDescription, keyDescriptionLength, density));
         }
 
         /// <summary>
@@ -484,7 +514,7 @@ namespace Microsoft.Isam.Esent.Interop
                 string columnName,
                 out JET_COLUMNDEF columndef)
         {
-            Check(ErrApi.JetGetTableColumnInfo(sesid, tableid, columnName, out columndef));
+            Api.Check(Impl.JetGetTableColumnInfo(sesid, tableid, columnName, out columndef));
         }
 
         /// <summary>
@@ -500,7 +530,7 @@ namespace Microsoft.Isam.Esent.Interop
                 JET_COLUMNID columnid,
                 out JET_COLUMNDEF columndef)
         {
-            Check(ErrApi.JetGetTableColumnInfo(sesid, tableid, columnid, out columndef));
+            Api.Check(Impl.JetGetTableColumnInfo(sesid, tableid, columnid, out columndef));
         }
 
         /// <summary>
@@ -516,7 +546,7 @@ namespace Microsoft.Isam.Esent.Interop
                 string columnName,
                 out JET_COLUMNLIST columnlist)
         {
-            Check(ErrApi.JetGetTableColumnInfo(sesid, tableid, columnName, out columnlist));
+            Api.Check(Impl.JetGetTableColumnInfo(sesid, tableid, columnName, out columnlist));
         }
 
         /// <summary>
@@ -534,7 +564,7 @@ namespace Microsoft.Isam.Esent.Interop
                 string columnName,
                 out JET_COLUMNDEF columndef)
         {
-            Check(ErrApi.JetGetColumnInfo(sesid, dbid, tablename, columnName, out columndef));
+            Api.Check(Impl.JetGetColumnInfo(sesid, dbid, tablename, columnName, out columndef));
         }
 
         /// <summary>
@@ -552,7 +582,7 @@ namespace Microsoft.Isam.Esent.Interop
                 string columnName,
                 out JET_COLUMNLIST columnlist)
         {
-            Check(ErrApi.JetGetColumnInfo(sesid, dbid, tablename, columnName, out columnlist));
+            Api.Check(Impl.JetGetColumnInfo(sesid, dbid, tablename, columnName, out columnlist));
         }
 
         /// <summary>
@@ -563,7 +593,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="objectlist">Filled in with information about the objects in the database.</param>
         public static void JetGetObjectInfo(JET_SESID sesid, JET_DBID dbid, out JET_OBJECTLIST objectlist)
         {
-            Check(ErrApi.JetGetObjectInfo(sesid, dbid, out objectlist));
+            Api.Check(Impl.JetGetObjectInfo(sesid, dbid, out objectlist));
         }
 
         /// <summary>
@@ -582,7 +612,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         public static void JetGetCurrentIndex(JET_SESID sesid, JET_TABLEID tableid, out string indexName, int maxNameLength)
         {
-            Check(ErrApi.JetGetCurrentIndex(sesid, tableid, out indexName, maxNameLength));
+            Api.Check(Impl.JetGetCurrentIndex(sesid, tableid, out indexName, maxNameLength));
         }
 
         /// <summary>
@@ -600,7 +630,7 @@ namespace Microsoft.Isam.Esent.Interop
                 string ignored,
                 out JET_INDEXLIST indexlist)
         {
-            Check(ErrApi.JetGetIndexInfo(sesid, dbid, tablename, ignored, out indexlist));
+            Api.Check(Impl.JetGetIndexInfo(sesid, dbid, tablename, ignored, out indexlist));
         }
 
         /// <summary>
@@ -616,7 +646,7 @@ namespace Microsoft.Isam.Esent.Interop
                 string ignored,
                 out JET_INDEXLIST indexlist)
         {
-            Check(ErrApi.JetGetTableIndexInfo(sesid, tableid, ignored, out indexlist));
+            Api.Check(Impl.JetGetTableIndexInfo(sesid, tableid, ignored, out indexlist));
         }
 
         #endregion
@@ -635,7 +665,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="actualBookmarkSize">Returns the actual size of the bookmark.</param>
         public static void JetGetBookmark(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize, out int actualBookmarkSize)
         {
-            Check(ErrApi.JetGetBookmark(sesid, tableid, bookmark, bookmarkSize, out actualBookmarkSize));
+            Api.Check(Impl.JetGetBookmark(sesid, tableid, bookmark, bookmarkSize, out actualBookmarkSize));
         }
 
         /// <summary>
@@ -649,7 +679,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="bookmarkSize">The size of the bookmark.</param>
         public static void JetGotoBookmark(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize)
         {
-            Check(ErrApi.JetGotoBookmark(sesid, tableid, bookmark, bookmarkSize));
+            Api.Check(Impl.JetGotoBookmark(sesid, tableid, bookmark, bookmarkSize));
         }
 
         /// <summary>
@@ -678,7 +708,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>An ESENT warning code.</returns>
         public static JET_wrn JetRetrieveColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, out int actualDataSize, RetrieveColumnGrbit grbit, JET_RETINFO retinfo)
         {
-            return Check(ErrApi.JetRetrieveColumn(sesid, tableid, columnid, data, dataSize, out actualDataSize, grbit, retinfo));
+            return Api.Check(Impl.JetRetrieveColumn(sesid, tableid, columnid, data, dataSize, out actualDataSize, grbit, retinfo));
         }
 
         /// <summary>
@@ -692,7 +722,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Move options.</param>
         public static void JetMove(JET_SESID sesid, JET_TABLEID tableid, int numRows, MoveGrbit grbit)
         {
-            Check(ErrApi.JetMove(sesid, tableid, numRows, grbit));
+            Api.Check(Impl.JetMove(sesid, tableid, numRows, grbit));
         }
 
         /// <summary>
@@ -706,7 +736,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Move options.</param>
         public static void JetMove(JET_SESID sesid, JET_TABLEID tableid, JET_Move numRows, MoveGrbit grbit)
         {
-            Check(ErrApi.JetMove(sesid, tableid, (int)numRows, grbit));
+            Api.Check(Impl.JetMove(sesid, tableid, (int)numRows, grbit));
         }
 
         /// <summary>
@@ -719,7 +749,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Key options.</param>
         public static void JetMakeKey(JET_SESID sesid, JET_TABLEID tableid, byte[] data, int dataSize, MakeKeyGrbit grbit)
         {
-            Check(ErrApi.JetMakeKey(sesid, tableid, data, dataSize, grbit));
+            Api.Check(Impl.JetMakeKey(sesid, tableid, data, dataSize, grbit));
         }
 
         /// <summary>
@@ -733,7 +763,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Retrieve key options.</param>
         public static void JetRetrieveKey(JET_SESID sesid, JET_TABLEID tableid, byte[] data, int dataSize, out int actualDataSize, RetrieveKeyGrbit grbit)
         {
-            Check(ErrApi.JetRetrieveKey(sesid, tableid, data, dataSize, out actualDataSize, grbit));
+            Api.Check(Impl.JetRetrieveKey(sesid, tableid, data, dataSize, out actualDataSize, grbit));
         }
 
         /// <summary>
@@ -747,7 +777,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>An ESENT warning.</returns>
         public static JET_wrn JetSeek(JET_SESID sesid, JET_TABLEID tableid, SeekGrbit grbit)
         {
-            return Check(ErrApi.JetSeek(sesid, tableid, grbit));
+            return Api.Check(Impl.JetSeek(sesid, tableid, grbit));
         }
 
         /// <summary>
@@ -762,7 +792,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Index range options.</param>
         public static void JetSetIndexRange(JET_SESID sesid, JET_TABLEID tableid, SetIndexRangeGrbit grbit)
         {
-            Check(ErrApi.JetSetIndexRange(sesid, tableid, grbit));
+            Api.Check(Impl.JetSetIndexRange(sesid, tableid, grbit));
         }
 
         /// <summary>
@@ -788,7 +818,7 @@ namespace Microsoft.Isam.Esent.Interop
             out JET_RECORDLIST recordlist,
             IntersectIndexesGrbit grbit)
         {
-            Check(ErrApi.JetIntersectIndexes(sesid, tableids, numTableids, out recordlist, grbit));
+            Api.Check(Impl.JetIntersectIndexes(sesid, tableids, numTableids, out recordlist, grbit));
         }
 
         /// <summary>
@@ -802,7 +832,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         public static void JetSetCurrentIndex(JET_SESID sesid, JET_TABLEID tableid, string index)
         {
-            Check(ErrApi.JetSetCurrentIndex(sesid, tableid, index));
+            Api.Check(Impl.JetSetCurrentIndex(sesid, tableid, index));
         }
 
         /// <summary>
@@ -829,7 +859,7 @@ namespace Microsoft.Isam.Esent.Interop
                 maxRecordsToCount = int.MaxValue;
             }
 
-            Check(ErrApi.JetIndexRecordCount(sesid, tableid, out numRecords, maxRecordsToCount));
+            Api.Check(Impl.JetIndexRecordCount(sesid, tableid, out numRecords, maxRecordsToCount));
         }
 
         /// <summary>
@@ -843,7 +873,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Reserved for future use.</param>
         public static void JetSetTableSequential(JET_SESID sesid, JET_TABLEID tableid, SetTableSequentialGrbit grbit)
         {
-            Check(ErrApi.JetSetTableSequential(sesid, tableid, grbit));
+            Api.Check(Impl.JetSetTableSequential(sesid, tableid, grbit));
         }
 
         /// <summary>
@@ -856,7 +886,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Reserved for future use.</param>
         public static void JetResetTableSequential(JET_SESID sesid, JET_TABLEID tableid, ResetTableSequentialGrbit grbit)
         {
-            Check(ErrApi.JetResetTableSequential(sesid, tableid, grbit));
+            Api.Check(Impl.JetResetTableSequential(sesid, tableid, grbit));
         }
 
         /// <summary>
@@ -868,7 +898,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="recpos">Returns the approximate fractional position of the record.</param>
         public static void JetGetRecordPosition(JET_SESID sesid, JET_TABLEID tableid, out JET_RECPOS recpos)
         {
-            Check(ErrApi.JetGetRecordPosition(sesid, tableid, out recpos));
+            Api.Check(Impl.JetGetRecordPosition(sesid, tableid, out recpos));
         }
 
         /// <summary>
@@ -880,7 +910,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="recpos">The approximate position to move to.</param>
         public static void JetGotoPosition(JET_SESID sesid, JET_TABLEID tableid, JET_RECPOS recpos)
         {
-            Check(ErrApi.JetGotoPosition(sesid, tableid, recpos));
+            Api.Check(Impl.JetGotoPosition(sesid, tableid, recpos));
         }
 
         #endregion
@@ -894,7 +924,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor on a database table. The current row will be deleted.</param>
         public static void JetDelete(JET_SESID sesid, JET_TABLEID tableid)
         {
-            Check(ErrApi.JetDelete(sesid, tableid));
+            Api.Check(Impl.JetDelete(sesid, tableid));
         }
 
         /// <summary>
@@ -905,7 +935,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="prep">The type of update to prepare.</param>
         public static void JetPrepareUpdate(JET_SESID sesid, JET_TABLEID tableid, JET_prep prep)
         {
-            Check(ErrApi.JetPrepareUpdate(sesid, tableid, prep));
+            Api.Check(Impl.JetPrepareUpdate(sesid, tableid, prep));
         }
 
         /// <summary>
@@ -925,7 +955,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </remarks>
         public static void JetUpdate(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize, out int actualBookmarkSize)
         {
-            Check(ErrApi.JetUpdate(sesid, tableid, bookmark, bookmarkSize, out actualBookmarkSize));
+            Api.Check(Impl.JetUpdate(sesid, tableid, bookmark, bookmarkSize, out actualBookmarkSize));
         }
 
         /// <summary>
@@ -944,7 +974,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static void JetUpdate(JET_SESID sesid, JET_TABLEID tableid)
         {
             int ignored;
-            Check(ErrApi.JetUpdate(sesid, tableid, null, 0, out ignored));
+            Api.Check(Impl.JetUpdate(sesid, tableid, null, 0, out ignored));
         }
 
         /// <summary>
@@ -962,7 +992,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="setinfo">Used to specify itag or long-value offset.</param>
         public static void JetSetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, SetColumnGrbit grbit, JET_SETINFO setinfo)
         {
-            Check(ErrApi.JetSetColumn(sesid, tableid, columnid, data, dataSize, grbit, setinfo));
+            Api.Check(Impl.JetSetColumn(sesid, tableid, columnid, data, dataSize, grbit, setinfo));
         }
 
         /// <summary>
@@ -977,7 +1007,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Lock options, use this to specify which type of lock to obtain.</param>
         public static void JetGetLock(JET_SESID sesid, JET_TABLEID tableid, GetLockGrbit grbit)
         {
-            Check(ErrApi.JetGetLock(sesid, tableid, grbit));
+            Api.Check(Impl.JetGetLock(sesid, tableid, grbit));
         }
 
         /// <summary>
@@ -1011,7 +1041,7 @@ namespace Microsoft.Isam.Esent.Interop
             out int actualPreviousValueLength,
             EscrowUpdateGrbit grbit)
         {
-            Check(ErrApi.JetEscrowUpdate(
+            Api.Check(Impl.JetEscrowUpdate(
                 sesid,
                 tableid,
                 columnid,
@@ -1037,7 +1067,24 @@ namespace Microsoft.Isam.Esent.Interop
         {
             if (err < 0)
             {
-                throw new EsentErrorException((JET_err)err);
+                var ex = new EsentErrorException((JET_err)err);
+
+                // Invoke the Exception handling event. The event
+                // may provide a new exception which should be thrown
+                // instead.
+                Exception exceptionToThrow = null;
+                var handler = Api.HandleException;
+                if (handler != null)
+                {
+                    exceptionToThrow = handler(ex);
+                }
+
+                if (null == exceptionToThrow)
+                {
+                    exceptionToThrow = ex;
+                }
+
+                throw exceptionToThrow;
             }
 
             return (JET_wrn)err;

@@ -50,7 +50,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the move was successful.</returns>
         public static bool TryMoveFirst(JET_SESID sesid, JET_TABLEID tableid)
         {
-            var err = (JET_err)ErrApi.JetMove(sesid, tableid, (int)JET_Move.First, MoveGrbit.None);
+            var err = (JET_err)Impl.JetMove(sesid, tableid, (int)JET_Move.First, MoveGrbit.None);
             if (err >= JET_err.Success)
             {
                 return true;
@@ -73,7 +73,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the move was successful.</returns>
         public static bool TryMoveLast(JET_SESID sesid, JET_TABLEID tableid)
         {
-            var err = (JET_err)ErrApi.JetMove(sesid, tableid, (int)JET_Move.Last, MoveGrbit.None);
+            var err = (JET_err)Impl.JetMove(sesid, tableid, (int)JET_Move.Last, MoveGrbit.None);
             if (err >= JET_err.Success)
             {
                 return true;
@@ -96,7 +96,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the move was successful.</returns>
         public static bool TryMoveNext(JET_SESID sesid, JET_TABLEID tableid)
         {
-            var err = (JET_err)ErrApi.JetMove(sesid, tableid, (int)JET_Move.Next, MoveGrbit.None);
+            var err = (JET_err)Impl.JetMove(sesid, tableid, (int)JET_Move.Next, MoveGrbit.None);
             if (err >= JET_err.Success)
             {
                 return true;
@@ -119,7 +119,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the move was successful.</returns>
         public static bool TryMovePrevious(JET_SESID sesid, JET_TABLEID tableid)
         {
-            var err = (JET_err)ErrApi.JetMove(sesid, tableid, (int)JET_Move.Previous, MoveGrbit.None);
+            var err = (JET_err)Impl.JetMove(sesid, tableid, (int)JET_Move.Previous, MoveGrbit.None);
             if (err >= JET_err.Success)
             {
                 return true;
@@ -144,7 +144,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if a record matching the criteria was found.</returns>
         public static bool TrySeek(JET_SESID sesid, JET_TABLEID tableid, SeekGrbit grbit)
         {
-            var err = (JET_err)ErrApi.JetSeek(sesid, tableid, grbit);
+            var err = (JET_err)Impl.JetSeek(sesid, tableid, grbit);
             if (err >= JET_err.Success)
             {
                 return true;
@@ -171,7 +171,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the seek was successful.</returns>
         public static bool TrySetIndexRange(JET_SESID sesid, JET_TABLEID tableid, SetIndexRangeGrbit grbit)
         {
-            var err = (JET_err)ErrApi.JetSetIndexRange(sesid, tableid, grbit);
+            var err = (JET_err)Impl.JetSetIndexRange(sesid, tableid, grbit);
             if (err >= JET_err.Success)
             {
                 return true;
@@ -206,7 +206,7 @@ namespace Microsoft.Isam.Esent.Interop
             try
             {
                 Api.MoveBeforeFirst(sesid, recordlist.tableid);
-                while(Api.TryMoveNext(sesid, recordlist.tableid))
+                while (Api.TryMoveNext(sesid, recordlist.tableid))
                 {
                     yield return Api.RetrieveColumn(sesid, recordlist.tableid, recordlist.columnidBookmark);   
                 }

@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="ApiConstants.cs" />
     <Compile Include="Conversions.cs" />
+    <Compile Include="IJetApi.cs" />
     <Compile Include="jet_indexrange.cs" />
     <Compile Include="jet_recordlist.cs" />
     <Compile Include="VistaParam.cs" />
@@ -96,7 +97,7 @@
     <Compile Include="jet_objtyp.cs" />
     <Compile Include="jet_objectlist.cs" />
     <Compile Include="RetrieveColumnHelpers.cs" />
-    <Compile Include="CheckedApi.cs" />
+    <Compile Include="Api.cs" />
     <Compile Include="ColumnInfo.cs" />
     <Compile Include="MoveHelpers.cs" />
     <Compile Include="InstanceParameters.cs" />
@@ -122,7 +123,7 @@
     <Compile Include="SystemParameters.cs" />
     <Compile Include="Types.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UncheckedApi.cs" />
+    <Compile Include="JetApi.cs" />
     <Compile Include="VistaColtyp.cs" />
   </ItemGroup>
   <ItemGroup>

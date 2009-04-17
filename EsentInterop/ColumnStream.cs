@@ -61,7 +61,7 @@ namespace Microsoft.Isam.Esent.Interop
                 const int ColumnLVPageOverhead = 82;
                 int pageSize = 0;
                 string ignored;
-                if (0 == ErrApi.JetGetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.DatabasePageSize, ref pageSize, out ignored, 0))
+                if (0 == Api.JetGetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.DatabasePageSize, ref pageSize, out ignored, 0))
                 {
                     return pageSize - ColumnLVPageOverhead;
                 }
