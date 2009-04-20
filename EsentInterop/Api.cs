@@ -132,7 +132,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="instance">The instance to terminate.</param>
         public static void JetTerm(JET_INSTANCE instance)
         {
-            Api.Check(Impl.JetTerm(instance));
+			Api.Check(Impl.JetTerm(instance));
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Termination options.</param>
         public static void JetTerm2(JET_INSTANCE instance, TermGrbit grbit)
         {
-            Api.Check(Impl.JetTerm2(instance, grbit));
+			Api.Check(Impl.JetTerm2(instance, grbit));
         }
 
         /// <summary>

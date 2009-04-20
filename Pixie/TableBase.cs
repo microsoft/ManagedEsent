@@ -79,7 +79,7 @@ namespace Microsoft.Isam.Esent
         /// <summary>
         /// Gets information about columns in the table.
         /// </summary>
-        public Dictionary<string, ColumnMetaData> Columns { get; private set; }
+        public IDictionary<string, ColumnMetaData> Columns { get; private set; }
 
         /// <summary>
         /// Gets the name of the table.
@@ -315,7 +315,18 @@ namespace Microsoft.Isam.Esent
                     metadata.SetColumn = (cursor, obj) =>
                     {
                         byte[] data = metadata.ObjectToBytesConverter(metadata.ObjectConverter(obj));
-                        cursor.SetColumn(metadata.Columnid, data, SetColumnGrbit.None);
+                        if (null == data)
+                        {
+                            cursor.SetColumn(metadata.Columnid, null, SetColumnGrbit.None);
+                        }
+                        else if (data.Length == 0)
+                        {
+                            cursor.SetColumn(metadata.Columnid, null, SetColumnGrbit.ZeroLength);
+                        }
+                        else
+                        {
+                            cursor.SetColumn(metadata.Columnid, data, SetColumnGrbit.None);
+                        }
                     };
 
                     metadata.MakeKey = (cursor, obj, grbit) =>

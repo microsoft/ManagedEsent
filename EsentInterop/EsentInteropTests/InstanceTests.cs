@@ -10,6 +10,7 @@ using Microsoft.Isam.Esent.Interop;
 using Microsoft.Isam.Esent.Interop.Implementation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rhino.Mocks;
+using Rhino.Mocks.Constraints;
 
 namespace InteropApiTests
 {
@@ -93,6 +94,49 @@ namespace InteropApiTests
                 mocks.VerifyAll();
             }
         }
+
+		/// <summary>
+		/// When JetCreateInstance2 fails the instance isn't initialized
+		/// so it shouldn't be freed.
+		/// </summary>
+		[TestMethod]
+		[Priority(0)]
+		public void VerifyInstanceDoesNotCallJetTermWhenJetInitFails()
+		{
+			var mocks = new MockRepository();
+			var mockApi = mocks.StrictMock<IJetApi>();
+			using (new ApiTestHook(mockApi))
+			{
+				var jetInstance = new JET_INSTANCE { Value = (IntPtr) 0x1 };
+
+				Expect.Call(
+					mockApi.JetCreateInstance2(
+						out Arg<JET_INSTANCE>.Out(jetInstance).Dummy,
+						Arg<string>.Is.Anything,
+						Arg<string>.Is.Anything,
+						Arg<CreateInstanceGrbit>.Is.Anything))
+					.Return((int) JET_err.Success);
+				Expect.Call(
+					mockApi.JetInit(ref Arg<JET_INSTANCE>.Ref(Is.Equal(jetInstance), JET_INSTANCE.Nil).Dummy))
+					.Return((int) JET_err.OutOfMemory);
+				mocks.ReplayAll();
+
+				try
+				{
+					using (var instance = new Instance("test"))
+					{
+						instance.Init();
+						Assert.Fail("Expected an EsentErrorException");
+					}
+				}
+				catch (EsentErrorException)
+				{
+					// expected
+				}
+
+				mocks.VerifyAll();
+			}
+		}
 
         /// <summary>
         /// Allocate an instance and initialize it.

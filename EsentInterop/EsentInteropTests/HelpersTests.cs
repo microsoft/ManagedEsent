@@ -20,7 +20,7 @@ namespace InteropApiTests
     /// the helper methods that retrieve meta-data.
     /// </summary>
     [TestClass]
-    public class RetrieveColumnHelpers
+    public class HelpersTests
     {
         /// <summary>
         /// The directory being used for the database and its files.

@@ -94,13 +94,13 @@ namespace InteropApiTests
             Api.Impl = jetApi;
 
             SetupResult.For(
-                jetApi.JetTerm(JET_INSTANCE.Nil))
-                .IgnoreArguments()
+				jetApi.JetSetCurrentIndex(JET_SESID.Nil, JET_TABLEID.Nil, String.Empty))
+				.IgnoreArguments()
                 .Return((int)JET_err.OutOfMemory);
             this.mocks.ReplayAll();
 
-            Api.JetTerm(JET_INSTANCE.Nil);
-        }
+			Api.JetSetCurrentIndex(JET_SESID.Nil, JET_TABLEID.Nil, Any.String);
+		}
 
         /// <summary>
         /// Verify that the ExceptionHandler event is invoked when an exception is

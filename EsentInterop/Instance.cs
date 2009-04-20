@@ -97,8 +97,17 @@ namespace Microsoft.Isam.Esent.Interop
         {
             this.CheckObjectIsNotDisposed();
             JET_INSTANCE instance = this.JetInstance;
-            Api.JetInit(ref instance);
-        }
+			try
+			{
+				// Remember that a failure in JetInit can zero the handle
+				// and that JetTerm should not be called in that case.
+				Api.JetInit(ref instance);
+			}
+			finally
+			{
+				this.SetHandle(instance.Value);
+			}
+		}
 
         /// <summary>
         /// Terminate the JET_INSTANCE.

@@ -28,7 +28,7 @@ namespace Microsoft.Isam.Esent
         /// <summary>
         /// Gets information about columns in the table.
         /// </summary>
-        Dictionary<string, ColumnMetaData> Columns { get; }
+        IDictionary<string, ColumnMetaData> Columns { get; }
 
         /// <summary>
         /// Create a new record for inserting into the database. Use the Save() method
