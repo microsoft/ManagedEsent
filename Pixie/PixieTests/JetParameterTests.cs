@@ -16,12 +16,12 @@ namespace PixieTests
     [TestClass]
     public class JetParameterTests
     {
-        private JET_INSTANCE instance;
+        private Instance instance;
 
         [TestInitialize]
         public void Setup()
         {
-            Api.JetCreateInstance(out this.instance, "JetParameterTests");
+            this.instance = new Instance("JetParameterTests");
         }
 
         [TestCleanup]

@@ -78,10 +78,19 @@ namespace Microsoft.Isam.Esent
         }
 
         /// <summary>
-        /// Sets this parameter on the specifier instance.
+        /// Sets this parameter on the specified instance.
+        /// </summary>
+        public void SetParameter()
+        {
+            this.Tracer.TraceInfo("Setting {0} globally", this.ToString());
+            Api.JetSetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, this.param, this.intValue, this.strValue);
+        }
+
+        /// <summary>
+        /// Sets this parameter on the specified instance.
         /// </summary>
         /// <param name="instance">The instance to set the parameter on.</param>
-        public void SetParameter(JET_INSTANCE instance)
+        public void SetParameter(Instance instance)
         {
             this.Tracer.TraceInfo("Setting {0} on instance {1}", this.ToString(), instance);
             Api.JetSetSystemParameter(instance, JET_SESID.Nil, this.param, this.intValue, this.strValue);

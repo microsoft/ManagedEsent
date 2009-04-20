@@ -29,7 +29,7 @@ namespace Microsoft.Isam.Esent
         /// <summary>
         /// The ESE session for this connection.
         /// </summary>
-        private JET_SESID sesid;
+        private Session session;
 
         /// <summary>
         /// The ESE database for this connection.
@@ -54,7 +54,7 @@ namespace Microsoft.Isam.Esent
         /// <param name="name">The name of the connection.</param>
         /// <param name="database">The database to be connected do.</param>
         /// <param name="grbit">The option to open the database with.</param>
-        protected ConnectionBase(JET_INSTANCE instance, string name, string database, OpenDatabaseGrbit grbit)
+        protected ConnectionBase(Instance instance, string name, string database, OpenDatabaseGrbit grbit)
         {
             this.Tracer = new Tracer("Connection", "Esent Connection", String.Format("Connection {0}", name));
 
@@ -62,9 +62,9 @@ namespace Microsoft.Isam.Esent
             this.Database = database;
             this.openedTables = new List<Table>();
 
-            Api.JetBeginSession(instance, out this.sesid, String.Empty, String.Empty);
-            Api.JetAttachDatabase(this.sesid, database, AttachDatabaseGrbit.None);
-            Api.JetOpenDatabase(this.sesid, this.Database, String.Empty, out this.dbid, grbit);
+            this.session = new Session(instance);
+            Api.JetAttachDatabase(this.session, database, AttachDatabaseGrbit.None);
+            Api.JetOpenDatabase(this.session, this.Database, String.Empty, out this.dbid, grbit);
 
             this.Tracer.TraceInfo("created. (database '{0}')", this.Database);
         }
@@ -106,12 +106,12 @@ namespace Microsoft.Isam.Esent
         /// <summary>
         /// Gets the underlying ESE session for this connection
         /// </summary>
-        public JET_SESID Sesid
+        public Session Session
         {
             get
             {
                 this.CheckNotDisposed();
-                return this.sesid;
+                return this.session;
             }
         }
 
@@ -141,10 +141,9 @@ namespace Microsoft.Isam.Esent
             {
                 this.CloseAllOpenTables();
 
-                Api.JetCloseDatabase(this.sesid, this.dbid, CloseDatabaseGrbit.None);
-                Api.JetEndSession(this.sesid, EndSessionGrbit.None);
+                Api.JetCloseDatabase(this.session, this.dbid, CloseDatabaseGrbit.None);
+                this.session.End();
 
-                this.sesid = JET_SESID.Nil;
                 this.dbid = JET_DBID.Nil;
 
                 this.Tracer.TraceInfo("closed (database '{0}')", this.Database);
@@ -168,7 +167,7 @@ namespace Microsoft.Isam.Esent
         public Transaction BeginTransaction()
         {
             string transactionName = String.Format("{0}-{1}", this.Name, DateTime.Now);
-            var transaction = new EsentTransaction(this.sesid, transactionName, this.GetNewestTransaction());
+            var transaction = new EsentTransaction(this.session, transactionName, this.GetNewestTransaction());
             if (null == this.level0Transaction)
             {
                 this.OnBeginLevel0Transaction(transaction);
@@ -239,7 +238,7 @@ namespace Microsoft.Isam.Esent
         /// <returns>A new cursor opened on the table.</returns>
         public Cursor OpenCursor(string tablename)
         {
-            var cursor = new Cursor(this.sesid, this.dbid, tablename);
+            var cursor = new Cursor(this.session, this.dbid, tablename);
 
             if (this.InTransaction)
             {

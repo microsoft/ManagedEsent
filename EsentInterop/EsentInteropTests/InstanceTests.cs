@@ -7,7 +7,9 @@
 using System;
 using System.IO;
 using Microsoft.Isam.Esent.Interop;
+using Microsoft.Isam.Esent.Interop.Implementation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Rhino.Mocks;
 
 namespace InteropApiTests
 {
@@ -53,6 +55,43 @@ namespace InteropApiTests
             }
 
             Directory.Delete(dir, true);
+        }
+
+        /// <summary>
+        /// When JetCreateInstance2 fails the instance isn't initialized
+        /// so it shouldn't be freed.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyInstanceDoesNotCallJetTermWhenCreateInstanceFails()
+        {
+            var mocks = new MockRepository();
+            var mockApi = mocks.StrictMock<IJetApi>();
+            using (new ApiTestHook(mockApi))
+            {
+                Expect.Call(
+                    mockApi.JetCreateInstance2(
+                        out Arg<JET_INSTANCE>.Out(JET_INSTANCE.Nil).Dummy,
+                        Arg<string>.Is.Anything,
+                        Arg<string>.Is.Anything,
+                        Arg<CreateInstanceGrbit>.Is.Anything))
+                    .Return((int) JET_err.InvalidName);
+                mocks.ReplayAll();
+
+                try
+                {
+                    using(var instance = new Instance("test"))
+                    {
+                        Assert.Fail("Expected an EsentErrorException");
+                    }
+                }
+                catch (EsentErrorException)
+                {
+                    // expected
+                }
+
+                mocks.VerifyAll();
+            }
         }
 
         /// <summary>
@@ -111,47 +150,39 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Check that terminating the instance zeroes the JetInstance property.
+        /// Make sure that garbage collection can close an instance
         /// </summary>
         [TestMethod]
-        [Priority(1)]
-        public void InstanceTermZeroesJetInstance()
+        [Priority(0)]
+        public void VerifyInstanceCanBeFinalized()
         {
-            string dir = SetupHelper.CreateRandomDirectory();
-            using (var instance = new Instance("theinstance"))
+            for (int i = 0; i < 3; ++i)
             {
-                instance.Parameters.LogFileDirectory = dir;
-                instance.Parameters.SystemDirectory = dir;
-                instance.Parameters.TempDirectory = dir;
-                instance.Parameters.NoInformationEvent = true;
-                instance.Init();
-                instance.Term();
-                Assert.AreEqual(JET_INSTANCE.Nil, instance.JetInstance);
-            }
+                // If finalization doesn't close the instance then subseqent 
+                // creation attempts will fail
+                CreateOneInstance();
 
-            Directory.Delete(dir, true);
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
         }
 
         /// <summary>
-        /// Check that terminating the instance zeroes the JetInstance property.
+        /// Make sure that accessing the instance of a closed object throws an
+        /// exception.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
-        public void InstanceTermZeroesParameters()
+        [Priority(0)]
+        [ExpectedException(typeof(ObjectDisposedException))]
+        public void JetInstanceThrowsExceptionWhenInstanceIsClosed()
         {
-            string dir = SetupHelper.CreateRandomDirectory();
-            using (var instance = new Instance("theinstance"))
-            {
-                instance.Parameters.LogFileDirectory = dir;
-                instance.Parameters.SystemDirectory = dir;
-                instance.Parameters.TempDirectory = dir;
-                instance.Parameters.NoInformationEvent = true;
-                instance.Init();
-                instance.Term();
-                Assert.IsNull(instance.Parameters);
-            }
-
-            Directory.Delete(dir, true);
+            var instance = new Instance("theinstance");
+            instance.Parameters.NoInformationEvent = true;
+            instance.Parameters.Recovery = false;
+            instance.Parameters.MaxTemporaryTables = 0;
+            instance.Init();
+            instance.Term();
+            JET_INSTANCE x = instance.JetInstance;
         }
 
         /// <summary>
@@ -201,13 +232,26 @@ namespace InteropApiTests
         /// exception.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(0)]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void TermThrowsExceptionWhenInstanceIsDisposed()
         {
             var instance = new Instance("theinstance");
             instance.Dispose();
             instance.Term();
+        }
+
+        /// <summary>
+        /// Create an instance and abandon it. Garbage collection should
+        /// be able to finalize the instance.
+        /// </summary>
+        private static void CreateOneInstance()
+        {
+            var instance = new Instance("finalize_me");
+            instance.Parameters.NoInformationEvent = true;
+            instance.Parameters.Recovery = false;
+            instance.Parameters.MaxTemporaryTables = 0;
+            instance.Init();
         }
     }
 }

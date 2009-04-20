@@ -21,9 +21,9 @@ namespace Microsoft.Isam.Esent
         private readonly Tracer tracer;
 
         /// <summary>
-        /// The JET_SESID associated with the table.
+        /// The Session associated with the table.
         /// </summary>
-        private readonly JET_SESID sesid;
+        private readonly Session session;
 
         /// <summary>
         /// The JET_DBID associated with the table.
@@ -36,9 +36,9 @@ namespace Microsoft.Isam.Esent
         private readonly string tablename;
 
         /// <summary>
-        /// The JET_TABLEID owned by the cursor.
+        /// The Table owned by the cursor.
         /// </summary>
-        private JET_TABLEID tableid;
+        private JET_TABLEID table;
 
         /// <summary>
         /// True if the cursor is positioned on a record.
@@ -58,18 +58,18 @@ namespace Microsoft.Isam.Esent
         /// <summary>
         /// Initializes a new instance of the Cursor class.
         /// </summary>
-        /// <param name="sesid">The session to use for the cursor.</param>
+        /// <param name="session">The session to use for the cursor.</param>
         /// <param name="dbid">The database containing the table.</param>
         /// <param name="tablename">The name of the table.</param>
-        public Cursor(JET_SESID sesid, JET_DBID dbid, string tablename)
+        public Cursor(Session session, JET_DBID dbid, string tablename)
         {
             this.tracer = new Tracer("Cursor", "Esent Cursor object", String.Format("Cursor {0}", tablename));
 
-            this.sesid = sesid;
+            this.session = session;
             this.dbid = dbid;
             this.tablename = tablename;
 
-            Api.JetOpenTable(this.sesid, this.dbid, this.tablename, null, 0, OpenTableGrbit.None, out this.tableid);
+            Api.JetOpenTable(this.session, this.dbid, this.tablename, null, 0, OpenTableGrbit.None, out this.table);
             this.Tracer.TraceVerbose("opened");
         }
 
@@ -104,8 +104,8 @@ namespace Microsoft.Isam.Esent
                     this.Disposed(this);
                 }
 
-                Api.JetCloseTable(this.sesid, this.tableid);
-                this.tableid = JET_TABLEID.Nil;
+                Api.JetCloseTable(this.session, this.table);
+                this.table = JET_TABLEID.Nil;
                 this.isDisposed = true;
 
                 GC.SuppressFinalize(this);
@@ -121,7 +121,7 @@ namespace Microsoft.Isam.Esent
         public virtual IEnumerable<ColumnInfo> GetColumns()
         {
             this.CheckNotDisposed();
-            return Api.GetTableColumns(this.sesid, this.tableid);
+            return Api.GetTableColumns(this.session, this.table);
         }
 
         /// <summary>
@@ -136,11 +136,11 @@ namespace Microsoft.Isam.Esent
             this.CheckNotDisposed();
             if (null == defaultValue)
             {
-                Api.JetAddColumn(this.sesid, this.tableid, column, columndef, null, 0, out columnid);                
+                Api.JetAddColumn(this.session, this.table, column, columndef, null, 0, out columnid);                
             }
             else
             {
-                Api.JetAddColumn(this.sesid, this.tableid, column, columndef, defaultValue, defaultValue.Length, out columnid);                
+                Api.JetAddColumn(this.session, this.table, column, columndef, defaultValue, defaultValue.Length, out columnid);                
             }
         }
 
@@ -154,7 +154,7 @@ namespace Microsoft.Isam.Esent
         /// <param name="index">The name of the index.</param>
         public virtual void SetCurrentIndex(string index)
         {
-            Api.JetSetCurrentIndex(this.sesid, this.tableid, index);
+            Api.JetSetCurrentIndex(this.session, this.table, index);
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace Microsoft.Isam.Esent
         /// </summary>
         public virtual void SetSequential()
         {
-            Api.JetSetTableSequential(this.sesid, this.tableid, SetTableSequentialGrbit.None);
+            Api.JetSetTableSequential(this.session, this.table, SetTableSequentialGrbit.None);
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace Microsoft.Isam.Esent
         /// </summary>
         public virtual void ResetSequential()
         {
-            Api.JetResetTableSequential(this.sesid, this.tableid, ResetTableSequentialGrbit.None);
+            Api.JetResetTableSequential(this.session, this.table, ResetTableSequentialGrbit.None);
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace Microsoft.Isam.Esent
             this.CheckNotDisposed();
             this.CancelUpdate();
 
-            this.hasCurrency = Api.TryMoveFirst(this.sesid, this.tableid);
+            this.hasCurrency = Api.TryMoveFirst(this.session, this.table);
             return this.hasCurrency;
         }
 
@@ -197,7 +197,7 @@ namespace Microsoft.Isam.Esent
             this.CheckNotDisposed();
             this.CancelUpdate();
             
-            this.hasCurrency = Api.TryMoveLast(this.sesid, this.tableid);
+            this.hasCurrency = Api.TryMoveLast(this.session, this.table);
             return this.hasCurrency;
         }
 
@@ -211,7 +211,7 @@ namespace Microsoft.Isam.Esent
             this.CheckNotDisposed();
             this.CancelUpdate();
 
-            this.hasCurrency = Api.TryMoveNext(this.sesid, this.tableid);
+            this.hasCurrency = Api.TryMoveNext(this.session, this.table);
             return this.hasCurrency;
         }
 
@@ -225,7 +225,7 @@ namespace Microsoft.Isam.Esent
             this.CheckNotDisposed();
             this.CancelUpdate();
 
-            this.hasCurrency = Api.TryMovePrevious(this.sesid, this.tableid);
+            this.hasCurrency = Api.TryMovePrevious(this.session, this.table);
             return this.hasCurrency;
         }
 
@@ -240,7 +240,7 @@ namespace Microsoft.Isam.Esent
             this.CancelUpdate();
 
             this.hasCurrency = false;
-            Api.MoveBeforeFirst(this.sesid, this.tableid);
+            Api.MoveBeforeFirst(this.session, this.table);
         }
 
         /// <summary>
@@ -254,7 +254,7 @@ namespace Microsoft.Isam.Esent
             this.CancelUpdate();
 
             this.hasCurrency = false;
-            Api.MoveAfterLast(this.sesid, this.tableid);
+            Api.MoveAfterLast(this.session, this.table);
         }
 
         /// <summary>
@@ -267,7 +267,7 @@ namespace Microsoft.Isam.Esent
             this.CheckNotDisposed();
             this.CancelUpdate();
 
-            Api.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
+            Api.JetMove(this.session, this.table, JET_Move.First, MoveGrbit.None);
             this.hasCurrency = true;
         }
 
@@ -281,7 +281,7 @@ namespace Microsoft.Isam.Esent
             this.CheckNotDisposed();
             this.CancelUpdate();
 
-            Api.JetMove(this.sesid, this.tableid, JET_Move.Last, MoveGrbit.None);
+            Api.JetMove(this.session, this.table, JET_Move.Last, MoveGrbit.None);
             this.hasCurrency = true;
         }
 
@@ -295,7 +295,7 @@ namespace Microsoft.Isam.Esent
             this.CheckNotDisposed();
             this.CheckHasCurrency();
 
-            byte[] bookmarkData = Api.GetBookmark(this.sesid, this.tableid);
+            byte[] bookmarkData = Api.GetBookmark(this.session, this.table);
             var bookmark = new Bookmark { BookmarkData = bookmarkData };
             return bookmark;
         }
@@ -310,7 +310,7 @@ namespace Microsoft.Isam.Esent
             this.CheckNotDisposed();
             this.CancelUpdate();
 
-            Api.JetGotoBookmark(this.sesid, this.tableid, bookmark.BookmarkData, bookmark.BookmarkData.Length);
+            Api.JetGotoBookmark(this.session, this.table, bookmark.BookmarkData, bookmark.BookmarkData.Length);
             this.hasCurrency = true;
             this.CheckNotDisposed();
         }
@@ -322,7 +322,7 @@ namespace Microsoft.Isam.Esent
         /// <param name="grbit">MakeKey option.</param>
         public virtual void MakeKey(byte[] data, MakeKeyGrbit grbit)
         {
-            Api.JetMakeKey(this.sesid, this.tableid, data, data.Length, grbit);            
+            Api.JetMakeKey(this.session, this.table, data, data.Length, grbit);            
         }
 
         /// <summary>
@@ -331,7 +331,7 @@ namespace Microsoft.Isam.Esent
         /// <param name="grbit">Seek option.</param>
         public virtual void Seek(SeekGrbit grbit)
         {
-            Api.JetSeek(this.sesid, this.tableid, grbit);
+            Api.JetSeek(this.session, this.table, grbit);
         }
 
         #endregion Navigation
@@ -354,7 +354,7 @@ namespace Microsoft.Isam.Esent
                 throw new ArgumentException(error);
             }
 
-            Api.JetPrepareUpdate(this.sesid, this.tableid, prep);
+            Api.JetPrepareUpdate(this.session, this.table, prep);
             this.inUpdate = true;
 
             this.CheckNotDisposed();
@@ -372,7 +372,7 @@ namespace Microsoft.Isam.Esent
             var updateBookmark = new byte[Api.BookmarkMost];
             int bookmarkSize;
 
-            Api.JetUpdate(this.sesid, this.tableid, updateBookmark, updateBookmark.Length, out bookmarkSize);
+            Api.JetUpdate(this.session, this.table, updateBookmark, updateBookmark.Length, out bookmarkSize);
             this.inUpdate = false;
 
             Array.Resize(ref updateBookmark, bookmarkSize);
@@ -393,7 +393,7 @@ namespace Microsoft.Isam.Esent
             if (this.inUpdate)
             {
                 this.Tracer.TraceWarning("cancelling update");
-                Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Cancel);
+                Api.JetPrepareUpdate(this.session, this.table, JET_prep.Cancel);
                 this.inUpdate = false;
             }
         }
@@ -412,15 +412,15 @@ namespace Microsoft.Isam.Esent
 
             if (null == data)
             {
-                Api.JetSetColumn(this.sesid, this.tableid, columnid, null, 0, grbit, null);                
+                Api.JetSetColumn(this.session, this.table, columnid, null, 0, grbit, null);                
             }
             else if (data.Length == 0)
             {
-                Api.JetSetColumn(this.sesid, this.tableid, columnid, null, 0, grbit | SetColumnGrbit.ZeroLength, null);
+                Api.JetSetColumn(this.session, this.table, columnid, null, 0, grbit | SetColumnGrbit.ZeroLength, null);
             }
             else
             {
-                Api.JetSetColumn(this.sesid, this.tableid, columnid, data, data.Length, grbit, null);                
+                Api.JetSetColumn(this.session, this.table, columnid, data, data.Length, grbit, null);                
             }
         }
 
@@ -438,7 +438,7 @@ namespace Microsoft.Isam.Esent
             this.CheckNotDisposed();
             this.CheckHasCurrency();
 
-            return Api.EscrowUpdate(this.sesid, this.tableid, columnid, delta);
+            return Api.EscrowUpdate(this.session, this.table, columnid, delta);
         }
 
         /// <summary>
@@ -451,7 +451,7 @@ namespace Microsoft.Isam.Esent
             this.CheckHasCurrency();
             this.CancelUpdate();
 
-            Api.JetDelete(this.sesid, this.tableid);
+            Api.JetDelete(this.session, this.table);
         }
 
         #endregion Updates
@@ -471,7 +471,7 @@ namespace Microsoft.Isam.Esent
                 this.CheckHasCurrency();
             }
 
-            return Api.RetrieveColumn(this.sesid, this.tableid, columnid, grbit, null);
+            return Api.RetrieveColumn(this.session, this.table, columnid, grbit, null);
         }
 
         /// <summary>
@@ -482,7 +482,7 @@ namespace Microsoft.Isam.Esent
         {
             if (!this.inUpdate)
             {
-                string error = "Cursor is not in an update";
+                const string error = "Cursor is not in an update";
                 this.Tracer.TraceError(error);
                 throw new InvalidOperationException(error);
             }

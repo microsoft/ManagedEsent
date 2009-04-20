@@ -127,13 +127,13 @@ namespace Microsoft.Isam.Esent
         protected Cursor.Bookmark? Bookmark { get; set; }
 
         /// <summary>
-        /// Gets the JET_SESID for this record.
+        /// Gets the Session for this record.
         /// </summary>
-        protected JET_SESID Sesid
+        protected Session Session
         {
             get
             {
-                return this.Table.Connection.Sesid;
+                return this.Table.Connection.Session;
             }
         }
 

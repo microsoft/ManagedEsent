@@ -7,7 +7,9 @@
 using System;
 using System.IO;
 using Microsoft.Isam.Esent;
+using Microsoft.Isam.Esent.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Transaction=Microsoft.Isam.Esent.Transaction;
 
 namespace PixieTests
 {
@@ -40,7 +42,7 @@ namespace PixieTests
         /// <summary>
         /// The session used by the test.
         /// </summary>
-        private Microsoft.Isam.Esent.Interop.JET_SESID sesid;
+        private Session session;
 
         /// <summary>
         /// Identifies the database used by the test.
@@ -77,21 +79,21 @@ namespace PixieTests
             Microsoft.Isam.Esent.Interop.Api.JetSetSystemParameter(this.instance, Microsoft.Isam.Esent.Interop.JET_SESID.Nil, Microsoft.Isam.Esent.Interop.JET_param.Recovery, 0, "off");
             Microsoft.Isam.Esent.Interop.Api.JetSetSystemParameter(this.instance, Microsoft.Isam.Esent.Interop.JET_SESID.Nil, Microsoft.Isam.Esent.Interop.JET_param.MaxTemporaryTables, 0, null);
             Microsoft.Isam.Esent.Interop.Api.JetInit(ref this.instance);
-            Microsoft.Isam.Esent.Interop.Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
-            Microsoft.Isam.Esent.Interop.Api.JetCreateDatabase(this.sesid, this.database, String.Empty, out this.dbid, Microsoft.Isam.Esent.Interop.CreateDatabaseGrbit.None);
-            Microsoft.Isam.Esent.Interop.Api.JetBeginTransaction(this.sesid);
-            Microsoft.Isam.Esent.Interop.Api.JetCreateTable(this.sesid, this.dbid, this.tablename, 0, 100, out tableid);
+            this.session = new Session(this.instance);
+            Microsoft.Isam.Esent.Interop.Api.JetCreateDatabase(this.session, this.database, String.Empty, out this.dbid, Microsoft.Isam.Esent.Interop.CreateDatabaseGrbit.None);
+            Microsoft.Isam.Esent.Interop.Api.JetBeginTransaction(this.session);
+            Microsoft.Isam.Esent.Interop.Api.JetCreateTable(this.session, this.dbid, this.tablename, 0, 100, out tableid);
 
             var columndef = new Microsoft.Isam.Esent.Interop.JET_COLUMNDEF() { coltyp = Microsoft.Isam.Esent.Interop.JET_coltyp.Long };
-            Microsoft.Isam.Esent.Interop.Api.JetAddColumn(this.sesid, tableid, "Long", columndef, null, 0, out this.columnid);
+            Microsoft.Isam.Esent.Interop.Api.JetAddColumn(this.session, tableid, "Long", columndef, null, 0, out this.columnid);
 
             string indexDef = "+long\0\0";
-            Microsoft.Isam.Esent.Interop.Api.JetCreateIndex(this.sesid, tableid, "primary", Microsoft.Isam.Esent.Interop.CreateIndexGrbit.IndexPrimary, indexDef, indexDef.Length, 100);
+            Microsoft.Isam.Esent.Interop.Api.JetCreateIndex(this.session, tableid, "primary", Microsoft.Isam.Esent.Interop.CreateIndexGrbit.IndexPrimary, indexDef, indexDef.Length, 100);
 
-            Microsoft.Isam.Esent.Interop.Api.JetCloseTable(this.sesid, tableid);
-            Microsoft.Isam.Esent.Interop.Api.JetCommitTransaction(this.sesid, Microsoft.Isam.Esent.Interop.CommitTransactionGrbit.LazyFlush);
+            Microsoft.Isam.Esent.Interop.Api.JetCloseTable(this.session, tableid);
+            Microsoft.Isam.Esent.Interop.Api.JetCommitTransaction(this.session, Microsoft.Isam.Esent.Interop.CommitTransactionGrbit.LazyFlush);
 
-            Microsoft.Isam.Esent.Interop.Api.JetOpenTable(this.sesid, this.dbid, this.tablename, null, 0, Microsoft.Isam.Esent.Interop.OpenTableGrbit.None, out this.tableid);
+            Microsoft.Isam.Esent.Interop.Api.JetOpenTable(this.session, this.dbid, this.tablename, null, 0, Microsoft.Isam.Esent.Interop.OpenTableGrbit.None, out this.tableid);
         }
 
         /// <summary>
@@ -100,7 +102,7 @@ namespace PixieTests
         [TestCleanup]
         public void Teardown()
         {
-            Microsoft.Isam.Esent.Interop.Api.JetEndSession(this.sesid, Microsoft.Isam.Esent.Interop.EndSessionGrbit.None);
+            Microsoft.Isam.Esent.Interop.Api.JetEndSession(this.session, Microsoft.Isam.Esent.Interop.EndSessionGrbit.None);
             Microsoft.Isam.Esent.Interop.Api.JetTerm(this.instance);
             Directory.Delete(this.directory, true);
         }
@@ -113,7 +115,7 @@ namespace PixieTests
         public void VerifyFixtureSetup()
         {
             Assert.AreNotEqual(Microsoft.Isam.Esent.Interop.JET_INSTANCE.Nil, this.instance);
-            Assert.AreNotEqual(Microsoft.Isam.Esent.Interop.JET_SESID.Nil, this.sesid);
+            Assert.AreNotEqual(Microsoft.Isam.Esent.Interop.JET_SESID.Nil, this.session);
             Assert.AreNotEqual(Microsoft.Isam.Esent.Interop.JET_COLUMNID.Nil, this.columnid);
             Assert.AreNotEqual(Microsoft.Isam.Esent.Interop.JET_TABLEID.Nil, this.tableid);
         }
@@ -134,7 +136,7 @@ namespace PixieTests
         {
             bool eventCalled = false;
 
-            Transaction transaction = new EsentTransaction(this.sesid, "test", null);
+            Transaction transaction = new EsentTransaction(this.session, "test", null);
             transaction.Committed += () => eventCalled = true;
             transaction.Commit();
 
@@ -147,7 +149,7 @@ namespace PixieTests
         {
             bool eventCalled = false;
 
-            Transaction transaction = new EsentTransaction(this.sesid, "test", null);
+            Transaction transaction = new EsentTransaction(this.session, "test", null);
             transaction.RolledBack += () => eventCalled = true;
             transaction.Rollback();
 
@@ -160,8 +162,8 @@ namespace PixieTests
         {
             bool eventCalled = false;
 
-            var outerTransaction = new EsentTransaction(this.sesid, "test", null);
-            Transaction innerTransaction = new EsentTransaction(this.sesid, "test", outerTransaction);
+            var outerTransaction = new EsentTransaction(this.session, "test", null);
+            Transaction innerTransaction = new EsentTransaction(this.session, "test", outerTransaction);
 
             innerTransaction.Committed += () => eventCalled = true;
             outerTransaction.Commit();
@@ -175,8 +177,8 @@ namespace PixieTests
         {
             bool eventCalled = false;
 
-            var outerTransaction = new EsentTransaction(this.sesid, "test", null);
-            Transaction innerTransaction = new EsentTransaction(this.sesid, "test", outerTransaction);
+            var outerTransaction = new EsentTransaction(this.session, "test", null);
+            Transaction innerTransaction = new EsentTransaction(this.session, "test", outerTransaction);
 
             innerTransaction.RolledBack += () => eventCalled = true;
             outerTransaction.Rollback();
@@ -190,8 +192,8 @@ namespace PixieTests
         {
             bool eventCalled = false;
 
-            var outerTransaction = new EsentTransaction(this.sesid, "test", null);
-            Transaction innerTransaction = new EsentTransaction(this.sesid, "test", outerTransaction);
+            var outerTransaction = new EsentTransaction(this.session, "test", null);
+            Transaction innerTransaction = new EsentTransaction(this.session, "test", outerTransaction);
 
             innerTransaction.RolledBack += () => eventCalled = true;
             innerTransaction.Commit();
@@ -204,7 +206,7 @@ namespace PixieTests
         [Priority(1)]
         public void VerifyGetNewestTransactionReturnsCurrentTransactionIfNoSubtransactions()
         {
-            var transaction = new EsentTransaction(this.sesid, "test", null);
+            var transaction = new EsentTransaction(this.session, "test", null);
             Assert.AreEqual(transaction, transaction.GetNewestTransaction());
         }
 
@@ -212,9 +214,9 @@ namespace PixieTests
         [Priority(1)]
         public void VerifyGetNewestTransactionReturnsNewestTransaction()
         {
-            var level0transaction = new EsentTransaction(this.sesid, "test", null);
-            var innerTransaction = new EsentTransaction(this.sesid, "test", level0transaction);
-            var innermostTransaction = new EsentTransaction(this.sesid, "test", innerTransaction);
+            var level0transaction = new EsentTransaction(this.session, "test", null);
+            var innerTransaction = new EsentTransaction(this.session, "test", level0transaction);
+            var innermostTransaction = new EsentTransaction(this.session, "test", innerTransaction);
 
             Assert.AreEqual(innermostTransaction, level0transaction.GetNewestTransaction());
         }
@@ -223,7 +225,7 @@ namespace PixieTests
         [Priority(1)]
         public void VerifyCommitPersistsChanges()
         {
-            Transaction transaction = new EsentTransaction(this.sesid, "test", null);
+            Transaction transaction = new EsentTransaction(this.session, "test", null);
             this.InsertRecord(1);
             transaction.Commit();
 
@@ -234,7 +236,7 @@ namespace PixieTests
         [Priority(1)]
         public void VerifyRollbackUndoesChanges()
         {
-            Transaction transaction = new EsentTransaction(this.sesid, "test", null);
+            Transaction transaction = new EsentTransaction(this.session, "test", null);
             this.InsertRecord(1);
             transaction.Rollback();
 
@@ -245,8 +247,8 @@ namespace PixieTests
         [Priority(1)]
         public void VerifyCommitThenRollbackUndoesChanges()
         {
-            var outerTransaction = new EsentTransaction(this.sesid, "test", null);
-            Transaction innerTransaction = new EsentTransaction(this.sesid, "test", outerTransaction);
+            var outerTransaction = new EsentTransaction(this.session, "test", null);
+            Transaction innerTransaction = new EsentTransaction(this.session, "test", outerTransaction);
 
             this.InsertRecord(1);
             innerTransaction.Commit();
@@ -264,10 +266,10 @@ namespace PixieTests
         /// <param name="key">The key of the record.</param>
         private void InsertRecord(int key)
         {
-            Microsoft.Isam.Esent.Interop.Api.JetPrepareUpdate(this.sesid, this.tableid, Microsoft.Isam.Esent.Interop.JET_prep.Insert);
-            Microsoft.Isam.Esent.Interop.Api.SetColumn(this.sesid, this.tableid, this.columnid, key);
+            Microsoft.Isam.Esent.Interop.Api.JetPrepareUpdate(this.session, this.tableid, Microsoft.Isam.Esent.Interop.JET_prep.Insert);
+            Microsoft.Isam.Esent.Interop.Api.SetColumn(this.session, this.tableid, this.columnid, key);
             int ignored;
-            Microsoft.Isam.Esent.Interop.Api.JetUpdate(this.sesid, this.tableid, null, 0, out ignored);
+            Microsoft.Isam.Esent.Interop.Api.JetUpdate(this.session, this.tableid, null, 0, out ignored);
         }
 
         /// <summary>
@@ -277,8 +279,8 @@ namespace PixieTests
         /// <returns>True if the record is in the table, false otherwise.</returns>
         private bool ContainsRecord(int key)
         {
-            Microsoft.Isam.Esent.Interop.Api.MakeKey(this.sesid, this.tableid, key, Microsoft.Isam.Esent.Interop.MakeKeyGrbit.NewKey);
-            return Microsoft.Isam.Esent.Interop.Api.TrySeek(this.sesid, this.tableid, Microsoft.Isam.Esent.Interop.SeekGrbit.SeekEQ);
+            Microsoft.Isam.Esent.Interop.Api.MakeKey(this.session, this.tableid, key, Microsoft.Isam.Esent.Interop.MakeKeyGrbit.NewKey);
+            return Microsoft.Isam.Esent.Interop.Api.TrySeek(this.session, this.tableid, Microsoft.Isam.Esent.Interop.SeekGrbit.SeekEQ);
         }
 
         #endregion Helper Methods

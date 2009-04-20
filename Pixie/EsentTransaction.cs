@@ -24,7 +24,7 @@ namespace Microsoft.Isam.Esent
         /// <summary>
         /// The underlying Session
         /// </summary>
-        private readonly JET_SESID sesid;
+        private readonly Session session;
 
         /// <summary>
         /// The previous transaction. This is the last transaction started before
@@ -55,14 +55,14 @@ namespace Microsoft.Isam.Esent
         /// begins a transaction. The transaction will be rolled back if
         /// not explicitly committed.
         /// </summary>
-        /// <param name="sesid">The sesid to start the transaction for.</param>
+        /// <param name="session">The session to start the transaction for.</param>
         /// <param name="name">The name of the transaction.</param>
         /// <param name="outerTransaction">The previous active transaction.</param>
-        internal EsentTransaction(JET_SESID sesid, string name, EsentTransaction outerTransaction)
+        internal EsentTransaction(Session session, string name, EsentTransaction outerTransaction)
         {
             this.name = name;
             this.Tracer = new Tracer("Transaction", "Esent Transaction", this.ToString());
-            this.sesid = sesid;
+            this.session = session;
             this.outerTransaction = outerTransaction;
             this.Begin();
             if (null != this.outerTransaction)
@@ -161,7 +161,7 @@ namespace Microsoft.Isam.Esent
             }
 
             CommitTransactionGrbit grbit = commitIsLazy ? CommitTransactionGrbit.LazyFlush : CommitTransactionGrbit.None;
-            Api.JetCommitTransaction(this.sesid, grbit);
+            Api.JetCommitTransaction(this.session, grbit);
 
             // Even if this transaction commits the work done in the transaction will 
             // be undone if the outer transaction is rolled back. To make sure that the
@@ -198,7 +198,7 @@ namespace Microsoft.Isam.Esent
                 this.RolledBack();
             }
 
-            Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
+            Api.JetRollback(this.session, RollbackTransactionGrbit.None);
             this.inTransaction = false;
 
             this.Tracer.TraceWarning("rollback");
@@ -266,7 +266,7 @@ namespace Microsoft.Isam.Esent
                 throw new InvalidOperationException("Already in a transaction");
             }
 
-            Api.JetBeginTransaction(this.sesid);
+            Api.JetBeginTransaction(this.session);
             this.inTransaction = true;
         }
 

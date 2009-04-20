@@ -125,7 +125,7 @@ namespace Microsoft.Isam.Esent
         /// Set the default parameters for the instance.
         /// </summary>
         /// <param name="instance">The instance to set the default parameters on.</param>
-        private static void SetDefaultInstanceParameters(JET_INSTANCE instance)
+        private static void SetDefaultInstanceParameters(Instance instance)
         {
             var defaultParameters = Dependencies.Container.Resolve<IEnumerable<JetParameter>>("DefaultInstanceParameters");
             foreach (JetParameter parameter in defaultParameters)
@@ -139,7 +139,7 @@ namespace Microsoft.Isam.Esent
         /// </summary>
         /// <param name="instance">The instance to set the parameters on.</param>
         /// <param name="database">The database the instance will be using or creating.</param>
-        private static void SetPathParameters(JET_INSTANCE instance, string database)
+        private static void SetPathParameters(Instance instance, string database)
         {
             var parameters = new InstanceParameters(instance);
             string directory = Path.GetDirectoryName(Path.GetFullPath(database));
@@ -157,15 +157,14 @@ namespace Microsoft.Isam.Esent
         /// <returns>A new Connection to the database.</returns>
         private Connection CreateNewInstanceAndConnection(string database, DatabaseOpenMode mode)
         {
-            string instanceName = this.GetNewInstanceName();
-            JET_INSTANCE instance;
-            Api.JetCreateInstance(out instance, instanceName);
+            var instanceName = this.GetNewInstanceName();
+            var instance = new Instance(instanceName);
             this.Tracer.TraceInfo("created instance '{0}'", instanceName);
             try
             {
                 SetDefaultInstanceParameters(instance);
                 SetPathParameters(instance, database);
-                Api.JetInit(ref instance);
+                instance.Init();
 
                 this.instances[database] = new InstanceInfo(instance, database);
                 return this.CreateNewConnection(database, mode);
@@ -174,7 +173,7 @@ namespace Microsoft.Isam.Esent
             {
                 // Creating the new instance failed. Terminate ESE and remove the 
                 // instance information.
-                Api.JetTerm(instance);
+                instance.Term();
                 this.instances.Remove(database);
                 throw;
             }
@@ -188,7 +187,7 @@ namespace Microsoft.Isam.Esent
         /// <returns>A new connection to the database.</returns>
         private Connection CreateNewConnection(string database, DatabaseOpenMode mode)
         {
-            JET_INSTANCE instance = this.instances[database].Instance;
+            Instance instance = this.instances[database].Instance;
             string connectionName = Path.GetFileName(database);
             ConnectionBase connection;
             if (DatabaseOpenMode.ReadOnly == mode)
@@ -232,7 +231,7 @@ namespace Microsoft.Isam.Esent
                     this.Tracer.TraceInfo("no connections left to database '{0}'. Terminating ese", database);
 
                     // all connections are closed, terminate the instance
-                    Api.JetTerm(this.instances[database].Instance);
+                    this.instances[database].Instance.Term();
                     this.instances.Remove(database);
                 }
             }
@@ -249,7 +248,7 @@ namespace Microsoft.Isam.Esent
                 var globalParameters = Dependencies.Container.Resolve<IEnumerable<JetParameter>>("GlobalParameters");
                 foreach (JetParameter parameter in globalParameters)
                 {
-                    parameter.SetParameter(JET_INSTANCE.Nil);
+                    parameter.SetParameter();
                 }
 
                 this.globalParametersHaveBeenSet = true;
@@ -278,7 +277,7 @@ namespace Microsoft.Isam.Esent
             /// </summary>
             /// <param name="instance">The ESE instance</param>
             /// <param name="database">The name of the database this instance is for.</param>
-            public InstanceInfo(JET_INSTANCE instance, string database)
+            public InstanceInfo(Instance instance, string database)
             {
                 this.Connections = new List<Connection>();
                 this.Instance = instance;
@@ -293,7 +292,7 @@ namespace Microsoft.Isam.Esent
             /// <summary>
             /// Gets or sets the instance that has the database open.
             /// </summary>
-            public JET_INSTANCE Instance { get; private set; }
+            public Instance Instance { get; private set; }
 
             /// <summary>
             /// Gets or sets all the connections for the database.

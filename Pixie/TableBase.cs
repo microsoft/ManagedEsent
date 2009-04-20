@@ -99,13 +99,13 @@ namespace Microsoft.Isam.Esent
         public CursorCache<Cursor> CursorCache { get; private set; }
 
         /// <summary>
-        /// Gets the underlying JET_SESID for this table.
+        /// Gets the underlying Session for this table.
         /// </summary>
-        public JET_SESID Sesid
+        public Session Session
         {
             get
             {
-                return this.Connection.Sesid;
+                return this.Connection.Session;
             }
         }
 
@@ -393,7 +393,7 @@ namespace Microsoft.Isam.Esent
             }
             else
             {
-                theCursor = new Cursor(this.Sesid, this.Dbid, this.TableName);
+                theCursor = new Cursor(this.Session, this.Dbid, this.TableName);
                 this.Tracer.TraceInfo("opening a new Cursor");
             }
 

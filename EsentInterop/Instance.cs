@@ -4,22 +4,23 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+using System.Runtime.InteropServices;
+using Microsoft.Win32.SafeHandles;
+
 namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
-    /// A class that encapsulates a JET_INSTANCE in a disposable object.
+    /// A class that encapsulates a JET_INSTANCE in a disposable object. The
+    /// instance must be closed last and closing the instance releases all other
+    /// resources for the instance.
     /// </summary>
-    public class Instance : EsentResource
+    public class Instance : SafeHandleZeroOrMinusOneIsInvalid
     {
         /// <summary>
         /// Parameters for the instance.
         /// </summary>
-        private InstanceParameters parameters;
-
-        /// <summary>
-        /// The underlying JET_INSTANCE.
-        /// </summary>
-        private JET_INSTANCE instance;
+        private readonly InstanceParameters parameters;
 
         /// <summary>
         /// Initializes a new instance of the Instance class. The underlying
@@ -29,11 +30,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// The name of the instance. This string must be unique within a
         /// given process hosting the database engine
         /// </param>
-        public Instance(string name)
+        public Instance(string name) : this(name, name)
         {
-            Api.JetCreateInstance(out this.instance, name);
-            this.ResourceWasAllocated();
-            this.parameters = new InstanceParameters(this.instance);
         }
 
         /// <summary>
@@ -48,11 +46,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// A display name for the instance. This will be used in eventlog
         /// entries.
         /// </param>
-        public Instance(string name, string displayName)
+        public Instance(string name, string displayName) : base(true)
         {
-            Api.JetCreateInstance2(out this.instance, name, displayName, CreateInstanceGrbit.None);
-            this.ResourceWasAllocated();
-            this.parameters = new InstanceParameters(this.instance);
+            JET_INSTANCE instance;
+            Api.JetCreateInstance2(out instance, name, displayName, CreateInstanceGrbit.None);
+            this.SetHandle(instance.Value);
+            this.parameters = new InstanceParameters(instance);
         }
 
         /// <summary>
@@ -63,7 +62,7 @@ namespace Microsoft.Isam.Esent.Interop
             get
             {
                 this.CheckObjectIsNotDisposed();
-                return this.instance;
+                return this.CreateInstanceFromHandle();
             }
         }
 
@@ -97,7 +96,8 @@ namespace Microsoft.Isam.Esent.Interop
         public void Init()
         {
             this.CheckObjectIsNotDisposed();
-            Api.JetInit(ref this.instance);
+            JET_INSTANCE instance = this.JetInstance;
+            Api.JetInit(ref instance);
         }
 
         /// <summary>
@@ -105,19 +105,47 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public void Term()
         {
-            this.CheckObjectIsNotDisposed();
-            this.ReleaseResource();
+            Api.JetTerm(this.JetInstance);
+            this.SetHandleAsInvalid();
         }
 
         /// <summary>
-        /// Free the underlying JET_INSTANCE
+        /// Release the handle for this instance.
         /// </summary>
-        protected override void ReleaseResource()
+        /// <returns>True if the handle could be released.</returns>
+        protected override bool ReleaseHandle()
         {
-            Api.JetTerm(this.instance);
-            this.instance = JET_INSTANCE.Nil;
-            this.parameters = null;
-            this.ResourceWasReleased();
+            try
+            {
+                // The object is already marked as invalid so don't check
+                var instance = this.CreateInstanceFromHandle();
+                Api.JetTerm(instance);
+                return true;
+            }
+            catch (EsentException)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Create a JET_INSTANCE from the internal handle value.
+        /// </summary>
+        /// <returns></returns>
+        private JET_INSTANCE CreateInstanceFromHandle()
+        {
+            return new JET_INSTANCE { Value = this.handle };
+        }
+
+        /// <summary>
+        /// Check to see if this instance is invalid or closed.
+        /// </summary>
+        private void CheckObjectIsNotDisposed()
+        {
+            if (this.IsInvalid || this.IsClosed)
+            {
+                throw new ObjectDisposedException("Instance");
+            }
         }
     }
 }

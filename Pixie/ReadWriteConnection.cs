@@ -19,7 +19,7 @@ namespace Microsoft.Isam.Esent
         /// <param name="instance">The instance to use for the connection.</param>
         /// <param name="name">The name of the connection.</param>
         /// <param name="database">The database to be connected do.</param>
-        public ReadWriteConnection(JET_INSTANCE instance, string name, string database) :
+        public ReadWriteConnection(Instance instance, string name, string database) :
             base(instance, name + " (RW)", database, OpenDatabaseGrbit.None)
         {
         }
@@ -45,8 +45,8 @@ namespace Microsoft.Isam.Esent
             this.CheckNotDisposed();
 
             JET_TABLEID tableid;
-            Api.JetCreateTable(this.Sesid, this.Dbid, tablename, 16, 100, out tableid);
-            Api.JetCloseTable(this.Sesid, tableid);
+            Api.JetCreateTable(this.Session, this.Dbid, tablename, 16, 100, out tableid);
+            Api.JetCloseTable(this.Session, tableid);
             this.Tracer.TraceInfo("created table '{0}'", tablename);
             return this.OpenTable(tablename);
         }

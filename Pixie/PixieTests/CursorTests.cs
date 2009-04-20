@@ -47,7 +47,7 @@ namespace PixieTests
         /// <summary>
         /// The session used by the test.
         /// </summary>
-        private JET_SESID sesid;
+        private Session session;
 
         /// <summary>
         /// Identifies the database used by the test.
@@ -91,32 +91,32 @@ namespace PixieTests
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.PageTempDBMin, Api.PageTempDBSmallest, null);
             Api.JetInit(ref this.instance);
-            Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
-            Api.JetCreateDatabase(this.sesid, this.database, String.Empty, out this.dbid, CreateDatabaseGrbit.None);
-            Api.JetBeginTransaction(this.sesid);
-            Api.JetCreateTable(this.sesid, this.dbid, this.tablename, 0, 100, out tableid);
+            this.session = new Session(this.instance);
+            Api.JetCreateDatabase(this.session, this.database, String.Empty, out this.dbid, CreateDatabaseGrbit.None);
+            Api.JetBeginTransaction(this.session);
+            Api.JetCreateTable(this.session, this.dbid, this.tablename, 0, 100, out tableid);
 
             var columndef = new JET_COLUMNDEF { coltyp = JET_coltyp.Long };
-            Api.JetAddColumn(this.sesid, tableid, "Long", columndef, null, 0, out this.columnidLong);
+            Api.JetAddColumn(this.session, tableid, "Long", columndef, null, 0, out this.columnidLong);
 
             columndef = new JET_COLUMNDEF { coltyp = JET_coltyp.Text };
-            Api.JetAddColumn(this.sesid, tableid, "Text", columndef, null, 0, out this.columnidText);
+            Api.JetAddColumn(this.session, tableid, "Text", columndef, null, 0, out this.columnidText);
 
             columndef = new JET_COLUMNDEF { coltyp = JET_coltyp.Long, grbit = ColumndefGrbit.ColumnEscrowUpdate };
-            Api.JetAddColumn(this.sesid, tableid, "Escrow", columndef, BitConverter.GetBytes(0), 4, out this.columnidEscrow);
+            Api.JetAddColumn(this.session, tableid, "Escrow", columndef, BitConverter.GetBytes(0), 4, out this.columnidEscrow);
 
             string indexDef = "+long\0\0";
-            Api.JetCreateIndex(this.sesid, tableid, "primary", CreateIndexGrbit.IndexPrimary, indexDef, indexDef.Length, 100);
+            Api.JetCreateIndex(this.session, tableid, "primary", CreateIndexGrbit.IndexPrimary, indexDef, indexDef.Length, 100);
 
             for (int i = 0; i < this.numRecords; ++i)
             {
-                Api.JetPrepareUpdate(this.sesid, tableid, JET_prep.Insert);
-                Api.JetSetColumn(this.sesid, tableid, this.columnidLong, BitConverter.GetBytes(i), 4, SetColumnGrbit.None, null);
-                Api.JetUpdate(this.sesid, tableid);
+                Api.JetPrepareUpdate(this.session, tableid, JET_prep.Insert);
+                Api.JetSetColumn(this.session, tableid, this.columnidLong, BitConverter.GetBytes(i), 4, SetColumnGrbit.None, null);
+                Api.JetUpdate(this.session, tableid);
             }
 
-            Api.JetCloseTable(this.sesid, tableid);
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            Api.JetCloseTable(this.session, tableid);
+            Api.JetCommitTransaction(this.session, CommitTransactionGrbit.LazyFlush);
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace PixieTests
         [TestCleanup]
         public void Teardown()
         {
-            Api.JetEndSession(this.sesid, EndSessionGrbit.None);
+            Api.JetEndSession(this.session, EndSessionGrbit.None);
             Api.JetTerm(this.instance);
             Directory.Delete(this.directory, true);
         }
@@ -138,7 +138,7 @@ namespace PixieTests
         public void VerifyFixtureSetup()
         {
             Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
-            Assert.AreNotEqual(JET_SESID.Nil, this.sesid);
+            Assert.AreNotEqual(JET_SESID.Nil, this.session);
             Assert.IsTrue(this.numRecords > 0);
             Assert.AreNotEqual(JET_COLUMNID.Nil, this.columnidLong);
         }
@@ -353,7 +353,7 @@ namespace PixieTests
         {
             Cursor cursor = this.OpenCursor();
             cursor.MoveFirst();
-            using (var trx = new Microsoft.Isam.Esent.Interop.Transaction(this.sesid))
+            using (var trx = new Microsoft.Isam.Esent.Interop.Transaction(this.session))
             {
                 Assert.AreEqual(0, cursor.EscrowUpdate(this.columnidEscrow, 4));
                 Assert.AreEqual(4, BitConverter.ToInt32(cursor.RetrieveColumn(this.columnidEscrow, RetrieveColumnGrbit.None), 0));
@@ -469,7 +469,7 @@ namespace PixieTests
         /// <returns>A new Cursor on the test table.</returns>
         private Cursor OpenCursor()
         {
-            return new Cursor(this.sesid, this.dbid, this.tablename);
+            return new Cursor(this.session, this.dbid, this.tablename);
         }
 
         /// <summary>

@@ -19,7 +19,7 @@ namespace Microsoft.Isam.Esent
         /// <param name="instance">The instance to use for the connection.</param>
         /// <param name="name">The name of the connection.</param>
         /// <param name="database">The database to be connected do.</param>
-        public ReadOnlyConnection(JET_INSTANCE instance, string name, string database) :
+        public ReadOnlyConnection(Instance instance, string name, string database) :
             base(instance, name + " (RO)", database, OpenDatabaseGrbit.ReadOnly)
         {
         }

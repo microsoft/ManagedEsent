@@ -79,6 +79,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Any.cs" />
+    <Compile Include="ApiTestHook.cs" />
+    <Compile Include="ApiTestHookTests.cs" />
     <Compile Include="ApiTests.cs" />
     <Compile Include="BasicTableTests.cs" />
     <Compile Include="ColumndefTests.cs" />

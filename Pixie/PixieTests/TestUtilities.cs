@@ -12,8 +12,8 @@ namespace PixieTests
     {
         public static void FinalizeAndGCCollect()
         {
-            GC.WaitForPendingFinalizers();
             GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
     }
 }
