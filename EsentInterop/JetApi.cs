@@ -61,21 +61,23 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetTerm(JET_INSTANCE instance)
         {
             this.TraceFunctionCall("JetTerm");
-			if (JET_INSTANCE.Nil != instance)
-			{
-				return this.Err(NativeMethods.JetTerm(instance.Value));
-			}
-        	return (int)JET_err.Success;
+            if (JET_INSTANCE.Nil != instance)
+            {
+                return this.Err(NativeMethods.JetTerm(instance.Value));
+            }
+
+            return (int)JET_err.Success;
         }
 
         public int JetTerm2(JET_INSTANCE instance, TermGrbit grbit)
         {
             this.TraceFunctionCall("JetTerm2");
-			if (JET_INSTANCE.Nil != instance)
-			{
-				return this.Err(NativeMethods.JetTerm2(instance.Value, (uint) grbit));
-			}
-        	return (int)JET_err.Success;
+            if (JET_INSTANCE.Nil != instance)
+            {
+                return this.Err(NativeMethods.JetTerm2(instance.Value, (uint) grbit));
+            }
+
+            return (int)JET_err.Success;
         }
 
         public int JetSetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, int paramValue, string paramString)

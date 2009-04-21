@@ -75,9 +75,11 @@
   <ItemGroup>
     <Compile Include="ApiConstants.cs" />
     <Compile Include="Conversions.cs" />
+    <Compile Include="EnumerableColumnInfo.cs" />
     <Compile Include="IJetApi.cs" />
     <Compile Include="jet_indexrange.cs" />
     <Compile Include="jet_recordlist.cs" />
+    <Compile Include="TableEnumerator.cs" />
     <Compile Include="VistaParam.cs" />
     <Compile Include="EsentException.cs" />
     <Compile Include="IndexSegment.cs" />

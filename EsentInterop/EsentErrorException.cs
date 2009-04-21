@@ -56,18 +56,19 @@ namespace Microsoft.Isam.Esent.Interop
                 var errNum = (int)this.Data["error"];
 
                 try 
-	            {
+                {
                     string description;
-		            var wrn = Api.JetGetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.ErrorToString, ref errNum, out description, 1024);
+                    var wrn = Api.JetGetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.ErrorToString, ref errNum, out description, 1024);
                     if (JET_wrn.Success == wrn)
                     {
                         return description;
                     }
-	            }
-	            catch (EsentException)
-	            {
+                }
+                catch (EsentException)
+                {
                     // ignore the error
-            	}
+                }
+
                 return "<unknown>";
             }
         }

@@ -94,13 +94,13 @@ namespace InteropApiTests
             Api.Impl = jetApi;
 
             SetupResult.For(
-				jetApi.JetSetCurrentIndex(JET_SESID.Nil, JET_TABLEID.Nil, String.Empty))
-				.IgnoreArguments()
+                jetApi.JetSetCurrentIndex(JET_SESID.Nil, JET_TABLEID.Nil, String.Empty))
+                .IgnoreArguments()
                 .Return((int)JET_err.OutOfMemory);
             this.mocks.ReplayAll();
 
-			Api.JetSetCurrentIndex(JET_SESID.Nil, JET_TABLEID.Nil, Any.String);
-		}
+            Api.JetSetCurrentIndex(JET_SESID.Nil, JET_TABLEID.Nil, Any.String);
+        }
 
         /// <summary>
         /// Verify that the ExceptionHandler event is invoked when an exception is
@@ -134,6 +134,7 @@ namespace InteropApiTests
             catch (EsentErrorException)
             {
             }
+
             Api.HandleException -= handler;
             Assert.IsTrue(eventWasCalled);
         }
@@ -168,6 +169,7 @@ namespace InteropApiTests
             catch (InvalidOperationException)
             {
             }
+
             Api.HandleException -= handler;
         }
     }

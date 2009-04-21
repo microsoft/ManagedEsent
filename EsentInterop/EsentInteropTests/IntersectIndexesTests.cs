@@ -157,7 +157,7 @@ namespace InteropApiTests
             Api.JetIntersectIndexes(this.sesid, tableids, 2, out recordlist, IntersectIndexesGrbit.None);
 
             Assert.AreEqual(9, recordlist.cRecords);
-            Api.JetCloseTable(sesid, recordlist.tableid);
+            Api.JetCloseTable(this.sesid, recordlist.tableid);
         }
 
         /// <summary>

@@ -42,6 +42,7 @@ namespace InteropApiTests
             using (new ApiTestHook(newImpl))
             {
             }
+
             Assert.AreSame(Api.Impl, oldImpl);
         }
     }

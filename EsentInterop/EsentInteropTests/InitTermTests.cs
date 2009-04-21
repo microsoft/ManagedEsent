@@ -44,7 +44,6 @@ namespace InteropApiTests
             System.Console.WriteLine("Version = 0x{0:X}", version);
         }
 
-
         /// <summary>
         /// Initialize and terminate one instance. The instance is allocated
         /// with JetCreateInstance2.
@@ -65,27 +64,27 @@ namespace InteropApiTests
             Api.JetTerm(instance);
         }
 
-		/// <summary>
-		/// Terminating an uninitialized instance should work
-		/// </summary>
-		[TestMethod]
-		[Priority(0)]
-		public void VerifyTermUninitializedInstanceDoesNotThrowException()
-		{
-			var instance = new JET_INSTANCE();
-			Api.JetTerm(instance);
-		}
+        /// <summary>
+        /// Terminating an uninitialized instance should work
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyTermUninitializedInstanceDoesNotThrowException()
+        {
+            var instance = new JET_INSTANCE();
+            Api.JetTerm(instance);
+        }
 
-		/// <summary>
-		/// Terminating an uninitialized instance should work
-		/// </summary>
-		[TestMethod]
-		[Priority(0)]
-		public void VerifyTerm2UninitializedInstanceDoesNotThrowException()
-		{
-			var instance = new JET_INSTANCE();
-			Api.JetTerm2(instance, TermGrbit.None);
-		}
+        /// <summary>
+        /// Terminating an uninitialized instance should work
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyTerm2UninitializedInstanceDoesNotThrowException()
+        {
+            var instance = new JET_INSTANCE();
+            Api.JetTerm2(instance, TermGrbit.None);
+        }
 
         /// <summary>
         /// Initialize and terminate one instance.
