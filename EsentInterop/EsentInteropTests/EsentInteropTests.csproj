@@ -97,6 +97,7 @@
     <Compile Include="Config.cs" />
     <Compile Include="IndexrangeTests.cs" />
     <Compile Include="SeekTests.cs" />
+    <Compile Include="SimplePerfTest.cs" />
     <Compile Include="TableTests.cs" />
     <Compile Include="UpdateTests.cs" />
     <Compile Include="TransactionTests.cs" />
