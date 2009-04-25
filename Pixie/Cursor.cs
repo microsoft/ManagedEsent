@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Isam.Esent.Interop;
 
 namespace Microsoft.Isam.Esent
@@ -295,8 +296,16 @@ namespace Microsoft.Isam.Esent
             this.CheckNotDisposed();
             this.CheckHasCurrency();
 
-            byte[] bookmarkData = Api.GetBookmark(this.session, this.table);
-            var bookmark = new Bookmark { BookmarkData = bookmarkData };
+            byte[] bookmarkData = new byte[Api.BookmarkMost];
+            int bookmarkLength;
+            Api.JetGetBookmark(this.session, this.table, bookmarkData, bookmarkData.Length, out bookmarkLength);
+            Debug.Assert(bookmarkLength <= bookmarkData.Length, "Bookmark is too long");
+            var bookmark = new Bookmark
+            {
+                BookmarkData = bookmarkData,
+                BookmarkLength = bookmarkLength
+            };
+
             return bookmark;
         }
 
@@ -310,7 +319,7 @@ namespace Microsoft.Isam.Esent
             this.CheckNotDisposed();
             this.CancelUpdate();
 
-            Api.JetGotoBookmark(this.session, this.table, bookmark.BookmarkData, bookmark.BookmarkData.Length);
+            Api.JetGotoBookmark(this.session, this.table, bookmark.BookmarkData, bookmark.BookmarkLength);
             this.hasCurrency = true;
             this.CheckNotDisposed();
         }
@@ -349,9 +358,9 @@ namespace Microsoft.Isam.Esent
 
             if (JET_prep.Cancel == prep)
             {
-                string error = "Cannot use JET_prep.Cancel with PrepareUpdate. Use the Cancel method";
-                this.Tracer.TraceError(error);
-                throw new ArgumentException(error);
+                const string Error = "Cannot use JET_prep.Cancel with PrepareUpdate. Use the Cancel method";
+                this.Tracer.TraceError(Error);
+                throw new ArgumentException(Error);
             }
 
             Api.JetPrepareUpdate(this.session, this.table, prep);
@@ -375,9 +384,11 @@ namespace Microsoft.Isam.Esent
             Api.JetUpdate(this.session, this.table, updateBookmark, updateBookmark.Length, out bookmarkSize);
             this.inUpdate = false;
 
-            Array.Resize(ref updateBookmark, bookmarkSize);
-
-            var bookmark = new Bookmark { BookmarkData = updateBookmark };
+            var bookmark = new Bookmark
+            {
+                BookmarkData = updateBookmark,
+                BookmarkLength = bookmarkSize
+            };
             this.GotoBookmark(bookmark);
 
             return bookmark;
@@ -475,6 +486,24 @@ namespace Microsoft.Isam.Esent
         }
 
         /// <summary>
+        /// Retrieve a column from the current record as an Int64
+        /// </summary>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="grbit">Retrieve options.</param>
+        /// <returns>The data from the column.</returns>
+        public virtual Int64? RetrieveColumnAsInt64(JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
+        {
+            this.Tracer.TraceVerbose("RetrieveColumn");
+            this.CheckNotDisposed();
+            if (0 == (RetrieveColumnGrbit.RetrieveCopy & grbit))
+            {
+                this.CheckHasCurrency();
+            }
+
+            return Api.RetrieveColumnAsInt64(this.session, this.table, columnid, grbit);
+        }
+
+        /// <summary>
         /// Check to see if the cursor is in an update. Throws an exception if the cursor
         /// is not in an update.
         /// </summary>
@@ -514,17 +543,6 @@ namespace Microsoft.Isam.Esent
                 this.Tracer.TraceError(error);
                 throw new ObjectDisposedException(error);
             }
-        }
-
-        /// <summary>
-        /// A bookmark represents a cursor location.
-        /// </summary>
-        public struct Bookmark
-        {
-            /// <summary>
-            /// Gets or sets the ESE bookmark of the record.
-            /// </summary>
-            internal byte[] BookmarkData { get; set; }
         }
     }
 }

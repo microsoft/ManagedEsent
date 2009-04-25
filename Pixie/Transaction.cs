@@ -5,9 +5,29 @@
 //-----------------------------------------------------------------------
 
 using System;
+using Microsoft.Isam.Esent.Interop;
 
 namespace Microsoft.Isam.Esent
 {
+    /// <summary>
+    /// Options for transaction commit.
+    /// </summary>
+    public enum CommitOptions
+    {
+        /// <summary>
+        /// Perform a normal durable commit.
+        /// </summary>
+        Durable,
+
+        /// <summary>
+        /// A fast commit. This does not flush log records to disk.
+        /// Committing a transaction this way is faster and preserves
+        /// database consistency but some data may be lost in the event
+        /// of a crash.
+        /// </summary>
+        Fast,
+    }
+
     /// <summary>
     /// A class that encapsulates a transaction.
     /// </summary>
@@ -44,15 +64,24 @@ namespace Microsoft.Isam.Esent
         /// <summary>
         /// Commit a transaction. This object must be in a transaction.
         /// </summary>
-        /// <param name="commitIsLazy">
-        /// Makes the commit lazy. A lazy commit doesn't synchronously flush the
-        /// commit log record to the disk.
+        /// <param name="options">
+        /// Options for transaction commit.
         /// </param>
-        public abstract void Commit(bool commitIsLazy);
+        public abstract void Commit(CommitOptions options);
 
         /// <summary>
         /// Rollback a transaction. This object must be in a transaction.
         /// </summary>
         public abstract void Rollback();
+
+        /// <summary>
+        /// Get the CommitTransactionGrbit that should be used for the given options.
+        /// </summary>
+        /// <param name="options">The commit options.</param>
+        /// <returns>The commit grbit for the options.</returns>
+        internal static CommitTransactionGrbit GrbitFromOptions(CommitOptions options)
+        {
+            return CommitOptions.Fast == options ? CommitTransactionGrbit.LazyFlush : CommitTransactionGrbit.None;
+        }
    }
 }

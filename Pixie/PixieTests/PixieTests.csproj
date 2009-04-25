@@ -57,6 +57,7 @@
     <Compile Include="InteropConversionTests.cs" />
     <Compile Include="DefinedAsTests.cs" />
     <Compile Include="JetParameterTests.cs" />
+    <Compile Include="SimplePerfTest.cs" />
     <Compile Include="TestUtilities.cs" />
     <Compile Include="TransactionTests.cs" />
     <Compile Include="CursorTests.cs" />

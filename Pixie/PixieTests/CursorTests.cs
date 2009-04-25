@@ -294,7 +294,7 @@ namespace PixieTests
         {
             Cursor cursor = this.OpenCursor();
             cursor.TryMoveFirst();
-            Cursor.Bookmark bookmark = cursor.GetBookmark();
+            Bookmark bookmark = cursor.GetBookmark();
             cursor.TryMoveLast();
             cursor.GotoBookmark(bookmark);
 

@@ -116,8 +116,9 @@ namespace Microsoft.Isam.Esent.Interop
                 if (JET_wrn.BufferTruncated == wrn)
                 {
                     // there is more data to retrieve
-                    JET_wrn wrn2 = Api.JetRetrieveColumn(sesid, tableid, columnid, data, data.Length, out dataSize, grbit, retinfo);
-                    if (JET_wrn.Success != wrn2)
+                    wrn = Api.JetRetrieveColumn(
+                        sesid, tableid, columnid, data, data.Length, out dataSize, grbit, retinfo);
+                    if (JET_wrn.Success != wrn)
                     {
                         string error = String.Format(
                             "Column size changed from {0} to {1}. The record was probably updated by another thread.",
@@ -126,7 +127,7 @@ namespace Microsoft.Isam.Esent.Interop
                         Trace.TraceError(error);
                         throw new InvalidOperationException(error);
                     }
-                }                
+                }
             }
 
             return data;
@@ -189,7 +190,15 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The data retrieved from the column as a short. Null if the column is null.</returns>
         public static short? RetrieveColumnAsInt16(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
-            return RetrieveColumnAndConvert(sesid, tableid, columnid, data => BitConverter.ToInt16(data, 0));
+            unsafe
+            {
+                const int DataSize = 2;
+                short data;
+                var pointer = new IntPtr(&data);
+                int ignored;
+                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out ignored, RetrieveColumnGrbit.None, null);
+                return JET_wrn.ColumnNull == wrn ? new short?() : data;
+            }
         }
 
         /// <summary>
@@ -202,7 +211,15 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The data retrieved from the column as an int. Null if the column is null.</returns>
         public static int? RetrieveColumnAsInt32(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
-            return RetrieveColumnAndConvert(sesid, tableid, columnid, data => BitConverter.ToInt32(data, 0));
+            unsafe
+            {
+                const int DataSize = 4;
+                int data;
+                var pointer = new IntPtr(&data);
+                int ignored;
+                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out ignored, RetrieveColumnGrbit.None, null);
+                return JET_wrn.ColumnNull == wrn ? new int?() : data;
+            }
         }
 
         /// <summary>
@@ -215,7 +232,30 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The data retrieved from the column as a long. Null if the column is null.</returns>
         public static long? RetrieveColumnAsInt64(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
-            return RetrieveColumnAndConvert(sesid, tableid, columnid, data => BitConverter.ToInt64(data, 0));
+            return Api.RetrieveColumnAsInt64(sesid, tableid, columnid, RetrieveColumnGrbit.None);
+        }
+
+        /// <summary>
+        /// Retrieves a single column value from the current record. The record is that
+        /// record associated with the index entry at the current position of the cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the column from.</param>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="grbit">Retrieval options.</param>
+        /// <returns>The data retrieved from the column as a long. Null if the column is null.</returns>
+        public static long? RetrieveColumnAsInt64(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
+        {
+            unsafe
+            {
+                const int DataSize = 8;
+                long data;
+                var pointer = new IntPtr(&data);
+                int actualDataSize;
+                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out actualDataSize, grbit, null);
+                Debug.Assert(DataSize == actualDataSize || JET_wrn.ColumnNull == wrn, "Unexpected column size");
+                return JET_wrn.ColumnNull == wrn ? new long?() : data;
+            }
         }
 
         /// <summary>
@@ -228,7 +268,15 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The data retrieved from the column as a float. Null if the column is null.</returns>
         public static float? RetrieveColumnAsFloat(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
-            return RetrieveColumnAndConvert(sesid, tableid, columnid, data => BitConverter.ToSingle(data, 0));
+            unsafe
+            {
+                const int DataSize = 4;
+                float data;
+                var pointer = new IntPtr(&data);
+                int ignored;
+                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out ignored, RetrieveColumnGrbit.None, null);
+                return JET_wrn.ColumnNull == wrn ? new float?() : data;
+            }
         }
 
         /// <summary>
@@ -241,7 +289,15 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The data retrieved from the column as a double. Null if the column is null.</returns>
         public static double? RetrieveColumnAsDouble(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
-            return RetrieveColumnAndConvert(sesid, tableid, columnid, data => BitConverter.ToDouble(data, 0));
+            unsafe
+            {
+                const int DataSize = 8;
+                double data;
+                var pointer = new IntPtr(&data);
+                int ignored;
+                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out ignored, RetrieveColumnGrbit.None, null);
+                return JET_wrn.ColumnNull == wrn ? new double?() : data;
+            }
         }
 
         /// <summary>
@@ -326,7 +382,15 @@ namespace Microsoft.Isam.Esent.Interop
         /// <remarks>Internal becaue unsigned types aren't CLS compliant.</remarks>
         internal static uint? RetrieveColumnAsUInt32(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
-            return RetrieveColumnAndConvert(sesid, tableid, columnid, data => BitConverter.ToUInt32(data, 0));
+            unsafe
+            {
+                const int DataSize = 4;
+                uint data;
+                var pointer = new IntPtr(&data);
+                int ignored;
+                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out ignored, RetrieveColumnGrbit.None, null);
+                return JET_wrn.ColumnNull == wrn ? new uint?() : data;
+            }
         }
 
         /// <summary>
@@ -340,7 +404,15 @@ namespace Microsoft.Isam.Esent.Interop
         /// <remarks>Internal becaue unsigned types aren't CLS compliant.</remarks>
         internal static ulong? RetrieveColumnAsUInt64(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
-            return RetrieveColumnAndConvert(sesid, tableid, columnid, data => BitConverter.ToUInt64(data, 0));
+            unsafe
+            {
+                const int DataSize = 8;
+                ulong data;
+                var pointer = new IntPtr(&data);
+                int ignored;
+                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out ignored, RetrieveColumnGrbit.None, null);
+                return JET_wrn.ColumnNull == wrn ? new ulong?() : data;
+            }
         }
 
         /// <summary>

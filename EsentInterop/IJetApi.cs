@@ -184,6 +184,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         int JetMakeKey(JET_SESID sesid, JET_TABLEID tableid, byte[] data, int dataSize, MakeKeyGrbit grbit);
 
+        int JetMakeKey(JET_SESID sesid, JET_TABLEID tableid, IntPtr data, int dataSize, MakeKeyGrbit grbit);
+
         int JetRetrieveKey(JET_SESID sesid, JET_TABLEID tableid, byte[] data, int dataSize, out int actualDataSize, RetrieveKeyGrbit grbit);
 
         int JetSeek(JET_SESID sesid, JET_TABLEID tableid, SeekGrbit grbit);
@@ -230,6 +232,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         int JetRetrieveColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, out int actualDataSize, RetrieveColumnGrbit grbit, JET_RETINFO retinfo);
 
+        int JetRetrieveColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, IntPtr data, int dataSize, out int actualDataSize, RetrieveColumnGrbit grbit, JET_RETINFO retinfo);
+
         int JetDelete(JET_SESID sesid, JET_TABLEID tableid);
 
         int JetPrepareUpdate(JET_SESID sesid, JET_TABLEID tableid, JET_prep prep);
@@ -237,6 +241,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         int JetUpdate(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize, out int actualBookmarkSize);
 
         int JetSetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, SetColumnGrbit grbit, JET_SETINFO setinfo);
+
+        int JetSetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, IntPtr data, int dataSize, SetColumnGrbit grbit, JET_SETINFO setinfo);
 
         int JetGetLock(JET_SESID sesid, JET_TABLEID tableid, GetLockGrbit grbit);
 

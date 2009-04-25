@@ -264,7 +264,7 @@ namespace PixieTests
         [Priority(0)]
         public void VerifyCreateColumndefFromColumnDefinitionSetsColtypShort()
         {
-            ColumnDefinition def = DefinedAs.ShortColumn(Any.String);
+            ColumnDefinition def = DefinedAs.Int16Column(Any.String);
             JET_COLUMNDEF columndef = this.converter.CreateColumndefFromColumnDefinition(def);
 
             Assert.AreEqual(JET_coltyp.Short, columndef.coltyp);
@@ -324,7 +324,7 @@ namespace PixieTests
         [Priority(0)]
         public void VerifyCreateColumndefFromColumnDefinitionSetsAutoincrement()
         {
-            ColumnDefinition def = DefinedAs.LongColumn(Any.String).AsAutoincrement();
+            ColumnDefinition def = DefinedAs.Int64Column(Any.String).AsAutoincrement();
             JET_COLUMNDEF columndef = this.converter.CreateColumndefFromColumnDefinition(def);
 
             Assert.AreEqual(ColumndefGrbit.ColumnAutoincrement, columndef.grbit);
@@ -334,7 +334,7 @@ namespace PixieTests
         [Priority(0)]
         public void VerifyCreateColumndefFromColumnDefinitionSetsIsNotNull()
         {
-            ColumnDefinition def = DefinedAs.LongColumn(Any.String).MustBeNonNull();
+            ColumnDefinition def = DefinedAs.Int64Column(Any.String).MustBeNonNull();
             JET_COLUMNDEF columndef = this.converter.CreateColumndefFromColumnDefinition(def);
 
             Assert.AreEqual(ColumndefGrbit.ColumnNotNULL, columndef.grbit);
@@ -344,7 +344,7 @@ namespace PixieTests
         [Priority(0)]
         public void VerifyCreateColumndefFromColumnDefinitionSetsVersion()
         {
-            ColumnDefinition def = DefinedAs.LongColumn(Any.String).AsVersion();
+            ColumnDefinition def = DefinedAs.Int64Column(Any.String).AsVersion();
             JET_COLUMNDEF columndef = this.converter.CreateColumndefFromColumnDefinition(def);
 
             Assert.AreEqual(ColumndefGrbit.ColumnVersion, columndef.grbit);

@@ -31,7 +31,7 @@ namespace Microsoft.Isam.Esent
         /// </summary>
         /// <param name="table">The table containing the record.</param>
         /// <param name="bookmark">The bookmark of the record.</param>
-        public ReadWriteRecord(TableBase table, Cursor.Bookmark bookmark) :
+        public ReadWriteRecord(TableBase table, Bookmark bookmark) :
             base(table, bookmark)
         {
         }
@@ -47,7 +47,7 @@ namespace Microsoft.Isam.Esent
             {
                 this.Bookmark = this.Cursor.Update();
                 this.CurrentlyInUpdate = false;
-                this.CloseJetTableid();
+                this.CloseCursor();
             }
 
             Debug.Assert(!this.CurrentlyInUpdate, "Still in update after call to Save()");
@@ -80,7 +80,7 @@ namespace Microsoft.Isam.Esent
             {
                 this.Cursor.CancelUpdate();
                 this.CurrentlyInUpdate = false;
-                this.CloseJetTableid();
+                this.CloseCursor();
 
                 if (null == this.Bookmark)
                 {
@@ -106,7 +106,7 @@ namespace Microsoft.Isam.Esent
                 this.PrepareReplace();
             }
 
-            Debug.Assert(this.HasOwnCursor, "Expected this record to have its own myTableid");
+            Debug.Assert(this.HasOwnCursor, "Expected this record to have its own Cursor");
             try
             {
                 this.Table.Columns[column].SetColumn(this.Cursor, value);

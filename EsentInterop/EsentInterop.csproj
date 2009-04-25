@@ -39,6 +39,7 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile>bin\Release\Esent.Interop.XML</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
@@ -77,6 +78,7 @@
     <Compile Include="Conversions.cs" />
     <Compile Include="EnumerableColumnInfo.cs" />
     <Compile Include="IJetApi.cs" />
+    <Compile Include="InternalApi.cs" />
     <Compile Include="jet_indexrange.cs" />
     <Compile Include="jet_recordlist.cs" />
     <Compile Include="TableEnumerator.cs" />

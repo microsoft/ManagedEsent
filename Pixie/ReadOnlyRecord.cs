@@ -19,7 +19,7 @@ namespace Microsoft.Isam.Esent
         /// </summary>
         /// <param name="table">The table containing the record.</param>
         /// <param name="bookmark">The bookmark of the record.</param>
-        public ReadOnlyRecord(TableBase table, Cursor.Bookmark bookmark) :
+        public ReadOnlyRecord(TableBase table, Bookmark bookmark) :
             base(table, bookmark)
         {
         }

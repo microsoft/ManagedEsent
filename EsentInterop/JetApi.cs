@@ -649,42 +649,107 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
         }
 
+        public int JetRetrieveColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, out int actualDataSize, RetrieveColumnGrbit grbit, JET_RETINFO retinfo)
+        {
+            this.TraceFunctionCall("JetRetrieveColumn");
+            this.CheckDataSize(data, dataSize);
+
+            unsafe
+            {
+                fixed (byte* pointer = data)
+                {
+                    return this.JetRetrieveColumn(
+                        sesid, tableid, columnid, new IntPtr(pointer), dataSize, out actualDataSize, grbit, retinfo);
+                }
+            }
+        }
+
+        public int JetRetrieveColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, IntPtr data, int dataSize, out int actualDataSize, RetrieveColumnGrbit grbit, JET_RETINFO retinfo)
+        {
+            this.TraceFunctionCall("JetRetrieveColumn");
+            actualDataSize = 0;
+
+            int err;
+            uint cbActual = 0;
+            if (null != retinfo)
+            {
+                NATIVE_RETINFO nativeRetinfo = retinfo.GetNativeRetinfo();
+                GCHandle retinfoHandle = GCHandle.Alloc(nativeRetinfo, GCHandleType.Pinned);
+                try
+                {
+                    err = this.Err(NativeMethods.JetRetrieveColumn(
+                            sesid.Value,
+                            tableid.Value,
+                            columnid.Value,
+                            data,
+                            (uint)dataSize,
+                            ref cbActual,
+                            (uint)grbit,
+                            retinfoHandle.AddrOfPinnedObject()));
+                }
+                finally
+                {
+                    retinfoHandle.Free();
+                }
+
+                retinfo.SetFromNativeRetinfo(nativeRetinfo);
+            }
+            else
+            {
+                err = this.Err(NativeMethods.JetRetrieveColumn(
+                        sesid.Value,
+                        tableid.Value,
+                        columnid.Value,
+                        data,
+                        (uint)dataSize,
+                        ref cbActual,
+                        (uint)grbit,
+                        IntPtr.Zero));
+            }
+
+            actualDataSize = (int)cbActual;
+            return err;
+        }
+
         public int JetMakeKey(JET_SESID sesid, JET_TABLEID tableid, byte[] data, int dataSize, MakeKeyGrbit grbit)
         {
             this.TraceFunctionCall("JetMakeKey");
             this.CheckDataSize(data, dataSize);
 
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
+            unsafe
             {
-                return this.Err(NativeMethods.JetMakeKey(sesid.Value, tableid.Value, dataHandle.AddrOfPinnedObject(), (uint)dataSize, (uint)grbit));
+                fixed (byte* pointer = data)
+                {
+                    return this.JetMakeKey(sesid, tableid, new IntPtr(pointer), dataSize, grbit);
+                }
             }
-            finally
-            {
-                dataHandle.Free();
-            }
+        }
+
+        public int JetMakeKey(JET_SESID sesid, JET_TABLEID tableid, IntPtr data, int dataSize, MakeKeyGrbit grbit)
+        {
+            this.TraceFunctionCall("JetMakeKey");
+            return this.Err(NativeMethods.JetMakeKey(sesid.Value, tableid.Value, data, (uint)dataSize, (uint)grbit));
         }
 
         public int JetRetrieveKey(JET_SESID sesid, JET_TABLEID tableid, byte[] data, int dataSize, out int actualDataSize, RetrieveKeyGrbit grbit)
         {
             this.TraceFunctionCall("JetRetrieveKey");
-            actualDataSize = 0;
             this.CheckDataSize(data, dataSize);
 
-            uint cbActual = 0;
-            int err;
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+
             try
             {
-                err = this.Err(NativeMethods.JetRetrieveKey(sesid.Value, tableid.Value, dataHandle.AddrOfPinnedObject(), (uint)dataSize, ref cbActual, (uint)grbit));
+                uint cbActual = 0;
+                int err = this.Err(NativeMethods.JetRetrieveKey(sesid.Value, tableid.Value, dataHandle.AddrOfPinnedObject(), (uint)dataSize, ref cbActual, (uint)grbit));
+
+                actualDataSize = (int)cbActual;
+                return err;
             }
             finally
             {
                 dataHandle.Free();
             }
-
-            actualDataSize = (int)cbActual;
-            return err;
         }
 
         public int JetSeek(JET_SESID sesid, JET_TABLEID tableid, SeekGrbit grbit)
@@ -817,62 +882,6 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         #region DML
 
-        public int JetRetrieveColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, out int actualDataSize, RetrieveColumnGrbit grbit, JET_RETINFO retinfo)
-        {
-            this.TraceFunctionCall("JetRetrieveColumn");
-            actualDataSize = 0;
-            this.CheckDataSize(data, dataSize);
-
-            int err;
-            uint cbActual = 0;
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
-            {
-                if (null != retinfo)
-                {
-                    NATIVE_RETINFO nativeRetinfo = retinfo.GetNativeRetinfo();
-                    GCHandle retinfoHandle = GCHandle.Alloc(nativeRetinfo, GCHandleType.Pinned);
-                    try
-                    {
-                        err = this.Err(NativeMethods.JetRetrieveColumn(
-                                sesid.Value, 
-                                tableid.Value, 
-                                columnid.Value,
-                                dataHandle.AddrOfPinnedObject(), 
-                                (uint) dataSize,
-                                ref cbActual, 
-                                (uint) grbit,
-                                retinfoHandle.AddrOfPinnedObject()));
-                    }
-                    finally
-                    {
-                        retinfoHandle.Free();
-                    }
-
-                retinfo.SetFromNativeRetinfo(nativeRetinfo);
-                }
-                else
-                {
-                    err = this.Err(NativeMethods.JetRetrieveColumn(
-                            sesid.Value, 
-                            tableid.Value, 
-                            columnid.Value,
-                            dataHandle.AddrOfPinnedObject(), 
-                            (uint) dataSize,
-                            ref cbActual, 
-                            (uint) grbit, 
-                            IntPtr.Zero));
-                }
-            }
-            finally
-            {
-                dataHandle.Free();
-            }
-
-            actualDataSize = (int)cbActual;
-            return err;
-        }
-
         public int JetDelete(JET_SESID sesid, JET_TABLEID tableid)
         {
             this.TraceFunctionCall("JetDelete");
@@ -916,8 +925,27 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetSetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, SetColumnGrbit grbit, JET_SETINFO setinfo)
         {
             this.TraceFunctionCall("JetSetColumn");
+            if (null != data && dataSize > data.Length && (SetColumnGrbit.SizeLV != (grbit & SetColumnGrbit.SizeLV)))
+            {
+                throw new ArgumentException(
+                    "dataSize cannot be greater than the length of the data (unless the SizeLV option is used)",
+                    "dataSize");
+            }
+
+            unsafe
+            {
+                fixed (byte* pointer = data)
+                {
+                    return this.JetSetColumn(sesid, tableid, columnid, new IntPtr(pointer), dataSize, grbit, setinfo);
+                }
+            }
+        }
+
+        public int JetSetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, IntPtr data, int dataSize, SetColumnGrbit grbit, JET_SETINFO setinfo)
+        {
+            this.TraceFunctionCall("JetSetColumn");
             this.CheckNotNegative(dataSize, "dataSize");
-            if (null == data)
+            if (IntPtr.Zero == data)
             {
                 if (dataSize > 0 && (SetColumnGrbit.SizeLV != (grbit & SetColumnGrbit.SizeLV)))
                 {
@@ -926,40 +954,23 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                         "dataSize");
                 }
             }
-            else 
-            {
-                if (dataSize > data.Length && (SetColumnGrbit.SizeLV != (grbit & SetColumnGrbit.SizeLV)))
-                {
-                    throw new ArgumentException(
-                        "dataSize cannot be greater than the length of the data (unless the SizeLV option is used)",
-                        "dataSize");
-                }
-            }
 
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
+            if (null != setinfo)
             {
-                if (null != setinfo)
+                NATIVE_SETINFO nativeSetinfo = setinfo.GetNativeSetinfo();
+                GCHandle setinfoHandle = GCHandle.Alloc(nativeSetinfo, GCHandleType.Pinned);
+                try
                 {
-                    NATIVE_SETINFO nativeSetinfo = setinfo.GetNativeSetinfo();
-                    GCHandle setinfoHandle = GCHandle.Alloc(nativeSetinfo, GCHandleType.Pinned);
-                    try
-                    {
-                        return this.Err(NativeMethods.JetSetColumn(sesid.Value, tableid.Value, columnid.Value, dataHandle.AddrOfPinnedObject(), (uint)dataSize, (uint)grbit, setinfoHandle.AddrOfPinnedObject()));
-                    }
-                    finally
-                    {
-                        setinfoHandle.Free();
-                    }
+                    return this.Err(NativeMethods.JetSetColumn(sesid.Value, tableid.Value, columnid.Value, data, (uint)dataSize, (uint)grbit, setinfoHandle.AddrOfPinnedObject()));
                 }
-                else
+                finally
                 {
-                    return this.Err(NativeMethods.JetSetColumn(sesid.Value, tableid.Value, columnid.Value, dataHandle.AddrOfPinnedObject(), (uint)dataSize, (uint)grbit, IntPtr.Zero));
+                    setinfoHandle.Free();
                 }
             }
-            finally
+            else
             {
-                dataHandle.Free();
+                return this.Err(NativeMethods.JetSetColumn(sesid.Value, tableid.Value, columnid.Value, data, (uint)dataSize, (uint)grbit, IntPtr.Zero));
             }
         }
 

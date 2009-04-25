@@ -120,7 +120,6 @@ namespace Microsoft.Isam.Esent
             }
 
             this.isDisposed = true;
-            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -128,17 +127,16 @@ namespace Microsoft.Isam.Esent
         /// </summary>
         public override void Commit()
         {
-            this.Commit(false);
+            this.Commit(CommitOptions.Durable);
         }
 
         /// <summary>
         /// Commit a transaction. This object must be in a transaction.
         /// </summary>
-        /// <param name="commitIsLazy">
-        /// Makes the commit lazy. A lazy commit doesn't synchronously flush the
-        /// commit log record to the disk.
+        /// <param name="options">
+        /// Transaction commit options.
         /// </param>
-        public override void Commit(bool commitIsLazy)
+        public override void Commit(CommitOptions options)
         {
             this.CheckNotDisposed();
             if (!this.inTransaction)
@@ -160,7 +158,7 @@ namespace Microsoft.Isam.Esent
                 this.Committed();
             }
 
-            CommitTransactionGrbit grbit = commitIsLazy ? CommitTransactionGrbit.LazyFlush : CommitTransactionGrbit.None;
+            CommitTransactionGrbit grbit = Transaction.GrbitFromOptions(options);
             Api.JetCommitTransaction(this.session, grbit);
 
             // Even if this transaction commits the work done in the transaction will 

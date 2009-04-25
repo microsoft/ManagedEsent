@@ -86,7 +86,7 @@ namespace InteropApiTests
             Api.JetCreateTable(this.sesid, this.dbid, this.table, 0, 100, out this.tableid);
 
             JET_COLUMNDEF columndef = null;
-            var columnid = new JET_COLUMNID();
+            JET_COLUMNID columnid;
             
             columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Bit };
             Api.JetAddColumn(this.sesid, this.tableid, "Boolean", columndef, null, 0, out columnid);
@@ -205,6 +205,25 @@ namespace InteropApiTests
         #endregion Setup/Teardown
 
         #region RetrieveColumnAs tests
+
+        /// <summary>
+        /// Retrieve a column that exceeds the buffer created by JetRetrieveColumn
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void RetrieveLargeColumn()
+        {
+            JET_COLUMNID columnid = this.columnidDict["Binary"];
+            var expected = new byte[4096];
+
+            var random = new Random();
+            random.NextBytes(expected);
+
+            this.InsertRecord(columnid, expected);
+
+            byte[] actual = Api.RetrieveColumn(this.sesid, this.tableid, columnid);
+            CollectionAssert.AreEqual(expected, actual);
+        }
 
         /// <summary>
         /// Check that retrieving a column returns null

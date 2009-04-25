@@ -37,7 +37,7 @@ namespace PixieTests
         [Priority(0)]
         public void VerifyShortColumnCreatesShortColumn()
         {
-            ColumnDefinition columndef = DefinedAs.ShortColumn("Short");
+            ColumnDefinition columndef = DefinedAs.Int16Column("Short");
             Assert.AreEqual("Short", columndef.Name);
             Assert.AreEqual(ColumnType.Int16, columndef.Type);
         }
@@ -46,7 +46,7 @@ namespace PixieTests
         [Priority(0)]
         public void VerifyUShortColumnCreatesUShortColumn()
         {
-            ColumnDefinition columndef = DefinedAs.UShortColumn("UShort");
+            ColumnDefinition columndef = DefinedAs.UInt16Column("UShort");
             Assert.AreEqual("UShort", columndef.Name);
             Assert.AreEqual(ColumnType.UInt16, columndef.Type);
         }
@@ -55,7 +55,7 @@ namespace PixieTests
         [Priority(0)]
         public void VerifyIntColumnCreatesIntColumn()
         {
-            ColumnDefinition columndef = DefinedAs.IntColumn("int");
+            ColumnDefinition columndef = DefinedAs.Int32Column("int");
             Assert.AreEqual("int", columndef.Name);
             Assert.AreEqual(ColumnType.Int32, columndef.Type);
         }
@@ -64,7 +64,7 @@ namespace PixieTests
         [Priority(0)]
         public void VerifyUIntColumnCreatesUIntColumn()
         {
-            ColumnDefinition columndef = DefinedAs.UIntColumn("UInt");
+            ColumnDefinition columndef = DefinedAs.UInt32Column("UInt");
             Assert.AreEqual("UInt", columndef.Name);
             Assert.AreEqual(ColumnType.UInt32, columndef.Type);
         }
@@ -73,7 +73,7 @@ namespace PixieTests
         [Priority(0)]
         public void VerifyLongColumnCreatesLongColumn()
         {
-            ColumnDefinition columndef = DefinedAs.LongColumn("Long");
+            ColumnDefinition columndef = DefinedAs.Int64Column("Long");
             Assert.AreEqual("Long", columndef.Name);
             Assert.AreEqual(ColumnType.Int64, columndef.Type);
         }
@@ -145,7 +145,7 @@ namespace PixieTests
         [Priority(0)]
         public void VerifyDefinedAsSetsDefaultOptions()
         {
-            ColumnDefinition columndef = DefinedAs.IntColumn("sample");
+            ColumnDefinition columndef = DefinedAs.Int32Column("sample");
             Assert.IsFalse(columndef.IsAutoincrement);
             Assert.IsFalse(columndef.IsNotNull);
             Assert.IsFalse(columndef.IsVersion);
@@ -156,7 +156,7 @@ namespace PixieTests
         [Priority(0)]
         public void VerifyAsAutoincrementSetsAutoincrement()
         {
-            ColumnDefinition columndef = DefinedAs.IntColumn("col").AsAutoincrement();
+            ColumnDefinition columndef = DefinedAs.Int32Column("col").AsAutoincrement();
             Assert.IsTrue(columndef.IsAutoincrement);
         }
 
@@ -164,7 +164,7 @@ namespace PixieTests
         [Priority(0)]
         public void VerifyWithMaxSizeSetsMaxLength()
         {
-            ColumnDefinition columndef = DefinedAs.IntColumn("col").WithMaxSize(100);
+            ColumnDefinition columndef = DefinedAs.Int32Column("col").WithMaxSize(100);
             Assert.AreEqual(100, columndef.MaxSize);
         }
 
@@ -172,7 +172,7 @@ namespace PixieTests
         [Priority(0)]
         public void VerifyWithDefaultValueSetsDefaultValue()
         {
-            ColumnDefinition columndef = DefinedAs.IntColumn("col").WithDefaultValue(56);
+            ColumnDefinition columndef = DefinedAs.Int32Column("col").WithDefaultValue(56);
             Assert.AreEqual(56, columndef.DefaultValue);
         }
 
@@ -180,7 +180,7 @@ namespace PixieTests
         [Priority(0)]
         public void VerifyMustBeNonNullSetsIsNotNull()
         {
-            ColumnDefinition columndef = DefinedAs.IntColumn("col").MustBeNonNull();
+            ColumnDefinition columndef = DefinedAs.Int32Column("col").MustBeNonNull();
             Assert.IsTrue(columndef.IsNotNull);
         }
 
@@ -188,7 +188,7 @@ namespace PixieTests
         [Priority(0)]
         public void VerifyAsVersionSetsVersion()
         {
-            ColumnDefinition columndef = DefinedAs.IntColumn("col").AsVersion();
+            ColumnDefinition columndef = DefinedAs.Int32Column("col").AsVersion();
             Assert.IsTrue(columndef.IsVersion);
         }
 

@@ -86,6 +86,22 @@ namespace PixieTests
         }
 
         /// <summary>
+        /// insert a record.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void InsertRecord()
+        {
+            var value = Any.Int32;
+
+            Record r = this.table.NewRecord();
+            r[intColumn] = value;
+            r.Save();
+
+            Assert.AreEqual(value, r[intColumn]);
+        }
+
+        /// <summary>
         /// Update a record.
         /// </summary>
         [TestMethod]
@@ -100,6 +116,22 @@ namespace PixieTests
             r.Save();
 
             Assert.AreEqual(2, r[intColumn]);
+        }
+
+        /// <summary>
+        /// insert a record.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void VerifyColumnNamesAreCaseInsensitive()
+        {
+            var value = Any.Int32;
+
+            Record r = this.table.NewRecord();
+            r[intColumn.ToUpper()] = value;
+            r.Save();
+
+            Assert.AreEqual(value, r[intColumn.ToLower()]);
         }
 
         /// <summary>

@@ -67,7 +67,7 @@ namespace Microsoft.Isam.Esent
         /// </summary>
         /// <param name="table">The table containing the record.</param>
         /// <param name="bookmark">The bookmark of the record.</param>
-        protected RecordBase(TableBase table, Cursor.Bookmark bookmark) :
+        protected RecordBase(TableBase table, Bookmark bookmark) :
             this()
         {
             this.table = table;
@@ -124,7 +124,7 @@ namespace Microsoft.Isam.Esent
         /// for records that are being inserted (a record doesn't
         /// get a bookmark until it is inserted into the table).
         /// </summary>
-        protected Cursor.Bookmark? Bookmark { get; set; }
+        protected Bookmark? Bookmark { get; set; }
 
         /// <summary>
         /// Gets the Session for this record.
@@ -201,7 +201,7 @@ namespace Microsoft.Isam.Esent
         public virtual void Dispose()
         {
             this.Cancel();
-            this.CloseJetTableid();
+            this.CloseCursor();
             this.IsDisposed = true;
             GC.SuppressFinalize(this);
         }
@@ -284,9 +284,9 @@ namespace Microsoft.Isam.Esent
         }
 
         /// <summary>
-        /// Close the MyCursor allocated by OpenJetTableid.
+        /// Close the Cursor allocated by OpenJetTableid.
         /// </summary>
-        protected void CloseJetTableid()
+        protected void CloseCursor()
         {
             Debug.Assert(!this.CurrentlyInUpdate, "Record is in an update");
             if (this.HasOwnCursor)

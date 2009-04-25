@@ -64,7 +64,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         protected override void ReleaseResource()
         {
-            Api.JetEndSession(this.JetSesid, EndSessionGrbit.None);
+            if (JET_SESID.Nil != this.sesid)
+            {
+                Api.JetEndSession(this.JetSesid, EndSessionGrbit.None);
+            }
+
             this.sesid = JET_SESID.Nil;
             this.ResourceWasReleased();
         }

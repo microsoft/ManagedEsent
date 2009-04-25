@@ -293,56 +293,78 @@ namespace Microsoft.Isam.Esent
         /// </remarks>
         /// <param name="bookmark">The bookmark of the record.</param>
         /// <returns>A new record object.</returns>
-        protected abstract Record CreateRecord(Cursor.Bookmark bookmark);
+        protected abstract Record CreateRecord(Bookmark bookmark);
 
         /// <summary>
         /// Load the column meta-data for the table.
         /// </summary>
         private void LoadColumnMetaData()
         {
-            var dataConversion = Dependencies.Container.Resolve<DataConversion>();
-            this.Columns = new Dictionary<string, ColumnMetaData>();
+            this.Columns = new Dictionary<string, ColumnMetaData>(StringComparer.InvariantCultureIgnoreCase);
             using (Transaction trx = this.Connection.BeginTransaction())
             {
                 foreach (ColumnInfo columninfo in this.TableCursor.GetColumns())
                 {
-                    var converter = Dependencies.Container.Resolve<InteropConversion>();
-                    ColumnMetaData metadata = converter.CreateColumnMetaDataFromColumnInfo(columninfo);
-                    metadata.ObjectConverter = dataConversion.ConvertToObject[metadata.Type];
-                    metadata.ObjectToBytesConverter = dataConversion.ConvertObjectToBytes[metadata.Type];
-                    metadata.BytesToObjectConverter = dataConversion.ConvertBytesToObject[metadata.Type];
-
-                    metadata.SetColumn = (cursor, obj) =>
-                    {
-                        byte[] data = metadata.ObjectToBytesConverter(metadata.ObjectConverter(obj));
-                        if (null == data)
-                        {
-                            cursor.SetColumn(metadata.Columnid, null, SetColumnGrbit.None);
-                        }
-                        else if (data.Length == 0)
-                        {
-                            cursor.SetColumn(metadata.Columnid, null, SetColumnGrbit.ZeroLength);
-                        }
-                        else
-                        {
-                            cursor.SetColumn(metadata.Columnid, data, SetColumnGrbit.None);
-                        }
-                    };
-
-                    metadata.MakeKey = (cursor, obj, grbit) =>
-                    {
-                        byte[] data = metadata.ObjectToBytesConverter(metadata.ObjectConverter(obj));
-                        cursor.MakeKey(data, grbit);
-                    };
-
-                    metadata.RetrieveColumn = (cursor, grbit) => metadata.BytesToObjectConverter(
-                                                                     cursor.RetrieveColumn(metadata.Columnid, grbit));
+                    ColumnMetaData metadata = GetMetadata(columninfo);
 
                     this.Columns[metadata.Name] = metadata;
                 }
 
                 trx.Commit();
             }
+        }
+
+        /// <summary>
+        /// Create a ColumnMetaData object from a ColumnInfo.
+        /// </summary>
+        /// <param name="columninfo">The ColumnInfo for the column.</param>
+        /// <returns>A ColumnMetaData object for the column.</returns>
+        private ColumnMetaData GetMetadata(ColumnInfo columninfo)
+        {
+            var converter = Dependencies.Container.Resolve<InteropConversion>();
+            var dataConversion = Dependencies.Container.Resolve<DataConversion>();
+
+            ColumnMetaData metadata = converter.CreateColumnMetaDataFromColumnInfo(columninfo);
+
+            metadata.ObjectConverter = dataConversion.ConvertToObject[metadata.Type];
+            metadata.ObjectToBytesConverter = dataConversion.ConvertObjectToBytes[metadata.Type];
+            metadata.BytesToObjectConverter = dataConversion.ConvertBytesToObject[metadata.Type];
+
+            metadata.SetColumn = (cursor, obj) =>
+            {
+                byte[] data = metadata.ObjectToBytesConverter(metadata.ObjectConverter(obj));
+                if (null == data)
+                {
+                    cursor.SetColumn(metadata.Columnid, null, SetColumnGrbit.None);
+                }
+                else if (data.Length == 0)
+                {
+                    cursor.SetColumn(metadata.Columnid, null, SetColumnGrbit.ZeroLength);
+                }
+                else
+                {
+                    cursor.SetColumn(metadata.Columnid, data, SetColumnGrbit.None);
+                }
+            };
+
+            metadata.MakeKey = (cursor, obj, grbit) =>
+            {
+                byte[] data = metadata.ObjectToBytesConverter(metadata.ObjectConverter(obj));
+                cursor.MakeKey(data, grbit);
+            };
+
+            switch(metadata.Type)
+            {
+                case ColumnType.Int64:
+                    metadata.RetrieveColumn = (cursor, grbit) => cursor.RetrieveColumnAsInt64(metadata.Columnid, grbit);
+                    break;
+                default:
+                    metadata.RetrieveColumn = (cursor, grbit) => metadata.BytesToObjectConverter(
+                                                                     cursor.RetrieveColumn(metadata.Columnid, grbit));
+                    break;
+            }
+
+            return metadata;
         }
 
         /// <summary>

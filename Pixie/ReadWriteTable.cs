@@ -52,7 +52,7 @@ namespace Microsoft.Isam.Esent
         /// </summary>
         /// <param name="bookmark">The bookmark of the record.</param>
         /// <returns>A new ReadWriteRecord.</returns>
-        protected override Record CreateRecord(Cursor.Bookmark bookmark)
+        protected override Record CreateRecord(Bookmark bookmark)
         {
             return new ReadWriteRecord(this, bookmark);
         }

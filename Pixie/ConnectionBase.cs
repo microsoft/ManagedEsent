@@ -29,7 +29,7 @@ namespace Microsoft.Isam.Esent
         /// <summary>
         /// The ESE session for this connection.
         /// </summary>
-        private Session session;
+        private readonly Session session;
 
         /// <summary>
         /// The ESE database for this connection.
@@ -148,9 +148,10 @@ namespace Microsoft.Isam.Esent
 
                 this.Tracer.TraceInfo("closed (database '{0}')", this.Database);
 
-                if (null != this.Disposed)
+                Action<ConnectionBase> disposedEvent = this.Disposed;
+                if (null != disposedEvent)
                 {
-                    this.Disposed(this);
+                    disposedEvent(this);
                 }
 
                 this.isDisposed = true;
@@ -184,7 +185,7 @@ namespace Microsoft.Isam.Esent
         /// <returns>The Connection that performed the transaction.</returns>
         public Connection UsingTransaction(Action block)
         {
-            return this.UsingTransaction(block, false);
+            return this.UsingTransaction(block, CommitOptions.Durable);
         }
 
         /// <summary>
@@ -195,7 +196,7 @@ namespace Microsoft.Isam.Esent
         /// <returns>The Connection that performed the transaction.</returns>
         public Connection UsingLazyTransaction(Action block)
         {
-            return this.UsingTransaction(block, true);
+            return this.UsingTransaction(block, CommitOptions.Fast);
         }
 
         /// <summary>
@@ -308,16 +309,15 @@ namespace Microsoft.Isam.Esent
         /// if the operation completes normally.
         /// </summary>
         /// <param name="block">The operation to perform.</param>
-        /// <param name="isLazy">Commit option for the transaction.</param>
+        /// <param name="options">Commit option for the transaction.</param>
         /// <returns>The Connection that performed the transaction.</returns>
-        private Connection UsingTransaction(Action block, bool isLazy)
+        private Connection UsingTransaction(Action block, CommitOptions options)
         {
-            using (Transaction transaction = this.BeginTransaction())
+            using (var trx = this.BeginTransaction())
             {
                 block();
-                transaction.Commit(isLazy);
+                trx.Commit(options);
             }
-
             return this;
         }
 

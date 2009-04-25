@@ -401,7 +401,7 @@ namespace PixieTests
             Assert.AreEqual((uint)999, r["uint"]);
         }
 
-        #endregion Uint		
+        #endregion Uint
 
         #region Long
 
@@ -447,7 +447,7 @@ namespace PixieTests
             Assert.AreEqual((long)999, r["long"]);
         }
 
-        #endregion Long		
+        #endregion Long
 
         #region Float
 
@@ -494,7 +494,7 @@ namespace PixieTests
             Assert.AreEqual(expected, r["float"]);
         }
 
-        #endregion Float				
+        #endregion Float
 
         #region Double
 
@@ -540,7 +540,7 @@ namespace PixieTests
             Assert.AreEqual(Math.PI, r["double"]);
         }
 
-        #endregion Double	
+        #endregion Double
 
         #region DateTime
 

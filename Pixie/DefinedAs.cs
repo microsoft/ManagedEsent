@@ -43,7 +43,7 @@ namespace Microsoft.Isam.Esent
         /// <returns>
         /// A column definition for a Short column with the specified name.
         /// </returns>
-        public static ColumnDefinition ShortColumn(string name)
+        public static ColumnDefinition Int16Column(string name)
         {
             return new ColumnDefinition(name, ColumnType.Int16);
         }
@@ -55,7 +55,7 @@ namespace Microsoft.Isam.Esent
         /// <returns>
         /// A column definition for a UShort column with the specified name.
         /// </returns>
-        public static ColumnDefinition UShortColumn(string name)
+        public static ColumnDefinition UInt16Column(string name)
         {
             return new ColumnDefinition(name, ColumnType.UInt16);
         }
@@ -67,7 +67,7 @@ namespace Microsoft.Isam.Esent
         /// <returns>
         /// A column definition for an Integer column with the specified name.
         /// </returns>
-        public static ColumnDefinition IntColumn(string name)
+        public static ColumnDefinition Int32Column(string name)
         {
             return new ColumnDefinition(name, ColumnType.Int32);
         }
@@ -79,7 +79,7 @@ namespace Microsoft.Isam.Esent
         /// <returns>
         /// A column definition for a UInt column with the specified name.
         /// </returns>
-        public static ColumnDefinition UIntColumn(string name)
+        public static ColumnDefinition UInt32Column(string name)
         {
             return new ColumnDefinition(name, ColumnType.UInt32);
         }
@@ -91,7 +91,7 @@ namespace Microsoft.Isam.Esent
         /// <returns>
         /// A column definition for a Long column with the specified name.
         /// </returns>
-        public static ColumnDefinition LongColumn(string name)
+        public static ColumnDefinition Int64Column(string name)
         {
             return new ColumnDefinition(name, ColumnType.Int64);
         }

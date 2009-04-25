@@ -67,8 +67,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Key options.</param>
         public static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, bool data, MakeKeyGrbit grbit)
         {
-            byte[] bytes = data ? new byte[] { 0xff } : new byte[] { 0x0 };
-                Api.JetMakeKey(sesid, tableid, bytes, bytes.Length, grbit);
+            byte b = data ? (byte)0xff : (byte)0x0;
+            Api.MakeKey(sesid, tableid, b, grbit);
         }
 
         /// <summary>
@@ -80,8 +80,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Key options.</param>
         public static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, byte data, MakeKeyGrbit grbit)
         {
-            var bytes = new[] { data };
-            Api.JetMakeKey(sesid, tableid, bytes, bytes.Length, grbit);
+            unsafe
+            {
+                const int DataSize = 1;
+                var pointer = new IntPtr(&data);
+                Api.JetMakeKey(sesid, tableid, pointer, DataSize, grbit);
+            }
         }
 
         /// <summary>
@@ -93,8 +97,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Key options.</param>
         public static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, short data, MakeKeyGrbit grbit)
         {
-            byte[] bytes = BitConverter.GetBytes(data);
-            Api.JetMakeKey(sesid, tableid, bytes, bytes.Length, grbit);
+            unsafe
+            {
+                const int DataSize = 2;
+                var pointer = new IntPtr(&data);
+                Api.JetMakeKey(sesid, tableid, pointer, DataSize, grbit);
+            }
         }
 
         /// <summary>
@@ -106,8 +114,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Key options.</param>
         public static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, int data, MakeKeyGrbit grbit)
         {
-            byte[] bytes = BitConverter.GetBytes(data);
-            Api.JetMakeKey(sesid, tableid, bytes, bytes.Length, grbit);
+            unsafe
+            {
+                const int DataSize = 4;
+                var pointer = new IntPtr(&data);
+                Api.JetMakeKey(sesid, tableid, pointer, DataSize, grbit);
+            }
         }
 
         /// <summary>
@@ -119,8 +131,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Key options.</param>
         public static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, long data, MakeKeyGrbit grbit)
         {
-            byte[] bytes = BitConverter.GetBytes(data);
-            Api.JetMakeKey(sesid, tableid, bytes, bytes.Length, grbit);
+            unsafe
+            {
+                const int DataSize = 8;
+                var pointer = new IntPtr(&data);
+                Api.JetMakeKey(sesid, tableid, pointer, DataSize, grbit);
+            }
         }
 
         /// <summary>
@@ -145,8 +161,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Key options.</param>
         public static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, DateTime data, MakeKeyGrbit grbit)
         {
-            byte[] bytes = BitConverter.GetBytes(data.ToOADate());
-            Api.JetMakeKey(sesid, tableid, bytes, bytes.Length, grbit);
+            Api.MakeKey(sesid, tableid, data.ToOADate(), grbit);
         }
 
         /// <summary>
@@ -158,8 +173,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Key options.</param>
         public static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, float data, MakeKeyGrbit grbit)
         {
-            byte[] bytes = BitConverter.GetBytes(data);
-            Api.JetMakeKey(sesid, tableid, bytes, bytes.Length, grbit);
+            unsafe
+            {
+                const int DataSize = 4;
+                var pointer = new IntPtr(&data);
+                Api.JetMakeKey(sesid, tableid, pointer, DataSize, grbit);
+            }
         }
 
         /// <summary>
@@ -171,8 +190,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Key options.</param>
         public static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, double data, MakeKeyGrbit grbit)
         {
-            byte[] bytes = BitConverter.GetBytes(data);
-            Api.JetMakeKey(sesid, tableid, bytes, bytes.Length, grbit);
+            unsafe
+            {
+                const int DataSize = 8;
+                var pointer = new IntPtr(&data);
+                Api.JetMakeKey(sesid, tableid, pointer, DataSize, grbit);
+            }
         }
 
         /// <summary>
@@ -184,8 +207,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Key options.</param>
         internal static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, ushort data, MakeKeyGrbit grbit)
         {
-            byte[] bytes = BitConverter.GetBytes(data);
-            Api.JetMakeKey(sesid, tableid, bytes, bytes.Length, grbit);
+            unsafe
+            {
+                const int DataSize = 2;
+                var pointer = new IntPtr(&data);
+                Api.JetMakeKey(sesid, tableid, pointer, DataSize, grbit);
+            }
         }
 
         /// <summary>
@@ -197,8 +224,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Key options.</param>
         internal static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, uint data, MakeKeyGrbit grbit)
         {
-            byte[] bytes = BitConverter.GetBytes(data);
-            Api.JetMakeKey(sesid, tableid, bytes, bytes.Length, grbit);
+            unsafe
+            {
+                const int DataSize = 4;
+                var pointer = new IntPtr(&data);
+                Api.JetMakeKey(sesid, tableid, pointer, DataSize, grbit);
+            }
         }
 
         /// <summary>
@@ -210,8 +241,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Key options.</param>
         internal static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, ulong data, MakeKeyGrbit grbit)
         {
-            byte[] bytes = BitConverter.GetBytes(data);
-            Api.JetMakeKey(sesid, tableid, bytes, bytes.Length, grbit);
-       }
+            unsafe
+            {
+                const int DataSize = 8;
+                var pointer = new IntPtr(&data);
+                Api.JetMakeKey(sesid, tableid, pointer, DataSize, grbit);
+            }
+        }
     }
 }

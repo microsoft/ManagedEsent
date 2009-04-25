@@ -78,6 +78,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bookmark.cs" />
     <Compile Include="ColumnDefinition.cs" />
     <Compile Include="ConnectionManager.cs" />
     <Compile Include="ConnectionBase.cs" />

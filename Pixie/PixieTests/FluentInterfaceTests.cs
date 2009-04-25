@@ -81,8 +81,8 @@ namespace PixieTests
                 connection.UsingTransaction(() =>
                 {
                     Table table = connection.CreateTable("mytable")
-                        .CreateColumn(DefinedAs.IntColumn("autoinc").AsAutoincrement())
-                        .CreateColumn(DefinedAs.IntColumn("myint"))
+                        .CreateColumn(DefinedAs.Int32Column("autoinc").AsAutoincrement())
+                        .CreateColumn(DefinedAs.Int32Column("myint"))
                         .CreateColumn(DefinedAs.TextColumn("mystring").WithMaxSize(200));
 
                     table.NewRecord()
@@ -115,8 +115,8 @@ namespace PixieTests
                 connection.UsingLazyTransaction(() =>
                 {
                     Table table = connection.CreateTable("mytable")
-                        .CreateColumn(DefinedAs.IntColumn("autoinc").AsAutoincrement())
-                        .CreateColumn(DefinedAs.IntColumn("myint"))
+                        .CreateColumn(DefinedAs.Int32Column("autoinc").AsAutoincrement())
+                        .CreateColumn(DefinedAs.Int32Column("myint"))
                         .CreateColumn(DefinedAs.TextColumn("mystring").WithMaxSize(200));
 
                     table.NewRecord()
@@ -151,8 +151,8 @@ namespace PixieTests
                 {
                     table = connection.CreateTable("mytable")
                         .CreateColumn(
-                        DefinedAs.IntColumn("autoinc").AsAutoincrement())
-                        .CreateColumn(DefinedAs.IntColumn("myint"))
+                        DefinedAs.Int32Column("autoinc").AsAutoincrement())
+                        .CreateColumn(DefinedAs.Int32Column("myint"))
                         .CreateColumn(
                         DefinedAs.TextColumn("mystring").WithMaxSize(200));
                 });
