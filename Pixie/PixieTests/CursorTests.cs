@@ -301,6 +301,83 @@ namespace PixieTests
             this.AssertOnRecord(cursor, 0);
         }
 
+        [TestMethod]
+        [Priority(1)]
+        public void TestRetrieveAsInt16()
+        {
+            Cursor cursor = this.OpenCursor();
+
+            var columndef = new JET_COLUMNDEF { coltyp = JET_coltyp.Short };
+            JET_COLUMNID columnid;
+            cursor.AddColumn("test", columndef, null, out columnid);
+
+            var expected = Any.Int16;
+            cursor.PrepareUpdate(JET_prep.Insert);
+            cursor.SetColumn(columnid, BitConverter.GetBytes(expected), SetColumnGrbit.None);
+            cursor.GotoBookmark(cursor.Update());
+
+            var actual = cursor.RetrieveColumnAsInt16(columnid, RetrieveColumnGrbit.None);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        [Priority(1)]
+        public void TestRetrieveAsInt32()
+        {
+            Cursor cursor = this.OpenCursor();
+
+            var columndef = new JET_COLUMNDEF { coltyp = JET_coltyp.Long };
+            JET_COLUMNID columnid;
+            cursor.AddColumn("test", columndef, null, out columnid);
+
+            var expected = Any.Int32;
+            cursor.PrepareUpdate(JET_prep.Insert);
+            cursor.SetColumn(columnid, BitConverter.GetBytes(expected), SetColumnGrbit.None);
+            cursor.GotoBookmark(cursor.Update());
+
+            var actual = cursor.RetrieveColumnAsInt32(columnid, RetrieveColumnGrbit.None);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        [Priority(1)]
+        public void TestRetrieveAsInt64()
+        {
+            Cursor cursor = this.OpenCursor();
+
+            var columndef = new JET_COLUMNDEF { coltyp = JET_coltyp.Currency };
+            JET_COLUMNID columnid;
+            cursor.AddColumn("test", columndef, null, out columnid);
+
+            var expected = Any.Int64;
+            cursor.PrepareUpdate(JET_prep.Insert);
+            cursor.SetColumn(columnid, BitConverter.GetBytes(expected), SetColumnGrbit.None);
+            cursor.GotoBookmark(cursor.Update());
+
+            var actual = cursor.RetrieveColumnAsInt64(columnid, RetrieveColumnGrbit.None);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        [Priority(1)]
+        public void TestRetrieveAsGuid()
+        {
+            Cursor cursor = this.OpenCursor();
+
+            // Use binary because not all version of Esent support guid columns
+            var columndef = new JET_COLUMNDEF { coltyp = JET_coltyp.Binary };
+            JET_COLUMNID columnid;
+            cursor.AddColumn("test", columndef, null, out columnid);
+
+            var expected = Guid.NewGuid();
+            cursor.PrepareUpdate(JET_prep.Insert);
+            cursor.SetColumn(columnid, expected.ToByteArray(), SetColumnGrbit.None);
+            cursor.GotoBookmark(cursor.Update());
+
+            var actual = cursor.RetrieveColumnAsGuid(columnid, RetrieveColumnGrbit.None);
+            Assert.AreEqual(expected, actual);
+        }
+
         #endregion
 
         #region DML

@@ -75,10 +75,10 @@ namespace InteropApiTests
         [Priority(0)]
         public void VerifyGetIntegerParameterHelperGetsParameter()
         {
-            const int expected = 100;
+            const int Expected = 100;
             JET_param param = JET_param.MaxOpenTables;
-            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, param, expected, string.Empty);
-            Assert.AreEqual(expected, this.GetIntegerParameter(param));
+            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, param, Expected, string.Empty);
+            Assert.AreEqual(Expected, this.GetIntegerParameter(param));
         }
 
         /// <summary>

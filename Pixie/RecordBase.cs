@@ -155,20 +155,21 @@ namespace Microsoft.Isam.Esent
         {
             get
             {
+                Cursor cursor;
                 if (this.HasOwnCursor)
                 {
                     // Our Cursor is always on the record we want
                     return this.MyCursor;
                 }
-                else if (this.Table.CursorCache.HasCachedCursor(this.Id))
+                else if (this.Table.CursorCache.TryGetCursor(this.Id, out cursor))
                 {
                     // Our cached cursor will be where we left it.
-                    return this.Table.CursorCache.GetCachedCursor(this.Id);
+                    return cursor;
                 }
                 else
                 {
                     // A different record moved our cursor. Reposition it.
-                    Cursor cursor = this.Table.CursorCache.GetNewCursor(this.Id);
+                    cursor = this.Table.CursorCache.GetNewCursor(this.Id);
                     cursor.GotoBookmark(this.Bookmark.Value);
                     return cursor;
                 }

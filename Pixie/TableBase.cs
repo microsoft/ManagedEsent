@@ -333,18 +333,7 @@ namespace Microsoft.Isam.Esent
             metadata.SetColumn = (cursor, obj) =>
             {
                 byte[] data = metadata.ObjectToBytesConverter(metadata.ObjectConverter(obj));
-                if (null == data)
-                {
-                    cursor.SetColumn(metadata.Columnid, null, SetColumnGrbit.None);
-                }
-                else if (data.Length == 0)
-                {
-                    cursor.SetColumn(metadata.Columnid, null, SetColumnGrbit.ZeroLength);
-                }
-                else
-                {
-                    cursor.SetColumn(metadata.Columnid, data, SetColumnGrbit.None);
-                }
+                cursor.SetColumn(metadata.Columnid, data, SetColumnGrbit.None);
             };
 
             metadata.MakeKey = (cursor, obj, grbit) =>
@@ -353,18 +342,32 @@ namespace Microsoft.Isam.Esent
                 cursor.MakeKey(data, grbit);
             };
 
-            switch(metadata.Type)
-            {
-                case ColumnType.Int64:
-                    metadata.RetrieveColumn = (cursor, grbit) => cursor.RetrieveColumnAsInt64(metadata.Columnid, grbit);
-                    break;
-                default:
-                    metadata.RetrieveColumn = (cursor, grbit) => metadata.BytesToObjectConverter(
-                                                                     cursor.RetrieveColumn(metadata.Columnid, grbit));
-                    break;
-            }
+            metadata.RetrieveColumn = this.MakeRetrieveColumnFunction(metadata);
 
             return metadata;
+        }
+
+        /// <summary>
+        /// Create the column retrieval function for the given metadata.
+        /// </summary>
+        /// <param name="metadata">The meta-data.</param>
+        /// <returns>The meta-data function.</returns>
+        private Func<Cursor, RetrieveColumnGrbit, object> MakeRetrieveColumnFunction(ColumnMetaData metadata)
+        {
+            switch (metadata.Type)
+            {
+                case ColumnType.Int16:
+                    return (cursor, grbit) => cursor.RetrieveColumnAsInt16(metadata.Columnid, grbit);
+                case ColumnType.Int32:
+                    return (cursor, grbit) => cursor.RetrieveColumnAsInt32(metadata.Columnid, grbit);
+                case ColumnType.Int64:
+                    return (cursor, grbit) => cursor.RetrieveColumnAsInt64(metadata.Columnid, grbit);
+                case ColumnType.Guid:
+                    return (cursor, grbit) => cursor.RetrieveColumnAsGuid(metadata.Columnid, grbit);
+                default:
+                    return (cursor, grbit) => metadata.BytesToObjectConverter(
+                                                                     cursor.RetrieveColumn(metadata.Columnid, grbit));
+            }            
         }
 
         /// <summary>

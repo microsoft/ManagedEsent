@@ -181,24 +181,51 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Retrieves an int16 column value from the current record. The record is that
+        /// Retrieves a single column value from the current record. The record is that
         /// record associated with the index entry at the current position of the cursor.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to retrieve the column from.</param>
         /// <param name="columnid">The columnid to retrieve.</param>
         /// <returns>The data retrieved from the column as a short. Null if the column is null.</returns>
-        public static short? RetrieveColumnAsInt16(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
+        public static int? RetrieveColumnAsInt16(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
+        {
+            return Api.RetrieveColumnAsInt16(sesid, tableid, columnid, RetrieveColumnGrbit.None);
+        }
+
+        /// <summary>
+        /// Retrieves an int16 column value from the current record. The record is that
+        /// record associated with the index entry at the current position of the cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the column from.</param>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="grbit">Retrieval options.</param>
+        /// <returns>The data retrieved from the column as a short. Null if the column is null.</returns>
+        public static short? RetrieveColumnAsInt16(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {
             unsafe
             {
                 const int DataSize = 2;
                 short data;
                 var pointer = new IntPtr(&data);
-                int ignored;
-                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out ignored, RetrieveColumnGrbit.None, null);
-                return JET_wrn.ColumnNull == wrn ? new short?() : data;
+                int actualDataSize;
+                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out actualDataSize, grbit, null);
+                return CreateReturnValue(data, DataSize, wrn, actualDataSize);
             }
+        }
+
+        /// <summary>
+        /// Retrieves a single column value from the current record. The record is that
+        /// record associated with the index entry at the current position of the cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the column from.</param>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <returns>The data retrieved from the column as an int. Null if the column is null.</returns>
+        public static int? RetrieveColumnAsInt32(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
+        {
+            return Api.RetrieveColumnAsInt32(sesid, tableid, columnid, RetrieveColumnGrbit.None);
         }
 
         /// <summary>
@@ -208,17 +235,18 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to retrieve the column from.</param>
         /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="grbit">Retrieval options.</param>
         /// <returns>The data retrieved from the column as an int. Null if the column is null.</returns>
-        public static int? RetrieveColumnAsInt32(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
+        public static int? RetrieveColumnAsInt32(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {
             unsafe
             {
                 const int DataSize = 4;
                 int data;
                 var pointer = new IntPtr(&data);
-                int ignored;
-                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out ignored, RetrieveColumnGrbit.None, null);
-                return JET_wrn.ColumnNull == wrn ? new int?() : data;
+                int actualDataSize;
+                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out actualDataSize, grbit, null);
+                return CreateReturnValue(data, DataSize, wrn, actualDataSize);
             }
         }
 
@@ -253,8 +281,7 @@ namespace Microsoft.Isam.Esent.Interop
                 var pointer = new IntPtr(&data);
                 int actualDataSize;
                 JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out actualDataSize, grbit, null);
-                Debug.Assert(DataSize == actualDataSize || JET_wrn.ColumnNull == wrn, "Unexpected column size");
-                return JET_wrn.ColumnNull == wrn ? new long?() : data;
+                return CreateReturnValue(data, DataSize, wrn, actualDataSize);
             }
         }
 
@@ -273,9 +300,9 @@ namespace Microsoft.Isam.Esent.Interop
                 const int DataSize = 4;
                 float data;
                 var pointer = new IntPtr(&data);
-                int ignored;
-                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out ignored, RetrieveColumnGrbit.None, null);
-                return JET_wrn.ColumnNull == wrn ? new float?() : data;
+                int actualDataSize;
+                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out actualDataSize, RetrieveColumnGrbit.None, null);
+                return CreateReturnValue(data, DataSize, wrn, actualDataSize);
             }
         }
 
@@ -294,9 +321,9 @@ namespace Microsoft.Isam.Esent.Interop
                 const int DataSize = 8;
                 double data;
                 var pointer = new IntPtr(&data);
-                int ignored;
-                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out ignored, RetrieveColumnGrbit.None, null);
-                return JET_wrn.ColumnNull == wrn ? new double?() : data;
+                int actualDataSize;
+                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out actualDataSize, RetrieveColumnGrbit.None, null);
+                return CreateReturnValue(data, DataSize, wrn, actualDataSize);
             }
         }
 
@@ -336,7 +363,29 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The data retrieved from the column as a guid. Null if the column is null.</returns>
         public static Guid? RetrieveColumnAsGuid(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
-            return RetrieveColumnAndConvert(sesid, tableid, columnid, data => new Guid(data));
+            return RetrieveColumnAsGuid(sesid, tableid, columnid, RetrieveColumnGrbit.None);
+        }
+
+        /// <summary>
+        /// Retrieves a guid column value from the current record. The record is that
+        /// record associated with the index entry at the current position of the cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the column from.</param>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="grbit">Retrieval options.</param>
+        /// <returns>The data retrieved from the column as a guid. Null if the column is null.</returns>
+        public static Guid? RetrieveColumnAsGuid(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
+        {
+            unsafe
+            {
+                const int DataSize = 16;
+                Guid data;
+                var pointer = new IntPtr(&data);
+                int actualDataSize;
+                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out actualDataSize, grbit, null);
+                return CreateReturnValue(data, DataSize, wrn, actualDataSize);
+            }
         }
 
         /// <summary>
@@ -387,9 +436,9 @@ namespace Microsoft.Isam.Esent.Interop
                 const int DataSize = 4;
                 uint data;
                 var pointer = new IntPtr(&data);
-                int ignored;
-                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out ignored, RetrieveColumnGrbit.None, null);
-                return JET_wrn.ColumnNull == wrn ? new uint?() : data;
+                int actualDataSize;
+                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out actualDataSize, RetrieveColumnGrbit.None, null);
+                return CreateReturnValue(data, DataSize, wrn, actualDataSize);
             }
         }
 
@@ -439,6 +488,39 @@ namespace Microsoft.Isam.Esent.Interop
             }
 
             return converter(data);
+        }
+
+        /// <summary>
+        /// Create the nullable return value.
+        /// </summary>
+        /// <typeparam name="T">The (struct) type to return.</typeparam>
+        /// <param name="data">The data retrieved from the column.</param>
+        /// <param name="dataSize">The size of the data.</param>
+        /// <param name="wrn">The warning code from esent.</param>
+        /// <param name="actualDataSize">The actual size of the data retireved fomr esent.</param>
+        /// <returns></returns>
+        private static T? CreateReturnValue<T>(T data, int dataSize, JET_wrn wrn, int actualDataSize) where T : struct
+        {
+            if (JET_wrn.ColumnNull == wrn)
+            {
+                return new T?();
+            }
+            CheckDataSize(dataSize, actualDataSize);
+            return data;
+        }
+
+        /// <summary>
+        /// Make sure the retrieved data size is at least as long as the expected size.
+        /// An exception is thrown if the data isn't long enough.
+        /// </summary>
+        /// <param name="expectedDataSize">The expected data size.</param>
+        /// <param name="actualDataSize">The size of the retrieved data.</param>
+        private static void CheckDataSize(int expectedDataSize, int actualDataSize)
+        {
+            if (actualDataSize < expectedDataSize)
+            {
+                throw new EsentInvalidColumnException();
+            }
         }
     }
 }

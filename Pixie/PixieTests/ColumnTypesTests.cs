@@ -6,7 +6,6 @@
 
 using System;
 using System.IO;
-using System.Linq;
 using Microsoft.Isam.Esent;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -753,20 +752,20 @@ namespace PixieTests
         [Priority(1)]
         public void SetAllColumns()
         {
-            bool boolean     = Any.Boolean;
-            byte b           = Any.Byte;
-            short i16         = Any.Int16;
-            ushort u16         = Any.UInt16;
+            bool boolean    = Any.Boolean;
+            byte b          = Any.Byte;
+            short i16       = Any.Int16;
+            ushort u16      = Any.UInt16;
             int i32         = Any.Int32;
-            uint u32         = Any.UInt32;
-            long i64         = Any.Int64;
-            float f           = Any.Float;
-            double d           = Any.Double;
-            Guid guid        = Any.Guid;
+            uint u32        = Any.UInt32;
+            long i64        = Any.Int64;
+            float f         = Any.Float;
+            double d        = Any.Double;
+            Guid guid       = Any.Guid;
             DateTime datetime    = Any.DateTime;
-            string text        = Any.String;
-            string ascii       = Any.String;
-            byte[] binary      = Any.Bytes;
+            string text     = Any.String;
+            string ascii    = Any.String;
+            byte[] binary   = Any.Bytes;
 
             Record record = this.table.NewRecord();
             record["bool"]      = boolean;

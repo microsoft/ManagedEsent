@@ -18,7 +18,7 @@ namespace InteropApiTests
     [TestClass]
     public class SimplePerfTest
     {
-        const int DataSize = 32;
+        private const int DataSize = 32;
 
         private Instance instance;
         private Session session;
@@ -109,16 +109,24 @@ namespace InteropApiTests
             this.CheckMemoryUsage(this.InsertReadSeek);
         }
 
+        private static void TimeAction(string name, Action action)
+        {
+            var stopwatch = Stopwatch.StartNew();
+            action();
+            stopwatch.Stop();
+            Console.WriteLine("{0}: {1}", name, stopwatch.Elapsed);
+        }
+
         private void InsertReadSeek()
         {
-            const int numRecords = 1000000;
+            const int NumRecords = 1000000;
 
             // Randomly seek to all records in the table
-            long[] keys = (from x in Enumerable.Range(0, numRecords) select (long)x).ToArray();
+            long[] keys = (from x in Enumerable.Range(0, NumRecords) select (long)x).ToArray();
             this.Suffle(keys);
 
-            TimeAction("Insert records", () => this.InsertRecords(numRecords));
-            TimeAction("Read one record", () => this.RepeatedlyRetrieveOneRecord(numRecords));
+            TimeAction("Insert records", () => this.InsertRecords(NumRecords));
+            TimeAction("Read one record", () => this.RepeatedlyRetrieveOneRecord(NumRecords));
             TimeAction("Read all records", this.RetrieveAllRecords);
             TimeAction("Seek to all records", () => this.SeekToAllRecords(keys));
         }
@@ -137,21 +145,13 @@ namespace InteropApiTests
 
         private void Suffle<T>(T[] arrayToShuffle)
         {
-            for(int i = 0; i < arrayToShuffle.Length; ++i)
+            for (int i = 0; i < arrayToShuffle.Length; ++i)
             {
                 int swap = this.random.Next(i, arrayToShuffle.Length);
                 T temp = arrayToShuffle[i];
                 arrayToShuffle[i] = arrayToShuffle[swap];
                 arrayToShuffle[swap] = temp;
             }
-        }
-
-        private static void TimeAction(string name, Action action)
-        {
-            var stopwatch = Stopwatch.StartNew();
-            action();
-            stopwatch.Stop();
-            Console.WriteLine("{0}: {1}", name, stopwatch.Elapsed);
         }
 
         private void InsertRecord()
@@ -212,7 +212,7 @@ namespace InteropApiTests
 
         private void SeekToAllRecords(long[] keys)
         {
-            foreach(long key in keys)
+            foreach (long key in keys)
             {
                 Api.JetBeginTransaction(this.session);
                 Api.MakeKey(this.session, this.table, key, MakeKeyGrbit.NewKey);

@@ -11,12 +11,15 @@ using System.Linq;
 
 namespace Microsoft.Isam.Esent
 {
+    using Timestamp=Int64;
+    using RecordId=Int64;
+
     /// <summary>
     /// Caches Cursors for Records to use. This structure is not
     /// threadsafe.
     /// </summary>
     /// <typeparam name="TCursor">The type of the cursor to cache.</typeparam>
-    internal class CursorCache<TCursor>
+    internal class CursorCache<TCursor> where TCursor : class
     {
         /// <summary>
         /// The function used to open the table.
@@ -93,29 +96,23 @@ namespace Microsoft.Isam.Esent
         }
 
         /// <summary>
-        /// Is there a cached cursor for the record?
+        /// Look for a cached cursor for the given id.
         /// </summary>
-        /// <param name="recordId">The ID of the record.</param>
-        /// <returns>True if there is a cached cursor, false otherwise.</returns>
-        public bool HasCachedCursor(long recordId)
+        /// <param name="recordId">The record to find the cursor for.</param>
+        /// <param name="cursor">Returns the cursor.</param>
+        /// <returns>True if a matching cursor was found.</returns>
+        public bool TryGetCursor(RecordId recordId, out TCursor cursor)
         {
-            return this.cachedCursors.Any(x => x.Id == recordId);
-        }
-
-        /// <summary>
-        /// Get the cached cursor for the record. There must be a cached
-        /// cursor for the record.
-        /// </summary>
-        /// <param name="recordId">The id of the record.</param>
-        /// <returns>The cached cursor for the record.</returns>
-        public TCursor GetCachedCursor(long recordId)
-        {
-            Debug.Assert(this.HasCachedCursor(recordId), "No cached cursor for the record");
-
-            CachedCursor cachedcursor = this.cachedCursors.First(x => x.Id == recordId);
-            cachedcursor.Timestamp = this.timestamp++;
-            this.Tracer.TraceVerbose("returned cached tableid {0} for {1}", cachedcursor.Cursor, recordId);
-            return cachedcursor.Cursor;
+            foreach(var x in this.cachedCursors)
+            {
+                if (x.Id == recordId)
+                {
+                    cursor = x.Cursor;
+                    return true;
+                }
+            }
+            cursor = null;
+            return false;
         }
 
         /// <summary>
@@ -124,7 +121,7 @@ namespace Microsoft.Isam.Esent
         /// </summary>
         /// <param name="recordId">The id of the record.</param>
         /// <returns>The cursor for the record.</returns>
-        public TCursor GetNewCursor(long recordId)
+        public TCursor GetNewCursor(RecordId recordId)
         {
             Debug.Assert(!this.HasCachedCursor(recordId), "There is already a cached cusor for the record");
 
@@ -136,6 +133,16 @@ namespace Microsoft.Isam.Esent
         }
 
         /// <summary>
+        /// Is there a cached cursor for the record?
+        /// </summary>
+        /// <param name="recordId">The ID of the record.</param>
+        /// <returns>True if there is a cached cursor, false otherwise.</returns>
+        private bool HasCachedCursor(RecordId recordId)
+        {
+            return this.cachedCursors.Any(x => x.Id == recordId);
+        }
+
+        /// <summary>
         /// Describe a cached cursor.
         /// </summary>
         private class CachedCursor
@@ -143,12 +150,12 @@ namespace Microsoft.Isam.Esent
             /// <summary>
             /// Gets or sets the id of the record that is using the cached tableid.
             /// </summary>
-            public long Id { get; set; }
+            public RecordId Id { get; set; }
 
             /// <summary>
             /// Gets or sets the timestamp of the last access of the tableid.
             /// </summary>
-            public long Timestamp { get; set; }
+            public Timestamp Timestamp { get; set; }
 
             /// <summary>
             /// Gets or sets the cached tableid.

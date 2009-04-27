@@ -277,6 +277,36 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Retrieving a byte as an Int16 throws an exception when the column
+        /// is too short.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(EsentInvalidColumnException))]
+        public void VerifyRetrieveAsInt16ThrowsExceptionWhenColumnIsTooShort()
+        {
+            JET_COLUMNID columnid = this.columnidDict["Binary"];
+            var value = new byte[1];
+            this.InsertRecord(columnid, value);
+            Api.RetrieveColumnAsInt16(this.sesid, this.tableid, columnid);
+        }
+
+        /// <summary>
+        /// Retrieving a byte as a UInt16 throws an exception when the column
+        /// is too short.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(EsentInvalidColumnException))]
+        public void VerifyRetrieveAsUInt16ThrowsExceptionWhenColumnIsTooShort()
+        {
+            JET_COLUMNID columnid = this.columnidDict["Binary"];
+            var value = new byte[1];
+            this.InsertRecord(columnid, value);
+            Api.RetrieveColumnAsUInt16(this.sesid, this.tableid, columnid);
+        }
+
+        /// <summary>
         /// Retrieve a column as a ushort.
         /// </summary>
         [TestMethod]
@@ -817,7 +847,7 @@ namespace InteropApiTests
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
             byte[] actual = Api.RetrieveColumn(this.sesid, this.tableid, columnid);
-            this.AssertAreEqual(expected, actual);
+            CollectionAssert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -1188,21 +1218,6 @@ namespace InteropApiTests
         #region Helper methods
 
         /// <summary>
-        /// Assert that two byte arrays are equal to each other.
-        /// (Same length and contents).
-        /// </summary>
-        /// <param name="a">The first byte array.</param>
-        /// <param name="b">The second byte array.</param>
-        private void AssertAreEqual(byte[] a, byte[] b)
-        {
-            Assert.AreEqual(a.Length, b.Length);
-            for (int i = 0; i < a.Length; ++i)
-            {
-                Assert.AreEqual(a[i], b[i]);
-            }
-        }
-
-        /// <summary>
         /// Creates a record with the given column set to the specified value.
         /// The tableid is positioned on the new record.
         /// </summary>
@@ -1242,6 +1257,19 @@ namespace InteropApiTests
             Api.JetCreateIndex(this.sesid, this.tableid, indexname, CreateIndexGrbit.None, indexdef, indexdef.Length, 100);
             Api.JetSetCurrentIndex(this.sesid, this.tableid, indexname);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.None);
+        }
+
+        /// <summary>
+        /// Set a single byte and retrieve a column.
+        /// </summary>
+        /// <typeparam name="T">The type to retrieve.</typeparam>
+        /// <param name="retrieveFunc">The retrieval function.</param>
+        private void SetSingleByteAndRetrieveColumn<T>(Func<JET_SESID, JET_TABLEID, JET_COLUMNID, T?> retrieveFunc) where T : struct
+        {
+            JET_COLUMNID columnid = this.columnidDict["Binary"];
+            var value = new byte[1];
+            this.InsertRecord(columnid, value);
+            retrieveFunc(this.sesid, this.tableid, columnid);
         }
 
         #endregion Helper methods

@@ -49,5 +49,25 @@ namespace InteropApiTests
             var deserializedException = (EsentErrorException)formatter.Deserialize(stream);
             Assert.AreEqual(originalException.Error, deserializedException.Error);
         }
+
+        /// <summary>
+        /// Verify that an EsentInvalidColumnException can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyEsentInvalidColumnExceptionSerializationPreservesMessage()
+        {
+            var originalException = new EsentInvalidColumnException();
+
+            var stream = new MemoryStream();
+
+            var formatter = new BinaryFormatter();
+            formatter.Serialize(stream, originalException);
+
+            stream.Position = 0; // rewind
+
+            var deserializedException = (EsentInvalidColumnException)formatter.Deserialize(stream);
+            Assert.AreEqual(originalException.Message, deserializedException.Message);
+        }
     }
 }
