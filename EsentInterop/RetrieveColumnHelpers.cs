@@ -295,13 +295,27 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The data retrieved from the column as a float. Null if the column is null.</returns>
         public static float? RetrieveColumnAsFloat(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
+            return RetrieveColumnAsFloat(sesid, tableid, columnid, RetrieveColumnGrbit.None);
+        }
+
+        /// <summary>
+        /// Retrieves a float column value from the current record. The record is that
+        /// record associated with the index entry at the current position of the cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the column from.</param>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="grbit">Retrieval options.</param>
+        /// <returns>The data retrieved from the column as a float. Null if the column is null.</returns>
+        public static float? RetrieveColumnAsFloat(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
+        {
             unsafe
             {
                 const int DataSize = 4;
                 float data;
                 var pointer = new IntPtr(&data);
                 int actualDataSize;
-                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out actualDataSize, RetrieveColumnGrbit.None, null);
+                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out actualDataSize, grbit, null);
                 return CreateReturnValue(data, DataSize, wrn, actualDataSize);
             }
         }
@@ -316,13 +330,27 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The data retrieved from the column as a double. Null if the column is null.</returns>
         public static double? RetrieveColumnAsDouble(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
+            return RetrieveColumnAsDouble(sesid, tableid, columnid, RetrieveColumnGrbit.None);
+        }
+
+        /// <summary>
+        /// Retrieves a double column value from the current record. The record is that
+        /// record associated with the index entry at the current position of the cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the column from.</param>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="grbit">Retrieval options.</param>
+        /// <returns>The data retrieved from the column as a double. Null if the column is null.</returns>
+        public static double? RetrieveColumnAsDouble(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
+        {
             unsafe
             {
                 const int DataSize = 8;
                 double data;
                 var pointer = new IntPtr(&data);
                 int actualDataSize;
-                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out actualDataSize, RetrieveColumnGrbit.None, null);
+                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out actualDataSize, grbit, null);
                 return CreateReturnValue(data, DataSize, wrn, actualDataSize);
             }
         }
@@ -337,7 +365,26 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The data retrieved from the column as a boolean. Null if the column is null.</returns>
         public static bool? RetrieveColumnAsBoolean(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
-            return RetrieveColumnAndConvert(sesid, tableid, columnid, data => BitConverter.ToBoolean(data, 0));
+            return Api.RetrieveColumnAsBoolean(sesid, tableid, columnid, RetrieveColumnGrbit.None);
+        }
+
+        /// <summary>
+        /// Retrieves a boolean column value from the current record. The record is that
+        /// record associated with the index entry at the current position of the cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the column from.</param>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="grbit">Retrieval options.</param>
+        /// <returns>The data retrieved from the column as a boolean. Null if the column is null.</returns>
+        public static bool? RetrieveColumnAsBoolean(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
+        {
+            byte? b = Api.RetrieveColumnAsByte(sesid, tableid, columnid, grbit);
+            if (b.HasValue)
+            {
+                return 0 != b.Value;
+            }
+            return new bool?();
         }
 
         /// <summary>
@@ -350,7 +397,29 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The data retrieved from the column as a byte. Null if the column is null.</returns>
         public static byte? RetrieveColumnAsByte(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
-            return RetrieveColumnAndConvert(sesid, tableid, columnid, data => data[0]);
+            return Api.RetrieveColumnAsByte(sesid, tableid, columnid, RetrieveColumnGrbit.None);
+        }
+
+        /// <summary>
+        /// Retrieves a byte column value from the current record. The record is that
+        /// record associated with the index entry at the current position of the cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the column from.</param>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="grbit">Retrieval options.</param>
+        /// <returns>The data retrieved from the column as a byte. Null if the column is null.</returns>
+        public static byte? RetrieveColumnAsByte(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
+        {
+            unsafe
+            {
+                const int DataSize = 1;
+                byte data;
+                var pointer = new IntPtr(&data);
+                int actualDataSize;
+                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out actualDataSize, grbit, null);
+                return CreateReturnValue(data, DataSize, wrn, actualDataSize);
+            }
         }
 
         /// <summary>
@@ -398,12 +467,23 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The data retrieved from the column as a datetime. Null if the column is null.</returns>
         public static DateTime? RetrieveColumnAsDateTime(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
+            return Api.RetrieveColumnAsDateTime(sesid, tableid, columnid, RetrieveColumnGrbit.None);
+        }
+
+        /// <summary>
+        /// Retrieves a datetime column value from the current record. The record is that
+        /// record associated with the index entry at the current position of the cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the column from.</param>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="grbit">Retrieval options.</param>
+        /// <returns>The data retrieved from the column as a datetime. Null if the column is null.</returns>
+        public static DateTime? RetrieveColumnAsDateTime(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
+        {
             // Internally DateTime is stored in OLE Automation format
-            return RetrieveColumnAndConvert(
-                    sesid, 
-                    tableid, 
-                    columnid,
-                    data => DateTime.FromOADate(BitConverter.ToDouble(data, 0)));
+            double? oadate = Api.RetrieveColumnAsDouble(sesid, tableid, columnid, grbit);
+            return oadate.HasValue ? DateTime.FromOADate(oadate.Value) : new DateTime?();
         }
 
         /// <summary>
@@ -417,7 +497,30 @@ namespace Microsoft.Isam.Esent.Interop
         /// <remarks>Internal becaue unsigned types aren't CLS compliant.</remarks>
         internal static ushort? RetrieveColumnAsUInt16(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
-            return RetrieveColumnAndConvert(sesid, tableid, columnid, data => BitConverter.ToUInt16(data, 0));
+            return Api.RetrieveColumnAsUInt16(sesid, tableid, columnid, RetrieveColumnGrbit.None);
+        }
+
+        /// <summary>
+        /// Retrieves a uint16 column value from the current record. The record is that
+        /// record associated with the index entry at the current position of the cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the column from.</param>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="grbit">Retrieval options.</param>
+        /// <returns>The data retrieved from the column as an UInt16. Null if the column is null.</returns>
+        /// <remarks>Internal becaue unsigned types aren't CLS compliant.</remarks>
+        internal static ushort? RetrieveColumnAsUInt16(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
+        {
+            unsafe
+            {
+                const int DataSize = 2;
+                ushort data;
+                var pointer = new IntPtr(&data);
+                int actualDataSize;
+                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out actualDataSize, grbit, null);
+                return CreateReturnValue(data, DataSize, wrn, actualDataSize);
+            }
         }
 
         /// <summary>
@@ -431,13 +534,28 @@ namespace Microsoft.Isam.Esent.Interop
         /// <remarks>Internal becaue unsigned types aren't CLS compliant.</remarks>
         internal static uint? RetrieveColumnAsUInt32(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
+            return Api.RetrieveColumnAsUInt32(sesid, tableid, columnid, RetrieveColumnGrbit.None);
+        }
+
+        /// <summary>
+        /// Retrieves a uint32 column value from the current record. The record is that
+        /// record associated with the index entry at the current position of the cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the column from.</param>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="grbit">Retrieval options.</param>
+        /// <returns>The data retrieved from the column as an UInt32. Null if the column is null.</returns>
+        /// <remarks>Internal becaue unsigned types aren't CLS compliant.</remarks>
+        internal static uint? RetrieveColumnAsUInt32(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
+        {
             unsafe
             {
                 const int DataSize = 4;
                 uint data;
                 var pointer = new IntPtr(&data);
                 int actualDataSize;
-                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out actualDataSize, RetrieveColumnGrbit.None, null);
+                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out actualDataSize, grbit, null);
                 return CreateReturnValue(data, DataSize, wrn, actualDataSize);
             }
         }
@@ -453,14 +571,29 @@ namespace Microsoft.Isam.Esent.Interop
         /// <remarks>Internal becaue unsigned types aren't CLS compliant.</remarks>
         internal static ulong? RetrieveColumnAsUInt64(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
+            return Api.RetrieveColumnAsUInt64(sesid, tableid, columnid, RetrieveColumnGrbit.None);
+        }
+
+        /// <summary>
+        /// Retrieves a uint64 column value from the current record. The record is that
+        /// record associated with the index entry at the current position of the cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the column from.</param>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="grbit">Retrieval options.</param>
+        /// <returns>The data retrieved from the column as an UInt64. Null if the column is null.</returns>
+        /// <remarks>Internal becaue unsigned types aren't CLS compliant.</remarks>
+        internal static ulong? RetrieveColumnAsUInt64(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
+        {
             unsafe
             {
                 const int DataSize = 8;
                 ulong data;
                 var pointer = new IntPtr(&data);
-                int ignored;
-                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out ignored, RetrieveColumnGrbit.None, null);
-                return JET_wrn.ColumnNull == wrn ? new ulong?() : data;
+                int actualDataSize;
+                JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, pointer, DataSize, out actualDataSize, grbit, null);
+                return CreateReturnValue(data, DataSize, wrn, actualDataSize);
             }
         }
 

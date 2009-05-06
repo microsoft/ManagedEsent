@@ -801,6 +801,63 @@ namespace PixieTests
         }
 
         /// <summary>
+        /// Sets every column inside of an update
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void SetAllColumnsInUpdate()
+        {
+            bool boolean = Any.Boolean;
+            byte b = Any.Byte;
+            short i16 = Any.Int16;
+            ushort u16 = Any.UInt16;
+            int i32 = Any.Int32;
+            uint u32 = Any.UInt32;
+            long i64 = Any.Int64;
+            float f = Any.Float;
+            double d = Any.Double;
+            Guid guid = Any.Guid;
+            DateTime datetime = Any.DateTime;
+            string text = Any.String;
+            string ascii = Any.String;
+            byte[] binary = Any.Bytes;
+
+            // Create a record and update it
+            Record record = this.table.NewRecord();
+            record.Save();
+
+            record["bool"] = boolean;
+            record["byte"] = b;
+            record["short"] = i16;
+            record["ushort"] = u16;
+            record["int"] = i32;
+            record["uint"] = u32;
+            record["long"] = i64;
+            record["float"] = f;
+            record["double"] = d;
+            record["guid"] = guid;
+            record["datetime"] = datetime;
+            record["text"] = text;
+            record["asciitext"] = ascii;
+            record["binary"] = binary;
+
+            Assert.AreEqual(boolean, record["bool"]);
+            Assert.AreEqual(b, record["byte"]);
+            Assert.AreEqual(i16, record["short"]);
+            Assert.AreEqual(u16, record["ushort"]);
+            Assert.AreEqual(i32, record["int"]);
+            Assert.AreEqual(u32, record["uint"]);
+            Assert.AreEqual(i64, record["long"]);
+            Assert.AreEqual(f, record["float"]);
+            Assert.AreEqual(d, record["double"]);
+            Assert.AreEqual(guid, record["guid"]);
+            Assert.AreEqual(datetime, record["datetime"]);
+            Assert.AreEqual(text, record["text"]);
+            Assert.AreEqual(ascii, record["asciitext"]);
+            CollectionAssert.AreEqual(binary, (byte[])record["binary"]);
+        }
+
+        /// <summary>
         /// Test setting and retrieving null values in the columns.
         /// </summary>
         [TestMethod]

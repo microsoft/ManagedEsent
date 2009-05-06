@@ -277,7 +277,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Retrieving a byte as an Int16 throws an exception when the column
+        /// Retrieving a byte as a short throws an exception when the column
         /// is too short.
         /// </summary>
         [TestMethod]
@@ -289,21 +289,6 @@ namespace InteropApiTests
             var value = new byte[1];
             this.InsertRecord(columnid, value);
             Api.RetrieveColumnAsInt16(this.sesid, this.tableid, columnid);
-        }
-
-        /// <summary>
-        /// Retrieving a byte as a UInt16 throws an exception when the column
-        /// is too short.
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        [ExpectedException(typeof(EsentInvalidColumnException))]
-        public void VerifyRetrieveAsUInt16ThrowsExceptionWhenColumnIsTooShort()
-        {
-            JET_COLUMNID columnid = this.columnidDict["Binary"];
-            var value = new byte[1];
-            this.InsertRecord(columnid, value);
-            Api.RetrieveColumnAsUInt16(this.sesid, this.tableid, columnid);
         }
 
         /// <summary>
@@ -320,6 +305,21 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Retrieving a byte as a ushort throws an exception when the column
+        /// is too short.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(EsentInvalidColumnException))]
+        public void VerifyRetrieveAsUInt16ThrowsExceptionWhenColumnIsTooShort()
+        {
+            JET_COLUMNID columnid = this.columnidDict["Binary"];
+            var value = new byte[1];
+            this.InsertRecord(columnid, value);
+            Api.RetrieveColumnAsUInt16(this.sesid, this.tableid, columnid);
+        }
+
+        /// <summary>
         /// Retrieve a column as an int.
         /// </summary>
         [TestMethod]
@@ -330,6 +330,21 @@ namespace InteropApiTests
             int value = Any.Int32;
             this.InsertRecord(columnid, BitConverter.GetBytes(value));
             Assert.AreEqual(value, Api.RetrieveColumnAsInt32(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
+        /// Retrieving a byte as an int throws an exception when the column
+        /// is too short.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(EsentInvalidColumnException))]
+        public void VerifyRetrieveAsInt32ThrowsExceptionWhenColumnIsTooShort()
+        {
+            JET_COLUMNID columnid = this.columnidDict["Binary"];
+            var value = new byte[1];
+            this.InsertRecord(columnid, value);
+            Api.RetrieveColumnAsInt32(this.sesid, this.tableid, columnid);
         }
 
         /// <summary>
@@ -346,6 +361,21 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Retrieving a byte as a uint throws an exception when the column
+        /// is too short.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(EsentInvalidColumnException))]
+        public void VerifyRetrieveAsUInt32ThrowsExceptionWhenColumnIsTooShort()
+        {
+            JET_COLUMNID columnid = this.columnidDict["Binary"];
+            var value = new byte[1];
+            this.InsertRecord(columnid, value);
+            Api.RetrieveColumnAsUInt32(this.sesid, this.tableid, columnid);
+        }
+
+        /// <summary>
         /// Retrieve a column as a long.
         /// </summary>
         [TestMethod]
@@ -356,6 +386,21 @@ namespace InteropApiTests
             long value = Any.Int64;
             this.InsertRecord(columnid, BitConverter.GetBytes(value));
             Assert.AreEqual(value, Api.RetrieveColumnAsInt64(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
+        /// Retrieving a byte as a long throws an exception when the column
+        /// is too short.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(EsentInvalidColumnException))]
+        public void VerifyRetrieveAsInt64ThrowsExceptionWhenColumnIsTooShort()
+        {
+            JET_COLUMNID columnid = this.columnidDict["Binary"];
+            var value = new byte[1];
+            this.InsertRecord(columnid, value);
+            Api.RetrieveColumnAsInt64(this.sesid, this.tableid, columnid);
         }
 
         /// <summary>
@@ -372,6 +417,21 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Retrieving a byte as a ulong throws an exception when the column
+        /// is too short.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(EsentInvalidColumnException))]
+        public void VerifyRetrieveAsUInt64ThrowsExceptionWhenColumnIsTooShort()
+        {
+            JET_COLUMNID columnid = this.columnidDict["Binary"];
+            var value = new byte[1];
+            this.InsertRecord(columnid, value);
+            Api.RetrieveColumnAsUInt64(this.sesid, this.tableid, columnid);
+        }
+
+        /// <summary>
         /// Retrieve a column as a float.
         /// </summary>
         [TestMethod]
@@ -382,6 +442,21 @@ namespace InteropApiTests
             float value = Any.Float;
             this.InsertRecord(columnid, BitConverter.GetBytes(value));
             Assert.AreEqual(value, Api.RetrieveColumnAsFloat(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
+        /// Retrieving a byte as a float throws an exception when the column
+        /// is too short.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(EsentInvalidColumnException))]
+        public void VerifyRetrieveAsFloatThrowsExceptionWhenColumnIsTooShort()
+        {
+            JET_COLUMNID columnid = this.columnidDict["Binary"];
+            var value = new byte[1];
+            this.InsertRecord(columnid, value);
+            Api.RetrieveColumnAsFloat(this.sesid, this.tableid, columnid);
         }
 
         /// <summary>
@@ -398,6 +473,21 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Retrieving a byte as a double throws an exception when the column
+        /// is too short.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(EsentInvalidColumnException))]
+        public void VerifyRetrieveAsDoubleThrowsExceptionWhenColumnIsTooShort()
+        {
+            JET_COLUMNID columnid = this.columnidDict["Binary"];
+            var value = new byte[1];
+            this.InsertRecord(columnid, value);
+            Api.RetrieveColumnAsDouble(this.sesid, this.tableid, columnid);
+        }
+
+        /// <summary>
         /// Retrieve a column as a Guid.
         /// </summary>
         [TestMethod]
@@ -408,6 +498,21 @@ namespace InteropApiTests
             Guid value = Any.Guid;
             this.InsertRecord(columnid, value.ToByteArray());
             Assert.AreEqual(value, Api.RetrieveColumnAsGuid(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
+        /// Retrieving a byte as a guid throws an exception when the column
+        /// is too short.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(EsentInvalidColumnException))]
+        public void VerifyRetrieveAsGuidThrowsExceptionWhenColumnIsTooShort()
+        {
+            JET_COLUMNID columnid = this.columnidDict["Binary"];
+            var value = new byte[1];
+            this.InsertRecord(columnid, value);
+            Api.RetrieveColumnAsGuid(this.sesid, this.tableid, columnid);
         }
 
         /// <summary>
@@ -427,11 +532,26 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Retrieving a byte as a DateTime throws an exception when the column
+        /// is too short.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(EsentInvalidColumnException))]
+        public void VerifyRetrieveAsDateTimeThrowsExceptionWhenColumnIsTooShort()
+        {
+            JET_COLUMNID columnid = this.columnidDict["Binary"];
+            var value = new byte[1];
+            this.InsertRecord(columnid, value);
+            Api.RetrieveColumnAsDateTime(this.sesid, this.tableid, columnid);
+        }
+
+        /// <summary>
         /// Retrieve a column as ASCII
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        public void RetrieveAsASCII()
+        public void RetrieveAsAscii()
         {
             JET_COLUMNID columnid = this.columnidDict["ASCII"];
             string value = Any.String;

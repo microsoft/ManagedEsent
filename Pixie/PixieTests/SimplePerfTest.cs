@@ -72,15 +72,15 @@ namespace PixieTests
 
         private void InsertReadSeek()
         {
-            const int NumRecords = 100000;
+            const int NumRecords = 1000000;
 
             // Randomly seek to all records in the table
             long[] keys = (from x in Enumerable.Range(0, NumRecords) select (long)x).ToArray();
             this.Shuffle(keys);
 
             TimeAction("Insert records", () => this.InsertRecords(NumRecords));
-            //TimeAction("Read one record", () => this.RepeatedlyRetrieveOneRecord(NumRecords));
-            //TimeAction("Read all records", this.RetrieveAllRecords);
+            TimeAction("Read one record", () => this.RepeatedlyRetrieveOneRecord(NumRecords));
+            TimeAction("Read all records", this.RetrieveAllRecords);
             TimeAction("Seek to all records", () => this.SeekToAllRecords(keys));
         }
 

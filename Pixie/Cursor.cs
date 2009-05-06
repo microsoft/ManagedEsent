@@ -486,6 +486,42 @@ namespace Microsoft.Isam.Esent
         }
 
         /// <summary>
+        /// Retrieve a column from the current record as a Boolean
+        /// </summary>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="grbit">Retrieve options.</param>
+        /// <returns>The data from the column.</returns>
+        public virtual bool? RetrieveColumnAsBoolean(JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
+        {
+            this.Tracer.TraceVerbose("RetrieveColumn");
+            this.CheckNotDisposed();
+            if (0 == (RetrieveColumnGrbit.RetrieveCopy & grbit))
+            {
+                this.CheckHasCurrency();
+            }
+
+            return Api.RetrieveColumnAsBoolean(this.session, this.table, columnid, grbit);
+        }
+
+        /// <summary>
+        /// Retrieve a column from the current record as a Boolean
+        /// </summary>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="grbit">Retrieve options.</param>
+        /// <returns>The data from the column.</returns>
+        public virtual byte? RetrieveColumnAsByte(JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
+        {
+            this.Tracer.TraceVerbose("RetrieveColumn");
+            this.CheckNotDisposed();
+            if (0 == (RetrieveColumnGrbit.RetrieveCopy & grbit))
+            {
+                this.CheckHasCurrency();
+            }
+
+            return Api.RetrieveColumnAsByte(this.session, this.table, columnid, grbit);
+        }
+
+        /// <summary>
         /// Retrieve a column from the current record as an Int16
         /// </summary>
         /// <param name="columnid">The columnid to retrieve.</param>
@@ -501,6 +537,24 @@ namespace Microsoft.Isam.Esent
             }
 
             return Api.RetrieveColumnAsInt16(this.session, this.table, columnid, grbit);
+        }
+
+        /// <summary>
+        /// Retrieve a column from the current record as a UInt16
+        /// </summary>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="grbit">Retrieve options.</param>
+        /// <returns>The data from the column.</returns>
+        public virtual ushort? RetrieveColumnAsUInt16(JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
+        {
+            this.Tracer.TraceVerbose("RetrieveColumn");
+            this.CheckNotDisposed();
+            if (0 == (RetrieveColumnGrbit.RetrieveCopy & grbit))
+            {
+                this.CheckHasCurrency();
+            }
+
+            return Api.RetrieveColumnAsUInt16(this.session, this.table, columnid, grbit);
         }
 
         /// <summary>
@@ -522,6 +576,24 @@ namespace Microsoft.Isam.Esent
         }
 
         /// <summary>
+        /// Retrieve a column from the current record as a UInt32
+        /// </summary>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="grbit">Retrieve options.</param>
+        /// <returns>The data from the column.</returns>
+        public virtual uint? RetrieveColumnAsUInt32(JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
+        {
+            this.Tracer.TraceVerbose("RetrieveColumn");
+            this.CheckNotDisposed();
+            if (0 == (RetrieveColumnGrbit.RetrieveCopy & grbit))
+            {
+                this.CheckHasCurrency();
+            }
+
+            return Api.RetrieveColumnAsUInt32(this.session, this.table, columnid, grbit);
+        }
+
+        /// <summary>
         /// Retrieve a column from the current record as an Int64
         /// </summary>
         /// <param name="columnid">The columnid to retrieve.</param>
@@ -540,6 +612,60 @@ namespace Microsoft.Isam.Esent
         }
 
         /// <summary>
+        /// Retrieve a column from the current record as a UInt64
+        /// </summary>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="grbit">Retrieve options.</param>
+        /// <returns>The data from the column.</returns>
+        public virtual ulong? RetrieveColumnAsUInt64(JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
+        {
+            this.Tracer.TraceVerbose("RetrieveColumn");
+            this.CheckNotDisposed();
+            if (0 == (RetrieveColumnGrbit.RetrieveCopy & grbit))
+            {
+                this.CheckHasCurrency();
+            }
+
+            return Api.RetrieveColumnAsUInt64(this.session, this.table, columnid, grbit);
+        }
+
+        /// <summary>
+        /// Retrieve a column from the current record as a float
+        /// </summary>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="grbit">Retrieve options.</param>
+        /// <returns>The data from the column.</returns>
+        public virtual float? RetrieveColumnAsFloat(JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
+        {
+            this.Tracer.TraceVerbose("RetrieveColumn");
+            this.CheckNotDisposed();
+            if (0 == (RetrieveColumnGrbit.RetrieveCopy & grbit))
+            {
+                this.CheckHasCurrency();
+            }
+
+            return Api.RetrieveColumnAsFloat(this.session, this.table, columnid, grbit);
+        }
+
+        /// <summary>
+        /// Retrieve a column from the current record as a double
+        /// </summary>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="grbit">Retrieve options.</param>
+        /// <returns>The data from the column.</returns>
+        public virtual double? RetrieveColumnAsDouble(JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
+        {
+            this.Tracer.TraceVerbose("RetrieveColumn");
+            this.CheckNotDisposed();
+            if (0 == (RetrieveColumnGrbit.RetrieveCopy & grbit))
+            {
+                this.CheckHasCurrency();
+            }
+
+            return Api.RetrieveColumnAsDouble(this.session, this.table, columnid, grbit);
+        }
+
+        /// <summary>
         /// Retrieve a column from the current record as a Guid
         /// </summary>
         /// <param name="columnid">The columnid to retrieve.</param>
@@ -555,6 +681,24 @@ namespace Microsoft.Isam.Esent
             }
 
             return Api.RetrieveColumnAsGuid(this.session, this.table, columnid, grbit);
+        }
+
+        /// <summary>
+        /// Retrieve a column from the current record as a DateTime
+        /// </summary>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="grbit">Retrieve options.</param>
+        /// <returns>The data from the column.</returns>
+        public virtual DateTime? RetrieveColumnAsDateTime(JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
+        {
+            this.Tracer.TraceVerbose("RetrieveColumn");
+            this.CheckNotDisposed();
+            if (0 == (RetrieveColumnGrbit.RetrieveCopy & grbit))
+            {
+                this.CheckHasCurrency();
+            }
+
+            return Api.RetrieveColumnAsDateTime(this.session, this.table, columnid, grbit);
         }
 
         /// <summary>

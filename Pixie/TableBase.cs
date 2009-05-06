@@ -342,7 +342,7 @@ namespace Microsoft.Isam.Esent
                 cursor.MakeKey(data, grbit);
             };
 
-            metadata.RetrieveColumn = this.MakeRetrieveColumnFunction(metadata);
+            metadata.RetrieveColumn = MakeRetrieveColumnFunction(metadata);
 
             return metadata;
         }
@@ -352,16 +352,30 @@ namespace Microsoft.Isam.Esent
         /// </summary>
         /// <param name="metadata">The meta-data.</param>
         /// <returns>The meta-data function.</returns>
-        private Func<Cursor, RetrieveColumnGrbit, object> MakeRetrieveColumnFunction(ColumnMetaData metadata)
+        private static Func<Cursor, RetrieveColumnGrbit, object> MakeRetrieveColumnFunction(ColumnMetaData metadata)
         {
             switch (metadata.Type)
             {
+                case ColumnType.Bool:
+                    return (cursor, grbit) => cursor.RetrieveColumnAsBoolean(metadata.Columnid, grbit);
+                case ColumnType.Byte:
+                    return (cursor, grbit) => cursor.RetrieveColumnAsByte(metadata.Columnid, grbit);
                 case ColumnType.Int16:
                     return (cursor, grbit) => cursor.RetrieveColumnAsInt16(metadata.Columnid, grbit);
+                case ColumnType.UInt16:
+                    return (cursor, grbit) => cursor.RetrieveColumnAsUInt16(metadata.Columnid, grbit);
                 case ColumnType.Int32:
                     return (cursor, grbit) => cursor.RetrieveColumnAsInt32(metadata.Columnid, grbit);
+                case ColumnType.UInt32:
+                    return (cursor, grbit) => cursor.RetrieveColumnAsUInt32(metadata.Columnid, grbit);
                 case ColumnType.Int64:
                     return (cursor, grbit) => cursor.RetrieveColumnAsInt64(metadata.Columnid, grbit);
+                case ColumnType.Float:
+                    return (cursor, grbit) => cursor.RetrieveColumnAsFloat(metadata.Columnid, grbit);
+                case ColumnType.Double:
+                    return (cursor, grbit) => cursor.RetrieveColumnAsDouble(metadata.Columnid, grbit);
+                case ColumnType.DateTime:
+                    return (cursor, grbit) => cursor.RetrieveColumnAsDateTime(metadata.Columnid, grbit);
                 case ColumnType.Guid:
                     return (cursor, grbit) => cursor.RetrieveColumnAsGuid(metadata.Columnid, grbit);
                 default:
