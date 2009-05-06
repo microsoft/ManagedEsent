@@ -123,7 +123,7 @@ namespace InteropApiTests
 
             // Randomly seek to all records in the table
             long[] keys = (from x in Enumerable.Range(0, NumRecords) select (long)x).ToArray();
-            this.Suffle(keys);
+            this.Shuffle(keys);
 
             TimeAction("Insert records", () => this.InsertRecords(NumRecords));
             TimeAction("Read one record", () => this.RepeatedlyRetrieveOneRecord(NumRecords));
@@ -143,7 +143,7 @@ namespace InteropApiTests
             Console.WriteLine("Memory changed by {0} bytes", memoryAtEnd - memoryAtStart);
         }
 
-        private void Suffle<T>(T[] arrayToShuffle)
+        private void Shuffle<T>(T[] arrayToShuffle)
         {
             for (int i = 0; i < arrayToShuffle.Length; ++i)
             {

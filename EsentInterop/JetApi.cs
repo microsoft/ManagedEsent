@@ -290,13 +290,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             columnid = JET_COLUMNID.Nil;
             this.CheckNotNull(column, "column");
             this.CheckNotNull(columndef, "columndef");
-            this.CheckNotNegative(defaultValueSize, "defaultValueSize");
-            if ((null == defaultValue && 0 != defaultValueSize) || (null != defaultValue && defaultValueSize > defaultValue.Length))
-            {
-                throw new ArgumentException(
-                    "defaultValueSize cannot be greater than the length of the defaultValue array",
-                    "defaultValueSize");
-            }
+            this.CheckDataSize(defaultValue, defaultValueSize, "defaultValueSize");
 
             NATIVE_COLUMNDEF nativeColumndef = columndef.GetNativeColumndef();
             int err;
@@ -601,25 +595,23 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetGetBookmark(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize, out int actualBookmarkSize)
         {
             this.TraceFunctionCall("JetGetBookmark");
-            actualBookmarkSize = 0;
-            this.CheckNotNegative(bookmarkSize, "bookmarkSize");
-            if ((null == bookmark && 0 != bookmarkSize) || (null != bookmark && bookmarkSize > bookmark.Length))
-            {
-                throw new ArgumentException(
-                    "bookmarkSize cannot be greater than the length of the bookmark",
-                    "bookmarkSize");
-            }
+            this.CheckDataSize(bookmark, bookmarkSize, "bookmarkSize");
 
             uint cbActual = 0;
             int err;
-            GCHandle bookmarkHandle = GCHandle.Alloc(bookmark, GCHandleType.Pinned);
-            try
+            unsafe
             {
-                err = this.Err(NativeMethods.JetGetBookmark(sesid.Value, tableid.Value, bookmarkHandle.AddrOfPinnedObject(), (uint)bookmarkSize, ref cbActual));
-            }
-            finally
-            {
-                bookmarkHandle.Free();
+                fixed (void * pointer = bookmark)
+                {
+                    err =
+                        this.Err(
+                            NativeMethods.JetGetBookmark(
+                                sesid.Value,
+                                tableid.Value,
+                                new IntPtr(pointer), 
+                                (uint) bookmarkSize,
+                                ref cbActual));
+                }
             }
 
             actualBookmarkSize = (int)cbActual;
@@ -629,37 +621,17 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetGotoBookmark(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize)
         {
             this.TraceFunctionCall("JetGotoBookmark");
-            this.CheckNotNull(bookmark, "bookark");
-            this.CheckNotNegative(bookmarkSize, "bookmarkSize");
-            if (bookmarkSize > bookmark.Length)
-            {
-                throw new ArgumentException(
-                    "bookmarkSize cannot be greater than the length of the bookmark",
-                    "bookmarkSize");
-            }
-
-            GCHandle bookmarkHandle = GCHandle.Alloc(bookmark, GCHandleType.Pinned);
-            try
-            {
-                return this.Err(NativeMethods.JetGotoBookmark(sesid.Value, tableid.Value, bookmarkHandle.AddrOfPinnedObject(), (uint)bookmarkSize));
-            }
-            finally
-            {
-                bookmarkHandle.Free();
-            }
-        }
-
-        public int JetRetrieveColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, out int actualDataSize, RetrieveColumnGrbit grbit, JET_RETINFO retinfo)
-        {
-            this.TraceFunctionCall("JetRetrieveColumn");
-            this.CheckDataSize(data, dataSize);
+            this.CheckNotNull(bookmark, "bookmark");
+            this.CheckDataSize(bookmark, bookmarkSize, "bookmarkSize");
 
             unsafe
             {
-                fixed (byte* pointer = data)
+                fixed (void* pointer = bookmark)
                 {
-                    return this.JetRetrieveColumn(
-                        sesid, tableid, columnid, new IntPtr(pointer), dataSize, out actualDataSize, grbit, retinfo);
+                    return
+                        this.Err(
+                            NativeMethods.JetGotoBookmark(
+                                sesid.Value, tableid.Value, new IntPtr(pointer), (uint) bookmarkSize));
                 }
             }
         }
@@ -667,6 +639,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetRetrieveColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, IntPtr data, int dataSize, out int actualDataSize, RetrieveColumnGrbit grbit, JET_RETINFO retinfo)
         {
             this.TraceFunctionCall("JetRetrieveColumn");
+            this.CheckNotNegative(dataSize, "dataSize");
             actualDataSize = 0;
 
             int err;
@@ -711,30 +684,17 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return err;
         }
 
-        public int JetMakeKey(JET_SESID sesid, JET_TABLEID tableid, byte[] data, int dataSize, MakeKeyGrbit grbit)
-        {
-            this.TraceFunctionCall("JetMakeKey");
-            this.CheckDataSize(data, dataSize);
-
-            unsafe
-            {
-                fixed (byte* pointer = data)
-                {
-                    return this.JetMakeKey(sesid, tableid, new IntPtr(pointer), dataSize, grbit);
-                }
-            }
-        }
-
         public int JetMakeKey(JET_SESID sesid, JET_TABLEID tableid, IntPtr data, int dataSize, MakeKeyGrbit grbit)
         {
             this.TraceFunctionCall("JetMakeKey");
+            this.CheckNotNegative(dataSize, "dataSize");
             return this.Err(NativeMethods.JetMakeKey(sesid.Value, tableid.Value, data, (uint)dataSize, (uint)grbit));
         }
 
         public int JetRetrieveKey(JET_SESID sesid, JET_TABLEID tableid, byte[] data, int dataSize, out int actualDataSize, RetrieveKeyGrbit grbit)
         {
             this.TraceFunctionCall("JetRetrieveKey");
-            this.CheckDataSize(data, dataSize);
+            this.CheckDataSize(data, dataSize, "dataSize");
 
             GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
 
@@ -796,7 +756,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetIntersectIndexes");
             this.CheckNotNull(tableids, "tableids");
-            this.CheckDataSize(tableids, numTableids);
+            this.CheckDataSize(tableids, numTableids, "numTableids");
             if (numTableids < 2)
             {
                 throw new ArgumentException("JetIntersectIndexes requires at least two tables.", "numTableids");
@@ -897,48 +857,20 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetUpdate(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize, out int actualBookmarkSize)
         {
             this.TraceFunctionCall("JetUpdate");
-            actualBookmarkSize = 0;
-            this.CheckNotNegative(bookmarkSize, "bookmarkSize");
-            if ((null == bookmark && 0 != bookmarkSize) || (null != bookmark && bookmarkSize > bookmark.Length))
-            {
-                throw new ArgumentException(
-                    "bookmarkSize cannot be greater than the length of the bookmark",
-                    "bookmarkSize");
-            }
+            this.CheckDataSize(bookmark, bookmarkSize, "bookmarkSize");
 
             uint cbActual = 0;
             int err;
-            GCHandle gch = GCHandle.Alloc(bookmark, GCHandleType.Pinned);
-            try
+            unsafe
             {
-                err = this.Err(NativeMethods.JetUpdate(sesid.Value, tableid.Value, gch.AddrOfPinnedObject(), (uint)bookmarkSize, ref cbActual));
-            }
-            finally
-            {
-                gch.Free();
+                fixed (byte* pointer = bookmark)
+                {
+                    err = this.Err(NativeMethods.JetUpdate(sesid.Value, tableid.Value, new IntPtr(pointer), (uint)bookmarkSize, ref cbActual));
+                }
             }
 
             actualBookmarkSize = (int)cbActual;
             return err;
-        }
-
-        public int JetSetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, SetColumnGrbit grbit, JET_SETINFO setinfo)
-        {
-            this.TraceFunctionCall("JetSetColumn");
-            if (null != data && dataSize > data.Length && (SetColumnGrbit.SizeLV != (grbit & SetColumnGrbit.SizeLV)))
-            {
-                throw new ArgumentException(
-                    "dataSize cannot be greater than the length of the data (unless the SizeLV option is used)",
-                    "dataSize");
-            }
-
-            unsafe
-            {
-                fixed (byte* pointer = data)
-                {
-                    return this.JetSetColumn(sesid, tableid, columnid, new IntPtr(pointer), dataSize, grbit, setinfo);
-                }
-            }
         }
 
         public int JetSetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, IntPtr data, int dataSize, SetColumnGrbit grbit, JET_SETINFO setinfo)
@@ -1012,8 +944,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetEscrowUpdate");
             this.CheckNotNull(delta, "delta");
-            this.CheckDataSize(delta, deltaSize);
-            this.CheckDataSize(previousValue, previousValueLength);
+            this.CheckDataSize(delta, deltaSize, "deltaSize");
+            this.CheckDataSize(previousValue, previousValueLength, "previousValueLength");
 
             actualPreviousValueLength = 0;
 
@@ -1052,16 +984,17 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </summary>
         /// <param name="data">The data buffer.</param>
         /// <param name="dataSize">The size of the data.</param>
+        /// <param name="argumentName">The name of the size argument.</param>
         /// <typeparam name="T">The type of the data.</typeparam>
-        private void CheckDataSize<T>(ICollection<T> data, int dataSize)
+        private void CheckDataSize<T>(ICollection<T> data, int dataSize, string argumentName)
         {
             this.CheckNotNegative(dataSize, "dataSize");
             if ((null == data && 0 != dataSize) || (null != data && dataSize > data.Count))
             {
                 Trace.WriteLineIf(this.traceSwitch.TraceError, "CheckDataSize failed");
                 throw new ArgumentException(
-                    "dataSize cannot be greater than the length of the data",
-                    "dataSize");
+                    "cannot be greater than the length of the buffer",
+                    argumentName);
             }
         }
 

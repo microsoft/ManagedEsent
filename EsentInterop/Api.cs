@@ -708,7 +708,21 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>An ESENT warning code.</returns>
         public static JET_wrn JetRetrieveColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, out int actualDataSize, RetrieveColumnGrbit grbit, JET_RETINFO retinfo)
         {
-            return Api.Check(Impl.JetRetrieveColumn(sesid, tableid, columnid, data, dataSize, out actualDataSize, grbit, retinfo));
+            if ((null == data && dataSize > 0) || (null != data && dataSize > data.Length))
+            {
+                throw new ArgumentException(
+                    "dataSize is greater than the length of the data",
+                    "dataSize");
+            }
+
+            unsafe
+            {
+                fixed (byte* pointer = data)
+                {
+                    return Api.JetRetrieveColumn(
+                        sesid, tableid, columnid, new IntPtr(pointer), dataSize, out actualDataSize, grbit, retinfo);
+                }
+            }
         }
 
         /// <summary>
@@ -749,7 +763,20 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Key options.</param>
         public static void JetMakeKey(JET_SESID sesid, JET_TABLEID tableid, byte[] data, int dataSize, MakeKeyGrbit grbit)
         {
-            Api.Check(Impl.JetMakeKey(sesid, tableid, data, dataSize, grbit));
+            if ((null == data && 0 != dataSize) || (null != data && dataSize > data.Length))
+            {
+                throw new ArgumentException(
+                    "dataSize cannot be greater than the length of the data",
+                    "dataSize");
+            }
+
+            unsafe
+            {
+                fixed (byte* pointer = data)
+                {
+                    Api.JetMakeKey(sesid, tableid, new IntPtr(pointer), dataSize, grbit);
+                }
+            }
         }
 
         /// <summary>
@@ -992,7 +1019,20 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="setinfo">Used to specify itag or long-value offset.</param>
         public static void JetSetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, SetColumnGrbit grbit, JET_SETINFO setinfo)
         {
-            Api.Check(Impl.JetSetColumn(sesid, tableid, columnid, data, dataSize, grbit, setinfo));
+            if (null != data && dataSize > data.Length && (SetColumnGrbit.SizeLV != (grbit & SetColumnGrbit.SizeLV)))
+            {
+                throw new ArgumentException(
+                    "dataSize cannot be greater than the length of the data (unless the SizeLV option is used)",
+                    "dataSize");
+            }
+
+            unsafe
+            {
+                fixed (byte* pointer = data)
+                {
+                    Api.JetSetColumn(sesid, tableid, columnid, new IntPtr(pointer), dataSize, grbit, setinfo);
+                }
+            }
         }
 
         /// <summary>
