@@ -22,6 +22,16 @@ def insertTest(keys):
 	db.close()
 	return timer.Elapsed
 
+def repeatedRetrieveTest(numretrieves):
+	db = esedb.open(database, 'r')
+	(key, data) = db.first()
+	timer = Stopwatch.StartNew()
+	for i in xrange(0, numretrieves):
+		data = db[key]
+	timer.Stop()
+	db.close()
+	return timer.Elapsed
+	
 def retrieveTest(keys):
 	db = esedb.open(database, 'r')
 	timer = Stopwatch.StartNew()
@@ -45,6 +55,22 @@ def scanTest():
 keys = range(1000000)
 time = insertTest(keys)
 print 'appended %d records in %s (lazy commit)' % (len(keys), time)
+
+# Repeatedly retrieve the same record
+numretrieves = 1000000
+time = repeatedRetrieveTest(numretrieves)
+print 'retrieved 1 record %d times in %s' % (numretrieves, time)
+
+# Now scan all the records in key order. As the database was closed and reopened
+# we will be starting with no data cached
+time = scanTest()
+print 'scanned %d records in %s' % (len(keys), time)
+
+# Now retrieve all the records. As the database was closed and reopened
+# we will be starting with no data cached
+random.shuffle(keys)
+time = retrieveTest(keys)
+print 'randomly retrieved %d records in %s' % (len(keys), time)
 
 # Now insert in random order (more likely)
 random.shuffle(keys)

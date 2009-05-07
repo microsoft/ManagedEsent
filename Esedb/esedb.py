@@ -8,10 +8,8 @@
 #
 # Register for shutdown function (atexit.register)
 # create a table for record counts, implement a sync() method
-# 'n' needs to delete the database/logs/checkpoint
-# get 'in'/'not in' keywords working
 # keep track of number of items: support len()
-#	len can't be cached (multiple cursors), always get from DB
+#   lazily load then keep up-to-date in memory
 # clear(): delete all records
 # pop
 # popitem (remove the last one)
@@ -21,7 +19,6 @@
 # use str() or repr()?
 # More tests
 #	- compare against in-memory dictionary
-# 	- performance
 #	- stress
 #	- delete records when iterating
 # Write-lock keys in memory when updating
@@ -69,6 +66,7 @@ from Microsoft.Isam.Esent.Interop import JET_COLUMNID
 from Microsoft.Isam.Esent.Interop import JET_COLUMNDEF
 from Microsoft.Isam.Esent.Interop import JET_CP
 from Microsoft.Isam.Esent.Interop import JET_coltyp
+from Microsoft.Isam.Esent.Interop import JET_param
 from Microsoft.Isam.Esent.Interop import JET_prep
 from Microsoft.Isam.Esent.Interop import CreateDatabaseGrbit
 from Microsoft.Isam.Esent.Interop import CreateIndexGrbit
@@ -528,7 +526,17 @@ class EseDBCursor(object):
 		>>> x = open('wdbtest.db', mode='n')
 		>>> x['key'] = 'value'
 		>>> del x['key']
-		>>> x.close()				
+		>>> x.close()
+
+		If the key isn't present in the database then a KeyError
+		is raised.
+		
+		>>> x = open('wdbtest.db', mode='n')
+		>>> del x['a']
+		Traceback (most recent call last):
+		...
+		KeyError: key 'a' was not found
+		>>> x.close()
 		
 		"""
 		self._checkNotClosed()
@@ -540,6 +548,23 @@ class EseDBCursor(object):
 				trx.commit(self._lazyupdate)
 		finally:
 			self._database.unlock()
+			
+	def __contains__(self, key):
+		"""Returns True if the database contains the specified key,
+		otherwise returns False.
+
+		>>> x = open('wdbtest.db', mode='n')
+		>>> x['foo'] = 'bar'
+		>>> 'foo' in x
+		True
+		>>> 'baz' in x
+		False
+		>>> 'baz' not in x
+		True
+		>>> x.close()
+			
+		"""
+		return self.has_key(key)
 		
 	def close(self):
 		"""Close the database. After being closed this object can no
@@ -941,6 +966,9 @@ def open(filename, mode='c', lazyupdate=False):
 	finally:
 		_registry.unlock()			
 
+# Set global esent options
+Api.JetSetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.DatabasePageSize, 8192, None)
+
 # A global object to perform filename => EseDB mappings
 _registry = _EseDBRegistry()
 
@@ -951,6 +979,7 @@ if __name__ == '__main__':
 	__test__['__getitem__'] = EseDBCursor.__getitem__
 	__test__['__setitem__'] = EseDBCursor.__setitem__
 	__test__['__delitem__'] = EseDBCursor.__delitem__
+	__test__['__contains__'] = EseDBCursor.__contains__
 	__test__['close'] = EseDBCursor.close
 	__test__['iterkeys'] = EseDBCursor.iterkeys
 	__test__['keys'] = EseDBCursor.keys

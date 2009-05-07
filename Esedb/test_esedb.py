@@ -70,6 +70,13 @@ class EsedbSingleDBFixture(unittest.TestCase):
 		self._db['key'] = 'value'
 		self.assertEqual(True, self._db.has_key('key'))
 
+	def testInReturnsFalseWhenKeyNotPresent(self):
+		self.assertEqual(False, ('key' in self._db))
+
+	def testInReturnsTrueWhenKeyIsPresent(self):
+		self._db['key'] = 'value'
+		self.assertEqual(True, ('key' in self._db))
+		
 	def testRetrieveRaisesKeyErrorWhenKeyNotPresent(self):
 		self.assertRaises(KeyError, self._db.__getitem__, 'key')
 
@@ -313,6 +320,9 @@ class EsedbClosedCursorFixture(unittest.TestCase):
 	def testDelitemRaisesErrorOnClosedCursor(self):
 		self.assertRaises(EseDBCursorClosedError, self._db.__delitem__, '?')
 
+	def testContainsRaisesErrorOnClosedCursor(self):
+		self.assertRaises(EseDBCursorClosedError, self._db.__contains__, '?')
+		
 	def testKeysRaisesErrorOnClosedCursor(self):
 		self.assertRaises(EseDBCursorClosedError, self._db.keys)
 
@@ -327,7 +337,7 @@ class EsedbClosedCursorFixture(unittest.TestCase):
 
 	def testHaskeyRaisesErrorOnClosedCursor(self):
 		self.assertRaises(EseDBCursorClosedError, self._db.has_key, '?')
-
+		
 	def testFirstRaisesErrorOnClosedCursor(self):
 		self.assertRaises(EseDBCursorClosedError, self._db.first)		
 
