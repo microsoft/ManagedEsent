@@ -6,6 +6,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Text;
 
 namespace Microsoft.Isam.Esent.Interop
@@ -13,6 +14,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Native interop for functions in esent.dll.
     /// </summary>
+    [SuppressUnmanagedCodeSecurity]
     internal static class NativeMethods
     {
         #region Configuration Constants

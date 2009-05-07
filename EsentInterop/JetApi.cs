@@ -601,7 +601,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             int err;
             unsafe
             {
-                fixed (void * pointer = bookmark)
+                fixed (void* pointer = bookmark)
                 {
                     err =
                         this.Err(
