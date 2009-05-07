@@ -262,7 +262,7 @@ namespace PixieTests
         /// <param name="column">The name of the column to retrieve.</param>
         private void TimeColumnRetrieval(string column)
         {
-            const int NumRetrievals = 1000000;
+            const int NumRetrievals = 2000000;
 
             using (var trx = this.connection.BeginTransaction())
             {

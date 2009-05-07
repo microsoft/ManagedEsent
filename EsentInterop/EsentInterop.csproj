@@ -82,6 +82,7 @@
     <Compile Include="InternalApi.cs" />
     <Compile Include="jet_indexrange.cs" />
     <Compile Include="jet_recordlist.cs" />
+    <Compile Include="MemoryCache.cs" />
     <Compile Include="TableEnumerator.cs" />
     <Compile Include="VistaParam.cs" />
     <Compile Include="EsentException.cs" />

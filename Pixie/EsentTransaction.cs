@@ -17,6 +17,11 @@ namespace Microsoft.Isam.Esent
     internal class EsentTransaction : Transaction
     {
         /// <summary>
+        /// Tracing object for transactions
+        /// </summary>
+        private static readonly Tracer tracer = new Tracer("Transaction", "Esent Transaction", String.Empty);
+
+        /// <summary>
         /// The name of the transaction.
         /// </summary>
         private readonly string name;
@@ -61,7 +66,6 @@ namespace Microsoft.Isam.Esent
         internal EsentTransaction(Session session, string name, EsentTransaction outerTransaction)
         {
             this.name = name;
-            this.Tracer = new Tracer("Transaction", "Esent Transaction", this.ToString());
             this.session = session;
             this.outerTransaction = outerTransaction;
             this.Begin();
@@ -84,9 +88,15 @@ namespace Microsoft.Isam.Esent
         public override event Action Committed;
 
         /// <summary>
-        /// Gets or sets the Tracer object for this Table.
+        /// Gets the Tracer object for this Table.
         /// </summary>
-        private Tracer Tracer { get; set; }
+        private Tracer Tracer
+        {
+            get
+            {
+                return tracer;
+            }
+        }
 
         /// <summary>
         /// Returns a string which names the transaction.
@@ -186,7 +196,7 @@ namespace Microsoft.Isam.Esent
             {
                 this.Tracer.TraceWarning("rolling back subtransaction");
 
-                // subTransaction.Rollback() raises the Committed event which will
+                // subTransaction.Rollback() raises the RolledBack event which will
                 // call UnregisterSubTransaction.
                 this.subTransaction.Rollback();
             }
@@ -203,7 +213,7 @@ namespace Microsoft.Isam.Esent
         }
 
         /// <summary>
-        /// Register the a transaction as a subtransaction. A subtransaction has to
+        /// Register a transaction as a subtransaction. A subtransaction has to
         /// commit or rollback before this transaction.
         /// </summary>
         /// <param name="transaction">The new subtransaction.</param>

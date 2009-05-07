@@ -207,14 +207,14 @@ namespace InteropApiTests
         #region RetrieveColumnAs tests
 
         /// <summary>
-        /// Retrieve a column that exceeds the buffer created by JetRetrieveColumn
+        /// Retrieve a column that exceeds the cached buffer size used by RetrieveColumn
         /// </summary>
         [TestMethod]
         [Priority(1)]
         public void RetrieveLargeColumn()
         {
             JET_COLUMNID columnid = this.columnidDict["Binary"];
-            var expected = new byte[4096];
+            var expected = new byte[16384];
 
             var random = new Random();
             random.NextBytes(expected);
@@ -251,6 +251,16 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Retrieve a null column as boolean.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void RetrieveNullAsBoolean()
+        {
+            this.NullColumnTest<bool>("Boolean", Api.RetrieveColumnAsBoolean);
+        }
+
+        /// <summary>
         /// Retrieve a column as a byte.
         /// </summary>
         [TestMethod]
@@ -264,6 +274,16 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Retrieve a null column as byte.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void RetrieveNullAsByte()
+        {
+            this.NullColumnTest<byte>("Byte", Api.RetrieveColumnAsByte);
+        }
+
+        /// <summary>
         /// Retrieve a column as a short.
         /// </summary>
         [TestMethod]
@@ -274,6 +294,16 @@ namespace InteropApiTests
             short value = Any.Int16;
             this.InsertRecord(columnid, BitConverter.GetBytes(value));
             Assert.AreEqual(value, Api.RetrieveColumnAsInt16(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
+        /// Retrieve a null column as a short.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void RetrieveNullAsInt16()
+        {
+            this.NullColumnTest<short>("Int16", Api.RetrieveColumnAsInt16);
         }
 
         /// <summary>
@@ -305,6 +335,16 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Retrieve a null column as a ushort.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void RetrieveNullAsUInt16()
+        {
+            this.NullColumnTest<ushort>("UInt16", Api.RetrieveColumnAsUInt16);
+        }
+
+        /// <summary>
         /// Retrieving a byte as a ushort throws an exception when the column
         /// is too short.
         /// </summary>
@@ -330,6 +370,16 @@ namespace InteropApiTests
             int value = Any.Int32;
             this.InsertRecord(columnid, BitConverter.GetBytes(value));
             Assert.AreEqual(value, Api.RetrieveColumnAsInt32(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
+        /// Retrieve a null column as an int.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void RetrieveNullAsInt32()
+        {
+            this.NullColumnTest<int>("Int32", Api.RetrieveColumnAsInt32);
         }
 
         /// <summary>
@@ -361,6 +411,16 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Retrieve a null column as a uint.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void RetrieveNullAsUInt32()
+        {
+            this.NullColumnTest<uint>("UInt32", Api.RetrieveColumnAsUInt32);
+        }
+
+        /// <summary>
         /// Retrieving a byte as a uint throws an exception when the column
         /// is too short.
         /// </summary>
@@ -386,6 +446,16 @@ namespace InteropApiTests
             long value = Any.Int64;
             this.InsertRecord(columnid, BitConverter.GetBytes(value));
             Assert.AreEqual(value, Api.RetrieveColumnAsInt64(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
+        /// Retrieve a null column as a long.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void RetrieveNullAsInt64()
+        {
+            this.NullColumnTest<long>("Int64", Api.RetrieveColumnAsInt64);
         }
 
         /// <summary>
@@ -417,6 +487,16 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Retrieve a null column as a ulong.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void RetrieveNullAsUInt64()
+        {
+            this.NullColumnTest<ulong>("UInt64", Api.RetrieveColumnAsUInt64);
+        }
+
+        /// <summary>
         /// Retrieving a byte as a ulong throws an exception when the column
         /// is too short.
         /// </summary>
@@ -442,6 +522,16 @@ namespace InteropApiTests
             float value = Any.Float;
             this.InsertRecord(columnid, BitConverter.GetBytes(value));
             Assert.AreEqual(value, Api.RetrieveColumnAsFloat(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
+        /// Retrieve a null column as a float.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void RetrieveNullAsFloat()
+        {
+            this.NullColumnTest<float>("float", Api.RetrieveColumnAsFloat);
         }
 
         /// <summary>
@@ -473,6 +563,16 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Retrieve a null column as a double.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void RetrieveNullAsDouble()
+        {
+            this.NullColumnTest<double>("double", Api.RetrieveColumnAsDouble);
+        }
+
+        /// <summary>
         /// Retrieving a byte as a double throws an exception when the column
         /// is too short.
         /// </summary>
@@ -498,6 +598,16 @@ namespace InteropApiTests
             Guid value = Any.Guid;
             this.InsertRecord(columnid, value.ToByteArray());
             Assert.AreEqual(value, Api.RetrieveColumnAsGuid(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
+        /// Retrieve a null column as a guid.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void RetrieveNullAsGuid()
+        {
+            this.NullColumnTest<Guid>("Guid", Api.RetrieveColumnAsGuid);
         }
 
         /// <summary>
@@ -532,6 +642,16 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Retrieve a null column as a DateTime.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void RetrieveNullAsDateTime()
+        {
+            this.NullColumnTest<DateTime>("DateTime", Api.RetrieveColumnAsDateTime);
+        }
+
+        /// <summary>
         /// Retrieving a byte as a DateTime throws an exception when the column
         /// is too short.
         /// </summary>
@@ -560,6 +680,18 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Retrieve a null column as ASCII
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void RetrieveNullAsAscii()
+        {
+            JET_COLUMNID columnid = this.columnidDict["ASCII"];
+            this.InsertRecord(columnid, null);
+            Assert.IsNull(Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, Encoding.ASCII));
+        }
+
+        /// <summary>
         /// Retrieve a column as Unicode
         /// </summary>
         [TestMethod]
@@ -573,6 +705,18 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Retrieve a null column as Unicode
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void RetrieveNullAsUnicode()
+        {
+            JET_COLUMNID columnid = this.columnidDict["Unicode"];
+            this.InsertRecord(columnid, null);
+            Assert.IsNull(Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, Encoding.Unicode));
+        }
+
+        /// <summary>
         /// Retrieve a column as a (unicode) string
         /// </summary>
         [TestMethod]
@@ -581,6 +725,19 @@ namespace InteropApiTests
         {
             JET_COLUMNID columnid = this.columnidDict["Unicode"];
             string value = Any.String;
+            this.InsertRecord(columnid, Encoding.Unicode.GetBytes(value));
+            Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
+        /// Retrieve a string that is too large for the cached retrieval buffer
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void RetrieveLargeString()
+        {
+            JET_COLUMNID columnid = this.columnidDict["Unicode"];
+            var value = new string('x', 16384);
             this.InsertRecord(columnid, Encoding.Unicode.GetBytes(value));
             Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid));
         }
@@ -1347,9 +1504,22 @@ namespace InteropApiTests
         {
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
-            Api.JetSetColumn(this.sesid, this.tableid, columnid, data, data.Length, SetColumnGrbit.None, null);
+            Api.JetSetColumn(this.sesid, this.tableid, columnid, data, (null == data) ? 0 : data.Length, SetColumnGrbit.None, null);
             this.UpdateAndGotoBookmark();
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);      
+        }
+
+        /// <summary>
+        /// Test setting and retrieving a null column.
+        /// </summary>
+        /// <typeparam name="T">The struct type that is being returned.</typeparam>
+        /// <param name="column">The name of the column to set.</param>
+        /// <param name="retrieveFunc">The function to use when retrieving the column.</param>
+        private void NullColumnTest<T>(string column, Func<JET_SESID, JET_TABLEID, JET_COLUMNID, T?> retrieveFunc) where T : struct
+        {
+            JET_COLUMNID columnid = this.columnidDict[column];
+            this.InsertRecord(columnid, null);
+            Assert.IsNull(retrieveFunc(this.sesid, this.tableid, columnid));
         }
 
         /// <summary>
@@ -1377,19 +1547,6 @@ namespace InteropApiTests
             Api.JetCreateIndex(this.sesid, this.tableid, indexname, CreateIndexGrbit.None, indexdef, indexdef.Length, 100);
             Api.JetSetCurrentIndex(this.sesid, this.tableid, indexname);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.None);
-        }
-
-        /// <summary>
-        /// Set a single byte and retrieve a column.
-        /// </summary>
-        /// <typeparam name="T">The type to retrieve.</typeparam>
-        /// <param name="retrieveFunc">The retrieval function.</param>
-        private void SetSingleByteAndRetrieveColumn<T>(Func<JET_SESID, JET_TABLEID, JET_COLUMNID, T?> retrieveFunc) where T : struct
-        {
-            JET_COLUMNID columnid = this.columnidDict["Binary"];
-            var value = new byte[1];
-            this.InsertRecord(columnid, value);
-            retrieveFunc(this.sesid, this.tableid, columnid);
         }
 
         #endregion Helper methods

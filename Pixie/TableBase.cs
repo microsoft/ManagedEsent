@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
 using Microsoft.Isam.Esent.Interop;
 
 namespace Microsoft.Isam.Esent
@@ -378,6 +379,10 @@ namespace Microsoft.Isam.Esent
                     return (cursor, grbit) => cursor.RetrieveColumnAsDateTime(metadata.Columnid, grbit);
                 case ColumnType.Guid:
                     return (cursor, grbit) => cursor.RetrieveColumnAsGuid(metadata.Columnid, grbit);
+                case ColumnType.AsciiText:
+                    return (cursor, grbit) => cursor.RetrieveColumnAsString(metadata.Columnid, Encoding.ASCII, grbit);
+                case ColumnType.Text:
+                    return (cursor, grbit) => cursor.RetrieveColumnAsString(metadata.Columnid, Encoding.Unicode, grbit);
                 default:
                     return (cursor, grbit) => metadata.BytesToObjectConverter(
                                                                      cursor.RetrieveColumn(metadata.Columnid, grbit));

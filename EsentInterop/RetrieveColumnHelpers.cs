@@ -7,6 +7,7 @@
 using System;
 using System.Diagnostics;
 using System.Text;
+using System.Threading;
 
 namespace Microsoft.Isam.Esent.Interop
 {
@@ -18,6 +19,11 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     public static partial class Api
     {
+        /// <summary>
+        /// Cached retrieve buffers
+        /// </summary>
+        private static MemoryCache memoryCache = new MemoryCache();
+
         /// <summary>
         /// Conversion function delegate.
         /// </summary>
@@ -103,7 +109,8 @@ namespace Microsoft.Isam.Esent.Interop
             // escrow-update column with no buffer.
             var data = new byte[256];
             int dataSize;
-            JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, data, data.Length, out dataSize, grbit, retinfo);
+            JET_wrn wrn = Api.JetRetrieveColumn(
+                sesid, tableid, columnid, data, data.Length, out dataSize, grbit, retinfo);
 
             if (JET_wrn.ColumnNull == wrn)
             {
@@ -147,26 +154,6 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Retrieves a string column value from the current record. The record is that
-        /// record associated with the index entry at the current position of the cursor.
-        /// </summary>
-        /// <param name="sesid">The session to use.</param>
-        /// <param name="tableid">The cursor to retrieve the column from.</param>
-        /// <param name="columnid">The columnid to retrieve.</param>
-        /// <param name="encoding">The string encoding to use when converting data.</param>
-        /// <returns>The data retrieved from the column as a string. Null if the column is null.</returns>
-        public static string RetrieveColumnAsString(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, Encoding encoding)
-        {
-            byte[] data = Api.RetrieveColumn(sesid, tableid, columnid, RetrieveColumnGrbit.None, null);
-            if (null == data)
-            {
-                return null;
-            }
-
-            return encoding.GetString(data);
-        }
-
-        /// <summary>
         /// Retrieves a single column value from the current record. The record is that
         /// record associated with the index entry at the current position of the cursor.
         /// The Unicode encoding is used.
@@ -177,7 +164,69 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The data retrieved from the column as a string. Null if the column is null.</returns>
         public static string RetrieveColumnAsString(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
-            return Api.RetrieveColumnAsString(sesid, tableid, columnid, Encoding.Unicode);
+            return Api.RetrieveColumnAsString(sesid, tableid, columnid, Encoding.Unicode, RetrieveColumnGrbit.None);
+        }
+
+        /// <summary>
+        /// Retrieves a string column value from the current record. The record is that
+        /// record associated with the index entry at the current position of the cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the column from.</param>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="encoding">The string encoding to use when converting data.</param>
+        /// <returns>The data retrieved from the column as a string. Null if the column is null.</returns>
+        public static string RetrieveColumnAsString(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, Encoding encoding)
+        {
+            return Api.RetrieveColumnAsString(sesid, tableid, columnid, encoding, RetrieveColumnGrbit.None);
+        }
+
+        /// <summary>
+        /// Retrieves a string column value from the current record. The record is that
+        /// record associated with the index entry at the current position of the cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the column from.</param>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="encoding">The string encoding to use when converting data.</param>
+        /// <param name="grbit">Retrieval options.</param>
+        /// <returns>The data retrieved from the column as a string. Null if the column is null.</returns>
+        public static string RetrieveColumnAsString(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, Encoding encoding, RetrieveColumnGrbit grbit)
+        {
+            // Retrieving a string happens in two stages: first the data is retrieved into a data
+            // buffer and then the buffer is converted to a string. The buffer isn't needed for
+            // very long so we try to use a cached buffer.
+            byte[] data = Api.memoryCache.Allocate();
+
+            int dataSize;
+            JET_wrn wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, data, data.Length, out dataSize, grbit, null);
+            if (JET_wrn.ColumnNull == wrn)
+            {
+                return null;
+            }
+
+            if (JET_wrn.BufferTruncated == wrn)
+            {
+                Debug.Assert(dataSize > data.Length, "Expected column to be bigger than buffer");
+                data = new byte[dataSize];
+                wrn = Api.JetRetrieveColumn(sesid, tableid, columnid, data, data.Length, out dataSize, grbit, null);
+                if (JET_wrn.BufferTruncated == wrn)
+                {
+                    string error = String.Format(
+                        "Column size changed from {0} to {1}. The record was probably updated by another thread.",
+                        data.Length,
+                        dataSize);
+                    Trace.TraceError(error);
+                    throw new InvalidOperationException(error);                    
+                }
+            }
+
+            string s = encoding.GetString(data, 0, dataSize);
+
+            // Now we have extracted the string from the buffer we can free (cache) the buffer.
+            Api.memoryCache.Free(data);
+
+            return s;
         }
 
         /// <summary>
@@ -188,7 +237,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor to retrieve the column from.</param>
         /// <param name="columnid">The columnid to retrieve.</param>
         /// <returns>The data retrieved from the column as a short. Null if the column is null.</returns>
-        public static int? RetrieveColumnAsInt16(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
+        public static short? RetrieveColumnAsInt16(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
             return Api.RetrieveColumnAsInt16(sesid, tableid, columnid, RetrieveColumnGrbit.None);
         }
@@ -384,6 +433,7 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 return 0 != b.Value;
             }
+
             return new bool?();
         }
 
@@ -631,13 +681,14 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="dataSize">The size of the data.</param>
         /// <param name="wrn">The warning code from esent.</param>
         /// <param name="actualDataSize">The actual size of the data retireved fomr esent.</param>
-        /// <returns></returns>
+        /// <returns>A nullable struct of type T.</returns>
         private static T? CreateReturnValue<T>(T data, int dataSize, JET_wrn wrn, int actualDataSize) where T : struct
         {
             if (JET_wrn.ColumnNull == wrn)
             {
                 return new T?();
             }
+
             CheckDataSize(dataSize, actualDataSize);
             return data;
         }

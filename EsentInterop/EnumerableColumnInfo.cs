@@ -70,7 +70,11 @@ namespace Microsoft.Isam.Esent.Interop
         private ColumnInfo GetColumnInfoFromColumnlist(JET_COLUMNLIST columnlist)
         {
             string name = Api.RetrieveColumnAsString(
-                this.sesid, columnlist.tableid, columnlist.columnidcolumnname, NativeMethods.Encoding);
+                this.sesid,
+                columnlist.tableid,
+                columnlist.columnidcolumnname,
+                NativeMethods.Encoding,
+                RetrieveColumnGrbit.None);
             var columnidValue = (uint)Api.RetrieveColumnAsUInt32(this.sesid, columnlist.tableid, columnlist.columnidcolumnid);
             var coltypValue = (uint)Api.RetrieveColumnAsUInt32(this.sesid, columnlist.tableid, columnlist.columnidcoltyp);
             uint codepageValue = (ushort)Api.RetrieveColumnAsUInt16(this.sesid, columnlist.tableid, columnlist.columnidCp);

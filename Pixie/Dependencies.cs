@@ -55,7 +55,7 @@ namespace Microsoft.Isam.Esent
                 .RegisterType<IConnectionManager, ConnectionManager>(new ContainerControlledLifetimeManager());  // singleton
 
             // The Unicode Encoding will throw an exception on an invalid string
-            Encoding textEncoding = new UnicodeEncoding(true, false, true);
+            Encoding textEncoding = new UnicodeEncoding(false, false, true);
             Encoding asciiTextEncoding = new ASCIIEncoding();
             Container.RegisterType<DataConversion>(
                 new ContainerControlledLifetimeManager(),   // singleton

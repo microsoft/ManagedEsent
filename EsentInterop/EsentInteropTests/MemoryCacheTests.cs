@@ -1,0 +1,79 @@
+﻿//-----------------------------------------------------------------------
+// <copyright file="MemoryCacheTests.cs" company="Microsoft Corporation">
+//     Copyright (c) Microsoft Corporation.
+// </copyright>
+//-----------------------------------------------------------------------
+
+using Microsoft.Isam.Esent.Interop;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace InteropApiTests
+{
+    /// <summary>
+    /// Test the methods of the MemoryCache class
+    /// </summary>
+    [TestClass]
+    public class MemoryCacheTests
+    {
+        /// <summary>
+        /// The MemoryCache object being tested.
+        /// </summary>
+        private MemoryCache memoryCache;
+
+        /// <summary>
+        /// Initializes the fixture by creating a MemoryCache object.
+        /// </summary>
+        [TestInitialize]
+        public void Setup()
+        {
+            this.memoryCache = new MemoryCache();           
+        }
+
+        /// <summary>
+        /// Allocating a buffer should give a non-null result.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyAllocateDoesNotReturnNull()
+        {
+            Assert.IsNotNull(this.memoryCache.Allocate());
+        }
+
+        /// <summary>
+        /// An allocated buffer must be a reasonable size
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyAllocatedBufferIsLargeEnough()
+        {
+            byte[] buffer = this.memoryCache.Allocate();
+            Assert.IsTrue(buffer.Length > 32);
+        }
+
+        /// <summary>
+        /// Allocating a buffer, freeing it and reallocating should
+        /// give back the same buffer.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyAllocationLocality()
+        {
+            byte[] buffer = this.memoryCache.Allocate();
+            this.memoryCache.Free(buffer);
+            Assert.AreEqual(buffer, this.memoryCache.Allocate());
+        }
+
+        /// <summary>
+        /// Allocating a buffer, freeing it and reallocating should
+        /// give back the same buffer.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyZeroLengthBufferIsNotCached()
+        {
+            this.memoryCache.Free(new byte[0]);
+            byte[] buffer = this.memoryCache.Allocate();
+            Assert.IsTrue(buffer.Length > 0);
+        }
+    }
+}

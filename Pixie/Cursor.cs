@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
 using Microsoft.Isam.Esent.Interop;
 
 namespace Microsoft.Isam.Esent
@@ -699,6 +700,25 @@ namespace Microsoft.Isam.Esent
             }
 
             return Api.RetrieveColumnAsDateTime(this.session, this.table, columnid, grbit);
+        }
+
+        /// <summary>
+        /// Retrieve a column from the current record as a String
+        /// </summary>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="encoding">The string encoding format.</param>
+        /// <param name="grbit">Retrieve options.</param>
+        /// <returns>The data from the column.</returns>
+        public virtual string RetrieveColumnAsString(JET_COLUMNID columnid, Encoding encoding, RetrieveColumnGrbit grbit)
+        {
+            this.Tracer.TraceVerbose("RetrieveColumn");
+            this.CheckNotDisposed();
+            if (0 == (RetrieveColumnGrbit.RetrieveCopy & grbit))
+            {
+                this.CheckHasCurrency();
+            }
+
+            return Api.RetrieveColumnAsString(this.session, this.table, columnid, encoding, grbit);
         }
 
         /// <summary>

@@ -89,6 +89,7 @@
     <Compile Include="ConversionsTests.cs" />
     <Compile Include="EquatableTests.cs" />
     <Compile Include="IntersectIndexesTests.cs" />
+    <Compile Include="MemoryCacheTests.cs" />
     <Compile Include="RecordlistTests.cs" />
     <Compile Include="EscrowUpdateTests.cs" />
     <Compile Include="ExceptionTests.cs" />

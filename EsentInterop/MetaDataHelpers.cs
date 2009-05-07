@@ -38,7 +38,11 @@ namespace Microsoft.Isam.Esent.Interop
                     while (TryMoveNext(sesid, columnlist.tableid))
                     {
                         string name = RetrieveColumnAsString(
-                            sesid, columnlist.tableid, columnlist.columnidcolumnname, NativeMethods.Encoding);
+                            sesid,
+                            columnlist.tableid,
+                            columnlist.columnidcolumnname,
+                            NativeMethods.Encoding,
+                            RetrieveColumnGrbit.None);
                         var columnidValue =
                             (uint) RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcolumnid);
 
@@ -128,7 +132,11 @@ namespace Microsoft.Isam.Esent.Interop
                     {
                         yield return
                             RetrieveColumnAsString(
-                                sesid, objectlist.tableid, objectlist.columnidobjectname, NativeMethods.Encoding);
+                                sesid,
+                                objectlist.tableid,
+                                objectlist.columnidobjectname,
+                                NativeMethods.Encoding,
+                                RetrieveColumnGrbit.None);
                     }
                 }
             }
@@ -172,7 +180,7 @@ namespace Microsoft.Isam.Esent.Interop
         private static IndexInfo GetIndexInfoFromIndexlist(JET_SESID sesid, JET_INDEXLIST indexlist)
         {
             string name = RetrieveColumnAsString(
-                sesid, indexlist.tableid, indexlist.columnidindexname, NativeMethods.Encoding);
+                sesid, indexlist.tableid, indexlist.columnidindexname, NativeMethods.Encoding, RetrieveColumnGrbit.None);
             var lcid = (int) RetrieveColumnAsInt16(sesid, indexlist.tableid, indexlist.columnidLangid);
             var cultureInfo = new CultureInfo(lcid);
             var lcmapFlags = (uint) RetrieveColumnAsUInt32(sesid, indexlist.tableid, indexlist.columnidLCMapFlags);
@@ -204,7 +212,11 @@ namespace Microsoft.Isam.Esent.Interop
             for (int i = 0; i < numSegments; ++i)
             {
                 string columnName = RetrieveColumnAsString(
-                    sesid, indexlist.tableid, indexlist.columnidcolumnname, NativeMethods.Encoding);
+                    sesid,
+                    indexlist.tableid,
+                    indexlist.columnidcolumnname,
+                    NativeMethods.Encoding,
+                    RetrieveColumnGrbit.None);
                 var coltyp = (int) RetrieveColumnAsInt32(sesid, indexlist.tableid, indexlist.columnidcoltyp);
                 var grbit =
                     (IndexKeyGrbit) RetrieveColumnAsInt32(sesid, indexlist.tableid, indexlist.columnidgrbitColumn);
@@ -257,7 +269,11 @@ namespace Microsoft.Isam.Esent.Interop
         private static ColumnInfo GetColumnInfoFromColumnlist(JET_SESID sesid, JET_COLUMNLIST columnlist)
         {
             string name = RetrieveColumnAsString(
-                sesid, columnlist.tableid, columnlist.columnidcolumnname, NativeMethods.Encoding);
+                sesid,
+                columnlist.tableid,
+                columnlist.columnidcolumnname,
+                NativeMethods.Encoding,
+                RetrieveColumnGrbit.None);
             var columnidValue = (uint) RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcolumnid);
             var coltypValue = (uint) RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcoltyp);
             uint codepageValue = (ushort) RetrieveColumnAsUInt16(sesid, columnlist.tableid, columnlist.columnidCp);
