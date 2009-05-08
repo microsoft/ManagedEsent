@@ -27,19 +27,41 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="columnid">The columnid to set.</param>
         /// <param name="data">The data to set.</param>
         /// <param name="encoding">The encoding used to convert the string.</param>
-        public static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, string data, Encoding encoding)
+        public static void SetColumn(
+            JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, string data, Encoding encoding)
         {
             CheckEncodingIsValid(encoding);
 
             if (null == data)
             {
-                Api.JetSetColumn(sesid, tableid, columnid, null, 0, SetColumnGrbit.None, null);
+                JetSetColumn(sesid, tableid, columnid, null, 0, SetColumnGrbit.None, null);
+            }
+            else if (0 == data.Length)
+            {
+                JetSetColumn(sesid, tableid, columnid, null, 0, SetColumnGrbit.ZeroLength, null);
+            }
+            else if (Encoding.Unicode == encoding)
+            {
+                // Optimization for setting Unicode strings.
+                unsafe
+                {
+                    fixed (char* buffer = data)
+                    {
+                        JetSetColumn(
+                            sesid,
+                            tableid,
+                            columnid,
+                            new IntPtr(buffer),
+                            data.Length * sizeof(char),
+                            SetColumnGrbit.None,
+                            null);
+                    }
+                }
             }
             else
             {
                 byte[] bytes = encoding.GetBytes(data);
-                SetColumnGrbit grbit = (0 == bytes.Length) ? SetColumnGrbit.ZeroLength : SetColumnGrbit.None;
-                Api.JetSetColumn(sesid, tableid, columnid, bytes, bytes.Length, grbit, null);
+                JetSetColumn(sesid, tableid, columnid, bytes, bytes.Length, SetColumnGrbit.None, null);
             }
         }
 
@@ -53,9 +75,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="data">The data to set.</param>
         public static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data)
         {
-            SetColumnGrbit grbit = ((null != data) && (0 == data.Length)) ? SetColumnGrbit.ZeroLength : SetColumnGrbit.None;
+            SetColumnGrbit grbit = ((null != data) && (0 == data.Length))
+                                       ? SetColumnGrbit.ZeroLength
+                                       : SetColumnGrbit.None;
             int dataLength = (null == data) ? 0 : data.Length;
-            Api.JetSetColumn(sesid, tableid, columnid, data, dataLength, grbit, null);
+            JetSetColumn(sesid, tableid, columnid, data, dataLength, grbit, null);
         }
 
         /// <summary>
@@ -68,8 +92,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="data">The data to set.</param>
         public static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, bool data)
         {
-            byte b = data ? (byte)0xff : (byte)0x0;
-            Api.SetColumn(sesid, tableid, columnid, b);
+            byte b = data ? (byte) 0xff : (byte) 0x0;
+            SetColumn(sesid, tableid, columnid, b);
         }
 
         /// <summary>
@@ -84,9 +108,9 @@ namespace Microsoft.Isam.Esent.Interop
         {
             unsafe
             {
-                const int DataSize = 1;
-                IntPtr pointer = new IntPtr(&data);
-                Api.JetSetColumn(sesid, tableid, columnid, pointer, DataSize, SetColumnGrbit.None, null);
+                const int DataSize = sizeof(byte);
+                var pointer = new IntPtr(&data);
+                JetSetColumn(sesid, tableid, columnid, pointer, DataSize, SetColumnGrbit.None, null);
             }
         }
 
@@ -102,9 +126,9 @@ namespace Microsoft.Isam.Esent.Interop
         {
             unsafe
             {
-                const int DataSize = 2;
+                const int DataSize = sizeof(short);
                 var pointer = new IntPtr(&data);
-                Api.JetSetColumn(sesid, tableid, columnid, pointer, DataSize, SetColumnGrbit.None, null);
+                JetSetColumn(sesid, tableid, columnid, pointer, DataSize, SetColumnGrbit.None, null);
             }
         }
 
@@ -120,9 +144,9 @@ namespace Microsoft.Isam.Esent.Interop
         {
             unsafe
             {
-                const int DataSize = 4;
+                const int DataSize = sizeof(int);
                 var pointer = new IntPtr(&data);
-                Api.JetSetColumn(sesid, tableid, columnid, pointer, DataSize, SetColumnGrbit.None, null);
+                JetSetColumn(sesid, tableid, columnid, pointer, DataSize, SetColumnGrbit.None, null);
             }
         }
 
@@ -138,9 +162,9 @@ namespace Microsoft.Isam.Esent.Interop
         {
             unsafe
             {
-                const int DataSize = 8;
+                const int DataSize = sizeof(long);
                 var pointer = new IntPtr(&data);
-                Api.JetSetColumn(sesid, tableid, columnid, pointer, DataSize, SetColumnGrbit.None, null);
+                JetSetColumn(sesid, tableid, columnid, pointer, DataSize, SetColumnGrbit.None, null);
             }
         }
 
@@ -155,7 +179,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, Guid data)
         {
             byte[] bytes = data.ToByteArray();
-            Api.JetSetColumn(sesid, tableid, columnid, bytes, bytes.Length, SetColumnGrbit.None, null);
+            JetSetColumn(sesid, tableid, columnid, bytes, bytes.Length, SetColumnGrbit.None, null);
         }
 
         /// <summary>
@@ -168,7 +192,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="data">The data to set.</param>
         public static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, DateTime data)
         {
-            Api.SetColumn(sesid, tableid, columnid, data.ToOADate());
+            SetColumn(sesid, tableid, columnid, data.ToOADate());
         }
 
         /// <summary>
@@ -183,9 +207,9 @@ namespace Microsoft.Isam.Esent.Interop
         {
             unsafe
             {
-                const int DataSize = 4;
+                const int DataSize = sizeof(float);
                 var pointer = new IntPtr(&data);
-                Api.JetSetColumn(sesid, tableid, columnid, pointer, DataSize, SetColumnGrbit.None, null);
+                JetSetColumn(sesid, tableid, columnid, pointer, DataSize, SetColumnGrbit.None, null);
             }
         }
 
@@ -201,9 +225,9 @@ namespace Microsoft.Isam.Esent.Interop
         {
             unsafe
             {
-                const int DataSize = 8;
+                const int DataSize = sizeof(double);
                 var pointer = new IntPtr(&data);
-                Api.JetSetColumn(sesid, tableid, columnid, pointer, DataSize, SetColumnGrbit.None, null);
+                JetSetColumn(sesid, tableid, columnid, pointer, DataSize, SetColumnGrbit.None, null);
             }
         }
 
@@ -221,15 +245,15 @@ namespace Microsoft.Isam.Esent.Interop
         {
             var previousValue = new byte[4];
             int actualPreviousValueLength;
-            Api.JetEscrowUpdate(
-                sesid, 
-                tableid, 
-                columnid, 
-                BitConverter.GetBytes(delta), 
-                4, 
-                previousValue, 
-                previousValue.Length, 
-                out actualPreviousValueLength, 
+            JetEscrowUpdate(
+                sesid,
+                tableid,
+                columnid,
+                BitConverter.GetBytes(delta),
+                4,
+                previousValue,
+                previousValue.Length,
+                out actualPreviousValueLength,
                 EscrowUpdateGrbit.None);
             Debug.Assert(
                 previousValue.Length == actualPreviousValueLength,
@@ -249,9 +273,9 @@ namespace Microsoft.Isam.Esent.Interop
         {
             unsafe
             {
-                const int DataSize = 2;
+                const int DataSize = sizeof(ushort);
                 var pointer = new IntPtr(&data);
-                Api.JetSetColumn(sesid, tableid, columnid, pointer, DataSize, SetColumnGrbit.None, null);
+                JetSetColumn(sesid, tableid, columnid, pointer, DataSize, SetColumnGrbit.None, null);
             }
         }
 
@@ -267,9 +291,9 @@ namespace Microsoft.Isam.Esent.Interop
         {
             unsafe
             {
-                const int DataSize = 4;
+                const int DataSize = sizeof(uint);
                 var pointer = new IntPtr(&data);
-                Api.JetSetColumn(sesid, tableid, columnid, pointer, DataSize, SetColumnGrbit.None, null);
+                JetSetColumn(sesid, tableid, columnid, pointer, DataSize, SetColumnGrbit.None, null);
             }
         }
 
@@ -285,9 +309,9 @@ namespace Microsoft.Isam.Esent.Interop
         {
             unsafe
             {
-                const int DataSize = 8;
+                const int DataSize = sizeof(ulong);
                 var pointer = new IntPtr(&data);
-                Api.JetSetColumn(sesid, tableid, columnid, pointer, DataSize, SetColumnGrbit.None, null);
+                JetSetColumn(sesid, tableid, columnid, pointer, DataSize, SetColumnGrbit.None, null);
             }
         }
 

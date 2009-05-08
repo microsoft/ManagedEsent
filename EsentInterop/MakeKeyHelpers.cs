@@ -51,6 +51,21 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 Api.JetMakeKey(sesid, tableid, null, 0, grbit);
             }
+            else if (0 == data.Length)
+            {
+                Api.JetMakeKey(sesid, tableid, null, 0, grbit | MakeKeyGrbit.KeyDataZeroLength);
+            }
+            else if (Encoding.Unicode == encoding)
+            {
+                // Optimization for Unicode strings
+                unsafe
+                {
+                    fixed (char* buffer = data)
+                    {
+                        Api.JetMakeKey(sesid, tableid, new IntPtr(buffer), data.Length * sizeof(char), grbit);
+                    }
+                }
+            }
             else
             {
                 byte[] bytes = encoding.GetBytes(data);

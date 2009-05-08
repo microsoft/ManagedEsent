@@ -12,6 +12,36 @@ from System.Diagnostics import Stopwatch
 
 database = 'wdbperf.db'
 
+def insertRetrieveTest():
+	n = 1000000
+	db = esedb.open(database, 'n', True)
+	data = '0123456789ABCDEF'
+	timer = Stopwatch.StartNew()
+	for i in xrange(n):
+		db[i] = data
+	timer.Stop()
+	print 'Inserted %d records in %s' % (n, timer.Elapsed)
+	(k,v) = db.first()
+	timer = Stopwatch.StartNew()
+	for i in xrange(n):
+		data = db[k]
+	timer.Stop()
+	print 'Retrieved 1 record %d times in %s' % (n, timer.Elapsed)
+	timer = Stopwatch.StartNew()
+	i = 0
+	for (k,v) in db:
+		i += 1
+	timer.Stop()
+	print 'Scanned %d records in %s' % (i, timer.Elapsed)
+	keys = db.keys()
+	random.shuffle(keys)
+	timer = Stopwatch.StartNew()
+	for k in keys:
+		v = db[k]
+	timer.Stop()
+	print 'Retrieved %d records in %s' % (len(keys), timer.Elapsed)	
+	db.close()
+
 def insertTest(keys):
 	db = esedb.open(database, 'n', True)
 	data = 'XXXXXXXXXXXXXXXX'
@@ -51,6 +81,9 @@ def scanTest():
 	db.close()
 	return timer.Elapsed
 	
+# Basic test first
+insertRetrieveTest()
+
 # First insert the records in ascending order, this will be fastest
 keys = range(1000000)
 time = insertTest(keys)

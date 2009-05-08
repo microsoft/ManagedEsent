@@ -6,8 +6,7 @@
 
 # TODO
 #
-# Register for shutdown function (atexit.register)
-# create a table for record counts, implement a sync() method
+# Register for shutdown function (atexit.register)?
 # keep track of number of items: support len()
 #   lazily load then keep up-to-date in memory
 # clear(): delete all records
@@ -80,6 +79,7 @@ from Microsoft.Isam.Esent.Interop import RollbackTransactionGrbit
 from Microsoft.Isam.Esent.Interop import SeekGrbit
 from Microsoft.Isam.Esent.Interop import MakeKeyGrbit
 from Microsoft.Isam.Esent.Interop import InstanceParameters
+from Microsoft.Isam.Esent.Interop import SystemParameters
 
 #-----------------------------------------------------------------------
 class _EseTransaction(object):
@@ -445,7 +445,8 @@ class _EseDB(object):
 		return self._filename
 		
 	filename = property(_filename, doc='full path of the database')
-		
+
+	
 #-----------------------------------------------------------------------
 class EseDBCursorClosedError(Exception):
 #-----------------------------------------------------------------------
@@ -923,8 +924,7 @@ class EseDBCursor(object):
 				
 	def _makeKey(self, key):
 		"""Construct a key for the given value."""
-		data = Encoding.Unicode.GetBytes(str(key))
-		Api.JetMakeKey(self._sesid, self._tableid, data, data.Length, MakeKeyGrbit.NewKey)
+		Api.MakeKey(self._sesid, self._tableid, str(key), Encoding.Unicode, MakeKeyGrbit.NewKey)
 
 	def _seekForKey(self, key):
 		"""Seek for the specified key. A KeyError exception is raised if the
@@ -934,7 +934,8 @@ class EseDBCursor(object):
 		self._makeKey(key)
 		if not Api.TrySeek(self._sesid, self._tableid, SeekGrbit.SeekEQ):
 			raise KeyError('key \'%s\' was not found' % key)
-		
+
+			
 #-----------------------------------------------------------------------
 def open(filename, mode='c', lazyupdate=False):
 #-----------------------------------------------------------------------
@@ -966,8 +967,9 @@ def open(filename, mode='c', lazyupdate=False):
 	finally:
 		_registry.unlock()			
 
+		
 # Set global esent options
-Api.JetSetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.DatabasePageSize, 8192, None)
+SystemParameters.DatabasePageSize = 8192
 
 # A global object to perform filename => EseDB mappings
 _registry = _EseDBRegistry()

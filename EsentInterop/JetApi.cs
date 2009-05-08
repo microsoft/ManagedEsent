@@ -26,7 +26,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetCreateInstance");
             instance.Value = IntPtr.Zero;
-            return this.Err(NativeMethods.JetCreateInstance(ref instance.Value, name));
+            return this.Err(NativeMethods.JetCreateInstance(out instance.Value, name));
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetCreateInstance2");
             instance.Value = IntPtr.Zero;
-            return this.Err(NativeMethods.JetCreateInstance2(ref instance.Value, name, displayName, (uint)grbit));
+            return this.Err(NativeMethods.JetCreateInstance2(out instance.Value, name, displayName, (uint)grbit));
         }
 
         public int JetInit(ref JET_INSTANCE instance)
@@ -123,7 +123,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetGetVersion");
             uint nativeVersion = 0;
-            int err = this.Err(NativeMethods.JetGetVersion(sesid.Value, ref nativeVersion));
+            int err = this.Err(NativeMethods.JetGetVersion(sesid.Value, out nativeVersion));
             version = checked((int) nativeVersion);
             return err;
         }
@@ -138,7 +138,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.CheckNotNull(database, "database");
 
             dbid = JET_DBID.Nil;
-            return this.Err(NativeMethods.JetCreateDatabase(sesid.Value, database, connect, ref dbid.Value, (uint)grbit));
+            return this.Err(NativeMethods.JetCreateDatabase(sesid.Value, database, connect, out dbid.Value, (uint)grbit));
         }
 
         public int JetAttachDatabase(JET_SESID sesid, string database, AttachDatabaseGrbit grbit)
@@ -155,7 +155,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             dbid = JET_DBID.Nil;
             this.CheckNotNull(database, "database");
 
-            return this.Err(NativeMethods.JetOpenDatabase(sesid.Value, database, connect, ref dbid.Value, (uint)grbit));
+            return this.Err(NativeMethods.JetOpenDatabase(sesid.Value, database, connect, out dbid.Value, (uint)grbit));
         }
 
         public int JetCloseDatabase(JET_SESID sesid, JET_DBID dbid, CloseDatabaseGrbit grbit)
@@ -180,7 +180,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetBeginSession");
             sesid = JET_SESID.Nil;
-            return this.Err(NativeMethods.JetBeginSession(instance.Value, ref sesid.Value, null, null));
+            return this.Err(NativeMethods.JetBeginSession(instance.Value, out sesid.Value, null, null));
         }
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetDupSession");
             newSesid = JET_SESID.Nil;
-            return this.Err(NativeMethods.JetDupSession(sesid.Value, ref newSesid.Value));
+            return this.Err(NativeMethods.JetDupSession(sesid.Value, out newSesid.Value));
         }
 
         #endregion
@@ -233,7 +233,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             tableid = JET_TABLEID.Nil;
             this.CheckNotNull(tablename, "tablename");
 
-            return this.Err(NativeMethods.JetOpenTable(sesid.Value, dbid.Value, tablename, IntPtr.Zero, 0, (uint)grbit, ref tableid.Value));
+            return this.Err(NativeMethods.JetOpenTable(sesid.Value, dbid.Value, tablename, IntPtr.Zero, 0, (uint)grbit, out tableid.Value));
         }
 
         public int JetCloseTable(JET_SESID sesid, JET_TABLEID tableid)
@@ -246,7 +246,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetDupCursor");
             newTableid = JET_TABLEID.Nil;
-            return this.Err(NativeMethods.JetDupCursor(sesid.Value, tableid.Value, ref newTableid.Value, (uint)grbit));
+            return this.Err(NativeMethods.JetDupCursor(sesid.Value, tableid.Value, out newTableid.Value, (uint)grbit));
         }
 
         #endregion
@@ -281,7 +281,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             tableid = JET_TABLEID.Nil;
             this.CheckNotNull(table, "table");
 
-            return this.Err(NativeMethods.JetCreateTable(sesid.Value, dbid.Value, table, pages, density, ref tableid.Value));
+            return this.Err(NativeMethods.JetCreateTable(sesid.Value, dbid.Value, table, pages, density, out tableid.Value));
         }
 
         public int JetAddColumn(JET_SESID sesid, JET_TABLEID tableid, string column, JET_COLUMNDEF columndef, byte[] defaultValue, int defaultValueSize, out JET_COLUMNID columnid)
@@ -293,23 +293,14 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.CheckDataSize(defaultValue, defaultValueSize, "defaultValueSize");
 
             NATIVE_COLUMNDEF nativeColumndef = columndef.GetNativeColumndef();
-            int err;
-            GCHandle gch = GCHandle.Alloc(defaultValue, GCHandleType.Pinned);
-            try
-            {
-                err = this.Err(NativeMethods.JetAddColumn(
-                        sesid.Value, 
-                        tableid.Value, 
-                        column, 
-                        ref nativeColumndef,
-                        gch.AddrOfPinnedObject(), 
-                        (uint) defaultValueSize,
-                        ref columnid.Value));
-            }
-            finally
-            {
-                gch.Free();
-            }
+            int err = this.Err(NativeMethods.JetAddColumn(
+                                   sesid.Value, 
+                                   tableid.Value, 
+                                   column, 
+                                   ref nativeColumndef,
+                                   defaultValue, 
+                                   (uint) defaultValueSize,
+                                   out columnid.Value));
 
             // esent doesn't actually set the columnid member of the passed in JET_COLUMNDEF, but we will do that here for
             // completeness.
@@ -598,21 +589,13 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.CheckDataSize(bookmark, bookmarkSize, "bookmarkSize");
 
             uint cbActual = 0;
-            int err;
-            unsafe
-            {
-                fixed (void* pointer = bookmark)
-                {
-                    err =
-                        this.Err(
-                            NativeMethods.JetGetBookmark(
-                                sesid.Value,
-                                tableid.Value,
-                                new IntPtr(pointer), 
-                                (uint) bookmarkSize,
-                                ref cbActual));
-                }
-            }
+            int err = this.Err(
+                NativeMethods.JetGetBookmark(
+                    sesid.Value,
+                    tableid.Value,
+                    bookmark, 
+                    (uint) bookmarkSize,
+                    out cbActual));
 
             actualBookmarkSize = (int)cbActual;
             return err;
@@ -624,16 +607,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.CheckNotNull(bookmark, "bookmark");
             this.CheckDataSize(bookmark, bookmarkSize, "bookmarkSize");
 
-            unsafe
-            {
-                fixed (void* pointer = bookmark)
-                {
-                    return
-                        this.Err(
-                            NativeMethods.JetGotoBookmark(
-                                sesid.Value, tableid.Value, new IntPtr(pointer), (uint) bookmarkSize));
-                }
-            }
+            return
+                this.Err(
+                    NativeMethods.JetGotoBookmark(
+                        sesid.Value, tableid.Value, bookmark, (uint) bookmarkSize));
         }
 
         public int JetRetrieveColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, IntPtr data, int dataSize, out int actualDataSize, RetrieveColumnGrbit grbit, JET_RETINFO retinfo)
@@ -656,7 +633,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                             columnid.Value,
                             data,
                             (uint)dataSize,
-                            ref cbActual,
+                            out cbActual,
                             (uint)grbit,
                             retinfoHandle.AddrOfPinnedObject()));
                 }
@@ -675,7 +652,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                         columnid.Value,
                         data,
                         (uint)dataSize,
-                        ref cbActual,
+                        out cbActual,
                         (uint)grbit,
                         IntPtr.Zero));
             }
@@ -696,20 +673,11 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.TraceFunctionCall("JetRetrieveKey");
             this.CheckDataSize(data, dataSize, "dataSize");
 
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            uint cbActual = 0;
+            int err = this.Err(NativeMethods.JetRetrieveKey(sesid.Value, tableid.Value, data, (uint)dataSize, out cbActual, (uint)grbit));
 
-            try
-            {
-                uint cbActual = 0;
-                int err = this.Err(NativeMethods.JetRetrieveKey(sesid.Value, tableid.Value, dataHandle.AddrOfPinnedObject(), (uint)dataSize, ref cbActual, (uint)grbit));
-
-                actualDataSize = (int)cbActual;
-                return err;
-            }
-            finally
-            {
-                dataHandle.Free();
-            }
+            actualDataSize = (int)cbActual;
+            return err;
         }
 
         public int JetSeek(JET_SESID sesid, JET_TABLEID tableid, SeekGrbit grbit)
@@ -771,24 +739,16 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             var nativeRecordlist = new NATIVE_RECORDLIST();
             nativeRecordlist.cbStruct = (uint)Marshal.SizeOf(nativeRecordlist);
 
-            GCHandle ranges = GCHandle.Alloc(indexRanges, GCHandleType.Pinned);
-            try
-            {
-                int err = this.Err(
-                            NativeMethods.JetIntersectIndexes(
-                                sesid.Value,
-                                ranges.AddrOfPinnedObject(),
-                                (uint) numTableids,
-                                ref nativeRecordlist,
-                                (uint) grbit));
-                recordlist = new JET_RECORDLIST();
-                recordlist.SetFromNativeRecordlist(nativeRecordlist);
-                return err;
-            }
-            finally
-            {
-                ranges.Free();
-            }
+            int err = this.Err(
+                        NativeMethods.JetIntersectIndexes(
+                            sesid.Value,
+                            indexRanges,
+                            (uint) indexRanges.Length,
+                            ref nativeRecordlist,
+                            (uint) grbit));
+            recordlist = new JET_RECORDLIST();
+            recordlist.SetFromNativeRecordlist(nativeRecordlist);
+            return err;
         }
 
         public int JetSetCurrentIndex(JET_SESID sesid, JET_TABLEID tableid, string index)
@@ -804,7 +764,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.TraceFunctionCall("JetIndexRecordCount");
             this.CheckNotNegative(maxRecordsToCount, "maxRecordsToCount");
             uint crec = 0;
-            int err = this.Err(NativeMethods.JetIndexRecordCount(sesid.Value, tableid.Value, ref crec, (uint)maxRecordsToCount));
+            int err = this.Err(NativeMethods.JetIndexRecordCount(sesid.Value, tableid.Value, out crec, (uint)maxRecordsToCount));
             numRecords = (int)crec;
             return err;
         }
@@ -826,7 +786,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.TraceFunctionCall("JetGetRecordPosition");
             recpos = new JET_RECPOS();
             NATIVE_RECPOS native = recpos.GetNativeRecpos();
-            int err = NativeMethods.JetGetRecordPosition(sesid.Value, tableid.Value, ref native, native.cbStruct);
+            int err = NativeMethods.JetGetRecordPosition(sesid.Value, tableid.Value, out native, native.cbStruct);
             recpos.SetFromNativeRecpos(native);
             return err;
         }
@@ -860,15 +820,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.CheckDataSize(bookmark, bookmarkSize, "bookmarkSize");
 
             uint cbActual = 0;
-            int err;
-            unsafe
-            {
-                fixed (byte* pointer = bookmark)
-                {
-                    err = this.Err(NativeMethods.JetUpdate(sesid.Value, tableid.Value, new IntPtr(pointer), (uint)bookmarkSize, ref cbActual));
-                }
-            }
-
+            int err = this.Err(NativeMethods.JetUpdate(sesid.Value, tableid.Value, bookmark, (uint)bookmarkSize, out cbActual));
             actualBookmarkSize = (int)cbActual;
             return err;
         }
@@ -949,30 +901,19 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             actualPreviousValueLength = 0;
 
-            GCHandle deltaHandle = GCHandle.Alloc(delta, GCHandleType.Pinned);
-            GCHandle valueHandle = GCHandle.Alloc(previousValue, GCHandleType.Pinned);
-
-            try
-            {
-                uint cbOldActual = 0;
-                int err = this.Err(NativeMethods.JetEscrowUpdate(
-                                      sesid.Value,
-                                      tableid.Value,
-                                      columnid.Value,
-                                      deltaHandle.AddrOfPinnedObject(),
-                                      (uint)deltaSize,
-                                      valueHandle.AddrOfPinnedObject(),
-                                      (uint)previousValueLength,
-                                      ref cbOldActual,
-                                      (uint)grbit));
-                actualPreviousValueLength = (int)cbOldActual;
-                return err;
-            }
-            finally
-            {
-                deltaHandle.Free();
-                valueHandle.Free();
-            }
+            uint cbOldActual = 0;
+            int err = this.Err(NativeMethods.JetEscrowUpdate(
+                                  sesid.Value,
+                                  tableid.Value,
+                                  columnid.Value,
+                                  delta,
+                                  (uint)deltaSize,
+                                  previousValue,
+                                  (uint)previousValueLength,
+                                  out cbOldActual,
+                                  (uint)grbit));
+            actualPreviousValueLength = (int)cbOldActual;
+            return err;
         }
 
         #endregion

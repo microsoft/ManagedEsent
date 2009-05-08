@@ -22,7 +22,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// The name of the DLL that the methods should be loaded from.
         /// </summary>
-        private const string EsentDLL = "esent.dll";
+        private const string EsentDll = "esent.dll";
 
         /// <summary>
         /// The CharSet for the methods in the DLL.
@@ -48,221 +48,224 @@ namespace Microsoft.Isam.Esent.Interop
 
         #region init/term
 
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
-        public static extern int JetCreateInstance(ref IntPtr instance, string szInstanceName);
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
+        public static extern int JetCreateInstance(out IntPtr instance, string szInstanceName);
 
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
-        public static extern int JetCreateInstance2(ref IntPtr instance, string szInstanceName, string szDisplayName, uint grbit);
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
+        public static extern int JetCreateInstance2(out IntPtr instance, string szInstanceName, string szDisplayName, uint grbit);
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetInit(ref IntPtr instance);
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetTerm(IntPtr instance);
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetTerm2(IntPtr instance, uint grbit);
 
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
         public static extern int JetSetSystemParameter(IntPtr pinstance, IntPtr sesid, uint paramid, IntPtr lParam, string szParam);
 
-        [DllImport(EsentDLL)]
+        // The param is ref because it is an 'in' parameter when getting error text
+        [DllImport(EsentDll)]
         public static extern int JetGetSystemParameter(IntPtr instance, IntPtr sesid, uint paramid, ref IntPtr plParam, StringBuilder szParam, uint cbMax);
 
-        [DllImport(EsentDLL)]
-        public static extern int JetGetVersion(IntPtr sesid, ref uint dwVersion);
+        [DllImport(EsentDll)]
+        public static extern int JetGetVersion(IntPtr sesid, out uint dwVersion);
 
         #endregion
 
         #region Databases
 
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
-        public static extern int JetCreateDatabase(IntPtr sesid, string szFilename, string szConnect, ref uint dbid, uint grbit);
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
+        public static extern int JetCreateDatabase(IntPtr sesid, string szFilename, string szConnect, out uint dbid, uint grbit);
 
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
         public static extern int JetAttachDatabase(IntPtr sesid, string szFilename, uint grbit);
 
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
         public static extern int JetDetachDatabase(IntPtr sesid, string szFilename);
 
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
-        public static extern int JetOpenDatabase(IntPtr sesid, string database, string szConnect, ref uint dbid, uint grbit);
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
+        public static extern int JetOpenDatabase(IntPtr sesid, string database, string szConnect, out uint dbid, uint grbit);
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetCloseDatabase(IntPtr sesid, uint dbid, uint grbit);
 
         #endregion
 
         #region sessions
 
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
-        public static extern int JetBeginSession(IntPtr instance, ref IntPtr session, string username, string password);
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
+        public static extern int JetBeginSession(IntPtr instance, out IntPtr session, string username, string password);
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetSetSessionContext(IntPtr session, IntPtr context);
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetResetSessionContext(IntPtr session);
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetEndSession(IntPtr sesid, uint grbit);
 
-        [DllImport(EsentDLL)]
-        public static extern int JetDupSession(IntPtr sesid, ref IntPtr newSesid);
+        [DllImport(EsentDll)]
+        public static extern int JetDupSession(IntPtr sesid, out IntPtr newSesid);
 
         #endregion
 
         #region tables
 
-        [DllImport(EsentDLL)]
-        public static extern int JetOpenTable(IntPtr sesid, uint dbid, string tablename, IntPtr pvParameters, uint cbParameters, uint grbit, ref IntPtr tableid);
+        [DllImport(EsentDll)]
+        public static extern int JetOpenTable(IntPtr sesid, uint dbid, string tablename, IntPtr pvParameters, uint cbParameters, uint grbit, out IntPtr tableid);
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetCloseTable(IntPtr sesid, IntPtr tableid);
 
-        [DllImport(EsentDLL)]
-        public static extern int JetDupCursor(IntPtr sesid, IntPtr tableid, ref IntPtr tableidNew, uint grbit);
+        [DllImport(EsentDll)]
+        public static extern int JetDupCursor(IntPtr sesid, IntPtr tableid, out IntPtr tableidNew, uint grbit);
 
         #endregion
 
         #region transactions
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetBeginTransaction(IntPtr sesid);
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetCommitTransaction(IntPtr sesid, uint grbit);
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetRollback(IntPtr sesid, uint grbit);
 
         #endregion
 
         #region DDL
 
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
-        public static extern int JetCreateTable(IntPtr sesid, uint dbid, string szTableName, int pages, int density, ref IntPtr tableid);
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
+        public static extern int JetCreateTable(IntPtr sesid, uint dbid, string szTableName, int pages, int density, out IntPtr tableid);
 
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
-        public static extern int JetAddColumn(IntPtr sesid, IntPtr tableid, string szColumnName, ref NATIVE_COLUMNDEF columndef, IntPtr pvDefault, uint cbDefault, ref uint columnid);
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
+        public static extern int JetAddColumn(IntPtr sesid, IntPtr tableid, string szColumnName, ref NATIVE_COLUMNDEF columndef, byte[] pvDefault, uint cbDefault, out uint columnid);
 
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
         public static extern int JetDeleteColumn(IntPtr sesid, IntPtr tableid, string szColumnName);
 
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
         public static extern int JetDeleteIndex(IntPtr sesid, IntPtr tableid, string szIndexName);
 
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
         public static extern int JetDeleteTable(IntPtr sesid, uint dbid, string szTableName);
 
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
         public static extern int JetCreateIndex(IntPtr sesid, IntPtr tableid, string szIndexName, uint grbit, string szKey, uint cbKey, uint lDensity);
         
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
         public static extern int JetGetTableColumnInfo(IntPtr sesid, IntPtr tableid, string szColumnName, ref NATIVE_COLUMNDEF columndef, uint cbMax, uint InfoLevel);
 
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
         public static extern int JetGetTableColumnInfo(IntPtr sesid, IntPtr tableid, ref uint pcolumnid, ref NATIVE_COLUMNDEF columndef, uint cbMax, uint InfoLevel);
 
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
         public static extern int JetGetTableColumnInfo(IntPtr sesid, IntPtr tableid, string szIgnored, ref NATIVE_COLUMNLIST columnlist, uint cbMax, uint InfoLevel);
 
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
         public static extern int JetGetColumnInfo(IntPtr sesid, uint dbid, string szTableName, string szColumnName, ref NATIVE_COLUMNDEF columndef, uint cbMax, uint InfoLevel);
 
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
         public static extern int JetGetColumnInfo(IntPtr sesid, uint dbid, string szTableName, string szColumnName, ref NATIVE_COLUMNLIST columnlist, uint cbMax, uint InfoLevel);
 
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
         public static extern int JetGetObjectInfo(IntPtr sesid, uint dbid, uint objtyp, string szContainerName, string szObjectName, ref NATIVE_OBJECTLIST objectlist, uint cbMax, uint InfoLevel);
 
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
         public static extern int JetGetCurrentIndex(IntPtr sesid, IntPtr tableid, StringBuilder szIndexName, uint cchIndexName);
 
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
         public static extern int JetGetIndexInfo(IntPtr sesid, uint dbid, string szTableName, string szIndexName, ref NATIVE_INDEXLIST indexlist, uint cbResult, uint InfoLevel);
 
-        [DllImport(EsentDLL, CharSet = EsentCharSet)]
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
         public static extern int JetGetTableIndexInfo(IntPtr sesid, IntPtr tableid, string szIndexName, ref NATIVE_INDEXLIST indexlist, uint cbResult, uint InfoLevel);
 
         #endregion
 
         #region Navigation
 
-        [DllImport(EsentDLL)]
-        public static extern int JetGetBookmark(IntPtr sesid, IntPtr tableid, IntPtr pvBookmark, uint cbMax, ref uint cbActual);
+        [DllImport(EsentDll)]
+        public static extern int JetGetBookmark(IntPtr sesid, IntPtr tableid, byte[] pvBookmark, uint cbMax, out uint cbActual);
 
-        [DllImport(EsentDLL)]
-        public static extern int JetGotoBookmark(IntPtr sesid, IntPtr tableid, IntPtr pvBookmark, uint cbBookmark);
+        [DllImport(EsentDll)]
+        public static extern int JetGotoBookmark(IntPtr sesid, IntPtr tableid, byte[] pvBookmark, uint cbBookmark);
 
-        [DllImport(EsentDLL)]
-        public static extern int JetRetrieveColumn(IntPtr sesid, IntPtr tableid, uint columnid, IntPtr pvData, uint cbData, ref uint cbActual, uint grbit, IntPtr pretinfo);
+        // This doesn't take a ref NATIVE_RETINFO because the parameter can be null
+        [DllImport(EsentDll)]
+        public static extern int JetRetrieveColumn(IntPtr sesid, IntPtr tableid, uint columnid, IntPtr pvData, uint cbData, out uint cbActual, uint grbit, IntPtr pretinfo);
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetMove(IntPtr sesid, IntPtr tableid, int cRow, uint grbit);
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetMakeKey(IntPtr sesid, IntPtr tableid, IntPtr pvData, uint cbData, uint grbit);
 
-        [DllImport(EsentDLL)]
-        public static extern int JetRetrieveKey(IntPtr sesid, IntPtr tableid, IntPtr pvData, uint cbMax, ref uint cbActual, uint grbit);
+        [DllImport(EsentDll)]
+        public static extern int JetRetrieveKey(IntPtr sesid, IntPtr tableid, byte[] pvData, uint cbMax, out uint cbActual, uint grbit);
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetSeek(IntPtr sesid, IntPtr tableid, uint grbit);
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetSetIndexRange(IntPtr sesid, IntPtr tableid, uint grbit);
 
-        [DllImport(EsentDLL)]
-        public static extern int JetIntersectIndexes(IntPtr sesid, IntPtr rgindexrange, uint cindexrange, ref NATIVE_RECORDLIST recordlist, uint grbit);
+        [DllImport(EsentDll)]
+        public static extern int JetIntersectIndexes(IntPtr sesid, NATIVE_INDEXRANGE[] rgindexrange, uint cindexrange, ref NATIVE_RECORDLIST recordlist, uint grbit);
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetSetCurrentIndex(IntPtr sesid, IntPtr tableid, string szIndexName);
 
-        [DllImport(EsentDLL)]
-        public static extern int JetIndexRecordCount(IntPtr sesid, IntPtr tableid, ref uint crec, uint crecMax);
+        [DllImport(EsentDll)]
+        public static extern int JetIndexRecordCount(IntPtr sesid, IntPtr tableid, out uint crec, uint crecMax);
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetSetTableSequential(IntPtr sesid, IntPtr tableid, uint grbit);
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetResetTableSequential(IntPtr sesid, IntPtr tableid, uint grbit);
 
-        [DllImport(EsentDLL)]
-        public static extern int JetGetRecordPosition(IntPtr sesid, IntPtr tableid, ref NATIVE_RECPOS precpos, uint cbRecpos);
+        [DllImport(EsentDll)]
+        public static extern int JetGetRecordPosition(IntPtr sesid, IntPtr tableid, out NATIVE_RECPOS precpos, uint cbRecpos);
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetGotoPosition(IntPtr sesid, IntPtr tableid, ref NATIVE_RECPOS precpos);
 
         #endregion
 
         #region DML
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetDelete(IntPtr sesid, IntPtr tableid);
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetPrepareUpdate(IntPtr sesid, IntPtr tableid, uint prep);
 
-        [DllImport(EsentDLL)]
-        public static extern int JetUpdate(IntPtr sesid, IntPtr tableid, IntPtr pvBookmark, uint cbBookmark, ref uint cbActual);
+        [DllImport(EsentDll)]
+        public static extern int JetUpdate(IntPtr sesid, IntPtr tableid, byte[] pvBookmark, uint cbBookmark, out uint cbActual);
 
-        [DllImport(EsentDLL)]
+        // Doesn't take a ref NATIVE_SETINFO because the parameter can be null
+        [DllImport(EsentDll)]
         public static extern int JetSetColumn(IntPtr sesid, IntPtr tableid, uint columnid, IntPtr pvData, uint cbData, uint grbit, IntPtr psetinfo);
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetGetLock(IntPtr sesid, IntPtr tableid, uint grbit);
 
-        [DllImport(EsentDLL)]
+        [DllImport(EsentDll)]
         public static extern int JetEscrowUpdate(
             IntPtr sesid,
             IntPtr tableid,
             uint columnid,
-            IntPtr pv,
+            byte[] pv,
             uint cbMax,
-            IntPtr pvOld,
+            byte[] pvOld,
             uint cbOldMax,
-            ref uint cbOldActual,
+            out uint cbOldActual,
             uint grbit);
 
         #endregion
