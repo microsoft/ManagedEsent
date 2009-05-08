@@ -23,7 +23,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void PrintVersion()
         {
-            Console.WriteLine("{0}.{1}", EsentVersion.MajorVersion, EsentVersion.BuildNumber);
+            Console.WriteLine("{0}", EsentVersion.BuildNumber);
 
             if (EsentVersion.SupportsVistaFeatures)
             {
@@ -34,16 +34,6 @@ namespace InteropApiTests
             {
                 Console.WriteLine("SupportsWindows7Features");
             }
-        }
-
-        /// <summary>
-        /// Verify the major version is not zero.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        public void VerifyMajorVersionIsNotZero()
-        {
-            Assert.AreNotEqual(0, EsentVersion.MajorVersion);
         }
 
         /// <summary>

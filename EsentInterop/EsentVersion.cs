@@ -17,7 +17,6 @@ namespace Microsoft.Isam.Esent.Interop
         static EsentVersion()
         {
             var version = (uint)GetVersionFromEsent();
-            MajorVersion = (int)(version >> 28);
             BuildNumber = (int) ((version & 0xFFFFFF) >> 8);
 
             if (BuildNumber >= 6000)
@@ -30,11 +29,6 @@ namespace Microsoft.Isam.Esent.Interop
                 SupportsWindows7Features = true;
             }
         }
-
-        /// <summary>
-        /// Gets the major version of esent
-        /// </summary>
-        public static int MajorVersion { get; internal set; }
 
         /// <summary>
         /// Gets the build number of esent
