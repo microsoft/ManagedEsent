@@ -73,12 +73,12 @@ namespace Microsoft.Isam.Esent
         {
             var globalParameters = new List<JetParameter>();
 
-            if (OSIsAtLeastVista())
+            if (EsentVersion.SupportsVistaFeatures)
             {
                 globalParameters.AddRange(new List<JetParameter>
                 {
                     new JetParameter(VistaParam.Configuration, 0),
-                    new JetParameter(VistaParam.EnabledAdvanced, 1),
+                    new JetParameter(VistaParam.EnableAdvanced, 1),
                     new JetParameter(JET_param.CacheSizeMin, 64),
                     new JetParameter(JET_param.CacheSizeMax, int.MaxValue),
                 });
@@ -147,15 +147,6 @@ namespace Microsoft.Isam.Esent
                 { VistaColtyp.UnsignedShort, ColumnType.UInt16 },
             };
             Container.RegisterInstance<Dictionary<JET_coltyp, ColumnType>>(jetcoltypToColumnType);
-        }
-
-        /// <summary>
-        /// Determine if the current OS is at least Windows Vista.
-        /// </summary>
-        /// <returns>True if the OS is at least Windows Vista.</returns>
-        private static bool OSIsAtLeastVista()
-        {
-            return Environment.OSVersion.Version.Major >= 6;
         }
     }
 }

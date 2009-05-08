@@ -80,6 +80,9 @@ from Microsoft.Isam.Esent.Interop import SeekGrbit
 from Microsoft.Isam.Esent.Interop import MakeKeyGrbit
 from Microsoft.Isam.Esent.Interop import InstanceParameters
 from Microsoft.Isam.Esent.Interop import SystemParameters
+from Microsoft.Isam.Esent.Interop import EsentVersion
+
+from Microsoft.Isam.Esent.Interop.Vista import VistaParam
 
 #-----------------------------------------------------------------------
 class _EseTransaction(object):
@@ -970,6 +973,13 @@ def open(filename, mode='c', lazyupdate=False):
 		
 # Set global esent options
 SystemParameters.DatabasePageSize = 8192
+
+# Turn on small-config, if available
+if EsentVersion.SupportsVistaFeatures:
+	Api.JetSetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.Configuration, 0, None)
+	Api.JetSetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.EnableAdvanced, 1, None)
+	SystemParameters.CacheSizeMin = 64
+	SystemParameters.CacheSizeMax = 2**30
 
 # A global object to perform filename => EseDB mappings
 _registry = _EseDBRegistry()

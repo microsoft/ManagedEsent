@@ -246,7 +246,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void ConfigurationVistaParameter()
         {
-            if (Config.SupportsVistaFeatures)
+            if (EsentVersion.SupportsVistaFeatures)
             {
                 this.IntegerParameterTest(Microsoft.Isam.Esent.Interop.Vista.VistaParam.Configuration, 1);
             }
@@ -259,9 +259,9 @@ namespace InteropApiTests
         [Priority(0)]
         public void EnableAdvancedVistaParameter()
         {
-            if (Config.SupportsVistaFeatures)
+            if (EsentVersion.SupportsVistaFeatures)
             {
-                this.BooleanParameterTest(Microsoft.Isam.Esent.Interop.Vista.VistaParam.EnabledAdvanced, Any.Boolean);
+                this.BooleanParameterTest(Microsoft.Isam.Esent.Interop.Vista.VistaParam.EnableAdvanced, Any.Boolean);
             }
         }
 

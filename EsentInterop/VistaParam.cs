@@ -30,6 +30,6 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// prevent some system parameters from being set away from the selected
         /// configuration's defaults.
         /// </summary>
-        public const JET_param EnabledAdvanced = (JET_param)130;
+        public const JET_param EnableAdvanced = (JET_param)130;
     }
 }

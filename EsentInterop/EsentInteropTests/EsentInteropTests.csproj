@@ -95,7 +95,6 @@
     <Compile Include="ExceptionTests.cs" />
     <Compile Include="IndexlistTests.cs" />
     <Compile Include="EmptyTableFixture.cs" />
-    <Compile Include="Config.cs" />
     <Compile Include="IndexrangeTests.cs" />
     <Compile Include="SeekTests.cs" />
     <Compile Include="SimplePerfTest.cs" />
@@ -120,6 +119,7 @@
     <Compile Include="SetGetSystemParameterTests.cs" />
     <Compile Include="ToStringTests.cs" />
     <Compile Include="UtilityMethodsTests.cs" />
+    <Compile Include="EsentVersionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\EsentInteropSamples\DbUtil\DbUtil.csproj">

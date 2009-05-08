@@ -84,6 +84,7 @@
     <Compile Include="jet_recordlist.cs" />
     <Compile Include="MemoryCache.cs" />
     <Compile Include="TableEnumerator.cs" />
+    <Compile Include="EsentVersion.cs" />
     <Compile Include="VistaParam.cs" />
     <Compile Include="EsentException.cs" />
     <Compile Include="IndexSegment.cs" />

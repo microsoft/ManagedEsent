@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Isam.Esent;
 using Microsoft.Isam.Esent.Interop;
+using Microsoft.Isam.Esent.Interop.Vista;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace InteropApiTests
@@ -121,21 +122,21 @@ namespace InteropApiTests
             columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.LongText, cp = JET_CP.Unicode };
             Api.JetAddColumn(this.sesid, this.tableid, "Unicode", columndef, null, 0, out columnid);
 
-            if (Config.SupportsVistaFeatures)
+            if (EsentVersion.SupportsVistaFeatures)
             {
                 // Starting with windows Vista esent provides support for these columns.) 
-                columndef = new JET_COLUMNDEF() { coltyp = Microsoft.Isam.Esent.Interop.Vista.VistaColtyp.UnsignedShort };
+                columndef = new JET_COLUMNDEF() { coltyp = VistaColtyp.UnsignedShort };
                 Api.JetAddColumn(this.sesid, this.tableid, "UInt16", columndef, null, 0, out columnid);
 
-                columndef = new JET_COLUMNDEF() { coltyp = Microsoft.Isam.Esent.Interop.Vista.VistaColtyp.UnsignedLong };
+                columndef = new JET_COLUMNDEF() { coltyp = VistaColtyp.UnsignedLong };
                 Api.JetAddColumn(this.sesid, this.tableid, "UInt32", columndef, null, 0, out columnid);
 
-                columndef = new JET_COLUMNDEF() { coltyp = Microsoft.Isam.Esent.Interop.Vista.VistaColtyp.GUID };
+                columndef = new JET_COLUMNDEF() { coltyp = VistaColtyp.GUID };
                 Api.JetAddColumn(this.sesid, this.tableid, "Guid", columndef, null, 0, out columnid);
             }
             else
             {
-                // Older version of esent support these column types natively so we'll just use binary columns.
+                // Older version of esent don't support these column types natively so we'll just use binary columns.
                 columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 2 };
                 Api.JetAddColumn(this.sesid, this.tableid, "UInt16", columndef, null, 0, out columnid);
 
