@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Isam.Esent.Interop;
 using Microsoft.Isam.Esent.Interop.Vista;
+using Microsoft.Isam.Esent.Interop.Windows7;
 using Microsoft.Practices.Unity;
 
 namespace Microsoft.Isam.Esent
@@ -81,6 +82,14 @@ namespace Microsoft.Isam.Esent
                     new JetParameter(VistaParam.EnableAdvanced, 1),
                     new JetParameter(JET_param.CacheSizeMin, 64),
                     new JetParameter(JET_param.CacheSizeMax, int.MaxValue),
+                });
+            }
+
+            if (EsentVersion.SupportsWindows7Features)
+            {
+                globalParameters.AddRange(new List<JetParameter>
+                {
+                    new JetParameter(Windows7Param.WaypointLatency, 1),
                 });
             }
 

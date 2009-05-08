@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using Microsoft.Isam.Esent.Interop;
+using Microsoft.Isam.Esent.Interop.Windows7;
 using Microsoft.Practices.Unity;
 
 namespace Microsoft.Isam.Esent
@@ -70,6 +71,26 @@ namespace Microsoft.Isam.Esent
         /// <returns>A JET_COLUMNDEF representing the ColumnDefintion.</returns>
         public JET_COLUMNDEF CreateColumndefFromColumnDefinition(ColumnDefinition definition)
         {
+            ColumndefGrbit grbit = CalculateColumndefGrbit(definition);
+
+            var columndef = new JET_COLUMNDEF
+            {
+                cbMax = definition.MaxSize,
+                coltyp = this.columnTypeToColtypMapping[definition.Type],
+                cp = (ColumnType.AsciiText == definition.Type) ? JET_CP.ASCII : JET_CP.Unicode,
+                grbit = grbit,
+            };
+
+            return columndef;
+        }
+
+        /// <summary>
+        /// Determine the ColumndefGrbit for the column definition.
+        /// </summary>
+        /// <param name="definition">The column definition.</param>
+        /// <returns>The grbit to use when creating the column.</returns>
+        private static ColumndefGrbit CalculateColumndefGrbit(ColumnDefinition definition)
+        {
             ColumndefGrbit grbit = ColumndefGrbit.None;
             if (definition.IsAutoincrement)
             {
@@ -86,15 +107,17 @@ namespace Microsoft.Isam.Esent
                 grbit |= ColumndefGrbit.ColumnVersion;
             }
 
-            var columndef = new JET_COLUMNDEF
+            if (EsentVersion.SupportsWindows7Features)
             {
-                cbMax = definition.MaxSize,
-                coltyp = this.columnTypeToColtypMapping[definition.Type],
-                cp = (ColumnType.AsciiText == definition.Type) ? JET_CP.ASCII : JET_CP.Unicode,
-                grbit = grbit,
-            };
-
-            return columndef;
+                // Only long-value columns can be compressed
+                if (ColumnType.Binary == definition.Type
+                    || ColumnType.AsciiText == definition.Type
+                    || ColumnType.Text == definition.Type)
+                {
+                    grbit |= Windows7Grbits.ColumnCompressed;
+                }
+            }
+            return grbit;
         }
 
         /// <summary>

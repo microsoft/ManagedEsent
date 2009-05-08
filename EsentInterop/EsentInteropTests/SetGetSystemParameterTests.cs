@@ -7,6 +7,8 @@
 using System;
 using System.IO;
 using Microsoft.Isam.Esent.Interop;
+using Microsoft.Isam.Esent.Interop.Vista;
+using Microsoft.Isam.Esent.Interop.Windows7;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace InteropApiTests
@@ -240,7 +242,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test setting and retrieving the Configuration parameter (if the OS supports it)
+        /// Test setting and retrieving the Configuration parameter (if esent supports it)
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -248,12 +250,12 @@ namespace InteropApiTests
         {
             if (EsentVersion.SupportsVistaFeatures)
             {
-                this.IntegerParameterTest(Microsoft.Isam.Esent.Interop.Vista.VistaParam.Configuration, 1);
+                this.IntegerParameterTest(VistaParam.Configuration, 1);
             }
         }
 
         /// <summary>
-        /// Test setting and retrieving the EnableAdvanced parameter (if the OS supports it)
+        /// Test setting and retrieving the EnableAdvanced parameter (if esent supports it)
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -261,7 +263,42 @@ namespace InteropApiTests
         {
             if (EsentVersion.SupportsVistaFeatures)
             {
-                this.BooleanParameterTest(Microsoft.Isam.Esent.Interop.Vista.VistaParam.EnableAdvanced, Any.Boolean);
+                this.BooleanParameterTest(VistaParam.EnableAdvanced, Any.Boolean);
+            }
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the WaypointLatency parameter (if esent supports it)
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void WaypointLatencyWin7Parameter()
+        {
+            if (EsentVersion.SupportsWindows7Features)
+            {
+                this.IntegerParameterTest(Windows7Param.WaypointLatency, 1);
+            }
+        }
+
+        /// <summary>
+        /// Test retrieving the LVChunkSizeMost parameter (if esent supports it)
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void RetrieveLVChunkSizeMostWin7Parameter()
+        {
+            if (EsentVersion.SupportsWindows7Features)
+            {
+                int lvChunkSize = 0;
+                string ignored;
+                Api.JetGetSystemParameter(
+                    JET_INSTANCE.Nil,
+                    JET_SESID.Nil,
+                    Windows7Param.LVChunkSizeMost,
+                    ref lvChunkSize,
+                    out ignored,
+                    0);
+                Assert.AreNotEqual(0, lvChunkSize);
             }
         }
 
