@@ -32,6 +32,19 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         int JetInit(ref JET_INSTANCE instance);
 
+        /// <summary>
+        /// Initialize the ESENT database engine.
+        /// </summary>
+        /// <param name="instance">
+        /// The instance to initialize. If an instance hasn't been
+        /// allocated then a new one is created and the engine
+        /// will operate in single-instance mode.
+        /// </param>
+        /// <param name="grbit">
+        /// Initialization options.
+        /// </param>
+        int JetInit2(ref JET_INSTANCE instance, InitGrbit grbit);
+
         int JetTerm(JET_INSTANCE instance);
 
         int JetTerm2(JET_INSTANCE instance, TermGrbit grbit);

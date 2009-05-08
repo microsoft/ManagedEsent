@@ -117,7 +117,9 @@ namespace InteropApiTests
                         Arg<CreateInstanceGrbit>.Is.Anything))
                     .Return((int) JET_err.Success);
                 Expect.Call(
-                    mockApi.JetInit(ref Arg<JET_INSTANCE>.Ref(Is.Equal(jetInstance), JET_INSTANCE.Nil).Dummy))
+                    mockApi.JetInit2(
+                        ref Arg<JET_INSTANCE>.Ref(Is.Equal(jetInstance), JET_INSTANCE.Nil).Dummy,
+                        Arg<InitGrbit>.Is.Anything))
                     .Return((int) JET_err.OutOfMemory);
                 mocks.ReplayAll();
 

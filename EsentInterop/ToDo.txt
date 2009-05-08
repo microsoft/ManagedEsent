@@ -19,7 +19,6 @@ Pri 1 APIs: New functionality
   - JetGetDatabaseFileInfo
   - JetGetTableInfo
   - JetOpenTempTable3
-  - JetEscrowUpdate  
   - JetFreeBuffer (just interop, not in checkedapi)
   - JetGetCurrentIndex
   - JetGetInstanceInfo
@@ -28,11 +27,8 @@ Pri 1 APIs: New functionality
   - JetGotoSecondaryIndexBookmark 
   - JetGrowDatabase
   - JetIdle
-  - JetIntersectIndexes  
-  - JetResetSessionContext
   - JetSetColumnDefaultValue
   - JetSetDatabaseSize
-  - JetSetSessionContext
 
 Pri 2 APIs: Extending functionality
 -----------------------------------

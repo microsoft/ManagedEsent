@@ -21,6 +21,18 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Options for JetInit2
+    /// </summary>
+    [Flags]
+    public enum InitGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0
+    }
+
+    /// <summary>
     /// Options for JetCreateDatabase
     /// </summary>
     [Flags]

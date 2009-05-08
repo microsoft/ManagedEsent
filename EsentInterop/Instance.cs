@@ -95,13 +95,24 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public void Init()
         {
+            this.Init(InitGrbit.None);
+        }
+
+        /// <summary>
+        /// Initialize the JET_INSTANCE.
+        /// </summary>
+        /// <param name="grbit">
+        /// Initialization options.
+        /// </param>
+        public void Init(InitGrbit grbit)
+        {
             this.CheckObjectIsNotDisposed();
             JET_INSTANCE instance = this.JetInstance;
             try
             {
                 // Remember that a failure in JetInit can zero the handle
                 // and that JetTerm should not be called in that case.
-                Api.JetInit(ref instance);
+                Api.JetInit2(ref instance, grbit);
             }
             finally
             {

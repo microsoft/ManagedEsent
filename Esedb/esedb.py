@@ -50,13 +50,12 @@ import thread
 import System
 import clr
 
-from System.IO import File
-from System.IO import Path
-from System.IO import Directory
+from System.IO import File, Path, Directory
 from System.Text import Encoding
 
 clr.AddReferenceByPartialName('Esent.Interop')
 from Microsoft.Isam.Esent.Interop import Api
+
 from Microsoft.Isam.Esent.Interop import JET_INSTANCE
 from Microsoft.Isam.Esent.Interop import JET_SESID
 from Microsoft.Isam.Esent.Interop import JET_DBID
@@ -67,22 +66,29 @@ from Microsoft.Isam.Esent.Interop import JET_CP
 from Microsoft.Isam.Esent.Interop import JET_coltyp
 from Microsoft.Isam.Esent.Interop import JET_param
 from Microsoft.Isam.Esent.Interop import JET_prep
+
+from Microsoft.Isam.Esent.Interop import AttachDatabaseGrbit
+from Microsoft.Isam.Esent.Interop import CloseDatabaseGrbit
+from Microsoft.Isam.Esent.Interop import ColumndefGrbit
+from Microsoft.Isam.Esent.Interop import CommitTransactionGrbit
 from Microsoft.Isam.Esent.Interop import CreateDatabaseGrbit
 from Microsoft.Isam.Esent.Interop import CreateIndexGrbit
-from Microsoft.Isam.Esent.Interop import CommitTransactionGrbit
-from Microsoft.Isam.Esent.Interop import CloseDatabaseGrbit
 from Microsoft.Isam.Esent.Interop import EndSessionGrbit
-from Microsoft.Isam.Esent.Interop import AttachDatabaseGrbit
+from Microsoft.Isam.Esent.Interop import InitGrbit
+from Microsoft.Isam.Esent.Interop import MakeKeyGrbit
 from Microsoft.Isam.Esent.Interop import OpenDatabaseGrbit
 from Microsoft.Isam.Esent.Interop import OpenTableGrbit
 from Microsoft.Isam.Esent.Interop import RollbackTransactionGrbit
 from Microsoft.Isam.Esent.Interop import SeekGrbit
-from Microsoft.Isam.Esent.Interop import MakeKeyGrbit
+
 from Microsoft.Isam.Esent.Interop import InstanceParameters
 from Microsoft.Isam.Esent.Interop import SystemParameters
 from Microsoft.Isam.Esent.Interop import EsentVersion
 
 from Microsoft.Isam.Esent.Interop.Vista import VistaParam
+
+from Microsoft.Isam.Esent.Interop.Windows7 import Windows7Param
+from Microsoft.Isam.Esent.Interop.Windows7 import Windows7Grbits
 
 #-----------------------------------------------------------------------
 class _EseTransaction(object):
@@ -292,7 +298,10 @@ class _EseDB(object):
 					
 		if None == self._instance:
 			self._instance = self._createInstance()	
-			Api.JetInit(self._instance)
+			grbit = InitGrbit.None
+			if EsentVersion.SupportsWindows7Features:
+				grbit = Windows7Grbits.ReplayIgnoreLostLogs
+			Api.JetInit2(self._instance, grbit)
 			
 		if create:
 			try:
@@ -344,6 +353,10 @@ class _EseDB(object):
 		parameters.CreatePathIfNotExist = True
 		parameters.LogFileSize = 1024
 		parameters.MaxTemporaryTables = 0
+		
+		if EsentVersion.SupportsWindows7Features:
+			Api.JetSetSystemParameter(instance, JET_SESID.Nil, Windows7Param.WaypointLatency, 1, None)			
+			
 		return instance
 
 	def _deleteDatabaseAndLogfiles(self):
@@ -396,9 +409,13 @@ class _EseDB(object):
 
 	def _addTextColumn(self, sesid, tableid, column):
 		"""Add a new text column to the given table."""
+		grbit = ColumndefGrbit.None
+		if EsentVersion.SupportsWindows7Features:
+			grbit = Windows7Grbits.ColumnCompressed		
 		columndef = JET_COLUMNDEF(
 			cp = JET_CP.Unicode,
-			coltyp = JET_coltyp.LongText)			
+			coltyp = JET_coltyp.LongText,
+			grbit = grbit)
 		Api.JetAddColumn(
 			sesid,
 			tableid,
@@ -904,11 +921,11 @@ class EseDBCursor(object):
 		
 	def _retrieveCurrentRecordKey(self):
 		"""Gets the key of the current record."""
-		return Api.RetrieveColumnAsString(self._sesid, self._tableid, self._keycolumnid, Encoding.Unicode)
+		return Api.RetrieveColumnAsString(self._sesid, self._tableid, self._keycolumnid)
 
 	def _retrieveCurrentRecordValue(self):
 		"""Gets the value of the current record."""
-		return Api.RetrieveColumnAsString(self._sesid, self._tableid, self._valuecolumnid, Encoding.Unicode)
+		return Api.RetrieveColumnAsString(self._sesid, self._tableid, self._valuecolumnid)
 		
 	def _setKeyColumn(self, key):
 		"""Sets the key column. An update should be prepared."""

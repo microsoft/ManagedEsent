@@ -126,6 +126,26 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Initialize the ESENT database engine.
+        /// </summary>
+        /// <param name="instance">
+        /// The instance to initialize. If an instance hasn't been
+        /// allocated then a new one is created and the engine
+        /// will operate in single-instance mode.
+        /// </param>
+        /// <param name="grbit">
+        /// Initialization options.
+        /// </param>
+        /// <returns>
+        /// A warning code.
+        /// </returns>
+        public static JET_wrn JetInit2(ref JET_INSTANCE instance, InitGrbit grbit)
+        {
+            return Api.Check(Impl.JetInit2(ref instance, grbit));
+        }
+
+
+        /// <summary>
         /// Terminate an instance that was created with JetInit or
         /// JetCreateInstance.
         /// </summary>

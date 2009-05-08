@@ -64,6 +64,26 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Initialize and terminate one instance. The instance is initialized
+        /// with JetInit2.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void InitializeInstanceWithJetInit2()
+        {
+            JET_INSTANCE instance;
+            Api.JetCreateInstance2(out instance, Guid.NewGuid().ToString(), "Instance Display Name", CreateInstanceGrbit.None);
+
+            var systemParameters = new InstanceParameters(instance);
+            systemParameters.MaxTemporaryTables = 0;
+            systemParameters.Recovery = false;
+            systemParameters.NoInformationEvent = true;
+
+            Api.JetInit2(ref instance, InitGrbit.None);
+            Api.JetTerm(instance);
+        }
+
+        /// <summary>
         /// Terminating an uninitialized instance should work
         /// </summary>
         [TestMethod]

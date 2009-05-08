@@ -26,7 +26,12 @@ namespace Microsoft.Isam.Esent.Interop.Windows7
         /// </summary>
         public const SetColumnGrbit Uncompressed = (SetColumnGrbit)0x20000;
 
-        // UNDONE: ReplayIgnoreLostLogs = 0x80
+        /// <summary>
+        /// Recover without error even if uncommitted logs have been lost. Set 
+        /// the recovery waypoint with Windows7Param.WaypointLatency to enable
+        /// this type of recovery.
+        /// </summary>
+        public const InitGrbit ReplayIgnoreLostLogs = (InitGrbit) 0x80;
 
         /// <summary>
         /// Terminate without flushing the database cache.

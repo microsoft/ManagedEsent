@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Microsoft.Isam.Esent.Interop;
+using Microsoft.Isam.Esent.Interop.Windows7;
 
 namespace Microsoft.Isam.Esent
 {
@@ -76,9 +77,7 @@ namespace Microsoft.Isam.Esent
                 // Create the database then open it
                 using (var instance = new Instance(this.GetNewInstanceName()))
                 {
-                    SetDefaultInstanceParameters(instance);
-                    SetPathParameters(instance, database);
-                    instance.Init();
+                    SetParametersAndInitializeInstance(database, instance);
 
                     using (var session = new Session(instance))
                     {
@@ -122,6 +121,22 @@ namespace Microsoft.Isam.Esent
         }
 
         /// <summary>
+        /// Set parameters and initialize the instance.
+        /// </summary>
+        /// <param name="database">The database that will be used by the instance.</param>
+        /// <param name="instance">The instance to initialize.</param>
+        private static void SetParametersAndInitializeInstance(string database, Instance instance)
+        {
+            SetDefaultInstanceParameters(instance);
+            SetPathParameters(instance, database);
+
+            InitGrbit grbit = EsentVersion.SupportsWindows7Features
+                                  ? Windows7Grbits.ReplayIgnoreLostLogs
+                                  : InitGrbit.None;
+            instance.Init(grbit);
+        }
+
+        /// <summary>
         /// Set the default parameters for the instance.
         /// </summary>
         /// <param name="instance">The instance to set the default parameters on.</param>
@@ -162,10 +177,7 @@ namespace Microsoft.Isam.Esent
             this.Tracer.TraceInfo("created instance '{0}'", instanceName);
             try
             {
-                SetDefaultInstanceParameters(instance);
-                SetPathParameters(instance, database);
-                instance.Init();
-
+                SetParametersAndInitializeInstance(database, instance);
                 this.instances[database] = new InstanceInfo(instance, database);
                 return this.CreateNewConnection(database, mode);
             }

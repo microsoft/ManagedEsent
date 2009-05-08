@@ -58,6 +58,24 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return this.Err(NativeMethods.JetInit(ref instance.Value));
         }
 
+        /// <summary>
+        /// Initialize the ESENT database engine.
+        /// </summary>
+        /// <param name="instance">
+        /// The instance to initialize. If an instance hasn't been
+        /// allocated then a new one is created and the engine
+        /// will operate in single-instance mode.
+        /// </param>
+        /// <param name="grbit">
+        /// Initialization options.
+        /// </param>
+        public int JetInit2(ref JET_INSTANCE instance, InitGrbit grbit)
+        {
+            this.TraceFunctionCall("JetInit2");
+            return this.Err(NativeMethods.JetInit2(ref instance.Value, (uint) grbit));
+        }
+
+
         public int JetTerm(JET_INSTANCE instance)
         {
             this.TraceFunctionCall("JetTerm");
