@@ -487,6 +487,8 @@ class EseDBCursor(object):
 		def checked_func(*args, **kwargs):
 			args[0]._checkNotClosed()
 			return func(*args, **kwargs)
+		# Promote the documentation so doctest will work
+		checked_func.__doc__ = func.__doc__
 		return checked_func
 
 	def __init__(self, database, sesid, tableid, lazyupdate, keycolumnid, valuecolumnid):
