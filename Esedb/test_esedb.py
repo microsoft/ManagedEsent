@@ -12,6 +12,10 @@ from System.IO import Directory
 from System.IO import Path
 from esedb import EseDBCursorClosedError
 
+def deleteDirectory(directory):
+	if Directory.Exists(directory):
+		Directory.Delete(directory, True)
+
 class EsedbSingleDBFixture(unittest.TestCase):
 	"""Basics tests for esedb. This fixture creates an empty database and tests
 	individual operations against it.
@@ -146,8 +150,7 @@ class EsedbIterationFixture(unittest.TestCase):
 		self._deleteDataDirectory()
 
 	def _deleteDataDirectory(self):
-		if Directory.Exists(self._dataDirectory):
-			Directory.Delete(self._dataDirectory, True)
+		deleteDirectory(self._dataDirectory)
 	
 	def _makeDatabasePath(self, filename):
 		return Path.Combine(self._dataDirectory, filename)
@@ -189,8 +192,7 @@ class EsedbFixture(unittest.TestCase):
 		self._deleteDataDirectory()
 
 	def _deleteDataDirectory(self):
-		if Directory.Exists(self._dataDirectory):
-			Directory.Delete(self._dataDirectory, True)
+		deleteDirectory(self._dataDirectory)
 	
 	def _makeDatabasePath(self, filename):
 		return Path.Combine(self._dataDirectory, filename)
@@ -305,8 +307,7 @@ class EsedbClosedCursorFixture(unittest.TestCase):
 		self._deleteDataDirectory()
 		
 	def _deleteDataDirectory(self):
-		if Directory.Exists(self._dataDirectory):
-			Directory.Delete(self._dataDirectory, True)
+		deleteDirectory(self._dataDirectory)
 	
 	def _makeDatabasePath(self, filename):
 		return Path.Combine(self._dataDirectory, filename)

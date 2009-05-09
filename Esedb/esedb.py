@@ -481,6 +481,13 @@ class EseDBCursor(object):
 	a JET_TABLEID along with a reference to the underlying EseDB.
 	
 	"""
+	
+	# Decorator that checks self (args[0]) isn't closed
+	def cursorMustBeOpen(func):
+		def checked_func(*args, **kwargs):
+			args[0]._checkNotClosed()
+			return func(*args, **kwargs)
+		return checked_func
 
 	def __init__(self, database, sesid, tableid, lazyupdate, keycolumnid, valuecolumnid):
 		"""Initialize a new EseDBCursor on the specified database."""
@@ -496,6 +503,7 @@ class EseDBCursor(object):
 		"""Called when garbage collection is removing the object. Close it."""
 		self.close()
 		
+	@cursorMustBeOpen
 	def __getitem__(self, key): 
 		"""Returns the value of the record with the specified key.
 
@@ -516,11 +524,11 @@ class EseDBCursor(object):
 		>>> x.close()
 		
 		"""
-		self._checkNotClosed()
 		with _EseTransaction(self._sesid):
 			self._seekForKey(key)
 			return self._retrieveCurrentRecordValue()
 
+	@cursorMustBeOpen
 	def __setitem__(self, key, value): 
 		"""Sets the value of the record with the specified key.
 		
@@ -529,7 +537,6 @@ class EseDBCursor(object):
 		>>> x.close()				
 		
 		"""
-		self._checkNotClosed()
 		self._database.getWriteLock()
 		try:
 			with _EseTransaction(self._sesid) as trx:
@@ -541,6 +548,7 @@ class EseDBCursor(object):
 		finally:
 			self._database.unlock()
 			
+	@cursorMustBeOpen
 	def __delitem__(self, key): 
 		"""Deletes the record with the specified key.
 
@@ -560,7 +568,6 @@ class EseDBCursor(object):
 		>>> x.close()
 		
 		"""
-		self._checkNotClosed()
 		self._database.getWriteLock()
 		try:
 			with _EseTransaction(self._sesid) as trx:
@@ -570,6 +577,7 @@ class EseDBCursor(object):
 		finally:
 			self._database.unlock()
 			
+	@cursorMustBeOpen
 	def __contains__(self, key):
 		"""Returns True if the database contains the specified key,
 		otherwise returns False.
@@ -609,6 +617,7 @@ class EseDBCursor(object):
 			self._database.closeCursor(self)
 			self._isopen = False
 		
+	@cursorMustBeOpen
 	def iterkeys(self):
 		"""Returns each key contained in the database. These
 		are returned in sorted order.
@@ -626,9 +635,9 @@ class EseDBCursor(object):
 		>>> x.close()
 		
 		"""
-		self._checkNotClosed()
 		return self._iterateAndYield(self._retrieveCurrentRecordKey)
 			
+	@cursorMustBeOpen
 	def keys(self):
 		"""Returns a list of all keys in the database. The
 		list is in sorted order.
@@ -644,6 +653,7 @@ class EseDBCursor(object):
 		"""
 		return list(self.iterkeys())
 
+	@cursorMustBeOpen
 	def itervalues(self):
 		"""Returns each value contained in the database. These
 		are returned in key order.
@@ -661,9 +671,9 @@ class EseDBCursor(object):
 		>>> x.close()
 		
 		"""
-		self._checkNotClosed()
 		return self._iterateAndYield(self._retrieveCurrentRecordValue)
 		
+	@cursorMustBeOpen
 	def values(self):
 		"""Returns a list of all values in the database. The
 		values are returned in key order.
@@ -679,6 +689,7 @@ class EseDBCursor(object):
 		"""
 		return list(self.itervalues())
 			
+	@cursorMustBeOpen
 	def iteritems(self):
 		"""Return each key/value pair contained in the database. These
 		are returned in key order.
@@ -696,11 +707,11 @@ class EseDBCursor(object):
 		>>> x.close()
 
 		"""
-		self._checkNotClosed()
 		return self._iterateAndYield(self._retrieveCurrentRecord)
 			
 	__iter__ = iteritems
 
+	@cursorMustBeOpen
 	def items(self):
 		"""Returns a list of all items in the database as a list of
 		(key, value) tuples. The items are returned in key order.
@@ -716,6 +727,7 @@ class EseDBCursor(object):
 		"""
 		return list(self.iteritems())
 			
+	@cursorMustBeOpen
 	def has_key(self, key):
 		"""Returns True if the database contains the specified key,
 		otherwise returns False.
@@ -729,11 +741,11 @@ class EseDBCursor(object):
 		>>> x.close()
 			
 		"""
-		self._checkNotClosed()
 		with _EseTransaction(self._sesid):				
 			self._makeKey(key)
 			return Api.TrySeek(self._sesid, self._tableid, SeekGrbit.SeekEQ)
 				
+	@cursorMustBeOpen
 	def set_location(self, key):
 		"""Sets the cursor to the record specified by the key and returns
 		a pair (key, value) for the record.
@@ -764,13 +776,13 @@ class EseDBCursor(object):
 		>>> x.close()				
 		
 		"""
-		self._checkNotClosed()
 		with _EseTransaction(self._sesid):		
 			self._makeKey(key)
 			if not Api.TrySeek(self._sesid, self._tableid, SeekGrbit.SeekGE):
 				raise KeyError('no key matching \'%s\' was found' % key)
 			return self._retrieveCurrentRecord()
 
+	@cursorMustBeOpen
 	def first(self):
 		"""Sets the cursor to the first record in the database and returns
 		a (key, value) for the record.
@@ -792,12 +804,12 @@ class EseDBCursor(object):
 		>>> x.close()			
 		
 		"""
-		self._checkNotClosed()
 		with _EseTransaction(self._sesid):		
 			if not Api.TryMoveFirst(self._sesid, self._tableid):
 				raise KeyError('database is empty')	
 			return self._retrieveCurrentRecord()
 	
+	@cursorMustBeOpen
 	def last(self):
 		"""Sets the cursor to the last record in the database and returns
 		a (key, value) for the record.
@@ -819,12 +831,12 @@ class EseDBCursor(object):
 		>>> x.close()			
 		
 		"""
-		self._checkNotClosed()
 		with _EseTransaction(self._sesid):		
 			if not Api.TryMoveLast(self._sesid, self._tableid):
 				raise KeyError('database is empty')		
 			return self._retrieveCurrentRecord()
 
+	@cursorMustBeOpen
 	def next(self):
 		"""Sets the cursor to the next record in the database and returns
 		a (key, value) for the record.
@@ -842,12 +854,12 @@ class EseDBCursor(object):
 		the table is empty.
 	
 		"""
-		self._checkNotClosed()
 		with _EseTransaction(self._sesid):		
 			if not Api.TryMoveNext(self._sesid, self._tableid):
 				raise KeyError('end of database')		
 			return self._retrieveCurrentRecord()
 		
+	@cursorMustBeOpen
 	def previous(self):
 		"""Sets the cursor to the previous item in the database and returns
 		a (key, value) for the record.
@@ -865,7 +877,6 @@ class EseDBCursor(object):
 		the table is empty.
 		
 		"""
-		self._checkNotClosed()
 		with _EseTransaction(self._sesid):		
 			if not Api.TryMovePrevious(self._sesid, self._tableid):
 				raise KeyError('end of database')		
@@ -886,13 +897,13 @@ class EseDBCursor(object):
 		then the iteration terminates).
 		
 		"""
-		self._checkNotClosed()
 		with _EseTransaction(self._sesid) as trx:
 			Api.MoveBeforeFirst(self._sesid, self._tableid)
 			while Api.TryMoveNext(self._sesid, self._tableid):
 				value = f()
 				trx.commit()
 				yield value
+				self._checkNotClosed()
 				trx.begin()
 			
 	def _updateItem(self, key, value):
