@@ -5,7 +5,10 @@
 //-----------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using Microsoft.Isam.Esent.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -333,6 +336,66 @@ namespace InteropApiTests
             using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
             {
                 stream.SetLength(-1);
+            }
+        }
+
+        /// <summary>
+        /// Test that a ColumnStream can serialize an object.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void ColumnStreamCanSerializeBasicType()
+        {
+            var expected = Any.Int64;
+
+            using (var t = new Transaction(this.sesid))
+            using (var u = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                var serializer = new BinaryFormatter
+                {
+                    Context = new StreamingContext(StreamingContextStates.Persistence)
+                };
+                serializer.Serialize(stream, expected);
+                u.Save();
+                t.Commit(CommitTransactionGrbit.LazyFlush);
+            }
+
+            Api.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                var deseriaizer = new BinaryFormatter();
+                var actual = (long)deseriaizer.Deserialize(stream);
+                Assert.AreEqual(expected, actual);
+            }
+
+        }
+
+        /// <summary>
+        /// Test that a ColumnStream can serialize an object.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void ColumnStreamCanSerializeObject()
+        {
+            var expected = new Dictionary<string, long> { { "foo", 1 }, { "bar", 2 }, { "baz", 3 } };
+
+            using (var t = new Transaction(this.sesid))
+            using (var u = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                var serializer = new BinaryFormatter();
+                serializer.Serialize(stream, expected);
+                u.Save();
+                t.Commit(CommitTransactionGrbit.LazyFlush);
+            }
+
+            Api.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                var deseriaizer = new BinaryFormatter();
+                var actual = (Dictionary<string, long>) deseriaizer.Deserialize(stream);
+                CollectionAssert.AreEqual(expected, actual);
             }
         }
 

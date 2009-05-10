@@ -6,6 +6,7 @@
 
 using System;
 using System.IO;
+using Microsoft.Isam.Esent.Interop.Windows7;
 
 namespace Microsoft.Isam.Esent.Interop
 {
@@ -33,7 +34,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Current LV offset.
         /// </summary>
-        private int offset;
+        private int currentOffset;
 
         /// <summary>
         /// Initializes a new instance of the ColumnStream class.
@@ -46,7 +47,7 @@ namespace Microsoft.Isam.Esent.Interop
             this.sesid = sesid;
             this.tableid = tableid;
             this.columnid = columnid;
-            this.offset = 0;
+            this.currentOffset = 0;
             this.Itag = 1;
         }
 
@@ -58,16 +59,22 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                const int ColumnLVPageOverhead = 82;
-                int pageSize = 0;
-                string ignored;
-                if (0 == Api.JetGetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.DatabasePageSize, ref pageSize, out ignored, 0))
+                if (EsentVersion.SupportsWindows7Features)
                 {
-                    return pageSize - ColumnLVPageOverhead;
+                    int chunkSize = 0;
+                    string ignored;
+                    Api.JetGetSystemParameter(
+                        JET_INSTANCE.Nil, JET_SESID.Nil, Windows7Param.LVChunkSizeMost, ref chunkSize, out ignored, 0);
+                    return chunkSize;
                 }
-
-                // Assume 4kb pages
-                return 4096 - ColumnLVPageOverhead;
+                else
+                {
+                    const int ColumnLvPageOverhead = 82;
+                    int pageSize = 0;
+                    string ignored;
+                    Api.JetGetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.DatabasePageSize, ref pageSize, out ignored, 0);
+                    return pageSize - ColumnLvPageOverhead;
+                }
             }
         }
 
@@ -107,22 +114,22 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                return this.offset;
+                return this.currentOffset;
             }
 
             set
             {
                 if (value < 0 || value > 0x7fffffff)
                 {
-                    throw new ArgumentOutOfRangeException("position", value, "A long-value offset has to be between 0 and 0x7fffffff bytes");
+                    throw new ArgumentOutOfRangeException("value", value, "A long-value offset has to be between 0 and 0x7fffffff bytes");
                 }
 
-                if (value > this.Length)
+                if (value > 0 && value > this.Length)
                 {
                     this.SetLength(value);
                 }
 
-                this.offset = (int)value;
+                this.currentOffset = (int)value;
             }
         }
 
@@ -171,24 +178,36 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="count">The number of bytes to write.</param>
         public override void Write(byte[] buffer, int offset, int count)
         {
-            if (buffer.Length - offset < count)
-            {
-                throw new ArgumentException("buffer is not large enough");
-            }
+            CheckBufferArguments(buffer, offset, count);
 
-            var setinfo = new JET_SETINFO { itagSequence = this.Itag, ibLongValue = this.offset };
-            if (0 == offset)
+            int newOffset = this.currentOffset + count;
+            SetColumnGrbit grbit;
+            if (this.currentOffset == this.Length)
             {
-                Api.JetSetColumn(this.sesid, this.tableid, this.columnid, buffer, count, SetColumnGrbit.None, setinfo);
+                grbit = SetColumnGrbit.AppendLV;
+            }
+            else if (newOffset > this.Length)
+            {
+                grbit = SetColumnGrbit.SizeLV;
             }
             else
             {
-                var offsetBuffer = new byte[count - offset];
-                Array.Copy(buffer, offset, offsetBuffer, 0, count);
-                Api.JetSetColumn(this.sesid, this.tableid, this.columnid, offsetBuffer, count, SetColumnGrbit.None, setinfo);
+                grbit = SetColumnGrbit.None;
             }
 
-            this.offset += count;
+            var setinfo = new JET_SETINFO { itagSequence = this.Itag, ibLongValue = this.currentOffset };
+            if (0 == offset)
+            {
+                Api.JetSetColumn(this.sesid, this.tableid, this.columnid, buffer, count, grbit, setinfo);
+            }
+            else
+            {
+                var offsetBuffer = new byte[count];
+                Array.Copy(buffer, offset, offsetBuffer, 0, count);
+                Api.JetSetColumn(this.sesid, this.tableid, this.columnid, offsetBuffer, count, grbit, setinfo);
+            }
+
+            this.currentOffset += count;
         }
 
         /// <summary>
@@ -201,26 +220,30 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The number of bytes read into the buffer.</returns>
         public override int Read(byte[] buffer, int offset, int count)
         {
-            if (buffer.Length - offset < count)
+            CheckBufferArguments(buffer, offset, count);
+
+            if (this.currentOffset >= this.Length)
             {
-                throw new ArgumentException("buffer is not large enough");
+                return 0;
             }
 
-            int bytesRead;
-            var retinfo = new JET_RETINFO { itagSequence = this.Itag, ibLongValue = this.offset };
+            int bytesToRead = (int)Math.Min(this.Length - this.currentOffset, count);
+
+            int ignored;
+            var retinfo = new JET_RETINFO { itagSequence = this.Itag, ibLongValue = this.currentOffset };
             if (0 == offset)
             {
-                Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, buffer, count, out bytesRead, RetrieveGrbit, retinfo);
+                Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, buffer, bytesToRead, out ignored, RetrieveGrbit, retinfo);
             }
             else
             {
-                var offsetBuffer = new byte[count - offset];
-                Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, offsetBuffer, count, out bytesRead, RetrieveGrbit, retinfo);
-                Array.Copy(offsetBuffer, 0, buffer, offset, bytesRead);
+                var offsetBuffer = new byte[bytesToRead];
+                Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, offsetBuffer, bytesToRead, out ignored, RetrieveGrbit, retinfo);
+                Array.Copy(offsetBuffer, 0, buffer, offset, bytesToRead);
             }
 
-            this.offset += bytesRead;
-            return bytesRead;
+            this.currentOffset += bytesToRead;
+            return bytesToRead;
         }
 
         /// <summary>
@@ -234,7 +257,8 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentOutOfRangeException("value", value, "A LongValueStream cannot be longer than 0x7FFFFFF or less than 0 bytes");
             }
 
-            Api.JetSetColumn(this.sesid, this.tableid, this.columnid, null, (int)value, SetColumnGrbit.SizeLV, null);
+            var setinfo = new JET_SETINFO { itagSequence = this.Itag, ibLongValue = this.currentOffset };
+            Api.JetSetColumn(this.sesid, this.tableid, this.columnid, null, (int)value, SetColumnGrbit.SizeLV, setinfo);
         }
 
         /// <summary>
@@ -252,10 +276,10 @@ namespace Microsoft.Isam.Esent.Interop
                     newOffset = offset;
                     break;
                 case SeekOrigin.End:
-                    newOffset = this.Length - offset;
+                    newOffset = this.Length + offset;
                     break;
                 case SeekOrigin.Current:
-                    newOffset = this.offset + offset;
+                    newOffset = this.currentOffset + offset;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("origin", origin, "Unknown origin");
@@ -271,8 +295,27 @@ namespace Microsoft.Isam.Esent.Interop
                 this.SetLength(newOffset);
             }
 
-            this.offset = (int)newOffset;
-            return this.offset;
+            this.currentOffset = (int)newOffset;
+            return this.currentOffset;
+        }
+
+        /// <summary>
+        /// Check the buffer arguments given to Read/Write 
+        /// </summary>
+        /// <param name="buffer">The buffer.</param>
+        /// <param name="offset">The offset in the buffer to read/write to.</param>
+        /// <param name="count">The number of bytes to read/write.</param>
+        private static void CheckBufferArguments(byte[] buffer, int offset, int count)
+        {
+            if (null == buffer)
+            {
+                throw new ArgumentNullException("buffer");
+            }
+
+            if (buffer.Length - offset < count)
+            {
+                throw new ArgumentException("buffer is not large enough");
+            }
         }
    }
 }
