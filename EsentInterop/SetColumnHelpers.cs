@@ -243,14 +243,14 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The current value of the column as stored in the database (versioning is ignored).</returns>
         public static int EscrowUpdate(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, int delta)
         {
-            var previousValue = new byte[4];
+            var previousValue = new byte[sizeof(int)];
             int actualPreviousValueLength;
             JetEscrowUpdate(
                 sesid,
                 tableid,
                 columnid,
                 BitConverter.GetBytes(delta),
-                4,
+                sizeof(int),
                 previousValue,
                 previousValue.Length,
                 out actualPreviousValueLength,

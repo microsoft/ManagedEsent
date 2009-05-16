@@ -9,7 +9,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
     /// <summary>
     /// Describes the functionality exposed by an object which implements IJetApi
     /// </summary>
-    internal struct JetCapabilities
+    internal class JetCapabilities
     {
         /// <summary>
         /// Gets or sets a value indicating whether Vista features (in the

@@ -221,9 +221,12 @@ namespace Microsoft.Isam.Esent.Interop
         [DllImport(EsentDll)]
         public static extern int JetGotoBookmark(IntPtr sesid, IntPtr tableid, byte[] pvBookmark, uint cbBookmark);
 
-        // This doesn't take a ref NATIVE_RETINFO because the parameter can be null
+        // This has IntPtr and NATIVE_RETINFO versions because the parameter can be null
         [DllImport(EsentDll)]
         public static extern int JetRetrieveColumn(IntPtr sesid, IntPtr tableid, uint columnid, IntPtr pvData, uint cbData, out uint cbActual, uint grbit, IntPtr pretinfo);
+
+        [DllImport(EsentDll)]
+        public static extern int JetRetrieveColumn(IntPtr sesid, IntPtr tableid, uint columnid, IntPtr pvData, uint cbData, out uint cbActual, uint grbit, ref NATIVE_RETINFO pretinfo);
 
         [DllImport(EsentDll)]
         public static extern int JetMove(IntPtr sesid, IntPtr tableid, int cRow, uint grbit);
@@ -274,9 +277,12 @@ namespace Microsoft.Isam.Esent.Interop
         [DllImport(EsentDll)]
         public static extern int JetUpdate(IntPtr sesid, IntPtr tableid, byte[] pvBookmark, uint cbBookmark, out uint cbActual);
 
-        // Doesn't take a ref NATIVE_SETINFO because the parameter can be null
+        // This has IntPtr and NATIVE_SETINFO versions because the parameter can be null
         [DllImport(EsentDll)]
         public static extern int JetSetColumn(IntPtr sesid, IntPtr tableid, uint columnid, IntPtr pvData, uint cbData, uint grbit, IntPtr psetinfo);
+
+        [DllImport(EsentDll)]
+        public static extern int JetSetColumn(IntPtr sesid, IntPtr tableid, uint columnid, IntPtr pvData, uint cbData, uint grbit, ref NATIVE_SETINFO psetinfo);
 
         [DllImport(EsentDll)]
         public static extern int JetGetLock(IntPtr sesid, IntPtr tableid, uint grbit);
