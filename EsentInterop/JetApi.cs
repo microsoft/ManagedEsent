@@ -20,7 +20,25 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
     {
         private readonly TraceSwitch traceSwitch = new TraceSwitch("ESENT P/Invoke", "P/Invoke calls to ESENT");
 
+        private JetCapabilities capabilities;
+
+        /// <summary>
+        /// Initializes a new instance of the JetApi class.
+        /// </summary>
+        public JetApi()
+        {
+            this.DetermineCapabilities();
+        }
+
         #region init/term
+
+        public JetCapabilities Capabilities
+        {
+            get
+            {
+                return this.capabilities;
+            }
+        }
 
         public int JetCreateInstance(out JET_INSTANCE instance, string name)
         {
@@ -69,12 +87,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="grbit">
         /// Initialization options.
         /// </param>
+        /// <returns>An error or a warning.</returns>
         public int JetInit2(ref JET_INSTANCE instance, InitGrbit grbit)
         {
             this.TraceFunctionCall("JetInit2");
             return this.Err(NativeMethods.JetInit2(ref instance.Value, (uint) grbit));
         }
-
 
         public int JetTerm(JET_INSTANCE instance)
         {
@@ -101,21 +119,15 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetSetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, int paramValue, string paramString)
         {
             this.TraceFunctionCall("JetSetSystemParameter");
-            if (IntPtr.Zero == instance.Value)
+            unsafe
             {
-                return this.Err(NativeMethods.JetSetSystemParameter(IntPtr.Zero, sesid.Value, (uint)paramid, (IntPtr)paramValue, paramString));
-            }
-            else
-            {
-                GCHandle instanceHandle = GCHandle.Alloc(instance, GCHandleType.Pinned);
-                try
+                IntPtr* pinstance = (IntPtr.Zero == instance.Value) ? null : &instance.Value;
+                if (this.Capabilities.SupportsUnicodePaths)
                 {
-                    return this.Err(NativeMethods.JetSetSystemParameter(instanceHandle.AddrOfPinnedObject(), sesid.Value, (uint)paramid, (IntPtr)paramValue, paramString));
+                    return this.Err(NativeMethods.JetSetSystemParameterW(pinstance, sesid.Value, (uint)paramid, (IntPtr)paramValue, paramString));
                 }
-                finally
-                {
-                    instanceHandle.Free();
-                }
+
+                return this.Err(NativeMethods.JetSetSystemParameter(pinstance, sesid.Value, (uint)paramid, (IntPtr)paramValue, paramString));                
             }
         }
 
@@ -125,7 +137,16 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             var intValue = (IntPtr)paramValue;
             var sb = new StringBuilder(maxParam);
-            int err = this.Err(NativeMethods.JetGetSystemParameter(instance.Value, sesid.Value, (uint)paramid, ref intValue, sb, (uint)maxParam));
+            int err;
+            if (this.Capabilities.SupportsUnicodePaths)
+            {
+                err = this.Err(NativeMethods.JetGetSystemParameterW(instance.Value, sesid.Value, (uint)paramid, ref intValue, sb, (uint)maxParam * sizeof(char)));
+            }
+            else
+            {
+                err = this.Err(NativeMethods.JetGetSystemParameter(instance.Value, sesid.Value, (uint)paramid, ref intValue, sb, (uint)maxParam));                
+            }
+
             paramString = sb.ToString();
             paramValue = intValue.ToInt32();
             return err;
@@ -156,6 +177,11 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.CheckNotNull(database, "database");
 
             dbid = JET_DBID.Nil;
+            if (this.Capabilities.SupportsUnicodePaths)
+            {
+                return this.Err(NativeMethods.JetCreateDatabaseW(sesid.Value, database, connect, out dbid.Value, (uint)grbit));
+            }
+
             return this.Err(NativeMethods.JetCreateDatabase(sesid.Value, database, connect, out dbid.Value, (uint)grbit));
         }
 
@@ -163,6 +189,11 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetAttachDatabase");
             this.CheckNotNull(database, "database");
+
+            if (this.Capabilities.SupportsUnicodePaths)
+            {
+                return this.Err(NativeMethods.JetAttachDatabaseW(sesid.Value, database, (uint)grbit));                
+            }
 
             return this.Err(NativeMethods.JetAttachDatabase(sesid.Value, database, (uint)grbit));
         }
@@ -172,6 +203,11 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.TraceFunctionCall("JetOpenDatabase");
             dbid = JET_DBID.Nil;
             this.CheckNotNull(database, "database");
+
+            if (this.Capabilities.SupportsUnicodePaths)
+            {
+                return this.Err(NativeMethods.JetOpenDatabaseW(sesid.Value, database, connect, out dbid.Value, (uint)grbit));                
+            }
 
             return this.Err(NativeMethods.JetOpenDatabase(sesid.Value, database, connect, out dbid.Value, (uint)grbit));
         }
@@ -186,6 +222,11 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetDetachDatabase");
             this.CheckNotNull(database, "database");
+
+            if (this.Capabilities.SupportsUnicodePaths)
+            {
+                return this.Err(NativeMethods.JetDetachDatabaseW(sesid.Value, database));                
+            }
 
             return this.Err(NativeMethods.JetDetachDatabase(sesid.Value, database));
         }
@@ -365,7 +406,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.CheckNotNegative(density, "density");
             if (keyDescriptionLength > keyDescription.Length + 1)
             {
-                throw new ArgumentException("keyDescriptionLength is greater than keyDescription", "keyDescriptionLength");
+                throw new ArgumentOutOfRangeException(
+                    "keyDescriptionLength", keyDescriptionLength, "cannot be greater than keyDescription.Length");
             }
 
             return this.Err(NativeMethods.JetCreateIndex(
@@ -376,6 +418,32 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 keyDescription,
                 (uint)keyDescriptionLength,
                 (uint)density));
+        }
+
+        /// <summary>
+        /// Creates indexes over data in an ESE database
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to create the index on.</param>
+        /// <param name="indexcreates">Array of objects describing the indexes to be created.</param>
+        /// <param name="numIndexCreates">Number of index description objects.</param>
+        /// <returns>An error code.</returns>
+        public int JetCreateIndex2(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            JET_INDEXCREATE[] indexcreates,
+            int numIndexCreates)
+        {
+            this.TraceFunctionCall("JetCreateIndex2");
+            this.CheckNotNull(indexcreates, "indexcreates");
+            this.CheckNotNegative(numIndexCreates, "numIndexCreates");
+            if (numIndexCreates > indexcreates.Length)
+            {
+                throw new ArgumentOutOfRangeException(
+                    "numIndexCreates", numIndexCreates, "numIndexCreates is larger than the number of indexes passed in");
+            }
+
+            return 0;
         }
 
         public int JetGetTableColumnInfo(
@@ -745,7 +813,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.CheckDataSize(tableids, numTableids, "numTableids");
             if (numTableids < 2)
             {
-                throw new ArgumentException("JetIntersectIndexes requires at least two tables.", "numTableids");
+                throw new ArgumentOutOfRangeException(
+                    "numTableids", numTableids, "JetIntersectIndexes requires at least two tables.");
             }
 
             var indexRanges = new NATIVE_INDEXRANGE[numTableids];
@@ -851,9 +920,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             {
                 if (dataSize > 0 && (SetColumnGrbit.SizeLV != (grbit & SetColumnGrbit.SizeLV)))
                 {
-                    throw new ArgumentException(
-                        "dataSize cannot be greater than the length of the data (unless the SizeLV option is used)",
-                        "dataSize");
+                    throw new ArgumentOutOfRangeException(
+                        "dataSize",
+                        dataSize,
+                        "cannot be greater than the length of the data (unless the SizeLV option is used)");
                 }
             }
 
@@ -936,6 +1006,68 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         #endregion
 
+        #region Helper Methods
+
+        /// <summary>
+        /// Calculates the capabilities of the current Esent version.
+        /// </summary>
+        public void DetermineCapabilities()
+        {
+            // Create new capabilities, set as all false. This will allow
+            // us to call into Esent.
+            this.capabilities = new JetCapabilities();
+
+            var version = (uint)this.GetVersionFromEsent();
+            var buildNumber = (int)((version & 0xFFFFFF) >> 8);
+
+            if (buildNumber >= 6000)
+            {
+                this.capabilities.SupportsVistaFeatures = true;
+                this.capabilities.SupportsUnicodePaths = true;
+            }
+
+            if (buildNumber >= 7000)
+            {
+                this.capabilities.SupportsWindows7Features = true;
+            }
+        }
+
+        /// <summary>
+        /// Create an instance and get the current version of Esent.
+        /// </summary>
+        /// <returns>The current version of Esent.</returns>
+        private int GetVersionFromEsent()
+        {
+            JET_INSTANCE instance;
+            this.JetCreateInstance(out instance, "GettingEsentVersion");
+            try
+            {
+                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
+                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.NoInformationEvent, 1, null);
+                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
+                this.JetInit(ref instance);
+
+                JET_SESID sesid;
+                this.JetBeginSession(instance, out sesid, String.Empty, String.Empty);
+                try
+                {
+                    int version;
+                    this.JetGetVersion(sesid, out version);
+                    return version;
+                }
+                finally
+                {
+                    this.JetEndSession(sesid, EndSessionGrbit.None);
+                }
+            }
+            finally
+            {
+                this.JetTerm(instance);
+            }
+        }
+
+        #endregion
+
         #region Parameter Checking and Tracing
 
         /// <summary>
@@ -947,13 +1079,14 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <typeparam name="T">The type of the data.</typeparam>
         private void CheckDataSize<T>(ICollection<T> data, int dataSize, string argumentName)
         {
-            this.CheckNotNegative(dataSize, "dataSize");
+            this.CheckNotNegative(dataSize, argumentName);
             if ((null == data && 0 != dataSize) || (null != data && dataSize > data.Count))
             {
                 Trace.WriteLineIf(this.traceSwitch.TraceError, "CheckDataSize failed");
-                throw new ArgumentException(
-                    "cannot be greater than the length of the buffer",
-                    argumentName);
+                throw new ArgumentOutOfRangeException(
+                    argumentName,
+                    dataSize,
+                    "cannot be greater than the length of the buffer");
             }
         }
 
@@ -968,15 +1101,13 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             if (null == o)
             {
                 Trace.WriteLineIf(this.traceSwitch.TraceError, "CheckNotNull failed");
-                throw new ArgumentNullException(
-                    String.Format("{0} cannot be null", paramName),
-                    paramName);
+                throw new ArgumentNullException(paramName);
             }
         }
 
         /// <summary>
         /// Make sure the given integer isn't negative. If it is
-        /// then throw an ArgumentException.
+        /// then throw an ArgumentOutOfRangeException.
         /// </summary>
         /// <param name="i">The integer to check.</param>
         /// <param name="paramName">The name of the parameter.</param>
@@ -985,9 +1116,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             if (i < 0)
             {
                 Trace.WriteLineIf(this.traceSwitch.TraceError, "CheckNotNegative failed");
-                throw new ArgumentException(
-                    String.Format("{0} cannot be less than zero", paramName),
-                    paramName);
+                throw new ArgumentOutOfRangeException(paramName, i, "cannot be negative");
             }
         }
 

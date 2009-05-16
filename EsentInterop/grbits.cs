@@ -11,13 +11,12 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetCreateInstance2
     /// </summary>
-    [Flags]
     public enum CreateInstanceGrbit
     {
         /// <summary>
         /// Default options.
         /// </summary>
-        None = 0
+        None = 0,
     }
 
     /// <summary>
@@ -845,7 +844,6 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Key definition grbits. Used when retrieving information about an index.
     /// </summary>
-    [Flags]
     public enum IndexKeyGrbit
     {
         /// <summary>
@@ -857,5 +855,21 @@ namespace Microsoft.Isam.Esent.Interop
         /// Key segment is descending.
         /// </summary>
         Descending = 0x1,
+    }
+
+    /// <summary>
+    /// Options for the JET_CONDITIONALCOLUMN structure.
+    /// </summary>
+    public enum ConditionalColumnGrbit
+    {
+        /// <summary>
+        /// The column must be null for an index entry to appear in the index.
+        /// </summary>
+        ColumnMustBeNull = 0x1,
+
+        /// <summary>
+        /// The column must be non-null for an index entry to appear in the index.
+        /// </summary>
+        ColumnMustBeNonNull = 0x2,
     }
 }

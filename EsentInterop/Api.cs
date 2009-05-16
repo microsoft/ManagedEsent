@@ -144,7 +144,6 @@ namespace Microsoft.Isam.Esent.Interop
             return Api.Check(Impl.JetInit2(ref instance, grbit));
         }
 
-
         /// <summary>
         /// Terminate an instance that was created with JetInit or
         /// JetCreateInstance.
@@ -730,9 +729,10 @@ namespace Microsoft.Isam.Esent.Interop
         {
             if ((null == data && dataSize > 0) || (null != data && dataSize > data.Length))
             {
-                throw new ArgumentException(
-                    "dataSize is greater than the length of the data",
-                    "dataSize");
+                throw new ArgumentOutOfRangeException(
+                    "dataSize",
+                    dataSize,
+                    "cannot be greater than the length of the data");
             }
 
             unsafe
@@ -785,9 +785,10 @@ namespace Microsoft.Isam.Esent.Interop
         {
             if ((null == data && 0 != dataSize) || (null != data && dataSize > data.Length))
             {
-                throw new ArgumentException(
-                    "dataSize cannot be greater than the length of the data",
-                    "dataSize");
+                throw new ArgumentOutOfRangeException(
+                    "dataSize",
+                    dataSize,
+                    "cannot be greater than the length of the data");
             }
 
             unsafe
@@ -1041,9 +1042,10 @@ namespace Microsoft.Isam.Esent.Interop
         {
             if (null != data && dataSize > data.Length && (SetColumnGrbit.SizeLV != (grbit & SetColumnGrbit.SizeLV)))
             {
-                throw new ArgumentException(
-                    "dataSize cannot be greater than the length of the data (unless the SizeLV option is used)",
-                    "dataSize");
+                throw new ArgumentOutOfRangeException(
+                    "dataSize",
+                    dataSize,
+                    "dataSize cannot be greater than the length of the data (unless the SizeLV option is used)");
             }
 
             unsafe

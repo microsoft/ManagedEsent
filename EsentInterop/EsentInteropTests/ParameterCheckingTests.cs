@@ -292,7 +292,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetAddColumnThrowsExceptionWhenDefaultValueLengthIsNegative()
         {
             var columndef = new JET_COLUMNDEF()
@@ -317,7 +317,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetAddColumnThrowsExceptionWhenDefaultValueLengthIsTooLong()
         {
             var defaultValue = new byte[10];
@@ -343,7 +343,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetAddColumnThrowsExceptionWhenDefaultValueIsUnexpectedNull()
         {
             var defaultValue = new byte[10];
@@ -381,7 +381,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetCreateIndexThrowsExceptionWhenDensityIsNegative()
         {
             Api.JetCreateIndex(this.sesid, this.tableid, "BadIndex,", CreateIndexGrbit.None, "+foo\0", 6, -1);
@@ -393,7 +393,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetCreateIndexThrowsExceptionWhenKeyDescriptionLengthIsNegative()
         {
             Api.JetCreateIndex(this.sesid, this.tableid, "BadIndex,", CreateIndexGrbit.None, "+foo\0", -1, 100);
@@ -405,7 +405,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetCreateIndexThrowsExceptionWhenKeyDescriptionLengthIsTooLong()
         {
             Api.JetCreateIndex(this.sesid, this.tableid, "BadIndex,", CreateIndexGrbit.None, "+foo\0", 77, 100);
@@ -512,7 +512,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetGetBookmarkThrowsExceptionWhenBookmarkIsNull()
         {
             int actualSize;
@@ -525,7 +525,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetGetBookmarkThrowsExceptionWhenBookmarkLengthIsNegative()
         {
             int actualSize;
@@ -539,7 +539,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetGetBookmarkThrowsExceptionWhenBookmarkLengthIsTooLong()
         {
             int actualSize;
@@ -565,7 +565,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetGotoBookmarkThrowsExceptionWhenBookmarkLengthIsNegative()
         {
             var bookmark = new byte[1];
@@ -578,7 +578,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetGotoBookmarkThrowsExceptionWhenBookmarkLengthIsTooLong()
         {
             var bookmark = new byte[1];
@@ -591,7 +591,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetMakeKeyThrowsExceptionWhenDataIsNull()
         {
             Api.JetMakeKey(this.sesid, this.tableid, null, 2, MakeKeyGrbit.None);
@@ -603,7 +603,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetMakeKeyThrowsExceptionWhenDataLengthIsTooLong()
         {
             var data = new byte[1];
@@ -616,7 +616,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetRetrieveKeyThrowsExceptionWhenDataIsNull()
         {
             int actualSize;
@@ -629,7 +629,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetRetrieveKeyThrowsExceptionWhenDataLengthIsTooLong()
         {
             var data = new byte[1];
@@ -643,7 +643,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetIndexRecordCountThrowsExceptionWhenMaxRecordsIsNegative()
         {
             int numRecords;
@@ -669,7 +669,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetIntersectIndexesThrowsExceptionWhenIntersectingOneTableid()
         {
             var tableids = new[] { this.tableid };
@@ -687,7 +687,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetSetColumnThrowsExceptionWhenDataIsNull()
         {
             Api.JetSetColumn(this.sesid, this.tableid, this.columnid, null, 1, SetColumnGrbit.None, null);
@@ -699,7 +699,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetSetColumnThrowsExceptionWhenDataSizeIsNegative()
         {
             var data = new byte[1];
@@ -712,7 +712,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetSetColumnThrowsExceptionWhenDataSizeIsTooLong()
         {
             var data = new byte[1];
@@ -725,7 +725,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetRetrieveColumnThrowsExceptionWhenDataIsNull()
         {
             int actualSize;
@@ -738,7 +738,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetRetrieveColumnThrowsExceptionWhenDataSizeIsNegative()
         {
             int actualSize;
@@ -752,7 +752,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetRetrieveColumnThrowsExceptionWhenDataSizeIsTooLong()
         {
             int actualSize;
@@ -766,7 +766,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetUpdateThrowsExceptionWhenDataIsNull()
         {
             int actualSize;
@@ -779,7 +779,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetUpdateThrowsExceptionWhenDataSizeIsNegative()
         {
             int actualSize;
@@ -793,7 +793,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetUpdateThrowsExceptionWhenDataSizeIsTooLong()
         {
             int actualSize;
@@ -807,7 +807,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetEscrowUpdateThrowsExceptionWhenDeltaSizeIsTooLong()
         {
             int actualSize;
@@ -821,7 +821,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetEscrowUpdateThrowsExceptionWhenDeltaSizeIsNegative()
         {
             int actualSize;
@@ -848,7 +848,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetEscrowUpdateThrowsExceptionWhenPreviousValueSizeIsTooLong()
         {
             int actualSize;
@@ -863,7 +863,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetEscrowUpdateThrowsExceptionWhenPreviousValueSizeIsNegative()
         {
             int actualSize;
@@ -878,7 +878,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetEscrowUpdateThrowsExceptionWhenPreviousValueIsNull()
         {
             int actualSize;

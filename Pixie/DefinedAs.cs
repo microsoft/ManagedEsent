@@ -179,5 +179,43 @@ namespace Microsoft.Isam.Esent
         {
             return new ColumnDefinition(name, ColumnType.AsciiText);
         }
+
+        /// <summary>
+        /// Create a new IndexDefinition for the named index.
+        /// </summary>
+        /// <param name="name">The name of the index.</param>
+        /// <returns>
+        /// A index definition for the index.
+        /// </returns>
+        public static IndexDefinition Index(string name)
+        {
+            return new IndexDefinition(name);
+        }
+
+        /// <summary>
+        /// Create a new IndexDefinition for the named index. The
+        /// index will be the primary index.
+        /// </summary>
+        /// <param name="name">The name of the index.</param>
+        /// <returns>
+        /// A index definition for the index.
+        /// </returns>
+        public static IndexDefinition PrimaryIndex(string name)
+        {
+            return new IndexDefinition(name).AsPrimary();
+        }
+
+        /// <summary>
+        /// Create a new IndexDefinition for the named index. The
+        /// index will be a unique index.
+        /// </summary>
+        /// <param name="name">The name of the index.</param>
+        /// <returns>
+        /// A index definition for the index.
+        /// </returns>
+        public static IndexDefinition UniqueIndex(string name)
+        {
+            return new IndexDefinition(name).AsUnique();
+        }
     }
 }

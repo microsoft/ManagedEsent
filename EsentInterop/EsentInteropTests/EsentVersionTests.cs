@@ -23,7 +23,10 @@ namespace InteropApiTests
         [Priority(0)]
         public void PrintVersion()
         {
-            Console.WriteLine("{0}", EsentVersion.BuildNumber);
+            if (EsentVersion.SupportsUnicodePaths)
+            {
+                Console.WriteLine("SupportsUnicodePaths");
+            }
 
             if (EsentVersion.SupportsVistaFeatures)
             {
@@ -34,16 +37,6 @@ namespace InteropApiTests
             {
                 Console.WriteLine("SupportsWindows7Features");
             }
-        }
-
-        /// <summary>
-        /// Verify the build number is not zero.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        public void VerifyBuildNumberIsNotZero()
-        {
-            Assert.AreNotEqual(0, EsentVersion.BuildNumber);
         }
     }
 }

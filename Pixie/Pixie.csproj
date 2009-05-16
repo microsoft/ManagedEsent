@@ -84,6 +84,7 @@
     <Compile Include="ConnectionBase.cs" />
     <Compile Include="DisposableObjectId.cs" />
     <Compile Include="DisposableObjectManager.cs" />
+    <Compile Include="IndexDefinition.cs" />
     <Compile Include="ReadWriteRecord.cs" />
     <Compile Include="ReadOnlyRecord.cs" />
     <Compile Include="RecordBase.cs" />

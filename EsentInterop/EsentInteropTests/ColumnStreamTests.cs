@@ -368,7 +368,6 @@ namespace InteropApiTests
                 var actual = (long)deseriaizer.Deserialize(stream);
                 Assert.AreEqual(expected, actual);
             }
-
         }
 
         /// <summary>

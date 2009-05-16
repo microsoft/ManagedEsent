@@ -39,6 +39,7 @@ namespace Microsoft.Isam.Esent.Interop
                 { CompareOptions.IgnoreNonSpace, Conversions.NativeMethods.NORM_IGNORENONSPACE },
                 { CompareOptions.IgnoreSymbols, Conversions.NativeMethods.NORM_IGNORESYMBOLS },
                 { CompareOptions.IgnoreWidth, Conversions.NativeMethods.NORM_IGNOREWIDTH },
+                { CompareOptions.StringSort, Conversions.NativeMethods.SORT_STRINGSORT }
             };
 
             Conversions.lcmapFlagsToCompareOptions = Conversions.InvertDictionary(Conversions.compareOptionsToLcmapFlags);
@@ -106,15 +107,44 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// This class contains the unmanaged constants used in the conversion.
         /// </summary>
-        private static class NativeMethods
+        public static class NativeMethods
         {
             #region Win32 Constants
 
-            public const uint NORM_IGNORECASE = 0x00000001;  // ignore case
-            public const uint NORM_IGNORENONSPACE = 0x00000002;  // ignore nonspacing chars
-            public const uint NORM_IGNORESYMBOLS = 0x00000004;  // ignore symbols
-            public const uint NORM_IGNOREKANATYPE = 0x00010000;  // ignore kanatype
-            public const uint NORM_IGNOREWIDTH = 0x00020000;  // ignore width
+            /// <summary>
+            /// Ignore case
+            /// </summary>
+            public const uint NORM_IGNORECASE = 0x00000001;
+
+            /// <summary>
+            /// Ignore nonspacing chars
+            /// </summary>
+            public const uint NORM_IGNORENONSPACE = 0x00000002;
+
+            /// <summary>
+            /// Ignore symbols
+            /// </summary>
+            public const uint NORM_IGNORESYMBOLS = 0x00000004;
+
+            /// <summary>
+            /// Inore kanatype
+            /// </summary>
+            public const uint NORM_IGNOREKANATYPE = 0x00010000;
+
+            /// <summary>
+            /// Ignore width
+            /// </summary>
+            public const uint NORM_IGNOREWIDTH = 0x00020000;
+
+            /// <summary>
+            /// Treat punctuation the same as symbols
+            /// </summary>
+            public const uint SORT_STRINGSORT = 0x00001000;
+
+            /// <summary>
+            /// Produce a normalized wide-character sort key.
+            /// </summary>
+            public const uint LCMAP_SORTKEY = 0x00000400;
 
             #endregion Win32 Constants
         }

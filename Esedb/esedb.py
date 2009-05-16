@@ -6,21 +6,13 @@
 
 # TODO
 #
-# Register for shutdown function (atexit.register)?
-# keep track of number of items: support len()
-#   lazily load then keep up-to-date in memory
-# clear(): delete all records
 # pop
 # popitem (remove the last one)
 # setdefault
 # use 'with' for locks
 # private names. one underscore or two?
 # use str() or repr()?
-# More tests
-#	- compare against in-memory dictionary
-#	- stress
-#	- delete records when iterating
-# Write-lock keys in memory when updating
+# Optimization: write-lock keys in memory when updating
 #	- use a hash
 #	- ok to have collisions
 
@@ -110,7 +102,6 @@ class _EseTransaction(object):
 	def __exit__(self, etyp, einst, etb):
 		if self._inTransaction:
 			if None == etyp:
-				# A normal exit, commit the transaction
 				self.commit()
 			else:
 				# Abnormal exit, rollback the transaction
@@ -277,6 +268,9 @@ class _EseDB(object):
 		self._instance = None	
 		self._basename = 'wdb'
 		
+		# Cached number of records
+		self.numRecords = None
+		
 	def openCursor(self, mode, lazyupdate):
 		"""Creates a new cursor on the database. This function will
 		initialize esent and create the database if necessary.
@@ -404,6 +398,9 @@ class _EseDB(object):
 				trx.commit(lazyflush=True)
 			Api.JetCloseDatabase(sesid, dbid, CloseDatabaseGrbit.None)
 			Api.JetDetachDatabase(sesid, self._filename)
+			
+			# As the database is newly created we know there are no records
+			self.numRecords = 0
 		finally:
 			Api.JetEndSession(sesid, EndSessionGrbit.None)
 
@@ -466,12 +463,27 @@ class _EseDB(object):
 		
 	filename = property(_filename, doc='full path of the database')
 
+
+#-----------------------------------------------------------------------
+class EseDBError(Exception):
+#-----------------------------------------------------------------------
+	"""Esedb exception"""
+	
+	def __init__(self, message):
+		self._message = message
+		
+	def __repr__(self):
+		return 'EseDBError(%s)' % self._message
+
+	__str__ = __repr__
 	
 #-----------------------------------------------------------------------
-class EseDBCursorClosedError(Exception):
+class EseDBCursorClosedError(EseDBError):
 #-----------------------------------------------------------------------
 	"""Raised when a method is called on a closed cursor."""
-	pass
+	
+	def __init__(self):
+		EseDBError.__init__(self, 'cursor is closed')
 	
 	
 #-----------------------------------------------------------------------
@@ -574,10 +586,37 @@ class EseDBCursor(object):
 		try:
 			with _EseTransaction(self._sesid) as trx:
 				self._seekForKey(key)
-				Api.JetDelete(self._sesid, self._tableid)
+				self._deleteCurrentRecord()
 				trx.commit(self._lazyupdate)
 		finally:
 			self._database.unlock()
+
+	@cursorMustBeOpen
+	def __len__(self):
+		"""Returns the number of records in the database.
+		
+		>>> x = open('wdbtest.db', mode='n')
+		>>> len(x)
+		0
+		>>> x['foo'] = 'bar'
+		>>> len(x)
+		1
+		>>> x.close()
+		
+		"""
+		# If there is no cached length we have to scan the database
+		if None == self._database.numRecords:
+			self._database.getWriteLock()
+			if None == self._database.numRecords:
+				try:
+					with _EseTransaction(self._sesid) as trx:
+						if Api.TryMoveFirst(self._sesid, self._tableid):
+							self._database.numRecords = Api.JetIndexRecordCount(self._sesid, self._tableid, 0)
+						else:
+							self._database.numRecords = 0
+				finally:
+					self._database.unlock()
+		return self._database.numRecords
 			
 	@cursorMustBeOpen
 	def __contains__(self, key):
@@ -606,7 +645,7 @@ class EseDBCursor(object):
 		>>> x.has_key('a')
 		Traceback (most recent call last):
 		...
-		EseDBCursorClosedError
+		EseDBCursorClosedError: EseDBError(cursor is closed)
 		
 		"""
 		if self._isopen:
@@ -618,6 +657,39 @@ class EseDBCursor(object):
 			# refcounted and closing the last cursor will close the database.
 			self._database.closeCursor(self)
 			self._isopen = False
+		
+	@cursorMustBeOpen
+	def clear(self):
+		"""Removes all records from the database.
+
+		>>> x = open('wdbtest.db', mode='n')
+		>>> x['key'] = 'value'
+		>>> x['anotherkey'] = 'anothervalue'
+		>>> x.clear()
+		>>> len(x)
+		0
+		>>> 'key' in x
+		False
+		>>> x.close()
+		
+		"""
+	
+		# clear() can be optimized by just deleting and
+		# recreating the table
+		self._database.getWriteLock()
+		try:
+			n = 0
+			# Do deletes in batches to improve performance
+			with _EseTransaction(self._sesid) as trx:
+				Api.MoveBeforeFirst(self._sesid, self._tableid)
+				while Api.TryMoveNext(self._sesid, self._tableid):
+					n += 1
+					if 0 == (n%100):
+						trx.commit(lazyflush=True)
+						trx.begin()					
+					self._deleteCurrentRecord()
+		finally:
+			self._database.unlock()	
 		
 	@cursorMustBeOpen
 	def iterkeys(self):
@@ -927,6 +999,11 @@ class EseDBCursor(object):
 			self._setKeyColumn(key)
 			self._setValueColumn(value)
 			u.update()
+			self._incrementCachedRecordCount()
+
+	def _deleteCurrentRecord(self):
+		Api.JetDelete(self._sesid, self._tableid)
+		self._decrementCachedRecordCount()	
 			
 	def _retrieveCurrentRecord(self):
 		"""Returns a tuple of (key, value) for the current record."""
@@ -968,6 +1045,18 @@ class EseDBCursor(object):
 		if not Api.TrySeek(self._sesid, self._tableid, SeekGrbit.SeekEQ):
 			raise KeyError('key \'%s\' was not found' % key)
 
+	def _decrementCachedRecordCount(self):
+		if None <> self._database.numRecords:
+			assert(self._database.numRecords > 0)
+			self._database.numRecords -= 1
+			assert(self._database.numRecords >= 0)
+
+	def _incrementCachedRecordCount(self):
+		if None <> self._database.numRecords:
+			assert(self._database.numRecords >= 0)
+			self._database.numRecords += 1
+			assert(self._database.numRecords > 0)
+	
 			
 #-----------------------------------------------------------------------
 def open(filename, mode='c', lazyupdate=False):
@@ -989,6 +1078,10 @@ def open(filename, mode='c', lazyupdate=False):
 	
 	"""
 	filename = Path.GetFullPath(filename)
+	
+	if not mode in 'rwcn':
+		raise EseDBError('invalid mode')
+	
 	_registry.lock()
 	try:
 		if not _registry.hasDB(filename):
@@ -1022,6 +1115,7 @@ if __name__ == '__main__':
 	__test__['__setitem__'] = EseDBCursor.__setitem__
 	__test__['__delitem__'] = EseDBCursor.__delitem__
 	__test__['__contains__'] = EseDBCursor.__contains__
+	__test__['__len__'] = EseDBCursor.__len__
 	__test__['close'] = EseDBCursor.close
 	__test__['iterkeys'] = EseDBCursor.iterkeys
 	__test__['keys'] = EseDBCursor.keys

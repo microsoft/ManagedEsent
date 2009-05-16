@@ -314,7 +314,7 @@ namespace Microsoft.Isam.Esent.Interop
 
             if (buffer.Length - offset < count)
             {
-                throw new ArgumentException("buffer is not large enough");
+                throw new ArgumentOutOfRangeException("count", count, "cannot be larger than the size of the buffer");
             }
         }
    }

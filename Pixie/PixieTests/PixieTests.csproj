@@ -53,6 +53,7 @@
     <Compile Include="DisposableObjectManagerTests.cs" />
     <Compile Include="ExceptionTests.cs" />
     <Compile Include="FluentInterfaceTests.cs" />
+    <Compile Include="IndexDefinitionTests.cs" />
     <Compile Include="ReadOnlyReadWriteTests.cs" />
     <Compile Include="InteropConversionTests.cs" />
     <Compile Include="DefinedAsTests.cs" />

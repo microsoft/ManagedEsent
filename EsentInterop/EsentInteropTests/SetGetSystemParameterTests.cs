@@ -289,16 +289,16 @@ namespace InteropApiTests
         {
             if (EsentVersion.SupportsWindows7Features)
             {
-                int lvChunkSize = 0;
+                int chunkSize = 0;
                 string ignored;
                 Api.JetGetSystemParameter(
                     JET_INSTANCE.Nil,
                     JET_SESID.Nil,
                     Windows7Param.LVChunkSizeMost,
-                    ref lvChunkSize,
+                    ref chunkSize,
                     out ignored,
                     0);
-                Assert.AreNotEqual(0, lvChunkSize);
+                Assert.AreNotEqual(0, chunkSize);
             }
         }
 

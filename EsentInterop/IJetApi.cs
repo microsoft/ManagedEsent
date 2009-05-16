@@ -10,6 +10,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 {
     internal interface IJetApi
     {
+        JetCapabilities Capabilities { get;  }
+
         int JetCreateInstance(out JET_INSTANCE instance, string name);
 
         /// <summary>
@@ -43,6 +45,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="grbit">
         /// Initialization options.
         /// </param>
+        /// <returns>An error or warning.</returns>
         int JetInit2(ref JET_INSTANCE instance, InitGrbit grbit);
 
         int JetTerm(JET_INSTANCE instance);
@@ -126,6 +129,20 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             string keyDescription,
             int keyDescriptionLength,
             int density);
+
+        /// <summary>
+        /// Creates indexes over data in an ESE database
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to create the index on.</param>
+        /// <param name="indexcreates">Array of objects describing the indexes to be created.</param>
+        /// <param name="numIndexCreates">Number of index description objects.</param>
+        /// <returns>An error code.</returns>
+        int JetCreateIndex2(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            JET_INDEXCREATE[] indexcreates,
+            int numIndexCreates);
 
         int JetGetTableColumnInfo(
             JET_SESID sesid,
