@@ -228,11 +228,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// table that match two or more criteria that can be expressed using index ranges. 
         /// </summary>
         /// <param name="sesid">The session to use.</param>
-        /// <param name="tableids">
-        /// An array of tableids to intersect. The tableids must have index ranges set on them.
+        /// <param name="ranges">
+        /// An the index ranges to intersect. The tableids in the ranges
+        ///  must have index ranges set on them.
         /// </param>
-        /// <param name="numTableids">
-        /// The number of tableids.
+        /// <param name="numRanges">
+        /// The number of index ranges.
         /// </param>
         /// <param name="recordlist">
         /// Returns information about the temporary table containing the intersection results.
@@ -241,8 +242,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         int JetIntersectIndexes(
             JET_SESID sesid,
-            JET_TABLEID[] tableids,
-            int numTableids,
+            JET_INDEXRANGE[] ranges,
+            int numRanges,
             out JET_RECORDLIST recordlist,
             IntersectIndexesGrbit grbit);
 

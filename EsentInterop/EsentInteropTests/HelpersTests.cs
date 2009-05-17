@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -61,7 +62,7 @@ namespace InteropApiTests
         /// <summary>
         /// A dictionary that maps column names to column ids.
         /// </summary>
-        private Dictionary<string, JET_COLUMNID> columnidDict;
+        private IDictionary<string, JET_COLUMNID> columnidDict;
 
         #region Setup/Teardown
 
@@ -1490,6 +1491,51 @@ namespace InteropApiTests
 
             Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
         }
+
+        /// <summary>
+        /// Get index information for one index
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void GetIndexInformationOneIndexWithCompareOptions()
+        {
+            const string Indexname = "myindex";
+            const string Indexdef = "-unicode\0\0";
+
+            var pidxUnicode = new JET_UNICODEINDEX
+            {
+                CultureInfo = CultureInfo.CurrentCulture,
+                CompareOptions = CompareOptions.IgnoreSymbols | CompareOptions.IgnoreCase,
+            };
+
+            var indexcreate = new JET_INDEXCREATE
+            {
+                szIndexName = Indexname,
+                szKey = Indexdef,
+                cbKey = Indexdef.Length,
+                grbit = CreateIndexGrbit.IndexDisallowNull,
+                pidxUnicode = pidxUnicode,
+            };
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetCreateIndex2(this.sesid, this.tableid, new[] { indexcreate }, 1);
+            IEnumerable<IndexInfo> indexes = Api.GetTableIndexes(this.sesid, this.tableid);
+
+            // There should be only one index
+            IndexInfo info = indexes.Single();
+            Assert.AreEqual(Indexname, info.Name);
+            Assert.AreEqual(CreateIndexGrbit.IndexDisallowNull, info.Grbit);
+
+            Assert.AreEqual(1, info.IndexSegments.Length);
+            Assert.IsTrue(0 == string.Compare("unicode", info.IndexSegments[0].ColumnName, true));
+            Assert.IsFalse(info.IndexSegments[0].IsAscending);
+            Assert.AreEqual(JET_coltyp.LongText, info.IndexSegments[0].Coltyp);
+            Assert.IsFalse(info.IndexSegments[0].IsASCII);
+            Assert.AreEqual(CompareOptions.IgnoreSymbols | CompareOptions.IgnoreCase, info.CompareOptions);
+
+            Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
+        }
+
 
         #endregion MetaData helpers tests
 

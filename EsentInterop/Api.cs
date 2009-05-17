@@ -521,6 +521,23 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Creates indexes over data in an ESE database
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to create the index on.</param>
+        /// <param name="indexcreates">Array of objects describing the indexes to be created.</param>
+        /// <param name="numIndexCreates">Number of index description objects.</param>
+        public static void JetCreateIndex2(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            JET_INDEXCREATE[] indexcreates,
+            int numIndexCreates)
+        {
+            Api.Check(Impl.JetCreateIndex2(sesid, tableid, indexcreates, numIndexCreates));            
+        }
+
+
+        /// <summary>
         /// Retrieves information about a table column.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
@@ -849,11 +866,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// table that match two or more criteria that can be expressed using index ranges. 
         /// </summary>
         /// <param name="sesid">The session to use.</param>
-        /// <param name="tableids">
-        /// An array of tableids to intersect. The tableids must have index ranges set on them.
+        /// <param name="ranges">
+        /// An the index ranges to intersect. The tableids in the ranges
+        ///  must have index ranges set on them.
         /// </param>
-        /// <param name="numTableids">
-        /// The number of tableids.
+        /// <param name="numRanges">
+        /// The number of index ranges.
         /// </param>
         /// <param name="recordlist">
         /// Returns information about the temporary table containing the intersection results.
@@ -861,12 +879,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Intersection options.</param>
         public static void JetIntersectIndexes(
             JET_SESID sesid,
-            JET_TABLEID[] tableids,
-            int numTableids,
+            JET_INDEXRANGE[] ranges,
+            int numRanges,
             out JET_RECORDLIST recordlist,
             IntersectIndexesGrbit grbit)
         {
-            Api.Check(Impl.JetIntersectIndexes(sesid, tableids, numTableids, out recordlist, grbit));
+            Api.Check(Impl.JetIntersectIndexes(sesid, ranges, numRanges, out recordlist, grbit));
         }
 
         /// <summary>

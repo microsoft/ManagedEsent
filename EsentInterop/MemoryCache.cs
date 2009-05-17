@@ -10,19 +10,19 @@ namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
     /// Cache allocated chunks of memory that are needed for very short periods
-    /// of time.
+    /// of time. The memory is not zeroed on allocation.
     /// </summary>
     public class MemoryCache
     {
         /// <summary>
         /// Default size for newly allocated buffers.
         /// </summary>
-        private const int DefaultBufferSize = 1024;
+        private const int DefaultBufferSize = 32 * 1024;
 
         /// <summary>
         /// Maximum buffer size to cache.
         /// </summary>
-        private const int MaxBufferSize = 8192;
+        private const int MaxBufferSize = 64 * 1024;
 
         /// <summary>
         /// Currently cached buffer.

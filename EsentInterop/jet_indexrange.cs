@@ -24,10 +24,49 @@ namespace Microsoft.Isam.Esent.Interop
             var s = new NATIVE_INDEXRANGE
             {
                 tableid = tableid.Value,
-                grbit = 0x1, // JET_bitRecordInIndex
+                grbit = (uint) IndexRangeGrbit.RecordInIndex,
             };
             s.cbStruct = (uint)Marshal.SizeOf(s);
             return s;
+        }
+    }
+
+    /// <summary>
+    /// Identifies an index range when it is used with the JetIntersectIndexes function.
+    /// </summary>
+    public class JET_INDEXRANGE
+    {
+        /// <summary>
+        /// Initializes a new instance of the JET_INDEXRANGE class.
+        /// </summary>
+        public JET_INDEXRANGE()
+        {
+            // set the grbit to the only valid value
+            this.grbit = IndexRangeGrbit.RecordInIndex;
+        }
+
+        /// <summary>
+        /// Gets or sets the cursor containing the index range. The cursor should have an
+        /// index range set with JetSetIndexRange
+        /// </summary>
+        public JET_TABLEID tableid { get; set; }
+
+        /// <summary>
+        /// Gets or sets the indexrange option.
+        /// </summary>
+        public IndexRangeGrbit grbit { get; set; }
+
+        /// <summary>
+        /// Get a NATIVE_INDEXRANGE structure representing the object.
+        /// </summary>
+        /// <returns>A NATIVE_INDEXRANGE whose members match the class.</returns>
+        internal NATIVE_INDEXRANGE GetNativeIndexRange()
+        {
+            var indexrange = new NATIVE_INDEXRANGE();
+            indexrange.cbStruct = (uint) Marshal.SizeOf(indexrange);
+            indexrange.tableid = this.tableid.Value;
+            indexrange.grbit = (uint) this.grbit;
+            return indexrange;
         }
     }
 }

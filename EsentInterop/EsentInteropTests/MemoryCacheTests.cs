@@ -64,8 +64,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Allocating a buffer, freeing it and reallocating should
-        /// give back the same buffer.
+        /// A short (in this case zero-length) buffer should not be cached.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -74,6 +73,20 @@ namespace InteropApiTests
             this.memoryCache.Free(new byte[0]);
             byte[] buffer = this.memoryCache.Allocate();
             Assert.IsTrue(buffer.Length > 0);
+        }
+
+        /// <summary>
+        /// We don't want to keep very large buffers alive. Make sure a
+        /// huge buffer isn't cached.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyHugeBufferIsNotCached()
+        {
+            var hugeBuffer = new byte[10 * 1024 * 1024];
+            this.memoryCache.Free(hugeBuffer);
+            byte[] buffer = this.memoryCache.Allocate();
+            Assert.AreNotEqual(buffer, hugeBuffer);
         }
     }
 }

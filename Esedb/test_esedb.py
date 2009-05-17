@@ -12,7 +12,7 @@ import System
 
 from System.IO import Directory
 from System.IO import Path
-from esedb import EseDBError, EseDBCursorClosedError
+from esedb import Counter, EseDBError, EseDBCursorClosedError
 
 def deleteDirectory(directory):
 	if Directory.Exists(directory):
@@ -62,7 +62,7 @@ class EsedbSingleDBFixture(unittest.TestCase):
 	def testNullValue(self):
 		self._db['key'] = None
 		self.assertEqual(self._db['key'], None)
-
+		
 	def testOverwriteRecord(self):
 		self._db['key'] = 'value'
 		self._db['key'] = 'newvalue'
@@ -478,10 +478,28 @@ class EsedbDictionaryComparisonFixture(unittest.TestCase):
 		self._closeDatabase()
 		self._openDatabase()
 		self._compareWithExpected()
+
+	def testKeyIsCaseInsensitive(self):
+		self._insert('aaa', 'foo')
+		self._insert('aAa', 'bar')
+		self._compareWithExpected()
+
+	def testKeyRespectsSpaces(self):
+		self._insert(' x', 'foo')
+		self._insert('x', 'bar')
+		self._insert('x ', 'baz')
+		self._compareWithExpected()
+
+	def testKeyRespectsSymbols(self):
+		self._insert('QQQ.', 'foo')
+		self._insert('QQQ', 'bar')
+		self._insert('-QQQ', 'baz')
+		self._compareWithExpected()
 		
 	def testRandomOperations(self):
-		for i in xrange(10000):
-			k = random.choice('abcdefghijklmompqrstuvwzyz0123456789')
+		keys = 'abcdefghijklmompqrstuvwzyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+		for i in xrange(12000):
+			k = random.choice(keys) * random.randint(1,2)
 			if random.random() < 0.005:
 				self._closeDatabase()
 				self._openDatabase()
@@ -496,7 +514,68 @@ class EsedbDictionaryComparisonFixture(unittest.TestCase):
 				v = random.choice('XYZ#@$%*.') * random.randint(0,1024)
 				self._insert(k,v)
 		self._compareWithExpected()
+
+class CounterTests(unittest.TestCase):
+	"""Test the counter class"""
 	
+	def testInitSetsValueToNone(self):
+		c = Counter()
+		self.assertEqual(None, c.get())
+
+	def testIncrementNoneValue(self):
+		c = Counter()
+		c.increment()
+		self.assertEqual(None, c.get())
+
+	def testDecrementNoneValue(self):
+		c = Counter()
+		c.decrement()
+		self.assertEqual(None, c.get())
+
+	def testSetValue(self):
+		c = Counter()
+		c.set(1)
+		self.assertEqual(1, c.get())
+
+	def testIncrementValue(self):
+		c = Counter()
+		c.set(1)
+		c.increment()
+		self.assertEqual(2, c.get())
+
+	def testDecrementValue(self):
+		c = Counter()
+		c.set(1)
+		c.decrement()
+		self.assertEqual(0, c.get())
+		
+	def testMultiThreadedCounterUpdates(self):
+		n = 250000 # perform this many increment/decrement/get operations per thread
+		c = Counter()
+		value = 1000000
+		c.set(value)
+		self.assertEqual(value, c.get())
+		threads = []
+		for i in range(8):
+			ops = ['+' for x in range(n)] + ['-' for x in range(n)] + ['R' for x in range(n)]
+			random.shuffle(ops)
+			threads.append(threading.Thread(target = self._updateThread, args = (c,ops)))
+		for t in threads:
+			t.start()
+		for t in threads:
+			t.join()
+		self.assertEqual(value, c.get())
+		
+	def _updateThread(self, c, ops):
+		for o in ops:
+			if '+' == o:
+				c.increment()
+			elif '-' == o:
+				c.decrement()
+			else:
+				_ = c.get()				
+		
+		
 class EsedbMultiThreadingFixture(unittest.TestCase):
 	"""Update a database with multiple threads."""
 	
@@ -537,22 +616,21 @@ class EsedbMultiThreadingFixture(unittest.TestCase):
 		db.close()
 
 	def _randomOperations(self):
+		keys = 'abcdefghijklmompqrstuvwzyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-+'
 		db = esedb.open(self._database, lazyupdate=True)
-		for i in xrange(1000):
-			k = random.choice('#ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
-			if random.random() < 0.005:
-				db.clear()
-			elif random.random() < 0.01:
+		for i in xrange(10000):
+			k = random.choice(keys) * random.randint(1,8)
+			if random.random() < 0.01:
 				db.close()
 				db = esedb.open(self._database, lazyupdate=True)
-			elif random.random() < 0.20:
+			elif random.random() < 0.10:
 				try:
 					del db[k]
 				except KeyError:
 					# the record wasn't there. retrieve all records instead
-					_ = db.items()
+					_ = db.keys()
 			else:
-				v = random.choice(('[]','xyz','$')) * random.randint(0,1024)
+				v = '#' * random.randint(256,1024)
 				db[k] = v
 		db.close()
 		
@@ -610,11 +688,14 @@ class EsedbMultiThreadingFixture(unittest.TestCase):
 		self.assertEqual([], self._db.values())
 
 	def testRandomMultiThreadedOperations(self):
-		threads = [threading.Thread(target = self._randomOperations) for x in range(4)]
+		threads = [threading.Thread(target = self._randomOperations) for x in range(8)]
 		for t in threads:
 			t.start()
+		self._db.clear() # try a concurrent clear
 		for t in threads:
 			t.join()
+		self.assertEqual(len(self._db), len(self._db.keys()))
+			
 		
 if __name__ == '__main__':
 	unittest.main()

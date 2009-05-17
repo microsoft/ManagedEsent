@@ -200,8 +200,20 @@ namespace Microsoft.Isam.Esent.Interop
         /// </returns>
         public static IEnumerable<byte[]> IntersectIndexes(JET_SESID sesid, JET_TABLEID[] tableids)
         {
+            if (null == tableids)
+            {
+                throw new ArgumentNullException("tableids");    
+            }
+
             JET_RECORDLIST recordlist;
-            Api.JetIntersectIndexes(sesid, tableids, tableids.Length, out recordlist, IntersectIndexesGrbit.None);
+
+            var ranges = new JET_INDEXRANGE[tableids.Length];
+            for (int i = 0; i < tableids.Length; ++i)
+            {
+                ranges[i] = new JET_INDEXRANGE { tableid = tableids[i] };
+            }
+
+            Api.JetIntersectIndexes(sesid, ranges, ranges.Length, out recordlist, IntersectIndexesGrbit.None);
 
             try
             {

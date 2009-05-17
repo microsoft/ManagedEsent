@@ -434,6 +434,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_INDEXCREATE[] indexcreates,
             int numIndexCreates)
         {
+            // LCID field of JET_INDEXCREATE actually points to a JET_UNICODEINDEX struct to allow user-defined LCMapString() flags
+            const CreateIndexGrbit IndexUnicode = (CreateIndexGrbit)0x00000800;
+
             this.TraceFunctionCall("JetCreateIndex2");
             this.CheckNotNull(indexcreates, "indexcreates");
             this.CheckNotNegative(numIndexCreates, "numIndexCreates");
@@ -443,7 +446,30 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     "numIndexCreates", numIndexCreates, "numIndexCreates is larger than the number of indexes passed in");
             }
 
-            return 0;
+            var nativeIndexcreates = new NATIVE_INDEXCREATE[indexcreates.Length];
+            for (int i = 0; i < numIndexCreates; ++i)
+            {
+                nativeIndexcreates[i] = indexcreates[i].GetNativeIndexcreate();
+            }
+
+            // pin the memory
+            using (var handles = new GCHandleCollection())
+            {
+                for (int i = 0; i < numIndexCreates; ++i)
+                {
+                    if (null != indexcreates[i].pidxUnicode)
+                    {
+                        NATIVE_UNICODEINDEX unicode = indexcreates[i].pidxUnicode.GetNativeUnicodeIndex();
+                        nativeIndexcreates[i].pidxUnicode = handles.Add(unicode);
+                        nativeIndexcreates[i].grbit |= (uint) IndexUnicode;
+                    }
+                    ////nativeIndexcreates[i].rgconditionalcolumn = handles.Add(indexcreates[i].rgconditionalcolumn);
+                }
+
+                return
+                    this.Err(
+                        NativeMethods.JetCreateIndex2(sesid.Value, tableid.Value, nativeIndexcreates, (uint) numIndexCreates));
+            }
         }
 
         public int JetGetTableColumnInfo(
@@ -780,11 +806,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// table that match two or more criteria that can be expressed using index ranges. 
         /// </summary>
         /// <param name="sesid">The session to use.</param>
-        /// <param name="tableids">
-        /// An array of tableids to intersect. The tableids must have index ranges set on them.
+        /// <param name="ranges">
+        /// An the index ranges to intersect. The tableids in the ranges
+        ///  must have index ranges set on them.
         /// </param>
-        /// <param name="numTableids">
-        /// The number of tableids.
+        /// <param name="numRanges">
+        /// The number of index ranges.
         /// </param>
         /// <param name="recordlist">
         /// Returns information about the temporary table containing the intersection results.
@@ -793,24 +820,24 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetIntersectIndexes(
             JET_SESID sesid,
-            JET_TABLEID[] tableids,
-            int numTableids,
+            JET_INDEXRANGE[] ranges,
+            int numRanges,
             out JET_RECORDLIST recordlist,
             IntersectIndexesGrbit grbit)
         {
             this.TraceFunctionCall("JetIntersectIndexes");
-            this.CheckNotNull(tableids, "tableids");
-            this.CheckDataSize(tableids, numTableids, "numTableids");
-            if (numTableids < 2)
+            this.CheckNotNull(ranges, "ranges");
+            this.CheckDataSize(ranges, numRanges, "numRanges");
+            if (numRanges < 2)
             {
                 throw new ArgumentOutOfRangeException(
-                    "numTableids", numTableids, "JetIntersectIndexes requires at least two tables.");
+                    "numRanges", numRanges, "JetIntersectIndexes requires at least two index ranges.");
             }
 
-            var indexRanges = new NATIVE_INDEXRANGE[numTableids];
-            for (int i = 0; i < numTableids; ++i)
+            var indexRanges = new NATIVE_INDEXRANGE[numRanges];
+            for (int i = 0; i < numRanges; ++i)
             {
-                indexRanges[i] = NATIVE_INDEXRANGE.MakeIndexRangeFromTableid(tableids[i]);
+                indexRanges[i] = ranges[i].GetNativeIndexRange();
             }
 
             var nativeRecordlist = new NATIVE_RECORDLIST();
@@ -922,6 +949,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 NATIVE_SETINFO nativeSetinfo = setinfo.GetNativeSetinfo();
                 return this.Err(NativeMethods.JetSetColumn(sesid.Value, tableid.Value, columnid.Value, data, (uint)dataSize, (uint)grbit, ref nativeSetinfo));
             }
+
             return this.Err(NativeMethods.JetSetColumn(sesid.Value, tableid.Value, columnid.Value, data, (uint)dataSize, (uint)grbit, IntPtr.Zero));
         }
 
@@ -988,7 +1016,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <summary>
         /// Calculates the capabilities of the current Esent version.
         /// </summary>
-        public void DetermineCapabilities()
+        private void DetermineCapabilities()
         {
             // Create new capabilities, set as all false. This will allow
             // us to call into Esent.
@@ -997,14 +1025,21 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             var version = (uint)this.GetVersionFromEsent();
             var buildNumber = (int)((version & 0xFFFFFF) >> 8);
 
+            Trace.WriteLineIf(
+                this.traceSwitch.TraceVerbose,
+                String.Format("Version = {0}, BuildNumber = {1}", version, buildNumber));
+
             if (buildNumber >= 6000)
             {
+                Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports Vista features");
                 this.capabilities.SupportsVistaFeatures = true;
+                Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports Unicode paths");
                 this.capabilities.SupportsUnicodePaths = true;
             }
 
             if (buildNumber >= 7000)
             {
+                Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports Windows 7 features");
                 this.capabilities.SupportsWindows7Features = true;
             }
         }

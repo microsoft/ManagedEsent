@@ -10,11 +10,12 @@
 # popitem (remove the last one)
 # setdefault
 # use 'with' for locks
-# private names. one underscore or two?
+# private names: one underscore or two?
 # use str() or repr()?
-# Optimization: write-lock keys in memory when updating
-#	- use a hash
-#	- ok to have collisions
+# Tests
+#	- read-only tests
+# Set read-only flag in cursor
+#	- use decorator to check
 
 """Provides a simple dictionary interface to an esent database. This requires
 the ManagedEsent interop dll.
@@ -42,8 +43,11 @@ import thread
 import System
 import clr
 
+from System import Array, Int64, Int32
+from System.Globalization import CompareOptions, CultureInfo
 from System.IO import File, Path, Directory
 from System.Text import Encoding
+from System.Threading import Interlocked
 
 clr.AddReferenceByPartialName('Esent.Interop')
 from Microsoft.Isam.Esent.Interop import Api
@@ -54,6 +58,8 @@ from Microsoft.Isam.Esent.Interop import JET_DBID
 from Microsoft.Isam.Esent.Interop import JET_TABLEID
 from Microsoft.Isam.Esent.Interop import JET_COLUMNID
 from Microsoft.Isam.Esent.Interop import JET_COLUMNDEF
+from Microsoft.Isam.Esent.Interop import JET_UNICODEINDEX
+from Microsoft.Isam.Esent.Interop import JET_INDEXCREATE
 from Microsoft.Isam.Esent.Interop import JET_CP
 from Microsoft.Isam.Esent.Interop import JET_coltyp
 from Microsoft.Isam.Esent.Interop import JET_param
@@ -72,6 +78,7 @@ from Microsoft.Isam.Esent.Interop import OpenDatabaseGrbit
 from Microsoft.Isam.Esent.Interop import OpenTableGrbit
 from Microsoft.Isam.Esent.Interop import RollbackTransactionGrbit
 from Microsoft.Isam.Esent.Interop import SeekGrbit
+from Microsoft.Isam.Esent.Interop import SetColumnGrbit
 
 from Microsoft.Isam.Esent.Interop import InstanceParameters
 from Microsoft.Isam.Esent.Interop import SystemParameters
@@ -108,12 +115,12 @@ class _EseTransaction(object):
 				self.rollback()
 			
 	def begin(self):
-		assert(not self._inTransaction)
+		assert not self._inTransaction, 'already in a transaction'
 		Api.JetBeginTransaction(self._sesid)
 		self._inTransaction = True
 	
 	def commit(self, lazyflush=False):
-		assert(self._inTransaction)
+		assert self._inTransaction, 'not in a transaction'
 		if lazyflush:
 			commitgrbit = CommitTransactionGrbit.LazyFlush
 		else:
@@ -122,7 +129,7 @@ class _EseTransaction(object):
 		self._inTransaction = False
 		
 	def rollback(self):
-		assert(self._inTransaction)
+		assert self._inTransaction, 'not in a transaction'
 		Api.JetRollback(self._sesid, RollbackTransactionGrbit.None)
 		self._inTransaction = False			
 
@@ -155,21 +162,21 @@ class _EseUpdate(object):
 				self.cancelUpdate()
 			
 	def prepareUpdate(self):
-		assert(not self._inUpdate)
+		assert not self._inUpdate, 'already in an update'
 		Api.JetPrepareUpdate(self._sesid, self._tableid, self._prep)
 		self._inUpdate = True
 	
 	def update(self):
-		assert(self._inUpdate)
+		assert self._inUpdate, 'not in an update'
 		Api.JetUpdate(self._sesid, self._tableid, None, 0)
 		self._inUpdate = False
 		
 	def cancelUpdate(self):
-		assert(self._inUpdate)
+		assert self._inUpdate, 'not in an update'
 		Api.JetPrepareUpdate(self._sesid, self._tableid, JET_prep.Cancel)
 		self._inUpdate = False	
 
-		
+	
 #-----------------------------------------------------------------------
 class _EseDBRegistry(object):
 #-----------------------------------------------------------------------
@@ -231,9 +238,111 @@ class _EseDBRegistry(object):
 		
 	def assertLocked(self):
 		"""Assert this object is locked."""
-		assert(self._critsec.locked())
-						
-						
+		assert self._critsec.locked(), 'registry is not locked'
+
+
+#-----------------------------------------------------------------------
+class Counter(object):
+#-----------------------------------------------------------------------
+	"""A counter that can be incremented, decremented and retrieved by
+	multiple threads. It starts out as None and has to be explicitly
+	initialized. Incrementing and decrementing when the count is None
+	has no effect. 
+	
+	As this is a counter we do not expect it to become a negative number.
+	
+	"""
+
+	def synchronized(func):
+		def locked_func(*args, **kwargs):
+			args[0]._critsec.acquire()
+			r = func(*args, **kwargs)
+			args[0]._critsec.release()
+			return r
+		# Promote the documentation so doctest will work
+		locked_func.__doc__ = func.__doc__
+		return locked_func
+	
+	def __init__(self):
+		self._critsec = thread.allocate_lock()
+		self._n = None
+		
+	@synchronized
+	def set(self, n):
+		"""Sets the counter.
+		
+		>>> c = Counter()
+		>>> c.set(7)
+		>>> c.get()	
+		7
+		
+		"""
+		self._n = n
+	
+	@synchronized
+	def get(self):
+		"""Gets the counter.
+
+		>>> c = Counter()
+		>>> c.set(1)
+		>>> c.get()	
+		1
+		
+		This will return None if the counter has not been set.
+
+		>>> c = Counter()
+		>>> c.get()
+		
+		"""
+		return self._n
+
+	@synchronized
+	def increment(self):
+		"""Increments the counter, if it has been set.
+
+		>>> c = Counter()
+		>>> c.set(1)
+		>>> c.increment()
+		>>> c.get()	
+		2
+		
+		Incrementing a counter that has not been set has
+		no effect.
+
+		>>> c = Counter()
+		>>> c.increment()
+		>>> c.get()			
+		
+		"""
+		if None <> self._n:
+			assert self._n >= 0, 'counter is negative'
+			self._n += 1
+			assert self._n > 0, 'counter should be positive'
+	
+	@synchronized
+	def decrement(self):
+		"""Decrements the counter, if it has been set.
+
+		>>> c = Counter()
+		>>> c.set(1)
+		>>> c.decrement()
+		>>> c.get()	
+		0
+		
+		Decrementing a counter that has not been set has
+		no effect.
+
+		>>> c = Counter()
+		>>> c.decrement()
+		>>> c.get()			
+		
+		"""
+		if None <> self._n:
+			assert self._n > 0, 'trying to decrement non-positive counter'
+			self._n -= 1
+			assert self._n >= 0, 'counter has become negative'
+
+
 #-----------------------------------------------------------------------
 class _EseDB(object):
 #-----------------------------------------------------------------------
@@ -264,12 +373,10 @@ class _EseDB(object):
 		self._keycolumn = 'key'
 		self._valuecolumn = 'value'
 		self._numCursors = 0
-		self._critsec = thread.allocate_lock()
+		self._critsecs = [thread.allocate_lock() for i in range(31)]
 		self._instance = None	
 		self._basename = 'wdb'
-		
-		# Cached number of records
-		self.numRecords = None
+		self.cachedRecordCount = Counter()
 		
 	def openCursor(self, mode, lazyupdate):
 		"""Creates a new cursor on the database. This function will
@@ -321,15 +428,36 @@ class _EseDB(object):
 				self._instance = None
 		finally:
 			_registry.unlock()
-					
-	def getWriteLock(self):
-		"""Gets a write-lock on the database"""
-		self._critsec.acquire()
-		
-	def unlock(self):
-		"""Releases the database lock."""
-		self._critsec.release()
-		
+			
+	def getWriteLock(self, hash=None):
+		"""
+		Gets a write-lock on the database. If no hash value is specified
+		then all locks are taken.
+
+		"""
+		self._lock(lambda l: l.acquire(), hash)
+			
+	def unlock(self, hash=None):
+		"""
+		Releases a write-lock on the database. If no hash value is specified
+		then all locks are released.
+
+		"""
+		self._lock(lambda l: l.release(), hash)
+
+	def _lock(self, f, hash=None):
+		"""
+		Applies a function to a database lock. If no hash value is specified
+		the function is applied to all locks.
+
+		"""
+		if None == hash:
+			for l in self._critsecs:			
+				f(l)
+		else:
+			i = hash % len(self._critsecs)
+			f(self._critsecs[i])
+			
 	def _createInstance(self):
 		"""Create the JET_INSTANCE and set the system parameters. The
 		important changes here are to reduce the logfile size, turn
@@ -367,6 +495,23 @@ class _EseDB(object):
 			for f in files:
 				File.Delete(f)
 		
+	def _createIndex(self, sesid, tableid):
+		indexdef = '+%s\0\0' % self._keycolumn
+
+		idxUnicode = JET_UNICODEINDEX(
+			CultureInfo = CultureInfo.CurrentCulture,
+			CompareOptions = CompareOptions.None)
+
+		indexcreate = JET_INDEXCREATE(
+			szIndexName = 'primary',
+			szKey = indexdef,
+			cbKey = indexdef.Length,
+			grbit = CreateIndexGrbit.IndexUnique | CreateIndexGrbit.IndexPrimary,
+			pidxUnicode = idxUnicode)
+		indexcreates = Array[JET_INDEXCREATE]([indexcreate])
+
+		Api.JetCreateIndex2(sesid, tableid, indexcreates, 1);			
+	
 	def _createDatabase(self):
 		"""Create the database, table and columns."""
 		sesid = Api.JetBeginSession(self._instance, '', '')		
@@ -385,22 +530,14 @@ class _EseDB(object):
 					100)
 				self._addTextColumn(sesid, tableid, self._keycolumn)
 				self._addTextColumn(sesid, tableid, self._valuecolumn)
-				indexdef = "+%s\0\0" % self._keycolumn
-				Api.JetCreateIndex(
-					sesid,
-					tableid,
-					'primary',
-					CreateIndexGrbit.IndexUnique | CreateIndexGrbit.IndexPrimary,
-					indexdef,
-					indexdef.Length,
-					100)
+				self._createIndex(sesid, tableid)
 				Api.JetCloseTable(sesid, tableid)
 				trx.commit(lazyflush=True)
 			Api.JetCloseDatabase(sesid, dbid, CloseDatabaseGrbit.None)
 			Api.JetDetachDatabase(sesid, self._filename)
 			
 			# As the database is newly created we know there are no records
-			self.numRecords = 0
+			self.cachedRecordCount.set(0)
 		finally:
 			Api.JetEndSession(sesid, EndSessionGrbit.None)
 
@@ -476,6 +613,7 @@ class EseDBError(Exception):
 		return 'EseDBError(%s)' % self._message
 
 	__str__ = __repr__
+
 	
 #-----------------------------------------------------------------------
 class EseDBCursorClosedError(EseDBError):
@@ -551,7 +689,8 @@ class EseDBCursor(object):
 		>>> x.close()				
 		
 		"""
-		self._database.getWriteLock()
+		key = str(key)
+		self._database.getWriteLock(hash=key.GetHashCode())
 		try:
 			with _EseTransaction(self._sesid) as trx:
 				if self.has_key(key):
@@ -560,7 +699,7 @@ class EseDBCursor(object):
 					self._insertItem(key, value)
 				trx.commit(self._lazyupdate)
 		finally:
-			self._database.unlock()
+			self._database.unlock(hash=key.GetHashCode())
 			
 	@cursorMustBeOpen
 	def __delitem__(self, key): 
@@ -582,14 +721,15 @@ class EseDBCursor(object):
 		>>> x.close()
 		
 		"""
-		self._database.getWriteLock()
+		key = str(key)
+		self._database.getWriteLock(hash=key.GetHashCode())
 		try:
 			with _EseTransaction(self._sesid) as trx:
 				self._seekForKey(key)
 				self._deleteCurrentRecord()
 				trx.commit(self._lazyupdate)
 		finally:
-			self._database.unlock()
+			self._database.unlock(hash=key.GetHashCode())
 
 	@cursorMustBeOpen
 	def __len__(self):
@@ -605,18 +745,18 @@ class EseDBCursor(object):
 		
 		"""
 		# If there is no cached length we have to scan the database
-		if None == self._database.numRecords:
+		if None == self._database.cachedRecordCount.get():
 			self._database.getWriteLock()
-			if None == self._database.numRecords:
+			if None == self._database.cachedRecordCount.get():
 				try:
 					with _EseTransaction(self._sesid) as trx:
 						if Api.TryMoveFirst(self._sesid, self._tableid):
-							self._database.numRecords = Api.JetIndexRecordCount(self._sesid, self._tableid, 0)
+							self._database.cachedRecordCount.set(Api.JetIndexRecordCount(self._sesid, self._tableid, 0))
 						else:
-							self._database.numRecords = 0
+							self._database.cachedRecordCount.set(0)
 				finally:
 					self._database.unlock()
-		return self._database.numRecords
+		return self._database.cachedRecordCount.get()
 			
 	@cursorMustBeOpen
 	def __contains__(self, key):
@@ -999,11 +1139,11 @@ class EseDBCursor(object):
 			self._setKeyColumn(key)
 			self._setValueColumn(value)
 			u.update()
-			self._incrementCachedRecordCount()
+			self._database.cachedRecordCount.increment()
 
 	def _deleteCurrentRecord(self):
 		Api.JetDelete(self._sesid, self._tableid)
-		self._decrementCachedRecordCount()	
+		self._database.cachedRecordCount.decrement()	
 			
 	def _retrieveCurrentRecord(self):
 		"""Returns a tuple of (key, value) for the current record."""
@@ -1030,7 +1170,7 @@ class EseDBCursor(object):
 			data = None
 		else:
 			data = str(value)		
-		Api.SetColumn(self._sesid, self._tableid, self._valuecolumnid, data, Encoding.Unicode)
+		Api.SetColumn(self._sesid, self._tableid, self._valuecolumnid, data, Encoding.Unicode, SetColumnGrbit.IntrinsicLV)
 				
 	def _makeKey(self, key):
 		"""Construct a key for the given value."""
@@ -1044,20 +1184,8 @@ class EseDBCursor(object):
 		self._makeKey(key)
 		if not Api.TrySeek(self._sesid, self._tableid, SeekGrbit.SeekEQ):
 			raise KeyError('key \'%s\' was not found' % key)
-
-	def _decrementCachedRecordCount(self):
-		if None <> self._database.numRecords:
-			assert(self._database.numRecords > 0)
-			self._database.numRecords -= 1
-			assert(self._database.numRecords >= 0)
-
-	def _incrementCachedRecordCount(self):
-		if None <> self._database.numRecords:
-			assert(self._database.numRecords >= 0)
-			self._database.numRecords += 1
-			assert(self._database.numRecords > 0)
 	
-			
+	
 #-----------------------------------------------------------------------
 def open(filename, mode='c', lazyupdate=False):
 #-----------------------------------------------------------------------
@@ -1093,7 +1221,7 @@ def open(filename, mode='c', lazyupdate=False):
 	finally:
 		_registry.unlock()			
 
-		
+	
 # Set global esent options
 SystemParameters.DatabasePageSize = 8192
 
@@ -1111,6 +1239,10 @@ if __name__ == '__main__':
 	# Doctest tests. This is a list of methods that have doctest
 	# tests. Doctest isn't finding them by default.
 	__test__ = dict()
+	__test__['set'] = Counter.set	
+	__test__['get'] = Counter.get	
+	__test__['increment'] = Counter.increment	
+	__test__['decrement'] = Counter.decrement	
 	__test__['__getitem__'] = EseDBCursor.__getitem__
 	__test__['__setitem__'] = EseDBCursor.__setitem__
 	__test__['__delitem__'] = EseDBCursor.__delitem__

@@ -76,6 +76,7 @@
     <Compile Include="Conversions.cs" />
     <Compile Include="EsentInvalidColumnException.cs" />
     <Compile Include="EnumerableColumnInfo.cs" />
+    <Compile Include="GCHandleCollection.cs" />
     <Compile Include="IJetApi.cs" />
     <Compile Include="InternalApi.cs" />
     <Compile Include="JetCapabilities.cs" />

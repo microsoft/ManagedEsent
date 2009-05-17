@@ -6,6 +6,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using Microsoft.Isam.Esent.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -651,8 +652,8 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Check that an exception is thrown when Jet gets a 
-        /// negative bookmark length.
+        /// Check that an exception is thrown when passing in NULL as the 
+        /// ranges to JetIntersectIndexes.
         /// </summary>
         [TestMethod]
         [Priority(1)]
@@ -664,17 +665,30 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Check that an exception is thrown when Jet gets a 
-        /// negative bookmark length.
+        /// Check that an exception is thrown when intersecting just one index.
         /// </summary>
         [TestMethod]
         [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetIntersectIndexesThrowsExceptionWhenIntersectingOneTableid()
         {
-            var tableids = new[] { this.tableid };
+            var ranges = new JET_INDEXRANGE[1];
+            ranges[0] = new JET_INDEXRANGE { tableid = this.tableid };
+
             JET_RECORDLIST recordlist;
-            Api.JetIntersectIndexes(this.sesid, tableids, 1, out recordlist, IntersectIndexesGrbit.None);
+            Api.JetIntersectIndexes(this.sesid, ranges, 1, out recordlist, IntersectIndexesGrbit.None);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when IntersectIndexes gets null
+        /// as the tableid argument.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void IntersectIndexesThrowsExceptionWhenTableidIsNull()
+        {
+            Api.IntersectIndexes(this.sesid, null).ToArray();
         }
 
         #endregion

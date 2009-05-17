@@ -100,7 +100,7 @@ namespace CsStockSample
                     {
                         // Load the columnids from the table. This should be done each time the database is attached
                         // as an offline defrag (esentutl /d) can change the name => columnid mapping.
-                        Dictionary<string, JET_COLUMNID> columnids = Api.GetColumnDictionary(session, table);
+                        IDictionary<string, JET_COLUMNID> columnids = Api.GetColumnDictionary(session, table);
                         columnidSymbol = columnids["symbol"];
                         columnidName = columnids["name"];
                         columnidPrice = columnids["price"];

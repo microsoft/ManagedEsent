@@ -90,6 +90,7 @@
     <Compile Include="ConversionsTests.cs" />
     <Compile Include="EquatableTests.cs" />
     <Compile Include="IndexcreateTests.cs" />
+    <Compile Include="IndexRangeTests.cs" />
     <Compile Include="IntersectIndexesTests.cs" />
     <Compile Include="MemoryCacheTests.cs" />
     <Compile Include="RecordlistTests.cs" />
@@ -97,7 +98,7 @@
     <Compile Include="ExceptionTests.cs" />
     <Compile Include="IndexlistTests.cs" />
     <Compile Include="EmptyTableFixture.cs" />
-    <Compile Include="IndexrangeTests.cs" />
+    <Compile Include="IndexRangeFromTableidTests.cs" />
     <Compile Include="SeekTests.cs" />
     <Compile Include="SimplePerfTest.cs" />
     <Compile Include="TableTests.cs" />

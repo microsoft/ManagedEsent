@@ -349,6 +349,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// this option is used to differentiate between NULL and 0 (zero) length.
         /// </summary>
         ZeroLength = 0x20,
+
+        /// <summary>
+        /// Try to store long-value columns in the record, even if they exceed the default
+        /// separation size.
+        /// </summary>
+        IntrinsicLV	= 0x400,
     }
 
     /// <summary>
@@ -602,6 +608,17 @@ namespace Microsoft.Isam.Esent.Interop
         /// Cancel and existing index range.
         /// </summary>
         RangeRemove = 0x8,
+    }
+
+    /// <summary>
+    /// Options for the JET_INDEXRANGE object.
+    /// </summary>
+    public enum IndexRangeGrbit
+    {
+        /// <summary>
+        /// Records in the cursors indexrange should be included in the output.
+        /// </summary>
+        RecordInIndex = 0x1,
     }
 
     /// <summary>

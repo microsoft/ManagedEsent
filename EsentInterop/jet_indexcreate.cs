@@ -22,9 +22,9 @@ namespace Microsoft.Isam.Esent.Interop
         public uint cbKey;
         public uint grbit;
         public uint ulDensity;
-        public NATIVE_UNICODEINDEX[] pidxUnicode;
+        public IntPtr pidxUnicode;
         public IntPtr cbVarSegMac;  // can also be JET_TUPLELIMITS*
-        public NATIVE_CONDITIONALCOLUMN[] rgconditionalcolumn;
+        public IntPtr rgconditionalcolumn;
         public uint cConditionalColumn;
         public int err;
     }
@@ -110,21 +110,7 @@ namespace Microsoft.Isam.Esent.Interop
             native.grbit = (uint) this.grbit;
             native.ulDensity = (uint) this.ulDensity;
 
-            if (null != this.pidxUnicode)
-            {
-                native.pidxUnicode = new[] { this.pidxUnicode.GetNativeUnicodeIndex() };
-            }
-
             native.cbVarSegMac = new IntPtr(this.cbVarSegMac);
-
-            if (null != this.rgconditionalcolumn)
-            {
-                native.rgconditionalcolumn = new NATIVE_CONDITIONALCOLUMN[this.rgconditionalcolumn.Length];
-                for (int i = 0; i < this.rgconditionalcolumn.Length; i++)
-                {
-                    native.rgconditionalcolumn[i] = this.rgconditionalcolumn[i].GetNativeConditionalColumn();
-                }
-            }
 
             native.cConditionalColumn = (uint) this.cConditionalColumn;
             return native;

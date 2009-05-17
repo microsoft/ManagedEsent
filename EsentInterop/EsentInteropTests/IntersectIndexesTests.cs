@@ -97,10 +97,7 @@ namespace InteropApiTests
             {
                 for (int j = 0; j < 10; ++j)
                 {
-                    Api.JetPrepareUpdate(this.sesid, tableid, JET_prep.Insert);
-                    Api.SetColumn(this.sesid, tableid, this.columnid1, i);
-                    Api.SetColumn(this.sesid, tableid, this.columnid2, j);
-                    Api.JetUpdate(this.sesid, tableid);
+                    this.InsertRecord(tableid, i, j);
                 }
             }
 
@@ -140,7 +137,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        public void VerifyIndexIntersectionReturnsCorrectNumberOfRecords()
+        public void VerifyJetIntersectIndexesReturnsCorrectNumberOfRecords()
         {
             JET_TABLEID tableid1 = this.OpenTable();
             JET_TABLEID tableid2 = this.OpenTable();
@@ -151,13 +148,37 @@ namespace InteropApiTests
             Api.JetSetCurrentIndex(this.sesid, tableid2, "index2");
             this.SetIndexRange(tableid2, 1, 3);
 
-            var tableids = new[] { tableid1, tableid2 };
+            var ranges = new JET_INDEXRANGE[2];
+            ranges[0] = new JET_INDEXRANGE { tableid = tableid1 };
+            ranges[1] = new JET_INDEXRANGE { tableid = tableid2 };
 
             JET_RECORDLIST recordlist;
-            Api.JetIntersectIndexes(this.sesid, tableids, 2, out recordlist, IntersectIndexesGrbit.None);
+            Api.JetIntersectIndexes(this.sesid, ranges, 2, out recordlist, IntersectIndexesGrbit.None);
 
             Assert.AreEqual(9, recordlist.cRecords);
             Api.JetCloseTable(this.sesid, recordlist.tableid);
+        }
+
+        /// <summary>
+        /// Verify that index intersection returns records with the correct criteria.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void VerifyIndexIntersectionReturnsCorrectNumberOfRecords()
+        {
+            JET_TABLEID tableid1 = this.OpenTable();
+            JET_TABLEID tableid2 = this.OpenTable();
+
+            Api.JetSetCurrentIndex(this.sesid, tableid1, "index1");
+            this.SetIndexRange(tableid1, 8, 9);
+
+            Api.JetSetCurrentIndex(this.sesid, tableid2, "index2");
+            this.SetIndexRange(tableid2, 1, 2);
+
+            var tableids = new[] { tableid1, tableid2 };
+
+            var bookmarks = Api.IntersectIndexes(this.sesid, tableids);
+            Assert.AreEqual(bookmarks.Count(), 4);
         }
 
         /// <summary>
@@ -189,6 +210,30 @@ namespace InteropApiTests
             }
         }
 
+        /// <summary>
+        /// Verify that index intersection returns a 'live' result
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void VerifyIndexIntersectionReturnsLiveResult()
+        {
+            JET_TABLEID tableid1 = this.OpenTable();
+            JET_TABLEID tableid2 = this.OpenTable();
+            JET_TABLEID tableid3 = this.OpenTable();
+
+            Api.JetSetCurrentIndex(this.sesid, tableid1, "index1");
+            this.SetIndexRange(tableid1, 0, 9);
+
+            Api.JetSetCurrentIndex(this.sesid, tableid2, "index2");
+            this.SetIndexRange(tableid2, 0, 9);
+
+            var tableids = new[] { tableid1, tableid2 };
+
+            var bookmarks = Api.IntersectIndexes(this.sesid, tableids);
+            this.InsertRecord(tableid3, 5, 5);
+            Assert.AreEqual(101, bookmarks.Count());
+        }
+
         #region Helper methods
 
         private JET_TABLEID OpenTable()
@@ -198,6 +243,22 @@ namespace InteropApiTests
             return tableid;
         }
 
+        private void InsertRecord(JET_TABLEID tableid, int i, int j)
+        {
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, tableid, this.columnid1, i);
+            Api.SetColumn(this.sesid, tableid, this.columnid2, j);
+            Api.JetUpdate(this.sesid, tableid);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+        }
+
+        /// <summary>
+        /// Set an inclusive range from min to max.
+        /// </summary>
+        /// <param name="tableid">The table to set the range [min,max] on.</param>
+        /// <param name="min">The minimum value.</param>
+        /// <param name="max">The maximum value.</param>
         private void SetIndexRange(JET_TABLEID tableid, int min, int max)
         {
             Api.MakeKey(this.sesid, tableid, min, MakeKeyGrbit.NewKey);

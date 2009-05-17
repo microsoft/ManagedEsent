@@ -23,7 +23,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="sesid">The sesid to use.</param>
         /// <param name="tableid">The table to retrieve the information for.</param>
         /// <returns>A dictionary mapping column names to column IDs.</returns>
-        public static Dictionary<string, JET_COLUMNID> GetColumnDictionary(JET_SESID sesid, JET_TABLEID tableid)
+        public static IDictionary<string, JET_COLUMNID> GetColumnDictionary(JET_SESID sesid, JET_TABLEID tableid)
         {
             JET_COLUMNLIST columnlist;
             JetGetTableColumnInfo(sesid, tableid, string.Empty, out columnlist);

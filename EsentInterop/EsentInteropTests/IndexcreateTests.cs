@@ -115,7 +115,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void VerifyConversionToNativeSetsUnicodeIndexToNull()
         {
-            Assert.IsNull(this.native.pidxUnicode);
+            Assert.AreEqual(IntPtr.Zero, this.native.pidxUnicode);
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void VerifyConversionToNativeSetsConditionalColumnsToNull()
         {
-            Assert.IsNull(this.native.rgconditionalcolumn);
+            Assert.AreEqual(IntPtr.Zero, this.native.rgconditionalcolumn);
         }
 
         /// <summary>
@@ -146,65 +146,6 @@ namespace InteropApiTests
         public void VerifyConversionToNativeSetsCConditionalColumn()
         {
             Assert.AreEqual((uint) 0, this.native.cConditionalColumn);
-        }
-
-        /// <summary>
-        /// Check the conversion to a NATIVE_INDEXCREATE sets JET_UNICODEINDEX
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        public void VerifyConversionToNativeSetsUnicodeIndex()
-        {
-            var toConvert = new JET_INDEXCREATE
-                           {
-                               pidxUnicode = new JET_UNICODEINDEX
-                                             {
-                                                 CompareOptions = CompareOptions.IgnoreCase,
-                                                 CultureInfo = CultureInfo.CurrentCulture,
-                                             }
-                           };
-            var converted = toConvert.GetNativeIndexcreate();
-
-            Assert.IsNotNull(converted.pidxUnicode);
-            Assert.AreEqual(
-                Conversions.NativeMethods.NORM_IGNORECASE | Conversions.NativeMethods.LCMAP_SORTKEY,
-                converted.pidxUnicode[0].dwMapFlags);
-            Assert.AreEqual((uint)CultureInfo.CurrentCulture.LCID, converted.pidxUnicode[0].lcid);
-        }
-
-        /// <summary>
-        /// Check the conversion to a NATIVE_INDEXCREATE sets JET_UNICODEINDEX
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        public void VerifyConversionToNativeSetsConditionalColumns()
-        {
-            var conditionalColumns = new JET_CONDITIONALCOLUMN[]
-                                     {
-                                         new JET_CONDITIONALCOLUMN
-                                         {
-                                           szColumnName  = "foo",
-                                           grbit = ConditionalColumnGrbit.ColumnMustBeNonNull,
-                                         },
-                                         new JET_CONDITIONALCOLUMN
-                                         {
-                                           szColumnName  = "bar",
-                                           grbit = ConditionalColumnGrbit.ColumnMustBeNull,
-                                         },
-                                     };
-            var toConvert = new JET_INDEXCREATE
-            {
-                rgconditionalcolumn = conditionalColumns,
-                cConditionalColumn = conditionalColumns.Length,
-            };
-            var converted = toConvert.GetNativeIndexcreate();
-
-            Assert.IsNotNull(converted.rgconditionalcolumn);
-            Assert.AreEqual((uint) conditionalColumns.Length, converted.cConditionalColumn);
-            Assert.AreEqual("foo", converted.rgconditionalcolumn[0].szColumnName);
-            Assert.AreEqual((uint) ConditionalColumnGrbit.ColumnMustBeNonNull, converted.rgconditionalcolumn[0].grbit);
-            Assert.AreEqual("bar", converted.rgconditionalcolumn[1].szColumnName);
-            Assert.AreEqual((uint) ConditionalColumnGrbit.ColumnMustBeNull, converted.rgconditionalcolumn[1].grbit);
         }
     }
 }

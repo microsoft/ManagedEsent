@@ -358,7 +358,7 @@ namespace InteropApiTests
             Api.JetAddColumn(this.sesid, this.tableid, columnName, columndef, null, 0, out columnid);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
-            Dictionary<string, JET_COLUMNID> dict = Api.GetColumnDictionary(this.sesid, this.tableid);
+            IDictionary<string, JET_COLUMNID> dict = Api.GetColumnDictionary(this.sesid, this.tableid);
             Assert.AreEqual(columnid, dict[columnName]);
         }
 
@@ -369,7 +369,7 @@ namespace InteropApiTests
         [Priority(1)]
         public void GetColumnDictionaryIsCaseInsensitive()
         {
-            Dictionary<string, JET_COLUMNID> dict = Api.GetColumnDictionary(this.sesid, this.tableid);
+            IDictionary<string, JET_COLUMNID> dict = Api.GetColumnDictionary(this.sesid, this.tableid);
             Assert.AreEqual(this.columnidLongText, dict["tEsTcOLuMn"]);
         }
 
@@ -387,6 +387,31 @@ namespace InteropApiTests
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
             Api.JetSetCurrentIndex(this.sesid, this.tableid, indexName);
+        }
+
+        /// <summary>
+        /// Creates an index with JetCreateIndex2
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void CreateIndex2()
+        {
+            Api.JetBeginTransaction(this.sesid);
+
+            const string IndexName = "another_index";
+            const string IndexDescription = "-TestColumn\0\0";
+            var indexcreate = new JET_INDEXCREATE
+            {
+                szIndexName = IndexName,
+                szKey = IndexDescription,
+                cbKey = IndexDescription.Length,
+                grbit = CreateIndexGrbit.IndexIgnoreAnyNull,
+                ulDensity = 100,
+            };
+            Api.JetCreateIndex2(this.sesid, this.tableid, new[] { indexcreate }, 1);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Api.JetSetCurrentIndex(this.sesid, this.tableid, IndexName);
         }
 
         /// <summary>

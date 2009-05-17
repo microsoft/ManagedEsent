@@ -117,7 +117,7 @@ namespace Microsoft.Isam.Esent.Utilities
 
                         using (var transaction = new Transaction(session))
                         {
-                            Dictionary<string, JET_COLUMNID> columnids = Api.GetColumnDictionary(session, table);
+                            IDictionary<string, JET_COLUMNID> columnids = Api.GetColumnDictionary(session, table);
 
                             // Null record
                             int ignored;

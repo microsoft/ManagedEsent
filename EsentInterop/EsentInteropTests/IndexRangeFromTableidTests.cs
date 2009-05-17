@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="IndexRangeTests.cs" company="Microsoft Corporation">
+// <copyright file="IndexRangeFromTableidTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
 //-----------------------------------------------------------------------
@@ -12,19 +12,18 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace InteropApiTests
 {
     /// <summary>
-    /// Tests for the JET_INDEXRANGE class
+    /// Tests for the NATIVE_INDEXRANGE class
     /// </summary>
     [TestClass]
-    public class IndexRangeTests
+    public class IndexRangeFromTableidTests
     {
         /// <summary>
-        /// The managed indexrange that will be converted to a native
-        /// structure.
+        /// The tableid to be converted.
         /// </summary>
-        private JET_INDEXRANGE managed;
+        private JET_TABLEID tableid;
 
         /// <summary>
-        /// The native index list made from the JET_INDEXRANGE.
+        /// The native index list that will be created from the tableid.
         /// </summary>
         private NATIVE_INDEXRANGE native;
 
@@ -35,25 +34,8 @@ namespace InteropApiTests
         [TestInitialize]
         public void Setup()
         {
-            this.managed = new JET_INDEXRANGE
-            {
-                tableid = new JET_TABLEID { Value = (IntPtr) 0x1234 },
-                grbit = IndexRangeGrbit.RecordInIndex,
-            };
-            this.native = this.managed.GetNativeIndexRange();
-        }
-
-        /// <summary>
-        /// Make sure the JET_INDEXRANGE constructor sets the grbit to
-        /// a valid value (there is only one valid grbit, but it is
-        /// non-zero).
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        public void VerifyIndexRangeConstructorSetsGrbit()
-        {
-            var indexrange = new JET_INDEXRANGE();
-            Assert.AreEqual(IndexRangeGrbit.RecordInIndex, indexrange.grbit);
+            this.tableid = new JET_TABLEID { Value = new IntPtr(0x55) };
+            this.native = NATIVE_INDEXRANGE.MakeIndexRangeFromTableid(this.tableid);
         }
 
         /// <summary>
@@ -73,7 +55,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void VerifyMakeIndexRangeFromTableidSetsTableid()
         {
-            Assert.AreEqual(this.managed.tableid.Value, this.native.tableid);
+            Assert.AreEqual(this.tableid.Value, this.native.tableid);
         }
 
         /// <summary>
@@ -83,7 +65,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void VerifyMakeIndexRangeFromTableidSetsGrbit()
         {
-            Assert.AreEqual((uint) this.managed.grbit, this.native.grbit);
+            Assert.AreEqual((uint) IndexRangeGrbit.RecordInIndex, this.native.grbit);
         }
     }
 }
