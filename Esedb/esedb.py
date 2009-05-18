@@ -1202,7 +1202,40 @@ def open(filename, mode='c', lazyupdate=False):
 	
 	If lazyupdate is true, then the transaction logs will be written in
 	a lazy fashion. This will preserve database consistency, but some data
-	will be lost if there is an unexpected shutdown (crash).	
+	will be lost if there is an unexpected shutdown (crash).
+
+	>>> db = open('wdbtest.db', 'n')
+	>>> for i in range(10): db['%d'%i] = '%d'% (i*i)
+	...
+	>>> db['3']
+	'9'
+	>>> db.keys()
+	['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+	>>> db.first()
+	('0', '0')
+	>>> db.next()
+	('1', '1')
+	>>> db.last()
+	('9', '81')
+	>>> db.set_location('2')
+	('2', '4')
+	>>> db.previous()
+	('1', '1')
+	>>> for k, v in db.iteritems():
+	...     print k, v
+	0 0
+	1 1
+	2 4
+	3 9
+	4 16
+	5 25
+	6 36
+	7 49
+	8 64
+	9 81
+	>>> '8' in db
+	True
+	>>> db.close()
 	
 	"""
 	filename = Path.GetFullPath(filename)
@@ -1261,6 +1294,7 @@ if __name__ == '__main__':
 	__test__['last'] = EseDBCursor.last
 	__test__['next'] = EseDBCursor.next
 	__test__['previous'] = EseDBCursor.previous
+	__test__['open'] = open
 	import doctest
 	doctest.testmod()
 	
