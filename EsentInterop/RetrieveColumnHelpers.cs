@@ -13,8 +13,6 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Helper methods for the ESENT API. These aren't interop versions
     /// of the API, but encapsulate very common uses of the functions.
-    /// The methods that operate on unsigned numbers are
-    /// internal so that the public API remains CLS compliant.
     /// </summary>
     public static partial class Api
     {
@@ -596,8 +594,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor to retrieve the column from.</param>
         /// <param name="columnid">The columnid to retrieve.</param>
         /// <returns>The data retrieved from the column as an UInt16. Null if the column is null.</returns>
-        /// <remarks>Internal becaue unsigned types aren't CLS compliant.</remarks>
-        internal static ushort? RetrieveColumnAsUInt16(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
+        /// <remarks>public becaue unsigned types aren't CLS compliant.</remarks>
+        public static ushort? RetrieveColumnAsUInt16(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
             return RetrieveColumnAsUInt16(sesid, tableid, columnid, RetrieveColumnGrbit.None);
         }
@@ -611,8 +609,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="columnid">The columnid to retrieve.</param>
         /// <param name="grbit">Retrieval options.</param>
         /// <returns>The data retrieved from the column as an UInt16. Null if the column is null.</returns>
-        /// <remarks>Internal becaue unsigned types aren't CLS compliant.</remarks>
-        internal static ushort? RetrieveColumnAsUInt16(
+        /// <remarks>public becaue unsigned types aren't CLS compliant.</remarks>
+        public static ushort? RetrieveColumnAsUInt16(
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {
             unsafe
@@ -635,8 +633,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor to retrieve the column from.</param>
         /// <param name="columnid">The columnid to retrieve.</param>
         /// <returns>The data retrieved from the column as an UInt32. Null if the column is null.</returns>
-        /// <remarks>Internal becaue unsigned types aren't CLS compliant.</remarks>
-        internal static uint? RetrieveColumnAsUInt32(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
+        /// <remarks>public becaue unsigned types aren't CLS compliant.</remarks>
+        public static uint? RetrieveColumnAsUInt32(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
             return RetrieveColumnAsUInt32(sesid, tableid, columnid, RetrieveColumnGrbit.None);
         }
@@ -650,8 +648,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="columnid">The columnid to retrieve.</param>
         /// <param name="grbit">Retrieval options.</param>
         /// <returns>The data retrieved from the column as an UInt32. Null if the column is null.</returns>
-        /// <remarks>Internal becaue unsigned types aren't CLS compliant.</remarks>
-        internal static uint? RetrieveColumnAsUInt32(
+        /// <remarks>public becaue unsigned types aren't CLS compliant.</remarks>
+        public static uint? RetrieveColumnAsUInt32(
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {
             unsafe
@@ -674,8 +672,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor to retrieve the column from.</param>
         /// <param name="columnid">The columnid to retrieve.</param>
         /// <returns>The data retrieved from the column as an UInt64. Null if the column is null.</returns>
-        /// <remarks>Internal becaue unsigned types aren't CLS compliant.</remarks>
-        internal static ulong? RetrieveColumnAsUInt64(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
+        /// <remarks>public becaue unsigned types aren't CLS compliant.</remarks>
+        public static ulong? RetrieveColumnAsUInt64(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
             return RetrieveColumnAsUInt64(sesid, tableid, columnid, RetrieveColumnGrbit.None);
         }
@@ -689,8 +687,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="columnid">The columnid to retrieve.</param>
         /// <param name="grbit">Retrieval options.</param>
         /// <returns>The data retrieved from the column as an UInt64. Null if the column is null.</returns>
-        /// <remarks>Internal becaue unsigned types aren't CLS compliant.</remarks>
-        internal static ulong? RetrieveColumnAsUInt64(
+        /// <remarks>public becaue unsigned types aren't CLS compliant.</remarks>
+        public static ulong? RetrieveColumnAsUInt64(
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {
             unsafe

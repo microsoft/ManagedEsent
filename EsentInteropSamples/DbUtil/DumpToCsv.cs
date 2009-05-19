@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Isam.Esent.Interop;
+using Microsoft.Isam.Esent.Interop.Vista;
 
 namespace Microsoft.Isam.Esent.Utilities
 {
@@ -32,11 +33,11 @@ namespace Microsoft.Isam.Esent.Utilities
                 return s;
             }
 
-            char quote = '"';
-            char comma = ',';
+            const char Quote = '"';
+            const char Comma = ',';
 
             // first, double any existing quotes
-            if (s.Contains(quote))
+            if (s.Contains(Quote))
             {
                 s = s.Replace("\"", "\"\"");
             }
@@ -50,8 +51,8 @@ namespace Microsoft.Isam.Esent.Utilities
             //  5. Value contains a newline
             if (Char.IsWhiteSpace(s[0])
                 || Char.IsWhiteSpace(s[s.Length - 1])
-                || s.Contains(comma)
-                || s.Contains(quote)
+                || s.Contains(Comma)
+                || s.Contains(Quote)
                 || s.Contains(Environment.NewLine))
             {
                 s = String.Format("\"{0}\"", s);
@@ -97,7 +98,7 @@ namespace Microsoft.Isam.Esent.Utilities
             string database = args[0];
             string tableName = args[1];
 
-            string comma = ",";
+            const string Comma = ",";
 
             using (var instance = new Instance("dumptocsv"))
             {
@@ -124,6 +125,7 @@ namespace Microsoft.Isam.Esent.Utilities
                             case JET_coltyp.Bit:
                                 columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsBoolean(s, t, columnid)));
                                 break;
+                            case VistaColtyp.LongLong:
                             case JET_coltyp.Currency:
                                 columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsInt64(s, t, columnid)));
                                 break;
@@ -147,6 +149,15 @@ namespace Microsoft.Isam.Esent.Utilities
                             case JET_coltyp.UnsignedByte:
                                 columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsByte(s, t, columnid)));
                                 break;
+                            case VistaColtyp.UnsignedShort:
+                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsUInt16(s, t, columnid)));
+                                break;
+                            case VistaColtyp.UnsignedLong:
+                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsUInt32(s, t, columnid)));
+                                break;
+                            case VistaColtyp.GUID:
+                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsGuid(s, t, columnid)));
+                                break;
                             case JET_coltyp.Binary:
                             case JET_coltyp.LongBinary:
                             case JET_coltyp.DateTime:
@@ -156,7 +167,7 @@ namespace Microsoft.Isam.Esent.Utilities
                         }
                     }
 
-                    Console.WriteLine(String.Join(comma, columnNames.ToArray()));
+                    Console.WriteLine(String.Join(Comma, columnNames.ToArray()));
 
                     using (var table = new Table(session, dbid, tableName, OpenTableGrbit.ReadOnly))
                     {
@@ -167,7 +178,7 @@ namespace Microsoft.Isam.Esent.Utilities
                         {
                             IEnumerable<string> columnData = from formatter in columnFormatters
                                              select Dbutil.QuoteForCsv(formatter(session, table));
-                            Console.WriteLine(String.Join(comma, columnData.ToArray()));
+                            Console.WriteLine(String.Join(Comma, columnData.ToArray()));
                         }
 
                         Api.JetResetTableSequential(session, table, ResetTableSequentialGrbit.None);

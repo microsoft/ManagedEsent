@@ -13,8 +13,6 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Helper methods for the ESENT API. These do data conversion for
     /// setting columns.
-    /// The methods that operate on unsigned numbers are
-    /// internal so that the public API remains CLS compliant.
     /// </summary>
     public static partial class Api
     {
@@ -285,7 +283,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor to update. An update should be prepared.</param>
         /// <param name="columnid">The columnid to set.</param>
         /// <param name="data">The data to set.</param>
-        internal static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, ushort data)
+        public static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, ushort data)
         {
             unsafe
             {
@@ -303,7 +301,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor to update. An update should be prepared.</param>
         /// <param name="columnid">The columnid to set.</param>
         /// <param name="data">The data to set.</param>
-        internal static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, uint data)
+        public static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, uint data)
         {
             unsafe
             {
@@ -321,7 +319,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor to update. An update should be prepared.</param>
         /// <param name="columnid">The columnid to set.</param>
         /// <param name="data">The data to set.</param>
-        internal static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, ulong data)
+        public static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, ulong data)
         {
             unsafe
             {
