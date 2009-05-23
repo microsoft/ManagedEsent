@@ -4,6 +4,9 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using Microsoft.Isam.Esent.Interop.Vista;
+using Microsoft.Isam.Esent.Interop.Windows7;
+
 namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
@@ -99,26 +102,116 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Set a system parameter which is a string.
+        /// Gets the maximum key size. This depends on the Esent version and database
+        /// page size.
+        /// <para>
+        /// Supported on Windows Vista and up. Ignored on Windows XP and
+        /// Windows Server 2003.
+        /// </para>
         /// </summary>
-        /// <param name="param">The parameter to set.</param>
-        /// <param name="value">The value to set.</param>
-        private static void SetStringParameter(JET_param param, string value)
+        public static int KeyMost
         {
-            Api.JetSetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, param, 0, value);
+            get
+            {
+                if (EsentVersion.SupportsVistaFeatures)
+                {
+                    return SystemParameters.GetIntegerParameter(VistaParam.KeyMost);
+                }
+
+                // All pre-Vista versions of Esent have 255 byte keys
+                return 255; 
+            }
         }
 
         /// <summary>
-        /// Get a system parameter which is a string.
+        /// Gets the lv chunks size. This depends on the database page size.
+        /// <para>
+        /// Supported on Windows 7 and up. Ignored on Windows XP,
+        /// Windows Server 2003, Windows Vista and Windows Server 2008.
+        /// </para>
         /// </summary>
-        /// <param name="param">The parameter to get.</param>
-        /// <returns>The value of the parameter.</returns>
-        private static string GetStringParameter(JET_param param)
+        public static int LVChunkSizeMost
         {
-            int ignored = 0;
-            string value;
-            Api.JetGetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, param, ref ignored, out value, 1024);
-            return value;
+            get
+            {
+                if (EsentVersion.SupportsWindows7Features)
+                {
+                    return SystemParameters.GetIntegerParameter(Windows7Param.LVChunkSizeMost);
+                }
+
+                // Can't retrieve the size directly, determine it from the database page size
+                const int ColumnLvPageOverhead = 82;
+                return SystemParameters.GetIntegerParameter(JET_param.DatabasePageSize) - ColumnLvPageOverhead;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value specifying the default values for the
+        /// entire set of system parameters. When this parameter is set to
+        /// a specific configuration, all system parameter values are reset
+        /// to their default values for that configuration. If the
+        /// configuration is set for a specific instance then global system
+        /// parameters will not be reset to their default values.
+        /// Small Configuration (0): The database engine is optimized for memory use. 
+        /// Legacy Configuration (1): The database engine has its traditional defaults.
+        /// <para>
+        /// Supported on Windows Vista and up. Ignored on Windows XP and
+        /// Windows Server 2003.
+        /// </para>
+        /// </summary>
+        public static int Configuration
+        {
+            get
+            {
+                if (EsentVersion.SupportsVistaFeatures)
+                {
+                    return GetIntegerParameter(VistaParam.Configuration);
+                }
+
+                // return the legacy configuration value
+                return 1;
+            }
+
+            set
+            {
+                if (EsentVersion.SupportsVistaFeatures)
+                {
+                    SetIntegerParameter(VistaParam.Configuration, value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the database engine accepts
+        /// or rejects changes to a subset of the system parameters. This
+        /// parameter is used in conjunction with <see cref="Configuration"/> to
+        /// prevent some system parameters from being set away from the selected
+        /// configuration's defaults.
+        /// <para>
+        /// Supported on Windows Vista and up. Ignored on Windows XP and
+        /// Windows Server 2003.
+        /// </para>
+        /// </summary>
+        public static bool EnableAdvanced
+        {
+            get
+            {
+                if (EsentVersion.SupportsVistaFeatures)
+                {
+                    return GetBoolParameter(VistaParam.EnableAdvanced);
+                }
+
+                // older versions always allow advanced settings
+                return true;
+            }
+
+            set
+            {
+                if (EsentVersion.SupportsVistaFeatures)
+                {
+                    SetBoolParameter(VistaParam.EnableAdvanced, value);
+                }
+            }
         }
 
         /// <summary>
@@ -142,6 +235,30 @@ namespace Microsoft.Isam.Esent.Interop
             string ignored;
             Api.JetGetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, param, ref value, out ignored, 0);
             return value;
+        }
+
+        /// <summary>
+        /// Set a system parameter which is a boolean.
+        /// </summary>
+        /// <param name="param">The parameter to set.</param>
+        /// <param name="value">The value to set.</param>
+        private static void SetBoolParameter(JET_param param, bool value)
+        {
+            int setting = value ? 1 : 0;
+            Api.JetSetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, param, 1, null);
+        }
+
+        /// <summary>
+        /// Get a system parameter which is a boolean.
+        /// </summary>
+        /// <param name="param">The parameter to get.</param>
+        /// <returns>The value of the parameter.</returns>
+        private static bool GetBoolParameter(JET_param param)
+        {
+            int value = 0;
+            string ignored;
+            Api.JetGetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, param, ref value, out ignored, 0);
+            return value != 0;
         }
     }
 }

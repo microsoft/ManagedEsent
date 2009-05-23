@@ -6,6 +6,8 @@
 
 using System;
 using System.IO;
+using Microsoft.Isam.Esent.Interop.Vista;
+using Microsoft.Isam.Esent.Interop.Windows7;
 
 namespace Microsoft.Isam.Esent.Interop
 {
@@ -413,6 +415,71 @@ namespace Microsoft.Isam.Esent.Interop
             set
             {
                 this.SetBoolParameter(JET_param.CreatePathIfNotExist, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value giving the number of B+ Tree resources cached by
+        /// the instance after the tables they represent have been closed by
+        /// the application. Large values for this parameter will cause the
+        /// database engine to use more memory but will increase the speed
+        /// with which a large number of tables can be opened randomly by
+        /// the application. This is useful for applications that have a
+        /// schema with a very large number of tables.
+        /// <para>
+        /// Supported on Windows Vista and up. Ignored on Windows XP and
+        /// Windows Server 2003.
+        /// </para>
+        /// </summary>
+        public int CachedClosedTables
+        {
+            get
+            {
+                if (EsentVersion.SupportsVistaFeatures)
+                {
+                    return this.GetIntegerParameter(VistaParam.CachedClosedTables);
+                }
+
+                return 0;
+            }
+
+            set
+            {
+                if (EsentVersion.SupportsVistaFeatures)
+                {
+                    this.SetIntegerParameter(VistaParam.CachedClosedTables, value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a the number of logs that esent will defer database
+        /// flushes for. This can be used to increase database recoverability if
+        /// failures cause logfiles to be lost.
+        /// <para>
+        /// Supported on Windows 7 and up. Ignored on Windows XP,
+        /// Windows Server 2003, Windows Vista and Windows Server 2008.
+        /// </para>
+        /// </summary>
+        public int WaypointLatency
+        {
+            get
+            {
+                if (EsentVersion.SupportsWindows7Features)
+                {
+                    return this.GetIntegerParameter(Windows7Param.WaypointLatency);
+                }
+
+                // older versions have no waypoint
+                return 0;
+            }
+
+            set
+            {
+                if (EsentVersion.SupportsWindows7Features)
+                {
+                    this.SetIntegerParameter(Windows7Param.WaypointLatency, value);
+                }
             }
         }
 

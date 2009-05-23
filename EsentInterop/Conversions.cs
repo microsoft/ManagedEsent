@@ -13,7 +13,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// Provide methods to convert data and flags between 
     /// Win32 and the .NET Framework.
     /// </summary>
-    internal static class Conversions
+    public static class Conversions
     {
         /// <summary>
         /// Maps a CompareOption enumeration to the corresponding LCMapString flag.
@@ -51,7 +51,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="lcmapFlags">LCMapString flags.</param>
         /// <returns>CompareOptions describing the (known) flags.</returns>
-        public static CompareOptions CompareOptionsFromLCmapFlags(uint lcmapFlags)
+        public static CompareOptions CompareOptionsFromLCMapFlags(uint lcmapFlags)
         {
             // This should be a template, but there isn't an elegant way to express than with C# generics
             CompareOptions options = CompareOptions.None;

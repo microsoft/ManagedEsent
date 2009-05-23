@@ -184,6 +184,11 @@ namespace Microsoft.Isam.Esent.Interop
         public static extern int JetCreateIndex2(
             IntPtr sesid, IntPtr tableid, NATIVE_INDEXCREATE[] pindexcreate, uint cIndexCreate);
 
+        // More modern versions of Esent take the larger NATIVE_INDEXCREATE2 structures
+        [DllImport(EsentDll, CharSet = EsentCharSet)]
+        public static extern int JetCreateIndex2(
+            IntPtr sesid, IntPtr tableid, NATIVE_INDEXCREATE2[] pindexcreate, uint cIndexCreate);
+
         [DllImport(EsentDll, CharSet = EsentCharSet)]
         public static extern int JetGetTableColumnInfo(IntPtr sesid, IntPtr tableid, string szColumnName, ref NATIVE_COLUMNDEF columndef, uint cbMax, uint InfoLevel);
 

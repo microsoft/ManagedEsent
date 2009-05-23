@@ -268,6 +268,45 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test setting and retrieving the CachedClosedTables parameter (if esent supports it)
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void CachedClosedTablesVistaParameter()
+        {
+            if (EsentVersion.SupportsVistaFeatures)
+            {
+                this.IntegerParameterTest(VistaParam.CachedClosedTables, 500);
+            }
+        }
+
+        /// <summary>
+        /// Test retrieving the KeyMost parameter (if esent supports it)
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void KeyMostVistaParameter()
+        {
+            if (EsentVersion.SupportsVistaFeatures)
+            {
+                JET_INSTANCE instance;
+                Api.JetCreateInstance(out instance, "IntParameterTest");
+                try
+                {
+                    int keyMost = 0;
+                    string ignored;
+                    Api.JetGetSystemParameter(instance, JET_SESID.Nil, VistaParam.KeyMost, ref keyMost, out ignored, 0);
+
+                    Assert.IsTrue(keyMost > 255);
+                }
+                finally
+                {
+                    Api.JetTerm(instance);
+                }
+            }
+        }
+
+        /// <summary>
         /// Test setting and retrieving the WaypointLatency parameter (if esent supports it)
         /// </summary>
         [TestMethod]

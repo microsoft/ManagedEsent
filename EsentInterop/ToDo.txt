@@ -3,15 +3,7 @@
   - Add XML headers to all functions/fields and re-enable StyleCop errors
   - Sample code that wraps the ColumnStream in a BufferedStream for performance
   - More JET_param parameters
-	- JET_paramEventSourceKey
-
- TESTING
- -------
-  - JetRetrieveKey
-  - Set a long-value at a different offset
-  - Exercise the ColumnStream more (seeking)
-  - Create a column with a default value
-  - Retrieve copy
+	- RetrieveColumnSize
 	
 Pri 1 APIs: New functionality
 ------------------------------
@@ -23,7 +15,6 @@ Pri 1 APIs: New functionality
   - JetGetCurrentIndex
   - JetGetInstanceInfo
   - JetGetSecondaryIndexBookmark
-  - JetGetVersion
   - JetGotoSecondaryIndexBookmark 
   - JetGrowDatabase
   - JetIdle
@@ -39,5 +30,4 @@ Pri 2 APIs: Extending functionality
   - JetSetCurrentIndex2
   - JetSetCurrentIndex3
   - JetSetCurrentIndex4
-  - JetTerm2
   

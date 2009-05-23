@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="ApiConstants.cs" />
     <Compile Include="Conversions.cs" />
+    <Compile Include="VistaGrbits.cs" />
     <Compile Include="EsentInvalidColumnException.cs" />
     <Compile Include="EnumerableColumnInfo.cs" />
     <Compile Include="GCHandleCollection.cs" />

@@ -354,7 +354,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Try to store long-value columns in the record, even if they exceed the default
         /// separation size.
         /// </summary>
-        IntrinsicLV	= 0x400,
+        IntrinsicLV = 0x400,
     }
 
     /// <summary>

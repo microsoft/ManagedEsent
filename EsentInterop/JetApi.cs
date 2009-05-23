@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
+using Microsoft.Isam.Esent.Interop.Vista;
 
 namespace Microsoft.Isam.Esent.Interop.Implementation
 {
@@ -18,27 +19,43 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
     /// </summary>
     internal class JetApi : IJetApi
     {
+        /// <summary>
+        /// API call tracing.
+        /// </summary>
         private readonly TraceSwitch traceSwitch = new TraceSwitch("ESENT P/Invoke", "P/Invoke calls to ESENT");
 
-        private JetCapabilities capabilities;
+        /// <summary>
+        /// The version of esent. If this is zero then it is looked up
+        /// with <see cref="JetGetVersion"/>.
+        /// </summary>
+        private readonly uint versionOverride;
+
+        /// <summary>
+        /// Initializes a new instance of the JetApi class. This allows the version
+        /// to be set.
+        /// </summary>
+        /// <param name="version">
+        /// The version of Esent. This is used to override the results of
+        /// <see cref="JetGetVersion"/>.
+        /// </param>
+        public JetApi(uint version)
+        {
+            this.versionOverride = version;
+            this.DetermineCapabilities();
+        }
 
         /// <summary>
         /// Initializes a new instance of the JetApi class.
         /// </summary>
         public JetApi()
         {
+            Debug.Assert(0 == this.versionOverride, "Expected version to be 0");
             this.DetermineCapabilities();
         }
 
         #region init/term
 
-        public JetCapabilities Capabilities
-        {
-            get
-            {
-                return this.capabilities;
-            }
-        }
+        public JetCapabilities Capabilities { get; private set; }
 
         public int JetCreateInstance(out JET_INSTANCE instance, string name)
         {
@@ -162,7 +179,22 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetGetVersion");
             uint nativeVersion;
-            int err = this.Err(NativeMethods.JetGetVersion(sesid.Value, out nativeVersion));
+            int err;
+
+            if (0 != this.versionOverride)
+            {
+                // We have an explicitly set version
+                Trace.WriteLineIf(
+                    this.traceSwitch.TraceVerbose, String.Format("JetGetVersion overridden with 0x{0:X}", this.versionOverride));
+                nativeVersion = this.versionOverride;
+                err = 0;
+            }
+            else
+            {
+                // Get the version from Esent
+                err = this.Err(NativeMethods.JetGetVersion(sesid.Value, out nativeVersion));                
+            }
+
             version = (int) nativeVersion;
             return err;
         }
@@ -434,9 +466,6 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_INDEXCREATE[] indexcreates,
             int numIndexCreates)
         {
-            // LCID field of JET_INDEXCREATE actually points to a JET_UNICODEINDEX struct to allow user-defined LCMapString() flags
-            const CreateIndexGrbit IndexUnicode = (CreateIndexGrbit)0x00000800;
-
             this.TraceFunctionCall("JetCreateIndex2");
             this.CheckNotNull(indexcreates, "indexcreates");
             this.CheckNotNegative(numIndexCreates, "numIndexCreates");
@@ -446,30 +475,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     "numIndexCreates", numIndexCreates, "numIndexCreates is larger than the number of indexes passed in");
             }
 
-            var nativeIndexcreates = new NATIVE_INDEXCREATE[indexcreates.Length];
-            for (int i = 0; i < numIndexCreates; ++i)
+            if (this.Capabilities.SupportsVistaFeatures)
             {
-                nativeIndexcreates[i] = indexcreates[i].GetNativeIndexcreate();
+                return this.CreateIndexes2(sesid, tableid, indexcreates, numIndexCreates);                
             }
 
-            // pin the memory
-            using (var handles = new GCHandleCollection())
-            {
-                for (int i = 0; i < numIndexCreates; ++i)
-                {
-                    if (null != indexcreates[i].pidxUnicode)
-                    {
-                        NATIVE_UNICODEINDEX unicode = indexcreates[i].pidxUnicode.GetNativeUnicodeIndex();
-                        nativeIndexcreates[i].pidxUnicode = handles.Add(unicode);
-                        nativeIndexcreates[i].grbit |= (uint) IndexUnicode;
-                    }
-                    ////nativeIndexcreates[i].rgconditionalcolumn = handles.Add(indexcreates[i].rgconditionalcolumn);
-                }
-
-                return
-                    this.Err(
-                        NativeMethods.JetCreateIndex2(sesid.Value, tableid.Value, nativeIndexcreates, (uint) numIndexCreates));
-            }
+            return this.CreateIndexes(sesid, tableid, indexcreates, numIndexCreates);
         }
 
         public int JetGetTableColumnInfo(
@@ -1014,13 +1025,85 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         #region Helper Methods
 
         /// <summary>
+        /// Creates indexes over data in an ESE database.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to create the index on.</param>
+        /// <param name="indexcreates">Array of objects describing the indexes to be created.</param>
+        /// <param name="numIndexCreates">Number of index description objects.</param>
+        /// <returns>An error code.</returns>
+        private int CreateIndexes(JET_SESID sesid, JET_TABLEID tableid, JET_INDEXCREATE[] indexcreates, int numIndexCreates)
+        {
+            var nativeIndexcreates = new NATIVE_INDEXCREATE[indexcreates.Length];
+            for (int i = 0; i < numIndexCreates; ++i)
+            {
+                nativeIndexcreates[i] = indexcreates[i].GetNativeIndexcreate();
+            }
+
+            // pin the memory
+            using (var handles = new GCHandleCollection())
+            {
+                for (int i = 0; i < numIndexCreates; ++i)
+                {
+                    if (null != indexcreates[i].pidxUnicode)
+                    {
+                        NATIVE_UNICODEINDEX unicode = indexcreates[i].pidxUnicode.GetNativeUnicodeIndex();
+                        nativeIndexcreates[i].pidxUnicode = handles.Add(unicode);
+                        nativeIndexcreates[i].grbit |= (uint)VistaGrbits.IndexUnicode;
+                    }
+                    ////nativeIndexcreates[i].rgconditionalcolumn = handles.Add(indexcreates[i].rgconditionalcolumn);
+                }
+
+                return
+                    this.Err(
+                        NativeMethods.JetCreateIndex2(sesid.Value, tableid.Value, nativeIndexcreates, (uint)numIndexCreates));
+            }
+        }
+
+        /// <summary>
+        /// Creates indexes over data in an ESE database.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to create the index on.</param>
+        /// <param name="indexcreates">Array of objects describing the indexes to be created.</param>
+        /// <param name="numIndexCreates">Number of index description objects.</param>
+        /// <returns>An error code.</returns>
+        private int CreateIndexes2(JET_SESID sesid, JET_TABLEID tableid, JET_INDEXCREATE[] indexcreates, int numIndexCreates)
+        {
+            var nativeIndexcreates = new NATIVE_INDEXCREATE2[indexcreates.Length];
+            for (int i = 0; i < numIndexCreates; ++i)
+            {
+                nativeIndexcreates[i] = indexcreates[i].GetNativeIndexcreate2();
+            }
+
+            // pin the memory
+            using (var handles = new GCHandleCollection())
+            {
+                for (int i = 0; i < numIndexCreates; ++i)
+                {
+                    if (null != indexcreates[i].pidxUnicode)
+                    {
+                        NATIVE_UNICODEINDEX unicode = indexcreates[i].pidxUnicode.GetNativeUnicodeIndex();
+                        nativeIndexcreates[i].indexcreate.pidxUnicode = handles.Add(unicode);
+                        nativeIndexcreates[i].indexcreate.grbit |= (uint)VistaGrbits.IndexUnicode;
+                    }
+                    ////nativeIndexcreates[i].rgconditionalcolumn = handles.Add(indexcreates[i].rgconditionalcolumn);
+                }
+
+                return
+                    this.Err(
+                        NativeMethods.JetCreateIndex2(sesid.Value, tableid.Value, nativeIndexcreates, (uint)numIndexCreates));
+            }
+        }
+
+        /// <summary>
         /// Calculates the capabilities of the current Esent version.
         /// </summary>
         private void DetermineCapabilities()
         {
             // Create new capabilities, set as all false. This will allow
             // us to call into Esent.
-            this.capabilities = new JetCapabilities();
+            this.Capabilities = new JetCapabilities();
 
             var version = (uint)this.GetVersionFromEsent();
             var buildNumber = (int)((version & 0xFFFFFF) >> 8);
@@ -1032,15 +1115,17 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             if (buildNumber >= 6000)
             {
                 Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports Vista features");
-                this.capabilities.SupportsVistaFeatures = true;
+                this.Capabilities.SupportsVistaFeatures = true;
                 Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports Unicode paths");
-                this.capabilities.SupportsUnicodePaths = true;
+                this.Capabilities.SupportsUnicodePaths = true;
+                Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports large keys");
+                this.Capabilities.SupportsLargeKeys = true;
             }
 
             if (buildNumber >= 7000)
             {
                 Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports Windows 7 features");
-                this.capabilities.SupportsWindows7Features = true;
+                this.Capabilities.SupportsWindows7Features = true;
             }
         }
 

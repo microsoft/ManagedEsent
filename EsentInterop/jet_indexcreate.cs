@@ -7,6 +7,7 @@
 using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using Microsoft.Isam.Esent.Interop.Vista;
 
 namespace Microsoft.Isam.Esent.Interop
 {
@@ -27,6 +28,17 @@ namespace Microsoft.Isam.Esent.Interop
         public IntPtr rgconditionalcolumn;
         public uint cConditionalColumn;
         public int err;
+    }
+
+    /// <summary>
+    /// The native version of the JET_INDEXCREATE structure. This version includes the cbKeyMost
+    /// member, which is only valid on Windows Vista and above.
+    /// </summary>
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct NATIVE_INDEXCREATE2
+    {
+        public NATIVE_INDEXCREATE indexcreate;
+        public uint cbKeyMost;
     }
 
     /// <summary>
@@ -97,6 +109,21 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_err err { get; set; }
 
         /// <summary>
+        /// Gets or sets the maximum allowable size, in bytes, for keys in the index.
+        /// The minimum supported maximum key size is JET_cbKeyMostMin (255) which
+        /// is the legacy maximum key size. The maximum key size is dependent on
+        /// the database page size <see cref="JET_param.DatabasePageSize"/>.
+        /// <para>
+        /// This parameter is ignored on Windows XP and Windows Server 2003.
+        /// </para>
+        /// <para>
+        /// Unlike the unmanaged API JET_bitIndexKeyMost is not needed, it will
+        /// be added automatically.
+        /// </para>
+        /// </summary>
+        public int cbKeyMost { get; set; }
+
+        /// <summary>
         /// Gets the native (interop) version of this object.
         /// </summary>
         /// <returns>The native (interop) version of this object.</returns>
@@ -113,6 +140,24 @@ namespace Microsoft.Isam.Esent.Interop
             native.cbVarSegMac = new IntPtr(this.cbVarSegMac);
 
             native.cConditionalColumn = (uint) this.cConditionalColumn;
+            return native;
+        }
+
+        /// <summary>
+        /// Gets the native (interop) version of this object.
+        /// </summary>
+        /// <returns>The native (interop) version of this object.</returns>
+        internal NATIVE_INDEXCREATE2 GetNativeIndexcreate2()
+        {
+            var native = new NATIVE_INDEXCREATE2();
+            native.indexcreate = this.GetNativeIndexcreate();
+            native.indexcreate.cbStruct = (uint)Marshal.SizeOf(native);
+            if (0 != this.cbKeyMost)
+            {
+                native.cbKeyMost = (uint)this.cbKeyMost;
+                native.indexcreate.grbit |= (uint)VistaGrbits.IndexKeyMost;
+            }
+
             return native;
         }
     }

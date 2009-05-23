@@ -17,6 +17,7 @@
 //      eliminate a lot of common Api errors.
 //  -   Provide helper methods/objects for common operations. These will be layered
 //      on top of the ESENT Api.
+//  -   Minimize the interop overhead.
 //  Changes that will be made are:
 //  -   Convert JET_coltyp etc. into real enumerations
 //  -   Removing cbStruct from structures
@@ -117,9 +118,6 @@ namespace Microsoft.Isam.Esent.Interop
         /// allocated then a new one is created and the engine
         /// will operate in single-instance mode.
         /// </param>
-        /// <remarks>
-        /// For Windows 2000 only single-instance mode is supported.
-        /// </remarks>
         public static void JetInit(ref JET_INSTANCE instance)
         {
             Api.Check(Impl.JetInit(ref instance));
@@ -145,8 +143,8 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Terminate an instance that was created with JetInit or
-        /// JetCreateInstance.
+        /// Terminate an instance that was created with <see cref="JetInit"/> or
+        /// <see cref="JetCreateInstance"/>.
         /// </summary>
         /// <param name="instance">The instance to terminate.</param>
         public static void JetTerm(JET_INSTANCE instance)
@@ -155,8 +153,8 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Terminate an instance that was created with JetInit or
-        /// JetCreateInstance.
+        /// Terminate an instance that was created with <see cref="JetInit"/> or
+        /// <see cref="JetCreateInstance"/>.
         /// </summary>
         /// <param name="instance">The instance to terminate.</param>
         /// <param name="grbit">Termination options.</param>
@@ -227,7 +225,7 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// Attaches a database file for use with a database instance. In order to use the
-        /// database, it will need to be subsequently opened with JetOpenDatabase.
+        /// database, it will need to be subsequently opened with <see cref="JetOpenDatabase"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="database">The database to attach.</param>
@@ -239,7 +237,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Opens a previously attached database,using the JetAttachDatabase function,
+        /// Opens a database previously attached with <see cref="JetAttachDatabase"/>,
         /// for use with a database session. This function can be called multiple times
         /// for the same database.
         /// </summary>
@@ -255,8 +253,8 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Closes a database file that was previously opened with JetOpenDatabase or
-        /// created with JetCreateDatabase.
+        /// Closes a database file that was previously opened with <see cref="JetOpenDatabase"/> or
+        /// created with <see cref="JetCreateDatabase"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="dbid">The database to close.</param>
@@ -296,7 +294,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// Associates a session with the current thread using the given context
         /// handle. This association overrides the default engine requirement
         /// that a transaction for a given session must occur entirely on the
-        /// same thread. 
+        /// same thread. Use <see cref="JetResetSessionContext"/> to remove the
+        /// association.
         /// </summary>
         /// <param name="sesid">The session to set the context on.</param>
         /// <param name="context">The context to set.</param>
@@ -307,7 +306,7 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// Disassociates a session from the current thread. This should be
-        /// used in conjunction with JetSetSessionContext.
+        /// used in conjunction with <see cref="JetSetSessionContext"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         public static void JetResetSessionContext(JET_SESID sesid)
@@ -521,7 +520,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Creates indexes over data in an ESE database
+        /// Creates indexes over data in an ESE database.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The table to create the index on.</param>
@@ -535,7 +534,6 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetCreateIndex2(sesid, tableid, indexcreates, numIndexCreates));            
         }
-
 
         /// <summary>
         /// Retrieves information about a table column.
@@ -692,7 +690,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Retrieves the bookmark for the record that is associated with the index entry
         /// at the current position of a cursor. This bookmark can then be used to
-        /// reposition that cursor back to the same record using JetGotoBookmark. 
+        /// reposition that cursor back to the same record using <see cref="JetGotoBookmark"/>. 
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to retrieve the bookmark from.</param>
@@ -728,6 +726,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// of a column, before retrieving the column data itself so that application
         /// buffers can be sized appropriately.  
         /// </summary>
+        /// <remarks>
+        /// The RetrieveColumnAs functions provide datatype-specific retrieval functions.
+        /// </remarks>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to retrieve the column from.</param>
         /// <param name="columnid">The columnid to retrieve.</param>
@@ -765,7 +766,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Navigate through an index. The cursor can be positioned at the start or
         /// end of the index and moved backwards and forwards by a specified number
-        /// of index entries.
+        /// of index entries. Also see
+        /// <seealso cref="TryMoveFirst"/>, <seealso cref="TryMoveLast"/>,
+        /// <seealso cref="TryMoveNext"/>, <seealso cref="TryMovePrevious"/>.
         /// </summary>
         /// <param name="sesid">The session to use for the call.</param>
         /// <param name="tableid">The cursor to position.</param>
@@ -779,7 +782,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Navigate through an index. The cursor can be positioned at the start or
         /// end of the index and moved backwards and forwards by a specified number
-        /// of index entries.
+        /// of index entries. Also see
+        /// <seealso cref="TryMoveFirst"/>, <seealso cref="TryMoveLast"/>,
+        /// <seealso cref="TryMoveNext"/>, <seealso cref="TryMovePrevious"/>.
         /// </summary>
         /// <param name="sesid">The session to use for the call.</param>
         /// <param name="tableid">The cursor to position.</param>
@@ -791,7 +796,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Constructs search keys that may then be used by JetSeek and JetSetIndexRange.
+        /// Constructs search keys that may then be used by <see cref="JetSeek"/> and <see cref="JetSetIndexRange"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to create the key on.</param>
@@ -819,6 +824,7 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// Retrieves the key for the index entry at the current position of a cursor.
+        /// Also see <seealso cref="RetrieveKey"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to retrieve the key from.</param>
@@ -835,6 +841,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Efficiently positions a cursor to an index entry that matches the search
         /// criteria specified by the search key in that cursor and the specified
         /// inequality. A search key must have been previously constructed using JetMakeKey.
+        /// Also see <seealso cref="TrySeek"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to position.</param>
@@ -850,7 +857,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// JetMove to those starting from the current index entry and ending at the index
         /// entry that matches the search criteria specified by the search key in that cursor
         /// and the specified bound criteria. A search key must have been previously constructed
-        /// using JetMakeKey. 
+        /// using JetMakeKey. Also see <seealso cref="TrySetIndexRange"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to set the index range on.</param>
@@ -863,7 +870,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Computes the intersection between multiple sets of index entries from different secondary
         /// indices over the same table. This operation is useful for finding the set of records in a
-        /// table that match two or more criteria that can be expressed using index ranges. 
+        /// table that match two or more criteria that can be expressed using index ranges. Also see
+        /// <seealso cref="IntersectIndexes"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="ranges">
@@ -957,7 +965,7 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// Returns the fractional position of the current record in the current index
-        /// in the form of a JET_RECPOS structure.
+        /// in the form of a <see cref="JET_RECPOS"/> structure.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor positioned on the record.</param>
@@ -1006,7 +1014,7 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// The JetUpdate function performs an update operation including inserting a new row into
-        /// a table or updating an existing row. Deleting a table row is performed by calling JetDelete.
+        /// a table or updating an existing row. Deleting a table row is performed by calling <see cref="JetDelete"/>.
         /// </summary>
         /// <param name="sesid">The session which started the update.</param>
         /// <param name="tableid">The cursor to update. An update should be prepared.</param>
@@ -1015,9 +1023,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="actualBookmarkSize">Returns the actual size of the bookmark.</param>
         /// <remarks>
         /// JetUpdate is the final step in performing an insert or an update. The update is begun by
-        /// calling JetPrepareUpdate and then by calling JetSetColumn or JetSetColumns one or more times
-        /// to set the record state. Finally, JetUpdate is called to complete the update operation.
-        /// Indexes are updated only by JetUpdate or and not during JetSetColumn or JetSetColumns
+        /// calling <see cref="JetPrepareUpdate"/> and then by calling JetSetColumn
+        /// one or more times to set the record state. Finally, JetUpdate is called to complete the update operation.
+        /// Indexes are updated only by JetUpdate or and not during JetSetColumn.
         /// </remarks>
         public static void JetUpdate(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize, out int actualBookmarkSize)
         {
@@ -1026,16 +1034,16 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// The JetUpdate function performs an update operation including inserting a new row into
-        /// a table or updating an existing row. Deleting a table row is performed by calling JetDelete.
+        /// a table or updating an existing row. Deleting a table row is performed by calling
+        /// <see cref="JetDelete"/>.
         /// </summary>
         /// <param name="sesid">The session which started the update.</param>
         /// <param name="tableid">The cursor to update. An update should be prepared.</param>
         /// <remarks>
         /// JetUpdate is the final step in performing an insert or an update. The update is begun by
-        /// calling JetPrepareUpdate and then by calling JetSetColumn or JetSetColumns one or more times
-        /// to set the record state. Finally, JetUpdate is called to complete the update operation.
-        /// Indexes are updated only by JetUpdate or and not during JetSetColumn or JetSetColumns.
-        /// This overload exists for callers who don't want the bookmark.
+        /// calling <see cref="JetPrepareUpdate"/> and then by calling JetSetColumn
+        /// one or more times to set the record state. Finally, JetUpdate is called to complete the update operation.
+        /// Indexes are updated only by JetUpdate or and not during JetSetColumn.
         /// </remarks>
         public static void JetUpdate(JET_SESID sesid, JET_TABLEID tableid)
         {
@@ -1047,7 +1055,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// The JetSetColumn function modifies a single column value in a modified record to be inserted or to
         /// update the current record. It can overwrite an existing value, add a new value to a sequence of
         /// values in a multi-valued column, remove a value from a sequence of values in a multi-valued column,
-        /// or update all or part of a long value, a column of type JET_coltyp.LongText or JET_coltyp.LongBinary. 
+        /// or update all or part of a long value, a column of type <see cref="JET_coltyp.LongText"/>
+        /// or <see cref="JET_coltyp.LongBinary"/>. 
         /// </summary>
         /// <param name="sesid">The session which is performing the update.</param>
         /// <param name="tableid">The cursor to update. An update should be prepared.</param>
@@ -1093,6 +1102,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Performs an atomic addition operation on one column. This function allows
         /// multiple sessions to update the same record concurrently without conflicts.
+        /// Also see <seealso cref="EscrowUpdate"/>.
         /// </summary>
         /// <param name="sesid">
         /// The session to use. The session must be in a transaction.

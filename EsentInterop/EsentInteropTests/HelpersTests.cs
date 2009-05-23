@@ -1504,8 +1504,8 @@ namespace InteropApiTests
 
             var pidxUnicode = new JET_UNICODEINDEX
             {
-                CultureInfo = CultureInfo.CurrentCulture,
-                CompareOptions = CompareOptions.IgnoreSymbols | CompareOptions.IgnoreCase,
+                lcid = CultureInfo.CurrentCulture.LCID,
+                dwMapFlags = Conversions.LCMapFlagsFromCompareOptions(CompareOptions.IgnoreSymbols | CompareOptions.IgnoreCase),
             };
 
             var indexcreate = new JET_INDEXCREATE
@@ -1535,7 +1535,6 @@ namespace InteropApiTests
 
             Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
         }
-
 
         #endregion MetaData helpers tests
 

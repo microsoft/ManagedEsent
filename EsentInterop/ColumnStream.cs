@@ -34,7 +34,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Current LV offset.
         /// </summary>
-        private int currentOffset;
+        private int ibLongValue;
 
         /// <summary>
         /// Initializes a new instance of the ColumnStream class.
@@ -47,35 +47,8 @@ namespace Microsoft.Isam.Esent.Interop
             this.sesid = sesid;
             this.tableid = tableid;
             this.columnid = columnid;
-            this.currentOffset = 0;
+            this.ibLongValue = 0;
             this.Itag = 1;
-        }
-
-        /// <summary>
-        /// Gets the chunk size a long-value is stored in. A column
-        /// stream should be buffered in multiples of this size.
-        /// </summary>
-        public int ChunkSize
-        {
-            get
-            {
-                if (EsentVersion.SupportsWindows7Features)
-                {
-                    int chunkSize = 0;
-                    string ignored;
-                    Api.JetGetSystemParameter(
-                        JET_INSTANCE.Nil, JET_SESID.Nil, Windows7Param.LVChunkSizeMost, ref chunkSize, out ignored, 0);
-                    return chunkSize;
-                }
-                else
-                {
-                    const int ColumnLvPageOverhead = 82;
-                    int pageSize = 0;
-                    string ignored;
-                    Api.JetGetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.DatabasePageSize, ref pageSize, out ignored, 0);
-                    return pageSize - ColumnLvPageOverhead;
-                }
-            }
         }
 
         /// <summary>
@@ -114,7 +87,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                return this.currentOffset;
+                return this.ibLongValue;
             }
 
             set
@@ -124,12 +97,7 @@ namespace Microsoft.Isam.Esent.Interop
                     throw new ArgumentOutOfRangeException("value", value, "A long-value offset has to be between 0 and 0x7fffffff bytes");
                 }
 
-                if (value > 0 && value > this.Length)
-                {
-                    this.SetLength(value);
-                }
-
-                this.currentOffset = (int)value;
+                this.ibLongValue = (int)value;
             }
         }
 
@@ -180,22 +148,34 @@ namespace Microsoft.Isam.Esent.Interop
         {
             CheckBufferArguments(buffer, offset, count);
 
-            int newOffset = this.currentOffset + count;
+            int length = (int)this.Length;
+            JET_SETINFO setinfo;
+
+            // If our current position is beyond the end of the LV extend
+            // the LV to the write point
+            if (this.ibLongValue > length)
+            {
+                setinfo = new JET_SETINFO { itagSequence = this.Itag };
+                Api.JetSetColumn(this.sesid, this.tableid, this.columnid, null, this.ibLongValue, SetColumnGrbit.SizeLV, setinfo);
+                length = this.ibLongValue;
+            }
+
+            int newIbLongValue = this.ibLongValue + count;
             SetColumnGrbit grbit;
-            if (this.currentOffset == this.Length)
+            /*if (this.ibLongValue == length)
             {
                 grbit = SetColumnGrbit.AppendLV;
             }
-            else if (newOffset > this.Length)
+            else */ if (newIbLongValue >= length)
             {
-                grbit = SetColumnGrbit.SizeLV;
+                grbit = SetColumnGrbit.OverwriteLV | SetColumnGrbit.SizeLV;
             }
             else
             {
-                grbit = SetColumnGrbit.None;
+                grbit = SetColumnGrbit.OverwriteLV;
             }
 
-            var setinfo = new JET_SETINFO { itagSequence = this.Itag, ibLongValue = this.currentOffset };
+            setinfo = new JET_SETINFO { itagSequence = this.Itag, ibLongValue = this.ibLongValue };
             if (0 == offset)
             {
                 Api.JetSetColumn(this.sesid, this.tableid, this.columnid, buffer, count, grbit, setinfo);
@@ -207,7 +187,7 @@ namespace Microsoft.Isam.Esent.Interop
                 Api.JetSetColumn(this.sesid, this.tableid, this.columnid, offsetBuffer, count, grbit, setinfo);
             }
 
-            this.currentOffset += count;
+            this.ibLongValue += count;
         }
 
         /// <summary>
@@ -222,15 +202,15 @@ namespace Microsoft.Isam.Esent.Interop
         {
             CheckBufferArguments(buffer, offset, count);
 
-            if (this.currentOffset >= this.Length)
+            if (this.ibLongValue >= this.Length)
             {
                 return 0;
             }
 
-            int bytesToRead = (int)Math.Min(this.Length - this.currentOffset, count);
+            int bytesToRead = (int)Math.Min(this.Length - this.ibLongValue, count);
 
             int ignored;
-            var retinfo = new JET_RETINFO { itagSequence = this.Itag, ibLongValue = this.currentOffset };
+            var retinfo = new JET_RETINFO { itagSequence = this.Itag, ibLongValue = this.ibLongValue };
             if (0 == offset)
             {
                 Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, buffer, bytesToRead, out ignored, RetrieveGrbit, retinfo);
@@ -242,7 +222,7 @@ namespace Microsoft.Isam.Esent.Interop
                 Array.Copy(offsetBuffer, 0, buffer, offset, bytesToRead);
             }
 
-            this.currentOffset += bytesToRead;
+            this.ibLongValue += bytesToRead;
             return bytesToRead;
         }
 
@@ -257,8 +237,15 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentOutOfRangeException("value", value, "A LongValueStream cannot be longer than 0x7FFFFFF or less than 0 bytes");
             }
 
-            var setinfo = new JET_SETINFO { itagSequence = this.Itag, ibLongValue = this.currentOffset };
-            Api.JetSetColumn(this.sesid, this.tableid, this.columnid, null, (int)value, SetColumnGrbit.SizeLV, setinfo);
+            var setinfo = new JET_SETINFO { itagSequence = this.Itag };
+            SetColumnGrbit grbit = (0 == value) ? SetColumnGrbit.ZeroLength : SetColumnGrbit.SizeLV;
+            Api.JetSetColumn(this.sesid, this.tableid, this.columnid, null, (int)value, grbit, setinfo);
+
+            // Setting the length moves the offset back to the end of the data
+            if (this.ibLongValue > value)
+            {
+                this.ibLongValue = (int)value;
+            }
         }
 
         /// <summary>
@@ -279,7 +266,7 @@ namespace Microsoft.Isam.Esent.Interop
                     newOffset = this.Length + offset;
                     break;
                 case SeekOrigin.Current:
-                    newOffset = this.currentOffset + offset;
+                    newOffset = this.ibLongValue + offset;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("origin", origin, "Unknown origin");
@@ -290,13 +277,8 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentOutOfRangeException("offset", offset, "invalid offset/origin combination");
             }
 
-            if (newOffset > this.Length)
-            {
-                this.SetLength(newOffset);
-            }
-
-            this.currentOffset = (int)newOffset;
-            return this.currentOffset;
+            this.ibLongValue = (int)newOffset;
+            return this.ibLongValue;
         }
 
         /// <summary>

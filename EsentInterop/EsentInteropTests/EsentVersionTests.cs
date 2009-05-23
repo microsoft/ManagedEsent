@@ -23,11 +23,6 @@ namespace InteropApiTests
         [Priority(0)]
         public void PrintVersion()
         {
-            if (EsentVersion.SupportsUnicodePaths)
-            {
-                Console.WriteLine("SupportsUnicodePaths");
-            }
-
             if (EsentVersion.SupportsVistaFeatures)
             {
                 Console.WriteLine("SupportsVistaFeatures");
@@ -36,6 +31,16 @@ namespace InteropApiTests
             if (EsentVersion.SupportsWindows7Features)
             {
                 Console.WriteLine("SupportsWindows7Features");
+            }
+
+            if (EsentVersion.SupportsUnicodePaths)
+            {
+                Console.WriteLine("SupportsUnicodePaths");
+            }
+
+            if (EsentVersion.SupportsLargeKeys)
+            {
+                Console.WriteLine("SupportsLargeKeys");
             }
         }
     }

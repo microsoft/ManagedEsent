@@ -13,6 +13,7 @@ namespace Microsoft.Isam.Esent
     /// Base class for ESENT exceptions
     /// </summary>
     [Serializable]
+    [CLSCompliant(true)]
     public class EsentException : Exception
     {
         /// <summary>

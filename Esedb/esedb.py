@@ -16,6 +16,7 @@
 #	- read-only tests
 # Set read-only flag in cursor
 #	- use decorator to check
+# Overwriting a database (mode='n') should fail if it is already open
 
 """Provides a simple dictionary interface to an esent database. This requires
 the ManagedEsent interop dll.
@@ -43,7 +44,7 @@ import thread
 import System
 import clr
 
-from System import Array, Int64, Int32
+from System import Array
 from System.Globalization import CompareOptions, CultureInfo
 from System.IO import File, Path, Directory
 from System.Text import Encoding
@@ -83,6 +84,7 @@ from Microsoft.Isam.Esent.Interop import SetColumnGrbit
 from Microsoft.Isam.Esent.Interop import InstanceParameters
 from Microsoft.Isam.Esent.Interop import SystemParameters
 from Microsoft.Isam.Esent.Interop import EsentVersion
+from Microsoft.Isam.Esent.Interop import Conversions
 
 from Microsoft.Isam.Esent.Interop.Vista import VistaParam
 
@@ -466,6 +468,7 @@ class _EseDB(object):
 		"""
 		instance = Api.JetCreateInstance(self._instancename)
 		parameters = InstanceParameters(instance)
+		parameters.WaypointLatency = 1
 		parameters.SystemDirectory = self._directory
 		parameters.TempDirectory = self._directory
 		parameters.LogFileDirectory = self._directory
@@ -475,10 +478,7 @@ class _EseDB(object):
 		parameters.CreatePathIfNotExist = True
 		parameters.LogFileSize = 1024
 		parameters.MaxTemporaryTables = 0
-		
-		if EsentVersion.SupportsWindows7Features:
-			Api.JetSetSystemParameter(instance, JET_SESID.Nil, Windows7Param.WaypointLatency, 1, None)			
-			
+					
 		return instance
 
 	def _deleteDatabaseAndLogfiles(self):
@@ -499,8 +499,8 @@ class _EseDB(object):
 		indexdef = '+%s\0\0' % self._keycolumn
 
 		idxUnicode = JET_UNICODEINDEX(
-			CultureInfo = CultureInfo.CurrentCulture,
-			CompareOptions = CompareOptions.None)
+			lcid = CultureInfo.CurrentCulture.LCID,
+			dwMapFlags = Conversions.LCMapFlagsFromCompareOptions(CompareOptions.None))
 
 		indexcreate = JET_INDEXCREATE(
 			szIndexName = 'primary',
@@ -1257,13 +1257,10 @@ def open(filename, mode='c', lazyupdate=False):
 	
 # Set global esent options
 SystemParameters.DatabasePageSize = 8192
-
-# Turn on small-config, if available
-if EsentVersion.SupportsVistaFeatures:
-	Api.JetSetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.Configuration, 0, None)
-	Api.JetSetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.EnableAdvanced, 1, None)
-	SystemParameters.CacheSizeMin = 64
-	SystemParameters.CacheSizeMax = 2**30
+SystemParameters.Configuration = 0
+SystemParameters.EnableAdvanced = True
+SystemParameters.CacheSizeMin = 64
+SystemParameters.CacheSizeMax = 2**30
 
 # A global object to perform filename => EseDB mappings
 _registry = _EseDBRegistry()

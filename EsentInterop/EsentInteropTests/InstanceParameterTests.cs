@@ -5,6 +5,8 @@
 //-----------------------------------------------------------------------
 
 using Microsoft.Isam.Esent.Interop;
+using Microsoft.Isam.Esent.Interop.Vista;
+using Microsoft.Isam.Esent.Interop.Windows7;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace InteropApiTests
@@ -366,6 +368,76 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test the CachedClosedTables property.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void SetAndRetrieveInstanceParametersCachedClosedTables()
+        {
+            if (EsentVersion.SupportsVistaFeatures)
+            {
+                const int Expected = 1000;
+                this.instanceParameters.CachedClosedTables = Expected;
+                Assert.AreEqual(Expected, this.instanceParameters.CachedClosedTables);
+            }
+            else
+            {
+                Assert.AreEqual(0, this.instanceParameters.CachedClosedTables);
+            }
+        }
+
+        /// <summary>
+        /// Setting the CachedClosedTables property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifySetInstanceParametersCachedClosedTables()
+        {
+            if (EsentVersion.SupportsVistaFeatures)
+            {
+                const int Expected = 2000;
+                this.instanceParameters.CachedClosedTables = Expected;
+                Assert.AreEqual(Expected, this.GetIntegerParameter(VistaParam.CachedClosedTables));
+            }
+        }
+
+        /// <summary>
+        /// Test the WaypointLatency property.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void SetAndRetrieveInstanceParametersWaypointLatency()
+        {
+            if (EsentVersion.SupportsWindows7Features)
+            {
+                const int Expected = 10;
+                this.instanceParameters.WaypointLatency = Expected;
+                Assert.AreEqual(Expected, this.instanceParameters.WaypointLatency);
+            }
+            else
+            {
+                Assert.AreEqual(0, this.instanceParameters.WaypointLatency);
+            }
+        }
+
+        /// <summary>
+        /// Setting the WaypointLatency property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifySetInstanceParametersWaypointLatency()
+        {
+            if (EsentVersion.SupportsWindows7Features)
+            {
+                const int Expected = 4;
+                this.instanceParameters.WaypointLatency = Expected;
+                Assert.AreEqual(Expected, this.GetIntegerParameter(Windows7Param.WaypointLatency));
+            }
+        }
+
+        /// <summary>
         /// Test the Recovery property.
         /// </summary>
         [TestMethod]
@@ -387,18 +459,6 @@ namespace InteropApiTests
             bool expected = Any.Boolean;
             this.instanceParameters.EnableIndexChecking = expected;
             Assert.AreEqual(expected, this.instanceParameters.EnableIndexChecking);
-        }
-
-        /// <summary>
-        /// Test the event source key property.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        public void SetAndRetrieveInstanceParametersEventSourceKey()
-        {
-            string expected = Any.String;
-            this.instanceParameters.EventSourceKey = expected;
-            Assert.AreEqual(expected, this.instanceParameters.EventSourceKey);
         }
 
         /// <summary>

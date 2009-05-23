@@ -11,7 +11,7 @@ using Microsoft.Win32.SafeHandles;
 namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
-    /// A class that encapsulates a JET_INSTANCE in a disposable object. The
+    /// A class that encapsulates a <see cref="JET_INSTANCE"/> in a disposable object. The
     /// instance must be closed last and closing the instance releases all other
     /// resources for the instance.
     /// </summary>

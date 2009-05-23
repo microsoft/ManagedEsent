@@ -184,7 +184,7 @@ namespace Microsoft.Isam.Esent.Interop
             var lcid = (int) RetrieveColumnAsInt16(sesid, indexlist.tableid, indexlist.columnidLangid);
             var cultureInfo = new CultureInfo(lcid);
             var lcmapFlags = (uint) RetrieveColumnAsUInt32(sesid, indexlist.tableid, indexlist.columnidLCMapFlags);
-            CompareOptions compareOptions = Conversions.CompareOptionsFromLCmapFlags(lcmapFlags);
+            CompareOptions compareOptions = Conversions.CompareOptionsFromLCMapFlags(lcmapFlags);
             var grbit = (uint) RetrieveColumnAsUInt32(sesid, indexlist.tableid, indexlist.columnidgrbitIndex);
 
             IndexSegment[] segments = GetIndexSegmentsFromIndexlist(sesid, indexlist);

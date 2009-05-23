@@ -23,7 +23,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void ConvertDefaultLCMapFlags()
         {
-            Assert.AreEqual(CompareOptions.None, Conversions.CompareOptionsFromLCmapFlags(0));
+            Assert.AreEqual(CompareOptions.None, Conversions.CompareOptionsFromLCMapFlags(0));
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace InteropApiTests
         public void ConvertOneLCMapFlag()
         {
             uint flags = 0x01; // NORM_IGNORECASE
-            Assert.AreEqual(CompareOptions.IgnoreCase, Conversions.CompareOptionsFromLCmapFlags(flags));
+            Assert.AreEqual(CompareOptions.IgnoreCase, Conversions.CompareOptionsFromLCMapFlags(flags));
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace InteropApiTests
             uint flags = 0x6; // NORM_IGNORENONSPACE | NORM_IGNORESYMBOLS
             Assert.AreEqual(
                 CompareOptions.IgnoreNonSpace | CompareOptions.IgnoreSymbols,
-                Conversions.CompareOptionsFromLCmapFlags(flags));
+                Conversions.CompareOptionsFromLCMapFlags(flags));
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace InteropApiTests
             uint flags = 0x8020000; // NORM_LINGUISTIC_CASING | NORM_IGNOREWIDTH
             Assert.AreEqual(
                 CompareOptions.IgnoreWidth,
-                Conversions.CompareOptionsFromLCmapFlags(flags));
+                Conversions.CompareOptionsFromLCMapFlags(flags));
         }
 
         /// <summary>

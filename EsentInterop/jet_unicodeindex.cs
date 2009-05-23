@@ -26,14 +26,14 @@ namespace Microsoft.Isam.Esent.Interop
     public class JET_UNICODEINDEX
     {
         /// <summary>
-        /// Gets or sets the CultureInfo used for index comparisons.
+        /// Gets or sets the LCID to be used when normalizing unicode. data.
         /// </summary>
-        public CultureInfo CultureInfo { get; set; }
+        public int lcid { get; set; }
 
         /// <summary>
-        /// Gets or sets the comparison options used for index comparisons.
+        /// Gets or sets the flags to be used with LCMapString when normalizing unicode data.
         /// </summary>
-        public CompareOptions CompareOptions { get; set; }
+        public uint dwMapFlags { get; set; }
 
         /// <summary>
         /// Gets the native version of this object.
@@ -43,10 +43,9 @@ namespace Microsoft.Isam.Esent.Interop
         {
             var native = new NATIVE_UNICODEINDEX
             {
-                lcid = (uint)this.CultureInfo.LCID,
-                dwMapFlags = Conversions.LCMapFlagsFromCompareOptions(this.CompareOptions),
+                lcid = (uint) this.lcid,
+                dwMapFlags = (uint) this.dwMapFlags,
             };
-            native.dwMapFlags |= Conversions.NativeMethods.LCMAP_SORTKEY;
             return native;
         }        
     }

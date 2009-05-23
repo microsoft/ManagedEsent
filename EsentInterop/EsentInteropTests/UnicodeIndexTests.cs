@@ -4,8 +4,6 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Globalization;
-using System.Runtime.InteropServices;
 using Microsoft.Isam.Esent.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -34,22 +32,30 @@ namespace InteropApiTests
         {
             this.managed = new JET_UNICODEINDEX()
             {
-                CompareOptions = CompareOptions.IgnoreNonSpace,
-                CultureInfo = CultureInfo.CurrentCulture,
+                lcid = 1033,
+                dwMapFlags = 0x400,
             };
             this.native = this.managed.GetNativeUnicodeIndex();
         }
 
         /// <summary>
-        /// Check the conversion to a NATIVE_INDEXCREATE sets the structure size
+        /// Check the conversion to a NATIVE_INDEXCREATE sets the map flags
         /// </summary>
         [TestMethod]
         [Priority(0)]
         public void VerifyConversionToNativeSetsDwMapFlags()
         {
-            Assert.AreEqual(
-                Conversions.NativeMethods.NORM_IGNORENONSPACE | Conversions.NativeMethods.LCMAP_SORTKEY,
-                this.native.dwMapFlags);
+            Assert.AreEqual((uint)0x400, this.native.dwMapFlags);
+        }
+
+        /// <summary>
+        /// Check the conversion to a NATIVE_INDEXCREATE sets the lcid
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyConversionToNativeSetsLcid()
+        {
+            Assert.AreEqual((uint)1033, this.native.lcid);
         }
     }
 }
