@@ -6,7 +6,6 @@
 
 using System;
 using System.IO;
-using Microsoft.Isam.Esent.Interop.Windows7;
 
 namespace Microsoft.Isam.Esent.Interop
 {
@@ -162,11 +161,11 @@ namespace Microsoft.Isam.Esent.Interop
 
             int newIbLongValue = this.ibLongValue + count;
             SetColumnGrbit grbit;
-            /*if (this.ibLongValue == length)
+            if (this.ibLongValue == length)
             {
                 grbit = SetColumnGrbit.AppendLV;
             }
-            else */ if (newIbLongValue >= length)
+            else if (newIbLongValue >= length)
             {
                 grbit = SetColumnGrbit.OverwriteLV | SetColumnGrbit.SizeLV;
             }
@@ -237,9 +236,33 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentOutOfRangeException("value", value, "A LongValueStream cannot be longer than 0x7FFFFFF or less than 0 bytes");
             }
 
-            var setinfo = new JET_SETINFO { itagSequence = this.Itag };
-            SetColumnGrbit grbit = (0 == value) ? SetColumnGrbit.ZeroLength : SetColumnGrbit.SizeLV;
-            Api.JetSetColumn(this.sesid, this.tableid, this.columnid, null, (int)value, grbit, setinfo);
+            if (value < this.Length && value > 0)
+            {
+                // Shrinking the column multiple times and then growing it can sometimes hit an unpleasant
+                // ESENT defect which causes a hang. To make sure we never have that problem we read out the data,
+                // and insert into a new long-value. This is not efficient.
+                var data = new byte[value];
+                var retinfo = new JET_RETINFO { itagSequence = this.Itag, ibLongValue = 0 };
+                int actualDataSize;
+                Api.JetRetrieveColumn(
+                    this.sesid,
+                    this.tableid,
+                    this.columnid,
+                    data,
+                    data.Length,
+                    out actualDataSize,
+                    RetrieveGrbit,
+                    retinfo);
+
+                var setinfo = new JET_SETINFO { itagSequence = this.Itag };
+                Api.JetSetColumn(this.sesid, this.tableid, this.columnid, data, data.Length, SetColumnGrbit.None, setinfo);
+            }
+            else
+            {
+                var setinfo = new JET_SETINFO { itagSequence = this.Itag };
+                SetColumnGrbit grbit = (0 == value) ? SetColumnGrbit.ZeroLength : SetColumnGrbit.SizeLV;
+                Api.JetSetColumn(this.sesid, this.tableid, this.columnid, null, (int)value, grbit, setinfo);                
+            }
 
             // Setting the length moves the offset back to the end of the data
             if (this.ibLongValue > value)

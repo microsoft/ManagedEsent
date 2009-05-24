@@ -192,9 +192,8 @@ def testColumnStream():
 	print 'Verifying ColumnStream against MemoryStream'
 	timer = Stopwatch.StartNew()
 	instance = Instance('ColumnStreamTest')
-	instance.Parameters.Recovery = False
-	instance.Parameters.MaxTemporaryTables = 0
 	instance.Parameters.MaxVerPages = 1024
+	instance.Parameters.CircularLog = True
 	instance.Init()
 	
 	bookmark = Array.CreateInstance(System.Byte, 255)	
@@ -212,7 +211,7 @@ def testColumnStream():
 		Api.JetCommitTransaction(session, CommitTransactionGrbit.LazyFlush)
 		tableid = Api.JetOpenTable(session, dbid, 'table', None, 0, OpenTableGrbit.None)
 
-		for i in xrange(128):
+		for i in xrange(64):
 			runtimer = Stopwatch.StartNew()
 			
 			Api.JetBeginTransaction(session)
