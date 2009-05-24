@@ -42,8 +42,8 @@ private:
 	// Run for the STOP TIMER console command
 	void StopTimer(array<String^> ^args);
 
-  // Run for the MEMSTATS console command
-  void MemStats(array<String^> ^args);
+	// Run for the MEMSTATS console command
+	void MemStats(array<String^> ^args);
 
 private:
 	TextReader ^ const m_input;
@@ -70,7 +70,7 @@ SqlConsole::SqlConsole(TextReader ^ const input, TextWriter ^ const output, Text
 	
 	m_consoleCommands["START TIMER"] = gcnew Action<array<String^>^>(this, &SqlConsole::StartTimer);
 	m_consoleCommands["STOP TIMER"] = gcnew Action<array<String^>^>(this, &SqlConsole::StopTimer);
-  m_consoleCommands["MEMSTATS"] = gcnew Action<array<String^>^>(this, &SqlConsole::MemStats);
+	m_consoleCommands["MEMSTATS"] = gcnew Action<array<String^>^>(this, &SqlConsole::MemStats);
 }
 
 // Called when the console is disposed

@@ -22,7 +22,7 @@
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
-			ManagedExtensions="1"
+			ManagedExtensions="3"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -59,11 +59,13 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(NoInherit)"
-				LinkIncremental="2"
+				AdditionalDependencies="$(NoInherit);ptrustmd.lib"
+				LinkIncremental="1"
+				IgnoreAllDefaultLibraries="true"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				TargetMachine="1"
+				CLRImageType="3"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -93,7 +95,7 @@
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
-			ManagedExtensions="1"
+			ManagedExtensions="3"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -130,10 +132,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(NoInherit)"
+				AdditionalDependencies="$(NoInherit);ptrustm.lib "
 				LinkIncremental="1"
+				IgnoreAllDefaultLibraries="true"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
+				CLRImageType="3"
 			/>
 			<Tool
 				Name="VCALinkTool"

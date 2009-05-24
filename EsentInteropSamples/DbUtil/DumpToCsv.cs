@@ -33,8 +33,8 @@ namespace Microsoft.Isam.Esent.Utilities
                 return s;
             }
 
-            const char Quote = '"';
-            const char Comma = ',';
+            const string Quote = "\"";
+            const string Comma = ",";
 
             // first, double any existing quotes
             if (s.Contains(Quote))
