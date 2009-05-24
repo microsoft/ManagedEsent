@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
 using Microsoft.Isam.Esent.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -230,11 +231,46 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Buffer a ColumnStream
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void BufferColumnStream()
+        {
+            var data = new byte[1024];
+
+            var memoryStream = new MemoryStream();
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            using (var stream = new BufferedStream(new ColumnStream(this.sesid, this.tableid, this.columnidLongText), SystemParameters.LVChunkSizeMost))
+            {
+                for (int i = 0; i < 10; ++i)
+                {
+                    stream.Write(data, 0, data.Length);
+                    memoryStream.Write(data, 0, data.Length);
+                }
+            }
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            var hasher = new SHA512Managed();
+            memoryStream.Position = 0;
+            var expected = hasher.ComputeHash(memoryStream);
+
+            using (var stream = new BufferedStream(new ColumnStream(this.sesid, this.tableid, this.columnidLongText), SystemParameters.LVChunkSizeMost))
+            {
+                var actual = hasher.ComputeHash(stream);
+                CollectionAssert.AreEqual(expected, actual);
+            }
+        }
+
+        /// <summary>
         /// Test that seeking beyond the length of the stream doesn't grow the stream.
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        public void SeekingPastEndOfColumnStreamGrowsStream()
+        public void SeekingPastEndOfColumnStreamDoesNotGrowStream()
         {
             const int Offset = 1200;
 
