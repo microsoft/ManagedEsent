@@ -201,7 +201,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="version">Returns the version number of the database engine.</param>
-        public static void JetGetVersion(JET_SESID sesid, out int version)
+        public static void JetGetVersion(JET_SESID sesid, out uint version)
         {
             Api.Check(Impl.JetGetVersion(sesid, out version));
         }

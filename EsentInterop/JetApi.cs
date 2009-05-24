@@ -175,7 +175,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="sesid">The session to use.</param>
         /// <param name="version">Returns the version number of the database engine.</param>
         /// <returns>An error code if the call fails.</returns>
-        public int JetGetVersion(JET_SESID sesid, out int version)
+        public int JetGetVersion(JET_SESID sesid, out uint version)
         {
             this.TraceFunctionCall("JetGetVersion");
             uint nativeVersion;
@@ -195,7 +195,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 err = this.Err(NativeMethods.JetGetVersion(sesid.Value, out nativeVersion));                
             }
 
-            version = (int) nativeVersion;
+            version = nativeVersion;
             return err;
         }
 
@@ -1133,7 +1133,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// Create an instance and get the current version of Esent.
         /// </summary>
         /// <returns>The current version of Esent.</returns>
-        private int GetVersionFromEsent()
+        private uint GetVersionFromEsent()
         {
             JET_INSTANCE instance;
             this.JetCreateInstance(out instance, "GettingEsentVersion");
@@ -1148,7 +1148,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 this.JetBeginSession(instance, out sesid, String.Empty, String.Empty);
                 try
                 {
-                    int version;
+                    uint version;
                     this.JetGetVersion(sesid, out version);
                     return version;
                 }

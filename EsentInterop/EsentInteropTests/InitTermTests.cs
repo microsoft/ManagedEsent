@@ -26,7 +26,7 @@ namespace InteropApiTests
         {
             JET_INSTANCE instance;
             JET_SESID sesid;
-            int version;
+            uint version;
 
             Api.JetCreateInstance(out instance, "JetGetVersion");
             

@@ -230,19 +230,19 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test that seeking beyond the length of the stream grows the stream.
+        /// Test that seeking beyond the length of the stream doesn't grow the stream.
         /// </summary>
         [TestMethod]
         [Priority(1)]
         public void SeekingPastEndOfColumnStreamGrowsStream()
         {
-            int offset = 1200;
+            const int Offset = 1200;
 
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
             using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
             {
-                stream.Seek(offset, SeekOrigin.Begin);
+                stream.Seek(Offset, SeekOrigin.Begin);
             }
 
             this.UpdateAndGotoBookmark();
@@ -250,7 +250,7 @@ namespace InteropApiTests
 
             using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
             {
-                Assert.AreEqual(offset, stream.Length);
+                Assert.AreEqual(0, stream.Length);
             }
         }
 

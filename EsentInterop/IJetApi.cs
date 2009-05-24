@@ -62,7 +62,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="sesid">The session to use.</param>
         /// <param name="version">Returns the version number of the database engine.</param>
         /// <returns>An error code if the call fails.</returns>
-        int JetGetVersion(JET_SESID sesid, out int version);
+        int JetGetVersion(JET_SESID sesid, out uint version);
 
         int JetCreateDatabase(JET_SESID sesid, string database, string connect, out JET_DBID dbid, CreateDatabaseGrbit grbit);
 
