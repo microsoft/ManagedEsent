@@ -4,8 +4,10 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using Microsoft.Isam.Esent;
 using Microsoft.Isam.Esent.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -17,6 +19,18 @@ namespace InteropApiTests
     [TestClass]
     public class ExceptionTests
     {
+        /// <summary>
+        /// Verify that creating an EsentException with an innner exception sets
+        /// the inner exception property.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyEsentExceptionConstructorSetsInnerException()
+        {
+            var ex = new EsentException("foo", new OutOfMemoryException("InnerException"));
+            Assert.AreEqual("InnerException", ex.InnerException.Message);
+        }
+
         /// <summary>
         /// Verify that the error passed into the constructor is set in the error
         /// property.

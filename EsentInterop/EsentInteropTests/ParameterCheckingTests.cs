@@ -413,6 +413,44 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Check that an exception is thrown when JetCreateIndex2 gets 
+        /// null indexcreates.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetCreateIndex2ThrowsExceptionWhenIndexcreatesAreNull()
+        {
+            Api.JetCreateIndex2(this.sesid, this.tableid, null, 0);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetCreateIndex2 gets 
+        /// a negative indexcreate count.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetCreateIndex2ThrowsExceptionWhenNumIndexcreatesIsNegative()
+        {
+            var indexcreates = new[] { new JET_INDEXCREATE() };
+            Api.JetCreateIndex2(this.sesid, this.tableid, indexcreates, -1);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetCreateIndex2 gets 
+        /// an indexcreate count that is too long.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetCreateIndex2ThrowsExceptionWhenNumIndexcreatesIsTooLong()
+        {
+            var indexcreates = new[] { new JET_INDEXCREATE() };
+            Api.JetCreateIndex2(this.sesid, this.tableid, indexcreates, indexcreates.Length+1);
+        }
+
+        /// <summary>
         /// Check that an exception is thrown when JetDeleteColumn gets a 
         /// null column name.
         /// </summary>

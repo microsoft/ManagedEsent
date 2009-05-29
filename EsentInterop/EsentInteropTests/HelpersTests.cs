@@ -874,10 +874,30 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        public void SetBoolean()
+        public void SetBooleanTrue()
         {
             JET_COLUMNID columnid = this.columnidDict["boolean"];
-            bool expected = Any.Boolean;
+            bool expected = true;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, expected);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            bool actual = BitConverter.ToBoolean(Api.RetrieveColumn(this.sesid, this.tableid, columnid), 0);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test setting a column from a boolean.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void SetBooleanFalse()
+        {
+            JET_COLUMNID columnid = this.columnidDict["boolean"];
+            bool expected = false;
 
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
@@ -1477,6 +1497,35 @@ namespace InteropApiTests
             Api.JetBeginTransaction(this.sesid);
             Api.JetCreateIndex(this.sesid, this.tableid, indexname, grbit, indexdef, indexdef.Length, 100);
             IEnumerable<IndexInfo> indexes = Api.GetTableIndexes(this.sesid, this.tableid);
+
+            // There should be only one index
+            IndexInfo info = indexes.Single();
+            Assert.AreEqual(indexname, info.Name);
+            Assert.AreEqual(grbit, info.Grbit);
+
+            Assert.AreEqual(1, info.IndexSegments.Length);
+            Assert.IsTrue(0 == string.Compare("ascii", info.IndexSegments[0].ColumnName, true));
+            Assert.IsTrue(info.IndexSegments[0].IsAscending);
+            Assert.AreEqual(JET_coltyp.LongText, info.IndexSegments[0].Coltyp);
+            Assert.IsTrue(info.IndexSegments[0].IsASCII);
+
+            Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
+        }
+
+        /// <summary>
+        /// Get index information for one index
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void GetIndexInformationByTableNameOneIndex()
+        {
+            string indexname = "myindex";
+            string indexdef = "+ascii\0\0";
+            CreateIndexGrbit grbit = CreateIndexGrbit.IndexUnique;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetCreateIndex(this.sesid, this.tableid, indexname, grbit, indexdef, indexdef.Length, 100);
+            IEnumerable<IndexInfo> indexes = Api.GetTableIndexes(this.sesid, this.dbid, this.table);
 
             // There should be only one index
             IndexInfo info = indexes.Single();

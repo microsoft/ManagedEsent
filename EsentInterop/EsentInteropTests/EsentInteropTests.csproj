@@ -102,6 +102,7 @@
     <Compile Include="IndexRangeFromTableidTests.cs" />
     <Compile Include="SeekTests.cs" />
     <Compile Include="SimplePerfTest.cs" />
+    <Compile Include="SystemParameterTests.cs" />
     <Compile Include="TableTests.cs" />
     <Compile Include="UnicodeIndexTests.cs" />
     <Compile Include="UnicodePathTests.cs" />
