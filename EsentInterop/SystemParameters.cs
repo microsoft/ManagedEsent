@@ -130,12 +130,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                if (EsentVersion.SupportsVistaFeatures)
-                {
-                    return 16;
-                }
-
-                return 12;
+                return Api.Impl.Capabilities.ColumnsKeyMost;
             }
         }
 

@@ -1313,6 +1313,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             // Create new capabilities, set as all false. This will allow
             // us to call into Esent.
             this.Capabilities = new JetCapabilities();
+            this.Capabilities.ColumnsKeyMost = 12;  // XP through Vista
 
             var version = (uint)this.GetVersionFromEsent();
             var buildNumber = (int)((version & 0xFFFFFF) >> 8);
@@ -1335,6 +1336,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 this.Capabilities.SupportsUnicodePaths = true;
                 Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports large keys");
                 this.Capabilities.SupportsLargeKeys = true;
+                Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports 16-column keys");
+                this.Capabilities.ColumnsKeyMost = 16;
             }
 
             if (buildNumber >= 7000)

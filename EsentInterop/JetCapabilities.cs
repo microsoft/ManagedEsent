@@ -40,5 +40,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// object.
         /// </summary>
         public bool SupportsLargeKeys { get; set; }
+
+        /// <summary>
+        /// Gets or sets the maximum number of components in a sort or index key.
+        /// </summary>
+        public int ColumnsKeyMost { get; set; }
     }
 }

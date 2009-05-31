@@ -41,6 +41,7 @@ namespace InteropApiTests
             Api.JetTerm(instance);
 
             Assert.AreNotEqual(0, version);
+            Console.WriteLine("Version = 0x{0:X}", version);
         }
 
         /// <summary>
