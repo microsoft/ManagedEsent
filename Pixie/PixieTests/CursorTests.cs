@@ -89,7 +89,7 @@ namespace PixieTests
 
             // turn off logging so initialization is faster
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
-            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.PageTempDBMin, Api.PageTempDBSmallest, null);
+            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.PageTempDBMin, SystemParameters.PageTempDBSmallest, null);
             Api.JetInit(ref this.instance);
             this.session = new Session(this.instance);
             Api.JetCreateDatabase(this.session, this.database, String.Empty, out this.dbid, CreateDatabaseGrbit.None);

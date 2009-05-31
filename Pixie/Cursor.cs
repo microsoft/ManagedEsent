@@ -297,7 +297,7 @@ namespace Microsoft.Isam.Esent
             this.CheckNotDisposed();
             this.CheckHasCurrency();
 
-            byte[] bookmarkData = new byte[Api.BookmarkMost];
+            byte[] bookmarkData = new byte[SystemParameters.BookmarkMost];
             int bookmarkLength;
             Api.JetGetBookmark(this.session, this.table, bookmarkData, bookmarkData.Length, out bookmarkLength);
             Debug.Assert(bookmarkLength <= bookmarkData.Length, "Bookmark is too long");
@@ -379,7 +379,7 @@ namespace Microsoft.Isam.Esent
             this.Tracer.TraceVerbose("Update");
             this.CheckNotDisposed();
 
-            var updateBookmark = new byte[Api.BookmarkMost];
+            var updateBookmark = new byte[SystemParameters.BookmarkMost];
             int bookmarkSize;
 
             Api.JetUpdate(this.session, this.table, updateBookmark, updateBookmark.Length, out bookmarkSize);

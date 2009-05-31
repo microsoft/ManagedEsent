@@ -181,7 +181,7 @@ namespace InteropApiTests
         [Priority(1)]
         public void SetColumnStreamLength()
         {
-            var bookmark = new byte[Api.BookmarkMost];
+            var bookmark = new byte[SystemParameters.BookmarkMost];
             int bookmarkSize;
 
             long length = 1345;
@@ -251,6 +251,7 @@ namespace InteropApiTests
                     memoryStream.Write(data, 0, data.Length);
                 }
             }
+
             this.UpdateAndGotoBookmark();
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
@@ -443,7 +444,7 @@ namespace InteropApiTests
         /// </summary>
         private void UpdateAndGotoBookmark()
         {
-            var bookmark = new byte[Api.BookmarkMost];
+            var bookmark = new byte[SystemParameters.BookmarkMost];
             int bookmarkSize;
             Api.JetUpdate(this.sesid, this.tableid, bookmark, bookmark.Length, out bookmarkSize);
             Api.JetGotoBookmark(this.sesid, this.tableid, bookmark, bookmarkSize);

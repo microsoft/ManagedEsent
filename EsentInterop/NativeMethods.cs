@@ -166,7 +166,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static extern int JetCreateTable(IntPtr sesid, uint dbid, string szTableName, int pages, int density, out IntPtr tableid);
 
         [DllImport(EsentDll, CharSet = EsentCharSet)]
-        public static extern int JetAddColumn(IntPtr sesid, IntPtr tableid, string szColumnName, ref NATIVE_COLUMNDEF columndef, byte[] pvDefault, uint cbDefault, out uint columnid);
+        public static extern int JetAddColumn(IntPtr sesid, IntPtr tableid, string szColumnName, [In] ref NATIVE_COLUMNDEF columndef, [In] byte[] pvDefault, uint cbDefault, out uint columnid);
 
         [DllImport(EsentDll, CharSet = EsentCharSet)]
         public static extern int JetDeleteColumn(IntPtr sesid, IntPtr tableid, string szColumnName);
@@ -182,12 +182,52 @@ namespace Microsoft.Isam.Esent.Interop
 
         [DllImport(EsentDll, CharSet = EsentCharSet)]
         public static extern int JetCreateIndex2(
-            IntPtr sesid, IntPtr tableid, NATIVE_INDEXCREATE[] pindexcreate, uint cIndexCreate);
+            IntPtr sesid, IntPtr tableid, [In] NATIVE_INDEXCREATE[] pindexcreate, uint cIndexCreate);
 
         // More modern versions of Esent take the larger NATIVE_INDEXCREATE2 structures
         [DllImport(EsentDll, CharSet = EsentCharSet)]
         public static extern int JetCreateIndex2(
-            IntPtr sesid, IntPtr tableid, NATIVE_INDEXCREATE2[] pindexcreate, uint cIndexCreate);
+            IntPtr sesid, IntPtr tableid, [In] NATIVE_INDEXCREATE2[] pindexcreate, uint cIndexCreate);
+
+        [DllImport(EsentDll)]
+        public static extern int JetOpenTempTable(
+            IntPtr sesid,
+            [In] NATIVE_COLUMNDEF[] rgcolumndef,
+            uint ccolumn,
+            uint grbit,
+            out IntPtr ptableid,
+            [Out] uint[] rgcolumnid);
+
+        [DllImport(EsentDll)]
+        public static extern int JetOpenTempTable2(
+            IntPtr sesid,
+            [In] NATIVE_COLUMNDEF[] rgcolumndef,
+            uint ccolumn,
+            uint lcid,
+            uint grbit,
+            out IntPtr ptableid,
+            [Out] uint[] rgcolumnid);
+
+        [DllImport(EsentDll)]
+        public static extern int JetOpenTempTable3(
+            IntPtr sesid,
+            [In] NATIVE_COLUMNDEF[] rgcolumndef,
+            uint ccolumn,
+            [In] ref NATIVE_UNICODEINDEX pidxunicode,
+            uint grbit,
+            out IntPtr ptableid,
+            [Out] uint[] rgcolumnid);
+
+        // Overload to allow for null pidxunicode
+        [DllImport(EsentDll)]
+        public static extern int JetOpenTempTable3(
+            IntPtr sesid,
+            [In] NATIVE_COLUMNDEF[] rgcolumndef,
+            uint ccolumn,
+            IntPtr pidxunicode,
+            uint grbit,
+            out IntPtr ptableid,
+            [Out] uint[] rgcolumnid);
 
         [DllImport(EsentDll, CharSet = EsentCharSet)]
         public static extern int JetGetTableColumnInfo(IntPtr sesid, IntPtr tableid, string szColumnName, ref NATIVE_COLUMNDEF columndef, uint cbMax, uint InfoLevel);
@@ -221,10 +261,10 @@ namespace Microsoft.Isam.Esent.Interop
         #region Navigation
 
         [DllImport(EsentDll)]
-        public static extern int JetGetBookmark(IntPtr sesid, IntPtr tableid, byte[] pvBookmark, uint cbMax, out uint cbActual);
+        public static extern int JetGetBookmark(IntPtr sesid, IntPtr tableid, [Out] byte[] pvBookmark, uint cbMax, out uint cbActual);
 
         [DllImport(EsentDll)]
-        public static extern int JetGotoBookmark(IntPtr sesid, IntPtr tableid, byte[] pvBookmark, uint cbBookmark);
+        public static extern int JetGotoBookmark(IntPtr sesid, IntPtr tableid, [In] byte[] pvBookmark, uint cbBookmark);
 
         // This has IntPtr and NATIVE_RETINFO versions because the parameter can be null
         [DllImport(EsentDll)]
@@ -240,7 +280,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static extern int JetMakeKey(IntPtr sesid, IntPtr tableid, IntPtr pvData, uint cbData, uint grbit);
 
         [DllImport(EsentDll)]
-        public static extern int JetRetrieveKey(IntPtr sesid, IntPtr tableid, byte[] pvData, uint cbMax, out uint cbActual, uint grbit);
+        public static extern int JetRetrieveKey(IntPtr sesid, IntPtr tableid, [Out] byte[] pvData, uint cbMax, out uint cbActual, uint grbit);
 
         [DllImport(EsentDll)]
         public static extern int JetSeek(IntPtr sesid, IntPtr tableid, uint grbit);
@@ -249,7 +289,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static extern int JetSetIndexRange(IntPtr sesid, IntPtr tableid, uint grbit);
 
         [DllImport(EsentDll)]
-        public static extern int JetIntersectIndexes(IntPtr sesid, NATIVE_INDEXRANGE[] rgindexrange, uint cindexrange, ref NATIVE_RECORDLIST recordlist, uint grbit);
+        public static extern int JetIntersectIndexes(IntPtr sesid, [In] NATIVE_INDEXRANGE[] rgindexrange, uint cindexrange, ref NATIVE_RECORDLIST recordlist, uint grbit);
 
         [DllImport(EsentDll)]
         public static extern int JetSetCurrentIndex(IntPtr sesid, IntPtr tableid, string szIndexName);
@@ -267,7 +307,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static extern int JetGetRecordPosition(IntPtr sesid, IntPtr tableid, out NATIVE_RECPOS precpos, uint cbRecpos);
 
         [DllImport(EsentDll)]
-        public static extern int JetGotoPosition(IntPtr sesid, IntPtr tableid, ref NATIVE_RECPOS precpos);
+        public static extern int JetGotoPosition(IntPtr sesid, IntPtr tableid, [In] ref NATIVE_RECPOS precpos);
 
         #endregion
 
@@ -280,14 +320,14 @@ namespace Microsoft.Isam.Esent.Interop
         public static extern int JetPrepareUpdate(IntPtr sesid, IntPtr tableid, uint prep);
 
         [DllImport(EsentDll)]
-        public static extern int JetUpdate(IntPtr sesid, IntPtr tableid, byte[] pvBookmark, uint cbBookmark, out uint cbActual);
+        public static extern int JetUpdate(IntPtr sesid, IntPtr tableid, [Out] byte[] pvBookmark, uint cbBookmark, out uint cbActual);
 
         // This has IntPtr and NATIVE_SETINFO versions because the parameter can be null
         [DllImport(EsentDll)]
         public static extern int JetSetColumn(IntPtr sesid, IntPtr tableid, uint columnid, IntPtr pvData, uint cbData, uint grbit, IntPtr psetinfo);
 
         [DllImport(EsentDll)]
-        public static extern int JetSetColumn(IntPtr sesid, IntPtr tableid, uint columnid, IntPtr pvData, uint cbData, uint grbit, ref NATIVE_SETINFO psetinfo);
+        public static extern int JetSetColumn(IntPtr sesid, IntPtr tableid, uint columnid, IntPtr pvData, uint cbData, uint grbit, [In] ref NATIVE_SETINFO psetinfo);
 
         [DllImport(EsentDll)]
         public static extern int JetGetLock(IntPtr sesid, IntPtr tableid, uint grbit);
@@ -297,9 +337,9 @@ namespace Microsoft.Isam.Esent.Interop
             IntPtr sesid,
             IntPtr tableid,
             uint columnid,
-            byte[] pv,
+            [In] byte[] pv,
             uint cbMax,
-            byte[] pvOld,
+            [Out] byte[] pvOld,
             uint cbOldMax,
             out uint cbOldActual,
             uint grbit);

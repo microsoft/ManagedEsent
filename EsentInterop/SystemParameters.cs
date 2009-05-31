@@ -13,7 +13,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// This class provides static properties to set and get
     /// global ESENT system parameters
     /// </summary>
-    public static class SystemParameters
+    public static partial class SystemParameters
     {
         /// <summary>
         /// Gets or sets the maximum size of the database page cache. The size
@@ -25,12 +25,12 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                return SystemParameters.GetIntegerParameter(JET_param.CacheSizeMax);
+                return GetIntegerParameter(JET_param.CacheSizeMax);
             }
 
             set
             {
-                SystemParameters.SetIntegerParameter(JET_param.CacheSizeMax, value);
+                SetIntegerParameter(JET_param.CacheSizeMax, value);
             }
         }
 
@@ -44,12 +44,12 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                return SystemParameters.GetIntegerParameter(JET_param.CacheSize);
+                return GetIntegerParameter(JET_param.CacheSize);
             }
 
             set
             {
-                SystemParameters.SetIntegerParameter(JET_param.CacheSize, value);
+                SetIntegerParameter(JET_param.CacheSize, value);
             }
         }
 
@@ -60,12 +60,12 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                return SystemParameters.GetIntegerParameter(JET_param.DatabasePageSize);
+                return GetIntegerParameter(JET_param.DatabasePageSize);
             }
 
             set
             {
-                SystemParameters.SetIntegerParameter(JET_param.DatabasePageSize, value);
+                SetIntegerParameter(JET_param.DatabasePageSize, value);
             }
         }
 
@@ -76,12 +76,12 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                return SystemParameters.GetIntegerParameter(JET_param.CacheSizeMin);
+                return GetIntegerParameter(JET_param.CacheSizeMin);
             }
 
             set
             {
-                SystemParameters.SetIntegerParameter(JET_param.CacheSizeMin, value);
+                SetIntegerParameter(JET_param.CacheSizeMin, value);
             }
         }
 
@@ -92,12 +92,12 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                return SystemParameters.GetIntegerParameter(JET_param.MaxInstances);
+                return GetIntegerParameter(JET_param.MaxInstances);
             }
 
             set
             {
-                SystemParameters.SetIntegerParameter(JET_param.MaxInstances, value);
+                SetIntegerParameter(JET_param.MaxInstances, value);
             }
         }
 
@@ -115,11 +115,39 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 if (EsentVersion.SupportsVistaFeatures)
                 {
-                    return SystemParameters.GetIntegerParameter(VistaParam.KeyMost);
+                    return GetIntegerParameter(VistaParam.KeyMost);
                 }
 
                 // All pre-Vista versions of Esent have 255 byte keys
                 return 255; 
+            }
+        }
+
+        /// <summary>
+        /// Gets the maximum number of components in a sort or index key.
+        /// </summary>
+        public static int ColumnsKeyMost
+        {
+            get
+            {
+                if (EsentVersion.SupportsVistaFeatures)
+                {
+                    return 16;
+                }
+
+                return 12;
+            }
+        }
+
+        /// <summary>
+        /// Gets the maximum size of a bookmark. <seealso cref="Api.JetGetBookmark"/>.
+        /// </summary>
+        public static int BookmarkMost
+        {
+            get
+            {
+                // This correctly returns 256 on pre-Vista systems
+                return KeyMost + 1;
             }
         }
 
@@ -136,12 +164,12 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 if (EsentVersion.SupportsWindows7Features)
                 {
-                    return SystemParameters.GetIntegerParameter(Windows7Param.LVChunkSizeMost);
+                    return GetIntegerParameter(Windows7Param.LVChunkSizeMost);
                 }
 
                 // Can't retrieve the size directly, determine it from the database page size
                 const int ColumnLvPageOverhead = 82;
-                return SystemParameters.GetIntegerParameter(JET_param.DatabasePageSize) - ColumnLvPageOverhead;
+                return GetIntegerParameter(JET_param.DatabasePageSize) - ColumnLvPageOverhead;
             }
         }
 

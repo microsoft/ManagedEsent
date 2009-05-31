@@ -507,6 +507,7 @@ class _EseDB(object):
 			szKey = indexdef,
 			cbKey = indexdef.Length,
 			grbit = CreateIndexGrbit.IndexUnique | CreateIndexGrbit.IndexPrimary,
+			cbKeyMost = SystemParameters.KeyMost,
 			pidxUnicode = idxUnicode)
 		indexcreates = Array[JET_INDEXCREATE]([indexcreate])
 

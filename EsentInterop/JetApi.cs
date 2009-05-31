@@ -483,6 +483,184 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return this.CreateIndexes(sesid, tableid, indexcreates, numIndexCreates);
         }
 
+        /// <summary>
+        /// Creates a temporary table with a single index. A temporary table
+        /// stores and retrieves records just like an ordinary table created
+        /// using JetCreateTableColumnIndex. However, temporary tables are
+        /// much faster than ordinary tables due to their volatile nature.
+        /// They can also be used to very quickly sort and perform duplicate
+        /// removal on record sets when accessed in a purely sequential manner.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="columns">
+        /// Column definitions for the columns created in the temporary table.
+        /// </param>
+        /// <param name="numColumns">Number of column definitions.</param>
+        /// <param name="grbit">Table creation options.</param>
+        /// <param name="tableid">
+        /// Returns the tableid of the temporary table. Closing this tableid
+        /// frees the resources associated with the temporary table.
+        /// </param>
+        /// <param name="columnids">
+        /// The output buffer that receives the array of column IDs generated
+        /// during the creation of the temporary table. The column IDs in this
+        /// array will exactly correspond to the input array of column definitions.
+        /// As a result, the size of this buffer must correspond to the size of the input array.
+        /// </param>
+        /// <returns>An error code.</returns>
+        public int JetOpenTempTable(
+            JET_SESID sesid,
+            JET_COLUMNDEF[] columns,
+            int numColumns,
+            TempTableGrbit grbit,
+            out JET_TABLEID tableid,
+            JET_COLUMNID[] columnids)
+        {
+            this.TraceFunctionCall("JetOpenTempTable");
+            this.CheckNotNull(columns, "columnns");
+            this.CheckDataSize(columns, numColumns, "numColumns");
+            this.CheckNotNull(columnids, "columnids");
+            this.CheckDataSize(columnids, numColumns, "numColumns");
+
+            tableid = JET_TABLEID.Nil;
+
+            NATIVE_COLUMNDEF[] nativecolumndefs = GetNativecolumndefs(columns, numColumns);
+            var nativecolumnids = new uint[numColumns];
+
+            int err = NativeMethods.JetOpenTempTable(
+                sesid.Value, nativecolumndefs, (uint) numColumns, (uint) grbit, out tableid.Value, nativecolumnids);
+
+            SetColumnids(columnids, nativecolumnids, numColumns);
+            
+            return err;
+        }
+
+        /// <summary>
+        /// Creates a temporary table with a single index. A temporary table
+        /// stores and retrieves records just like an ordinary table created
+        /// using JetCreateTableColumnIndex. However, temporary tables are
+        /// much faster than ordinary tables due to their volatile nature.
+        /// They can also be used to very quickly sort and perform duplicate
+        /// removal on record sets when accessed in a purely sequential manner.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="columns">
+        /// Column definitions for the columns created in the temporary table.
+        /// </param>
+        /// <param name="numColumns">Number of column definitions.</param>
+        /// <param name="lcid">
+        /// The locale ID to use to compare any Unicode key column data in the temporary table.
+        /// Any locale may be used as long as the appropriate language pack has been installed
+        /// on the machine. 
+        /// </param>
+        /// <param name="grbit">Table creation options.</param>
+        /// <param name="tableid">
+        /// Returns the tableid of the temporary table. Closing this tableid
+        /// frees the resources associated with the temporary table.
+        /// </param>
+        /// <param name="columnids">
+        /// The output buffer that receives the array of column IDs generated
+        /// during the creation of the temporary table. The column IDs in this
+        /// array will exactly correspond to the input array of column definitions.
+        /// As a result, the size of this buffer must correspond to the size of the input array.
+        /// </param>
+        /// <returns>An error code.</returns>
+        public int JetOpenTempTable2(
+            JET_SESID sesid,
+            JET_COLUMNDEF[] columns,
+            int numColumns,
+            int lcid,
+            TempTableGrbit grbit,
+            out JET_TABLEID tableid,
+            JET_COLUMNID[] columnids)
+        {
+            this.TraceFunctionCall("JetOpenTempTable2");
+            this.CheckNotNull(columns, "columnns");
+            this.CheckDataSize(columns, numColumns, "numColumns");
+            this.CheckNotNull(columnids, "columnids");
+            this.CheckDataSize(columnids, numColumns, "numColumns");
+
+            tableid = JET_TABLEID.Nil;
+
+            NATIVE_COLUMNDEF[] nativecolumndefs = GetNativecolumndefs(columns, numColumns);
+            var nativecolumnids = new uint[numColumns];
+
+            int err = NativeMethods.JetOpenTempTable2(
+                sesid.Value, nativecolumndefs, (uint)numColumns, (uint) lcid, (uint)grbit, out tableid.Value, nativecolumnids);
+
+            SetColumnids(columnids, nativecolumnids, numColumns);
+
+            return err;            
+        }
+
+        /// <summary>
+        /// Creates a temporary table with a single index. A temporary table
+        /// stores and retrieves records just like an ordinary table created
+        /// using JetCreateTableColumnIndex. However, temporary tables are
+        /// much faster than ordinary tables due to their volatile nature.
+        /// They can also be used to very quickly sort and perform duplicate
+        /// removal on record sets when accessed in a purely sequential manner.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="columns">
+        /// Column definitions for the columns created in the temporary table.
+        /// </param>
+        /// <param name="numColumns">Number of column definitions.</param>
+        /// <param name="unicodeindex">
+        /// The Locale ID and normalization flags that will be used to compare
+        /// any Unicode key column data in the temporary table. When this 
+        /// is not present then the default options are used. 
+        /// </param>
+        /// <param name="grbit">Table creation options.</param>
+        /// <param name="tableid">
+        /// Returns the tableid of the temporary table. Closing this tableid
+        /// frees the resources associated with the temporary table.
+        /// </param>
+        /// <param name="columnids">
+        /// The output buffer that receives the array of column IDs generated
+        /// during the creation of the temporary table. The column IDs in this
+        /// array will exactly correspond to the input array of column definitions.
+        /// As a result, the size of this buffer must correspond to the size of the input array.
+        /// </param>
+        /// <returns>An error code.</returns>
+        public int JetOpenTempTable3(
+            JET_SESID sesid,
+            JET_COLUMNDEF[] columns,
+            int numColumns,
+            JET_UNICODEINDEX unicodeindex,
+            TempTableGrbit grbit,
+            out JET_TABLEID tableid,
+            JET_COLUMNID[] columnids)
+        {
+            this.TraceFunctionCall("JetOpenTempTable3");
+            this.CheckNotNull(columns, "columnns");
+            this.CheckDataSize(columns, numColumns, "numColumns");
+            this.CheckNotNull(columnids, "columnids");
+            this.CheckDataSize(columnids, numColumns, "numColumns");
+
+            tableid = JET_TABLEID.Nil;
+
+            NATIVE_COLUMNDEF[] nativecolumndefs = GetNativecolumndefs(columns, numColumns);
+            var nativecolumnids = new uint[numColumns];
+
+            int err;
+            if (null != unicodeindex)
+            {
+                NATIVE_UNICODEINDEX nativeunicodeindex = unicodeindex.GetNativeUnicodeIndex();
+                err = NativeMethods.JetOpenTempTable3(
+                    sesid.Value, nativecolumndefs, (uint)numColumns, ref nativeunicodeindex, (uint)grbit, out tableid.Value, nativecolumnids);
+            }
+            else
+            {
+                err = NativeMethods.JetOpenTempTable3(
+                    sesid.Value, nativecolumndefs, (uint)numColumns, IntPtr.Zero, (uint)grbit, out tableid.Value, nativecolumnids);                
+            }
+
+            SetColumnids(columnids, nativecolumnids, numColumns);
+
+            return err;            
+        }
+
         public int JetGetTableColumnInfo(
                 JET_SESID sesid,
                 JET_TABLEID tableid,
@@ -1025,6 +1203,37 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         #region Helper Methods
 
         /// <summary>
+        /// Make an array of native columndefs from JET_COLUMNDEFs.
+        /// </summary>
+        /// <param name="columns">Columndefs to convert.</param>
+        /// <param name="numColumns">Number of columndefs to convert.</param>
+        /// <returns>An array of native columndefs.</returns>
+        private static NATIVE_COLUMNDEF[] GetNativecolumndefs(JET_COLUMNDEF[] columns, int numColumns)
+        {
+            var nativecolumndefs = new NATIVE_COLUMNDEF[numColumns];
+            for (int i = 0; i < numColumns; ++i)
+            {
+                nativecolumndefs[i] = columns[i].GetNativeColumndef();
+            }
+
+            return nativecolumndefs;
+        }
+
+        /// <summary>
+        /// Set managed columnids from unmanaged columnids.
+        /// </summary>
+        /// <param name="columnids">The columnids to set.</param>
+        /// <param name="nativecolumnids">The native columnids.</param>
+        /// <param name="numColumns">The number of columnids to set.</param>
+        private static void SetColumnids(JET_COLUMNID[] columnids, uint[] nativecolumnids, int numColumns)
+        {
+            for (int i = 0; i < numColumns; ++i)
+            {
+                columnids[i] = new JET_COLUMNID { Value = nativecolumnids[i] };
+            }
+        }
+
+        /// <summary>
         /// Creates indexes over data in an ESE database.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
@@ -1111,6 +1320,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             Trace.WriteLineIf(
                 this.traceSwitch.TraceVerbose,
                 String.Format("Version = {0}, BuildNumber = {1}", version, buildNumber));
+
+            if (buildNumber >= 2700)
+            {
+                Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports Server 2003 features");
+                this.Capabilities.SupportsServer2003Features = true;
+            }
 
             if (buildNumber >= 6000)
             {

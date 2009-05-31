@@ -337,7 +337,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void SetAndRetrieveInstanceParametersPageTempDBMinSmallest()
         {
-            int expected = Api.PageTempDBSmallest;
+            int expected = SystemParameters.PageTempDBSmallest;
             this.instanceParameters.PageTempDBMin = expected;
             Assert.AreEqual(expected, this.instanceParameters.PageTempDBMin);
         }

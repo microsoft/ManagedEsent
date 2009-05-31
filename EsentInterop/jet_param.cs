@@ -127,7 +127,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// database pages. A size of zero indicates that the default size of an ordinary
         /// database should be used. It is often desirable for small applications to configure
         /// the temporary database to be as small as possible. Setting this parameter to
-        /// Api.PageTempDBSmallest will achieve the smallest temporary database possible.
+        /// SystemParameters.PageTempDBSmallest will achieve the smallest temporary database possible.
         /// </summary>
         PageTempDBMin = 19,
 

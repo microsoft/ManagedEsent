@@ -74,7 +74,7 @@ namespace InteropApiTests
             this.table = "table";
             this.instance = SetupHelper.CreateNewInstance(this.directory);
 
-            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.PageTempDBMin, Api.PageTempDBSmallest, null);
+            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.PageTempDBMin, SystemParameters.PageTempDBSmallest, null);
             Api.JetInit(ref this.instance);
             Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
             Api.JetCreateDatabase(this.sesid, this.database, String.Empty, out this.dbid, CreateDatabaseGrbit.None);
@@ -429,7 +429,7 @@ namespace InteropApiTests
 
             Api.JetSetCurrentIndex(this.sesid, this.tableid, indexName);
             string actual;
-            Api.JetGetCurrentIndex(this.sesid, this.tableid, out actual, Api.NameMost);
+            Api.JetGetCurrentIndex(this.sesid, this.tableid, out actual, SystemParameters.NameMost);
             Assert.AreEqual(indexName, actual);
         }
 
@@ -683,7 +683,7 @@ namespace InteropApiTests
         [Priority(1)]
         public void GetLockThrowsExceptionOnWriteConflict()
         {
-            var bookmark = new byte[Api.BookmarkMost];
+            var bookmark = new byte[SystemParameters.BookmarkMost];
             int bookmarkSize;
 
             Api.JetBeginTransaction(this.sesid);
@@ -840,7 +840,7 @@ namespace InteropApiTests
         /// </summary>
         private void UpdateAndGotoBookmark()
         {
-            var bookmark = new byte[Api.BookmarkMost];
+            var bookmark = new byte[SystemParameters.BookmarkMost];
             int bookmarkSize;
             Api.JetUpdate(this.sesid, this.tableid, bookmark, bookmark.Length, out bookmarkSize);
             Api.JetGotoBookmark(this.sesid, this.tableid, bookmark, bookmarkSize);

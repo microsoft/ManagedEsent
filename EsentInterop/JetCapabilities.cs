@@ -12,6 +12,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
     internal class JetCapabilities
     {
         /// <summary>
+        /// Gets or sets a value indicating whether Windows Server 2003 features
+        /// (in the Interop.Server2003 namespace) are supported.
+        /// </summary>
+        public bool SupportsServer2003Features { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether Vista features (in the
         /// Interop.Vista namespace) are supported.
         /// </summary>

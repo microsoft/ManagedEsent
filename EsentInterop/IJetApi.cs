@@ -144,6 +144,117 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_INDEXCREATE[] indexcreates,
             int numIndexCreates);
 
+        /// <summary>
+        /// Creates a temporary table with a single index. A temporary table
+        /// stores and retrieves records just like an ordinary table created
+        /// using JetCreateTableColumnIndex. However, temporary tables are
+        /// much faster than ordinary tables due to their volatile nature.
+        /// They can also be used to very quickly sort and perform duplicate
+        /// removal on record sets when accessed in a purely sequential manner.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="columns">
+        /// Column definitions for the columns created in the temporary table.
+        /// </param>
+        /// <param name="numColumns">Number of column definitions.</param>
+        /// <param name="grbit">Table creation options.</param>
+        /// <param name="tableid">
+        /// Returns the tableid of the temporary table. Closing this tableid
+        /// frees the resources associated with the temporary table.
+        /// </param>
+        /// <param name="columnids">
+        /// The output buffer that receives the array of column IDs generated
+        /// during the creation of the temporary table. The column IDs in this
+        /// array will exactly correspond to the input array of column definitions.
+        /// As a result, the size of this buffer must correspond to the size of the input array.
+        /// </param>
+        /// <returns>An error code.</returns>
+        int JetOpenTempTable(
+            JET_SESID sesid,
+            JET_COLUMNDEF[] columns,
+            int numColumns,
+            TempTableGrbit grbit,
+            out JET_TABLEID tableid,
+            JET_COLUMNID[] columnids);
+
+        /// <summary>
+        /// Creates a temporary table with a single index. A temporary table
+        /// stores and retrieves records just like an ordinary table created
+        /// using JetCreateTableColumnIndex. However, temporary tables are
+        /// much faster than ordinary tables due to their volatile nature.
+        /// They can also be used to very quickly sort and perform duplicate
+        /// removal on record sets when accessed in a purely sequential manner.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="columns">
+        /// Column definitions for the columns created in the temporary table.
+        /// </param>
+        /// <param name="numColumns">Number of column definitions.</param>
+        /// <param name="lcid">
+        /// The locale ID to use to compare any Unicode key column data in the temporary table.
+        /// Any locale may be used as long as the appropriate language pack has been installed
+        /// on the machine. 
+        /// </param>
+        /// <param name="grbit">Table creation options.</param>
+        /// <param name="tableid">
+        /// Returns the tableid of the temporary table. Closing this tableid
+        /// frees the resources associated with the temporary table.
+        /// </param>
+        /// <param name="columnids">
+        /// The output buffer that receives the array of column IDs generated
+        /// during the creation of the temporary table. The column IDs in this
+        /// array will exactly correspond to the input array of column definitions.
+        /// As a result, the size of this buffer must correspond to the size of the input array.
+        /// </param>
+        /// <returns>An error code.</returns>
+        int JetOpenTempTable2(
+            JET_SESID sesid,
+            JET_COLUMNDEF[] columns,
+            int numColumns,
+            int lcid,
+            TempTableGrbit grbit,
+            out JET_TABLEID tableid,
+            JET_COLUMNID[] columnids);
+
+        /// <summary>
+        /// Creates a temporary table with a single index. A temporary table
+        /// stores and retrieves records just like an ordinary table created
+        /// using JetCreateTableColumnIndex. However, temporary tables are
+        /// much faster than ordinary tables due to their volatile nature.
+        /// They can also be used to very quickly sort and perform duplicate
+        /// removal on record sets when accessed in a purely sequential manner.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="columns">
+        /// Column definitions for the columns created in the temporary table.
+        /// </param>
+        /// <param name="numColumns">Number of column definitions.</param>
+        /// <param name="unicodeindex">
+        /// The Locale ID and normalization flags that will be used to compare
+        /// any Unicode key column data in the temporary table. When this 
+        /// is not present then the default options are used. 
+        /// </param>
+        /// <param name="grbit">Table creation options.</param>
+        /// <param name="tableid">
+        /// Returns the tableid of the temporary table. Closing this tableid
+        /// frees the resources associated with the temporary table.
+        /// </param>
+        /// <param name="columnids">
+        /// The output buffer that receives the array of column IDs generated
+        /// during the creation of the temporary table. The column IDs in this
+        /// array will exactly correspond to the input array of column definitions.
+        /// As a result, the size of this buffer must correspond to the size of the input array.
+        /// </param>
+        /// <returns>An error code.</returns>
+        int JetOpenTempTable3(
+            JET_SESID sesid,
+            JET_COLUMNDEF[] columns,
+            int numColumns,
+            JET_UNICODEINDEX unicodeindex,
+            TempTableGrbit grbit,
+            out JET_TABLEID tableid,
+            JET_COLUMNID[] columnids);
+
         int JetGetTableColumnInfo(
             JET_SESID sesid,
             JET_TABLEID tableid,

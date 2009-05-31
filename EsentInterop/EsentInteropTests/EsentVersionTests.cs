@@ -23,6 +23,11 @@ namespace InteropApiTests
         [Priority(0)]
         public void PrintVersion()
         {
+            if (EsentVersion.SupportsServer2003Features)
+            {
+                Console.WriteLine("SupportsServer2003Features");    
+            }
+
             if (EsentVersion.SupportsVistaFeatures)
             {
                 Console.WriteLine("SupportsVistaFeatures");

@@ -447,7 +447,7 @@ namespace InteropApiTests
         public void JetCreateIndex2ThrowsExceptionWhenNumIndexcreatesIsTooLong()
         {
             var indexcreates = new[] { new JET_INDEXCREATE() };
-            Api.JetCreateIndex2(this.sesid, this.tableid, indexcreates, indexcreates.Length+1);
+            Api.JetCreateIndex2(this.sesid, this.tableid, indexcreates, indexcreates.Length + 1);
         }
 
         /// <summary>

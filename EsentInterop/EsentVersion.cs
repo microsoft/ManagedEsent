@@ -15,6 +15,19 @@ namespace Microsoft.Isam.Esent.Interop
     {
         /// <summary>
         /// Gets a value indicating whether the current version of esent
+        /// supports features available in the Windows Server 2003 version of
+        /// esent.
+        /// </summary>
+        public static bool SupportsServer2003Features
+        {
+            get
+            {
+                return Capabilities.SupportsServer2003Features;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the current version of esent
         /// supports features available in the Windows Vista version of
         /// esent.
         /// </summary>

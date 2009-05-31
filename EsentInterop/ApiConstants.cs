@@ -7,20 +7,16 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
-    /// Constants for the ESENT API. 
+    /// Constants for the ESENT API. These don't have to be looked up via
+    /// system parameters.
     /// </summary>
-    public static partial class Api
+    public static partial class SystemParameters
     {
         /// <summary>
         /// The length of the prefix used to name files used by the database
         /// engine.
         /// </summary>
         public const int BaseNameLength = 3;
-
-        /// <summary>
-        /// Maximum size of a bookmark.
-        /// </summary>
-        public const int BookmarkMost = 256;
 
         /// <summary>
         /// Maximum size of a table/column/index name.
@@ -32,16 +28,6 @@ namespace Microsoft.Isam.Esent.Interop
         /// or JET_coltyp.LongText.
         /// </summary>
         public const int ColumnMost = 255;
-
-        /// <summary>
-        /// The maximum size of a sort or index key.
-        /// </summary>
-        public const int KeyMost = 255;
-
-        /// <summary>
-        /// Maximum number of components in a sort or index key.
-        /// </summary>
-        public const int ColumnsKeyMost = 12;
 
         /// <summary>
         /// Maximum number of columns allowed in a table.

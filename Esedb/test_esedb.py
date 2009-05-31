@@ -14,6 +14,10 @@ from System.IO import Directory
 from System.IO import Path
 from esedb import Counter, EseDBError, EseDBCursorClosedError
 
+import clr
+clr.AddReferenceByPartialName('Esent.Interop')
+import Microsoft.Isam.Esent.Interop as Esent
+
 def deleteDirectory(directory):
 	if Directory.Exists(directory):
 		Directory.Delete(directory, True)
@@ -44,16 +48,24 @@ class EsedbSingleDBFixture(unittest.TestCase):
 		self.assertEqual(self._db['key'], 'value')
 
 	def testLargeKey(self):
-		# esent will truncate the key (only the first 255 bytes
-		# are indexed, but we should be able to set all this data)
+		# esent will truncate the key, but we should be able to set all this data
 		key = 'K' * 1024*1024
 		self._db[key] = 'value'
 		self.assertEqual(self._db[key], 'value')
-
+		
 	def testLargeValue(self):
 		value = 'V' * 1024*1024
 		self._db['bigstuff'] = value
 		self.assertEqual(self._db['bigstuff'], value)
+
+	def testLongKeys(self):
+		if Esent.EsentVersion.SupportsLargeKeys:
+			key1 = '?'*300 + 'Foo'
+			key2 = '?'*300 + 'Bar'
+			self._db[key1] = 'value1'
+			self._db[key2] = 'value2'
+			self.assertEqual(self._db[key1], 'value1')
+			self.assertEqual(self._db[key2], 'value2')
 		
 	def testNullKey(self):
 		self._db[None] = 'value'

@@ -132,7 +132,7 @@ namespace InteropApiTests
         [Priority(1)]
         public void TestSaveUpdateGetsBookmark()
         {
-            var bookmark = new byte[Api.BookmarkMost];
+            var bookmark = new byte[SystemParameters.BookmarkMost];
             int bookmarkSize;
             using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
             {
