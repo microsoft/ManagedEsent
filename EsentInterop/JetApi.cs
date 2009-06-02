@@ -527,10 +527,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             NATIVE_COLUMNDEF[] nativecolumndefs = GetNativecolumndefs(columns, numColumns);
             var nativecolumnids = new uint[numColumns];
 
-            int err = NativeMethods.JetOpenTempTable(
-                sesid.Value, nativecolumndefs, (uint) numColumns, (uint) grbit, out tableid.Value, nativecolumnids);
+            int err = this.Err(NativeMethods.JetOpenTempTable(
+                sesid.Value, nativecolumndefs, (uint) numColumns, (uint) grbit, out tableid.Value, nativecolumnids));
 
-            SetColumnids(columnids, nativecolumnids, numColumns);
+            SetColumnids(columns, columnids, nativecolumnids, numColumns);
             
             return err;
         }
@@ -585,10 +585,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             NATIVE_COLUMNDEF[] nativecolumndefs = GetNativecolumndefs(columns, numColumns);
             var nativecolumnids = new uint[numColumns];
 
-            int err = NativeMethods.JetOpenTempTable2(
-                sesid.Value, nativecolumndefs, (uint)numColumns, (uint) lcid, (uint)grbit, out tableid.Value, nativecolumnids);
+            int err = this.Err(NativeMethods.JetOpenTempTable2(
+                sesid.Value, nativecolumndefs, (uint)numColumns, (uint) lcid, (uint)grbit, out tableid.Value, nativecolumnids));
 
-            SetColumnids(columnids, nativecolumnids, numColumns);
+            SetColumnids(columns, columnids, nativecolumnids, numColumns);
 
             return err;            
         }
@@ -647,18 +647,69 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             if (null != unicodeindex)
             {
                 NATIVE_UNICODEINDEX nativeunicodeindex = unicodeindex.GetNativeUnicodeIndex();
-                err = NativeMethods.JetOpenTempTable3(
-                    sesid.Value, nativecolumndefs, (uint)numColumns, ref nativeunicodeindex, (uint)grbit, out tableid.Value, nativecolumnids);
+                err = this.Err(NativeMethods.JetOpenTempTable3(
+                    sesid.Value, nativecolumndefs, (uint)numColumns, ref nativeunicodeindex, (uint)grbit, out tableid.Value, nativecolumnids));
             }
             else
             {
-                err = NativeMethods.JetOpenTempTable3(
-                    sesid.Value, nativecolumndefs, (uint)numColumns, IntPtr.Zero, (uint)grbit, out tableid.Value, nativecolumnids);                
+                err = this.Err(NativeMethods.JetOpenTempTable3(
+                    sesid.Value, nativecolumndefs, (uint)numColumns, IntPtr.Zero, (uint)grbit, out tableid.Value, nativecolumnids));                
             }
 
-            SetColumnids(columnids, nativecolumnids, numColumns);
+            SetColumnids(columns, columnids, nativecolumnids, numColumns);
 
             return err;            
+        }
+
+        /// <summary>
+        /// Creates a temporary table with a single index. A temporary table
+        /// stores and retrieves records just like an ordinary table created
+        /// using JetCreateTableColumnIndex. However, temporary tables are
+        /// much faster than ordinary tables due to their volatile nature.
+        /// They can also be used to very quickly sort and perform duplicate
+        /// removal on record sets when accessed in a purely sequential manner.
+        /// </summary>
+        /// <remarks>
+        /// Introduced in Windows Vista;
+        /// </remarks>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="temporarytable">
+        /// Description of the temporary table to create on input. After a
+        /// successful call, the structure contains the handle to the temporary
+        /// table and column identifications.
+        /// </param>
+        /// <returns>An error code.</returns>
+        public int JetOpenTemporaryTable(JET_SESID sesid, JET_OPENTEMPORARYTABLE temporarytable)
+        {
+            this.TraceFunctionCall("JetOpenTemporaryTable");
+            if (!this.Capabilities.SupportsVistaFeatures)
+            {
+                this.ThrowUnsupportedApiException("JetOpenTemporaryTable");
+            }
+
+            NATIVE_OPENTEMPORARYTABLE nativetemporarytable = temporarytable.GetNativeOpenTemporaryTable();
+            var nativecolumnids = new uint[nativetemporarytable.ccolumn];
+            NATIVE_COLUMNDEF[] nativecolumndefs = GetNativecolumndefs(temporarytable.prgcolumndef, temporarytable.ccolumn);
+            using (var gchandlecollection = new GCHandleCollection())
+            {
+                // Pin memory
+                nativetemporarytable.prgcolumndef = gchandlecollection.Add(nativecolumndefs);
+                nativetemporarytable.rgcolumnid = gchandlecollection.Add(nativecolumnids);
+                if (null != temporarytable.pidxunicode)
+                {
+                    nativetemporarytable.pidxunicode =
+                        gchandlecollection.Add(temporarytable.pidxunicode.GetNativeUnicodeIndex());
+                }
+
+                // Call the interop method
+                int err = this.Err(NativeMethods.JetOpenTemporaryTable(sesid.Value, ref nativetemporarytable));
+
+                // Convert the return values
+                SetColumnids(temporarytable.prgcolumndef, temporarytable.prgcolumnid, nativecolumnids, temporarytable.ccolumn);
+                temporarytable.tableid = new JET_TABLEID { Value = nativetemporarytable.tableid };
+
+                return err;
+            }
         }
 
         public int JetGetTableColumnInfo(
@@ -1079,7 +1130,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.TraceFunctionCall("JetGetRecordPosition");
             recpos = new JET_RECPOS();
             NATIVE_RECPOS native = recpos.GetNativeRecpos();
-            int err = NativeMethods.JetGetRecordPosition(sesid.Value, tableid.Value, out native, native.cbStruct);
+            int err = this.Err(NativeMethods.JetGetRecordPosition(sesid.Value, tableid.Value, out native, native.cbStruct));
             recpos.SetFromNativeRecpos(native);
             return err;
         }
@@ -1169,7 +1220,14 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     nativeSetColumns[i] = setcolumns[i].GetNativeSetcolumn();
                 }
 
-                return NativeMethods.JetSetColumns(sesid.Value, tableid.Value, nativeSetColumns, (uint) numColumns);
+                int err = this.Err(NativeMethods.JetSetColumns(sesid.Value, tableid.Value, nativeSetColumns, (uint) numColumns));
+
+                for (int i = 0; i < numColumns; ++i)
+                {
+                    setcolumns[i].err = (JET_wrn) nativeSetColumns[i].err;
+                }
+
+                return err;
             }
         }
 
@@ -1251,16 +1309,19 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         }
 
         /// <summary>
-        /// Set managed columnids from unmanaged columnids.
+        /// Set managed columnids from unmanaged columnids. This also sets the columnids
+        /// in the columndefs.
         /// </summary>
+        /// <param name="columns">The column definitions.</param>
         /// <param name="columnids">The columnids to set.</param>
         /// <param name="nativecolumnids">The native columnids.</param>
         /// <param name="numColumns">The number of columnids to set.</param>
-        private static void SetColumnids(JET_COLUMNID[] columnids, uint[] nativecolumnids, int numColumns)
+        private static void SetColumnids(JET_COLUMNDEF[] columns, JET_COLUMNID[] columnids, uint[] nativecolumnids, int numColumns)
         {
             for (int i = 0; i < numColumns; ++i)
             {
                 columnids[i] = new JET_COLUMNID { Value = nativecolumnids[i] };
+                columns[i].columnid = columnids[i];
             }
         }
 
@@ -1464,6 +1525,18 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 Trace.WriteLineIf(this.traceSwitch.TraceError, "CheckNotNegative failed");
                 throw new ArgumentOutOfRangeException(paramName, i, "cannot be negative");
             }
+        }
+
+        /// <summary>
+        /// Used when an unsupported API method is called. This 
+        /// logs an error and throws an InvalidOperationException.
+        /// </summary>
+        /// <param name="method">The name of the method.</param>
+        private void ThrowUnsupportedApiException(string method)
+        {
+            string error = String.Format("Method {0} is not supported by this version of esent", method);
+            Trace.WriteLineIf(this.traceSwitch.TraceError, error);
+            throw new InvalidOperationException(error);
         }
 
         /// <summary>

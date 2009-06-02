@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using Microsoft.Isam.Esent.Interop;
+using Microsoft.Isam.Esent.Interop.Vista;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace InteropApiTests
@@ -316,6 +317,57 @@ namespace InteropApiTests
             Array.Sort(data);
             CollectionAssert.AreEqual(data, this.RetrieveAllRecordsAsString(tableid, columnids[0]).ToArray());
             Api.JetCloseTable(this.session, tableid);
+        }
+
+        /// <summary>
+        /// Sort data with a temporary table
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void SortDataCaseSensitiveWithJetOpenTemporaryTable()
+        {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
+            var columns = new[]
+            {
+                new JET_COLUMNDEF { coltyp = JET_coltyp.Text, cp = JET_CP.Unicode, grbit = ColumndefGrbit.TTKey },
+            };
+            var columnids = new JET_COLUMNID[columns.Length];
+
+            var idxunicode = new JET_UNICODEINDEX
+            {
+                dwMapFlags = Conversions.LCMapFlagsFromCompareOptions(CompareOptions.None),
+                lcid = 1033,
+            };
+
+            var opentemporarytable = new JET_OPENTEMPORARYTABLE
+            {
+                cbKeyMost = SystemParameters.KeyMost,
+                ccolumn = columns.Length,
+                grbit = TempTableGrbit.None,
+                pidxunicode = idxunicode,
+                prgcolumndef = columns,
+                prgcolumnid = columnids,
+            };
+            VistaApi.JetOpenTemporaryTable(this.session, opentemporarytable);
+
+            var data = new[] { "g", "a", "A", "aa", "x", "b", "X" };
+            foreach (string s in data)
+            {
+                using (var update = new Update(this.session, opentemporarytable.tableid, JET_prep.Insert))
+                {
+                    Api.SetColumn(this.session, opentemporarytable.tableid, columnids[0], s, Encoding.Unicode);
+                    update.Save();
+                }
+            }
+
+            Array.Sort(data);
+            CollectionAssert.AreEqual(
+                data, this.RetrieveAllRecordsAsString(opentemporarytable.tableid, columnids[0]).ToArray());
+            Api.JetCloseTable(this.session, opentemporarytable.tableid);
         }
 
         #endregion

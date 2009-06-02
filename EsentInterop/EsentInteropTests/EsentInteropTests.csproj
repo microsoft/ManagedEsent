@@ -89,6 +89,7 @@
     <Compile Include="ConditionalColumnTests.cs" />
     <Compile Include="ConversionsTests.cs" />
     <Compile Include="Indexcreate2Tests.cs" />
+    <Compile Include="OpenTemporaryTableTests.cs" />
     <Compile Include="EquatableTests.cs" />
     <Compile Include="IndexcreateTests.cs" />
     <Compile Include="IndexRangeTests.cs" />

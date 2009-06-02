@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System;
+using Microsoft.Isam.Esent.Interop.Vista;
 
 namespace Microsoft.Isam.Esent.Interop.Implementation
 {
@@ -254,6 +255,26 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             TempTableGrbit grbit,
             out JET_TABLEID tableid,
             JET_COLUMNID[] columnids);
+
+        /// <summary>
+        /// Creates a temporary table with a single index. A temporary table
+        /// stores and retrieves records just like an ordinary table created
+        /// using JetCreateTableColumnIndex. However, temporary tables are
+        /// much faster than ordinary tables due to their volatile nature.
+        /// They can also be used to very quickly sort and perform duplicate
+        /// removal on record sets when accessed in a purely sequential manner.
+        /// </summary>
+        /// <remarks>
+        /// Introduced in Windows Vista;
+        /// </remarks>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="temporarytable">
+        /// Description of the temporary table to create on input. After a
+        /// successful call, the structure contains the handle to the temporary
+        /// table and column identifications.
+        /// </param>
+        /// <returns>An error code.</returns>
+        int JetOpenTemporaryTable(JET_SESID sesid, JET_OPENTEMPORARYTABLE temporarytable);
 
         int JetGetTableColumnInfo(
             JET_SESID sesid,

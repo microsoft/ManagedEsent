@@ -68,7 +68,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets the error code or warning returned from the set column operation.
         /// </summary>
-        public JET_err err { get; internal set; }
+        public JET_wrn err { get; internal set; }
 
         /// <summary>
         /// Gets or sets the pinned data. This is the data which will be used when the column is set. It is the caller's 

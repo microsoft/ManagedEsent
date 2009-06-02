@@ -50,7 +50,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Check the conversion to a NATIVE_INDEXCREATE sets the structure size
+        /// Check the conversion to a NATIVE_INDEXCREATE2 sets the structure size
         /// </summary>
         [TestMethod]
         [Priority(0)]

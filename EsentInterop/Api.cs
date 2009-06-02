@@ -22,6 +22,10 @@
 //  -   Convert JET_coltyp etc. into real enumerations
 //  -   Removing cbStruct from structures
 //  -   Removing unused/reserved entries from structures
+//  -   Working around ESENT bugs or variances in API behavior
+//  -   Automatically using upgraded/downgraded functionality where possible
+//  -   Removing common API confusion where possible (e.g. always setting the columnid
+//      in the JET_COLUMNDEF)
 //  -   Throwing exceptions instead of returning errors
 //  The Api has four layers:
 //  -   NativeMethods (internal): this is the P/Invoke interop layer. This layer deals
@@ -1312,7 +1316,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="err">The error code to check.</param>
         /// <returns>An ESENT warning code (possibly success).</returns>
-        private static JET_wrn Check(int err)
+        internal static JET_wrn Check(int err)
         {
             if (err < 0)
             {

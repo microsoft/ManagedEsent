@@ -54,9 +54,9 @@ namespace Microsoft.Isam.Esent.Interop
         public ColumndefGrbit grbit { get; set; }
 
         /// <summary>
-        /// Gets or sets the columnid.
+        /// Gets the columnid of the column.
         /// </summary>
-        public JET_COLUMNID columnid { get; set; }
+        public JET_COLUMNID columnid { get; internal set; }
 
         /// <summary>
         /// Returns the unmanaged columndef that represents this managed class.

@@ -103,7 +103,7 @@ namespace InteropApiTests
         private class MockEsesntResource : EsentResource
         {
             /// <summary>
-            /// Gets or sets a value indicating whether the internal ReleaseResource method 
+            /// Gets a value indicating whether the internal ReleaseResource method 
             /// was called.
             /// </summary>
             public bool WasReleaseResourceCalled { get; private set; }

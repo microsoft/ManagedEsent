@@ -8,6 +8,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
+using Microsoft.Isam.Esent.Interop.Vista;
 
 namespace Microsoft.Isam.Esent.Interop
 {
@@ -184,7 +185,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static extern int JetCreateIndex2(
             IntPtr sesid, IntPtr tableid, [In] NATIVE_INDEXCREATE[] pindexcreate, uint cIndexCreate);
 
-        // More modern versions of Esent take the larger NATIVE_INDEXCREATE2 structures
+        // Introduced in Windows Vista, this versions takes the larger NATIVE_INDEXCREATE2 structure
         [DllImport(EsentDll, CharSet = EsentCharSet)]
         public static extern int JetCreateIndex2(
             IntPtr sesid, IntPtr tableid, [In] NATIVE_INDEXCREATE2[] pindexcreate, uint cIndexCreate);
@@ -217,6 +218,10 @@ namespace Microsoft.Isam.Esent.Interop
             uint grbit,
             out IntPtr ptableid,
             [Out] uint[] rgcolumnid);
+
+        // Introduced in Windows Vista
+        [DllImport(EsentDll)]
+        public static extern int JetOpenTemporaryTable(IntPtr sesid, ref NATIVE_OPENTEMPORARYTABLE popentemporarytable);
 
         // Overload to allow for null pidxunicode
         [DllImport(EsentDll)]
