@@ -330,6 +330,10 @@ namespace Microsoft.Isam.Esent.Interop
         public static extern int JetSetColumn(IntPtr sesid, IntPtr tableid, uint columnid, IntPtr pvData, uint cbData, uint grbit, [In] ref NATIVE_SETINFO psetinfo);
 
         [DllImport(EsentDll)]
+        public static unsafe extern int JetSetColumns(
+            IntPtr sesid, IntPtr tableid, NATIVE_SETCOLUMN* psetcolumn, uint csetcolumn);
+
+        [DllImport(EsentDll)]
         public static extern int JetGetLock(IntPtr sesid, IntPtr tableid, uint grbit);
 
         [DllImport(EsentDll)]

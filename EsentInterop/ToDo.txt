@@ -8,7 +8,6 @@
 Pri 0 APIs: Needed by clients
 -----------------------------
   - JetCreateTemporaryTable
-  - JetSetColumns
   - JetRetrieveColumns
   - JetEnumerateColumns
   - JetGetThreadStats

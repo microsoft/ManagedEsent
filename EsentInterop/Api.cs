@@ -1202,6 +1202,48 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Allows an application to set multiple column values in a single
+        /// operation. An array of <see cref="JET_SETCOLUMN"/> structures is
+        /// used to describe the set of column values to be set, and to describe
+        /// input buffers for each column value to be set.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to set the columns on.</param>
+        /// <param name="setcolumns">
+        /// An array of <see cref="JET_SETCOLUMN"/> structures describing the
+        /// data to set.
+        /// </param>
+        /// <param name="numColumns">
+        /// Number of entries in the setcolumns parameter.
+        /// </param>
+        /// <returns>
+        /// A warning. If the last column set has a warning, then
+        /// this warning will be returned from JetSetColumns itself
+        /// </returns>
+        public static JET_wrn JetSetColumns(JET_SESID sesid, JET_TABLEID tableid, JET_SETCOLUMN[] setcolumns, int numColumns)
+        {
+            var gchandles = new GCHandleCollection();
+            try
+            {
+                foreach (JET_SETCOLUMN setcolumn in setcolumns)
+                {
+                    setcolumn.PinnedData = gchandles.Add(setcolumn.pvData);
+                }
+
+                return Api.Check(Impl.JetSetColumns(sesid, tableid, setcolumns, numColumns));
+            }
+            finally
+            {
+                gchandles.Dispose();
+                foreach (JET_SETCOLUMN setcolumn in setcolumns)
+                {
+                    // Clear the pinned data pointers
+                    setcolumn.PinnedData = IntPtr.Zero;
+                }
+            }
+        }
+
+        /// <summary>
         /// Explicitly reserve the ability to update a row, write lock, or to explicitly prevent a row from
         /// being updated by any other session, read lock. Normally, row write locks are acquired implicitly as a
         /// result of updating rows. Read locks are usually not required because of record versioning. However,

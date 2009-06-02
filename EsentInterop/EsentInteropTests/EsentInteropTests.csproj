@@ -101,6 +101,8 @@
     <Compile Include="EmptyTableFixture.cs" />
     <Compile Include="IndexRangeFromTableidTests.cs" />
     <Compile Include="SeekTests.cs" />
+    <Compile Include="TempTableFixture.cs" />
+    <Compile Include="SetColumnTests.cs" />
     <Compile Include="SimplePerfTest.cs" />
     <Compile Include="SystemParameterTests.cs" />
     <Compile Include="TableTests.cs" />
