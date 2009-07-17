@@ -824,7 +824,7 @@ namespace InteropApiTests
                 Api.SetColumn(this.sesid, this.tableid, columnid, Any.String, Encoding.UTF8);
                 Assert.Fail("Expected an ESENT exception");
             }
-            catch (EsentException)
+            catch (ArgumentOutOfRangeException)
             {
             }
         }
@@ -1368,7 +1368,7 @@ namespace InteropApiTests
                 Api.MakeKey(this.sesid, this.tableid, Any.String, Encoding.UTF32, MakeKeyGrbit.NewKey);
                 Assert.Fail("Expected an EsentException");
             }
-            catch (EsentException)
+            catch (ArgumentOutOfRangeException)
             {
             }
         }

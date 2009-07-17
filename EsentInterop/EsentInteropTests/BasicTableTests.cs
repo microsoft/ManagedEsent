@@ -10,6 +10,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using Microsoft.Isam.Esent.Interop;
+using Microsoft.Isam.Esent.Interop.Vista;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace InteropApiTests
@@ -721,6 +722,31 @@ namespace InteropApiTests
             Api.JetCloseTable(otherSesid, otherTableid);
             Api.JetCloseDatabase(otherSesid, otherDbid, CloseDatabaseGrbit.None);
             Api.JetEndSession(otherSesid, EndSessionGrbit.None);
+        }
+
+        /// <summary>
+        /// Test JetGetThreadStats
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void GetThreadStats()
+        {
+            if (!EsentVersion.SupportsVistaFeatures)
+                return;
+
+            string s = Any.String;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            this.SetColumnFromString(Any.String);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            JET_THREADSTATS threadstats;
+            VistaApi.JetGetThreadStats(out threadstats);
+            Assert.AreNotEqual(0, threadstats.cPageReferenced);
+            Assert.AreNotEqual(0, threadstats.cLogRecord);
+            Assert.AreNotEqual(0, threadstats.cbLogRecord);
         }
 
         #endregion DML Tests

@@ -187,12 +187,14 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// Intersect a group of index ranges and return the bookmarks of the records which are found
-        /// in all the index ranges.
+        /// in all the index ranges. 
+        /// Also see <see cref="JetIntersectIndexes"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableids">
         /// The tableids to use. Each tableid must be from a different index on the same table and
-        /// have an active index range.
+        /// have an active index range. Use <see cref="JetSetIndexRange"/>
+        /// to create an index range.
         /// </param>
         /// <returns>
         /// The bookmarks of the records which are found in all the index ranges. The bookmarks 

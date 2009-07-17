@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
-    /// The native version of the JET_UNICODEINDEX structure.
+    /// The native version of the JET_CONDITIONALCOLUMN structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     internal struct NATIVE_CONDITIONALCOLUMN

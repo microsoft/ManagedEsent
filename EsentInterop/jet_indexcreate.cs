@@ -15,7 +15,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native version of the JET_INDEXCREATE structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    internal struct NATIVE_INDEXCREATE
+    internal unsafe struct NATIVE_INDEXCREATE
     {
         public uint cbStruct;
         public string szIndexName;
@@ -23,7 +23,7 @@ namespace Microsoft.Isam.Esent.Interop
         public uint cbKey;
         public uint grbit;
         public uint ulDensity;
-        public IntPtr pidxUnicode;
+        public NATIVE_UNICODEINDEX* pidxUnicode;
         public IntPtr cbVarSegMac;  // can also be JET_TUPLELIMITS*
         public IntPtr rgconditionalcolumn;
         public uint cConditionalColumn;

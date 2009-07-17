@@ -11,13 +11,13 @@ namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
     /// Helper methods for the ESENT API. These do data conversion for
-    /// JetMakeKey. The methods that operate on unsigned numbers are
-    /// internal so that the public API remains CLS compliant.
+    /// JetMakeKey.
     /// </summary>
     public static partial class Api
     {
         /// <summary>
-        /// Constructs a search key that may then be used by JetSeek and JetSetIndexRange.
+        /// Constructs a search key that may then be used by <see cref="JetSeek"/>
+        /// and <see cref="JetSetIndexRange"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to create the key on.</param>
@@ -36,7 +36,8 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Constructs a search key that may then be used by JetSeek and JetSetIndexRange.
+        /// Constructs a search key that may then be used by <see cref="JetSeek"/>
+        /// and <see cref="JetSetIndexRange"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to create the key on.</param>
@@ -74,7 +75,8 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Constructs a search key that may then be used by JetSeek and JetSetIndexRange.
+        /// Constructs a search key that may then be used by <see cref="JetSeek"/>
+        /// and <see cref="JetSetIndexRange"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to create the key on.</param>
@@ -87,7 +89,8 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Constructs a search key that may then be used by JetSeek and JetSetIndexRange.
+        /// Constructs a search key that may then be used by <see cref="JetSeek"/>
+        /// and <see cref="JetSetIndexRange"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to create the key on.</param>
@@ -104,7 +107,8 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Constructs a search key that may then be used by JetSeek and JetSetIndexRange.
+        /// Constructs a search key that may then be used by <see cref="JetSeek"/>
+        /// and <see cref="JetSetIndexRange"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to create the key on.</param>
@@ -121,7 +125,8 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Constructs a search key that may then be used by JetSeek and JetSetIndexRange.
+        /// Constructs a search key that may then be used by <see cref="JetSeek"/>
+        /// and <see cref="JetSetIndexRange"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to create the key on.</param>
@@ -138,7 +143,8 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Constructs a search key that may then be used by JetSeek and JetSetIndexRange.
+        /// Constructs a search key that may then be used by <see cref="JetSeek"/>
+        /// and <see cref="JetSetIndexRange"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to create the key on.</param>
@@ -155,7 +161,8 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Constructs a search key that may then be used by JetSeek and JetSetIndexRange.
+        /// Constructs a search key that may then be used by <see cref="JetSeek"/>
+        /// and <see cref="JetSetIndexRange"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to create the key on.</param>
@@ -168,7 +175,8 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Constructs a search key that may then be used by JetSeek and JetSetIndexRange.
+        /// Constructs a search key that may then be used by <see cref="JetSeek"/>
+        /// and <see cref="JetSetIndexRange"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to create the key on.</param>
@@ -180,7 +188,8 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Constructs a search key that may then be used by JetSeek and JetSetIndexRange.
+        /// Constructs a search key that may then be used by <see cref="JetSeek"/>
+        /// and <see cref="JetSetIndexRange"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to create the key on.</param>
@@ -197,7 +206,8 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Constructs a search key that may then be used by JetSeek and JetSetIndexRange.
+        /// Constructs a search key that may then be used by <see cref="JetSeek"/>
+        /// and <see cref="JetSetIndexRange"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to create the key on.</param>
@@ -214,7 +224,8 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Constructs a search key that may then be used by JetSeek and JetSetIndexRange.
+        /// Constructs a search key that may then be used by <see cref="JetSeek"/>
+        /// and <see cref="JetSetIndexRange"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to create the key on.</param>
@@ -231,7 +242,8 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Constructs a search key that may then be used by JetSeek and JetSetIndexRange.
+        /// Constructs a search key that may then be used by <see cref="JetSeek"/>
+        /// and <see cref="JetSetIndexRange"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to create the key on.</param>
@@ -248,7 +260,8 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Constructs a search key that may then be used by JetSeek and JetSetIndexRange.
+        /// Constructs a search key that may then be used by <see cref="JetSeek"/>
+        /// and <see cref="JetSetIndexRange"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to create the key on.</param>

@@ -314,6 +314,28 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return this.Err(NativeMethods.JetDupSession(sesid.Value, out newSesid.Value));
         }
 
+        /// <summary>
+        /// Retrieves performance information from the database engine for the
+        /// current thread. Multiple calls can be used to collect statistics
+        /// that reflect the activity of the database engine on this thread
+        /// between those calls. 
+        /// </summary>
+        /// <param name="threadstats">
+        /// Returns the thread statistics..
+        /// </param>
+        /// <returns>An error code if the operation fails.</returns>
+        public int JetGetThreadStats(out JET_THREADSTATS threadstats)
+        {
+            this.CheckSupportsVistaFeatures();
+
+            var native = new NATIVE_THREADSTATS();
+            int err = this.Err(NativeMethods.JetGetThreadStats(out native, (uint) Marshal.SizeOf(native)));
+
+            threadstats = new JET_THREADSTATS();
+            threadstats.SetFromNativeThreadstats(native);
+            return err;
+        }
+
         #endregion
 
         #region tables
@@ -682,33 +704,33 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetOpenTemporaryTable(JET_SESID sesid, JET_OPENTEMPORARYTABLE temporarytable)
         {
             this.TraceFunctionCall("JetOpenTemporaryTable");
-            if (!this.Capabilities.SupportsVistaFeatures)
-            {
-                this.ThrowUnsupportedApiException("JetOpenTemporaryTable");
-            }
+            this.CheckSupportsVistaFeatures();
 
             NATIVE_OPENTEMPORARYTABLE nativetemporarytable = temporarytable.GetNativeOpenTemporaryTable();
             var nativecolumnids = new uint[nativetemporarytable.ccolumn];
             NATIVE_COLUMNDEF[] nativecolumndefs = GetNativecolumndefs(temporarytable.prgcolumndef, temporarytable.ccolumn);
-            using (var gchandlecollection = new GCHandleCollection())
+            unsafe
             {
-                // Pin memory
-                nativetemporarytable.prgcolumndef = gchandlecollection.Add(nativecolumndefs);
-                nativetemporarytable.rgcolumnid = gchandlecollection.Add(nativecolumnids);
-                if (null != temporarytable.pidxunicode)
+                using (var gchandlecollection = new GCHandleCollection())
                 {
-                    nativetemporarytable.pidxunicode =
-                        gchandlecollection.Add(temporarytable.pidxunicode.GetNativeUnicodeIndex());
+                    // Pin memory
+                    nativetemporarytable.prgcolumndef = (NATIVE_COLUMNDEF*) gchandlecollection.Add(nativecolumndefs);
+                    nativetemporarytable.rgcolumnid = (uint*) gchandlecollection.Add(nativecolumnids);
+                    if (null != temporarytable.pidxunicode)
+                    {
+                        nativetemporarytable.pidxunicode = (NATIVE_UNICODEINDEX*)
+                            gchandlecollection.Add(temporarytable.pidxunicode.GetNativeUnicodeIndex());
+                    }
+
+                    // Call the interop method
+                    int err = this.Err(NativeMethods.JetOpenTemporaryTable(sesid.Value, ref nativetemporarytable));
+
+                    // Convert the return values
+                    SetColumnids(temporarytable.prgcolumndef, temporarytable.prgcolumnid, nativecolumnids, temporarytable.ccolumn);
+                    temporarytable.tableid = new JET_TABLEID { Value = nativetemporarytable.tableid };
+
+                    return err;
                 }
-
-                // Call the interop method
-                int err = this.Err(NativeMethods.JetOpenTemporaryTable(sesid.Value, ref nativetemporarytable));
-
-                // Convert the return values
-                SetColumnids(temporarytable.prgcolumndef, temporarytable.prgcolumnid, nativecolumnids, temporarytable.ccolumn);
-                temporarytable.tableid = new JET_TABLEID { Value = nativetemporarytable.tableid };
-
-                return err;
             }
         }
 
@@ -1342,22 +1364,26 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
 
             // pin the memory
-            using (var handles = new GCHandleCollection())
+            unsafe
             {
-                for (int i = 0; i < numIndexCreates; ++i)
+                using (var handles = new GCHandleCollection())
                 {
-                    if (null != indexcreates[i].pidxUnicode)
+                    for (int i = 0; i < numIndexCreates; ++i)
                     {
-                        NATIVE_UNICODEINDEX unicode = indexcreates[i].pidxUnicode.GetNativeUnicodeIndex();
-                        nativeIndexcreates[i].pidxUnicode = handles.Add(unicode);
-                        nativeIndexcreates[i].grbit |= (uint)VistaGrbits.IndexUnicode;
+                        if (null != indexcreates[i].pidxUnicode)
+                        {
+                            NATIVE_UNICODEINDEX unicode = indexcreates[i].pidxUnicode.GetNativeUnicodeIndex();
+                            nativeIndexcreates[i].pidxUnicode = (NATIVE_UNICODEINDEX*) handles.Add(unicode);
+                            nativeIndexcreates[i].grbit |= (uint) VistaGrbits.IndexUnicode;
+                        }
+                        ////nativeIndexcreates[i].rgconditionalcolumn = handles.Add(indexcreates[i].rgconditionalcolumn);
                     }
-                    ////nativeIndexcreates[i].rgconditionalcolumn = handles.Add(indexcreates[i].rgconditionalcolumn);
-                }
 
-                return
-                    this.Err(
-                        NativeMethods.JetCreateIndex2(sesid.Value, tableid.Value, nativeIndexcreates, (uint)numIndexCreates));
+                    return
+                        this.Err(
+                            NativeMethods.JetCreateIndex2(
+                                sesid.Value, tableid.Value, nativeIndexcreates, (uint) numIndexCreates));
+                }
             }
         }
 
@@ -1378,22 +1404,25 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
 
             // pin the memory
-            using (var handles = new GCHandleCollection())
+            unsafe
             {
-                for (int i = 0; i < numIndexCreates; ++i)
+                using (var handles = new GCHandleCollection())
                 {
-                    if (null != indexcreates[i].pidxUnicode)
+                    for (int i = 0; i < numIndexCreates; ++i)
                     {
-                        NATIVE_UNICODEINDEX unicode = indexcreates[i].pidxUnicode.GetNativeUnicodeIndex();
-                        nativeIndexcreates[i].indexcreate.pidxUnicode = handles.Add(unicode);
-                        nativeIndexcreates[i].indexcreate.grbit |= (uint)VistaGrbits.IndexUnicode;
+                        if (null != indexcreates[i].pidxUnicode)
+                        {
+                            NATIVE_UNICODEINDEX unicode = indexcreates[i].pidxUnicode.GetNativeUnicodeIndex();
+                            nativeIndexcreates[i].indexcreate.pidxUnicode = (NATIVE_UNICODEINDEX*) handles.Add(unicode);
+                            nativeIndexcreates[i].indexcreate.grbit |= (uint)VistaGrbits.IndexUnicode;
+                        }
+                        ////nativeIndexcreates[i].rgconditionalcolumn = handles.Add(indexcreates[i].rgconditionalcolumn);
                     }
-                    ////nativeIndexcreates[i].rgconditionalcolumn = handles.Add(indexcreates[i].rgconditionalcolumn);
-                }
 
-                return
-                    this.Err(
-                        NativeMethods.JetCreateIndex2(sesid.Value, tableid.Value, nativeIndexcreates, (uint)numIndexCreates));
+                    return
+                        this.Err(
+                            NativeMethods.JetCreateIndex2(sesid.Value, tableid.Value, nativeIndexcreates, (uint)numIndexCreates));
+                }                
             }
         }
 
@@ -1470,6 +1499,18 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             finally
             {
                 this.JetTerm(instance);
+            }
+        }
+
+        /// <summary>
+        /// Check that ESENT supports Vista features. Throws an exception if Vista features
+        /// aren't supported.
+        /// </summary>
+        private void CheckSupportsVistaFeatures()
+        {
+            if (!this.Capabilities.SupportsVistaFeatures)
+            {
+                this.ThrowUnsupportedApiException("JetOpenTemporaryTable");
             }
         }
 

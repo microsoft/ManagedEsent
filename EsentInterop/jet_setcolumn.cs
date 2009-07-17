@@ -11,13 +11,13 @@ using System.Runtime.InteropServices;
 namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
-    /// The native version of the JET_SETCOLUMN structure.
+    /// The native version of the <see cref="JET_SETCOLUMN"/> structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    internal struct NATIVE_SETCOLUMN
+    internal unsafe struct NATIVE_SETCOLUMN
     {
         public uint columnid;
-        public IntPtr pvData;
+        public byte* pvData;
         public uint cbData;
         public uint grbit;
         public uint ibLongValue;
@@ -26,9 +26,9 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Contains input and output parameters for JetSetColumns. Fields in the
-    /// structure describe what column value to set, how to set it, and where
-    /// to get the column set data.
+    /// Contains input and output parameters for <see cref="Api.JetSetColumns"/>.
+    /// Fields in the structure describe what column value to set, how to set it,
+    /// and where to get the column set data.
     /// </summary>
     public class JET_SETCOLUMN
     {
@@ -53,7 +53,8 @@ namespace Microsoft.Isam.Esent.Interop
         public SetColumnGrbit grbit { get; set; }
 
         /// <summary>
-        /// Gets or sets offset to the first byte to be set in a column of type JET_coltypLongBinary or JET_coltypLongText.
+        /// Gets or sets offset to the first byte to be set in a column of type
+        /// <see cref="JET_coltyp.LongBinary"/> or <see cref="JET_coltyp.LongText"/>.
         /// </summary>
         public int ibLongValue { get; set; }
 
@@ -80,13 +81,13 @@ namespace Microsoft.Isam.Esent.Interop
         /// Gets the NATIVE_SETCOLUMN structure that represents the object.
         /// </summary>
         /// <returns>A NATIVE_SETCOLUMN structure whose fields match the class.</returns>
-        internal NATIVE_SETCOLUMN GetNativeSetcolumn()
+        internal unsafe NATIVE_SETCOLUMN GetNativeSetcolumn()
         {
             Debug.Assert(null == this.pvData || IntPtr.Zero != this.PinnedData, "pvData is non-null, but PinnedData is null");
             var setinfo = new NATIVE_SETCOLUMN
             {
                 columnid = this.columnid.Value,
-                pvData = this.PinnedData,
+                pvData = (byte*) this.PinnedData,
                 cbData = (uint) this.cbData,
                 grbit = (uint) this.grbit,
                 ibLongValue = (uint) this.ibLongValue,

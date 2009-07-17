@@ -100,10 +100,10 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        public void VerifyConversionToNativeSetsPvData()
+        public unsafe void VerifyConversionToNativeSetsPvData()
         {
             var expected = new IntPtr(5);
-            Assert.AreEqual(expected, this.native.pvData);
+            Assert.IsTrue((void*) expected == this.native.pvData);
         }
     }
 }

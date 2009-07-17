@@ -7,10 +7,11 @@
 	
 Pri 0 APIs: Needed by clients
 -----------------------------
-  - JetCreateTemporaryTable
   - JetRetrieveColumns
   - JetEnumerateColumns
-  - JetGetThreadStats
+  - JetIdle
+  - JetGetThreadStats (Vista)
+  - JetGetRecordSize (Vista)
   	
 Pri 1 APIs: New functionality
 ------------------------------
@@ -20,11 +21,16 @@ Pri 1 APIs: New functionality
   - JetGetInstanceInfo
   - JetGetSecondaryIndexBookmark
   - JetGotoSecondaryIndexBookmark 
-  - JetIdle
 
 Pri 2 APIs: Extending functionality
 -----------------------------------
   - JetSetCurrentIndex2
   - JetSetCurrentIndex3
+  - JetCreateTableColumnIndex2
+
+Pri 2 APIs: Obscure functionality
+---------------------------------
+  - JetGetInstanceMiscInfo
+  - JetRegisterCallback
+  - JetUnregisterCallback
   - JetSetCurrentIndex4
-  

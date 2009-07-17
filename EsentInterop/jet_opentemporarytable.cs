@@ -13,14 +13,14 @@ namespace Microsoft.Isam.Esent.Interop.Vista
     /// The native version of the JET_OPENTEMPORARYTABLE structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    internal struct NATIVE_OPENTEMPORARYTABLE
+    internal unsafe struct NATIVE_OPENTEMPORARYTABLE
     {
         public uint cbStruct;
-        public IntPtr prgcolumndef; // points to NATIVE_COLUMNDEF[]
+        public NATIVE_COLUMNDEF* prgcolumndef;
         public uint ccolumn;
-        public IntPtr pidxunicode; // points to a NATIVE_UNICODEINDEX
+        public NATIVE_UNICODEINDEX* pidxunicode;
         public uint grbit;
-        public IntPtr rgcolumnid; // points to uint[]
+        public uint* rgcolumnid;
         public uint cbKeyMost;
         public uint cbVarSegMac;
         public IntPtr tableid;

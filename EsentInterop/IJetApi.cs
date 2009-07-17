@@ -100,6 +100,18 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         int JetDupSession(JET_SESID sesid, out JET_SESID newSesid);
 
+        /// <summary>
+        /// Retrieves performance information from the database engine for the
+        /// current thread. Multiple calls can be used to collect statistics
+        /// that reflect the activity of the database engine on this thread
+        /// between those calls. 
+        /// </summary>
+        /// <param name="threadstats">
+        /// Returns the thread statistics..
+        /// </param>
+        /// <returns>An error code if the operation fails.</returns>
+        int JetGetThreadStats(out JET_THREADSTATS threadstats);
+
         int JetOpenTable(JET_SESID sesid, JET_DBID dbid, string tablename, byte[] parameters, int parametersLength, OpenTableGrbit grbit, out JET_TABLEID tableid);
 
         int JetCloseTable(JET_SESID sesid, JET_TABLEID tableid);

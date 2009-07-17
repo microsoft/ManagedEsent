@@ -114,9 +114,9 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        public void VerifyConversionToNativeSetsUnicodeIndexToNull()
+        public unsafe void VerifyConversionToNativeSetsUnicodeIndexToNull()
         {
-            Assert.AreEqual(IntPtr.Zero, this.native.indexcreate.pidxUnicode);
+            Assert.IsTrue(null == this.native.indexcreate.pidxUnicode);
         }
 
         /// <summary>

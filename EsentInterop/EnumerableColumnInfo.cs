@@ -22,7 +22,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The table to retrieve column information for.</param>
-        public EnumerableColumnInfo(JET_SESID sesid, JET_TABLEID tableid)
+        internal EnumerableColumnInfo(JET_SESID sesid, JET_TABLEID tableid)
         {
             this.sesid = sesid;
             this.tableid = tableid;

@@ -32,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
@@ -87,7 +88,10 @@
     <Compile Include="ColumnlistTests.cs" />
     <Compile Include="ColumnStreamTests.cs" />
     <Compile Include="ConditionalColumnTests.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="ConversionsTests.cs" />
+    <Compile Include="AsciiPathTests.cs" />
+    <Compile Include="GCHandleCollectionTests.cs" />
     <Compile Include="Indexcreate2Tests.cs" />
     <Compile Include="OpenTemporaryTableTests.cs" />
     <Compile Include="EquatableTests.cs" />
@@ -108,6 +112,7 @@
     <Compile Include="SystemParameterTests.cs" />
     <Compile Include="TableTests.cs" />
     <Compile Include="TemporaryTableTests.cs" />
+    <Compile Include="ThreadstatsTests.cs" />
     <Compile Include="UnicodeIndexTests.cs" />
     <Compile Include="UnicodePathTests.cs" />
     <Compile Include="UpdateTests.cs" />
@@ -131,6 +136,7 @@
     <Compile Include="ToStringTests.cs" />
     <Compile Include="UtilityMethodsTests.cs" />
     <Compile Include="EsentVersionTests.cs" />
+    <Compile Include="XpCompatabilityTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\EsentInteropSamples\DbUtil\DbUtil.csproj">

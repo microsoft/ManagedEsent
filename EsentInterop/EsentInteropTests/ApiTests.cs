@@ -103,12 +103,12 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Verify that the ExceptionHandler event is invoked when an exception is
+        /// Verify that the ErrorHandler event is invoked when an error is
         /// generated.
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        public void VerifyExceptionHandlerIsInvokedOnException()
+        public void VerifyErrorHandlerIsInvokedOnException()
         {
             var jetApi = this.mocks.Stub<IJetApi>();
             Api.Impl = jetApi;
@@ -120,23 +120,25 @@ namespace InteropApiTests
             this.mocks.ReplayAll();
 
             bool eventWasCalled = false;
-            Api.ExceptionHandler handler = ex =>
+            JET_err error = JET_err.Success;
+            Api.ErrorHandler handler = errArg =>
                 {
                     eventWasCalled = true;
-                    return ex;
+                    error = errArg;
                 };
 
             try
             {
-                Api.HandleException += handler;
+                Api.HandleError += handler;
                 Api.JetBeginTransaction(JET_SESID.Nil);
             }
             catch (EsentErrorException)
             {
             }
 
-            Api.HandleException -= handler;
+            Api.HandleError -= handler;
             Assert.IsTrue(eventWasCalled);
+            Assert.AreEqual(JET_err.TransTooDeep, error);
         }
 
         /// <summary>
@@ -155,14 +157,14 @@ namespace InteropApiTests
                 .Return((int)JET_err.TransTooDeep);
             this.mocks.ReplayAll();
 
-            Api.ExceptionHandler handler = ex =>
+            Api.ErrorHandler handler = ex =>
                 {
-                    throw new InvalidOperationException("test", ex);
+                    throw new InvalidOperationException("test");
                 };
 
             try
             {
-                Api.HandleException += handler;
+                Api.HandleError += handler;
                 Api.JetBeginTransaction(JET_SESID.Nil);
                 Assert.Fail("Expected an invalid operation exception");
             }
@@ -170,7 +172,7 @@ namespace InteropApiTests
             {
             }
 
-            Api.HandleException -= handler;
+            Api.HandleError -= handler;
         }
     }
 }

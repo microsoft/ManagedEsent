@@ -64,6 +64,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
 
             var handle = GCHandle.Alloc(value, GCHandleType.Pinned);
+            this.handles.Add(handle);
             return handle.AddrOfPinnedObject();
         }
 

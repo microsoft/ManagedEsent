@@ -247,9 +247,12 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// Perform atomic addition on one column. The column must be of type
-        /// JET_coltyp.Long. This function allows multiple sessions to update the
+        /// <see cref="JET_coltyp.Long"/>. This function allows multiple sessions to update the
         /// same record concurrently without conflicts.
         /// </summary>
+        /// <remarks>
+        /// This method wraps <see cref="JetEscrowUpdate"/>.
+        /// </remarks>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to update.</param>
         /// <param name="columnid">The column to update. This must be an escrow-updatable column.</param>
@@ -331,15 +334,16 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// Verifies that the given encoding is valid for setting/retrieving data. Only
-        /// the ASCII and Unicode encodings are allowed. An EsentException is thrown if
-        /// the encoding isn't valid.
+        /// the ASCII and Unicode encodings are allowed. An <see cref="ArgumentOutOfRangeException"/>
+        /// is thrown if the encoding isn't valid.
         /// </summary>
         /// <param name="encoding">The encoding to check.</param>
         private static void CheckEncodingIsValid(Encoding encoding)
         {
             if (!((encoding is ASCIIEncoding) || (encoding is UnicodeEncoding)))
             {
-                throw new EsentException("Invalid Encoding type. Only ASCII and Unicode encodings are allowed");
+                throw new ArgumentOutOfRangeException(
+                    "encoding", "Invalid Encoding type. Only ASCII and Unicode encodings are allowed");
             }
         }
     }
