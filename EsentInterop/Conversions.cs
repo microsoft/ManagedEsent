@@ -18,12 +18,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Maps a CompareOption enumeration to the corresponding LCMapString flag.
         /// </summary>
-        private static readonly Dictionary<CompareOptions, uint> compareOptionsToLcmapFlags;
+        private static readonly IDictionary<CompareOptions, uint> compareOptionsToLcmapFlags;
 
         /// <summary>
         /// Maps an LCMapString flag to the corresponding CompareOption enumeration.
         /// </summary>
-        private static readonly Dictionary<uint, CompareOptions> lcmapFlagsToCompareOptions;
+        private static readonly IDictionary<uint, CompareOptions> lcmapFlagsToCompareOptions;
 
         /// <summary>
         /// Initializes static members of the Conversions class. This sets up the
@@ -93,7 +93,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <typeparam name="TKey">The new key type (the value if the current dictionary)</typeparam>
         /// <param name="dict">The dictionary to invert.</param>
         /// <returns>An inverted dictionary.</returns>
-        private static Dictionary<TKey, TValue> InvertDictionary<TValue, TKey>(Dictionary<TValue, TKey> dict)
+        private static IDictionary<TKey, TValue> InvertDictionary<TValue, TKey>(IDictionary<TValue, TKey> dict)
         {
             var invertedDict = new Dictionary<TKey, TValue>();
             foreach (KeyValuePair<TValue, TKey> entry in dict)

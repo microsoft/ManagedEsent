@@ -21,7 +21,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <summary>
         /// The handles of the objects being pinned.
         /// </summary>
-        private readonly List<GCHandle> handles;
+        private readonly IList<GCHandle> handles;
 
         /// <summary>
         /// Initializes a new instance of the GCHandleCollection class.

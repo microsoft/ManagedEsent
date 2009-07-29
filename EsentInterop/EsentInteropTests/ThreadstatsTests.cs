@@ -19,6 +19,9 @@ namespace InteropApiTests
 
         private JET_THREADSTATS managed;
  
+        /// <summary>
+        /// Initialize the native and managed objects.
+        /// </summary>
         [TestInitialize]
         public void Setup()
         {
