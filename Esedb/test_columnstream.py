@@ -5,7 +5,7 @@
 #-----------------------------------------------------------------------
 
 # TODO:
-# Add methods for reset (seek to 0), append
+# Add method for append
 # Add R/O tests (take a populated stream, restricted set of actions)
 # Verify data from read
 #	- allocate buffer for read

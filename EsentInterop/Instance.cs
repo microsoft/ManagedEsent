@@ -134,17 +134,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the handle could be released.</returns>
         protected override bool ReleaseHandle()
         {
-            try
-            {
-                // The object is already marked as invalid so don't check
-                var instance = this.CreateInstanceFromHandle();
-                Api.JetTerm(instance);
-                return true;
-            }
-            catch (EsentException)
-            {
-                return false;
-            }
+            // The object is already marked as invalid so don't check
+            var instance = this.CreateInstanceFromHandle();
+            return ((int) JET_err.Success == Api.Impl.JetTerm(instance));
         }
 
         /// <summary>
