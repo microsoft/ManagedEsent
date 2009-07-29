@@ -136,7 +136,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             // The object is already marked as invalid so don't check
             var instance = this.CreateInstanceFromHandle();
-            return ((int) JET_err.Success == Api.Impl.JetTerm(instance));
+            return (int) JET_err.Success == Api.Impl.JetTerm(instance);
         }
 
         /// <summary>

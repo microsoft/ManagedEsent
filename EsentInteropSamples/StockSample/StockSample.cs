@@ -320,7 +320,7 @@ namespace CsStockSample
         /// <param name="symbol">The symbol to seek for.</param>
         private static void SeekToSymbol(JET_SESID sesid, JET_TABLEID tableid, string symbol)
         {
-            // We need to be on the primary index (which is over the 'symbol' column
+            // We need to be on the primary index (which is over the 'symbol' column)
             Api.JetSetCurrentIndex(sesid, tableid, null);
             Api.MakeKey(sesid, tableid, symbol, Encoding.Unicode, MakeKeyGrbit.NewKey);
 
@@ -429,7 +429,7 @@ namespace CsStockSample
 
             // This call will generate a set of bookmarks. The bookmarks are
             // returned in primary key (i.e. symbol) order.
-            foreach (byte[] bookmark in Api.IntersectIndexes(sesid, new[] { nameIndex, priceIndex }))
+            foreach (byte[] bookmark in Api.IntersectIndexes(sesid, nameIndex, priceIndex))
             {
                 Api.JetGotoBookmark(sesid, tableid, bookmark, bookmark.Length);
                 PrintOneRow(sesid, tableid);
@@ -481,7 +481,7 @@ namespace CsStockSample
             // this column can be null so we keep the nullable type
             int? shares = Api.RetrieveColumnAsInt32(sesid, tableid, columnidShares);
 
-            Console.Write("\t{0,-40} {1,-4} ${2,-6}", name, symbol, (double)price / 100.0);
+            Console.Write("\t{0,-40} {1,-4} ${2,-6}", name, symbol, price / 100.0);
             if (shares.HasValue)
             {
                 Console.Write(" {0} shares", shares);
@@ -514,6 +514,14 @@ namespace CsStockSample
                         CreateColumnsAndIndexes(session, tableid);
                         Api.JetCloseTable(session, tableid);
 
+                        // Lazily commit the transaction. Normally committing a transaction forces the
+                        // associated log records to be flushed to disk, so the commit has to wait for
+                        // the I/O to complete. Using the LazyFlush option means that the log records
+                        // are kept in memory and will be flushed later. This will preserve transaction
+                        // atomicity (all operations in the transaction will either happen or be rolled
+                        // back) but will not preserve durability (a crash after the commit call may
+                        // result in the transaction updates being lost). Lazy transaction commits are
+                        // considerably faster though, as they don't have to wait for an I/O.
                         transaction.Commit(CommitTransactionGrbit.LazyFlush);
                     }
                 }
@@ -548,7 +556,11 @@ namespace CsStockSample
                 // Current price, stored in cents : 32-bit integer
                 columndef = new JET_COLUMNDEF
                     {
-                        coltyp = JET_coltyp.Long, 
+                        coltyp = JET_coltyp.Long,
+
+                        // Be careful with ColumndefGrbit.ColumnNotNULL. Older versions of ESENT
+                        // (e.g. Windows XP) do not support this grbit for tagged or variable columns
+                        // (JET_coltyp.Text, JET_coltyp.LongText, JET_coltyp.Binary, JET_coltyp.LongBinary)
                         grbit = ColumndefGrbit.ColumnNotNULL
                     };
 

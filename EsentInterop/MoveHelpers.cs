@@ -200,7 +200,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// The bookmarks of the records which are found in all the index ranges. The bookmarks 
         /// are returned in primary key order.
         /// </returns>
-        public static IEnumerable<byte[]> IntersectIndexes(JET_SESID sesid, JET_TABLEID[] tableids)
+        public static IEnumerable<byte[]> IntersectIndexes(JET_SESID sesid, params JET_TABLEID[] tableids)
         {
             if (null == tableids)
             {
