@@ -149,6 +149,9 @@ namespace Microsoft.Isam.Esent.Utilities
                             case JET_coltyp.UnsignedByte:
                                 columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsByte(s, t, columnid)));
                                 break;
+                            case JET_coltyp.DateTime:
+                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsDateTime(s, t, columnid)));
+                                break;
                             case VistaColtyp.UnsignedShort:
                                 columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsUInt16(s, t, columnid)));
                                 break;
@@ -160,7 +163,6 @@ namespace Microsoft.Isam.Esent.Utilities
                                 break;
                             case JET_coltyp.Binary:
                             case JET_coltyp.LongBinary:
-                            case JET_coltyp.DateTime:
                             default:
                                 columnFormatters.Add((s, t) => Dbutil.FormatBytes(Api.RetrieveColumn(s, t, columnid)));
                                 break;

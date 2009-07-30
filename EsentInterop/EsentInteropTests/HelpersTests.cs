@@ -644,6 +644,34 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Retrieve a column as a DateTime when the value is invalid.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void RetrieveAsDateTimeReturnsMinWhenValueIsTooSmall()
+        {
+            JET_COLUMNID columnid = this.columnidDict["DateTime"];
+
+            // MSDN says that the value must be a value between negative 657435.0 through positive 2958466.0
+            this.InsertRecord(columnid, BitConverter.GetBytes(-657436.0));
+            Assert.AreEqual(DateTime.MinValue, Api.RetrieveColumnAsDateTime(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
+        /// Retrieve a column as a DateTime when the value is invalid.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void RetrieveAsDateTimeReturnsMaxWhenValueIsTooLarge()
+        {
+            JET_COLUMNID columnid = this.columnidDict["DateTime"];
+
+            // MSDN says that the value must be a value between negative 657435.0 through positive 2958466.0
+            this.InsertRecord(columnid, BitConverter.GetBytes(2958467.0));
+            Assert.AreEqual(DateTime.MaxValue, Api.RetrieveColumnAsDateTime(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
         /// Retrieve a null column as a DateTime.
         /// </summary>
         [TestMethod]

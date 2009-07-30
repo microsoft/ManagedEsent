@@ -583,7 +583,20 @@ namespace Microsoft.Isam.Esent.Interop
         {
             // Internally DateTime is stored in OLE Automation format
             double? oadate = RetrieveColumnAsDouble(sesid, tableid, columnid, grbit);
-            return oadate.HasValue ? DateTime.FromOADate(oadate.Value) : new DateTime?();
+            if (oadate.HasValue)
+            {
+                try
+                {
+                    return DateTime.FromOADate(oadate.Value);
+                }
+                catch (ArgumentException)
+                {
+                    // Not all double values are valid OADates. We deal with out-of-range values
+                    // by returning either min or max
+                    return oadate.Value < 0 ? DateTime.MinValue : DateTime.MaxValue;
+                }
+            }
+            return new DateTime?();
         }
 
         /// <summary>
