@@ -291,34 +291,15 @@ namespace Microsoft.Isam.Esent.Interop
         #region Navigation
 
         [DllImport(EsentDll, ExactSpelling = true)]
-        public static extern int JetGetBookmark(IntPtr sesid, IntPtr tableid, [Out] byte[] pvBookmark, uint cbMax, out uint cbActual);
-
-        [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetGotoBookmark(IntPtr sesid, IntPtr tableid, [In] byte[] pvBookmark, uint cbBookmark);
 
         // This has IntPtr and NATIVE_RETINFO versions because the parameter can be null
-        [DllImport(EsentDll, ExactSpelling = true)]
-        public static extern int JetRetrieveColumn(IntPtr sesid, IntPtr tableid, uint columnid, IntPtr pvData, uint cbData, out uint cbActual, uint grbit, IntPtr pretinfo);
-
-        [DllImport(EsentDll, ExactSpelling = true)]
-        public static extern int JetRetrieveColumn(
-            IntPtr sesid,
-            IntPtr tableid,
-            uint columnid,
-            IntPtr pvData,
-            uint cbData,
-            out uint cbActual,
-            uint grbit,
-            [In] [Out] ref NATIVE_RETINFO pretinfo);
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetMove(IntPtr sesid, IntPtr tableid, int cRow, uint grbit);
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetMakeKey(IntPtr sesid, IntPtr tableid, IntPtr pvData, uint cbData, uint grbit);
-
-        [DllImport(EsentDll, ExactSpelling = true)]
-        public static extern int JetRetrieveKey(IntPtr sesid, IntPtr tableid, [Out] byte[] pvData, uint cbMax, out uint cbActual, uint grbit);
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetSeek(IntPtr sesid, IntPtr tableid, uint grbit);
@@ -351,6 +332,55 @@ namespace Microsoft.Isam.Esent.Interop
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetGotoPosition(IntPtr sesid, IntPtr tableid, [In] ref NATIVE_RECPOS precpos);
+
+        #endregion
+
+        #region Data Retrieval
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetGetBookmark(IntPtr sesid, IntPtr tableid, [Out] byte[] pvBookmark, uint cbMax, out uint cbActual);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetRetrieveColumn(IntPtr sesid, IntPtr tableid, uint columnid, IntPtr pvData, uint cbData, out uint cbActual, uint grbit, IntPtr pretinfo);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetRetrieveColumn(
+            IntPtr sesid,
+            IntPtr tableid,
+            uint columnid,
+            IntPtr pvData,
+            uint cbData,
+            out uint cbActual,
+            uint grbit,
+            [In] [Out] ref NATIVE_RETINFO pretinfo);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetRetrieveKey(IntPtr sesid, IntPtr tableid, [Out] byte[] pvData, uint cbMax, out uint cbActual, uint grbit);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern unsafe int JetEnumerateColumns(
+            IntPtr sesid,
+            IntPtr tableid,
+            uint cEnumColumnId,
+            IntPtr rgEnumColumnId,
+            out uint pcEnumColumn,
+            out NATIVE_ENUMCOLUMN* prgEnumColumn,
+            IntPtr pfnRealloc,
+            IntPtr pvReallocContext,
+            uint cbDataMost,
+            uint grbit);
+
+//JetEnumerateColumns(
+//    __in JET_SESID											sesid,
+//    __in JET_TABLEID										tableid,
+//    __in unsigned long										cEnumColumnId,
+//    __in_ecount_opt( cEnumColumnId ) JET_ENUMCOLUMNID *		rgEnumColumnId,
+//    __out unsigned long *									pcEnumColumn,
+//    __deref_out_ecount( *pcEnumColumn ) JET_ENUMCOLUMN **	prgEnumColumn,
+//    __in JET_PFNREALLOC										pfnRealloc,
+//    __in void *												pvReallocContext,
+//    __in unsigned long										cbDataMost,
+//    __in JET_GRBIT											grbit );
 
         #endregion
 

@@ -9,8 +9,19 @@ using System;
 namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
+    /// Native (unmanaged) version of the JET_ENUMCOLUMNVALUE class.
+    /// </summary>
+    internal struct NATIVE_ENUMCOLUMNVALUE
+    {
+        public uint itagSequence;
+        public int err;
+        public uint cbData;
+        public IntPtr pvData;
+    }
+
+    /// <summary>
     /// Enumerates the column values of a record using the JetEnumerateColumns
-    /// function. JetEnumerateColumns returns an array of JET_ENUMCOLUMNVALUE
+    /// function. <see cref="Api.JetEnumerateColumns"/> returns an array of JET_ENUMCOLUMNVALUE
     /// structures. The array is returned in memory that was allocated using
     /// the callback that was supplied to that function.
     /// </summary>
@@ -39,5 +50,19 @@ namespace Microsoft.Isam.Esent.Interop
         /// Gets the value that was enumerated for the column.
         /// </summary>
         public IntPtr pvData { get; internal set; }
+
+        /// <summary>
+        /// Sets the fields of the object from a native JET_ENUMCOLUMN struct.
+        /// </summary>
+        /// <param name="value">
+        /// The native enumcolumn to set the values from.
+        /// </param>
+        internal void SetFromNativeEnumColumnValue(NATIVE_ENUMCOLUMNVALUE value)
+        {
+            this.itagSequence = checked((int) value.itagSequence);
+            this.err = (JET_wrn) value.err;
+            this.cbData = checked((int) value.cbData);
+            this.pvData = value.pvData;
+        }
     }
 }

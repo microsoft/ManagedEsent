@@ -13,7 +13,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// Native (unmanaged) version of the JET_ENUMCOLUMN structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    internal struct NATIVE_ENUMCOLUMN
+    internal unsafe struct NATIVE_ENUMCOLUMN
     {
         /// <summary>
         /// The columnid that was enumerated.
@@ -23,31 +23,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// The column status code from the enumeration of the column.
         /// </summary>
-        public uint err;
-
-        /// <summary>
-        /// Number of entries in rgEnumColumnValue.
-        /// This member is only used if <see cref="err"/> is not
-        /// <see cref="JET_wrn.ColumnSingleValue"/>.
-        /// </summary>
-        /// <remarks>
-        /// The unmanaged JET_ENUMCOLUMN structure is a union so this
-        /// value is aliased with the cbData member. A separate property
-        /// is provided for cbData.
-        /// </remarks>
-        public uint cEnumColumnValue;
-
-        /// <summary>
-        /// Array of column values.
-        /// This member is only used if <see cref="err"/> is not
-        /// <see cref="JET_wrn.ColumnSingleValue"/>.
-        /// </summary>
-        /// <remarks>
-        /// The unmanaged JET_ENUMCOLUMN structure is a union so this
-        /// value is aliased with the pvData member. A separate property
-        /// is provided for pvData.
-        /// </remarks>
-        public IntPtr rgEnumColumnValue;
+        public int err;
 
         /// <summary>
         /// Gets the size of the value that was enumerated for the column.
@@ -56,15 +32,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <remarks>
         /// The unmanaged JET_ENUMCOLUMN structure is a union so this
-        /// property uses cEnumColumnValue as its backing storage.
+        /// is aliased with cEnumColumnValue.
         /// </remarks>
-        public uint cbData
-        {
-            get
-            {
-                return this.cEnumColumnValue;
-            }
-        }
+        public uint cbData;
 
         /// <summary>
         /// Gets the the value that was enumerated for the column.
@@ -73,13 +43,51 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <remarks>
         /// The unmanaged JET_ENUMCOLUMN structure is a union so this
-        /// property uses rgEnumColumnValue as its backing storage.
+        /// is aliased with rgEnumColumnValue.
         /// </remarks>
-        public IntPtr pvData
+        public IntPtr pvData;
+
+        /// <summary>
+        /// Number of entries in rgEnumColumnValue.
+        /// This member is only used if <see cref="err"/> is not
+        /// <see cref="JET_wrn.ColumnSingleValue"/>.
+        /// </summary>
+        /// <remarks>
+        /// The unmanaged JET_ENUMCOLUMN structure is a union so this
+        /// property uses cbData as its backing storage.
+        /// </remarks>
+        public uint cEnumColumnValue
         {
             get
             {
-                return this.rgEnumColumnValue;
+                return this.cbData;
+            }
+
+            set
+            {
+                this.cbData = value;
+            }
+        }
+
+        /// <summary>
+        /// Array of column values.
+        /// This member is only used if <see cref="err"/> is not
+        /// <see cref="JET_wrn.ColumnSingleValue"/>.
+        /// </summary>
+        /// <remarks>
+        /// The unmanaged JET_ENUMCOLUMN structure is a union so this
+        /// property uses pvData as its backing storage.
+        /// </remarks>
+        public NATIVE_ENUMCOLUMNVALUE* rgEnumColumnValue
+        {
+            get
+            {
+                return (NATIVE_ENUMCOLUMNVALUE*) this.pvData;
+            }
+
+            set
+            {
+                this.pvData = new IntPtr(value);
             }
         }
     }
@@ -100,6 +108,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets the column status code that results from the enumeration.
         /// </summary>
+        /// <seealso cref="JET_wrn.ColumnSingleValue"/>
         public JET_wrn err { get; internal set; }
 
         /// <summary>
@@ -151,7 +160,8 @@ namespace Microsoft.Isam.Esent.Interop
             }
             else
             {
-                throw new Exception("Not Yet Implemented");
+                this.cEnumColumnValue = checked((int) value.cEnumColumnValue);
+                this.rgEnumColumnValue = null;
             }
         }
     }

@@ -837,7 +837,7 @@ namespace InteropApiTests
         {
             int numColumnValues;
             JET_ENUMCOLUMN[] columnValues;
-            JET_PFNREALLOC allocator = (pv, cb, context) => Marshal.ReAllocHGlobal(pv, cb);
+            JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero;
             Api.JetEnumerateColumns(
                 this.sesid,
                 this.tableid,
@@ -862,7 +862,7 @@ namespace InteropApiTests
         {
             int numColumnValues;
             JET_ENUMCOLUMN[] columnValues;
-            JET_PFNREALLOC allocator = (pv, cb, context) => Marshal.ReAllocHGlobal(pv, cb);
+            JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero;
             Api.JetEnumerateColumns(
                 this.sesid,
                 this.tableid,
@@ -887,7 +887,7 @@ namespace InteropApiTests
         {
             int numColumnValues;
             JET_ENUMCOLUMN[] columnValues;
-            JET_PFNREALLOC allocator = (pv, cb, context) => Marshal.ReAllocHGlobal(pv, cb);
+            JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero;
             var columnids = new JET_ENUMCOLUMNID[2];
             Api.JetEnumerateColumns(
                 this.sesid,
@@ -913,7 +913,7 @@ namespace InteropApiTests
         {
             int numColumnValues;
             JET_ENUMCOLUMN[] columnValues;
-            JET_PFNREALLOC allocator = (pv, cb, context) => Marshal.ReAllocHGlobal(pv, cb);
+            JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero;
             var columnids = new JET_ENUMCOLUMNID[2];
             Api.JetEnumerateColumns(
                 this.sesid,

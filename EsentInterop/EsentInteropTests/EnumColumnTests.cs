@@ -27,8 +27,8 @@ namespace InteropApiTests
             {
                 columnid = 1,
                 err = (int) JET_wrn.ColumnSingleValue,
-                cEnumColumnValue = 3,
-                rgEnumColumnValue = new IntPtr(4),
+                cbData = 3,
+                pvData = new IntPtr(4),
             };
 
             var managed = new JET_ENUMCOLUMN();

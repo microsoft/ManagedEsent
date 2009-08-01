@@ -92,6 +92,7 @@
     <Compile Include="ConversionsTests.cs" />
     <Compile Include="AsciiPathTests.cs" />
     <Compile Include="EnumColumnTests.cs" />
+    <Compile Include="EnumColumnValueTests.cs" />
     <Compile Include="EnumerateColumnTests.cs" />
     <Compile Include="GCHandleCollectionTests.cs" />
     <Compile Include="Indexcreate2Tests.cs" />

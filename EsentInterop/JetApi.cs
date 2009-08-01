@@ -1227,10 +1227,51 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.CheckNotNegative(maxDataSize, "maxDataSize");
             this.CheckDataSize(columnids, numColumnids, "numColumnids");
 
-            numColumnValues = 0;
-            columnValues = null;
+            unsafe
+            {
+                uint cEnumColumn;
+                NATIVE_ENUMCOLUMN* prgEnumColumn;
+                int err = NativeMethods.JetEnumerateColumns(
+                    sesid.Value,
+                    tableid.Value,
+                    (uint) numColumnids,
+                    IntPtr.Zero,
+                    out cEnumColumn,
+                    out prgEnumColumn,
+                    Marshal.GetFunctionPointerForDelegate(allocator),
+                    allocatorContext,
+                    (uint) maxDataSize,
+                    (uint) grbit);
 
-            return 0;
+                numColumnValues = checked((int) cEnumColumn);
+                columnValues = new JET_ENUMCOLUMN[numColumnValues];
+                for (int i = 0; i < numColumnValues; ++i)
+                {
+                    columnValues[i] = new JET_ENUMCOLUMN();
+                    columnValues[i].SetFromNativeEnumColumn(prgEnumColumn[i]);
+                    if (JET_wrn.ColumnSingleValue != columnValues[i].err)
+                    {
+                        columnValues[i].rgEnumColumnValue = new JET_ENUMCOLUMNVALUE[columnValues[i].cEnumColumnValue];
+                        for (int j = 0; j < columnValues[i].cEnumColumnValue; ++j)
+                        {
+                            columnValues[i].rgEnumColumnValue[j] = new JET_ENUMCOLUMNVALUE();
+                            columnValues[i].rgEnumColumnValue[j].SetFromNativeEnumColumnValue(prgEnumColumn[i].rgEnumColumnValue[j]);
+                        }
+
+                        // the NATIVE_ENUMCOLUMNVALUES have been converted
+                        // free their memory
+                        allocator(allocatorContext, new IntPtr(prgEnumColumn[i].rgEnumColumnValue), 0);
+                        prgEnumColumn[i].rgEnumColumnValue = null;
+                    }
+                }
+
+                // Now we have converted all the NATIVE_ENUMCOLUMNS we can
+                // free the memory they use
+                allocator(allocatorContext, new IntPtr(prgEnumColumn), 0);
+                prgEnumColumn = null;
+
+                return this.Err(err);
+            }
         }
 
         #endregion

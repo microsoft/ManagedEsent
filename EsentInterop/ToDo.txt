@@ -10,7 +10,6 @@ Pri 0 APIs: Needed by clients
   - JetRetrieveColumns
   - JetEnumerateColumns
   - JetIdle
-  - JetGetThreadStats (Vista)
   - JetGetRecordSize (Vista)
   	
 Pri 1 APIs: New functionality

@@ -6,12 +6,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using Microsoft.Isam.Esent;
 using Microsoft.Isam.Esent.Interop;
 using Microsoft.Isam.Esent.Interop.Vista;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -87,69 +83,70 @@ namespace InteropApiTests
             Api.JetBeginTransaction(this.sesid);
             Api.JetCreateTable(this.sesid, this.dbid, this.table, 0, 100, out this.tableid);
 
-            JET_COLUMNDEF columndef = null;
             JET_COLUMNID columnid;
 
-            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Bit };
+            // Make these columns should all be tagged
+
+            var columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Bit, grbit = ColumndefGrbit.ColumnTagged };
             Api.JetAddColumn(this.sesid, this.tableid, "Boolean", columndef, null, 0, out columnid);
 
-            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.UnsignedByte };
+            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.UnsignedByte, grbit = ColumndefGrbit.ColumnTagged };
             Api.JetAddColumn(this.sesid, this.tableid, "Byte", columndef, null, 0, out columnid);
 
-            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Short };
+            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Short, grbit = ColumndefGrbit.ColumnTagged };
             Api.JetAddColumn(this.sesid, this.tableid, "Int16", columndef, null, 0, out columnid);
 
-            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Long };
+            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Long, grbit = ColumndefGrbit.ColumnTagged };
             Api.JetAddColumn(this.sesid, this.tableid, "Int32", columndef, null, 0, out columnid);
 
-            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Currency };
+            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Currency, grbit = ColumndefGrbit.ColumnTagged };
             Api.JetAddColumn(this.sesid, this.tableid, "Int64", columndef, null, 0, out columnid);
 
-            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.IEEESingle };
+            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.IEEESingle, grbit = ColumndefGrbit.ColumnTagged };
             Api.JetAddColumn(this.sesid, this.tableid, "Float", columndef, null, 0, out columnid);
 
-            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.IEEEDouble };
+            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.IEEEDouble, grbit = ColumndefGrbit.ColumnTagged };
             Api.JetAddColumn(this.sesid, this.tableid, "Double", columndef, null, 0, out columnid);
 
-            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.DateTime };
+            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.DateTime, grbit = ColumndefGrbit.ColumnTagged };
             Api.JetAddColumn(this.sesid, this.tableid, "DateTime", columndef, null, 0, out columnid);
 
-            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.LongBinary };
+            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.LongBinary, grbit = ColumndefGrbit.ColumnTagged };
             Api.JetAddColumn(this.sesid, this.tableid, "Binary", columndef, null, 0, out columnid);
 
-            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.LongText, cp = JET_CP.ASCII };
+            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.LongText, cp = JET_CP.ASCII, grbit = ColumndefGrbit.ColumnTagged };
             Api.JetAddColumn(this.sesid, this.tableid, "ASCII", columndef, null, 0, out columnid);
 
-            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.LongText, cp = JET_CP.Unicode };
+            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.LongText, cp = JET_CP.Unicode, grbit = ColumndefGrbit.ColumnTagged };
             Api.JetAddColumn(this.sesid, this.tableid, "Unicode", columndef, null, 0, out columnid);
 
             if (EsentVersion.SupportsVistaFeatures)
             {
                 // Starting with windows Vista esent provides support for these columns.) 
-                columndef = new JET_COLUMNDEF() { coltyp = VistaColtyp.UnsignedShort };
+                columndef = new JET_COLUMNDEF() { coltyp = VistaColtyp.UnsignedShort, grbit = ColumndefGrbit.ColumnTagged };
                 Api.JetAddColumn(this.sesid, this.tableid, "UInt16", columndef, null, 0, out columnid);
 
-                columndef = new JET_COLUMNDEF() { coltyp = VistaColtyp.UnsignedLong };
+                columndef = new JET_COLUMNDEF() { coltyp = VistaColtyp.UnsignedLong, grbit = ColumndefGrbit.ColumnTagged };
                 Api.JetAddColumn(this.sesid, this.tableid, "UInt32", columndef, null, 0, out columnid);
 
-                columndef = new JET_COLUMNDEF() { coltyp = VistaColtyp.GUID };
+                columndef = new JET_COLUMNDEF() { coltyp = VistaColtyp.GUID, grbit = ColumndefGrbit.ColumnTagged };
                 Api.JetAddColumn(this.sesid, this.tableid, "Guid", columndef, null, 0, out columnid);
             }
             else
             {
                 // Older version of esent don't support these column types natively so we'll just use binary columns.
-                columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 2 };
+                columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 2, grbit = ColumndefGrbit.ColumnTagged };
                 Api.JetAddColumn(this.sesid, this.tableid, "UInt16", columndef, null, 0, out columnid);
 
-                columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 4 };
+                columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 4, grbit = ColumndefGrbit.ColumnTagged };
                 Api.JetAddColumn(this.sesid, this.tableid, "UInt32", columndef, null, 0, out columnid);
 
-                columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 16 };
+                columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 16, grbit = ColumndefGrbit.ColumnTagged };
                 Api.JetAddColumn(this.sesid, this.tableid, "Guid", columndef, null, 0, out columnid);
             }
 
             // Not natively supported by any version of Esent
-            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 8 };
+            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 8, grbit = ColumndefGrbit.ColumnTagged };
             Api.JetAddColumn(this.sesid, this.tableid, "UInt64", columndef, null, 0, out columnid);
 
             Api.JetCloseTable(this.sesid, this.tableid);
@@ -218,11 +215,50 @@ namespace InteropApiTests
             const int Expected = 123;
 
             this.CreateNewRecord();
-            this.SetColumn(this.columnidDict["int32"], BitConverter.GetBytes(Expected));
+            this.SetColumn(this.columnidDict["int32"], BitConverter.GetBytes(Expected), 0);
 
             int numValues;
             JET_ENUMCOLUMN[] values;
-            JET_PFNREALLOC allocator = (pv, cb, context) => Marshal.ReAllocHGlobal(pv, cb);
+            JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero == pv ? Marshal.AllocHGlobal(new IntPtr(cb)) : Marshal.ReAllocHGlobal(pv, new IntPtr(cb));
+            Api.JetEnumerateColumns(
+                this.sesid,
+                this.tableid,
+                0,
+                null,
+                out numValues,
+                out values,
+                allocator,
+                IntPtr.Zero,
+                0,
+                EnumerateColumnsGrbit.EnumerateCompressOutput);
+
+            Assert.AreEqual(1, numValues);
+            Assert.IsNotNull(values);
+            Assert.AreEqual(this.columnidDict["int32"], values[0].columnid);
+            Assert.AreEqual(JET_wrn.ColumnSingleValue, values[0].err);
+            Assert.AreEqual(sizeof(int), values[0].cbData);
+
+            int actual = Marshal.ReadInt32(values[0].pvData);
+            Assert.AreEqual(Expected, actual);
+        }
+
+        /// <summary>
+        /// Enumerate one column.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void TestEnumerateOneMultivalueColumn()
+        {
+            const int Expected1 = 123;
+            const int Expected2 = 456;
+
+            this.CreateNewRecord();
+            this.SetColumn(this.columnidDict["int32"], BitConverter.GetBytes(Expected1), 0);
+            this.SetColumn(this.columnidDict["int32"], BitConverter.GetBytes(Expected2), 0);
+
+            int numValues;
+            JET_ENUMCOLUMN[] values;
+            JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero == pv ? Marshal.AllocHGlobal(new IntPtr(cb)) : Marshal.ReAllocHGlobal(pv, new IntPtr(cb));
             Api.JetEnumerateColumns(
                 this.sesid,
                 this.tableid,
@@ -238,11 +274,13 @@ namespace InteropApiTests
             Assert.AreEqual(1, numValues);
             Assert.IsNotNull(values);
             Assert.AreEqual(this.columnidDict["int32"], values[0].columnid);
-            Assert.AreEqual(JET_wrn.ColumnSingleValue, values[0].err);
-            Assert.AreEqual(sizeof(int), values[0].cbData);
+            Assert.AreEqual(JET_wrn.Success, values[0].err);
+            Assert.AreEqual(2, values[0].cEnumColumnValue);
 
-            int actual = Marshal.ReadInt32(values[0].pvData);
-            Assert.AreEqual(Expected, actual);
+            int actual1 = Marshal.ReadInt32(values[0].rgEnumColumnValue[0].pvData);
+            int actual2 = Marshal.ReadInt32(values[0].rgEnumColumnValue[1].pvData);
+            Assert.AreEqual(Expected1, actual1);
+            Assert.AreEqual(Expected2, actual2);
         }
 
         #endregion
@@ -265,11 +303,17 @@ namespace InteropApiTests
         /// </summary>
         /// <param name="columnid">The column to set.</param>
         /// <param name="data">The data to set.</param>
-        private void SetColumn(JET_COLUMNID columnid, byte[] data)
+        /// <param name="itagSequence">The itag sequence to set.</param>
+        private void SetColumn(JET_COLUMNID columnid, byte[] data, int itagSequence)
         {
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Replace);
-            Api.JetSetColumn(this.sesid, this.tableid, columnid, data, (null == data) ? 0 : data.Length, SetColumnGrbit.None, null);
+            var setinfo = new JET_SETINFO
+                {
+                ibLongValue = 0,
+                itagSequence = itagSequence,
+                };
+            Api.JetSetColumn(this.sesid, this.tableid, columnid, data, (null == data) ? 0 : data.Length, SetColumnGrbit.None, setinfo);
             Api.JetUpdate(this.sesid, this.tableid);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
         }
