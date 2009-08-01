@@ -36,7 +36,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <returns>
         /// An enumerator that iterates through the ColumnInfo objects describing
-        /// the columns in the table
+        /// the columns in the table.
         /// </returns>
         public IEnumerator<ColumnInfo> GetEnumerator()
         {
@@ -52,7 +52,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <returns>
         /// An enumerator that iterates through the ColumnInfo objects describing
-        /// the columns in the table
+        /// the columns in the table.
         /// </returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
@@ -87,7 +87,7 @@ namespace Microsoft.Isam.Esent.Interop
                 new JET_COLUMNID() { Value = columnidValue },
                 (JET_coltyp)coltypValue,
                 (JET_CP)codepageValue,
-                (int)maxLength,
+                checked((int) maxLength),
                 defaultValue,
                 (ColumndefGrbit)grbitValue);
         }

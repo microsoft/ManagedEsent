@@ -17,7 +17,7 @@ namespace Microsoft.Isam.Esent.Interop
     internal unsafe struct NATIVE_SETCOLUMN
     {
         public uint columnid;
-        public byte* pvData;
+        public IntPtr pvData;
         public uint cbData;
         public uint grbit;
         public uint ibLongValue;
@@ -72,22 +72,33 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_wrn err { get; internal set; }
 
         /// <summary>
-        /// Gets or sets the pinned data. This is the data which will be used when the column is set. It is the caller's 
-        /// responsibility to pin the data in <see cref="pvData"/> and set the pinned value.
+        /// Check to see if cbData is negative or greater than cbData.
         /// </summary>
-        internal IntPtr PinnedData { get; set; }
+        internal void CheckDataSize()
+        {
+            if (this.cbData < 0)
+            {
+                throw new ArgumentOutOfRangeException("cbData", "data length cannot be negative");    
+            }
+
+            if ((null == this.pvData && 0 != this.cbData) || (null != this.pvData && this.cbData > this.pvData.Length))
+            {
+                throw new ArgumentOutOfRangeException(
+                    "cbData",
+                    this.cbData,
+                    "cannot be greater than the length of the pvData");
+            }            
+        }
 
         /// <summary>
         /// Gets the NATIVE_SETCOLUMN structure that represents the object.
         /// </summary>
         /// <returns>A NATIVE_SETCOLUMN structure whose fields match the class.</returns>
-        internal unsafe NATIVE_SETCOLUMN GetNativeSetcolumn()
+        internal NATIVE_SETCOLUMN GetNativeSetcolumn()
         {
-            Debug.Assert(null == this.pvData || IntPtr.Zero != this.PinnedData, "pvData is non-null, but PinnedData is null");
             var setinfo = new NATIVE_SETCOLUMN
             {
                 columnid = this.columnid.Value,
-                pvData = (byte*) this.PinnedData,
                 cbData = (uint) this.cbData,
                 grbit = (uint) this.grbit,
                 ibLongValue = (uint) this.ibLongValue,

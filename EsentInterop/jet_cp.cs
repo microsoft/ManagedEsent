@@ -22,7 +22,7 @@ namespace Microsoft.Isam.Esent.Interop
         Unicode = 1200,
 
         /// <summary>
-        /// ASCII encoding
+        /// ASCII encoding.
         /// </summary>
         ASCII = 1252,
     }

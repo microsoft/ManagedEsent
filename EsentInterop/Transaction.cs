@@ -10,7 +10,7 @@ using System.Diagnostics;
 namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
-    /// A class that encapsulates a transaction on a JET_SESID
+    /// A class that encapsulates a transaction on a JET_SESID.
     /// </summary>
     public class Transaction : EsentResource
     {

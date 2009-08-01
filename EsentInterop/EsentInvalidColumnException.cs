@@ -10,7 +10,7 @@ using System.Runtime.Serialization;
 namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
-    /// Base class for ESENT exceptions
+    /// Exception thrown when a column conversion fails.
     /// </summary>
     [Serializable]
     public class EsentInvalidColumnException : EsentException

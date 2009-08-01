@@ -6,11 +6,12 @@
 
 using System;
 using Microsoft.Isam.Esent.Interop.Server2003;
+using Microsoft.Isam.Esent.Interop.Windows7;
 
 namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
-    /// Options for JetCreateInstance2
+    /// Options for JetCreateInstance2.
     /// </summary>
     public enum CreateInstanceGrbit
     {
@@ -21,8 +22,9 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetInit2
+    /// Options for JetInit2.
     /// </summary>
+    /// <seealso cref="Windows7Grbits.ReplayIgnoreLostLogs"/>
     [Flags]
     public enum InitGrbit
     {
@@ -33,7 +35,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetCreateDatabase
+    /// Options for JetCreateDatabase.
     /// </summary>
     [Flags]
     public enum CreateDatabaseGrbit
@@ -59,7 +61,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetAttachDatabase
+    /// Options for JetAttachDatabase.
     /// </summary>
     [Flags]
     public enum AttachDatabaseGrbit
@@ -82,7 +84,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetOpenDatabase
+    /// Options for JetOpenDatabase.
     /// </summary>
     [Flags]
     public enum OpenDatabaseGrbit
@@ -105,7 +107,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetCloseDatabase
+    /// Options for JetCloseDatabase.
     /// </summary>
     [Flags]
     public enum CloseDatabaseGrbit
@@ -117,8 +119,9 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetTerm2
+    /// Options for JetTerm2.
     /// </summary>
+    /// <seealso cref="Windows7Grbits.Dirty"/>
     public enum TermGrbit
     {
         /// <summary>
@@ -142,7 +145,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetCommitTransaction
+    /// Options for JetCommitTransaction.
     /// </summary>
     [Flags]
     public enum CommitTransactionGrbit
@@ -178,7 +181,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetRollbackTransaction
+    /// Options for JetRollbackTransaction.
     /// </summary>
     public enum RollbackTransactionGrbit
     {
@@ -196,7 +199,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetEndSession
+    /// Options for JetEndSession.
     /// </summary>
     public enum EndSessionGrbit
     {
@@ -274,6 +277,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetSetColumn.
     /// </summary>
+    /// <seealso cref="Windows7Grbits.Compressed"/>
+    /// <seealso cref="Windows7Grbits.Uncompressed"/>
     [Flags]
     public enum SetColumnGrbit
     {
@@ -416,7 +421,79 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetMove
+    /// Options for JetEnumerateColumns.
+    /// </summary>
+    /// <seealso cref="Server2003Grbits.EnumerateIgnoreUserDefinedDefault"/>
+    /// <seealso cref="Windows7Grbits.EnumerateInRecordOnly"/>
+    [Flags]
+    public enum EnumerateColumnsGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// When enumerating column values, all columns for which we are retrieving
+        /// all values and that have only one non-NULL column value may be returned
+        /// in a compressed format. The status for such columns will be set to
+        /// <see cref="JET_wrn.ColumnSingleValue"/> and the size of the column value
+        /// and the memory containing the column value will be returned directly in
+        /// the <see cref="JET_ENUMCOLUMN"/> structure. It is not guaranteed that
+        /// all eligible columns are compressed in this manner. See
+        /// <see cref="JET_ENUMCOLUMN"/> for more information.
+        /// </summary>
+        EnumerateCompressOutput = 0x00080000,
+
+        /// <summary>
+        /// This option indicates that the modified column values of the record
+        /// should be enumerated rather than the original column values. If a
+        /// column value has not been modified, the original column value is
+        /// enumerated. In this way, a column value that has not yet been inserted
+        /// or updated may be enumerated when inserting or updating a record.
+        /// </summary>
+        /// <remarks>
+        /// This option is identical to <see cref="RetrieveColumnGrbit.RetrieveCopy"/>.
+        /// </remarks>
+        EnumerateCopy = 0x1,
+
+        /// <summary>
+        /// If a given column is not present in the record then no column value
+        /// will be returned. Ordinarily, the default value for the column,
+        /// if any, would be returned in this case. It is guaranteed that if the
+        /// column is set to a value different than the default value then that
+        /// different value will be returned (that is, if a column with a
+        /// default value is explicitly set to NULL then a NULL will be returned
+        /// as the value for that column). Even if this option is requested, it
+        /// is still possible to see a column value that happens to be equal to
+        /// the default value. No effort is made to remove column values that
+        /// match their default values.
+        /// It is important to remember that this option affects the output of
+        /// <see cref="Api.JetEnumerateColumns"/> when used with 
+        /// <see cref="EnumerateColumnsGrbit.EnumeratePresenceOnly"/> or
+        /// <see cref="EnumerateColumnsGrbit.EnumerateTaggedOnly"/>.
+        /// </summary>
+        EnumerateIgnoreDefault = 0x20,
+
+        /// <summary>
+        /// If a non-NULL value exists for the requested column or column value
+        /// then the associated data is not returned. Instead, the associated
+        /// status for that column or column value will be set to
+        /// <see cref="JET_wrn.ColumnPresent"/>. If the column or column value
+        /// is NULL then <see cref="JET_wrn.ColumnNull"/> will be returned as usual.
+        /// </summary>
+        EnumeratePresenceOnly = 0x00020000,
+
+        /// <summary>
+        /// When enumerating all column values in the record (for example,that is
+        /// when numColumnids is zero), only tagged column values will be returned.
+        /// This option is not allowed when enumerating a specific array of column IDs.
+        /// </summary>
+        EnumerateTaggedOnly = 0x00040000, 
+    }
+
+    /// <summary>
+    /// Options for JetMove.
     /// </summary>
     public enum MoveGrbit
     {
@@ -435,7 +512,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetMakeKey
+    /// Options for JetMakeKey.
     /// </summary>
     [Flags]
     public enum MakeKeyGrbit
@@ -696,6 +773,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for the JET_COLUMNDEF structure.
     /// </summary>
+    /// <seealso cref="Windows7Grbits.ColumnCompressed"/>
     [Flags]
     public enum ColumndefGrbit
     {
@@ -800,7 +878,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetCreateIndex
+    /// Options for JetCreateIndex.
     /// </summary>
     [Flags]
     public enum CreateIndexGrbit
@@ -913,6 +991,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for temporary table creation.
     /// </summary>
+    /// <seealso cref="Server2003Grbits.ForwardOnly"/>
+    /// <seealso cref="Windows7Grbits.IntrinsicLVsOnly"/>
     [Flags]
     public enum TempTableGrbit
     {

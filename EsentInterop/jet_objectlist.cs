@@ -92,7 +92,7 @@ namespace Microsoft.Isam.Esent.Interop
         internal void SetFromNativeObjectlist(NATIVE_OBJECTLIST value)
         {
             this.tableid = new JET_TABLEID { Value = value.tableid };
-            this.cRecord = (int)value.cRecord;
+            this.cRecord = checked((int) value.cRecord);
 
             this.columnidobjectname = new JET_COLUMNID { Value = value.columnidobjectname };
             this.columnidobjtyp = new JET_COLUMNID { Value = value.columnidobjtyp };

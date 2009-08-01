@@ -206,7 +206,33 @@ namespace InteropApiTests
 
         #endregion Setup/Teardown
 
-        #region RetrieveColumnAs tests
+        #region RetrieveColumn tests
+
+        /// <summary>
+        /// Check that retrieving the size of a null column returns 0
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void RetrieveNullColumnSize()
+        {
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            this.UpdateAndGotoBookmark();
+            Assert.AreEqual(0, Api.RetrieveColumnSize(this.sesid, this.tableid, this.columnidDict["Int32"]));
+        }
+
+        /// <summary>
+        /// Check that retrieving the size of a column returns the amount of data
+        /// in the column.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void RetrieveColumnSize()
+        {
+            JET_COLUMNID columnid = this.columnidDict["Byte"];
+            var b = new byte[] { 0x55 };
+            this.InsertRecord(columnid, b);
+            Assert.AreEqual(0, Api.RetrieveColumnSize(this.sesid, this.tableid, columnid));
+        }
 
         /// <summary>
         /// Retrieve a column that exceeds the cached buffer size used by RetrieveColumn

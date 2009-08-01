@@ -10,7 +10,7 @@ using System.Runtime.Serialization;
 namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
-    /// Base class for ESENT exceptions
+    /// Base class for ESENT error exceptions.
     /// </summary>
     [Serializable]
     public class EsentErrorException : EsentException

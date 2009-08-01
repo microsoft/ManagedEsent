@@ -1,4 +1,7 @@
 <StyleCopSettings Version="4.3">
+  <GlobalSettings>
+    <BooleanProperty Name="WriteCache">False</BooleanProperty>
+  </GlobalSettings>
   <Analyzers>
     <Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.DocumentationRules">
       <Rules>
@@ -30,6 +33,7 @@
           <Value>dw</Value>
           <Value>ib</Value>
           <Value>pv</Value>
+          <Value>rg</Value>
           <Value>sz</Value>
           <Value>ul</Value>
           <Value>w</Value>

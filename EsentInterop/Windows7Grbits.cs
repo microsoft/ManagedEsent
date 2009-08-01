@@ -43,5 +43,11 @@ namespace Microsoft.Isam.Esent.Interop.Windows7
         /// because a TT has an LV column).
         /// </summary>
         public const TempTableGrbit IntrinsicLVsOnly = (TempTableGrbit) 0x80;
+
+        /// <summary>
+        /// When enumerating column values only retrieve data that is present in
+        /// the record. This means that BLOB columns will not always be retrieved.
+        /// </summary>
+        public const EnumerateColumnsGrbit EnumerateInRecordOnly = (EnumerateColumnsGrbit) 0x00200000;
     }
 }

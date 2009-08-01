@@ -186,6 +186,25 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Removes an index range created with <see cref="JetSetIndexRange"/> or
+        /// <see cref="TrySetIndexRange"/>. If no index range is present this
+        /// method does nothing.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to remove the index range on.</param>
+        public static void ResetIndexRange(JET_SESID sesid, JET_TABLEID tableid)
+        {
+            var err = (JET_err)Impl.JetSetIndexRange(sesid, tableid, SetIndexRangeGrbit.RangeRemove);
+            if (err >= JET_err.Success || JET_err.InvalidOperation == err)
+            {
+                return;
+            }
+
+            Api.Check((int)err);
+            throw new Exception("Unreachable code");
+        }
+
+        /// <summary>
         /// Intersect a group of index ranges and return the bookmarks of the records which are found
         /// in all the index ranges. 
         /// Also see <see cref="JetIntersectIndexes"/>.

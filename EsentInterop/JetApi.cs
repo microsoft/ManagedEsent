@@ -475,7 +475,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         }
 
         /// <summary>
-        /// Creates indexes over data in an ESE database
+        /// Creates indexes over data in an ESE database.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The table to create the index on.</param>
@@ -957,24 +957,6 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         #region Navigation
 
-        public int JetGetBookmark(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize, out int actualBookmarkSize)
-        {
-            this.TraceFunctionCall("JetGetBookmark");
-            this.CheckDataSize(bookmark, bookmarkSize, "bookmarkSize");
-
-            uint cbActual;
-            int err = this.Err(
-                NativeMethods.JetGetBookmark(
-                    sesid.Value,
-                    tableid.Value,
-                    bookmark, 
-                    (uint) bookmarkSize,
-                    out cbActual));
-
-            actualBookmarkSize = (int)cbActual;
-            return err;
-        }
-
         public int JetGotoBookmark(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize)
         {
             this.TraceFunctionCall("JetGotoBookmark");
@@ -987,61 +969,11 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                         sesid.Value, tableid.Value, bookmark, (uint) bookmarkSize));
         }
 
-        public int JetRetrieveColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, IntPtr data, int dataSize, out int actualDataSize, RetrieveColumnGrbit grbit, JET_RETINFO retinfo)
-        {
-            this.TraceFunctionCall("JetRetrieveColumn");
-            this.CheckNotNegative(dataSize, "dataSize");
-
-            int err;
-            uint cbActual;
-            if (null != retinfo)
-            {
-                NATIVE_RETINFO nativeRetinfo = retinfo.GetNativeRetinfo();
-                err = this.Err(NativeMethods.JetRetrieveColumn(
-                        sesid.Value,
-                        tableid.Value,
-                        columnid.Value,
-                        data,
-                        (uint)dataSize,
-                        out cbActual,
-                        (uint)grbit,
-                        ref nativeRetinfo));
-                retinfo.SetFromNativeRetinfo(nativeRetinfo);
-            }
-            else
-            {
-                err = this.Err(NativeMethods.JetRetrieveColumn(
-                        sesid.Value,
-                        tableid.Value,
-                        columnid.Value,
-                        data,
-                        (uint)dataSize,
-                        out cbActual,
-                        (uint)grbit,
-                        IntPtr.Zero));
-            }
-
-            actualDataSize = (int)cbActual;
-            return err;
-        }
-
         public int JetMakeKey(JET_SESID sesid, JET_TABLEID tableid, IntPtr data, int dataSize, MakeKeyGrbit grbit)
         {
             this.TraceFunctionCall("JetMakeKey");
             this.CheckNotNegative(dataSize, "dataSize");
             return this.Err(NativeMethods.JetMakeKey(sesid.Value, tableid.Value, data, (uint)dataSize, (uint)grbit));
-        }
-
-        public int JetRetrieveKey(JET_SESID sesid, JET_TABLEID tableid, byte[] data, int dataSize, out int actualDataSize, RetrieveKeyGrbit grbit)
-        {
-            this.TraceFunctionCall("JetRetrieveKey");
-            this.CheckDataSize(data, dataSize, "dataSize");
-
-            uint cbActual;
-            int err = this.Err(NativeMethods.JetRetrieveKey(sesid.Value, tableid.Value, data, (uint)dataSize, out cbActual, (uint)grbit));
-
-            actualDataSize = (int)cbActual;
-            return err;
         }
 
         public int JetSeek(JET_SESID sesid, JET_TABLEID tableid, SeekGrbit grbit)
@@ -1131,7 +1063,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.CheckNotNegative(maxRecordsToCount, "maxRecordsToCount");
             uint crec;
             int err = this.Err(NativeMethods.JetIndexRecordCount(sesid.Value, tableid.Value, out crec, (uint)maxRecordsToCount));
-            numRecords = (int)crec;
+            numRecords = checked((int) crec);
             return err;
         }
 
@@ -1166,6 +1098,143 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         #endregion
 
+        #region Data Retrieval
+
+        public int JetGetBookmark(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize, out int actualBookmarkSize)
+        {
+            this.TraceFunctionCall("JetGetBookmark");
+            this.CheckDataSize(bookmark, bookmarkSize, "bookmarkSize");
+
+            uint cbActual;
+            int err = this.Err(
+                NativeMethods.JetGetBookmark(
+                    sesid.Value,
+                    tableid.Value,
+                    bookmark,
+                    (uint)bookmarkSize,
+                    out cbActual));
+
+            actualBookmarkSize = checked((int) cbActual);
+            return err;
+        }
+
+        public int JetRetrieveKey(JET_SESID sesid, JET_TABLEID tableid, byte[] data, int dataSize, out int actualDataSize, RetrieveKeyGrbit grbit)
+        {
+            this.TraceFunctionCall("JetRetrieveKey");
+            this.CheckDataSize(data, dataSize, "dataSize");
+
+            uint cbActual;
+            int err = this.Err(NativeMethods.JetRetrieveKey(sesid.Value, tableid.Value, data, (uint)dataSize, out cbActual, (uint)grbit));
+
+            actualDataSize = checked((int) cbActual);
+            return err;
+        }
+
+        public int JetRetrieveColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, IntPtr data, int dataSize, out int actualDataSize, RetrieveColumnGrbit grbit, JET_RETINFO retinfo)
+        {
+            this.TraceFunctionCall("JetRetrieveColumn");
+            this.CheckNotNegative(dataSize, "dataSize");
+
+            int err;
+            uint cbActual;
+            if (null != retinfo)
+            {
+                NATIVE_RETINFO nativeRetinfo = retinfo.GetNativeRetinfo();
+                err = this.Err(NativeMethods.JetRetrieveColumn(
+                        sesid.Value,
+                        tableid.Value,
+                        columnid.Value,
+                        data,
+                        (uint)dataSize,
+                        out cbActual,
+                        (uint)grbit,
+                        ref nativeRetinfo));
+                retinfo.SetFromNativeRetinfo(nativeRetinfo);
+            }
+            else
+            {
+                err = this.Err(NativeMethods.JetRetrieveColumn(
+                        sesid.Value,
+                        tableid.Value,
+                        columnid.Value,
+                        data,
+                        (uint)dataSize,
+                        out cbActual,
+                        (uint)grbit,
+                        IntPtr.Zero));
+            }
+
+            actualDataSize = checked((int) cbActual);
+            return err;
+        }
+
+        /// <summary>
+        /// Efficiently retrieves a set of columns and their values from the
+        /// current record of a cursor or the copy buffer of that cursor. The
+        /// columns and values retrieved can be restricted by a list of
+        /// column IDs, itagSequence numbers, and other characteristics. This
+        /// column retrieval API is unique in that it returns information in
+        /// dynamically allocated memory that is obtained using a
+        /// user-provided realloc compatible callback. This new flexibility
+        /// permits the efficient retrieval of column data with specific
+        /// characteristics (such as size and multiplicity) that are unknown
+        /// to the caller. This eliminates the need for the use of the discovery
+        /// modes of JetRetrieveColumn to determine those
+        /// characteristics in order to setup a final call to
+        /// JetRetrieveColumn that will successfully retrieve
+        /// the desired data.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve data from.</param>
+        /// <param name="numColumnids">The numbers of JET_ENUMCOLUMNIDS.</param>
+        /// <param name="columnids">
+        /// An optional array of column IDs, each with an optional array of itagSequence
+        /// numbers to enumerate.
+        /// </param>
+        /// <param name="numColumnValues">
+        /// Returns the number of column values retrieved.
+        /// </param>
+        /// <param name="columnValues">
+        /// Returns the enumerated column values.
+        /// </param>
+        /// <param name="allocator">
+        /// Callback used to allocate memory.
+        /// </param>
+        /// <param name="allocatorContext">
+        /// Context for the allocation callback.
+        /// </param>
+        /// <param name="maxDataSize">
+        /// Sets a cap on the amount of data to return from a long text or long
+        /// binary column. This parameter can be used to prevent the enumeration
+        /// of an extremely large column value.
+        /// </param>
+        /// <param name="grbit">Retrieve options.</param>
+        /// <returns>A warning, error or success.</returns>
+        public int JetEnumerateColumns(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            int numColumnids,
+            JET_ENUMCOLUMNID[] columnids,
+            out int numColumnValues,
+            out JET_ENUMCOLUMN[] columnValues,
+            JET_PFNREALLOC allocator,
+            IntPtr allocatorContext,
+            int maxDataSize,
+            EnumerateColumnsGrbit grbit)
+        {
+            this.TraceFunctionCall("JetEnumerateColumns");
+            this.CheckNotNull(allocator, "allocator");
+            this.CheckNotNegative(maxDataSize, "maxDataSize");
+            this.CheckDataSize(columnids, numColumnids, "numColumnids");
+
+            numColumnValues = 0;
+            columnValues = null;
+
+            return 0;
+        }
+
+        #endregion
+
         #region DML
 
         public int JetDelete(JET_SESID sesid, JET_TABLEID tableid)
@@ -1187,7 +1256,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             uint cbActual;
             int err = this.Err(NativeMethods.JetUpdate(sesid.Value, tableid.Value, bookmark, (uint)bookmarkSize, out cbActual));
-            actualBookmarkSize = (int)cbActual;
+            actualBookmarkSize = checked((int) cbActual);
             return err;
         }
 
@@ -1233,23 +1302,36 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code or warning.</returns>
         public int JetSetColumns(JET_SESID sesid, JET_TABLEID tableid, JET_SETCOLUMN[] setcolumns, int numColumns)
         {
+            this.TraceFunctionCall("JetSetColumns");
+            this.CheckNotNull(setcolumns, "setcolumns");
             this.CheckDataSize(setcolumns, numColumns, "numColumns");
-            unsafe
+
+            var gchandles = new GCHandleCollection();
+            try
             {
-                NATIVE_SETCOLUMN* nativeSetColumns = stackalloc NATIVE_SETCOLUMN[numColumns];
-                for (int i = 0; i < numColumns; ++i)
+                unsafe
                 {
-                    nativeSetColumns[i] = setcolumns[i].GetNativeSetcolumn();
+                    NATIVE_SETCOLUMN* nativeSetColumns = stackalloc NATIVE_SETCOLUMN[numColumns];
+                    for (int i = 0; i < numColumns; ++i)
+                    {
+                        setcolumns[i].CheckDataSize();
+                        nativeSetColumns[i] = setcolumns[i].GetNativeSetcolumn();
+                        nativeSetColumns[i].pvData = gchandles.Add(setcolumns[i].pvData);
+                    }
+
+                    int err = this.Err(NativeMethods.JetSetColumns(sesid.Value, tableid.Value, nativeSetColumns, (uint)numColumns));
+
+                    for (int i = 0; i < numColumns; ++i)
+                    {
+                        setcolumns[i].err = (JET_wrn)nativeSetColumns[i].err;
+                    }
+
+                    return err;
                 }
-
-                int err = this.Err(NativeMethods.JetSetColumns(sesid.Value, tableid.Value, nativeSetColumns, (uint) numColumns));
-
-                for (int i = 0; i < numColumns; ++i)
-                {
-                    setcolumns[i].err = (JET_wrn) nativeSetColumns[i].err;
-                }
-
-                return err;
+            }
+            finally
+            {
+                gchandles.Dispose();
             }
         }
 
@@ -1305,7 +1387,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                                   (uint)previousValueLength,
                                   out cbOldActual,
                                   (uint)grbit));
-            actualPreviousValueLength = (int)cbOldActual;
+            actualPreviousValueLength = checked((int) cbOldActual);
             return err;
         }
 

@@ -42,7 +42,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Contains the information needed to create an index over data in an ESE database
+    /// Contains the information needed to create an index over data in an ESE database.
     /// </summary>
     public class JET_INDEXCREATE
     {
@@ -117,8 +117,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// This parameter is ignored on Windows XP and Windows Server 2003.
         /// </para>
         /// <para>
-        /// Unlike the unmanaged API JET_bitIndexKeyMost is not needed, it will
-        /// be added automatically.
+        /// Unlike the unmanaged API, <see cref="VistaGrbits.IndexKeyMost"/>
+        /// (JET_bitIndexKeyMost) is not needed, it will be added automatically.
         /// </para>
         /// </summary>
         public int cbKeyMost { get; set; }

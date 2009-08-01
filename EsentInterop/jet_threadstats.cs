@@ -42,7 +42,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
 
         /// <summary>
         /// Gets the total number of database pages, with unwritten changes, that
-        /// have been modified by the database engine on the current thread
+        /// have been modified by the database engine on the current thread.
         /// </summary>
         public int cPageRedirtied { get; internal set; }
 
@@ -106,13 +106,13 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// </param>
         internal void SetFromNativeThreadstats(NATIVE_THREADSTATS value)
         {
-            this.cPageReferenced = (int) value.cPageReferenced;
-            this.cPageRead = (int) value.cPageRead;
-            this.cPagePreread = (int) value.cPagePreread;
-            this.cPageDirtied = (int) value.cPageDirtied;
-            this.cPageRedirtied = (int) value.cPageRedirtied;
-            this.cLogRecord = (int) value.cLogRecord;
-            this.cbLogRecord = (int) value.cbLogRecord;
+            this.cPageReferenced = checked((int) value.cPageReferenced);
+            this.cPageRead = checked((int) value.cPageRead);
+            this.cPagePreread = checked((int) value.cPagePreread);
+            this.cPageDirtied = checked((int) value.cPageDirtied);
+            this.cPageRedirtied = checked((int) value.cPageRedirtied);
+            this.cLogRecord = checked((int) value.cLogRecord);
+            this.cbLogRecord = checked((int) value.cbLogRecord);
         }
     }
 

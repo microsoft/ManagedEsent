@@ -61,7 +61,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Returns the unmanaged columndef that represents this managed class.
         /// </summary>
-        /// <returns>A native (interop) version of the JET_COLUMNDEF</returns>
+        /// <returns>A native (interop) version of the JET_COLUMNDEF.</returns>
         internal NATIVE_COLUMNDEF GetNativeColumndef()
         {
             var columndef       = new NATIVE_COLUMNDEF();
@@ -83,7 +83,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             this.coltyp = (JET_coltyp)value.coltyp;
             this.cp = (JET_CP)value.cp;
-            this.cbMax = (int)value.cbMax;
+            this.cbMax = checked((int) value.cbMax);
             this.grbit = (ColumndefGrbit)value.grbit;
             this.columnid = new JET_COLUMNID { Value = value.columnid };
         }

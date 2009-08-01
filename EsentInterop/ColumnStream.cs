@@ -96,7 +96,7 @@ namespace Microsoft.Isam.Esent.Interop
                     throw new ArgumentOutOfRangeException("value", value, "A long-value offset has to be between 0 and 0x7fffffff bytes");
                 }
 
-                this.ibLongValue = (int)value;
+                this.ibLongValue = checked((int) value);
             }
         }
 
@@ -115,7 +115,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Gets the options that should be used with JetRetrieveColumn
+        /// Gets the options that should be used with JetRetrieveColumn.
         /// </summary>
         private static RetrieveColumnGrbit RetrieveGrbit
         {
@@ -147,7 +147,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             CheckBufferArguments(buffer, offset, count);
 
-            int length = (int)this.Length;
+            int length = checked((int) this.Length);
             JET_SETINFO setinfo;
 
             // If our current position is beyond the end of the LV extend
@@ -206,7 +206,7 @@ namespace Microsoft.Isam.Esent.Interop
                 return 0;
             }
 
-            int bytesToRead = (int)Math.Min(this.Length - this.ibLongValue, count);
+            int bytesToRead = checked((int) Math.Min(this.Length - this.ibLongValue, count));
 
             int ignored;
             var retinfo = new JET_RETINFO { itagSequence = this.Itag, ibLongValue = this.ibLongValue };
@@ -261,13 +261,13 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 var setinfo = new JET_SETINFO { itagSequence = this.Itag };
                 SetColumnGrbit grbit = (0 == value) ? SetColumnGrbit.ZeroLength : SetColumnGrbit.SizeLV;
-                Api.JetSetColumn(this.sesid, this.tableid, this.columnid, null, (int)value, grbit, setinfo);                
+                Api.JetSetColumn(this.sesid, this.tableid, this.columnid, null, checked((int) value), grbit, setinfo);                
             }
 
             // Setting the length moves the offset back to the end of the data
             if (this.ibLongValue > value)
             {
-                this.ibLongValue = (int)value;
+                this.ibLongValue = checked((int) value);
             }
         }
 
@@ -300,12 +300,12 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentOutOfRangeException("offset", offset, "invalid offset/origin combination");
             }
 
-            this.ibLongValue = (int)newOffset;
+            this.ibLongValue = checked((int) newOffset);
             return this.ibLongValue;
         }
 
         /// <summary>
-        /// Check the buffer arguments given to Read/Write 
+        /// Check the buffer arguments given to Read/Write .
         /// </summary>
         /// <param name="buffer">The buffer.</param>
         /// <param name="offset">The offset in the buffer to read/write to.</param>

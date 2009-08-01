@@ -40,9 +40,55 @@ namespace InteropApiTests
                 grbit = SetColumnGrbit.AppendLV,
                 ibLongValue = 3,
                 itagSequence = 4,
-                PinnedData = new IntPtr(5),
             };
             this.native = this.managed.GetNativeSetcolumn();
+        }
+
+        /// <summary>
+        /// CheckDataSize should detect a negative data length.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyCheckThrowsExceptionWhenCbDataIsNegative()
+        {
+            var setcolumn = new JET_SETCOLUMN
+            {
+                cbData = -1,
+                pvData = new byte[1],
+            };
+            setcolumn.CheckDataSize();
+        }
+
+        /// <summary>
+        /// CheckDataSize should detect null pvData and non-zero cbData.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyCheckThrowsExceptionWhenPvDataIsNull()
+        {
+            var setcolumn = new JET_SETCOLUMN
+            {
+                cbData = 1,
+            };
+            setcolumn.CheckDataSize();
+        }
+
+        /// <summary>
+        /// CheckDataSize should detect cbData that is too long.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyCheckThrowsExceptionWhenCbDataIsTooLong()
+        {
+            var setcolumn = new JET_SETCOLUMN
+            {
+                cbData = 100,
+                pvData = new byte[9],
+            };
+            setcolumn.CheckDataSize();
         }
 
         /// <summary>
@@ -100,10 +146,9 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        public unsafe void VerifyConversionToNativeSetsPvData()
+        public void VerifyConversionToNativeDoesNotSetPvData()
         {
-            var expected = new IntPtr(5);
-            Assert.IsTrue((void*) expected == this.native.pvData);
+            Assert.AreEqual(IntPtr.Zero, this.native.pvData);
         }
     }
 }

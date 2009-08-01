@@ -508,7 +508,42 @@ namespace InteropApiTests
             Assert.AreEqual(last - first, countedRecords);
         }
 
+        /// <summary>
+        /// Remove an index range
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void RemoveIndexRange()
+        {
+            int first = 2;
+            int last = this.numRecords - 2;
+
+            this.MakeKeyForRecord(first);
+            Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekEQ);
+
+            this.MakeKeyForRecord(last);
+            Api.JetSetIndexRange(this.sesid, this.tableid, SetIndexRangeGrbit.RangeUpperLimit);
+            Api.ResetIndexRange(this.sesid, this.tableid);
+
+            int countedRecords;
+            Api.JetIndexRecordCount(this.sesid, this.tableid, out countedRecords, 0);
+            Assert.AreEqual(this.numRecords - first, countedRecords);
+        }
+
+        /// <summary>
+        /// Removing a non-existant index range is not an error when
+        /// ResetIndexRange is used.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void RemoveIndexRangeWhenNoRangeExists()
+        {
+            Api.ResetIndexRange(this.sesid, this.tableid);
+        }
+
         #endregion
+
+        #region JetIndexRecordCount Tests
 
         /// <summary>
         /// Count the records in the table with JetIndexRecordCount
@@ -534,6 +569,8 @@ namespace InteropApiTests
             Api.JetIndexRecordCount(this.sesid, this.tableid, out countedRecords, this.numRecords - 1);
             Assert.AreEqual(this.numRecords - 1, countedRecords);
         }
+
+        #endregion
 
         /// <summary>
         /// Test using JetGetRecord position

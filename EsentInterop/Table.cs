@@ -89,7 +89,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Free the underlying JET_TABLEID
+        /// Free the underlying JET_TABLEID.
         /// </summary>
         protected override void ReleaseResource()
         {

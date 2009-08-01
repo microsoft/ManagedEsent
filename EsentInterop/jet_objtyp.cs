@@ -7,7 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
-    /// Type of an ESENT object
+    /// Type of an ESENT object.
     /// </summary>
     internal enum JET_objtyp
     {

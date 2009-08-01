@@ -405,7 +405,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// commits the changes made to the state of the database during the current save point
+        /// Commits the changes made to the state of the database during the current save point
         /// and migrates them to the previous save point. If the outermost save point is committed
         /// then the changes made during that save point will be committed to the state of the
         /// database and the session will exit the transaction.
@@ -798,7 +798,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="sesid">The session to use.</param>
         /// <param name="dbid">The database to use.</param>
         /// <param name="tablename">The name of the table to retrieve index information about.</param>
-        /// <param name="ignored">This parameter is ignored</param>
+        /// <param name="ignored">This parameter is ignored.</param>
         /// <param name="indexlist">Filled in with information about indexes on the table.</param>
         public static void JetGetIndexInfo(
                 JET_SESID sesid,
@@ -815,7 +815,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The table to retrieve index information about.</param>
-        /// <param name="ignored">This parameter is ignored</param>
+        /// <param name="ignored">This parameter is ignored.</param>
         /// <param name="indexlist">Filled in with information about indexes on the table.</param>
         public static void JetGetTableIndexInfo(
                 JET_SESID sesid,
@@ -831,24 +831,6 @@ namespace Microsoft.Isam.Esent.Interop
         #region Navigation
 
         /// <summary>
-        /// Retrieves the bookmark for the record that is associated with the index entry
-        /// at the current position of a cursor. This bookmark can then be used to
-        /// reposition that cursor back to the same record using <see cref="JetGotoBookmark"/>. 
-        /// The bookmark will be no longer than <see cref="SystemParameters.BookmarkMost"/>
-        /// bytes.
-        /// Also see <seealso cref="GetBookmark"/>.
-        /// </summary>
-        /// <param name="sesid">The session to use.</param>
-        /// <param name="tableid">The cursor to retrieve the bookmark from.</param>
-        /// <param name="bookmark">Buffer to contain the bookmark.</param>
-        /// <param name="bookmarkSize">Size of the bookmark buffer.</param>
-        /// <param name="actualBookmarkSize">Returns the actual size of the bookmark.</param>
-        public static void JetGetBookmark(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize, out int actualBookmarkSize)
-        {
-            Api.Check(Impl.JetGetBookmark(sesid, tableid, bookmark, bookmarkSize, out actualBookmarkSize));
-        }
-
-        /// <summary>
         /// Positions a cursor to an index entry for the record that is associated with
         /// the specified bookmark. The bookmark can be used with any index defined over
         /// a table. The bookmark for a record can be retrieved using <see cref="JetGetBookmark"/>. 
@@ -860,53 +842,6 @@ namespace Microsoft.Isam.Esent.Interop
         public static void JetGotoBookmark(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize)
         {
             Api.Check(Impl.JetGotoBookmark(sesid, tableid, bookmark, bookmarkSize));
-        }
-
-        /// <summary>
-        /// Retrieves a single column value from the current record. The record is that
-        /// record associated with the index entry at the current position of the cursor.
-        /// Alternatively, this function can retrieve a column from a record being created
-        /// in the cursor copy buffer. This function can also retrieve column data from an
-        /// index entry that references the current record. In addition to retrieving the
-        /// actual column value, JetRetrieveColumn can also be used to retrieve the size
-        /// of a column, before retrieving the column data itself so that application
-        /// buffers can be sized appropriately.  
-        /// </summary>
-        /// <remarks>
-        /// The RetrieveColumnAs functions provide datatype-specific retrieval functions.
-        /// </remarks>
-        /// <param name="sesid">The session to use.</param>
-        /// <param name="tableid">The cursor to retrieve the column from.</param>
-        /// <param name="columnid">The columnid to retrieve.</param>
-        /// <param name="data">The data buffer to be retrieved into.</param>
-        /// <param name="dataSize">The size of the data buffer.</param>
-        /// <param name="actualDataSize">Returns the actual size of the data buffer.</param>
-        /// <param name="grbit">Retrieve column options.</param>
-        /// <param name="retinfo">
-        /// If pretinfo is give as NULL then the function behaves as though an itagSequence
-        /// of 1 and an ibLongValue of 0 (zero) were given. This causes column retrieval to
-        /// retrieve the first value of a multi-valued column, and to retrieve long data at
-        /// offset 0 (zero).
-        /// </param>
-        /// <returns>An ESENT warning code.</returns>
-        public static JET_wrn JetRetrieveColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, out int actualDataSize, RetrieveColumnGrbit grbit, JET_RETINFO retinfo)
-        {
-            if ((null == data && dataSize > 0) || (null != data && dataSize > data.Length))
-            {
-                throw new ArgumentOutOfRangeException(
-                    "dataSize",
-                    dataSize,
-                    "cannot be greater than the length of the data");
-            }
-
-            unsafe
-            {
-                fixed (byte* pointer = data)
-                {
-                    return Api.JetRetrieveColumn(
-                        sesid, tableid, columnid, new IntPtr(pointer), dataSize, out actualDataSize, grbit, retinfo);
-                }
-            }
         }
 
         /// <summary>
@@ -969,21 +904,6 @@ namespace Microsoft.Isam.Esent.Interop
                     Api.JetMakeKey(sesid, tableid, new IntPtr(pointer), dataSize, grbit);
                 }
             }
-        }
-
-        /// <summary>
-        /// Retrieves the key for the index entry at the current position of a cursor.
-        /// Also see <seealso cref="RetrieveKey"/>.
-        /// </summary>
-        /// <param name="sesid">The session to use.</param>
-        /// <param name="tableid">The cursor to retrieve the key from.</param>
-        /// <param name="data">The buffer to retrieve the key into.</param>
-        /// <param name="dataSize">The size of the buffer.</param>
-        /// <param name="actualDataSize">Returns the actual size of the data.</param>
-        /// <param name="grbit">Retrieve key options.</param>
-        public static void JetRetrieveKey(JET_SESID sesid, JET_TABLEID tableid, byte[] data, int dataSize, out int actualDataSize, RetrieveKeyGrbit grbit)
-        {
-            Api.Check(Impl.JetRetrieveKey(sesid, tableid, data, dataSize, out actualDataSize, grbit));
         }
 
         /// <summary>
@@ -1145,6 +1065,158 @@ namespace Microsoft.Isam.Esent.Interop
 
         #endregion
 
+        #region Data Retrieval
+
+        /// <summary>
+        /// Retrieves the bookmark for the record that is associated with the index entry
+        /// at the current position of a cursor. This bookmark can then be used to
+        /// reposition that cursor back to the same record using <see cref="JetGotoBookmark"/>. 
+        /// The bookmark will be no longer than <see cref="SystemParameters.BookmarkMost"/>
+        /// bytes.
+        /// Also see <seealso cref="GetBookmark"/>.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the bookmark from.</param>
+        /// <param name="bookmark">Buffer to contain the bookmark.</param>
+        /// <param name="bookmarkSize">Size of the bookmark buffer.</param>
+        /// <param name="actualBookmarkSize">Returns the actual size of the bookmark.</param>
+        public static void JetGetBookmark(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize, out int actualBookmarkSize)
+        {
+            Api.Check(Impl.JetGetBookmark(sesid, tableid, bookmark, bookmarkSize, out actualBookmarkSize));
+        }
+
+        /// <summary>
+        /// Retrieves the key for the index entry at the current position of a cursor.
+        /// Also see <seealso cref="RetrieveKey"/>.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the key from.</param>
+        /// <param name="data">The buffer to retrieve the key into.</param>
+        /// <param name="dataSize">The size of the buffer.</param>
+        /// <param name="actualDataSize">Returns the actual size of the data.</param>
+        /// <param name="grbit">Retrieve key options.</param>
+        public static void JetRetrieveKey(JET_SESID sesid, JET_TABLEID tableid, byte[] data, int dataSize, out int actualDataSize, RetrieveKeyGrbit grbit)
+        {
+            Api.Check(Impl.JetRetrieveKey(sesid, tableid, data, dataSize, out actualDataSize, grbit));
+        }
+
+        /// <summary>
+        /// Retrieves a single column value from the current record. The record is that
+        /// record associated with the index entry at the current position of the cursor.
+        /// Alternatively, this function can retrieve a column from a record being created
+        /// in the cursor copy buffer. This function can also retrieve column data from an
+        /// index entry that references the current record. In addition to retrieving the
+        /// actual column value, JetRetrieveColumn can also be used to retrieve the size
+        /// of a column, before retrieving the column data itself so that application
+        /// buffers can be sized appropriately.  
+        /// </summary>
+        /// <remarks>
+        /// The RetrieveColumnAs functions provide datatype-specific retrieval functions.
+        /// </remarks>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the column from.</param>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="data">The data buffer to be retrieved into.</param>
+        /// <param name="dataSize">The size of the data buffer.</param>
+        /// <param name="actualDataSize">Returns the actual size of the data buffer.</param>
+        /// <param name="grbit">Retrieve column options.</param>
+        /// <param name="retinfo">
+        /// If pretinfo is give as NULL then the function behaves as though an itagSequence
+        /// of 1 and an ibLongValue of 0 (zero) were given. This causes column retrieval to
+        /// retrieve the first value of a multi-valued column, and to retrieve long data at
+        /// offset 0 (zero).
+        /// </param>
+        /// <returns>An ESENT warning code.</returns>
+        public static JET_wrn JetRetrieveColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, out int actualDataSize, RetrieveColumnGrbit grbit, JET_RETINFO retinfo)
+        {
+            if ((null == data && dataSize > 0) || (null != data && dataSize > data.Length))
+            {
+                throw new ArgumentOutOfRangeException(
+                    "dataSize",
+                    dataSize,
+                    "cannot be greater than the length of the data");
+            }
+
+            unsafe
+            {
+                fixed (byte* pointer = data)
+                {
+                    return Api.JetRetrieveColumn(
+                        sesid, tableid, columnid, new IntPtr(pointer), dataSize, out actualDataSize, grbit, retinfo);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Efficiently retrieves a set of columns and their values from the
+        /// current record of a cursor or the copy buffer of that cursor. The
+        /// columns and values retrieved can be restricted by a list of
+        /// column IDs, itagSequence numbers, and other characteristics. This
+        /// column retrieval API is unique in that it returns information in
+        /// dynamically allocated memory that is obtained using a
+        /// user-provided realloc compatible callback. This new flexibility
+        /// permits the efficient retrieval of column data with specific
+        /// characteristics (such as size and multiplicity) that are unknown
+        /// to the caller. This eliminates the need for the use of the discovery
+        /// modes of JetRetrieveColumn to determine those
+        /// characteristics in order to setup a final call to
+        /// JetRetrieveColumn that will successfully retrieve
+        /// the desired data.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve data from.</param>
+        /// <param name="numColumnids">The numbers of JET_ENUMCOLUMNIDS.</param>
+        /// <param name="columnids">
+        /// An optional array of column IDs, each with an optional array of itagSequence
+        /// numbers to enumerate.
+        /// </param>
+        /// <param name="numColumnValues">
+        /// Returns the number of column values retrieved.
+        /// </param>
+        /// <param name="columnValues">
+        /// Returns the enumerated column values.
+        /// </param>
+        /// <param name="allocator">
+        /// Callback used to allocate memory.
+        /// </param>
+        /// <param name="allocatorContext">
+        /// Context for the allocation callback.
+        /// </param>
+        /// <param name="maxDataSize">
+        /// Sets a cap on the amount of data to return from a long text or long
+        /// binary column. This parameter can be used to prevent the enumeration
+        /// of an extremely large column value.
+        /// </param>
+        /// <param name="grbit">Retrieve options.</param>
+        /// <returns>A warning or success.</returns>
+        public static JET_wrn JetEnumerateColumns(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            int numColumnids,
+            JET_ENUMCOLUMNID[] columnids,
+            out int numColumnValues,
+            out JET_ENUMCOLUMN[] columnValues,
+            JET_PFNREALLOC allocator,
+            IntPtr allocatorContext,
+            int maxDataSize,
+            EnumerateColumnsGrbit grbit)
+        {
+            return Api.Check(
+                Impl.JetEnumerateColumns(
+                    sesid,
+                    tableid,
+                    numColumnids,
+                    columnids,
+                    out numColumnValues,
+                    out columnValues,
+                    allocator,
+                    allocatorContext,
+                    maxDataSize,
+                    grbit));
+        }
+
+        #endregion
+
         #region DML
 
         /// <summary>
@@ -1260,29 +1332,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         /// <returns>
         /// A warning. If the last column set has a warning, then
-        /// this warning will be returned from JetSetColumns itself
+        /// this warning will be returned from JetSetColumns itself.
         /// </returns>
         public static JET_wrn JetSetColumns(JET_SESID sesid, JET_TABLEID tableid, JET_SETCOLUMN[] setcolumns, int numColumns)
         {
-            var gchandles = new GCHandleCollection();
-            try
-            {
-                foreach (JET_SETCOLUMN setcolumn in setcolumns)
-                {
-                    setcolumn.PinnedData = gchandles.Add(setcolumn.pvData);
-                }
-
-                return Api.Check(Impl.JetSetColumns(sesid, tableid, setcolumns, numColumns));
-            }
-            finally
-            {
-                gchandles.Dispose();
-                foreach (JET_SETCOLUMN setcolumn in setcolumns)
-                {
-                    // Clear the pinned data pointers
-                    setcolumn.PinnedData = IntPtr.Zero;
-                }
-            }
+            return Api.Check(Impl.JetSetColumns(sesid, tableid, setcolumns, numColumns));
         }
 
         /// <summary>

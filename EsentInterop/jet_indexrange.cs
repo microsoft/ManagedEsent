@@ -47,7 +47,7 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// Gets or sets the cursor containing the index range. The cursor should have an
-        /// index range set with JetSetIndexRange
+        /// index range set with JetSetIndexRange.
         /// </summary>
         public JET_TABLEID tableid { get; set; }
 

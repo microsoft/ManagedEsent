@@ -7,6 +7,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Microsoft.Isam.Esent.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -546,47 +547,6 @@ namespace InteropApiTests
         #region Navigation
 
         /// <summary>
-        /// Check that an exception is thrown when JetGetBookmark gets a 
-        /// null bookmark and non-null length.
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void JetGetBookmarkThrowsExceptionWhenBookmarkIsNull()
-        {
-            int actualSize;
-            Api.JetGetBookmark(this.sesid, this.tableid, null, 10, out actualSize);
-        }
-
-        /// <summary>
-        /// Check that an exception is thrown when JetGetBookmark gets a 
-        /// bookmark length that is negative.
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void JetGetBookmarkThrowsExceptionWhenBookmarkLengthIsNegative()
-        {
-            int actualSize;
-            var bookmark = new byte[1];
-            Api.JetGetBookmark(this.sesid, this.tableid, bookmark, -1, out actualSize);
-        }
-
-        /// <summary>
-        /// Check that an exception is thrown when JetGetBookmark gets a 
-        /// bookmark length that is too long.
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void JetGetBookmarkThrowsExceptionWhenBookmarkLengthIsTooLong()
-        {
-            int actualSize;
-            var bookmark = new byte[1];
-            Api.JetGetBookmark(this.sesid, this.tableid, bookmark, bookmark.Length + 1, out actualSize);
-        }
-
-        /// <summary>
         /// Check that an exception is thrown when JetGotoBookmark gets a 
         /// null bookmark.
         /// </summary>
@@ -638,28 +598,15 @@ namespace InteropApiTests
 
         /// <summary>
         /// Check that an exception is thrown when JetMakeKey gets a 
-        /// data length that is too long.
+        /// data length that is negative.
         /// </summary>
         [TestMethod]
         [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void JetMakeKeyThrowsExceptionWhenDataLengthIsTooLong()
+        public void JetMakeKeyThrowsExceptionWhenDataLengthIsNegative()
         {
             var data = new byte[1];
-            Api.JetMakeKey(this.sesid, this.tableid, data, data.Length + 1, MakeKeyGrbit.None);
-        }
-
-        /// <summary>
-        /// Check that an exception is thrown when JetRetrieveKey gets 
-        /// null data and a non-null length.
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void JetRetrieveKeyThrowsExceptionWhenDataIsNull()
-        {
-            int actualSize;
-            Api.JetRetrieveKey(this.sesid, this.tableid, null, 1, out actualSize, RetrieveKeyGrbit.None);
+            Api.JetMakeKey(this.sesid, this.tableid, data, -1, MakeKeyGrbit.None);
         }
 
         /// <summary>
@@ -669,11 +616,10 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void JetRetrieveKeyThrowsExceptionWhenDataLengthIsTooLong()
+        public void JetMakeKeyThrowsExceptionWhenDataLengthIsTooLong()
         {
             var data = new byte[1];
-            int actualSize;
-            Api.JetRetrieveKey(this.sesid, this.tableid, data, data.Length + 1, out actualSize, RetrieveKeyGrbit.None);
+            Api.JetMakeKey(this.sesid, this.tableid, data, data.Length + 1, MakeKeyGrbit.None);
         }
 
         /// <summary>
@@ -731,44 +677,88 @@ namespace InteropApiTests
 
         #endregion
 
-        #region DML
+        #region Data Retrieval
 
         /// <summary>
-        /// Check that an exception is thrown when JetSetColumn gets a 
-        /// null buffer and non-null length (and SetSizeLV isn't specified).
+        /// Check that an exception is thrown when JetGetBookmark gets a 
+        /// null bookmark and non-null length.
         /// </summary>
         [TestMethod]
         [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void JetSetColumnThrowsExceptionWhenDataIsNull()
+        public void JetGetBookmarkThrowsExceptionWhenBookmarkIsNull()
         {
-            Api.JetSetColumn(this.sesid, this.tableid, this.columnid, null, 1, SetColumnGrbit.None, null);
+            int actualSize;
+            Api.JetGetBookmark(this.sesid, this.tableid, null, 10, out actualSize);
         }
 
         /// <summary>
-        /// Check that an exception is thrown when JetSetColumn gets a 
-        /// negative data length.
+        /// Check that an exception is thrown when JetGetBookmark gets a 
+        /// bookmark length that is negative.
         /// </summary>
         [TestMethod]
         [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void JetSetColumnThrowsExceptionWhenDataSizeIsNegative()
+        public void JetGetBookmarkThrowsExceptionWhenBookmarkLengthIsNegative()
         {
-            var data = new byte[1];
-            Api.JetSetColumn(this.sesid, this.tableid, this.columnid, data, -1, SetColumnGrbit.None, null);
+            int actualSize;
+            var bookmark = new byte[1];
+            Api.JetGetBookmark(this.sesid, this.tableid, bookmark, -1, out actualSize);
         }
 
         /// <summary>
-        /// Check that an exception is thrown when JetSetColumn gets a 
-        /// negative data length.
+        /// Check that an exception is thrown when JetGetBookmark gets a 
+        /// bookmark length that is too long.
         /// </summary>
         [TestMethod]
         [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void JetSetColumnThrowsExceptionWhenDataSizeIsTooLong()
+        public void JetGetBookmarkThrowsExceptionWhenBookmarkLengthIsTooLong()
+        {
+            int actualSize;
+            var bookmark = new byte[1];
+            Api.JetGetBookmark(this.sesid, this.tableid, bookmark, bookmark.Length + 1, out actualSize);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetRetrieveKey gets 
+        /// null data and a non-null length.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetRetrieveKeyThrowsExceptionWhenDataIsNull()
+        {
+            int actualSize;
+            Api.JetRetrieveKey(this.sesid, this.tableid, null, 1, out actualSize, RetrieveKeyGrbit.None);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetMakeKey gets a 
+        /// data length that is negative.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetRetrieveKeyThrowsExceptionWhenDataLengthIsNegative()
         {
             var data = new byte[1];
-            Api.JetSetColumn(this.sesid, this.tableid, this.columnid, data, data.Length + 1, SetColumnGrbit.None, null);
+            int actualSize;
+            Api.JetRetrieveKey(this.sesid, this.tableid, data, -1, out actualSize, RetrieveKeyGrbit.None);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetMakeKey gets a 
+        /// data length that is too long.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetRetrieveKeyThrowsExceptionWhenDataLengthIsTooLong()
+        {
+            var data = new byte[1];
+            int actualSize;
+            Api.JetRetrieveKey(this.sesid, this.tableid, data, data.Length + 1, out actualSize, RetrieveKeyGrbit.None);
         }
 
         /// <summary>
@@ -810,6 +800,230 @@ namespace InteropApiTests
             int actualSize;
             var data = new byte[1];
             Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, data, data.Length + 1, out actualSize, RetrieveColumnGrbit.None, null);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetEnumerateColumns gets a 
+        /// null allocator callback.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetEnumerateColumnsThrowsExceptionWhenAllocatorIsNull()
+        {
+            int numColumnValues;
+            JET_ENUMCOLUMN[] columnValues;
+            Api.JetEnumerateColumns(
+                this.sesid,
+                this.tableid,
+                0,
+                null,
+                out numColumnValues,
+                out columnValues,
+                null,
+                IntPtr.Zero,
+                0,
+                EnumerateColumnsGrbit.None);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetEnumerateColumns gets a 
+        /// negative maximum column size.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetEnumerateColumnsThrowsExceptionWhenMaxSizeIsNegative()
+        {
+            int numColumnValues;
+            JET_ENUMCOLUMN[] columnValues;
+            JET_PFNREALLOC allocator = (pv, cb, context) => Marshal.ReAllocHGlobal(pv, cb);
+            Api.JetEnumerateColumns(
+                this.sesid,
+                this.tableid,
+                0,
+                null,
+                out numColumnValues,
+                out columnValues,
+                allocator,
+                IntPtr.Zero,
+                -1,
+                EnumerateColumnsGrbit.None);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetEnumerateColumns gets a 
+        /// null columnids when numColumnids is non-zero.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetEnumerateColumnsThrowsExceptionWhenColumnidsIsNull()
+        {
+            int numColumnValues;
+            JET_ENUMCOLUMN[] columnValues;
+            JET_PFNREALLOC allocator = (pv, cb, context) => Marshal.ReAllocHGlobal(pv, cb);
+            Api.JetEnumerateColumns(
+                this.sesid,
+                this.tableid,
+                1,
+                null,
+                out numColumnValues,
+                out columnValues,
+                allocator,
+                IntPtr.Zero,
+                0,
+                EnumerateColumnsGrbit.None);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetEnumerateColumns gets a 
+        /// negative numColumnids.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetEnumerateColumnsThrowsExceptionWhenNumColumnidsIsNegative()
+        {
+            int numColumnValues;
+            JET_ENUMCOLUMN[] columnValues;
+            JET_PFNREALLOC allocator = (pv, cb, context) => Marshal.ReAllocHGlobal(pv, cb);
+            var columnids = new JET_ENUMCOLUMNID[2];
+            Api.JetEnumerateColumns(
+                this.sesid,
+                this.tableid,
+                -1,
+                columnids,
+                out numColumnValues,
+                out columnValues,
+                allocator,
+                IntPtr.Zero,
+                0,
+                EnumerateColumnsGrbit.None);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetEnumerateColumns gets a 
+        /// numColumnids count which is greater than the size of columnids.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetEnumerateColumnsThrowsExceptionWhenNumColumnidsIsTooLong()
+        {
+            int numColumnValues;
+            JET_ENUMCOLUMN[] columnValues;
+            JET_PFNREALLOC allocator = (pv, cb, context) => Marshal.ReAllocHGlobal(pv, cb);
+            var columnids = new JET_ENUMCOLUMNID[2];
+            Api.JetEnumerateColumns(
+                this.sesid,
+                this.tableid,
+                columnids.Length + 1,
+                columnids,
+                out numColumnValues,
+                out columnValues,
+                allocator,
+                IntPtr.Zero,
+                0,
+                EnumerateColumnsGrbit.None);
+        }
+
+        #endregion
+
+        #region DML
+
+        /// <summary>
+        /// Check that an exception is thrown when JetSetColumn gets a 
+        /// null buffer and non-null length (and SetSizeLV isn't specified).
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetSetColumnThrowsExceptionWhenDataIsNull()
+        {
+            Api.JetSetColumn(this.sesid, this.tableid, this.columnid, null, 1, SetColumnGrbit.None, null);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetSetColumn gets a 
+        /// negative data length.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetSetColumnThrowsExceptionWhenDataSizeIsNegative()
+        {
+            var data = new byte[1];
+            Api.JetSetColumn(this.sesid, this.tableid, this.columnid, data, -1, SetColumnGrbit.None, null);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetSetColumn gets a 
+        /// negative data length.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetSetColumnThrowsExceptionWhenDataSizeIsTooLong()
+        {
+            var data = new byte[1];
+            Api.JetSetColumn(this.sesid, this.tableid, this.columnid, data, data.Length + 1, SetColumnGrbit.None, null);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetSetColumns gets a 
+        /// null setcolumns array. 
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetSetColumnsThrowsExceptionWhenSetColumnsIsNull()
+        {
+            Api.JetSetColumns(this.sesid, this.tableid, null, 0);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetSetColumns gets a 
+        /// negative number of columns.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetSetColumnsThrowsExceptionWhenNumColumnsIsNegative()
+        {
+            Api.JetSetColumns(this.sesid, this.tableid, new JET_SETCOLUMN[1], -1);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetSetColumns gets a 
+        /// numColumns count that is greater than the number of columns.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetSetColumnsThrowsExceptionWhenDataSizeIsTooLong()
+        {
+            Api.JetSetColumns(this.sesid, this.tableid, new JET_SETCOLUMN[1], 2);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetSetColumns gets a 
+        /// numColumns count that is greater than the number of columns.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetSetColumnsThrowsExceptionWhenSetColumnDataIsInvalid()
+        {
+            var setcolumns = new[]
+            {
+                new JET_SETCOLUMN
+                {
+                    cbData = 100,
+                    pvData = new byte[10],
+                },
+            };
+            Api.JetSetColumns(this.sesid, this.tableid, setcolumns, setcolumns.Length);
         }
 
         /// <summary>
@@ -855,16 +1069,15 @@ namespace InteropApiTests
 
         /// <summary>
         /// Check that an exception is thrown when JetEscrowUpdate gets a 
-        /// delta length that is too long.
+        /// null delta.
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void JetEscrowUpdateThrowsExceptionWhenDeltaSizeIsTooLong()
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetEscrowUpdateThrowsExceptionWhenDeltaIsNull()
         {
             int actualSize;
-            var delta = new byte[1];
-            Api.JetEscrowUpdate(this.sesid, this.tableid, this.columnid, delta, delta.Length + 1, null, 0, out actualSize, EscrowUpdateGrbit.None);
+            Api.JetEscrowUpdate(this.sesid, this.tableid, this.columnid, null, 0, null, 0, out actualSize, EscrowUpdateGrbit.None);
         }
 
         /// <summary>
@@ -883,30 +1096,30 @@ namespace InteropApiTests
 
         /// <summary>
         /// Check that an exception is thrown when JetEscrowUpdate gets a 
-        /// null delta.
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void JetEscrowUpdateThrowsExceptionWhenDeltaIsNull()
-        {
-            int actualSize;
-            Api.JetEscrowUpdate(this.sesid, this.tableid, this.columnid, null, 0, null, 0, out actualSize, EscrowUpdateGrbit.None);
-        }
-
-        /// <summary>
-        /// Check that an exception is thrown when JetEscrowUpdate gets a 
-        /// previous value length that is too long.
+        /// delta length that is too long.
         /// </summary>
         [TestMethod]
         [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void JetEscrowUpdateThrowsExceptionWhenPreviousValueSizeIsTooLong()
+        public void JetEscrowUpdateThrowsExceptionWhenDeltaSizeIsTooLong()
+        {
+            int actualSize;
+            var delta = new byte[1];
+            Api.JetEscrowUpdate(this.sesid, this.tableid, this.columnid, delta, delta.Length + 1, null, 0, out actualSize, EscrowUpdateGrbit.None);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetEscrowUpdate gets a 
+        /// null previous value and non-zero length.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetEscrowUpdateThrowsExceptionWhenPreviousValueIsNull()
         {
             int actualSize;
             var delta = new byte[4];
-            var previous = new byte[4];
-            Api.JetEscrowUpdate(this.sesid, this.tableid, this.columnid, delta, delta.Length, previous, previous.Length + 1, out actualSize, EscrowUpdateGrbit.None);
+            Api.JetEscrowUpdate(this.sesid, this.tableid, this.columnid, delta, delta.Length, null, 4, out actualSize, EscrowUpdateGrbit.None);
         }
 
         /// <summary>
@@ -926,16 +1139,17 @@ namespace InteropApiTests
 
         /// <summary>
         /// Check that an exception is thrown when JetEscrowUpdate gets a 
-        /// null previous value and non-zero length.
+        /// previous value length that is too long.
         /// </summary>
         [TestMethod]
         [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void JetEscrowUpdateThrowsExceptionWhenPreviousValueIsNull()
+        public void JetEscrowUpdateThrowsExceptionWhenPreviousValueSizeIsTooLong()
         {
             int actualSize;
             var delta = new byte[4];
-            Api.JetEscrowUpdate(this.sesid, this.tableid, this.columnid, delta, delta.Length, null, 4, out actualSize, EscrowUpdateGrbit.None);
+            var previous = new byte[4];
+            Api.JetEscrowUpdate(this.sesid, this.tableid, this.columnid, delta, delta.Length, previous, previous.Length + 1, out actualSize, EscrowUpdateGrbit.None);
         }
 
         #endregion DML

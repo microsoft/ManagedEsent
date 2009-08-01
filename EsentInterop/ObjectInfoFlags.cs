@@ -9,7 +9,7 @@ using System;
 namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
-    /// Flags for ESENT objects (tables)
+    /// Flags for ESENT objects (tables).
     /// </summary>
     [Flags]
     internal enum ObjectInfoFlags : uint
@@ -25,17 +25,17 @@ namespace Microsoft.Isam.Esent.Interop
         TableFixedDDL = 0x40000000,
 
         /// <summary>
-        /// Table's DDL is inheritable (implied FixedDDL)
+        /// Table's DDL is inheritable (implied FixedDDL).
         /// </summary>
         TableTemplate = 0x20000000,
 
         /// <summary>
-        /// Table's DDL is inherited from a template table
+        /// Table's DDL is inherited from a template table.
         /// </summary>
         TableDerived = 0x10000000,
 
         /// <summary>
-        /// Used in conjunction with JET_bitObjectTableTemplate
+        /// Used in conjunction with JET_bitObjectTableTemplate.
         /// </summary>
         TableNoFixedVarColumnsInDerivedTables = 0x04000000,
     }

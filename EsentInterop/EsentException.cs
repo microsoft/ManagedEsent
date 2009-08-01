@@ -10,7 +10,7 @@ using System.Runtime.Serialization;
 namespace Microsoft.Isam.Esent
 {
     /// <summary>
-    /// Base class for ESENT exceptions
+    /// Base class for ESENT exceptions.
     /// </summary>
     [Serializable]
     [CLSCompliant(true)]

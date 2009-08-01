@@ -27,7 +27,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="name">
         /// The name of the instance. This string must be unique within a
-        /// given process hosting the database engine
+        /// given process hosting the database engine.
         /// </param>
         public Instance(string name) : this(name, name)
         {
@@ -39,7 +39,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="name">
         /// The name of the instance. This string must be unique within a
-        /// given process hosting the database engine
+        /// given process hosting the database engine.
         /// </param>
         /// <param name="displayName">
         /// A display name for the instance. This will be used in eventlog
@@ -142,7 +142,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Create a JET_INSTANCE from the internal handle value.
         /// </summary>
-        /// <returns>A JET_INSTANCE containing the internal handle</returns>
+        /// <returns>A JET_INSTANCE containing the internal handle.</returns>
         private JET_INSTANCE CreateInstanceFromHandle()
         {
             return new JET_INSTANCE { Value = this.handle };

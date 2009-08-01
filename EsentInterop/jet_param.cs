@@ -7,7 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
-    /// ESENT system parameters
+    /// ESENT system parameters.
     /// </summary>
     public enum JET_param
     {

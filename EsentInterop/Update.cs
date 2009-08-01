@@ -9,7 +9,7 @@ using System;
 namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
-    /// A class that encapsulates an update on a JET_TABLEID
+    /// A class that encapsulates an update on a JET_TABLEID.
     /// </summary>
     public class Update : EsentResource
     {

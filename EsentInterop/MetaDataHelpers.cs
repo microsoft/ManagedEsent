@@ -286,7 +286,7 @@ namespace Microsoft.Isam.Esent.Interop
                 new JET_COLUMNID() { Value = columnidValue },
                 (JET_coltyp) coltypValue,
                 (JET_CP) codepageValue,
-                (int) maxLength,
+                checked((int) maxLength),
                 defaultValue,
                 (ColumndefGrbit) grbitValue);
         }

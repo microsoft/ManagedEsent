@@ -139,7 +139,7 @@ namespace Microsoft.Isam.Esent.Interop
         internal void SetFromNativeIndexlist(NATIVE_INDEXLIST value)
         {
             this.tableid = new JET_TABLEID { Value = value.tableid };
-            this.cRecord = (int)value.cRecord;
+            this.cRecord = checked((int) value.cRecord);
             this.columnidindexname = new JET_COLUMNID { Value = value.columnidindexname };
             this.columnidgrbitIndex = new JET_COLUMNID { Value = value.columnidgrbitIndex };
             this.columnidcColumn = new JET_COLUMNID { Value = value.columnidcColumn };

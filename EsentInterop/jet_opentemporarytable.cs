@@ -39,8 +39,8 @@ namespace Microsoft.Isam.Esent.Interop.Vista
 
         /// <summary>
         /// Gets or sets the number of columns in <see cref="prgcolumndef"/>.
-        /// <seealso cref="prgcolumnid"/>
         /// </summary>
+        /// <seealso cref="prgcolumnid"/>
         public int ccolumn { get; set; }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// Returns the unmanaged opentemporarytable that represents this managed class.
         /// </summary>
         /// <returns>
-        /// A native (interop) version of the JET_OPENTEMPORARYTABLE
+        /// A native (interop) version of the JET_OPENTEMPORARYTABLE.
         /// </returns>
         internal NATIVE_OPENTEMPORARYTABLE GetNativeOpenTemporaryTable()
         {

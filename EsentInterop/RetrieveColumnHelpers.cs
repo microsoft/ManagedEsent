@@ -17,7 +17,7 @@ namespace Microsoft.Isam.Esent.Interop
     public static partial class Api
     {
         /// <summary>
-        /// Cached retrieve buffers
+        /// Cached retrieve buffers.
         /// </summary>
         private static readonly MemoryCache memoryCache = new MemoryCache();
 
@@ -27,8 +27,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// Conversion function delegate.
         /// </summary>
         /// <typeparam name="TResult">The return type.</typeparam>
-        /// <param name="data">The data to convert,</param>
-        /// <returns>An object of type TRresult</returns>
+        /// <param name="data">The data to convert.</param>
+        /// <returns>An object of type TRresult.</returns>
         /// <remarks>
         /// We create this delegate here, instead of using the built-in
         /// Func/Converter generics to avoid taking a dependency on 
@@ -79,6 +79,52 @@ namespace Microsoft.Isam.Esent.Interop
             JetRetrieveKey(sesid, tableid, key, key.Length, out keySize, grbit);
 
             return key;
+        }
+
+        /// <summary>
+        /// Retrieves the size of a single column value from the current record.
+        /// The record is that record associated with the index entry at the
+        /// current position of the cursor. Alternatively, this function can
+        /// retrieve a column from a record being created in the cursor copy
+        /// buffer. This function can also retrieve column data from an index
+        /// entry that references the current record.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the column from.</param>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <returns>The size of the column. 0 if the column is null.</returns>
+        public static int RetrieveColumnSize(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
+        {
+            return RetrieveColumnSize(sesid, tableid, columnid, 1, RetrieveColumnGrbit.None);
+        }
+
+        /// <summary>
+        /// Retrieves the size of a single column value from the current record.
+        /// The record is that record associated with the index entry at the
+        /// current position of the cursor. Alternatively, this function can
+        /// retrieve a column from a record being created in the cursor copy
+        /// buffer. This function can also retrieve column data from an index
+        /// entry that references the current record.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the column from.</param>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="itagSequence">
+        /// The sequence number of value in a multi-valued column.
+        /// The array of values is one-based. The first value is
+        /// sequence 1, not 0. If the record column has only one value then
+        /// 1 should be passed as the itagSequence.
+        /// </param>
+        /// <param name="grbit">Retrieve column options.</param>
+        /// <returns>The size of the column. 0 if the column is null.</returns>
+        public static int RetrieveColumnSize(
+            JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, int itagSequence, RetrieveColumnGrbit grbit)
+        {
+            var retinfo = new JET_RETINFO() { itagSequence = itagSequence };
+            int dataSize;
+            JetRetrieveColumn(
+                sesid, tableid, columnid, null, 0, out dataSize, grbit, retinfo);
+            return 0;
         }
 
         /// <summary>
@@ -596,6 +642,7 @@ namespace Microsoft.Isam.Esent.Interop
                     return oadate.Value < 0 ? DateTime.MinValue : DateTime.MaxValue;
                 }
             }
+
             return new DateTime?();
         }
 
@@ -607,7 +654,6 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor to retrieve the column from.</param>
         /// <param name="columnid">The columnid to retrieve.</param>
         /// <returns>The data retrieved from the column as an UInt16. Null if the column is null.</returns>
-        /// <remarks>public becaue unsigned types aren't CLS compliant.</remarks>
         public static ushort? RetrieveColumnAsUInt16(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
             return RetrieveColumnAsUInt16(sesid, tableid, columnid, RetrieveColumnGrbit.None);
@@ -622,7 +668,6 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="columnid">The columnid to retrieve.</param>
         /// <param name="grbit">Retrieval options.</param>
         /// <returns>The data retrieved from the column as an UInt16. Null if the column is null.</returns>
-        /// <remarks>public becaue unsigned types aren't CLS compliant.</remarks>
         public static ushort? RetrieveColumnAsUInt16(
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {
@@ -646,7 +691,6 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor to retrieve the column from.</param>
         /// <param name="columnid">The columnid to retrieve.</param>
         /// <returns>The data retrieved from the column as an UInt32. Null if the column is null.</returns>
-        /// <remarks>public becaue unsigned types aren't CLS compliant.</remarks>
         public static uint? RetrieveColumnAsUInt32(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
             return RetrieveColumnAsUInt32(sesid, tableid, columnid, RetrieveColumnGrbit.None);
@@ -661,7 +705,6 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="columnid">The columnid to retrieve.</param>
         /// <param name="grbit">Retrieval options.</param>
         /// <returns>The data retrieved from the column as an UInt32. Null if the column is null.</returns>
-        /// <remarks>public becaue unsigned types aren't CLS compliant.</remarks>
         public static uint? RetrieveColumnAsUInt32(
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {
@@ -685,7 +728,6 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor to retrieve the column from.</param>
         /// <param name="columnid">The columnid to retrieve.</param>
         /// <returns>The data retrieved from the column as an UInt64. Null if the column is null.</returns>
-        /// <remarks>public becaue unsigned types aren't CLS compliant.</remarks>
         public static ulong? RetrieveColumnAsUInt64(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
             return RetrieveColumnAsUInt64(sesid, tableid, columnid, RetrieveColumnGrbit.None);
@@ -700,7 +742,6 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="columnid">The columnid to retrieve.</param>
         /// <param name="grbit">Retrieval options.</param>
         /// <returns>The data retrieved from the column as an UInt64. Null if the column is null.</returns>
-        /// <remarks>public becaue unsigned types aren't CLS compliant.</remarks>
         public static ulong? RetrieveColumnAsUInt64(
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {

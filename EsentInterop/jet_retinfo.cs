@@ -27,13 +27,13 @@ namespace Microsoft.Isam.Esent.Interop
     {
         /// <summary>
         /// Gets or sets the offset to the first byte to be retrieved from a column of
-        /// type JET_coltyp.LongBinary, or JET_coltyp.LongText
+        /// type <see cref="JET_coltyp.LongBinary"/>, or <see cref="JET_coltyp.LongText"/>.
         /// </summary>
         public int ibLongValue { get; set; }
 
         /// <summary>
         /// Gets or sets the sequence number of value in a multi-valued column.
-        /// Note that the array of values is one-based. The first value is
+        /// The array of values is one-based. The first value is
         /// sequence 1, not 0. If the record column has only one value then
         /// 1 should be passed as the itagSequence.
         /// </summary>
@@ -65,11 +65,10 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="value">The NATIVE_RETINFO which will be used to set the fields.</param>
         internal void SetFromNativeRetinfo(NATIVE_RETINFO value)
         {
-            this.ibLongValue = (int)value.ibLongValue;
-            this.itagSequence = (int)value.itagSequence;
+            this.ibLongValue = checked((int) value.ibLongValue);
+            this.itagSequence = checked((int) value.itagSequence);
 
-            var columnid = new JET_COLUMNID();
-            columnid.Value = value.columnidNextTagged;
+            var columnid = new JET_COLUMNID { Value = value.columnidNextTagged };
             this.columnidNextTagged = columnid;
         }
     }

@@ -11,7 +11,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
     /// This class provides static properties to set and get
-    /// global ESENT system parameters
+    /// global ESENT system parameters.
     /// </summary>
     public static partial class SystemParameters
     {

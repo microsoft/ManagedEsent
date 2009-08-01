@@ -54,7 +54,7 @@ namespace Microsoft.Isam.Esent.Interop
         internal void SetFromNativeRecordlist(NATIVE_RECORDLIST value)
         {
             this.tableid = new JET_TABLEID { Value = value.tableid };
-            this.cRecords = (int)value.cRecords;
+            this.cRecords = checked((int) value.cRecords);
             this.columnidBookmark = new JET_COLUMNID { Value = value.columnidBookmark };
         }
     }

@@ -55,8 +55,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="value">The NATIVE_RECPOS which will be used to set the fields.</param>
         internal void SetFromNativeRecpos(NATIVE_RECPOS value)
         {
-            this.centriesLT = (int)value.centriesLT;
-            this.centriesTotal = (int)value.centriesTotal;
+            this.centriesLT = checked((int) value.centriesLT);
+            this.centriesTotal = checked((int) value.centriesTotal);
         }
     }
 }
