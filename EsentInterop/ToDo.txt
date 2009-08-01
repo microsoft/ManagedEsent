@@ -1,9 +1,14 @@
 ﻿ TODO
  ----
+  * Tests for JET_ENUMCOLUMNID conversion
+  * Tests for JET_ENUMCOLUMNID.CheckDataSize (rename method?)
+  * Parameter tests for JetEnumerateColumns (bad JET_ENUMCOLUMNID)
+  * Convert JET_ENUMCOLUMNID to native
+  * Write JetEnumerateColumns test
+  * Add to perf test (retrieve two columns, benchmark against two calls to JetRetrieveColumn)
+  
   - Add XML headers to all functions/fields and re-enable StyleCop errors
   - More JET_param parameters
-	- RetrieveColumnSize
-	- Test for GCHandleCollection
 	
 Pri 0 APIs: Needed by clients
 -----------------------------

@@ -5,11 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices;
 using Microsoft.Isam.Esent.Interop;
-using Microsoft.Isam.Esent.Interop.Vista;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace InteropApiTests
@@ -21,7 +17,7 @@ namespace InteropApiTests
     public class EnumColumnValueTests
     {
         /// <summary>
-        /// Test conversion of a single value
+        /// Test conversion from native to managed.
         /// </summary>
         [TestMethod]
         [Priority(0)]

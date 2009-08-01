@@ -39,5 +39,33 @@ namespace InteropApiTests
             Assert.AreEqual(3, managed.cbData);
             Assert.AreEqual(new IntPtr(4), managed.pvData);
         }
+
+        /// <summary>
+        /// Test conversion of a multi value
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void TestMultiValueConversion()
+        {
+            var managed = new JET_ENUMCOLUMN();
+            unsafe
+            {
+                var columnvalues = stackalloc NATIVE_ENUMCOLUMNVALUE[2];
+                var native = new NATIVE_ENUMCOLUMN
+                {
+                    columnid = 1,
+                    err = (int) JET_wrn.Success,
+                    cEnumColumnValue = 3,
+                    rgEnumColumnValue = columnvalues,
+                };
+
+                managed.SetFromNativeEnumColumn(native);                
+            }
+
+            Assert.AreEqual<uint>(1, managed.columnid.Value);
+            Assert.AreEqual(JET_wrn.Success, managed.err);
+            Assert.AreEqual(3, managed.cEnumColumnValue);
+            Assert.AreEqual(null, managed.rgEnumColumnValue);
+        }
     }
 }

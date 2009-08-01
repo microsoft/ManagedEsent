@@ -26,7 +26,7 @@ namespace Microsoft.Isam.Esent.Interop
         public int err;
 
         /// <summary>
-        /// Gets the size of the value that was enumerated for the column.
+        /// The size of the value that was enumerated for the column.
         /// This member is only used if <see cref="err"/> is equal to
         /// <see cref="JET_wrn.ColumnSingleValue"/>.
         /// </summary>
@@ -37,7 +37,7 @@ namespace Microsoft.Isam.Esent.Interop
         public uint cbData;
 
         /// <summary>
-        /// Gets the the value that was enumerated for the column.
+        /// The the value that was enumerated for the column.
         /// This member is only used if <see cref="err"/> is equal to
         /// <see cref="JET_wrn.ColumnSingleValue"/>.
         /// </summary>
@@ -48,7 +48,7 @@ namespace Microsoft.Isam.Esent.Interop
         public IntPtr pvData;
 
         /// <summary>
-        /// Number of entries in rgEnumColumnValue.
+        /// Gets or sets the number of entries in rgEnumColumnValue.
         /// This member is only used if <see cref="err"/> is not
         /// <see cref="JET_wrn.ColumnSingleValue"/>.
         /// </summary>
@@ -70,7 +70,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Array of column values.
+        /// Gets or sets an array of column values.
         /// This member is only used if <see cref="err"/> is not
         /// <see cref="JET_wrn.ColumnSingleValue"/>.
         /// </summary>

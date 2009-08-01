@@ -91,6 +91,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="ConversionsTests.cs" />
     <Compile Include="AsciiPathTests.cs" />
+    <Compile Include="EnumColumnidTests.cs" />
     <Compile Include="EnumColumnTests.cs" />
     <Compile Include="EnumColumnValueTests.cs" />
     <Compile Include="EnumerateColumnTests.cs" />

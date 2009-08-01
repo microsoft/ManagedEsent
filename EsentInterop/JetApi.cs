@@ -1229,46 +1229,40 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             unsafe
             {
+                // Converting to the native structs is a bit complex because we
+                // do not want to allocate heap memory for this operations. We
+                // allocate the NATIVE_ENUMCOLUMNID array on the stack and 
+                // convert the managed objects. During the conversion pass we
+                // calculate the total size of the tags. An array for the tags
+                // is then allocated and a second pass converts the tags.
+                //
+                // Because we are using stackalloc all the work has to be done
+                // in the same method.
+
+                NATIVE_ENUMCOLUMNID* nativecolumnids = stackalloc NATIVE_ENUMCOLUMNID[numColumnids];
+                int totalNumTags = ConvertEnumColumnids(columnids, numColumnids, nativecolumnids);
+
+                uint* tags = stackalloc uint[totalNumTags];
+                ConvertEnumColumnidTags(columnids, numColumnids, nativecolumnids, tags);
+
+                // Do we have to pin this?
+                IntPtr pfnAlloc = Marshal.GetFunctionPointerForDelegate(allocator);
+
                 uint cEnumColumn;
-                NATIVE_ENUMCOLUMN* prgEnumColumn;
+                NATIVE_ENUMCOLUMN* nativeenumcolumns;
                 int err = NativeMethods.JetEnumerateColumns(
                     sesid.Value,
                     tableid.Value,
                     (uint) numColumnids,
-                    IntPtr.Zero,
+                    numColumnids > 0 ? nativecolumnids : null,
                     out cEnumColumn,
-                    out prgEnumColumn,
-                    Marshal.GetFunctionPointerForDelegate(allocator),
+                    out nativeenumcolumns,
+                    pfnAlloc,
                     allocatorContext,
                     (uint) maxDataSize,
                     (uint) grbit);
 
-                numColumnValues = checked((int) cEnumColumn);
-                columnValues = new JET_ENUMCOLUMN[numColumnValues];
-                for (int i = 0; i < numColumnValues; ++i)
-                {
-                    columnValues[i] = new JET_ENUMCOLUMN();
-                    columnValues[i].SetFromNativeEnumColumn(prgEnumColumn[i]);
-                    if (JET_wrn.ColumnSingleValue != columnValues[i].err)
-                    {
-                        columnValues[i].rgEnumColumnValue = new JET_ENUMCOLUMNVALUE[columnValues[i].cEnumColumnValue];
-                        for (int j = 0; j < columnValues[i].cEnumColumnValue; ++j)
-                        {
-                            columnValues[i].rgEnumColumnValue[j] = new JET_ENUMCOLUMNVALUE();
-                            columnValues[i].rgEnumColumnValue[j].SetFromNativeEnumColumnValue(prgEnumColumn[i].rgEnumColumnValue[j]);
-                        }
-
-                        // the NATIVE_ENUMCOLUMNVALUES have been converted
-                        // free their memory
-                        allocator(allocatorContext, new IntPtr(prgEnumColumn[i].rgEnumColumnValue), 0);
-                        prgEnumColumn[i].rgEnumColumnValue = null;
-                    }
-                }
-
-                // Now we have converted all the NATIVE_ENUMCOLUMNS we can
-                // free the memory they use
-                allocator(allocatorContext, new IntPtr(prgEnumColumn), 0);
-                prgEnumColumn = null;
+                ConvertEnumerateColumnsResult(allocator, allocatorContext, cEnumColumn, nativeenumcolumns, out numColumnValues, out columnValues);
 
                 return this.Err(err);
             }
@@ -1435,6 +1429,90 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         #endregion
 
         #region Helper Methods
+
+        /// <summary>
+        /// Convert managed JET_ENUMCOLUMNID objects to NATIVE_ENUMCOLUMNID
+        /// structures.
+        /// </summary>
+        /// <param name="columnids">The columnids to convert.</param>
+        /// <param name="numColumnids">The number of columnids to convert.</param>
+        /// <param name="nativecolumnids">The array to store the converted columnids.</param>
+        /// <returns>The total number of tag entries in the converted structures.</returns>
+        private static unsafe int ConvertEnumColumnids(JET_ENUMCOLUMNID[] columnids, int numColumnids, NATIVE_ENUMCOLUMNID* nativecolumnids)
+        {
+            int totalNumTags = 0;
+            for (int i = 0; i < numColumnids; ++i)
+            {
+                nativecolumnids[i] = columnids[i].GetNativeEnumColumnid();
+                totalNumTags += columnids[i].ctagSequence;
+            }
+            return totalNumTags;
+        }
+
+        /// <summary>
+        /// Convert managed rgtagSequence to unmanaged rgtagSequence.
+        /// </summary>
+        /// <param name="columnids">The columnids to convert.</param>
+        /// <param name="numColumnids">The number of columnids to covert.</param>
+        /// <param name="nativecolumnids">The unmanaged columnids to add the tags to.</param>
+        /// <param name="tags">
+        /// Memory to use for converted rgtagSequence. This should be large enough to
+        /// hold all columnids.
+        /// </param>
+        private static unsafe void ConvertEnumColumnidTags(JET_ENUMCOLUMNID[] columnids, int numColumnids, NATIVE_ENUMCOLUMNID* nativecolumnids, uint* tags)
+        {
+            for (int i = 0; i < numColumnids; ++i)
+            {
+                nativecolumnids[i].rgtagSequence = tags;
+                for (int j = 0; j < columnids[i].ctagSequence; ++j)
+                {
+                    nativecolumnids[i].rgtagSequence[j] = checked((uint)columnids[i].rgtagSequence[j]);
+                }
+
+                tags += columnids[i].ctagSequence;
+            }
+        }
+
+        /// <summary>
+        /// Convert the native (unmanaged) results of JetEnumerateColumns to
+        /// managed objects. This uses the allocator callback to free some
+        /// memory as the data is converted.
+        /// </summary>
+        /// <param name="allocator">The allocator callback used.</param>
+        /// <param name="allocatorContext">The allocator callback context.</param>
+        /// <param name="cEnumColumn">Number of NATIVE_ENUMCOLUMN structures returned.</param>
+        /// <param name="nativeenumcolumns">NATIVE_ENUMCOLUMN structures.</param>
+        /// <param name="numColumnValues">Returns the number of converted JET_ENUMCOLUMN objects.</param>
+        /// <param name="columnValues">Returns the convertd column values.</param>
+        private static unsafe void ConvertEnumerateColumnsResult(JET_PFNREALLOC allocator, IntPtr allocatorContext, uint cEnumColumn, NATIVE_ENUMCOLUMN* nativeenumcolumns, out int numColumnValues, out JET_ENUMCOLUMN[] columnValues)
+        {
+            numColumnValues = checked((int)cEnumColumn);
+            columnValues = new JET_ENUMCOLUMN[numColumnValues];
+            for (int i = 0; i < numColumnValues; ++i)
+            {
+                columnValues[i] = new JET_ENUMCOLUMN();
+                columnValues[i].SetFromNativeEnumColumn(nativeenumcolumns[i]);
+                if (JET_wrn.ColumnSingleValue != columnValues[i].err)
+                {
+                    columnValues[i].rgEnumColumnValue = new JET_ENUMCOLUMNVALUE[columnValues[i].cEnumColumnValue];
+                    for (int j = 0; j < columnValues[i].cEnumColumnValue; ++j)
+                    {
+                        columnValues[i].rgEnumColumnValue[j] = new JET_ENUMCOLUMNVALUE();
+                        columnValues[i].rgEnumColumnValue[j].SetFromNativeEnumColumnValue(nativeenumcolumns[i].rgEnumColumnValue[j]);
+                    }
+
+                    // the NATIVE_ENUMCOLUMNVALUES have been converted
+                    // free their memory
+                    allocator(allocatorContext, new IntPtr(nativeenumcolumns[i].rgEnumColumnValue), 0);
+                    nativeenumcolumns[i].rgEnumColumnValue = null;
+                }
+            }
+
+            // Now we have converted all the NATIVE_ENUMCOLUMNS we can
+            // free the memory they use
+            allocator(allocatorContext, new IntPtr(nativeenumcolumns), 0);
+            nativeenumcolumns = null;
+        }
 
         /// <summary>
         /// Make an array of native columndefs from JET_COLUMNDEFs.

@@ -5,12 +5,14 @@
 //-----------------------------------------------------------------------
 
 using System;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
     /// Native (unmanaged) version of the JET_ENUMCOLUMNVALUE class.
     /// </summary>
+    [StructLayout(LayoutKind.Sequential)]
     internal struct NATIVE_ENUMCOLUMNVALUE
     {
         public uint itagSequence;

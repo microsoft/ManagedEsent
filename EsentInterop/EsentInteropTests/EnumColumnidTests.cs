@@ -1,0 +1,101 @@
+﻿//-----------------------------------------------------------------------
+// <copyright file="EnumColumnidTests.cs" company="Microsoft Corporation">
+//     Copyright (c) Microsoft Corporation.
+// </copyright>
+//-----------------------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.InteropServices;
+using Microsoft.Isam.Esent.Interop;
+using Microsoft.Isam.Esent.Interop.Vista;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace InteropApiTests
+{
+    /// <summary>
+    /// Tests for JET_ENUMCOLUMNID conversion and checking.
+    /// </summary>
+    [TestClass]
+    public class EnumColumnidTests
+    {
+        /// <summary>
+        /// When ctagSequence is negative we should throw an exception.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void TestConvertEnumColumnidCheckThrowsExceptionWhenCTagsSequenceIsNegative()
+        {
+            var managed = new JET_ENUMCOLUMNID
+            {
+                columnid = new JET_COLUMNID { Value = 1 },
+                ctagSequence = -1,
+                rgtagSequence = null,
+            };
+
+            managed.CheckDataSize();
+        }
+
+        /// <summary>
+        /// When ctagSequence is greater than the length of rgtagSequence we should 
+        /// throw an exception.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void TestConvertEnumColumnidCheckThrowsExceptionWhenCTagsSequenceIsTooLong()
+        {
+            var managed = new JET_ENUMCOLUMNID
+            {
+                columnid = new JET_COLUMNID { Value = 1 },
+                ctagSequence = 3,
+                rgtagSequence = new int[2],
+            };
+
+            managed.CheckDataSize();
+        }
+
+        /// <summary>
+        /// Non-zero ctagSequence and null rgtagSequence should throw an exception.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void TestConvertEnumColumnidCheckThrowsExceptionWhenRgtagSequenceIsUnexpectedNull()
+        {
+            var managed = new JET_ENUMCOLUMNID
+            {
+                columnid = new JET_COLUMNID { Value = 1 },
+                ctagSequence = 1,
+                rgtagSequence = null,
+            };
+
+            managed.CheckDataSize();
+        }
+
+        /// <summary>
+        /// Test conversion from managed to native.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void TestConvertEnumColumnidToNativeWithNoTags()
+        {
+            var managed = new JET_ENUMCOLUMNID
+            {
+                columnid = new JET_COLUMNID { Value = 1 },
+                ctagSequence = 0,
+                rgtagSequence = null,
+            };
+
+            var native = managed.GetNativeEnumColumnid();
+            Assert.AreEqual<uint>(1, native.columnid);
+            Assert.AreEqual<uint>(0, native.ctagSequence);
+            unsafe
+            {
+                Assert.IsTrue(null == native.rgtagSequence);
+            }
+        }
+    }
+}

@@ -4,8 +4,23 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
+using System.Runtime.InteropServices;
+
 namespace Microsoft.Isam.Esent.Interop
 {
+    /// <summary>
+    /// The native (unmanaged) version of the
+    /// <see cref="JET_ENUMCOLUMNID"/> class.
+    /// </summary>
+    [StructLayout(LayoutKind.Sequential)]
+    internal unsafe struct NATIVE_ENUMCOLUMNID
+    {
+        public uint columnid;
+        public uint ctagSequence;
+        public uint* rgtagSequence;
+    }
+
     /// <summary>
     /// Enumerates a specific set of columns and, optionally, a specific set
     /// of multiple values for those columns when the JetEnumerateColumns
@@ -40,5 +55,40 @@ namespace Microsoft.Isam.Esent.Interop
         /// 2 means the second, and so on.
         /// </summary>
         public int[] rgtagSequence { get; set; }
+
+        /// <summary>
+        /// Check to see if ctagSequence is negative or greater than the length
+        /// of rgtagSequence.
+        /// </summary>
+        internal void CheckDataSize()
+        {
+            if (this.ctagSequence < 0)
+            {
+                throw new ArgumentOutOfRangeException("ctagSequence", "ctagSequence cannot be negative");
+            }
+
+            if ((null == this.rgtagSequence && 0 != this.ctagSequence) || (null != this.rgtagSequence && this.ctagSequence > this.rgtagSequence.Length))
+            {
+                throw new ArgumentOutOfRangeException(
+                    "ctagSequence",
+                    this.ctagSequence,
+                    "cannot be greater than the length of the pvData");
+            }
+        }
+
+        /// <summary>
+        /// Gets the native (interop) version of this object.
+        /// </summary>
+        /// <returns>A NATIVE_ENUMCOLUMNID representing this object.</returns>
+        internal NATIVE_ENUMCOLUMNID GetNativeEnumColumnid()
+        {
+            this.CheckDataSize();          
+            var value = new NATIVE_ENUMCOLUMNID
+            {
+                columnid = this.columnid.Value,
+                ctagSequence = checked((uint) this.ctagSequence)
+            };
+            return value;
+        }
     }
 }

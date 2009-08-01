@@ -7,6 +7,7 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Microsoft.Isam.Esent.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -127,6 +128,7 @@ namespace InteropApiTests
 
             TimeAction("Insert records", () => this.InsertRecords(NumRecords));
             TimeAction("Read one record", () => this.RepeatedlyRetrieveOneRecord(NumRecords));
+            TimeAction("Read one record with JetEnumerateColumns", () => this.RepeatedlyRetrieveOneRecordWithEnumColumns(NumRecords));
             TimeAction("Read all records", this.RetrieveAllRecords);
             TimeAction("Seek to all records", () => this.SeekToAllRecords(keys));
         }
@@ -206,6 +208,39 @@ namespace InteropApiTests
             {
                 Api.JetBeginTransaction(this.session);
                 this.RetrieveRecord();
+                Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
+            }
+        }
+
+        private void RepeatedlyRetrieveOneRecordWithEnumColumns(int numRetrieves)
+        {
+            Api.JetMove(this.session, this.table, JET_Move.First, MoveGrbit.None);
+            var columnids = new[]
+            {
+                new JET_ENUMCOLUMNID { columnid = this.columnidKey },
+                new JET_ENUMCOLUMNID { columnid = this.columnidData },
+            };
+            JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero == pv ? Marshal.AllocHGlobal(new IntPtr(cb)) : Marshal.ReAllocHGlobal(pv, new IntPtr(cb));
+
+            for (int i = 0; i < numRetrieves; ++i)
+            {
+                Api.JetBeginTransaction(this.session);
+                int numValues;
+                JET_ENUMCOLUMN[] values;
+                Api.JetEnumerateColumns(
+                    this.session,
+                    this.table,
+                    columnids.Length,
+                    columnids,
+                    out numValues,
+                    out values,
+                    allocator,
+                    IntPtr.Zero,
+                    0,
+                    EnumerateColumnsGrbit.EnumerateCompressOutput);
+                Marshal.ReadInt32(values[0].pvData);
+                allocator(IntPtr.Zero, values[0].pvData, 0);
+                allocator(IntPtr.Zero, values[1].pvData, 0);
                 Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
             }
         }

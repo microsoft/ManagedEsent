@@ -362,25 +362,13 @@ namespace Microsoft.Isam.Esent.Interop
             IntPtr sesid,
             IntPtr tableid,
             uint cEnumColumnId,
-            IntPtr rgEnumColumnId,
+            NATIVE_ENUMCOLUMNID* rgEnumColumnId,
             out uint pcEnumColumn,
             out NATIVE_ENUMCOLUMN* prgEnumColumn,
             IntPtr pfnRealloc,
             IntPtr pvReallocContext,
             uint cbDataMost,
             uint grbit);
-
-//JetEnumerateColumns(
-//    __in JET_SESID											sesid,
-//    __in JET_TABLEID										tableid,
-//    __in unsigned long										cEnumColumnId,
-//    __in_ecount_opt( cEnumColumnId ) JET_ENUMCOLUMNID *		rgEnumColumnId,
-//    __out unsigned long *									pcEnumColumn,
-//    __deref_out_ecount( *pcEnumColumn ) JET_ENUMCOLUMN **	prgEnumColumn,
-//    __in JET_PFNREALLOC										pfnRealloc,
-//    __in void *												pvReallocContext,
-//    __in unsigned long										cbDataMost,
-//    __in JET_GRBIT											grbit );
 
         #endregion
 

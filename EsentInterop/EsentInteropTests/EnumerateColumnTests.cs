@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using Microsoft.Isam.Esent.Interop;
 using Microsoft.Isam.Esent.Interop.Vista;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -85,7 +86,8 @@ namespace InteropApiTests
 
             JET_COLUMNID columnid;
 
-            // Make these columns should all be tagged
+            // These columns are all tagged so they are not present in the record
+            // by default.
 
             var columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Bit, grbit = ColumndefGrbit.ColumnTagged };
             Api.JetAddColumn(this.sesid, this.tableid, "Boolean", columndef, null, 0, out columnid);
@@ -239,11 +241,12 @@ namespace InteropApiTests
             Assert.AreEqual(sizeof(int), values[0].cbData);
 
             int actual = Marshal.ReadInt32(values[0].pvData);
+            allocator(IntPtr.Zero, values[0].pvData, 0);    // free the memory
             Assert.AreEqual(Expected, actual);
         }
 
         /// <summary>
-        /// Enumerate one column.
+        /// Enumerate one column with multivalues.
         /// </summary>
         [TestMethod]
         [Priority(1)]
@@ -278,9 +281,130 @@ namespace InteropApiTests
             Assert.AreEqual(2, values[0].cEnumColumnValue);
 
             int actual1 = Marshal.ReadInt32(values[0].rgEnumColumnValue[0].pvData);
+            allocator(IntPtr.Zero, values[0].rgEnumColumnValue[0].pvData, 0);    // free the memory
             int actual2 = Marshal.ReadInt32(values[0].rgEnumColumnValue[1].pvData);
+            allocator(IntPtr.Zero, values[0].rgEnumColumnValue[1].pvData, 0);    // free the memory
             Assert.AreEqual(Expected1, actual1);
             Assert.AreEqual(Expected2, actual2);
+        }
+
+        /// <summary>
+        /// Enumerate specific columns using a JET_ENUMCOLUMNID array.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void TestEnumerateSpecificColumns()
+        {
+            const short Expected16 = 2;
+            const int Expected32 = 100;
+            const long Expected64 = 9999;
+
+            this.CreateNewRecord();
+            this.SetColumn(this.columnidDict["int16"], BitConverter.GetBytes(Expected16), 0);
+            this.SetColumn(this.columnidDict["int32"], BitConverter.GetBytes(Expected32), 0);
+            this.SetColumn(this.columnidDict["int64"], BitConverter.GetBytes(Expected64), 0);
+            this.SetColumn(this.columnidDict["unicode"], Encoding.Unicode.GetBytes("test"), 0);
+            this.SetColumn(this.columnidDict["ascii"], Encoding.ASCII.GetBytes("test"), 0);
+
+            var columnids = new[]
+            {
+                new JET_ENUMCOLUMNID { columnid = this.columnidDict["int16"] },
+                new JET_ENUMCOLUMNID { columnid = this.columnidDict["int64"] },
+            };
+
+            int numValues;
+            JET_ENUMCOLUMN[] values;
+            JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero == pv ? Marshal.AllocHGlobal(new IntPtr(cb)) : Marshal.ReAllocHGlobal(pv, new IntPtr(cb));
+            Api.JetEnumerateColumns(
+                this.sesid,
+                this.tableid,
+                columnids.Length,
+                columnids,
+                out numValues,
+                out values,
+                allocator,
+                IntPtr.Zero,
+                0,
+                EnumerateColumnsGrbit.EnumerateCompressOutput);
+
+            Assert.AreEqual(2, numValues);
+            Assert.IsNotNull(values);
+            Assert.AreEqual(this.columnidDict["int16"], values[0].columnid);
+            Assert.AreEqual(this.columnidDict["int64"], values[1].columnid);
+            Assert.AreEqual(JET_wrn.ColumnSingleValue, values[0].err);
+            Assert.AreEqual(JET_wrn.ColumnSingleValue, values[1].err);
+
+            short actual16 = Marshal.ReadInt16(values[0].pvData);
+            allocator(IntPtr.Zero, values[0].pvData, 0);    // free the memory
+            long actual64 = Marshal.ReadInt64(values[1].pvData);
+            allocator(IntPtr.Zero, values[1].pvData, 0);    // free the memory
+            Assert.AreEqual(Expected16, actual16);
+            Assert.AreEqual(Expected64, actual64);
+        }
+
+        /// <summary>
+        /// Enumerate specific columns using a JET_ENUMCOLUMNID array.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void TestEnumerateSpecificColumnsAndTags()
+        {
+            const short Expected16 = 2;
+            const int Expected32 = 100;
+            const long Expected64 = 9999;
+
+            this.CreateNewRecord();
+            this.SetColumn(this.columnidDict["int16"], BitConverter.GetBytes(Int16.MinValue), 0);   // itag 1
+            this.SetColumn(this.columnidDict["int16"], BitConverter.GetBytes(Expected16), 0);       // itag 2
+            this.SetColumn(this.columnidDict["int16"], BitConverter.GetBytes(Int16.MaxValue), 0);   // itag 3
+
+            this.SetColumn(this.columnidDict["int32"], BitConverter.GetBytes(Expected32), 0);
+
+            this.SetColumn(this.columnidDict["int64"], BitConverter.GetBytes(Int64.MinValue), 0);   // itag 1
+            this.SetColumn(this.columnidDict["int64"], BitConverter.GetBytes(Int64.MaxValue), 0);   // itag 2
+            this.SetColumn(this.columnidDict["int64"], BitConverter.GetBytes(Expected64), 0);       // itag 3
+
+            this.SetColumn(this.columnidDict["unicode"], Encoding.Unicode.GetBytes("test"), 0);
+            this.SetColumn(this.columnidDict["ascii"], Encoding.ASCII.GetBytes("test"), 0);
+
+            var columnids = new[]
+            {
+                new JET_ENUMCOLUMNID { columnid = this.columnidDict["int16"], ctagSequence = 1, rgtagSequence = new [] { 2 }},
+                new JET_ENUMCOLUMNID { columnid = this.columnidDict["int64"], ctagSequence = 1, rgtagSequence = new [] { 3 } },
+            };
+
+            int numValues;
+            JET_ENUMCOLUMN[] values;
+            JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero == pv ? Marshal.AllocHGlobal(new IntPtr(cb)) : Marshal.ReAllocHGlobal(pv, new IntPtr(cb));
+            Api.JetEnumerateColumns(
+                this.sesid,
+                this.tableid,
+                columnids.Length,
+                columnids,
+                out numValues,
+                out values,
+                allocator,
+                IntPtr.Zero,
+                0,
+                EnumerateColumnsGrbit.None);
+
+            Assert.AreEqual(2, numValues);
+            Assert.IsNotNull(values);
+            Assert.AreEqual(this.columnidDict["int16"], values[0].columnid);
+            Assert.AreEqual(this.columnidDict["int64"], values[1].columnid);
+            Assert.AreEqual(JET_wrn.Success, values[0].err);
+            Assert.AreEqual(JET_wrn.Success, values[1].err);
+            Assert.AreEqual(1, values[0].cEnumColumnValue);
+            Assert.AreEqual(1, values[1].cEnumColumnValue);
+            Assert.AreEqual(2, values[0].rgEnumColumnValue[0].itagSequence);
+            Assert.AreEqual(3, values[1].rgEnumColumnValue[0].itagSequence);
+
+            short actual16 = Marshal.ReadInt16(values[0].rgEnumColumnValue[0].pvData);
+            allocator(IntPtr.Zero, values[0].rgEnumColumnValue[0].pvData, 0);    // free the memory
+            long actual64 = Marshal.ReadInt64(values[1].rgEnumColumnValue[0].pvData);
+            allocator(IntPtr.Zero, values[1].rgEnumColumnValue[0].pvData, 0);    // free the memory
+            Assert.AreEqual(Expected16, actual16);
+            Assert.AreEqual(Expected64, actual64);
         }
 
         #endregion
