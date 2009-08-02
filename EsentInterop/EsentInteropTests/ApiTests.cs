@@ -52,7 +52,7 @@ namespace InteropApiTests
         /// Verify that the internal IJetApi has default implementation.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyApiHasDefaultImplementation()
         {
             Assert.IsNotNull(Api.Impl);
@@ -64,7 +64,7 @@ namespace InteropApiTests
         /// object.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyJetApiImplementationCanBeChanged()
         {
             var jetApi = this.mocks.StrictMock<IJetApi>();
@@ -73,7 +73,7 @@ namespace InteropApiTests
             Expect.Call(
                 jetApi.JetSetCurrentIndex(JET_SESID.Nil, JET_TABLEID.Nil, String.Empty))
                 .IgnoreArguments()
-                .Return(0);
+                .Return(1);
             this.mocks.ReplayAll();
 
             Api.JetSetCurrentIndex(JET_SESID.Nil, JET_TABLEID.Nil, Any.String);
@@ -86,7 +86,7 @@ namespace InteropApiTests
         /// causes an exception to be thrown.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(EsentErrorException))]
         public void VerifyErrorFromJetApiImplementationGeneratesException()
         {
@@ -107,7 +107,7 @@ namespace InteropApiTests
         /// generated.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyErrorHandlerIsInvokedOnException()
         {
             var jetApi = this.mocks.Stub<IJetApi>();
@@ -145,7 +145,7 @@ namespace InteropApiTests
         /// Verify that the ExceptionHandler event can wrap exceptions.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyExceptionHandlerCanWrapExceptions()
         {
             var jetApi = this.mocks.Stub<IJetApi>();

@@ -70,12 +70,12 @@ namespace InteropApiTests
         /// Verify that setting the property sets the system parameter
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifySettingCacheSizeMax()
         {
             Expect.Call(
                 this.mockApi.JetSetSystemParameter(
-                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.CacheSizeMax, 64, null)).Return(0);
+                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.CacheSizeMax, 64, null)).Return(1);
             this.repository.ReplayAll();
             SystemParameters.CacheSizeMax = 64;
             this.repository.VerifyAll();
@@ -85,12 +85,12 @@ namespace InteropApiTests
         /// Verify that setting the property sets the system parameter
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifySettingCacheSize()
         {
             Expect.Call(
                 this.mockApi.JetSetSystemParameter(
-                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.CacheSize, 64, null)).Return(0);
+                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.CacheSize, 64, null)).Return(1);
             this.repository.ReplayAll();
             SystemParameters.CacheSize = 64;
             this.repository.VerifyAll();
@@ -100,12 +100,12 @@ namespace InteropApiTests
         /// Verify that setting the property sets the system parameter
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifySettingCacheSizeMin()
         {
             Expect.Call(
                 this.mockApi.JetSetSystemParameter(
-                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.CacheSizeMin, 64, null)).Return(0);
+                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.CacheSizeMin, 64, null)).Return(1);
             this.repository.ReplayAll();
             SystemParameters.CacheSizeMin = 64;
             this.repository.VerifyAll();
@@ -115,12 +115,12 @@ namespace InteropApiTests
         /// Verify that setting the property sets the system parameter
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifySettingDatabasePageSize()
         {
             Expect.Call(
                 this.mockApi.JetSetSystemParameter(
-                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.DatabasePageSize, 4096, null)).Return(0);
+                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.DatabasePageSize, 4096, null)).Return(1);
             this.repository.ReplayAll();
             SystemParameters.DatabasePageSize = 4096;
             this.repository.VerifyAll();
@@ -130,12 +130,12 @@ namespace InteropApiTests
         /// Verify that setting the property sets the system parameter
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifySettingMaxInstances()
         {
             Expect.Call(
                 this.mockApi.JetSetSystemParameter(
-                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.MaxInstances, 12, null)).Return(0);
+                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.MaxInstances, 12, null)).Return(1);
             this.repository.ReplayAll();
             SystemParameters.MaxInstances = 12;
             this.repository.VerifyAll();
@@ -145,12 +145,12 @@ namespace InteropApiTests
         /// Verify that setting the property sets the system parameter
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifySettingConfiguration()
         {
             Expect.Call(
                 this.mockApi.JetSetSystemParameter(
-                    JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.Configuration, 0, null)).Return(0);
+                    JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.Configuration, 0, null)).Return(1);
             this.repository.ReplayAll();
             SystemParameters.Configuration = 0;
             this.repository.VerifyAll();
@@ -160,12 +160,12 @@ namespace InteropApiTests
         /// Verify that setting the property sets the system parameter
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifySettingEnableAdvanced()
         {
             Expect.Call(
                 this.mockApi.JetSetSystemParameter(
-                    JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.EnableAdvanced, 1, null)).Return(0);
+                    JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.EnableAdvanced, 1, null)).Return(1);
             this.repository.ReplayAll();
             SystemParameters.EnableAdvanced = true;
             this.repository.VerifyAll();

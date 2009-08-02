@@ -60,7 +60,7 @@ namespace InteropApiTests
         /// so it shouldn't be freed.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyInstanceDoesNotCallJetTermWhenCreateInstanceFails()
         {
             var mocks = new MockRepository();
@@ -97,7 +97,7 @@ namespace InteropApiTests
         /// so it shouldn't be freed.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyInstanceDoesNotCallJetTermWhenJetInitFails()
         {
             var mocks = new MockRepository();
