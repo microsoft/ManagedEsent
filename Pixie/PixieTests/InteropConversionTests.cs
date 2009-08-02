@@ -32,98 +32,98 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestCreateColumnMetaDataFromColumnInfoWithBoolColumn()
         {
             this.VerifyCreateColumnMetaDataSetsType(JET_coltyp.Bit, ColumnType.Bool);
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestCreateColumnMetaDataFromColumnInfoWithByteColumn()
         {
             this.VerifyCreateColumnMetaDataSetsType(JET_coltyp.UnsignedByte, ColumnType.Byte);
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestCreateColumnMetaDataFromColumnInfoWithShortColumn()
         {
             this.VerifyCreateColumnMetaDataSetsType(JET_coltyp.Short, ColumnType.Int16);
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestCreateColumnMetaDataFromColumnInfoWithUShortColumn()
         {
             this.VerifyCreateColumnMetaDataSetsType(VistaColtyp.UnsignedShort, ColumnType.UInt16);
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestCreateColumnMetaDataFromColumnInfoWithIntColumn()
         {
             this.VerifyCreateColumnMetaDataSetsType(JET_coltyp.Long, ColumnType.Int32);
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestCreateColumnMetaDataFromColumnInfoWithUIntColumn()
         {
             this.VerifyCreateColumnMetaDataSetsType(VistaColtyp.UnsignedLong, ColumnType.UInt32);
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestCreateColumnMetaDataFromColumnInfoWithLongColumn()
         {
             this.VerifyCreateColumnMetaDataSetsType(JET_coltyp.Currency, ColumnType.Int64);
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestCreateColumnMetaDataFromColumnInfoWithFloatColumn()
         {
             this.VerifyCreateColumnMetaDataSetsType(JET_coltyp.IEEESingle, ColumnType.Float);
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestCreateColumnMetaDataFromColumnInfoWithDoubleColumn()
         {
             this.VerifyCreateColumnMetaDataSetsType(JET_coltyp.IEEEDouble, ColumnType.Double);
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestCreateColumnMetaDataFromColumnInfoWithDateTimeColumn()
         {
             this.VerifyCreateColumnMetaDataSetsType(JET_coltyp.DateTime, ColumnType.DateTime);
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestCreateColumnMetaDataFromColumnInfoWithGuidColumn()
         {
             this.VerifyCreateColumnMetaDataSetsType(VistaColtyp.GUID, ColumnType.Guid);
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestCreateColumnMetaDataFromColumnInfoWithBinaryColumn()
         {
             this.VerifyCreateColumnMetaDataSetsType(JET_coltyp.Binary, ColumnType.Binary);
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestCreateColumnMetaDataFromColumnInfoWithLongBinaryColumn()
         {
             this.VerifyCreateColumnMetaDataSetsType(JET_coltyp.LongBinary, ColumnType.Binary);
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestCreateColumnMetaDataFromColumnInfoWithAsciiColumn()
         {
             var info = new ColumnInfo(
@@ -146,7 +146,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestCreateColumnMetaDataFromColumnInfoWithUnicodeColumn()
         {
             var info = new ColumnInfo(
@@ -169,7 +169,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestCreateColumnMetaDataFromColumnInfoWithAutoinc()
         {
             var info = new ColumnInfo(
@@ -193,7 +193,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestCreateColumnMetaDataFromColumnInfoWithVersionColumn()
         {
             var info = new ColumnInfo(
@@ -217,7 +217,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestCreateColumnMetaDataFromColumnInfoWithEscrowUpdate()
         {
             var info = new ColumnInfo(
@@ -241,7 +241,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyCreateColumndefFromColumnDefinitionSetsColtypBit()
         {
             ColumnDefinition def = DefinedAs.BoolColumn(Any.String);
@@ -251,7 +251,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyCreateColumndefFromColumnDefinitionSetsColtypByte()
         {
             ColumnDefinition def = DefinedAs.ByteColumn(Any.String);
@@ -261,7 +261,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyCreateColumndefFromColumnDefinitionSetsColtypShort()
         {
             ColumnDefinition def = DefinedAs.Int16Column(Any.String);
@@ -271,7 +271,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyCreateColumndefFromColumnDefinitionSetsColtypSingle()
         {
             ColumnDefinition def = DefinedAs.FloatColumn(Any.String);
@@ -281,7 +281,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyCreateColumndefFromColumnDefinitionSetsColtypDouble()
         {
             ColumnDefinition def = DefinedAs.DoubleColumn(Any.String);
@@ -291,7 +291,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyCreateColumndefFromColumnDefinitionSetsCodePageForUnicodeColumn()
         {
             ColumnDefinition def = DefinedAs.TextColumn(Any.String);
@@ -301,7 +301,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyCreateColumndefFromColumnDefinitionSetsCodePageForAsciiColumn()
         {
             ColumnDefinition def = DefinedAs.AsciiTextColumn(Any.String);
@@ -311,7 +311,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyCreateColumndefFromColumnDefinitionSetsCbMax()
         {
             ColumnDefinition def = DefinedAs.BinaryColumn(Any.String).WithMaxSize(25);
@@ -321,7 +321,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyCreateColumndefFromColumnDefinitionSetsAutoincrement()
         {
             ColumnDefinition def = DefinedAs.Int64Column(Any.String).AsAutoincrement();
@@ -331,7 +331,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyCreateColumndefFromColumnDefinitionSetsIsNotNull()
         {
             ColumnDefinition def = DefinedAs.Int64Column(Any.String).MustBeNonNull();
@@ -341,7 +341,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyCreateColumndefFromColumnDefinitionSetsVersion()
         {
             ColumnDefinition def = DefinedAs.Int64Column(Any.String).AsVersion();

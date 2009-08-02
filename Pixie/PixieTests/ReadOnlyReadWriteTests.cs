@@ -42,7 +42,7 @@ namespace PixieTests
         /// Create a read-only connection.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyOpenDatabaseReadOnlyReturnsReadOnlyConnection()
         {
             using (Connection connection = Esent.CreateDatabase(this.database))
@@ -56,7 +56,7 @@ namespace PixieTests
         /// Create a read-only connection.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyOpenDatabaseReturnsReadWriteConnection()
         {
             using (Connection connection = Esent.CreateDatabase(this.database))
@@ -69,7 +69,7 @@ namespace PixieTests
         /// Check that a read-only connection cannot create a table.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentReadOnlyException))]
         public void VerifyReadOnlyConnectionCannotCreateTable()
         {
@@ -84,7 +84,7 @@ namespace PixieTests
         /// Check that creating a table returns a read-write table
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyTableCreationReturnsReadWriteTable()
         {
             using (Connection connection = Esent.CreateDatabase(this.database))
@@ -99,7 +99,7 @@ namespace PixieTests
         /// opening the table.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyReadWriteConnectionReturnsReadWriteTable()
         {
             using (Connection connection = Esent.CreateDatabase(this.database))
@@ -115,7 +115,7 @@ namespace PixieTests
         /// opening the table.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyReadOnlyConnectionReturnsReadOnlyTable()
         {
             using (Connection connection = Esent.CreateDatabase(this.database))
@@ -131,7 +131,7 @@ namespace PixieTests
         /// Check that a column cannot be added to a read-only table.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentReadOnlyException))]
         public void VerifyReadOnlyTableCannotCreateColumn()
         {
@@ -148,7 +148,7 @@ namespace PixieTests
         /// Check that a read-only table cannot create a new record.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentReadOnlyException))]
         public void VerifyReadOnlyTableCannotCreateNewRecord()
         {
@@ -165,7 +165,7 @@ namespace PixieTests
         /// Check that a read-write table returns a read-write record.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyReadWriteTableReturnsReadWriteRecord()
         {
             using (Connection connection = Esent.CreateDatabase(this.database))
@@ -182,7 +182,7 @@ namespace PixieTests
         /// Check that a read-only table returns a read-only record.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyReadOnlyTableReturnsReadOnlyRecord()
         {
             this.WithReadOnlyRecord(record => Assert.IsInstanceOfType(record, typeof(ReadOnlyRecord)));
@@ -192,7 +192,7 @@ namespace PixieTests
         /// Check that a read-only record cannot have its column set.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentReadOnlyException))]
         public void VerifyReadOnlyRecordCannotSetColumn()
         {
@@ -203,7 +203,7 @@ namespace PixieTests
         /// Check that a read-only record cannot be deleted.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentReadOnlyException))]
         public void VerifyReadOnlyRecordCannotBeDeleted()
         {
@@ -214,7 +214,7 @@ namespace PixieTests
         /// Check that a read-only record throws a ReadOnly exception when saved.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentReadOnlyException))]
         public void VerifyReadOnlyRecordCannotBeSaved()
         {
@@ -226,7 +226,7 @@ namespace PixieTests
         /// is cancelled.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentReadOnlyException))]
         public void VerifyReadOnlyRecordCannotBeCancelled()
         {

@@ -64,7 +64,7 @@ namespace PixieTests
         /// Test inserting and retrieving records.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         public void BasicPerfTest()
         {
             this.CheckMemoryUsage(this.InsertReadSeek);

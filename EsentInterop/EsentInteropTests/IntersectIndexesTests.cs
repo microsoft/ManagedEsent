@@ -120,7 +120,7 @@ namespace InteropApiTests
         /// Verify that the test class has setup the test fixture properly.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyFixtureSetup()
         {
             Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
@@ -136,7 +136,7 @@ namespace InteropApiTests
         /// Verify that index intersection returns the correct number of records.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyJetIntersectIndexesReturnsCorrectNumberOfRecords()
         {
             JET_TABLEID tableid1 = this.OpenTable();
@@ -163,7 +163,7 @@ namespace InteropApiTests
         /// Verify that index intersection returns records with the correct criteria.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyIndexIntersectionReturnsCorrectNumberOfRecords()
         {
             JET_TABLEID tableid1 = this.OpenTable();
@@ -185,7 +185,7 @@ namespace InteropApiTests
         /// Verify that index intersection returns records with the correct criteria.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyIndexIntersectionReturnsCorrectRecords()
         {
             JET_TABLEID tableid1 = this.OpenTable();
@@ -214,7 +214,7 @@ namespace InteropApiTests
         /// Verify that index intersection returns a 'live' result
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyIndexIntersectionReturnsLiveResult()
         {
             JET_TABLEID tableid1 = this.OpenTable();

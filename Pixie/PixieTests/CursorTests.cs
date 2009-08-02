@@ -134,7 +134,7 @@ namespace PixieTests
         /// Verify that the test class has setup the test fixture properly.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyFixtureSetup()
         {
             Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
@@ -148,7 +148,7 @@ namespace PixieTests
         #region DDL
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyAddColumnCreatesColumn()
         {
             Cursor cursor = this.OpenCursor();
@@ -160,7 +160,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyAddColumnWithDefaultValueCreatesColumnWithDefaultValue()
         {
             byte[] defaultValue = Any.Bytes;
@@ -174,7 +174,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyGetColumnsReturnsColumns()
         {
             Cursor cursor = this.OpenCursor();
@@ -188,7 +188,7 @@ namespace PixieTests
         #region Lifecycle
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyCursorClosedEventIsCalledWhenCursorIsDisposed()
         {
             bool eventCalled = false;
@@ -205,7 +205,7 @@ namespace PixieTests
         #region Navigation
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyTryMoveFirstMovesToFirstRecord()
         {
             Cursor cursor = this.OpenCursor();
@@ -215,7 +215,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyTryMoveLastMovesToLastRecord()
         {
             Cursor cursor = this.OpenCursor();
@@ -225,7 +225,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyMoveFirstMovesToFirstRecord()
         {
             Cursor cursor = this.OpenCursor();
@@ -235,7 +235,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyMoveLastMovesToLastRecord()
         {
             Cursor cursor = this.OpenCursor();
@@ -245,7 +245,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyTryMoveNextMovesToNextRecord()
         {
             Cursor cursor = this.OpenCursor();
@@ -256,7 +256,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyTryMovePreviousMovesToPreviousRecord()
         {
             Cursor cursor = this.OpenCursor();
@@ -267,7 +267,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyMoveBeforeFirstMovesBeforeFirstRecord()
         {
             Cursor cursor = this.OpenCursor();
@@ -278,7 +278,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyMoveAfterLastMovesAfterLastRecord()
         {
             Cursor cursor = this.OpenCursor();
@@ -289,7 +289,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyGotoBookmarkPositionsCursor()
         {
             Cursor cursor = this.OpenCursor();
@@ -302,7 +302,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestRetrieveAsBoolean()
         {
             Cursor cursor = this.OpenCursor();
@@ -321,7 +321,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestRetrieveAsByte()
         {
             Cursor cursor = this.OpenCursor();
@@ -340,7 +340,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestRetrieveAsInt16()
         {
             Cursor cursor = this.OpenCursor();
@@ -359,7 +359,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestRetrieveAsUInt16()
         {
             Cursor cursor = this.OpenCursor();
@@ -378,7 +378,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestRetrieveAsInt32()
         {
             Cursor cursor = this.OpenCursor();
@@ -397,7 +397,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestRetrieveAsUInt32()
         {
             Cursor cursor = this.OpenCursor();
@@ -416,7 +416,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestRetrieveAsInt64()
         {
             Cursor cursor = this.OpenCursor();
@@ -435,7 +435,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestRetrieveAsUInt64()
         {
             Cursor cursor = this.OpenCursor();
@@ -454,7 +454,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestRetrieveAsFloat()
         {
             Cursor cursor = this.OpenCursor();
@@ -473,7 +473,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestRetrieveAsDouble()
         {
             Cursor cursor = this.OpenCursor();
@@ -492,7 +492,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestRetrieveAsDateTime()
         {
             Cursor cursor = this.OpenCursor();
@@ -511,7 +511,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestRetrieveAsGuid()
         {
             Cursor cursor = this.OpenCursor();
@@ -535,7 +535,7 @@ namespace PixieTests
         #region DML
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyInsertRecordCreatesRecord()
         {
             Cursor cursor = this.OpenCursor();
@@ -547,7 +547,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifySetColumnWithNullSetsColumnToNull()
         {
             int key = Any.Int32;
@@ -562,7 +562,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifySetColumnWithZeroLengthSetsColumnToZeroLength()
         {
             int key = Any.Int32;
@@ -577,7 +577,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyEscrowUpdate()
         {
             Cursor cursor = this.OpenCursor();
@@ -590,7 +590,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyDeleteRecordRemovesRecord()
         {
             Cursor cursor = this.OpenCursor();
@@ -602,7 +602,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyCancelUpdateStopsUpdate()
         {
             Cursor cursor = this.OpenCursor();
@@ -619,7 +619,7 @@ namespace PixieTests
         #region Error Checking
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(InvalidOperationException))]
         public void VerifySetColumnWithoutUpdateThrowsException()
         {
@@ -628,7 +628,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyRetrieveCopyWithoutCurrencyDoesNotThrowException()
         {
             // We don't have a currency but are inserting a record so RetrieveCopy is valid
@@ -640,7 +640,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(InvalidOperationException))]
         public void VerifyRetrieveColumnWithoutCurrencyThrowsException()
         {
@@ -650,7 +650,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(InvalidOperationException))]
         public void VerifyNavigationCancelsUpdate()
         {
@@ -661,7 +661,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentException))]
         public void VerifyUpdateWithPrepCancelThrowsException()
         {
@@ -670,7 +670,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void VerifyUsingDisposedCursorThrowsException()
         {
@@ -680,7 +680,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void DisposeTwice()
         {
             Cursor cursor = this.OpenCursor();

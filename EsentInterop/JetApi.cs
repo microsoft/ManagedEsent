@@ -1245,7 +1245,6 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 uint* tags = stackalloc uint[totalNumTags];
                 ConvertEnumColumnidTags(columnids, numColumnids, nativecolumnids, tags);
 
-                // Do we have to pin this?
                 IntPtr pfnAlloc = Marshal.GetFunctionPointerForDelegate(allocator);
 
                 uint cEnumColumn;

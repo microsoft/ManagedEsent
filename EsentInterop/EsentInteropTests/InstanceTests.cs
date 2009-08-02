@@ -24,7 +24,7 @@ namespace InteropApiTests
         /// Allocate an instance, but don't initialize it.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void CreateInstanceNoInit()
         {
             string dir = SetupHelper.CreateRandomDirectory();
@@ -48,14 +48,11 @@ namespace InteropApiTests
         [Priority(0)]
         public void InstanceCanConvertToJetInstance()
         {
-            string dir = SetupHelper.CreateRandomDirectory();
             using (var instance = new Instance("theinstance"))
             {
                 JET_INSTANCE jetinstance = instance;
                 Assert.AreEqual(jetinstance, instance.JetInstance);
             }
-
-            Directory.Delete(dir, true);
         }
 
         /// <summary>
@@ -144,7 +141,7 @@ namespace InteropApiTests
         /// Allocate an instance and initialize it.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void CreateInstanceInit()
         {
             string dir = SetupHelper.CreateRandomDirectory();
@@ -164,7 +161,7 @@ namespace InteropApiTests
         /// Allocate an instance with a display name.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void CreateInstanceWithDisplayName()
         {
             using (var instance = new Instance(Guid.NewGuid().ToString(), "Friendly Display Name"))
@@ -179,7 +176,7 @@ namespace InteropApiTests
         /// Allocate an instance and initialize it and then terminate.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void CreateInstanceInitTerm()
         {
             string dir = SetupHelper.CreateRandomDirectory();
@@ -199,7 +196,7 @@ namespace InteropApiTests
         /// Make sure that garbage collection can close an instance
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyInstanceCanBeFinalized()
         {
             for (int i = 0; i < 3; ++i)
@@ -218,7 +215,7 @@ namespace InteropApiTests
         /// exception.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void JetInstanceThrowsExceptionWhenInstanceIsClosed()
         {

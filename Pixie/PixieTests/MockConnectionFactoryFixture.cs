@@ -56,7 +56,7 @@ namespace PixieTests
         /// Verify that Esent.CreateDatabase uses None as its default creation mode.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void EsentCreateDatabaseUsesCreationModeNoneAsDefault()
         {
             Expect.Call(this.mockConnectionManager.CreateDatabase("mydatabase.edb", DatabaseCreationMode.None)).Return(this.dummyConnection);
@@ -69,7 +69,7 @@ namespace PixieTests
         /// Verify that Esent.CreateDatabase passes the specified creation mode to the ConnectionManager.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void EsentCreateDatabasePassesCreationModeToConnectionFactory()
         {
             Expect.Call(this.mockConnectionManager.CreateDatabase("mydatabase.edb", DatabaseCreationMode.OverwriteExisting)).Return(this.dummyConnection);
@@ -82,7 +82,7 @@ namespace PixieTests
         /// Verify that Esent.OpenDatabase uses ReadWrite as its default open mode.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void EsentOpenDatabaseUsesOpenModeReadWriteAsDefault()
         {
             Expect.Call(this.mockConnectionManager.AttachDatabase("mydatabase.edb", DatabaseOpenMode.ReadWrite)).Return(this.dummyConnection);
@@ -95,7 +95,7 @@ namespace PixieTests
         /// Verify that Esent.OpenDatabase passes the specified open mode to the connection factory.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void EsentOpenDatabasePassesOpenModeToConnectionFactory()
         {
             Expect.Call(this.mockConnectionManager.AttachDatabase("mydatabase.edb", DatabaseOpenMode.ReadOnly)).Return(this.dummyConnection);
@@ -108,7 +108,7 @@ namespace PixieTests
         /// Verify that ISqlImpl.CreateDatabase calls ConnectionManager.CreateDatabase
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void SqlImplCreateDatabaseCallsConnectionFactory()
         {
             Expect.Call(this.mockConnectionManager.CreateDatabase("sqldatabase.edb", DatabaseCreationMode.None)).Return(this.dummyConnection);
@@ -122,7 +122,7 @@ namespace PixieTests
         /// Verify that ISqlImpl.AttachDatabase calls ConnectionManager.AttachDatabase
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void SqlImplAttachDatabaseCallsConnectionFactory()
         {
             Expect.Call(this.mockConnectionManager.AttachDatabase("sqldatabase.edb", DatabaseOpenMode.ReadWrite)).Return(this.dummyConnection);
@@ -136,7 +136,7 @@ namespace PixieTests
         /// Verify that CREATE DATABASE calls ConnectionManager.CreateDatabase
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void SqlCreateDatabaseCallsConnectionFactory()
         {
             Expect.Call(this.mockConnectionManager.CreateDatabase("sql.edb", DatabaseCreationMode.None)).Return(this.dummyConnection);
@@ -150,7 +150,7 @@ namespace PixieTests
         /// Verify that ATTACH DATABASE calls ConnectionManager.AttachDatabase
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void SqlAttachDatabaseCallsConnectionFactory()
         {
             Expect.Call(this.mockConnectionManager.AttachDatabase("sql.edb", DatabaseOpenMode.ReadWrite)).Return(this.dummyConnection);

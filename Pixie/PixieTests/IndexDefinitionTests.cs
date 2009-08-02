@@ -16,7 +16,7 @@ namespace PixieTests
     public class IndexDefinitionTests
     {
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyConstructorSetsName()
         {
             var indexdefinition = new IndexDefinition("index");
@@ -24,7 +24,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyAsPrimarySetsUnique()
         {
             var indexdefinition = new IndexDefinition("index").AsPrimary();

@@ -111,7 +111,7 @@ namespace InteropApiTests
         /// Verify that the test class has setup the test fixture properly.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyFixtureSetup()
         {
             // Basic setup has been done
@@ -138,7 +138,7 @@ namespace InteropApiTests
         /// Verify that JetEscrowUpdate returns the previous column value.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyJetEscrowUpdateReturnsOldValue()
         {
             var previousValue = new byte[4];
@@ -156,7 +156,7 @@ namespace InteropApiTests
         /// Verify that JetEscrowUpdate updates the column
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyJetEscrowUpdateUpdatesColumn()
         {
             const int Delta = -9;
@@ -173,7 +173,7 @@ namespace InteropApiTests
         /// Verify that EscrowUpdate returns the previous column value.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyEscrowUpdateReturnsOldValue()
         {
             Api.JetBeginTransaction(this.sesid);
@@ -187,7 +187,7 @@ namespace InteropApiTests
         /// Verify that EscrowUpdate updates the column
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyEscrowUpdateUpdatesColumn()
         {
             const int Delta = 17;

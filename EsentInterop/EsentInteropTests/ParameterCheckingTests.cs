@@ -111,7 +111,7 @@ namespace InteropApiTests
         /// Verify that the test class has setup the test fixture properly.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyFixtureSetup()
         {
             Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
@@ -131,7 +131,7 @@ namespace InteropApiTests
         /// Check that an exception is thrown when an API calls fails
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentErrorException))]
         public void EsentExceptionIsThrownOnApiError()
         {
@@ -144,7 +144,7 @@ namespace InteropApiTests
         /// Check that an exception contains the right error code.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void EsentExceptionHasErrorCode()
         {
             try
@@ -168,7 +168,7 @@ namespace InteropApiTests
         /// null database name.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetCreateDatabaseThrowsExceptionWhenDatabaseNameIsNull()
         {
@@ -181,7 +181,7 @@ namespace InteropApiTests
         /// null database name.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetAttachDatabaseThrowsExceptionWhenDatabaseNameIsNull()
         {
@@ -193,7 +193,7 @@ namespace InteropApiTests
         /// null database name.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetOpenDatabaseThrowsExceptionWhenDatabaseNameIsNull()
         {
@@ -206,7 +206,7 @@ namespace InteropApiTests
         /// null database name.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetDetachDatabaseThrowsExceptionWhenDatabaseNameIsNull()
         {
@@ -218,7 +218,7 @@ namespace InteropApiTests
         /// null table name.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetOpenTableThrowsExceptionWhenTableNameIsNull()
         {
@@ -235,7 +235,7 @@ namespace InteropApiTests
         /// null table name.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetCreateTableThrowsExceptionWhenTableNameIsNull()
         {
@@ -248,7 +248,7 @@ namespace InteropApiTests
         /// null column name.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetAddColumnThrowsExceptionWhenColumnNameIsNull()
         {
@@ -273,7 +273,7 @@ namespace InteropApiTests
         /// null column definition.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetAddColumnThrowsExceptionWhenColumndefIsNull()
         {
@@ -293,7 +293,7 @@ namespace InteropApiTests
         /// default value length that is negative.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetAddColumnThrowsExceptionWhenDefaultValueLengthIsNegative()
         {
@@ -318,7 +318,7 @@ namespace InteropApiTests
         /// default value length that is too long.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetAddColumnThrowsExceptionWhenDefaultValueLengthIsTooLong()
         {
@@ -344,7 +344,7 @@ namespace InteropApiTests
         /// default value that is null with a non-zero default value size.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetAddColumnThrowsExceptionWhenDefaultValueIsUnexpectedNull()
         {
@@ -370,7 +370,7 @@ namespace InteropApiTests
         /// null name.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetCreateIndexThrowsExceptionWhenNameIsNull()
         {
@@ -382,7 +382,7 @@ namespace InteropApiTests
         /// density that is negative.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetCreateIndexThrowsExceptionWhenDensityIsNegative()
         {
@@ -394,7 +394,7 @@ namespace InteropApiTests
         /// key description length that is negative.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetCreateIndexThrowsExceptionWhenKeyDescriptionLengthIsNegative()
         {
@@ -406,7 +406,7 @@ namespace InteropApiTests
         /// key description length that is too long.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetCreateIndexThrowsExceptionWhenKeyDescriptionLengthIsTooLong()
         {
@@ -418,7 +418,7 @@ namespace InteropApiTests
         /// null indexcreates.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetCreateIndex2ThrowsExceptionWhenIndexcreatesAreNull()
         {
@@ -430,7 +430,7 @@ namespace InteropApiTests
         /// a negative indexcreate count.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetCreateIndex2ThrowsExceptionWhenNumIndexcreatesIsNegative()
         {
@@ -443,7 +443,7 @@ namespace InteropApiTests
         /// an indexcreate count that is too long.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetCreateIndex2ThrowsExceptionWhenNumIndexcreatesIsTooLong()
         {
@@ -456,7 +456,7 @@ namespace InteropApiTests
         /// null column name.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetDeleteColumnThrowsExceptionWhenColumnNameIsNull()
         {
@@ -468,7 +468,7 @@ namespace InteropApiTests
         /// null index name.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetDeleteIndexThrowsExceptionWhenIndexNameIsNull()
         {
@@ -480,7 +480,7 @@ namespace InteropApiTests
         /// null table name.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetDeleteTableThrowsExceptionWhenTableNameIsNull()
         {
@@ -492,7 +492,7 @@ namespace InteropApiTests
         /// null column name.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetGetTableColumnInfoThrowsExceptionWhenColumnNameIsNull()
         {
@@ -505,7 +505,7 @@ namespace InteropApiTests
         /// null table name.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetGetColumnInfoThrowsExceptionWhenTableNameIsNull()
         {
@@ -518,7 +518,7 @@ namespace InteropApiTests
         /// null column name.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetGetColumnInfoThrowsExceptionWhenColumnNameIsNull()
         {
@@ -534,7 +534,7 @@ namespace InteropApiTests
         /// This tests the version of the API that takes a JET_COLUMNLIST.
         /// </remarks>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetGetColumnInfoThrowsExceptionWhenTableNameIsNull2()
         {
@@ -551,7 +551,7 @@ namespace InteropApiTests
         /// null bookmark.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetGotoBookmarkThrowsExceptionWhenBookmarkIsNull()
         {
@@ -563,7 +563,7 @@ namespace InteropApiTests
         /// negative bookmark length.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetGotoBookmarkThrowsExceptionWhenBookmarkLengthIsNegative()
         {
@@ -576,7 +576,7 @@ namespace InteropApiTests
         /// bookmark length that is too long.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetGotoBookmarkThrowsExceptionWhenBookmarkLengthIsTooLong()
         {
@@ -589,7 +589,7 @@ namespace InteropApiTests
         /// null data and a non-null length.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetMakeKeyThrowsExceptionWhenDataIsNull()
         {
@@ -601,7 +601,7 @@ namespace InteropApiTests
         /// data length that is negative.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetMakeKeyThrowsExceptionWhenDataLengthIsNegative()
         {
@@ -614,7 +614,7 @@ namespace InteropApiTests
         /// data length that is too long.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetMakeKeyThrowsExceptionWhenDataLengthIsTooLong()
         {
@@ -627,7 +627,7 @@ namespace InteropApiTests
         /// negative max record count.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetIndexRecordCountThrowsExceptionWhenMaxRecordsIsNegative()
         {
@@ -640,7 +640,7 @@ namespace InteropApiTests
         /// ranges to JetIntersectIndexes.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetIntersectIndexesThrowsExceptionWhenTableidsIsNull()
         {
@@ -652,7 +652,7 @@ namespace InteropApiTests
         /// Check that an exception is thrown when intersecting just one index.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetIntersectIndexesThrowsExceptionWhenIntersectingOneTableid()
         {
@@ -668,7 +668,7 @@ namespace InteropApiTests
         /// as the tableid argument.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void IntersectIndexesThrowsExceptionWhenTableidIsNull()
         {
@@ -684,7 +684,7 @@ namespace InteropApiTests
         /// null bookmark and non-null length.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetGetBookmarkThrowsExceptionWhenBookmarkIsNull()
         {
@@ -697,7 +697,7 @@ namespace InteropApiTests
         /// bookmark length that is negative.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetGetBookmarkThrowsExceptionWhenBookmarkLengthIsNegative()
         {
@@ -711,7 +711,7 @@ namespace InteropApiTests
         /// bookmark length that is too long.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetGetBookmarkThrowsExceptionWhenBookmarkLengthIsTooLong()
         {
@@ -725,7 +725,7 @@ namespace InteropApiTests
         /// null data and a non-null length.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetRetrieveKeyThrowsExceptionWhenDataIsNull()
         {
@@ -738,7 +738,7 @@ namespace InteropApiTests
         /// data length that is negative.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetRetrieveKeyThrowsExceptionWhenDataLengthIsNegative()
         {
@@ -752,7 +752,7 @@ namespace InteropApiTests
         /// data length that is too long.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetRetrieveKeyThrowsExceptionWhenDataLengthIsTooLong()
         {
@@ -766,7 +766,7 @@ namespace InteropApiTests
         /// null buffer and non-null length.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetRetrieveColumnThrowsExceptionWhenDataIsNull()
         {
@@ -779,7 +779,7 @@ namespace InteropApiTests
         /// data length that is negative.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetRetrieveColumnThrowsExceptionWhenDataSizeIsNegative()
         {
@@ -793,7 +793,7 @@ namespace InteropApiTests
         /// data length that is too long.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetRetrieveColumnThrowsExceptionWhenDataSizeIsTooLong()
         {
@@ -807,7 +807,7 @@ namespace InteropApiTests
         /// null allocator callback.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetEnumerateColumnsThrowsExceptionWhenAllocatorIsNull()
         {
@@ -831,7 +831,7 @@ namespace InteropApiTests
         /// negative maximum column size.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetEnumerateColumnsThrowsExceptionWhenMaxSizeIsNegative()
         {
@@ -856,7 +856,7 @@ namespace InteropApiTests
         /// null columnids when numColumnids is non-zero.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetEnumerateColumnsThrowsExceptionWhenColumnidsIsNull()
         {
@@ -881,7 +881,7 @@ namespace InteropApiTests
         /// negative numColumnids.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetEnumerateColumnsThrowsExceptionWhenNumColumnidsIsNegative()
         {
@@ -907,7 +907,7 @@ namespace InteropApiTests
         /// numColumnids count which is greater than the size of columnids.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetEnumerateColumnsThrowsExceptionWhenNumColumnidsIsTooLong()
         {
@@ -937,7 +937,7 @@ namespace InteropApiTests
         /// null buffer and non-null length (and SetSizeLV isn't specified).
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetSetColumnThrowsExceptionWhenDataIsNull()
         {
@@ -949,7 +949,7 @@ namespace InteropApiTests
         /// negative data length.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetSetColumnThrowsExceptionWhenDataSizeIsNegative()
         {
@@ -962,7 +962,7 @@ namespace InteropApiTests
         /// negative data length.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetSetColumnThrowsExceptionWhenDataSizeIsTooLong()
         {
@@ -975,7 +975,7 @@ namespace InteropApiTests
         /// null setcolumns array. 
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetSetColumnsThrowsExceptionWhenSetColumnsIsNull()
         {
@@ -987,7 +987,7 @@ namespace InteropApiTests
         /// negative number of columns.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetSetColumnsThrowsExceptionWhenNumColumnsIsNegative()
         {
@@ -999,7 +999,7 @@ namespace InteropApiTests
         /// numColumns count that is greater than the number of columns.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetSetColumnsThrowsExceptionWhenDataSizeIsTooLong()
         {
@@ -1011,7 +1011,7 @@ namespace InteropApiTests
         /// numColumns count that is greater than the number of columns.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetSetColumnsThrowsExceptionWhenSetColumnDataIsInvalid()
         {
@@ -1031,7 +1031,7 @@ namespace InteropApiTests
         /// null buffer and non-null length.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetUpdateThrowsExceptionWhenDataIsNull()
         {
@@ -1044,7 +1044,7 @@ namespace InteropApiTests
         /// data length that is negative.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetUpdateThrowsExceptionWhenDataSizeIsNegative()
         {
@@ -1058,7 +1058,7 @@ namespace InteropApiTests
         /// data length that is too long.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetUpdateThrowsExceptionWhenDataSizeIsTooLong()
         {
@@ -1072,7 +1072,7 @@ namespace InteropApiTests
         /// null delta.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetEscrowUpdateThrowsExceptionWhenDeltaIsNull()
         {
@@ -1085,7 +1085,7 @@ namespace InteropApiTests
         /// negative delta length.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetEscrowUpdateThrowsExceptionWhenDeltaSizeIsNegative()
         {
@@ -1099,7 +1099,7 @@ namespace InteropApiTests
         /// delta length that is too long.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetEscrowUpdateThrowsExceptionWhenDeltaSizeIsTooLong()
         {
@@ -1113,7 +1113,7 @@ namespace InteropApiTests
         /// null previous value and non-zero length.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetEscrowUpdateThrowsExceptionWhenPreviousValueIsNull()
         {
@@ -1127,7 +1127,7 @@ namespace InteropApiTests
         /// negative previous value length.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetEscrowUpdateThrowsExceptionWhenPreviousValueSizeIsNegative()
         {
@@ -1142,7 +1142,7 @@ namespace InteropApiTests
         /// previous value length that is too long.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetEscrowUpdateThrowsExceptionWhenPreviousValueSizeIsTooLong()
         {

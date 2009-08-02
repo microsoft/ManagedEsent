@@ -174,7 +174,7 @@ namespace InteropApiTests
         /// Verify that the test class has setup the test fixture properly.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyFixtureSetup()
         {
             Assert.IsNotNull(this.table);
@@ -211,7 +211,7 @@ namespace InteropApiTests
         /// Enumerate one column.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestEnumerateOneColumn()
         {
             const int Expected = 123;
@@ -249,7 +249,7 @@ namespace InteropApiTests
         /// Enumerate one column with multivalues.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestEnumerateOneMultivalueColumn()
         {
             const int Expected1 = 123;
@@ -292,7 +292,7 @@ namespace InteropApiTests
         /// Enumerate specific columns using a JET_ENUMCOLUMNID array.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestEnumerateSpecificColumns()
         {
             const short Expected16 = 2;
@@ -346,7 +346,7 @@ namespace InteropApiTests
         /// Enumerate specific columns using a JET_ENUMCOLUMNID array.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestEnumerateSpecificColumnsAndTags()
         {
             const short Expected16 = 2;

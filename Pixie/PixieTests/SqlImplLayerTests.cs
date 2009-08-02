@@ -65,7 +65,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void DetachDatabaseClosesConnection()
         {
             // This is the method that must be called
@@ -77,7 +77,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void BeginTransactionCreatesTransaction()
         {
             var stubTransaction = this.mocks.Stub<Transaction>();
@@ -89,7 +89,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void BeginSecondTransactionThrowsException()
         {
             var stubTransaction = this.mocks.Stub<Transaction>();
@@ -109,7 +109,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void CommitTransactionCommitsTransaction()
         {
             var mockTransaction = this.mocks.StrictMock<Transaction>();
@@ -124,7 +124,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void CommitTransactionTwiceThrowsException()
         {
             var mockTransaction = this.mocks.StrictMock<Transaction>();
@@ -149,7 +149,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(EsentSqlExecutionException))]
         public void CommitTransactionWithoutBeginThrowsException()
         {
@@ -157,7 +157,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void SavepointCreatesTransaction()
         {
             var stubTransaction1 = this.mocks.Stub<Transaction>();
@@ -173,7 +173,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(EsentSqlExecutionException))]
         public void SavepointWithoutBeginThrowsException()
         {
@@ -181,7 +181,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void RollbackTransactionUndoesTransaction()
         {
             var mockTransaction = this.mocks.StrictMock<Transaction>();
@@ -196,7 +196,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(EsentSqlExecutionException))]
         public void RollbackWithoutBeginThrowsException()
         {
@@ -204,7 +204,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void RollbackTransactionTwiceThrowsException()
         {
             var mockTransaction = this.mocks.StrictMock<Transaction>();
@@ -229,7 +229,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void InsertRecordSetsRecordColumns()
         {
             var stubTransaction = this.mocks.Stub<Transaction>();
@@ -256,7 +256,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void InsertSecondRecordDoesNotReopenTable()
         {
             var stubTransaction = this.mocks.Stub<Transaction>();

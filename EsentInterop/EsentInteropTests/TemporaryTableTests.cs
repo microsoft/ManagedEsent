@@ -57,7 +57,7 @@ namespace InteropApiTests
         /// Null columns is invalid.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyJetOpenTempTableThrowsExceptionWhenColumnsIsNull()
         {
@@ -70,7 +70,7 @@ namespace InteropApiTests
         /// Null columns is invalid.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyJetOpenTempTableThrowsExceptionWhenColumnidsIsNull()
         {
@@ -83,7 +83,7 @@ namespace InteropApiTests
         /// Negative column count is invalid
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyJetOpenTempTableThrowsExceptionWhenColumnCountIsNegative()
         {
@@ -97,7 +97,7 @@ namespace InteropApiTests
         /// Too-long column count is invalid
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyJetOpenTempTableThrowsExceptionWhenColumnCountIsTooLong()
         {
@@ -111,7 +111,7 @@ namespace InteropApiTests
         /// Null columns is invalid.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyJetOpenTempTable2ThrowsExceptionWhenColumnsIsNull()
         {
@@ -124,7 +124,7 @@ namespace InteropApiTests
         /// Null columns is invalid.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyJetOpenTempTable2ThrowsExceptionWhenColumnidsIsNull()
         {
@@ -137,7 +137,7 @@ namespace InteropApiTests
         /// Negative column count is invalid
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyJetOpenTempTable2ThrowsExceptionWhenColumnCountIsNegative()
         {
@@ -151,7 +151,7 @@ namespace InteropApiTests
         /// Too-long column count is invalid
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyJetOpenTempTable2ThrowsExceptionWhenColumnCountIsTooLong()
         {
@@ -165,7 +165,7 @@ namespace InteropApiTests
         /// Null columns is invalid.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyJetOpenTempTable3ThrowsExceptionWhenColumnsIsNull()
         {
@@ -178,7 +178,7 @@ namespace InteropApiTests
         /// Null columns is invalid.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyJetOpenTempTable3ThrowsExceptionWhenColumnidsIsNull()
         {
@@ -191,7 +191,7 @@ namespace InteropApiTests
         /// Negative column count is invalid
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyJetOpenTempTable3ThrowsExceptionWhenColumnCountIsNegative()
         {
@@ -205,7 +205,7 @@ namespace InteropApiTests
         /// Too-long column count is invalid
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyJetOpenTempTable3ThrowsExceptionWhenColumnCountIsTooLong()
         {
@@ -223,7 +223,7 @@ namespace InteropApiTests
         /// Sort data with a temporary table
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void SortDataWithJetOpenTempTable()
         {
             JET_TABLEID tableid;
@@ -255,7 +255,7 @@ namespace InteropApiTests
         /// Sort data with a temporary table
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void SortDataWithJetOpenTempTable2()
         {
             JET_TABLEID tableid;
@@ -287,7 +287,7 @@ namespace InteropApiTests
         /// Sort data with a temporary table
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void SortDataCaseSensitiveWithJetOpenTempTable3()
         {
             JET_TABLEID tableid;
@@ -323,7 +323,7 @@ namespace InteropApiTests
         /// Sort data with a temporary table
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void SortDataCaseSensitiveWithJetOpenTemporaryTable()
         {
             if (!EsentVersion.SupportsVistaFeatures)

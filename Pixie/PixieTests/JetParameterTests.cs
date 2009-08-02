@@ -31,7 +31,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void SetJetParameterAsString()
         {
             var jetparam = new JetParameter(JET_param.BaseName, "abc");
@@ -42,7 +42,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void SetJetParameterAsInteger()
         {
             var jetparam = new JetParameter(JET_param.MaxVerPages, 3000);

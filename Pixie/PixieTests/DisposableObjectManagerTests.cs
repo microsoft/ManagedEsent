@@ -32,7 +32,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyManagedDisposableObjectConstructorSetsWasDisposedToFalse()
         {
             var object1 = new ManagedDisposableObject();
@@ -40,7 +40,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyManagedDisposableObjectDisposeSetsWasDisposedToTrue()
         {
             var object1 = new ManagedDisposableObject();
@@ -49,35 +49,35 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyManagedDisposableObjectDisposeFiresEvent()
         {
             VerifyIManagedDisposableObjectDisposeFiresEvent(new ManagedDisposableObject());
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyManagedDisposableObjectDisposePassesSelfToEvent()
         {
             VerifyIManagedDisposableObjectDisposePassesSelfToEvent(new ManagedDisposableObject());
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyDisposableObjectManagerDisposeFiresEvent()
         {
             VerifyIManagedDisposableObjectDisposeFiresEvent(new DisposableObjectManager());
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyDisposableObjectManagerDisposePassesSelfToEvent()
         {
             VerifyIManagedDisposableObjectDisposePassesSelfToEvent(new DisposableObjectManager());
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyGetNewDisposableObjectIdReturnsUniqueValues()
         {
             DisposableObjectId id1 = DisposableObjectManager.GetNewDisposableObjectId();
@@ -86,7 +86,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyLinkedListAddExtensionAddsItem()
         {
             var list = new LinkedList<string>();
@@ -95,7 +95,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyChildObjectIsDisposedWhenParentIsDisposed()
         {
             var parent = new ManagedDisposableObject();
@@ -109,7 +109,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestDisposeTwice()
         {
             var obj = new ManagedDisposableObject();
@@ -120,7 +120,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyAllChildrenAreDisposedWhenParentIsDisposed()
         {
             var parent = new ManagedDisposableObject();
@@ -148,7 +148,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyParentIsNotDisposedWhenChildIsDisposed()
         {
             var parent = new ManagedDisposableObject();
@@ -162,7 +162,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyChildAndGrandchildAreDisposedWhenParentIsDisposed()
         {
             var parent = new ManagedDisposableObject();
@@ -179,7 +179,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyAllObjectAreDisposedWhenManagerIsDisposed()
         {
             var manager = new DisposableObjectManager();
@@ -205,7 +205,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyGrandchildIsDisposedWhenChildIsDisposed()
         {
             var parent = new ManagedDisposableObject();
@@ -222,7 +222,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyChildIsNotDisposedWhenGrandchildIsDisposed()
         {
             var parent = new ManagedDisposableObject();
@@ -239,7 +239,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyObjectWithDependentsCannotBeGarbageCollected()
         {
             var parent = new ManagedDisposableObject();
@@ -256,7 +256,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyObjectWithNoDependentsCanBeGarbageCollected()
         {
             var parent = new ManagedDisposableObject();
@@ -273,7 +273,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyGarbageCollectionCanGetAllObjects()
         {
             var grandparent = new ManagedDisposableObject();
@@ -306,7 +306,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestDisposingParentWhenSomeChildrenAreUnreferenced()
         {
             var parent = new ManagedDisposableObject();

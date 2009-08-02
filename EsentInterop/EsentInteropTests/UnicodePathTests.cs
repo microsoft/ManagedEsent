@@ -98,7 +98,7 @@ namespace InteropApiTests
         /// Create a database with a unicode path.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void CreateDatabaseWithUnicodePath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
@@ -123,7 +123,7 @@ namespace InteropApiTests
         /// Detach a database with a unicode path.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void DetachDatabaseWithUnicodePath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
@@ -149,7 +149,7 @@ namespace InteropApiTests
         /// Attach a database with a unicode path.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void AttachDatabaseWithUnicodePath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
@@ -177,7 +177,7 @@ namespace InteropApiTests
         /// Open a database with a unicode path.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void OpenDatabaseWithUnicodePath()
         {
             if (!EsentVersion.SupportsUnicodePaths)

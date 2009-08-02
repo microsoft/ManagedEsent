@@ -66,7 +66,7 @@ namespace PixieTests
         /// CREATE DATABASE
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlCreateDatabaseCallsSqlImpl()
         {
             Expect.Call(() => this.mockImpl.CreateDatabase("new.edb"));
@@ -79,7 +79,7 @@ namespace PixieTests
         /// ATTACH DATABASE
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlAttachDatabaseCallsSqlImpl()
         {
             Expect.Call(() => this.mockImpl.AttachDatabase("foo.edb"));
@@ -92,7 +92,7 @@ namespace PixieTests
         /// DETACH DATABASE
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlDetachDatabaseCallsSqlImpl()
         {
             Expect.Call(() => this.mockImpl.DetachDatabase());
@@ -105,7 +105,7 @@ namespace PixieTests
         /// BEGIN
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlBeginCallsSqlImpl()
         {
             Expect.Call(() => this.mockImpl.BeginTransaction());
@@ -118,7 +118,7 @@ namespace PixieTests
         /// BEGIN TRANSACTION
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlBeginTransactionCallsSqlImpl()
         {
             Expect.Call(() => this.mockImpl.BeginTransaction());
@@ -131,7 +131,7 @@ namespace PixieTests
         /// COMMIT
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlCommitCallsSqlImpl()
         {
             Expect.Call(() => this.mockImpl.CommitTransaction());
@@ -144,7 +144,7 @@ namespace PixieTests
         /// COMMIT TRANSACTION
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlCommitTransactionCallsSqlImpl()
         {
             Expect.Call(() => this.mockImpl.CommitTransaction());
@@ -157,7 +157,7 @@ namespace PixieTests
         /// END
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlEndCallsSqlImpl()
         {
             Expect.Call(() => this.mockImpl.CommitTransaction());
@@ -170,7 +170,7 @@ namespace PixieTests
         /// END TRANSACTION
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlEndTransactionCallsSqlImpl()
         {
             Expect.Call(() => this.mockImpl.CommitTransaction());
@@ -183,7 +183,7 @@ namespace PixieTests
         /// ROLLBACK
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlRollbackCallsSqlImpl()
         {
             Expect.Call(() => this.mockImpl.RollbackTransaction());
@@ -196,7 +196,7 @@ namespace PixieTests
         /// ROLLBACK TRANSACTION
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlRollbackTransactionCallsSqlImpl()
         {
             Expect.Call(() => this.mockImpl.RollbackTransaction());
@@ -209,7 +209,7 @@ namespace PixieTests
         /// ROLLBACK TO
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlRollbackToCallsSqlImpl()
         {
             Expect.Call(() => this.mockImpl.RollbackToSavepoint("mysavepoint"));
@@ -222,7 +222,7 @@ namespace PixieTests
         /// ROLLBACK TRANSACTION TO
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlRollbackTransactionToCallsSqlImpl()
         {
             Expect.Call(() => this.mockImpl.RollbackToSavepoint("mysavepoint"));
@@ -235,7 +235,7 @@ namespace PixieTests
         /// ROLLBACK TO SAVEPOINT
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlRollbackToSavepointCallsSqlImpl()
         {
             Expect.Call(() => this.mockImpl.RollbackToSavepoint("mysavepoint"));
@@ -248,7 +248,7 @@ namespace PixieTests
         /// ROLLBACK TRANSACTION TO SAVEPOINT
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlRollbackTransactionToSavepointCallsSqlImpl()
         {
             Expect.Call(() => this.mockImpl.RollbackToSavepoint("mysavepoint"));
@@ -261,7 +261,7 @@ namespace PixieTests
         /// SAVEPOINT
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlSavepointCallsSqlImpl()
         {
             Expect.Call(() => this.mockImpl.CreateSavepoint("mysavepoint"));
@@ -274,7 +274,7 @@ namespace PixieTests
         /// RELEASE
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlReleaseCallsSqlImpl()
         {
             Expect.Call(() => this.mockImpl.CommitSavepoint("mysavepoint"));
@@ -287,7 +287,7 @@ namespace PixieTests
         /// RELEASE SAVEPOINT
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlReleaseSavepointCallsSqlImpl()
         {
             Expect.Call(() => this.mockImpl.CommitSavepoint("mysavepoint"));
@@ -300,7 +300,7 @@ namespace PixieTests
         /// CREATE TABLE (boolean column)
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlCreateTableBooleanColumn()
         {
             this.TestCreateSingleColumnTable(ColumnType.Bool, "BOOLEAN");
@@ -310,7 +310,7 @@ namespace PixieTests
         /// CREATE TABLE (boolean column)
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlCreateTableBoolColumn()
         {
             this.TestCreateSingleColumnTable(ColumnType.Bool, "BOOL");
@@ -320,7 +320,7 @@ namespace PixieTests
         /// CREATE TABLE (byte column)
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlCreateTableByteColumn()
         {
             this.TestCreateSingleColumnTable(ColumnType.Byte, "BYTE");
@@ -330,7 +330,7 @@ namespace PixieTests
         /// CREATE TABLE (short column)
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlCreateTableShortColumn()
         {
             this.TestCreateSingleColumnTable(ColumnType.Int16, "SHORT");
@@ -340,7 +340,7 @@ namespace PixieTests
         /// CREATE TABLE (int column)
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlCreateTableIntColumn()
         {
             this.TestCreateSingleColumnTable(ColumnType.Int32, "INT");
@@ -350,7 +350,7 @@ namespace PixieTests
         /// CREATE TABLE (long column)
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlCreateTableLongColumn()
         {
             this.TestCreateSingleColumnTable(ColumnType.Int64, "LONG");
@@ -360,7 +360,7 @@ namespace PixieTests
         /// CREATE TABLE (datetime column)
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlCreateTableDateTimeColumn()
         {
             this.TestCreateSingleColumnTable(ColumnType.DateTime, "DATETIME");
@@ -370,7 +370,7 @@ namespace PixieTests
         /// CREATE TABLE (guid column)
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlCreateGuidColumn()
         {
             this.TestCreateSingleColumnTable(ColumnType.Guid, "GUID");
@@ -380,7 +380,7 @@ namespace PixieTests
         /// CREATE TABLE (text column)
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlCreateTableTextColumn()
         {
             this.TestCreateSingleColumnTable(ColumnType.Text, "TEXT");
@@ -390,7 +390,7 @@ namespace PixieTests
         /// CREATE TABLE (binary column)
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestSqlCreateTableBinaryColumn()
         {
             this.TestCreateSingleColumnTable(ColumnType.Binary, "BINARY");
@@ -400,7 +400,7 @@ namespace PixieTests
         /// INSERT INTO 
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifySqlInsertIntoCallsSqlImpl()
         {
             Expect.Call(() => this.mockImpl.InsertRecord(null, null)).Constraints(Is.Equal("mytable"), List.Count(Is.Equal(3)));
@@ -413,7 +413,7 @@ namespace PixieTests
         /// INSERT INTO should throw an exception when there are too many columns
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(EsentSqlParseException))]
         public void VerifySqlInsertIntoThrowsExceptionWhenTooManyColumns()
         {
@@ -424,7 +424,7 @@ namespace PixieTests
         /// INSERT INTO should throw an exception when there are too many values
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(EsentSqlParseException))]
         public void VerifySqlInsertIntoThrowsExceptionWhenTooManyValues()
         {

@@ -21,7 +21,7 @@ namespace InteropApiTests
         /// Create a database, attach, open, close and detach
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void CreateAndOpenDatabase()
         {
             string dir = SetupHelper.CreateRandomDirectory();
@@ -54,7 +54,7 @@ namespace InteropApiTests
         /// Create a database, open read-only
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void CreateDatabaseAndOpenReadOnly()
         {
             string dir = SetupHelper.CreateRandomDirectory();

@@ -123,7 +123,7 @@ namespace InteropApiTests
         /// Verify that the test class has setup the test fixture properly.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyFixtureSetup()
         {
             Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
@@ -144,7 +144,7 @@ namespace InteropApiTests
         /// Seek for a record with SeekLT
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SeekLT()
         {
             int expected = this.numRecords / 2;
@@ -158,7 +158,7 @@ namespace InteropApiTests
         /// Seek for a record with SeekLE
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SeekLE()
         {
             int expected = this.numRecords / 2;
@@ -172,7 +172,7 @@ namespace InteropApiTests
         /// Seek for a record with SeekEQ
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SeekEQ()
         {
             int expected = this.numRecords / 2;
@@ -186,7 +186,7 @@ namespace InteropApiTests
         /// Seek for a record with SeekGE
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SeekGE()
         {
             int expected = this.numRecords / 2;
@@ -200,7 +200,7 @@ namespace InteropApiTests
         /// Seek for a record with SeekGT
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SeekGT()
         {
             int expected = this.numRecords / 2;
@@ -218,7 +218,7 @@ namespace InteropApiTests
         /// Test moving to the first record.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MoveFirst()
         {
             int expected = 0;
@@ -232,7 +232,7 @@ namespace InteropApiTests
         /// This should generate an exception.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentErrorException))]
         public void MovingBeforeFirstThrowsException()
         {
@@ -244,7 +244,7 @@ namespace InteropApiTests
         /// Test moving to the next record.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MoveNext()
         {
             int expected = 1;
@@ -258,7 +258,7 @@ namespace InteropApiTests
         /// Test moving several records.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MoveForwardSeveralRecords()
         {
             int expected = 3;
@@ -272,7 +272,7 @@ namespace InteropApiTests
         /// Test moving to the last record.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MoveLast()
         {
             int expected = this.numRecords - 1;
@@ -286,7 +286,7 @@ namespace InteropApiTests
         /// This should generate an exception.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentErrorException))]
         public void MovingAfterLastThrowsException()
         {
@@ -298,7 +298,7 @@ namespace InteropApiTests
         /// Test moving to the previous record.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MovePrevious()
         {
             int expected = this.numRecords - 2;
@@ -316,7 +316,7 @@ namespace InteropApiTests
         /// Test using JetGotoPosition to go to the first record
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void GotoFirstPosition()
         {
             var recpos = new JET_RECPOS() { centriesLT = 0, centriesTotal = 10 };
@@ -329,7 +329,7 @@ namespace InteropApiTests
         /// Test using JetGotoPosition to go to the last record
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void GotoLastPosition()
         {
             var recpos = new JET_RECPOS() { centriesLT = 4, centriesTotal = 4 };
@@ -346,7 +346,7 @@ namespace InteropApiTests
         /// Create an ascending inclusive index range
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void AscendingInclusiveIndexRange()
         {
             int first = 1;
@@ -375,7 +375,7 @@ namespace InteropApiTests
         /// Create an ascending exclusive index range
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void AscendingExclusiveIndexRange()
         {
             int first = 1;
@@ -404,7 +404,7 @@ namespace InteropApiTests
         /// Create a descending inclusive index range
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void DescendingInclusiveIndexRange()
         {
             int first = 1;
@@ -433,7 +433,7 @@ namespace InteropApiTests
         /// Create a descending exclusive index range
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void DescendingExclusiveIndexRange()
         {
             int first = 1;
@@ -462,7 +462,7 @@ namespace InteropApiTests
         /// Create a descending exclusive index range with TrySetIndexRange
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TryCreateDescendingExclusiveIndexRange()
         {
             int first = 1;
@@ -491,7 +491,7 @@ namespace InteropApiTests
         /// Count the records in an index range with JetGetIndexRecordCount
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void CountIndexRangeRecords()
         {
             int first = 2;
@@ -512,7 +512,7 @@ namespace InteropApiTests
         /// Remove an index range
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RemoveIndexRange()
         {
             int first = 2;
@@ -535,7 +535,7 @@ namespace InteropApiTests
         /// ResetIndexRange is used.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RemoveIndexRangeWhenNoRangeExists()
         {
             Api.ResetIndexRange(this.sesid, this.tableid);
@@ -549,7 +549,7 @@ namespace InteropApiTests
         /// Count the records in the table with JetIndexRecordCount
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void GetIndexRecordCount()
         {
             int countedRecords;
@@ -562,7 +562,7 @@ namespace InteropApiTests
         /// the maximum number of records constrained.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void GetIndexRecordCountConstrained()
         {
             int countedRecords;
@@ -576,7 +576,7 @@ namespace InteropApiTests
         /// Test using JetGetRecord position
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void GetRecordPosition()
         {
             Api.JetMove(this.sesid, this.tableid, JET_Move.Last, MoveGrbit.None);
@@ -589,7 +589,7 @@ namespace InteropApiTests
         /// Scan all the records
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void ScanRecords()
         {
             Api.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
@@ -613,7 +613,7 @@ namespace InteropApiTests
         /// Try moving to the first record.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TryMoveFirst()
         {
             int expected = 0;
@@ -626,7 +626,7 @@ namespace InteropApiTests
         /// Try moving previous to the first record.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TryMovePreviousReturnsFalseWhenOnFirstRecord()
         {
             Assert.AreEqual(true, Api.TryMoveFirst(this.sesid, this.tableid));
@@ -637,7 +637,7 @@ namespace InteropApiTests
         /// Move before the first record
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MoveBeforeFirst()
         {
             Api.MoveBeforeFirst(this.sesid, this.tableid);
@@ -649,7 +649,7 @@ namespace InteropApiTests
         /// Move after the last record
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MoveAfterLast()
         {
             Api.MoveAfterLast(this.sesid, this.tableid);
@@ -661,7 +661,7 @@ namespace InteropApiTests
         /// Try moving to the next record.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TryMoveNext()
         {
             int expected = 1;
@@ -675,7 +675,7 @@ namespace InteropApiTests
         /// Try moving to the last record.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TryMoveLast()
         {
             int expected = this.numRecords - 1;
@@ -689,7 +689,7 @@ namespace InteropApiTests
         /// This should generate an exception.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TryMoveNextReturnsFalseWhenOnLastRecord()
         {
             Assert.AreEqual(true, Api.TryMoveLast(this.sesid, this.tableid));
@@ -700,7 +700,7 @@ namespace InteropApiTests
         /// Test moving to the previous record.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TryMovePrevious()
         {
             int expected = this.numRecords - 2;

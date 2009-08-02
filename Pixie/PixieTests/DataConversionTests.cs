@@ -27,7 +27,7 @@ namespace PixieTests
         #region AsciiText
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertAsciiText()
         {
             string expected = Any.String;
@@ -36,7 +36,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertAsciiTextFromNull()
         {
             this.TestNullConversion(ColumnType.AsciiText);
@@ -47,7 +47,7 @@ namespace PixieTests
         #region Binary
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertBinary()
         {
             byte[] expected = Any.Bytes;
@@ -56,7 +56,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertNullBinary()
         {
             object actual = this.RoundTripConversion(null, ColumnType.Binary);
@@ -64,7 +64,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(InvalidCastException))]
         public void VerifyBinaryConversionThrowsInvalidCastExceptionOnBadType()
         {
@@ -76,7 +76,7 @@ namespace PixieTests
         #region Boolean
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyBooleanConversionReturnsNullableBoolean()
         {
             bool expected = Any.Boolean;
@@ -85,7 +85,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertBoolean()
         {
             bool expected = Any.Boolean;
@@ -94,7 +94,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertBooleanFromString()
         {
             bool expected = Any.Boolean;
@@ -103,7 +103,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertBooleanFromNull()
         {
             this.TestNullConversion(ColumnType.Bool);
@@ -114,7 +114,7 @@ namespace PixieTests
         #region Byte
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyByteConversionReturnsNullableByte()
         {
             byte expected = Any.Byte;
@@ -123,7 +123,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertByte()
         {
             byte expected = Any.Byte;
@@ -132,7 +132,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertByteFromString()
         {
             byte expected = Any.Byte;
@@ -141,7 +141,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertByteFromBool()
         {
             const byte Expected = 1;
@@ -150,7 +150,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertByteFromInt()
         {
             const byte Expected = 123;
@@ -159,7 +159,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertByteFromNull()
         {
             this.TestNullConversion(ColumnType.Byte);
@@ -170,7 +170,7 @@ namespace PixieTests
         #region DateTime
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyDateTimeConversionReturnsNullableDateTime()
         {
             DateTime expected = Any.DateTime;
@@ -179,7 +179,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertDateTime()
         {
             var expected = new DateTime(2008, 11, 10, 4, 56, 13);
@@ -188,7 +188,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertDateTimeFromString()
         {
             var expected = new DateTime(2008, 11, 10, 4, 56, 13);
@@ -197,7 +197,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertDateTimeFromNull()
         {
             this.TestNullConversion(ColumnType.DateTime);
@@ -208,7 +208,7 @@ namespace PixieTests
         #region Double
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyDoubleConversionReturnsNullableDouble()
         {
             double expected = Any.Double;
@@ -217,7 +217,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertDouble()
         {
             double expected = Any.Double;
@@ -226,7 +226,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertDoubleFromNull()
         {
             this.TestNullConversion(ColumnType.Double);
@@ -237,7 +237,7 @@ namespace PixieTests
         #region Float
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyFloatConversionReturnsNullableFloat()
         {
             float expected = Any.Float;
@@ -246,7 +246,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertFloat()
         {
             float expected = Any.Float;
@@ -255,7 +255,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertFloatFromNull()
         {
             this.TestNullConversion(ColumnType.Float);
@@ -266,7 +266,7 @@ namespace PixieTests
         #region Guid
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertGuid()
         {
             Guid expected = Any.Guid;
@@ -275,7 +275,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertGuidFromString()
         {
             Guid expected = Any.Guid;
@@ -284,7 +284,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertGuidFromBytes()
         {
             Guid expected = Any.Guid;
@@ -293,14 +293,14 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertGuidFromNull()
         {
             this.TestNullConversion(ColumnType.Guid);
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(InvalidCastException))]
         public void VerifyGuidConversionThrowsInvalidCastExceptionOnBadType()
         {
@@ -312,7 +312,7 @@ namespace PixieTests
         #region Int
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyIntConversionReturnsNullableInt()
         {
             int expected = Any.Int32;
@@ -321,7 +321,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertInt()
         {
             int expected = Any.Int32;
@@ -330,7 +330,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertIntFromString()
         {
             int expected = Any.Int32;
@@ -339,7 +339,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertIntFromShort()
         {
             int expected = Any.Int16;
@@ -348,7 +348,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertIntFromNull()
         {
             this.TestNullConversion(ColumnType.Int32);
@@ -359,7 +359,7 @@ namespace PixieTests
         #region Long
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyLongConversionReturnsNullableLong()
         {
             long expected = Any.Int64;
@@ -368,7 +368,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertLong()
         {
             long expected = Any.Int64;
@@ -377,7 +377,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertLongFromString()
         {
             long expected = Any.Int64;
@@ -386,7 +386,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertLongFromNull()
         {
             this.TestNullConversion(ColumnType.Int64);
@@ -397,7 +397,7 @@ namespace PixieTests
         #region Short
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyShortConversionReturnsNullableShort()
         {
             short expected = Any.Int16;
@@ -406,7 +406,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertShort()
         {
             short expected = Any.Int16;
@@ -415,7 +415,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertShortFromString()
         {
             short expected = Any.Int16;
@@ -424,7 +424,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertShortFromNull()
         {
             this.TestNullConversion(ColumnType.Int16);
@@ -435,7 +435,7 @@ namespace PixieTests
         #region Text
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertText()
         {
             string expected = Any.String;
@@ -444,7 +444,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertTextFromNull()
         {
             this.TestNullConversion(ColumnType.Text);
@@ -455,7 +455,7 @@ namespace PixieTests
         #region UInt
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyUIntConversionReturnsNullableUInt()
         {
             uint expected = Any.UInt32;
@@ -464,7 +464,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertUInt()
         {
             uint expected = Any.UInt32;
@@ -473,7 +473,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertUIntFromString()
         {
             uint expected = Any.UInt32;
@@ -482,7 +482,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertUIntFromShort()
         {
             ushort expected = Any.UInt16;
@@ -491,7 +491,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertUIntFromNull()
         {
             this.TestNullConversion(ColumnType.UInt32);
@@ -502,7 +502,7 @@ namespace PixieTests
         #region UShort
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyUShortConversionReturnsNullableUShort()
         {
             ushort expected = Any.UInt16;
@@ -511,7 +511,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertUShort()
         {
             ushort expected = Any.UInt16;
@@ -520,7 +520,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertUShortFromString()
         {
             ushort expected = Any.UInt16;
@@ -529,7 +529,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertUShortFromShort()
         {
             ushort expected = Any.UInt16;
@@ -538,7 +538,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void TestConvertUShortFromNull()
         {
             this.TestNullConversion(ColumnType.UInt16);

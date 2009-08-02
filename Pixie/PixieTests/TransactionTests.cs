@@ -111,7 +111,7 @@ namespace PixieTests
         /// Verify that the test class has setup the test fixture properly.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyFixtureSetup()
         {
             Assert.AreNotEqual(Microsoft.Isam.Esent.Interop.JET_INSTANCE.Nil, this.instance);
@@ -123,7 +123,7 @@ namespace PixieTests
         #endregion Setup/Teardown
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestHelperMethods()
         {
             this.InsertRecord(1);
@@ -131,7 +131,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyCommittedEventIsCalledOnCommit()
         {
             bool eventCalled = false;
@@ -144,7 +144,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyRolledBackEventIsCalledOnRollback()
         {
             bool eventCalled = false;
@@ -157,7 +157,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyCommitOfOuterTransactionCommitsInnerTransaction()
         {
             bool eventCalled = false;
@@ -172,7 +172,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyRollbackOfOuterTransactionRollsbackInnerTransaction()
         {
             bool eventCalled = false;
@@ -187,7 +187,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyRolledBackEventMigratesToOuterTransactionOnCommit()
         {
             bool eventCalled = false;
@@ -203,7 +203,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyGetNewestTransactionReturnsCurrentTransactionIfNoSubtransactions()
         {
             var transaction = new EsentTransaction(this.session, "test", null);
@@ -211,7 +211,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyGetNewestTransactionReturnsNewestTransaction()
         {
             var level0transaction = new EsentTransaction(this.session, "test", null);
@@ -222,7 +222,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyCommitPersistsChanges()
         {
             Transaction transaction = new EsentTransaction(this.session, "test", null);
@@ -233,7 +233,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyRollbackUndoesChanges()
         {
             Transaction transaction = new EsentTransaction(this.session, "test", null);
@@ -244,7 +244,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyCommitThenRollbackUndoesChanges()
         {
             var outerTransaction = new EsentTransaction(this.session, "test", null);

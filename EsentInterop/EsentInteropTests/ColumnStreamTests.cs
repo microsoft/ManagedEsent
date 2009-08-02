@@ -110,7 +110,7 @@ namespace InteropApiTests
         /// Verify that the test class has setup the test fixture properly.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyFixtureSetup()
         {
             Assert.IsNotNull(this.table);
@@ -133,7 +133,7 @@ namespace InteropApiTests
         /// Test that a ColumnStream supports reading.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void ColumnStreamSupportsRead()
         {
             using (var t = new Transaction(this.sesid))
@@ -148,7 +148,7 @@ namespace InteropApiTests
         /// Test that a ColumnStream supports writing.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void ColumnStreamSupportsWrite()
         {
             using (var t = new Transaction(this.sesid))
@@ -163,7 +163,7 @@ namespace InteropApiTests
         /// Test that a ColumnStream supports seeking.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void ColumnStreamSupportsSeek()
         {
             using (var t = new Transaction(this.sesid))
@@ -178,7 +178,7 @@ namespace InteropApiTests
         /// Test setting the length of a ColumnStream.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetColumnStreamLength()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -208,7 +208,7 @@ namespace InteropApiTests
         /// Test setting and retrieving a column with the ColumnStream class.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetAndRetrieveColumnStream()
         {
             string s = Any.String;
@@ -234,7 +234,7 @@ namespace InteropApiTests
         /// Buffer a ColumnStream
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void BufferColumnStream()
         {
             var data = new byte[1024];
@@ -270,7 +270,7 @@ namespace InteropApiTests
         /// Test that seeking beyond the length of the stream doesn't grow the stream.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SeekingPastEndOfColumnStreamDoesNotGrowStream()
         {
             const int Offset = 1200;
@@ -296,7 +296,7 @@ namespace InteropApiTests
         /// and multivalues.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetAndRetrieveMultiValueColumnStream()
         {
             string[] data = { Any.String, Any.String, Any.String, Any.String, Any.String, Any.String };                                
@@ -332,7 +332,7 @@ namespace InteropApiTests
         /// Trying to seek to an invalid offset generates an exception.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ColumnStreamThrowsExceptionWhenSeekOffsetIsTooLarge()
         {
@@ -348,7 +348,7 @@ namespace InteropApiTests
         /// Setting the size past the maximum LV size generates an exception.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ColumnStreamSetLengthThrowsExceptionWhenLengthIsTooLong()
         {
@@ -364,7 +364,7 @@ namespace InteropApiTests
         /// Setting the size to a negative number generates an exception.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ColumnStreamSetLengthThrowsExceptionWhenLengthIsNegative()
         {
@@ -380,7 +380,7 @@ namespace InteropApiTests
         /// Test that a ColumnStream can serialize an object.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void ColumnStreamCanSerializeBasicType()
         {
             var expected = Any.Int64;
@@ -411,7 +411,7 @@ namespace InteropApiTests
         /// Test that a ColumnStream can serialize an object.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void ColumnStreamCanSerializeObject()
         {
             var expected = new Dictionary<string, long> { { "foo", 1 }, { "bar", 2 }, { "baz", 3 } };

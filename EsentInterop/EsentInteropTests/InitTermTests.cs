@@ -21,7 +21,7 @@ namespace InteropApiTests
         /// Verify that the version returned by JetGetVersion is not zero
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyJetVersionIsNotZero()
         {
             JET_INSTANCE instance;
@@ -49,7 +49,7 @@ namespace InteropApiTests
         /// with JetCreateInstance2.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void CreateInstanceWithJetCreateInstance2()
         {
             JET_INSTANCE instance;
@@ -69,7 +69,7 @@ namespace InteropApiTests
         /// with JetInit2.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void InitializeInstanceWithJetInit2()
         {
             JET_INSTANCE instance;
@@ -110,7 +110,7 @@ namespace InteropApiTests
         /// Initialize and terminate one instance.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void InitAndTermOneInstance()
         {
             string dir = SetupHelper.CreateRandomDirectory();
@@ -130,7 +130,7 @@ namespace InteropApiTests
         /// Initialize and terminate one instance abruptly.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void InitAndTermOneInstanceAbruptly()
         {
             string dir = SetupHelper.CreateRandomDirectory();
@@ -151,7 +151,7 @@ namespace InteropApiTests
         /// (Init/Term/Init/Term).
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void InitAndTermOneInstanceTwice()
         {
             string dir = SetupHelper.CreateRandomDirectory();
@@ -173,7 +173,7 @@ namespace InteropApiTests
         /// Initialize and terminate two instances
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void InitAndTermTwoInstances()
         {    
             string dir1 = SetupHelper.CreateRandomDirectory();
@@ -198,7 +198,7 @@ namespace InteropApiTests
         /// Duplicate a session
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestJetDupSession()
         {
             string dir = SetupHelper.CreateRandomDirectory();

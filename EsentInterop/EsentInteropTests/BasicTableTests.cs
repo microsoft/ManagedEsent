@@ -110,7 +110,7 @@ namespace InteropApiTests
         /// Verify that the test class has setup the test fixture properly.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyFixtureSetup()
         {
             Assert.IsNotNull(this.table);
@@ -133,7 +133,7 @@ namespace InteropApiTests
         /// Move a transaction between threads.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyJetSetSessionContextAllowsThreadMigration()
         {
             // Without the calls to JetSetSessionContext/JetResetSessionContext
@@ -162,7 +162,7 @@ namespace InteropApiTests
         /// JetDupCursor should return a different tableid.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void JetDupCursorReturnsDifferentTableid()
         {
             JET_TABLEID newTableid;
@@ -175,7 +175,7 @@ namespace InteropApiTests
         /// JetDupCursor should return a tableid on the same table.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void JetDupCursorReturnsCursorOnSameTable()
         {
             string expected = Any.String;
@@ -202,7 +202,7 @@ namespace InteropApiTests
         /// Create one column of each type
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void CreateOneColumnOfEachType()
         {
             Api.JetBeginTransaction(this.sesid);
@@ -224,7 +224,7 @@ namespace InteropApiTests
         /// Create a column with a default value
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void CreateColumnWithDefaultValue()
         {
             int expected = Any.Int32;
@@ -247,7 +247,7 @@ namespace InteropApiTests
         /// Add a column and retrieve its information using JetGetTableColumnInfo
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void JetGetTableColumnInfo()
         {
             string columnName = "column1";
@@ -279,7 +279,7 @@ namespace InteropApiTests
         /// Add a column and retrieve its information using JetGetTableColumnInfo
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void JetGetTableColumnInfoByColumnid()
         {
             string columnName = "column2";
@@ -311,7 +311,7 @@ namespace InteropApiTests
         /// Add a column and retrieve its information using JetGetColumnInfo
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void JetGetColumnInfo()
         {
             string columnName = "column3";
@@ -342,7 +342,7 @@ namespace InteropApiTests
         /// Add a column and retrieve its information using GetColumnDictionary
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void GetColumnDictionary()
         {
             string columnName = "column4";
@@ -367,7 +367,7 @@ namespace InteropApiTests
         /// Check that the dictionary returned by GetColumnDictionary is case-insensitive
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void GetColumnDictionaryIsCaseInsensitive()
         {
             IDictionary<string, JET_COLUMNID> dict = Api.GetColumnDictionary(this.sesid, this.tableid);
@@ -378,7 +378,7 @@ namespace InteropApiTests
         /// Creates an index
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void CreateIndex()
         {
             string indexDescription = "+TestColumn\0";
@@ -394,7 +394,7 @@ namespace InteropApiTests
         /// Creates an index with JetCreateIndex2
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void CreateIndex2()
         {
             Api.JetBeginTransaction(this.sesid);
@@ -419,7 +419,7 @@ namespace InteropApiTests
         /// Creates an index
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyJetGetCurrentIndexReturnsIndexName()
         {
             string indexDescription = "+TestColumn\0";
@@ -438,7 +438,7 @@ namespace InteropApiTests
         /// Delete an index and make sure we can't use it afterwards
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentErrorException))]
         public void DeleteIndex()
         {
@@ -459,7 +459,7 @@ namespace InteropApiTests
         /// Delete a column and make sure we can't see it afterwards
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentErrorException))]
         public void DeleteColumn()
         {
@@ -481,7 +481,7 @@ namespace InteropApiTests
         /// Delete a table and make sure we can't see it afterwards
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentErrorException))]
         public void DeleteTable()
         {
@@ -507,7 +507,7 @@ namespace InteropApiTests
         /// Inserts a record and retrieve it.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void InsertRecord()
         {
             string s = Any.String;
@@ -524,7 +524,7 @@ namespace InteropApiTests
         /// Inserts a record and update it.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void ReplaceRecord()
         {
             string before = Any.String;
@@ -550,7 +550,7 @@ namespace InteropApiTests
         /// class.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void ReplaceRecordWithTransactionClass()
         {
             string before = Any.String;
@@ -579,7 +579,7 @@ namespace InteropApiTests
         /// Inserts a record, update it and rollback the update.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void ReplaceAndRollback()
         {
             string before = Any.String;
@@ -605,7 +605,7 @@ namespace InteropApiTests
         /// This uses the Transaction helper class.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void ReplaceAndRollbackWithTransactionClass()
         {
             string before = Any.String;
@@ -635,7 +635,7 @@ namespace InteropApiTests
         /// Insert a record and delete it.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void InsertRecordAndDelete()
         {
             Api.JetBeginTransaction(this.sesid);
@@ -662,7 +662,7 @@ namespace InteropApiTests
         /// Test JetGetLock()
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void GetLock()
         {
             Api.JetBeginTransaction(this.sesid);
@@ -681,7 +681,7 @@ namespace InteropApiTests
         /// locks are requested.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void GetLockThrowsExceptionOnWriteConflict()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -728,7 +728,7 @@ namespace InteropApiTests
         /// Test JetGetThreadStats
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void GetThreadStats()
         {
             if (!EsentVersion.SupportsVistaFeatures)
@@ -757,7 +757,7 @@ namespace InteropApiTests
         /// Inserts a record and retrieve its bookmark
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void JetGetBookmark()
         {
             var expectedBookmark = new byte[256];
@@ -784,7 +784,7 @@ namespace InteropApiTests
         /// Inserts a record and retrieve its bookmark
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void GetBookmark()
         {
             var expectedBookmark = new byte[256];
@@ -809,7 +809,7 @@ namespace InteropApiTests
         /// Insert a record and retrieve its key
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void JetRetrieveKey()
         {
             string expected = Any.String;
@@ -836,7 +836,7 @@ namespace InteropApiTests
         /// Insert a record and retrieve its key
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveKey()
         {
             string expected = Any.String;

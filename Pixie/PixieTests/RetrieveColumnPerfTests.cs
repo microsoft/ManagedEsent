@@ -120,7 +120,7 @@ namespace PixieTests
         /// Measure retrieval performance for Bool columns.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         public void RetrieveBoolPerf()
         {
             this.TimeColumnRetrieval("bool");
@@ -130,7 +130,7 @@ namespace PixieTests
         /// Measure retrieval performance for Byte columns.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         public void RetrieveBytePerf()
         {
             this.TimeColumnRetrieval("byte");
@@ -140,7 +140,7 @@ namespace PixieTests
         /// Measure retrieval performance for Int16 columns.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         public void RetrieveInt16Perf()
         {
             this.TimeColumnRetrieval("short");
@@ -150,7 +150,7 @@ namespace PixieTests
         /// Measure retrieval performance for UInt16 columns.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         public void RetrieveUInt16Perf()
         {
             this.TimeColumnRetrieval("ushort");
@@ -160,7 +160,7 @@ namespace PixieTests
         /// Measure retrieval performance for Int32 columns.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         public void RetrieveInt32Perf()
         {
             this.TimeColumnRetrieval("int");
@@ -170,7 +170,7 @@ namespace PixieTests
         /// Measure retrieval performance for UInt32 columns.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         public void RetrieveUInt32Perf()
         {
             this.TimeColumnRetrieval("uint");
@@ -180,7 +180,7 @@ namespace PixieTests
         /// Measure retrieval performance for Int64 columns.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         public void RetrieveInt64Perf()
         {
             this.TimeColumnRetrieval("long");
@@ -190,7 +190,7 @@ namespace PixieTests
         /// Measure retrieval performance for Single columns.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         public void RetrieveFloatPerf()
         {
             this.TimeColumnRetrieval("float");
@@ -200,7 +200,7 @@ namespace PixieTests
         /// Measure retrieval performance for Double columns.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         public void RetrieveDoublePerf()
         {
             this.TimeColumnRetrieval("double");
@@ -210,7 +210,7 @@ namespace PixieTests
         /// Measure retrieval performance for DateTime columns.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         public void RetrieveDateTimePerf()
         {
             this.TimeColumnRetrieval("datetime");
@@ -220,7 +220,7 @@ namespace PixieTests
         /// Measure retrieval performance for Guid columns.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         public void RetrieveGuidPerf()
         {
             this.TimeColumnRetrieval("guid");
@@ -230,7 +230,7 @@ namespace PixieTests
         /// Measure retrieval performance for Unicode text columns.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         public void RetrieveTextPerf()
         {
             this.TimeColumnRetrieval("text");
@@ -240,7 +240,7 @@ namespace PixieTests
         /// Measure retrieval performance for ASCII text columns.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         public void RetrieveAsciiTextPerf()
         {
             this.TimeColumnRetrieval("asciitext");
@@ -250,7 +250,7 @@ namespace PixieTests
         /// Measure retrieval performance for binary columns.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         public void RetrieveBinaryPerf()
         {
             this.TimeColumnRetrieval("binary");

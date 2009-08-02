@@ -89,7 +89,7 @@ namespace PixieTests
         /// insert a record.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void InsertRecord()
         {
             var value = Any.Int32;
@@ -105,7 +105,7 @@ namespace PixieTests
         /// Update a record.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void UpdateRecord()
         {
             Record r = this.table.NewRecord();
@@ -122,7 +122,7 @@ namespace PixieTests
         /// insert a record.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyColumnNamesAreCaseInsensitive()
         {
             var value = Any.Int32;
@@ -138,7 +138,7 @@ namespace PixieTests
         /// Commit an update.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void CommitTransaction()
         {
             Record r = this.table.NewRecord();
@@ -157,7 +157,7 @@ namespace PixieTests
         /// Rollback an update.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RollbackTransaction()
         {
             Record r = this.table.NewRecord();
@@ -176,7 +176,7 @@ namespace PixieTests
         /// Automatically rollback an update when the Transaction is disposed.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void AutomaticallyRollbackTransaction()
         {
             Record r = this.table.NewRecord();
@@ -196,7 +196,7 @@ namespace PixieTests
         /// Update a record and retrieve the new value before saving.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void UpdateRecordRetrieveCopy()
         {
             Record r = this.table.NewRecord();
@@ -211,7 +211,7 @@ namespace PixieTests
         /// Create a new record and try to delete it before inserting it.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void DeleteNonInsertedRecord()
         {
             Record r1 = this.table.NewRecord();
@@ -235,7 +235,7 @@ namespace PixieTests
         /// Insert a record and delete it.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void DeleteRecord()
         {
             Record r = this.table.NewRecord();
@@ -252,7 +252,7 @@ namespace PixieTests
         /// update and delete the record.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void DeleteRecordThatIsBeingUpdated()
         {
             Record r = this.table.NewRecord();
@@ -269,7 +269,7 @@ namespace PixieTests
         /// Insert several records and retrieve them all.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveAllRecords()
         {
             for (int i = 0; i < 10; ++i)
@@ -287,7 +287,7 @@ namespace PixieTests
         /// the previous transaction commits it.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void CommitOrphanedTransaction()
         {
             Transaction trx1 = this.connection.BeginTransaction();
@@ -309,7 +309,7 @@ namespace PixieTests
         /// the previous transaction commits it.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RollbackOrphanedTransaction()
         {
             Transaction trx1 = this.connection.BeginTransaction();
@@ -330,7 +330,7 @@ namespace PixieTests
         /// Try an invalid conversion.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentInvalidConversionException))]
         public void SetColumnThrowsInvalidConversionException()
         {
@@ -342,7 +342,7 @@ namespace PixieTests
         /// Try setting a column that doesn't exist
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentColumnNotFoundException))]
         public void SetUnknownColumnThrowsColumnNotFoundException()
         {
@@ -354,7 +354,7 @@ namespace PixieTests
         /// Try retrieving a column that doesn't exist
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentColumnNotFoundException))]
         public void RetrieveUnknownColumnThrowsColumnNotFoundException()
         {
@@ -366,7 +366,7 @@ namespace PixieTests
         /// Insert multiple records at the same time.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MultipleActiveInserts()
         {
             Record r1 = this.table.NewRecord();
@@ -388,7 +388,7 @@ namespace PixieTests
         /// Insert multiple records at the same time.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MultipleActiveReplaces()
         {
             var records = new Record[20];
@@ -415,7 +415,7 @@ namespace PixieTests
         /// Cancel an update and make sure the record isn't modified.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void CancelReplace()
         {
             Record r = this.table.NewRecord();
@@ -432,7 +432,7 @@ namespace PixieTests
         /// Cancel an insert and make sure the record can't be used
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void CancelInsert()
         {
             Record r = this.table.NewRecord();
@@ -452,7 +452,7 @@ namespace PixieTests
         /// Close a table and make sure it can't be used
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void DisposedTableThrowsExceptionOnUse()
         {
             Table t = this.connection.OpenTable(tablename);
@@ -471,7 +471,7 @@ namespace PixieTests
         /// Let an enumerator be finalized after the table is closed.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void FinalizeEnumerator()
         {
             Table table = this.connection.OpenTable(tablename);
@@ -495,7 +495,7 @@ namespace PixieTests
         /// Create and use multiple enumerators.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MultipleEnumerators()
         {
             foreach (int i in Enumerable.Range(0, 10))
@@ -524,7 +524,7 @@ namespace PixieTests
         /// Create a column with a default value.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void CreateColumnWithDefaultValue()
         {
             var columndef = new ColumnDefinition("defaultcolumn", ColumnType.Int32);
@@ -542,7 +542,7 @@ namespace PixieTests
         /// Rollback of a transaction closes tables opened in the transaction.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyRollbackClosesTable()
         {
             Transaction transactionToRollback = this.connection.BeginTransaction();
@@ -557,7 +557,7 @@ namespace PixieTests
         /// Rollback of a transaction closes tables opened in the transaction.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyRollbackOfOuterTransactionClosesTable()
         {
             Transaction transactionToRollback = this.connection.BeginTransaction();

@@ -23,7 +23,7 @@ namespace PixieTests
         /// Verify that the exception can be serialized and deserialized.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyEsentColumnNotFoundExceptionCanBeSerialized()
         {
             var originalException = new EsentColumnNotFoundException("table", "column", null);
@@ -35,7 +35,7 @@ namespace PixieTests
         /// Verify that the exception can be serialized and deserialized.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyEsentInvalidConversionExceptionCanBeSerialized()
         {
             var originalException = new EsentInvalidConversionException("table", "column", ColumnType.AsciiText, typeof(double), null);
@@ -47,7 +47,7 @@ namespace PixieTests
         /// Verify that the exception can be serialized and deserialized.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyEsentReadOnlyExceptionCanBeSerialized()
         {
             var originalException = new EsentReadOnlyException("something");
@@ -59,7 +59,7 @@ namespace PixieTests
         /// Verify that the exception can be serialized and deserialized.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyEsentSqlExecutionExceptionCanBeSerialized()
         {
             var originalException = new EsentSqlExecutionException("description");
@@ -71,7 +71,7 @@ namespace PixieTests
         /// Verify that the exception can be serialized and deserialized.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyEsentSqlParseExceptionCanBeSerialized()
         {
             var originalException = new EsentSqlParseException("description");

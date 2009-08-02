@@ -91,7 +91,7 @@ namespace InteropApiTests
             using (var handles = new GCHandleCollection())
             {
                 handles.Add(expected);
-                expected = null;
+                expected = null; // needed to allow GC to work
             }
 
             GC.Collect();

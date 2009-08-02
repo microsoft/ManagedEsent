@@ -175,7 +175,7 @@ namespace InteropApiTests
         /// Verify that the test class has setup the test fixture properly.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyFixtureSetup()
         {
             Assert.IsNotNull(this.table);
@@ -212,7 +212,7 @@ namespace InteropApiTests
         /// Check that retrieving the size of a null column returns 0
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveNullColumnSize()
         {
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
@@ -225,7 +225,7 @@ namespace InteropApiTests
         /// in the column.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveColumnSize()
         {
             JET_COLUMNID columnid = this.columnidDict["Byte"];
@@ -238,7 +238,7 @@ namespace InteropApiTests
         /// Retrieve a column that exceeds the cached buffer size used by RetrieveColumn
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveLargeColumn()
         {
             JET_COLUMNID columnid = this.columnidDict["Binary"];
@@ -257,7 +257,7 @@ namespace InteropApiTests
         /// Check that retrieving a column returns null
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveNullColumn()
         {
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
@@ -269,7 +269,7 @@ namespace InteropApiTests
         /// Retrieve a column as boolean.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveAsBoolean()
         {
             JET_COLUMNID columnid = this.columnidDict["Boolean"];
@@ -282,7 +282,7 @@ namespace InteropApiTests
         /// Retrieve a null column as boolean.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveNullAsBoolean()
         {
             this.NullColumnTest<bool>("Boolean", Api.RetrieveColumnAsBoolean);
@@ -292,7 +292,7 @@ namespace InteropApiTests
         /// Retrieve a column as a byte.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveAsByte()
         {
             JET_COLUMNID columnid = this.columnidDict["Byte"];
@@ -305,7 +305,7 @@ namespace InteropApiTests
         /// Retrieve a null column as byte.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveNullAsByte()
         {
             this.NullColumnTest<byte>("Byte", Api.RetrieveColumnAsByte);
@@ -315,7 +315,7 @@ namespace InteropApiTests
         /// Retrieve a column as a short.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveAsInt16()
         {
             JET_COLUMNID columnid = this.columnidDict["Int16"];
@@ -328,7 +328,7 @@ namespace InteropApiTests
         /// Retrieve a null column as a short.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveNullAsInt16()
         {
             this.NullColumnTest<short>("Int16", Api.RetrieveColumnAsInt16);
@@ -339,7 +339,7 @@ namespace InteropApiTests
         /// is too short.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentInvalidColumnException))]
         public void VerifyRetrieveAsInt16ThrowsExceptionWhenColumnIsTooShort()
         {
@@ -353,7 +353,7 @@ namespace InteropApiTests
         /// Retrieve a column as a ushort.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveAsUInt16()
         {
             JET_COLUMNID columnid = this.columnidDict["UInt16"];
@@ -366,7 +366,7 @@ namespace InteropApiTests
         /// Retrieve a null column as a ushort.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveNullAsUInt16()
         {
             this.NullColumnTest<ushort>("UInt16", Api.RetrieveColumnAsUInt16);
@@ -377,7 +377,7 @@ namespace InteropApiTests
         /// is too short.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentInvalidColumnException))]
         public void VerifyRetrieveAsUInt16ThrowsExceptionWhenColumnIsTooShort()
         {
@@ -391,7 +391,7 @@ namespace InteropApiTests
         /// Retrieve a column as an int.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveAsInt32()
         {
             JET_COLUMNID columnid = this.columnidDict["Int32"];
@@ -404,7 +404,7 @@ namespace InteropApiTests
         /// Retrieve a null column as an int.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveNullAsInt32()
         {
             this.NullColumnTest<int>("Int32", Api.RetrieveColumnAsInt32);
@@ -415,7 +415,7 @@ namespace InteropApiTests
         /// is too short.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentInvalidColumnException))]
         public void VerifyRetrieveAsInt32ThrowsExceptionWhenColumnIsTooShort()
         {
@@ -429,7 +429,7 @@ namespace InteropApiTests
         /// Retrieve a column as a uint.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveAsUInt32()
         {
             JET_COLUMNID columnid = this.columnidDict["UInt32"];
@@ -442,7 +442,7 @@ namespace InteropApiTests
         /// Retrieve a null column as a uint.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveNullAsUInt32()
         {
             this.NullColumnTest<uint>("UInt32", Api.RetrieveColumnAsUInt32);
@@ -453,7 +453,7 @@ namespace InteropApiTests
         /// is too short.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentInvalidColumnException))]
         public void VerifyRetrieveAsUInt32ThrowsExceptionWhenColumnIsTooShort()
         {
@@ -467,7 +467,7 @@ namespace InteropApiTests
         /// Retrieve a column as a long.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveAsInt64()
         {
             JET_COLUMNID columnid = this.columnidDict["Int64"];
@@ -480,7 +480,7 @@ namespace InteropApiTests
         /// Retrieve a null column as a long.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveNullAsInt64()
         {
             this.NullColumnTest<long>("Int64", Api.RetrieveColumnAsInt64);
@@ -491,7 +491,7 @@ namespace InteropApiTests
         /// is too short.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentInvalidColumnException))]
         public void VerifyRetrieveAsInt64ThrowsExceptionWhenColumnIsTooShort()
         {
@@ -505,7 +505,7 @@ namespace InteropApiTests
         /// Retrieve a column as a ulong.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveAsUInt64()
         {
             JET_COLUMNID columnid = this.columnidDict["UInt64"];
@@ -518,7 +518,7 @@ namespace InteropApiTests
         /// Retrieve a null column as a ulong.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveNullAsUInt64()
         {
             this.NullColumnTest<ulong>("UInt64", Api.RetrieveColumnAsUInt64);
@@ -529,7 +529,7 @@ namespace InteropApiTests
         /// is too short.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentInvalidColumnException))]
         public void VerifyRetrieveAsUInt64ThrowsExceptionWhenColumnIsTooShort()
         {
@@ -543,7 +543,7 @@ namespace InteropApiTests
         /// Retrieve a column as a float.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveAsFloat()
         {
             JET_COLUMNID columnid = this.columnidDict["Float"];
@@ -556,7 +556,7 @@ namespace InteropApiTests
         /// Retrieve a null column as a float.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveNullAsFloat()
         {
             this.NullColumnTest<float>("float", Api.RetrieveColumnAsFloat);
@@ -567,7 +567,7 @@ namespace InteropApiTests
         /// is too short.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentInvalidColumnException))]
         public void VerifyRetrieveAsFloatThrowsExceptionWhenColumnIsTooShort()
         {
@@ -581,7 +581,7 @@ namespace InteropApiTests
         /// Retrieve a column as a double.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveAsDouble()
         {
             JET_COLUMNID columnid = this.columnidDict["Double"];
@@ -594,7 +594,7 @@ namespace InteropApiTests
         /// Retrieve a null column as a double.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveNullAsDouble()
         {
             this.NullColumnTest<double>("double", Api.RetrieveColumnAsDouble);
@@ -605,7 +605,7 @@ namespace InteropApiTests
         /// is too short.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentInvalidColumnException))]
         public void VerifyRetrieveAsDoubleThrowsExceptionWhenColumnIsTooShort()
         {
@@ -619,7 +619,7 @@ namespace InteropApiTests
         /// Retrieve a column as a Guid.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveAsGuid()
         {
             JET_COLUMNID columnid = this.columnidDict["Guid"];
@@ -632,7 +632,7 @@ namespace InteropApiTests
         /// Retrieve a null column as a guid.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveNullAsGuid()
         {
             this.NullColumnTest<Guid>("Guid", Api.RetrieveColumnAsGuid);
@@ -643,7 +643,7 @@ namespace InteropApiTests
         /// is too short.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentInvalidColumnException))]
         public void VerifyRetrieveAsGuidThrowsExceptionWhenColumnIsTooShort()
         {
@@ -657,7 +657,7 @@ namespace InteropApiTests
         /// Retrieve a column as a DateTime.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveAsDateTime()
         {
             JET_COLUMNID columnid = this.columnidDict["DateTime"];
@@ -673,7 +673,7 @@ namespace InteropApiTests
         /// Retrieve a column as a DateTime when the value is invalid.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveAsDateTimeReturnsMinWhenValueIsTooSmall()
         {
             JET_COLUMNID columnid = this.columnidDict["DateTime"];
@@ -687,7 +687,7 @@ namespace InteropApiTests
         /// Retrieve a column as a DateTime when the value is invalid.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveAsDateTimeReturnsMaxWhenValueIsTooLarge()
         {
             JET_COLUMNID columnid = this.columnidDict["DateTime"];
@@ -701,7 +701,7 @@ namespace InteropApiTests
         /// Retrieve a null column as a DateTime.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveNullAsDateTime()
         {
             this.NullColumnTest<DateTime>("DateTime", Api.RetrieveColumnAsDateTime);
@@ -712,7 +712,7 @@ namespace InteropApiTests
         /// is too short.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentInvalidColumnException))]
         public void VerifyRetrieveAsDateTimeThrowsExceptionWhenColumnIsTooShort()
         {
@@ -726,7 +726,7 @@ namespace InteropApiTests
         /// Retrieve a column as ASCII
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveAsAscii()
         {
             JET_COLUMNID columnid = this.columnidDict["ASCII"];
@@ -739,7 +739,7 @@ namespace InteropApiTests
         /// Retrieve a null column as ASCII
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveNullAsAscii()
         {
             JET_COLUMNID columnid = this.columnidDict["ASCII"];
@@ -751,7 +751,7 @@ namespace InteropApiTests
         /// Retrieve a column as Unicode
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveAsUnicode()
         {
             JET_COLUMNID columnid = this.columnidDict["Unicode"];
@@ -764,7 +764,7 @@ namespace InteropApiTests
         /// Retrieve a null column as Unicode
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveNullAsUnicode()
         {
             JET_COLUMNID columnid = this.columnidDict["Unicode"];
@@ -776,7 +776,7 @@ namespace InteropApiTests
         /// Retrieve a column as a (unicode) string
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveAsString()
         {
             JET_COLUMNID columnid = this.columnidDict["Unicode"];
@@ -789,7 +789,7 @@ namespace InteropApiTests
         /// Retrieve a string that is too large for the cached retrieval buffer
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveLargeString()
         {
             JET_COLUMNID columnid = this.columnidDict["Unicode"];
@@ -803,7 +803,7 @@ namespace InteropApiTests
         /// it is handled differently from a null column.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void RetrieveEmptyString()
         {
             JET_COLUMNID columnid = this.columnidDict["Unicode"];
@@ -825,7 +825,7 @@ namespace InteropApiTests
         /// Test setting a unicode column from a string.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetUnicodeString()
         {
             JET_COLUMNID columnid = this.columnidDict["unicode"];
@@ -845,7 +845,7 @@ namespace InteropApiTests
         /// Test setting an ASCII column from a string.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetASCIIString()
         {
             JET_COLUMNID columnid = this.columnidDict["ascii"];
@@ -865,7 +865,7 @@ namespace InteropApiTests
         /// Using an encoding which is neither ASCII nor Unicode should thrown an exception.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifySetStringWithInvalidEncodingThrowsException()
         {
             JET_COLUMNID columnid = this.columnidDict["unicode"];
@@ -887,7 +887,7 @@ namespace InteropApiTests
         /// Test setting a column from an empty string.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetEmptyString()
         {
             JET_COLUMNID columnid = this.columnidDict["unicode"];
@@ -907,7 +907,7 @@ namespace InteropApiTests
         /// Test setting a column from a null string.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetNullString()
         {
             JET_COLUMNID columnid = this.columnidDict["unicode"];
@@ -927,7 +927,7 @@ namespace InteropApiTests
         /// Test setting a column from a boolean.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetBooleanTrue()
         {
             JET_COLUMNID columnid = this.columnidDict["boolean"];
@@ -947,7 +947,7 @@ namespace InteropApiTests
         /// Test setting a column from a boolean.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetBooleanFalse()
         {
             JET_COLUMNID columnid = this.columnidDict["boolean"];
@@ -967,7 +967,7 @@ namespace InteropApiTests
         /// Test setting a column from a boolean.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetByte()
         {
             JET_COLUMNID columnid = this.columnidDict["byte"];
@@ -987,7 +987,7 @@ namespace InteropApiTests
         /// Test setting a column from a short.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetInt16()
         {
             JET_COLUMNID columnid = this.columnidDict["int16"];
@@ -1007,7 +1007,7 @@ namespace InteropApiTests
         /// Test setting a column from an int.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetInt32()
         {
             JET_COLUMNID columnid = this.columnidDict["int32"];
@@ -1027,7 +1027,7 @@ namespace InteropApiTests
         /// Test setting a column from a long.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetInt64()
         {
             JET_COLUMNID columnid = this.columnidDict["int64"];
@@ -1047,7 +1047,7 @@ namespace InteropApiTests
         /// Test setting a column from a ushort.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetUInt16()
         {
             JET_COLUMNID columnid = this.columnidDict["uint16"];
@@ -1067,7 +1067,7 @@ namespace InteropApiTests
         /// Test setting a column from a uint.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetUInt32()
         {
             JET_COLUMNID columnid = this.columnidDict["uint32"];
@@ -1087,7 +1087,7 @@ namespace InteropApiTests
         /// Test setting a column from a ulong.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetUInt64()
         {
             JET_COLUMNID columnid = this.columnidDict["uint64"];
@@ -1107,7 +1107,7 @@ namespace InteropApiTests
         /// Test setting a column from a float.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetFloat()
         {
             JET_COLUMNID columnid = this.columnidDict["float"];
@@ -1127,7 +1127,7 @@ namespace InteropApiTests
         /// Test setting a column from a double.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetDouble()
         {
             JET_COLUMNID columnid = this.columnidDict["double"];
@@ -1147,7 +1147,7 @@ namespace InteropApiTests
         /// Test setting a column from a guid.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetGuid()
         {
             JET_COLUMNID columnid = this.columnidDict["guid"];
@@ -1167,7 +1167,7 @@ namespace InteropApiTests
         /// Test setting a column from a DateTime.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetDateTime()
         {
             JET_COLUMNID columnid = this.columnidDict["DateTime"];
@@ -1187,7 +1187,7 @@ namespace InteropApiTests
         /// Test setting a column from an array of bytes.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetBytes()
         {
             JET_COLUMNID columnid = this.columnidDict["binary"];
@@ -1207,7 +1207,7 @@ namespace InteropApiTests
         /// Test setting a binary column from a zero-length array.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetZeroLengthBytes()
         {
             JET_COLUMNID columnid = this.columnidDict["binary"];
@@ -1225,7 +1225,7 @@ namespace InteropApiTests
         /// Test setting a binary column from a null object.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetNullBytes()
         {
             JET_COLUMNID columnid = this.columnidDict["binary"];
@@ -1247,7 +1247,7 @@ namespace InteropApiTests
         /// Test make a key from true.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MakeKeyBooleanTrue()
         {
             this.CreateIndexOnColumn("boolean");
@@ -1258,7 +1258,7 @@ namespace InteropApiTests
         /// Test make a key from a boolean.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MakeKeyBooleanFalse()
         {
             this.CreateIndexOnColumn("boolean");
@@ -1269,7 +1269,7 @@ namespace InteropApiTests
         /// Test make a key from a byte.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MakeKeyByte()
         {
             this.CreateIndexOnColumn("byte");
@@ -1280,7 +1280,7 @@ namespace InteropApiTests
         /// Test make a key from a short.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MakeKeyInt16()
         {
             this.CreateIndexOnColumn("int16");
@@ -1291,7 +1291,7 @@ namespace InteropApiTests
         /// Test make a key from a ushort.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MakeKeyUInt16()
         {
             this.CreateIndexOnColumn("uint16");
@@ -1302,7 +1302,7 @@ namespace InteropApiTests
         /// Test make a key from an int.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MakeKeyInt32()
         {
             this.CreateIndexOnColumn("int32");
@@ -1313,7 +1313,7 @@ namespace InteropApiTests
         /// Test make a key from a uint.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MakeKeyUInt32()
         {
             this.CreateIndexOnColumn("uint32");
@@ -1324,7 +1324,7 @@ namespace InteropApiTests
         /// Test make a key from a long.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MakeKeyInt64()
         {
             this.CreateIndexOnColumn("int64");
@@ -1335,7 +1335,7 @@ namespace InteropApiTests
         /// Test make a key from a ulong.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MakeKeyUInt64()
         {
             this.CreateIndexOnColumn("uint64");
@@ -1346,7 +1346,7 @@ namespace InteropApiTests
         /// Test make a key from a float.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MakeKeyFloat()
         {
             this.CreateIndexOnColumn("float");
@@ -1357,7 +1357,7 @@ namespace InteropApiTests
         /// Test make a key from a double.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MakeKeyDouble()
         {
             this.CreateIndexOnColumn("double");
@@ -1368,7 +1368,7 @@ namespace InteropApiTests
         /// Test make a key from a guid.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MakeKeyGuid()
         {
             this.CreateIndexOnColumn("guid");
@@ -1379,7 +1379,7 @@ namespace InteropApiTests
         /// Test make a key from a DateTime.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MakeKeyDateTime()
         {
             this.CreateIndexOnColumn("DateTime");
@@ -1390,7 +1390,7 @@ namespace InteropApiTests
         /// Test make a key from a string.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MakeKeyUnicode()
         {
             this.CreateIndexOnColumn("unicode");
@@ -1401,7 +1401,7 @@ namespace InteropApiTests
         /// Test make a key from a string.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MakeKeyASCII()
         {
             this.CreateIndexOnColumn("ascii");
@@ -1412,7 +1412,7 @@ namespace InteropApiTests
         /// Making a key with an invalid encoding throws an exception.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyMakeKeyWithInvalidEncodingThrowsException()
         {
             this.CreateIndexOnColumn("unicode");
@@ -1431,7 +1431,7 @@ namespace InteropApiTests
         /// Test make a key from an empty string.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MakeKeyEmptyString()
         {
             this.CreateIndexOnColumn("unicode");
@@ -1442,7 +1442,7 @@ namespace InteropApiTests
         /// Test make a key from a string.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MakeKeyNullString()
         {
             this.CreateIndexOnColumn("unicode");
@@ -1453,7 +1453,7 @@ namespace InteropApiTests
         /// Test make a key from an array of bytes.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MakeKeyBinary()
         {
             this.CreateIndexOnColumn("binary");
@@ -1464,7 +1464,7 @@ namespace InteropApiTests
         /// Test make a key from a null array of bytes.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MakeKeyNullBinary()
         {
             this.CreateIndexOnColumn("binary");
@@ -1479,7 +1479,7 @@ namespace InteropApiTests
         /// Test the helper method that gets table names.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void GetTableNames()
         {
             string actual = Api.GetTableNames(this.sesid, this.dbid).Single();
@@ -1490,7 +1490,7 @@ namespace InteropApiTests
         /// Search the column information structures with Linq.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SearchColumnInfos()
         {
             IEnumerable<string> columnnames = from c in Api.GetTableColumns(this.sesid, this.tableid)
@@ -1503,7 +1503,7 @@ namespace InteropApiTests
         /// Iterate through the column information structures.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void GetTableColumnsFromTableidTest()
         {
             foreach (ColumnInfo col in Api.GetTableColumns(this.sesid, this.tableid))
@@ -1517,7 +1517,7 @@ namespace InteropApiTests
         /// the dbid and tablename to specify the table.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void GetTableColumnsByTableNameTest()
         {
             foreach (ColumnInfo col in Api.GetTableColumns(this.sesid, this.dbid, this.table))
@@ -1530,7 +1530,7 @@ namespace InteropApiTests
         /// Get index information when there are no indexes on the table.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void GetIndexInformationNoIndexes()
         {
             IEnumerable<IndexInfo> indexes = Api.GetTableIndexes(this.sesid, this.tableid);
@@ -1541,7 +1541,7 @@ namespace InteropApiTests
         /// Get index information for one index
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void GetIndexInformationOneIndex()
         {
             string indexname = "myindex";
@@ -1570,7 +1570,7 @@ namespace InteropApiTests
         /// Get index information for one index
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void GetIndexInformationByTableNameOneIndex()
         {
             string indexname = "myindex";
@@ -1599,7 +1599,7 @@ namespace InteropApiTests
         /// Get index information for one index
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void GetIndexInformationOneIndexWithCompareOptions()
         {
             const string Indexname = "myindex";

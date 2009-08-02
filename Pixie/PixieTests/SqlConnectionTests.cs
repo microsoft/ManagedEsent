@@ -50,7 +50,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(EsentSqlParseException))]
         public void BadSqlThrowsParseException()
         {
@@ -58,7 +58,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         [ExpectedException(typeof(EsentSqlExecutionException))]
         public void BeginTransactionWithoutDatabaseThrowsException()
         {
@@ -66,7 +66,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void DetachDatabaseWithoutDatabaseDoesNotThrowException()
         {
             this.sql.Execute("DETACH DATABASE");

@@ -104,7 +104,7 @@ namespace PixieTests
         /// Set a boolean column.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetBoolColumnToTrue()
         {
             Record r = this.table.NewRecord();
@@ -118,7 +118,7 @@ namespace PixieTests
         /// Set a boolean column to false.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetBoolColumnToFalse()
         {
             Record r = this.table.NewRecord();
@@ -132,7 +132,7 @@ namespace PixieTests
         /// Set a boolean column from a string.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetBooleanColumnFromString()
         {
             Record r = this.table.NewRecord();
@@ -146,7 +146,7 @@ namespace PixieTests
         /// Set a boolean column from a string.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetBooleanColumnFromInt()
         {
             Record r = this.table.NewRecord();
@@ -164,7 +164,7 @@ namespace PixieTests
         /// Set a byte column to the maximum value.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetByteColumnToMaxValue()
         {
             Record r = this.table.NewRecord();
@@ -178,7 +178,7 @@ namespace PixieTests
         /// Set a byte column to the minimum value.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetByteColumnToMinValue()
         {
             Record r = this.table.NewRecord();
@@ -192,7 +192,7 @@ namespace PixieTests
         /// Set a byte column from a string.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetByteColumnFromString()
         {
             Record r = this.table.NewRecord();
@@ -206,7 +206,7 @@ namespace PixieTests
         /// Set a byte column from an int.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetByteColumnFromInt()
         {
             Record r = this.table.NewRecord();
@@ -224,7 +224,7 @@ namespace PixieTests
         /// Set a short column to the maximum value.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetShortColumnToMaxValue()
         {
             Record r = this.table.NewRecord();
@@ -238,7 +238,7 @@ namespace PixieTests
         /// Set a short column to the minimum value.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetShortColumnToMinValue()
         {
             Record r = this.table.NewRecord();
@@ -252,7 +252,7 @@ namespace PixieTests
         /// Set a short column from a string.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetShortColumnFromString()
         {
             Record r = this.table.NewRecord();
@@ -270,7 +270,7 @@ namespace PixieTests
         /// Set a ushort column to the maximum value.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetUshortColumnToMaxValue()
         {
             Record r = this.table.NewRecord();
@@ -284,7 +284,7 @@ namespace PixieTests
         /// Set a ushort column to the minimum value.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetUshortColumnToMinValue()
         {
             Record r = this.table.NewRecord();
@@ -298,7 +298,7 @@ namespace PixieTests
         /// Set a ushort column from a string.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetUshortColumnFromString()
         {
             Record r = this.table.NewRecord();
@@ -316,7 +316,7 @@ namespace PixieTests
         /// Set an int column to the maximum value.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetIntColumnToMaxValue()
         {
             Record r = this.table.NewRecord();
@@ -330,7 +330,7 @@ namespace PixieTests
         /// Set an int column to the minimum value.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetIntColumnToMinValue()
         {
             Record r = this.table.NewRecord();
@@ -344,7 +344,7 @@ namespace PixieTests
         /// Set an int column from a string.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetIntColumnFromString()
         {
             Record r = this.table.NewRecord();
@@ -362,7 +362,7 @@ namespace PixieTests
         /// Set a uint column to the maximum value.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetUintColumnToMaxValue()
         {
             Record r = this.table.NewRecord();
@@ -376,7 +376,7 @@ namespace PixieTests
         /// Set a uint column to the minimum value.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetUintColumnToMinValue()
         {
             Record r = this.table.NewRecord();
@@ -390,7 +390,7 @@ namespace PixieTests
         /// Set a uint column from a string.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetUintColumnFromString()
         {
             Record r = this.table.NewRecord();
@@ -408,7 +408,7 @@ namespace PixieTests
         /// Set a long column to the maximum value.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetLongColumnToMaxValue()
         {
             Record r = this.table.NewRecord();
@@ -422,7 +422,7 @@ namespace PixieTests
         /// Set a long column to the minimum value.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetLongColumnToMinValue()
         {
             Record r = this.table.NewRecord();
@@ -436,7 +436,7 @@ namespace PixieTests
         /// Set a long column from a string.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetLongColumnFromString()
         {
             Record r = this.table.NewRecord();
@@ -454,7 +454,7 @@ namespace PixieTests
         /// Set a float column to the maximum value.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetFloatColumnToMaxValue()
         {
             Record r = this.table.NewRecord();
@@ -468,7 +468,7 @@ namespace PixieTests
         /// Set a float column to the minimum value.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetFloatColumnToMinValue()
         {
             Record r = this.table.NewRecord();
@@ -482,7 +482,7 @@ namespace PixieTests
         /// Set a float column from a string.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetFloatColumnFromString()
         {
             float expected = 123.456F;
@@ -501,7 +501,7 @@ namespace PixieTests
         /// Set a double column to the maximum value.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetDoubleColumnToMaxValue()
         {
             Record r = this.table.NewRecord();
@@ -515,7 +515,7 @@ namespace PixieTests
         /// Set a double column to the minimum value.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetDoubleColumnToMinValue()
         {
             Record r = this.table.NewRecord();
@@ -529,7 +529,7 @@ namespace PixieTests
         /// Set a double column from a string.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetDoubleColumnFromString()
         {
             Record r = this.table.NewRecord();
@@ -547,7 +547,7 @@ namespace PixieTests
         /// Set a date time column to the current time.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetDateTimeColumnToNow()
         {
             DateTime expected = DateTime.Now;
@@ -570,7 +570,7 @@ namespace PixieTests
         /// Set a GUID column to a guid.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetGuidColumn()
         {
             Guid expected = Any.Guid;
@@ -585,7 +585,7 @@ namespace PixieTests
         /// Set guid column to a string.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetGuidColumnFromString()
         {
             Guid expected = Any.Guid;
@@ -600,7 +600,7 @@ namespace PixieTests
         /// Set guid column to a byte array.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetGuidColumnFromBytes()
         {
             Guid expected = Any.Guid;
@@ -619,7 +619,7 @@ namespace PixieTests
         /// Set a text column to an empty String
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetTextColumnToEmptyString()
         {
             Record r = this.table.NewRecord();
@@ -633,7 +633,7 @@ namespace PixieTests
         /// Set a text column to a string
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetTextColumnToString()
         {
             string expected = Any.String;
@@ -650,7 +650,7 @@ namespace PixieTests
         /// This tests that .ToString() is called.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetTextColumnToInt()
         {
             Record r = this.table.NewRecord();
@@ -668,7 +668,7 @@ namespace PixieTests
         /// Set an ASCII text column to an empty String
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetAsciiTextColumnToEmptyString()
         {
             Record r = this.table.NewRecord();
@@ -682,7 +682,7 @@ namespace PixieTests
         /// Set an ASCII text column to a string
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetAsciiTextColumnToString()
         {
             string expected = Any.String;
@@ -699,7 +699,7 @@ namespace PixieTests
         /// This tests that .ToString() is called.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetAsciiTextColumnToInt()
         {
             Record r = this.table.NewRecord();
@@ -717,7 +717,7 @@ namespace PixieTests
         /// Set a binary column to a zero-length array 
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetBinaryColumnToZeroLengthArray()
         {
             Record r = this.table.NewRecord();
@@ -731,7 +731,7 @@ namespace PixieTests
         /// Set a binary column to some data
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetBinaryColumn()
         {
             byte[] expected = Any.Bytes;
@@ -749,7 +749,7 @@ namespace PixieTests
         /// Sets every column.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetAllColumns()
         {
             bool boolean    = Any.Boolean;
@@ -804,7 +804,7 @@ namespace PixieTests
         /// Sets every column inside of an update
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void SetAllColumnsInUpdate()
         {
             bool boolean = Any.Boolean;
@@ -861,7 +861,7 @@ namespace PixieTests
         /// Test setting and retrieving null values in the columns.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestNullColumns()
         {
             // Ideally these would be separate tests, but that is a lot

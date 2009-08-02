@@ -98,7 +98,7 @@ namespace InteropApiTests
         /// Verify that the test class has setup the test fixture properly.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyFixtureSetup()
         {
             Assert.IsNotNull(this.tableName);
@@ -112,7 +112,7 @@ namespace InteropApiTests
         /// Start an update and insert the record.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestSaveUpdate()
         {
             Assert.IsFalse(Api.TryMoveFirst(this.sesid, this.tableid));
@@ -129,7 +129,7 @@ namespace InteropApiTests
         /// Start an update, insert the record and goto the bookmark.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestSaveUpdateGetsBookmark()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -146,7 +146,7 @@ namespace InteropApiTests
         /// Start an update and cancel the insert.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestCancelUpdate()
         {
             Assert.IsFalse(Api.TryMoveFirst(this.sesid, this.tableid));
@@ -163,7 +163,7 @@ namespace InteropApiTests
         /// Start an update and cancel the insert.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestAutoCancelUpdate()
         {
             Assert.IsFalse(Api.TryMoveFirst(this.sesid, this.tableid));
@@ -179,7 +179,7 @@ namespace InteropApiTests
         /// Create an Update with JET_prep.Cancel, expecting an exception
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ArgumentException))]
         public void TestPrepCancelThrowsException()
         {
@@ -190,7 +190,7 @@ namespace InteropApiTests
         /// Call Cancel on a disposed object, expecting an exception.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void TestCancelThrowsExceptionWhenUpdateIsDisposed()
         {
@@ -203,7 +203,7 @@ namespace InteropApiTests
         /// Call Save on a disposed object, expecting an exception.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void TestSaveThrowsExceptionWhenUpdateIsDisposed()
         {
@@ -216,7 +216,7 @@ namespace InteropApiTests
         /// Call Save on a cancelled update, expecting an exception
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(InvalidOperationException))]
         public void TestSaveThrowsExceptionWhenUpdateIsCancelled()
         {
@@ -229,7 +229,7 @@ namespace InteropApiTests
         /// Call Cancel on a cancelled update, expecting an exception
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(InvalidOperationException))]
         public void TestCancelThrowsExceptionWhenUpdateIsCancelled()
         {

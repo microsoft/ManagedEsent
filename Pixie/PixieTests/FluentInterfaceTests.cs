@@ -39,7 +39,7 @@ namespace PixieTests
         /// Test the normal interface
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestNonFluentUpdateInterface()
         {
             using (Connection connection = Esent.CreateDatabase(this.database))
@@ -73,7 +73,7 @@ namespace PixieTests
         /// Test the fluent interface using method chaining.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestFluentUpdateInterface()
         {
             using (Connection connection = Esent.CreateDatabase(this.database))
@@ -107,7 +107,7 @@ namespace PixieTests
         /// Test the fluent interface using method chaining.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestFluentUpdateInterfaceWithLazyTransaction()
         {
             using (Connection connection = Esent.CreateDatabase(this.database))
@@ -141,7 +141,7 @@ namespace PixieTests
         /// Test the fluent interface using method chaining.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestFluentUpdateInterfaceWithRollback()
         {
             using (Connection connection = Esent.CreateDatabase(this.database))

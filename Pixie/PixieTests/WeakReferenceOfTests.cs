@@ -14,7 +14,7 @@ namespace PixieTests
     public class WeakReferenceOfTests
     {
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyIdReturnsObjectId()
         {
             var obj = new ManagedDisposableObject();
@@ -23,7 +23,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyIdReturnsObjectIdWhenObjectIsFinalized()
         {
             var obj = new ManagedDisposableObject();
@@ -36,7 +36,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyIsAliveReturnsTrueWhenObjectIsAlive()
         {
             var obj = new ManagedDisposableObject();
@@ -45,7 +45,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyIsAliveReturnsFalseWhenObjectIsGarbageCollected()
         {
             var weakref = new WeakReferenceOf<ManagedDisposableObject>(new ManagedDisposableObject());
@@ -55,7 +55,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyTargetReturnsObjectWhenObjectIsAlive()
         {
             var obj = new ManagedDisposableObject();
@@ -64,7 +64,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyTargetReturnsNullWhenObjectIsGarbageCollected()
         {
             var weakref = new WeakReferenceOf<ManagedDisposableObject>(new ManagedDisposableObject());

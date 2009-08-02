@@ -89,7 +89,7 @@ namespace InteropApiTests
         /// Verify that the test class has setup the test fixture properly.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyFixtureSetup()
         {
             Assert.IsNotNull(this.tableName);
@@ -103,7 +103,7 @@ namespace InteropApiTests
         /// Creating a table object should open the table.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestTableCreateOpensTable()
         {
             using (var table = new Table(this.sesid, this.dbid, this.tableName, OpenTableGrbit.None))
@@ -116,7 +116,7 @@ namespace InteropApiTests
         /// Creating a table object should set the name.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestTableCreateSetsName()
         {
             using (var table = new Table(this.sesid, this.dbid, this.tableName, OpenTableGrbit.None))
@@ -129,7 +129,7 @@ namespace InteropApiTests
         /// A Table object can be implicitly converted to a JET_TABLEID
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestTableCanConvertToJetTableid()
         {
             using (var table = new Table(this.sesid, this.dbid, this.tableName, OpenTableGrbit.None))
@@ -143,7 +143,7 @@ namespace InteropApiTests
         /// Allocate a table and close it.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestTableCloseZeroesJetTableid()
         {
             using (var table = new Table(this.sesid, this.dbid, this.tableName, OpenTableGrbit.None))
@@ -157,7 +157,7 @@ namespace InteropApiTests
         /// Allocate a table and close it.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestTableCloseZeroesName()
         {
             using (var table = new Table(this.sesid, this.dbid, this.tableName, OpenTableGrbit.None))
@@ -171,7 +171,7 @@ namespace InteropApiTests
         /// Try to close a disposed table, expecting an exception.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void TestCloseThrowsExceptionIfTableIsDisposed()
         {
@@ -185,7 +185,7 @@ namespace InteropApiTests
         /// expecting an exception.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void TestJetTableidThrowsExceptionIfTableIsDisposed()
         {
@@ -199,7 +199,7 @@ namespace InteropApiTests
         /// expecting an exception.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void TestNamePropertyThrowsExceptionIfTableIsDisposed()
         {

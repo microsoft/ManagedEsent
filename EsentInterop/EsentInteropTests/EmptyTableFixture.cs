@@ -92,7 +92,7 @@ namespace InteropApiTests
         /// Verify that the test class has setup the test fixture properly.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyEmptyTableFixtureSetup()
         {
             Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
@@ -107,7 +107,7 @@ namespace InteropApiTests
         /// empty table.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TryMoveFirstOnEmptyTableReturnsFalse()
         {
             Assert.IsFalse(Api.TryMoveFirst(this.sesid, this.tableid));
@@ -118,7 +118,7 @@ namespace InteropApiTests
         /// empty table.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TryMoveLastOnEmptyTableReturnsFalse()
         {
             Assert.IsFalse(Api.TryMoveLast(this.sesid, this.tableid));
@@ -129,7 +129,7 @@ namespace InteropApiTests
         /// empty table.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TryMoveNextOnEmptyTableReturnsFalse()
         {
             Api.MoveBeforeFirst(this.sesid, this.tableid);
@@ -141,7 +141,7 @@ namespace InteropApiTests
         /// empty table.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TryMovePreviousOnEmptyTableReturnsFalse()
         {
             Api.MoveAfterLast(this.sesid, this.tableid);
@@ -153,7 +153,7 @@ namespace InteropApiTests
         /// when the table is empty.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MoveBeforeFirstOnEmptyTableDoesNotThrowException()
         {
             Api.MoveBeforeFirst(this.sesid, this.tableid);
@@ -164,7 +164,7 @@ namespace InteropApiTests
         /// when the table is empty.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void MoveAfterLastOnEmptyTableDoesNotThrowException()
         {
             Api.MoveAfterLast(this.sesid, this.tableid);
@@ -175,7 +175,7 @@ namespace InteropApiTests
         /// returns an unexpected error;
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [ExpectedException(typeof(EsentErrorException))]
         public void TrySetIndexRangeThrowsExceptionOnError()
         {

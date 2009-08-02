@@ -105,7 +105,7 @@ namespace InteropApiTests
         /// Create a database with an ASCII path.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void CreateDatabaseWithAsciiPath()
         {
             using (var instance = new Instance("ascii"))
@@ -127,7 +127,7 @@ namespace InteropApiTests
         /// Detach a database with an ASCII path.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void DetachDatabaseWithAsciiPath()
         {
             using (var instance = new Instance("ascii"))
@@ -150,7 +150,7 @@ namespace InteropApiTests
         /// Attach a database with an ASCII path.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void AttachDatabaseWithAsciiPath()
         {
             using (var instance = new Instance("ascii"))
@@ -175,7 +175,7 @@ namespace InteropApiTests
         /// Open a database with an ASCII path.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void OpenDatabaseWithAsciiPath()
         {
             using (var instance = new Instance("ascii"))

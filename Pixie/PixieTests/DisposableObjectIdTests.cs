@@ -18,7 +18,7 @@ namespace PixieTests
         #region CompareTo
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyDisposableObjectIdCompareToReturnsZeroForEqualIds()
         {
             DisposableObjectId id1 = DisposableObjectManager.GetNewDisposableObjectId();
@@ -26,7 +26,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyDisposableObjectIdCompareToReturnsOneForLessThan()
         {
             var id1 = new DisposableObjectId() { Value = 1 };
@@ -35,7 +35,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyDisposableObjectIdCompareToReturnsMinusOneForGreaterThan()
         {
             var id1 = new DisposableObjectId() { Value = 5 };
@@ -48,7 +48,7 @@ namespace PixieTests
         #region operator<
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyDisposableObjectIdLessThanReturnsTrueWhenLessThan()
         {
             var id1 = new DisposableObjectId() { Value = 2 };
@@ -57,7 +57,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyDisposableObjectIdLessThanReturnsFalseWhenEqual()
         {
             var id1 = new DisposableObjectId() { Value = 2 };
@@ -66,7 +66,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyDisposableObjectIdLessThanReturnsFalseWhenGreaterThan()
         {
             var id1 = new DisposableObjectId() { Value = 3 };
@@ -79,7 +79,7 @@ namespace PixieTests
         #region operator>
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyDisposableObjectIdGreaterThanReturnsFalseWhenLessThan()
         {
             var id1 = new DisposableObjectId() { Value = 2 };
@@ -88,7 +88,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyDisposableObjectIdGreaterThanReturnsFalseWhenEqual()
         {
             var id1 = new DisposableObjectId() { Value = 2 };
@@ -97,7 +97,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyDisposableObjectIdGreaterThanReturnsTrueWhenGreaterThan()
         {
             var id1 = new DisposableObjectId() { Value = 3 };

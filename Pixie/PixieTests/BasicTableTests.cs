@@ -40,7 +40,7 @@ namespace PixieTests
         /// Connection.InTransaction should return false when not in a transaction.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void InTransactionIsFalseWhenNotInTransaction()
         {
             using (var connection = Esent.CreateDatabase(this.database) as ConnectionBase)
@@ -53,7 +53,7 @@ namespace PixieTests
         /// Connection.InTransaction should return false when a transaction is committed.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void InTransactionIsFalseWhenTransactionIsCommitted()
         {
             using (var connection = Esent.CreateDatabase(this.database) as ConnectionBase)
@@ -68,7 +68,7 @@ namespace PixieTests
         /// Connection.InTransaction should return false when a transaction is rolled back.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void InTransactionIsFalseWhenTransactionIsRolledBack()
         {
             using (var connection = Esent.CreateDatabase(this.database) as ConnectionBase)
@@ -83,7 +83,7 @@ namespace PixieTests
         /// Connection.InTransaction should return true when in a transaction.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void InTransactionIsTrueWhenInTransaction()
         {
             using (var connection = Esent.CreateDatabase(this.database) as ConnectionBase)
@@ -97,7 +97,7 @@ namespace PixieTests
         /// Starting two transactions should give two different objects.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void VerifyBeginTransactionTwiceReturnsDifferentTransactions()
         {
             using (Connection connection = Esent.CreateDatabase(this.database))
@@ -112,7 +112,7 @@ namespace PixieTests
         /// Inserting a record when not in a transaction should generate an exception.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void InsertRecordWithoutTransaction()
         {
             using (Connection connection = Esent.CreateDatabase(this.database))
@@ -133,7 +133,7 @@ namespace PixieTests
         /// Replacing a record when not in a transaction should generate an exception.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void ReplaceRecordWithoutTransaction()
         {
             using (Connection connection = Esent.CreateDatabase(this.database))
@@ -162,7 +162,7 @@ namespace PixieTests
         /// Create a second connection.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void CreateTwoConnections()
         {
             using (Connection connection = Esent.CreateDatabase(this.database))
@@ -190,7 +190,7 @@ namespace PixieTests
         /// Creating a database that already exists should generate an exception.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void CreateDatabaseThrowsExceptionWhenDatabaseExists()
         {
             using (Connection connection = Esent.CreateDatabase(this.database))
@@ -211,7 +211,7 @@ namespace PixieTests
         /// Overwrite a database that already exists.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void OverwriteDatabase()
         {
             using (Connection connection = Esent.CreateDatabase(this.database))

@@ -16,7 +16,7 @@ namespace PixieTests
     public class DefinedAsTests
     {
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyBoolColumnCreatesBoolColumn()
         {
             ColumnDefinition columndef = DefinedAs.BoolColumn("bool");
@@ -25,7 +25,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyByteColumnCreatesByteColumn()
         {
             ColumnDefinition columndef = DefinedAs.ByteColumn("Byte");
@@ -34,7 +34,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyShortColumnCreatesShortColumn()
         {
             ColumnDefinition columndef = DefinedAs.Int16Column("Short");
@@ -43,7 +43,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyUShortColumnCreatesUShortColumn()
         {
             ColumnDefinition columndef = DefinedAs.UInt16Column("UShort");
@@ -52,7 +52,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyIntColumnCreatesIntColumn()
         {
             ColumnDefinition columndef = DefinedAs.Int32Column("int");
@@ -61,7 +61,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyUIntColumnCreatesUIntColumn()
         {
             ColumnDefinition columndef = DefinedAs.UInt32Column("UInt");
@@ -70,7 +70,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyLongColumnCreatesLongColumn()
         {
             ColumnDefinition columndef = DefinedAs.Int64Column("Long");
@@ -79,7 +79,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyFloatColumnCreatesFloatColumn()
         {
             ColumnDefinition columndef = DefinedAs.FloatColumn("Float");
@@ -88,7 +88,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyDoubleColumnCreatesDoubleColumn()
         {
             ColumnDefinition columndef = DefinedAs.DoubleColumn("Double");
@@ -97,7 +97,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyDateTimeColumnCreatesDateTimeColumn()
         {
             ColumnDefinition columndef = DefinedAs.DateTimeColumn("DateTime");
@@ -106,7 +106,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyGuidColumnCreatesGuidColumn()
         {
             ColumnDefinition columndef = DefinedAs.GuidColumn("Guid");
@@ -115,7 +115,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyBinaryColumnCreatesBinaryColumn()
         {
             ColumnDefinition columndef = DefinedAs.BinaryColumn("Binary");
@@ -124,7 +124,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyTextColumnCreatesTextColumn()
         {
             ColumnDefinition columndef = DefinedAs.TextColumn("text");
@@ -133,7 +133,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyAsciiTextColumnCreatesAsciiTextColumn()
         {
             ColumnDefinition columndef = DefinedAs.AsciiTextColumn("asciitext");
@@ -142,7 +142,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyDefinedAsSetsDefaultOptions()
         {
             ColumnDefinition columndef = DefinedAs.Int32Column("sample");
@@ -153,7 +153,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyAsAutoincrementSetsAutoincrement()
         {
             ColumnDefinition columndef = DefinedAs.Int32Column("col").AsAutoincrement();
@@ -161,7 +161,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyWithMaxSizeSetsMaxLength()
         {
             ColumnDefinition columndef = DefinedAs.Int32Column("col").WithMaxSize(100);
@@ -169,7 +169,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyWithDefaultValueSetsDefaultValue()
         {
             ColumnDefinition columndef = DefinedAs.Int32Column("col").WithDefaultValue(56);
@@ -177,7 +177,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyMustBeNonNullSetsIsNotNull()
         {
             ColumnDefinition columndef = DefinedAs.Int32Column("col").MustBeNonNull();
@@ -185,7 +185,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyAsVersionSetsVersion()
         {
             ColumnDefinition columndef = DefinedAs.Int32Column("col").AsVersion();
@@ -193,7 +193,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyChainingSetterMethods()
         {
             ColumnDefinition columndef = DefinedAs.TextColumn("chained").WithMaxSize(64).WithDefaultValue("default");
@@ -203,7 +203,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyChainingAsAutoincrementProducesNewObject()
         {
             ColumnDefinition columndef1 = DefinedAs.TextColumn("col");
@@ -213,7 +213,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyChainingAsVersionProducesNewObject()
         {
             ColumnDefinition columndef1 = DefinedAs.TextColumn("col");
@@ -223,7 +223,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyChainingMustBeNonNullProducesNewObject()
         {
             ColumnDefinition columndef1 = DefinedAs.TextColumn("col");
@@ -233,7 +233,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyChainingWithMaxSizeProducesNewObject()
         {
             ColumnDefinition columndef1 = DefinedAs.TextColumn("col");
@@ -243,7 +243,7 @@ namespace PixieTests
         }
 
         [TestMethod]
-        [Priority(0)]
+        [Priority(1)]
         public void VerifyChainingWithDefaultValueProducesNewObject()
         {
             ColumnDefinition columndef1 = DefinedAs.BinaryColumn("col");
