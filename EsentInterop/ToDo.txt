@@ -1,16 +1,11 @@
 ﻿ TODO
  ----
-  * Parameter tests for JetEnumerateColumns (bad JET_ENUMCOLUMNID)
-  * TempTableFixture: RetrieveColumnAs tests
-  * TempTableFixture: SetColumn tests
-  
   - Add XML headers to all functions/fields and re-enable StyleCop errors
   - More JET_param parameters
 	
 Pri 0 APIs: Needed by clients
 -----------------------------
   - JetRetrieveColumns
-  - JetEnumerateColumns
   - JetIdle
   - JetGetRecordSize (Vista)
   	

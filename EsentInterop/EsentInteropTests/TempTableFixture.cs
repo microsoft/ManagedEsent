@@ -1157,7 +1157,7 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void JetEnumerateColumnsThrowsExceptionWhenColumnidsIsNull()
+        public void JetEnumerateColumnsThrowsExceptionWhenColumnidsIsUnexpectedNull()
         {
             int numColumnValues;
             JET_ENUMCOLUMN[] columnValues;
@@ -1218,6 +1218,35 @@ namespace InteropApiTests
                 this.session,
                 this.tableid,
                 columnids.Length + 1,
+                columnids,
+                out numColumnValues,
+                out columnValues,
+                allocator,
+                IntPtr.Zero,
+                0,
+                EnumerateColumnsGrbit.None);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetEnumerateColumns gets a 
+        /// numColumnids count which is greater than the size of columnids.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetEnumerateColumnsThrowsExceptionWhenNumColumnidRgtagIsInvalid()
+        {
+            int numColumnValues;
+            JET_ENUMCOLUMN[] columnValues;
+            JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero;
+            var columnids = new[]
+            {
+                new JET_ENUMCOLUMNID { columnid = this.coltypDict[JET_coltyp.Currency], ctagSequence = 2, rgtagSequence = new int[1] },
+            };
+            Api.JetEnumerateColumns(
+                this.session,
+                this.tableid,
+                columnids.Length,
                 columnids,
                 out numColumnValues,
                 out columnValues,
