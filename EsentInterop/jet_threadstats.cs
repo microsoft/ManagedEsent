@@ -4,7 +4,6 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
 using System.Runtime.InteropServices;
 
 namespace Microsoft.Isam.Esent.Interop.Vista
@@ -122,6 +121,8 @@ namespace Microsoft.Isam.Esent.Interop.Vista
     [StructLayout(LayoutKind.Sequential)]
     internal struct NATIVE_THREADSTATS
     {
+        public static readonly int Size = Marshal.SizeOf(typeof(NATIVE_THREADSTATS));
+
         public uint cbStruct;
         public uint cPageReferenced;
         public uint cPageRead;

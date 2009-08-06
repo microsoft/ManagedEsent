@@ -97,5 +97,25 @@ namespace InteropApiTests
             GC.Collect();
             Assert.IsFalse(weakref.IsAlive);
         }
+
+        /// <summary>
+        /// Add should give a pointer to the added object
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void GCHandleCollectionStress()
+        {
+            for (int i = 0; i < 1000; i++)
+            {
+                using (var handles = new GCHandleCollection())
+                {
+                    for (int j = 0; j < 100; j++)
+                    {
+                        IntPtr p = handles.Add(new byte[1]);
+                        Assert.AreNotEqual(IntPtr.Zero, p);
+                    }
+                }
+            }
+        }
     }
 }

@@ -215,7 +215,7 @@ namespace InteropApiTests
         /// exception.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(0)]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void JetInstanceThrowsExceptionWhenInstanceIsClosed()
         {

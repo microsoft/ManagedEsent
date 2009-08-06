@@ -297,30 +297,11 @@ namespace Microsoft.Isam.Esent
         protected abstract Record CreateRecord(Bookmark bookmark);
 
         /// <summary>
-        /// Load the column meta-data for the table.
-        /// </summary>
-        private void LoadColumnMetaData()
-        {
-            this.Columns = new Dictionary<string, ColumnMetaData>(StringComparer.InvariantCultureIgnoreCase);
-            using (Transaction trx = this.Connection.BeginTransaction())
-            {
-                foreach (ColumnInfo columninfo in this.TableCursor.GetColumns())
-                {
-                    ColumnMetaData metadata = GetMetadata(columninfo);
-
-                    this.Columns[metadata.Name] = metadata;
-                }
-
-                trx.Commit();
-            }
-        }
-
-        /// <summary>
         /// Create a ColumnMetaData object from a ColumnInfo.
         /// </summary>
         /// <param name="columninfo">The ColumnInfo for the column.</param>
         /// <returns>A ColumnMetaData object for the column.</returns>
-        private ColumnMetaData GetMetadata(ColumnInfo columninfo)
+        private static ColumnMetaData GetMetadata(ColumnInfo columninfo)
         {
             var converter = Dependencies.Container.Resolve<InteropConversion>();
             var dataConversion = Dependencies.Container.Resolve<DataConversion>();
@@ -387,6 +368,25 @@ namespace Microsoft.Isam.Esent
                     return (cursor, grbit) => metadata.BytesToObjectConverter(
                                                                      cursor.RetrieveColumn(metadata.Columnid, grbit));
             }            
+        }
+
+        /// <summary>
+        /// Load the column meta-data for the table.
+        /// </summary>
+        private void LoadColumnMetaData()
+        {
+            this.Columns = new Dictionary<string, ColumnMetaData>(StringComparer.InvariantCultureIgnoreCase);
+            using (Transaction trx = this.Connection.BeginTransaction())
+            {
+                foreach (ColumnInfo columninfo in this.TableCursor.GetColumns())
+                {
+                    ColumnMetaData metadata = GetMetadata(columninfo);
+
+                    this.Columns[metadata.Name] = metadata;
+                }
+
+                trx.Commit();
+            }
         }
 
         /// <summary>

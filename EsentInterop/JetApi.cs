@@ -151,17 +151,18 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetGetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, ref int paramValue, out string paramString, int maxParam)
         {
             this.TraceFunctionCall("JetGetSystemParameter");
+            this.CheckNotNegative(maxParam, "maxParam");
 
             var intValue = (IntPtr)paramValue;
             var sb = new StringBuilder(maxParam);
             int err;
             if (this.Capabilities.SupportsUnicodePaths)
             {
-                err = this.Err(NativeMethods.JetGetSystemParameterW(instance.Value, sesid.Value, (uint)paramid, ref intValue, sb, (uint)maxParam * sizeof(char)));
+                err = this.Err(NativeMethods.JetGetSystemParameterW(instance.Value, sesid.Value, (uint)paramid, ref intValue, sb, checked((uint)maxParam * sizeof(char))));
             }
             else
             {
-                err = this.Err(NativeMethods.JetGetSystemParameter(instance.Value, sesid.Value, (uint)paramid, ref intValue, sb, (uint)maxParam));                
+                err = this.Err(NativeMethods.JetGetSystemParameter(instance.Value, sesid.Value, (uint)paramid, ref intValue, sb, checked((uint) maxParam)));      
             }
 
             paramString = sb.ToString();
@@ -328,8 +329,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.CheckSupportsVistaFeatures();
 
-            var native = new NATIVE_THREADSTATS();
-            int err = this.Err(NativeMethods.JetGetThreadStats(out native, (uint) Marshal.SizeOf(native)));
+            NATIVE_THREADSTATS native;
+            int err = this.Err(NativeMethods.JetGetThreadStats(out native, (uint) NATIVE_THREADSTATS.Size));
 
             threadstats = new JET_THREADSTATS();
             threadstats.SetFromNativeThreadstats(native);
@@ -412,7 +413,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                                    column, 
                                    ref nativeColumndef,
                                    defaultValue, 
-                                   (uint) defaultValueSize,
+                                   checked((uint) defaultValueSize),
                                    out columnid.Value));
 
             // esent doesn't actually set the columnid member of the passed in JET_COLUMNDEF, but we will do that here for
@@ -470,8 +471,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 indexName,
                 (uint)grbit,
                 keyDescription,
-                (uint)keyDescriptionLength,
-                (uint)density));
+                checked((uint) keyDescriptionLength),
+                checked((uint) density)));
         }
 
         /// <summary>
@@ -550,7 +551,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             var nativecolumnids = new uint[numColumns];
 
             int err = this.Err(NativeMethods.JetOpenTempTable(
-                sesid.Value, nativecolumndefs, (uint) numColumns, (uint) grbit, out tableid.Value, nativecolumnids));
+                sesid.Value, nativecolumndefs, checked((uint) numColumns), (uint) grbit, out tableid.Value, nativecolumnids));
 
             SetColumnids(columns, columnids, nativecolumnids, numColumns);
             
@@ -608,7 +609,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             var nativecolumnids = new uint[numColumns];
 
             int err = this.Err(NativeMethods.JetOpenTempTable2(
-                sesid.Value, nativecolumndefs, (uint)numColumns, (uint) lcid, (uint)grbit, out tableid.Value, nativecolumnids));
+                sesid.Value, nativecolumndefs, checked((uint) numColumns), (uint) lcid, (uint)grbit, out tableid.Value, nativecolumnids));
 
             SetColumnids(columns, columnids, nativecolumnids, numColumns);
 
@@ -670,12 +671,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             {
                 NATIVE_UNICODEINDEX nativeunicodeindex = unicodeindex.GetNativeUnicodeIndex();
                 err = this.Err(NativeMethods.JetOpenTempTable3(
-                    sesid.Value, nativecolumndefs, (uint)numColumns, ref nativeunicodeindex, (uint)grbit, out tableid.Value, nativecolumnids));
+                    sesid.Value, nativecolumndefs, checked((uint) numColumns), ref nativeunicodeindex, (uint)grbit, out tableid.Value, nativecolumnids));
             }
             else
             {
                 err = this.Err(NativeMethods.JetOpenTempTable3(
-                    sesid.Value, nativecolumndefs, (uint)numColumns, IntPtr.Zero, (uint)grbit, out tableid.Value, nativecolumnids));                
+                    sesid.Value, nativecolumndefs, checked((uint) numColumns), IntPtr.Zero, (uint)grbit, out tableid.Value, nativecolumnids));                
             }
 
             SetColumnids(columns, columnids, nativecolumnids, numColumns);
@@ -899,7 +900,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.CheckNotNegative(maxNameLength, "maxNameLength");
 
             var name = new StringBuilder(maxNameLength);
-            int err = this.Err(NativeMethods.JetGetCurrentIndex(sesid.Value, tableid.Value, name, (uint)maxNameLength));
+            int err = this.Err(NativeMethods.JetGetCurrentIndex(sesid.Value, tableid.Value, name, checked((uint) maxNameLength)));
             indexName = name.ToString();
             return err;
         }
@@ -966,14 +967,14 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return
                 this.Err(
                     NativeMethods.JetGotoBookmark(
-                        sesid.Value, tableid.Value, bookmark, (uint) bookmarkSize));
+                        sesid.Value, tableid.Value, bookmark, checked((uint) bookmarkSize)));
         }
 
         public int JetMakeKey(JET_SESID sesid, JET_TABLEID tableid, IntPtr data, int dataSize, MakeKeyGrbit grbit)
         {
             this.TraceFunctionCall("JetMakeKey");
             this.CheckNotNegative(dataSize, "dataSize");
-            return this.Err(NativeMethods.JetMakeKey(sesid.Value, tableid.Value, data, (uint)dataSize, (uint)grbit));
+            return this.Err(NativeMethods.JetMakeKey(sesid.Value, tableid.Value, data, checked((uint) dataSize), (uint)grbit));
         }
 
         public int JetSeek(JET_SESID sesid, JET_TABLEID tableid, SeekGrbit grbit)
@@ -1041,7 +1042,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                         NativeMethods.JetIntersectIndexes(
                             sesid.Value,
                             indexRanges,
-                            (uint) indexRanges.Length,
+                            checked((uint) indexRanges.Length),
                             ref nativeRecordlist,
                             (uint) grbit));
             recordlist = new JET_RECORDLIST();
@@ -1062,7 +1063,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.TraceFunctionCall("JetIndexRecordCount");
             this.CheckNotNegative(maxRecordsToCount, "maxRecordsToCount");
             uint crec;
-            int err = this.Err(NativeMethods.JetIndexRecordCount(sesid.Value, tableid.Value, out crec, (uint)maxRecordsToCount));
+            int err = this.Err(NativeMethods.JetIndexRecordCount(sesid.Value, tableid.Value, out crec, (uint)maxRecordsToCount)); // -1 is allowed
             numRecords = checked((int) crec);
             return err;
         }
@@ -1111,7 +1112,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     sesid.Value,
                     tableid.Value,
                     bookmark,
-                    (uint)bookmarkSize,
+                    checked((uint) bookmarkSize),
                     out cbActual));
 
             actualBookmarkSize = checked((int) cbActual);
@@ -1124,7 +1125,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.CheckDataSize(data, dataSize, "dataSize");
 
             uint cbActual;
-            int err = this.Err(NativeMethods.JetRetrieveKey(sesid.Value, tableid.Value, data, (uint)dataSize, out cbActual, (uint)grbit));
+            int err = this.Err(NativeMethods.JetRetrieveKey(sesid.Value, tableid.Value, data, checked((uint) dataSize), out cbActual, (uint)grbit));
 
             actualDataSize = checked((int) cbActual);
             return err;
@@ -1145,7 +1146,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                         tableid.Value,
                         columnid.Value,
                         data,
-                        (uint)dataSize,
+                        checked((uint) dataSize),
                         out cbActual,
                         (uint)grbit,
                         ref nativeRetinfo));
@@ -1158,7 +1159,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                         tableid.Value,
                         columnid.Value,
                         data,
-                        (uint)dataSize,
+                        checked((uint) dataSize),
                         out cbActual,
                         (uint)grbit,
                         IntPtr.Zero));
@@ -1245,20 +1246,18 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 uint* tags = stackalloc uint[totalNumTags];
                 ConvertEnumColumnidTags(columnids, numColumnids, nativecolumnids, tags);
 
-                IntPtr pfnAlloc = Marshal.GetFunctionPointerForDelegate(allocator);
-
                 uint cEnumColumn;
                 NATIVE_ENUMCOLUMN* nativeenumcolumns;
                 int err = NativeMethods.JetEnumerateColumns(
                     sesid.Value,
                     tableid.Value,
-                    (uint) numColumnids,
+                    checked((uint) numColumnids),
                     numColumnids > 0 ? nativecolumnids : null,
                     out cEnumColumn,
                     out nativeenumcolumns,
-                    pfnAlloc,
+                    allocator,
                     allocatorContext,
-                    (uint) maxDataSize,
+                    checked((uint) maxDataSize),
                     (uint) grbit);
 
                 ConvertEnumerateColumnsResult(allocator, allocatorContext, cEnumColumn, nativeenumcolumns, out numColumnValues, out columnValues);
@@ -1289,7 +1288,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.CheckDataSize(bookmark, bookmarkSize, "bookmarkSize");
 
             uint cbActual;
-            int err = this.Err(NativeMethods.JetUpdate(sesid.Value, tableid.Value, bookmark, (uint)bookmarkSize, out cbActual));
+            int err = this.Err(NativeMethods.JetUpdate(sesid.Value, tableid.Value, bookmark, checked((uint) bookmarkSize), out cbActual));
             actualBookmarkSize = checked((int) cbActual);
             return err;
         }
@@ -1312,10 +1311,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             if (null != setinfo)
             {
                 NATIVE_SETINFO nativeSetinfo = setinfo.GetNativeSetinfo();
-                return this.Err(NativeMethods.JetSetColumn(sesid.Value, tableid.Value, columnid.Value, data, (uint)dataSize, (uint)grbit, ref nativeSetinfo));
+                return this.Err(NativeMethods.JetSetColumn(sesid.Value, tableid.Value, columnid.Value, data, checked((uint) dataSize), (uint)grbit, ref nativeSetinfo));
             }
 
-            return this.Err(NativeMethods.JetSetColumn(sesid.Value, tableid.Value, columnid.Value, data, (uint)dataSize, (uint)grbit, IntPtr.Zero));
+            return this.Err(NativeMethods.JetSetColumn(sesid.Value, tableid.Value, columnid.Value, data, checked((uint) dataSize), (uint)grbit, IntPtr.Zero));
         }
 
         /// <summary>
@@ -1340,32 +1339,45 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.CheckNotNull(setcolumns, "setcolumns");
             this.CheckDataSize(setcolumns, numColumns, "numColumns");
 
-            var gchandles = new GCHandleCollection();
-            try
+            using (var gchandles = new GCHandleCollection())
             {
                 unsafe
                 {
                     NATIVE_SETCOLUMN* nativeSetColumns = stackalloc NATIVE_SETCOLUMN[numColumns];
+
+                    const int BufferSize = 128;
+                    byte* buffer = stackalloc byte[BufferSize];
+                    int bufferRemaining = BufferSize;
+
                     for (int i = 0; i < numColumns; ++i)
                     {
                         setcolumns[i].CheckDataSize();
                         nativeSetColumns[i] = setcolumns[i].GetNativeSetcolumn();
-                        nativeSetColumns[i].pvData = gchandles.Add(setcolumns[i].pvData);
+                        if (bufferRemaining >= setcolumns[i].cbData)
+                        {
+                            nativeSetColumns[i].pvData = (IntPtr) buffer;
+                            Marshal.Copy(setcolumns[i].pvData, 0, nativeSetColumns[i].pvData, setcolumns[i].cbData);
+                            buffer += setcolumns[i].cbData;
+                            bufferRemaining -= setcolumns[i].cbData;
+                        }
+                        else
+                        {
+                            nativeSetColumns[i].pvData = gchandles.Add(setcolumns[i].pvData);                            
+                        }
                     }
 
-                    int err = this.Err(NativeMethods.JetSetColumns(sesid.Value, tableid.Value, nativeSetColumns, (uint)numColumns));
+                    int err =
+                        this.Err(
+                            NativeMethods.JetSetColumns(
+                                sesid.Value, tableid.Value, nativeSetColumns, checked((uint) numColumns)));
 
                     for (int i = 0; i < numColumns; ++i)
                     {
-                        setcolumns[i].err = (JET_wrn)nativeSetColumns[i].err;
+                        setcolumns[i].err = (JET_wrn) nativeSetColumns[i].err;
                     }
 
                     return err;
                 }
-            }
-            finally
-            {
-                gchandles.Dispose();
             }
         }
 
@@ -1416,9 +1428,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                                   tableid.Value,
                                   columnid.Value,
                                   delta,
-                                  (uint)deltaSize,
+                                  checked((uint) deltaSize),
                                   previousValue,
-                                  (uint)previousValueLength,
+                                  checked((uint) previousValueLength),
                                   out cbOldActual,
                                   (uint)grbit));
             actualPreviousValueLength = checked((int) cbOldActual);
@@ -1445,6 +1457,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 nativecolumnids[i] = columnids[i].GetNativeEnumColumnid();
                 totalNumTags += columnids[i].ctagSequence;
             }
+
             return totalNumTags;
         }
 
@@ -1502,14 +1515,14 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
                     // the NATIVE_ENUMCOLUMNVALUES have been converted
                     // free their memory
-                    allocator(allocatorContext, new IntPtr(nativeenumcolumns[i].rgEnumColumnValue), 0);
+                    allocator(allocatorContext, (IntPtr) nativeenumcolumns[i].rgEnumColumnValue, 0);
                     nativeenumcolumns[i].rgEnumColumnValue = null;
                 }
             }
 
             // Now we have converted all the NATIVE_ENUMCOLUMNS we can
             // free the memory they use
-            allocator(allocatorContext, new IntPtr(nativeenumcolumns), 0);
+            allocator(allocatorContext, (IntPtr) nativeenumcolumns, 0);
             nativeenumcolumns = null;
         }
 
@@ -1582,7 +1595,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     return
                         this.Err(
                             NativeMethods.JetCreateIndex2(
-                                sesid.Value, tableid.Value, nativeIndexcreates, (uint) numIndexCreates));
+                                sesid.Value, tableid.Value, nativeIndexcreates, checked((uint) numIndexCreates)));
                 }
             }
         }
@@ -1621,7 +1634,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
                     return
                         this.Err(
-                            NativeMethods.JetCreateIndex2(sesid.Value, tableid.Value, nativeIndexcreates, (uint)numIndexCreates));
+                            NativeMethods.JetCreateIndex2(sesid.Value, tableid.Value, nativeIndexcreates, checked((uint)numIndexCreates)));
                 }                
             }
         }
@@ -1631,25 +1644,28 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </summary>
         private void DetermineCapabilities()
         {
+            const int Server2003BuildNumber = 2700;
+            const int VisaBuildNumber = 6000;
+            const int Windows7BuildNumber = 7000; // includes beta as well as RTM
+
             // Create new capabilities, set as all false. This will allow
             // us to call into Esent.
-            this.Capabilities = new JetCapabilities();
-            this.Capabilities.ColumnsKeyMost = 12;  // XP through Vista
+            this.Capabilities = new JetCapabilities { ColumnsKeyMost = 12 };
 
-            var version = (uint)this.GetVersionFromEsent();
+            var version = this.GetVersionFromEsent();
             var buildNumber = (int)((version & 0xFFFFFF) >> 8);
 
             Trace.WriteLineIf(
                 this.traceSwitch.TraceVerbose,
                 String.Format("Version = {0}, BuildNumber = {1}", version, buildNumber));
 
-            if (buildNumber >= 2700)
+            if (buildNumber >= Server2003BuildNumber)
             {
                 Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports Server 2003 features");
                 this.Capabilities.SupportsServer2003Features = true;
             }
 
-            if (buildNumber >= 6000)
+            if (buildNumber >= VisaBuildNumber)
             {
                 Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports Vista features");
                 this.Capabilities.SupportsVistaFeatures = true;
@@ -1661,7 +1677,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 this.Capabilities.ColumnsKeyMost = 16;
             }
 
-            if (buildNumber >= 7000)
+            if (buildNumber >= Windows7BuildNumber)
             {
                 Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports Windows 7 features");
                 this.Capabilities.SupportsWindows7Features = true;

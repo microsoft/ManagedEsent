@@ -65,11 +65,11 @@ namespace Microsoft.Isam.Esent.Interop
         internal NATIVE_COLUMNDEF GetNativeColumndef()
         {
             var columndef       = new NATIVE_COLUMNDEF();
-            columndef.cbStruct  = (uint)Marshal.SizeOf(columndef);
+            columndef.cbStruct  = checked((uint) Marshal.SizeOf(columndef));
             columndef.cp        = (ushort)this.cp;
-            columndef.cbMax     = (uint)this.cbMax;
+            columndef.cbMax     = checked((uint) this.cbMax);
             columndef.grbit     = (uint)this.grbit;
-            columndef.coltyp    = (uint)this.coltyp;
+            columndef.coltyp    = checked((uint) this.coltyp);
             return columndef;
         }
 

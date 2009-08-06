@@ -14,8 +14,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace InteropApiTests
 {
     /// <summary>
-    /// Tests for the various Set/RetrieveColumn* methods and
-    /// the helper methods that retrieve meta-data.
+    /// Tests that use the temporary table fixture, which is very quick to setup.
     /// </summary>
     [TestClass]
     public class TempTableFixture
@@ -116,6 +115,7 @@ namespace InteropApiTests
                 trx.Commit(CommitTransactionGrbit.None);
                 Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
             }
+
             Assert.AreEqual(Expected, Api.RetrieveColumnAsByte(this.session, this.tableid, columnid));
         }
 
@@ -139,6 +139,7 @@ namespace InteropApiTests
                 trx.Commit(CommitTransactionGrbit.None);
                 Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
             }
+
             Assert.AreEqual(Expected, Api.RetrieveColumnAsByte(this.session, this.tableid, columnid));
         }
 
@@ -162,6 +163,7 @@ namespace InteropApiTests
                 trx.Commit(CommitTransactionGrbit.None);
                 Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
             }
+
             Assert.AreEqual(Expected, Api.RetrieveColumnAsInt16(this.session, this.tableid, columnid));
         }
 
@@ -185,6 +187,7 @@ namespace InteropApiTests
                 trx.Commit(CommitTransactionGrbit.None);
                 Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
             }
+
             Assert.AreEqual(Expected, Api.RetrieveColumnAsInt16(this.session, this.tableid, columnid));
         }
 
@@ -208,6 +211,7 @@ namespace InteropApiTests
                 trx.Commit(CommitTransactionGrbit.None);
                 Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
             }
+
             Assert.AreEqual(Expected, Api.RetrieveColumnAsUInt16(this.session, this.tableid, columnid));
         }
 
@@ -231,6 +235,7 @@ namespace InteropApiTests
                 trx.Commit(CommitTransactionGrbit.None);
                 Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
             }
+
             Assert.AreEqual(Expected, Api.RetrieveColumnAsUInt16(this.session, this.tableid, columnid));
         }
 
@@ -254,6 +259,7 @@ namespace InteropApiTests
                 trx.Commit(CommitTransactionGrbit.None);
                 Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
             }
+
             Assert.AreEqual(Expected, Api.RetrieveColumnAsInt32(this.session, this.tableid, columnid));
         }
 
@@ -277,6 +283,7 @@ namespace InteropApiTests
                 trx.Commit(CommitTransactionGrbit.None);
                 Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
             }
+
             Assert.AreEqual(Expected, Api.RetrieveColumnAsInt32(this.session, this.tableid, columnid));
         }
 
@@ -300,6 +307,7 @@ namespace InteropApiTests
                 trx.Commit(CommitTransactionGrbit.None);
                 Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
             }
+
             Assert.AreEqual(Expected, Api.RetrieveColumnAsUInt32(this.session, this.tableid, columnid));
         }
 
@@ -323,6 +331,7 @@ namespace InteropApiTests
                 trx.Commit(CommitTransactionGrbit.None);
                 Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
             }
+
             Assert.AreEqual(Expected, Api.RetrieveColumnAsUInt32(this.session, this.tableid, columnid));
         }
 
@@ -346,6 +355,7 @@ namespace InteropApiTests
                 trx.Commit(CommitTransactionGrbit.None);
                 Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
             }
+
             Assert.AreEqual(Expected, Api.RetrieveColumnAsInt64(this.session, this.tableid, columnid));
         }
 
@@ -369,6 +379,7 @@ namespace InteropApiTests
                 trx.Commit(CommitTransactionGrbit.None);
                 Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
             }
+
             Assert.AreEqual(Expected, Api.RetrieveColumnAsInt64(this.session, this.tableid, columnid));
         }
 
@@ -392,6 +403,7 @@ namespace InteropApiTests
                 trx.Commit(CommitTransactionGrbit.None);
                 Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
             }
+
             Assert.AreEqual(Expected, Api.RetrieveColumnAsUInt64(this.session, this.tableid, columnid));
         }
 
@@ -415,6 +427,7 @@ namespace InteropApiTests
                 trx.Commit(CommitTransactionGrbit.None);
                 Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
             }
+
             Assert.AreEqual(Expected, Api.RetrieveColumnAsUInt64(this.session, this.tableid, columnid));
         }
 
@@ -438,6 +451,7 @@ namespace InteropApiTests
                 trx.Commit(CommitTransactionGrbit.None);
                 Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
             }
+
             Assert.AreEqual(Expected, Api.RetrieveColumnAsFloat(this.session, this.tableid, columnid));
         }
 
@@ -461,6 +475,7 @@ namespace InteropApiTests
                 trx.Commit(CommitTransactionGrbit.None);
                 Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
             }
+
             Assert.AreEqual(Expected, Api.RetrieveColumnAsFloat(this.session, this.tableid, columnid));
         }
 
@@ -484,6 +499,7 @@ namespace InteropApiTests
                 trx.Commit(CommitTransactionGrbit.None);
                 Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
             }
+
             Assert.AreEqual(Expected, Api.RetrieveColumnAsDouble(this.session, this.tableid, columnid));
         }
 
@@ -507,6 +523,7 @@ namespace InteropApiTests
                 trx.Commit(CommitTransactionGrbit.None);
                 Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
             }
+
             Assert.AreEqual(Expected, Api.RetrieveColumnAsDouble(this.session, this.tableid, columnid));
         }
 
@@ -517,9 +534,10 @@ namespace InteropApiTests
         [Priority(1)]
         public void SetAndRetrieveDateTimeMin()
         {
-            var columnid = this.coltypDict[JET_coltyp.Binary];
             // MSDN says the base OLE Automation Date is midnight, 30 December 1899.
             var expected = new DateTime(1899, 12, 30, 23, 59, 59);
+
+            var columnid = this.coltypDict[JET_coltyp.Binary];
 
             using (var trx = new Transaction(this.session))
             using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
@@ -531,6 +549,7 @@ namespace InteropApiTests
                 trx.Commit(CommitTransactionGrbit.None);
                 Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
             }
+
             Assert.AreEqual(expected, Api.RetrieveColumnAsDateTime(this.session, this.tableid, columnid));
         }
 
@@ -541,10 +560,11 @@ namespace InteropApiTests
         [Priority(1)]
         public void SetAndRetrieveDateTimeMax()
         {
-            var columnid = this.coltypDict[JET_coltyp.Binary];
             // MSDN says the maximum OLE Automation Date is the same as
             // DateTime.MaxValue, the last moment of 31 December 9999.
             var expected = new DateTime(9999, 12, 31, 23, 59, 59);
+
+            var columnid = this.coltypDict[JET_coltyp.Binary];
 
             using (var trx = new Transaction(this.session))
             using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
@@ -556,6 +576,7 @@ namespace InteropApiTests
                 trx.Commit(CommitTransactionGrbit.None);
                 Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
             }
+
             Assert.AreEqual(expected, Api.RetrieveColumnAsDateTime(this.session, this.tableid, columnid));
         }
 
@@ -566,15 +587,28 @@ namespace InteropApiTests
         [Priority(1)]
         public void JetSetColumns()
         {
+            byte b = Any.Byte;
+            short s = Any.Int16;
             int i = Any.Int32;
-            string s = Any.String;
+            long l = Any.Int64;
+            string str = Any.String;
+            float f = Any.Float;
             double d = Any.Double;
+            byte[] data = new byte[1023];
+
+            var random = new Random();
+            random.NextBytes(data);
 
             var setcolumns = new[]
             {
+                new JET_SETCOLUMN { cbData = sizeof(byte), columnid = this.coltypDict[JET_coltyp.UnsignedByte], pvData = BitConverter.GetBytes(b) },
+                new JET_SETCOLUMN { cbData = sizeof(short), columnid = this.coltypDict[JET_coltyp.Short], pvData = BitConverter.GetBytes(s) },
                 new JET_SETCOLUMN { cbData = sizeof(int), columnid = this.coltypDict[JET_coltyp.Long], pvData = BitConverter.GetBytes(i) },
-                new JET_SETCOLUMN { cbData = s.Length * sizeof(char), columnid = this.coltypDict[JET_coltyp.LongText], pvData = Encoding.Unicode.GetBytes(s) },
+                new JET_SETCOLUMN { cbData = sizeof(long), columnid = this.coltypDict[JET_coltyp.Currency], pvData = BitConverter.GetBytes(l) },
+                new JET_SETCOLUMN { cbData = sizeof(float), columnid = this.coltypDict[JET_coltyp.IEEESingle], pvData = BitConverter.GetBytes(f) },
                 new JET_SETCOLUMN { cbData = sizeof(double), columnid = this.coltypDict[JET_coltyp.IEEEDouble], pvData = BitConverter.GetBytes(d) },
+                new JET_SETCOLUMN { cbData = str.Length * sizeof(char), columnid = this.coltypDict[JET_coltyp.LongText], pvData = Encoding.Unicode.GetBytes(str) },
+                new JET_SETCOLUMN { cbData = data.Length, columnid = this.coltypDict[JET_coltyp.LongBinary], pvData = data },
             };
 
             using (var trx = new Transaction(this.session))
@@ -587,9 +621,14 @@ namespace InteropApiTests
 
             Api.TryMoveFirst(this.session, this.tableid);
 
+            Assert.AreEqual(b, Api.RetrieveColumnAsByte(this.session, this.tableid, this.coltypDict[JET_coltyp.UnsignedByte]));
+            Assert.AreEqual(s, Api.RetrieveColumnAsInt16(this.session, this.tableid, this.coltypDict[JET_coltyp.Short]));
             Assert.AreEqual(i, Api.RetrieveColumnAsInt32(this.session, this.tableid, this.coltypDict[JET_coltyp.Long]));
-            Assert.AreEqual(s, Api.RetrieveColumnAsString(this.session, this.tableid, this.coltypDict[JET_coltyp.LongText]));
+            Assert.AreEqual(l, Api.RetrieveColumnAsInt64(this.session, this.tableid, this.coltypDict[JET_coltyp.Currency]));
+            Assert.AreEqual(f, Api.RetrieveColumnAsFloat(this.session, this.tableid, this.coltypDict[JET_coltyp.IEEESingle]));
             Assert.AreEqual(d, Api.RetrieveColumnAsDouble(this.session, this.tableid, this.coltypDict[JET_coltyp.IEEEDouble]));
+            Assert.AreEqual(str, Api.RetrieveColumnAsString(this.session, this.tableid, this.coltypDict[JET_coltyp.LongText]));
+            CollectionAssert.AreEqual(data, Api.RetrieveColumn(this.session, this.tableid, this.coltypDict[JET_coltyp.LongBinary]));
         }
 
         #endregion

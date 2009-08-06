@@ -318,6 +318,7 @@ namespace Microsoft.Isam.Esent
                 block();
                 trx.Commit(options);
             }
+
             return this;
         }
 

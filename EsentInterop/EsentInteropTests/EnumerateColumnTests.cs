@@ -86,8 +86,7 @@ namespace InteropApiTests
 
             JET_COLUMNID columnid;
 
-            // These columns are all tagged so they are not present in the record
-            // by default.
+            // These columns are all tagged so they are not present in the default record.
 
             var columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Bit, grbit = ColumndefGrbit.ColumnTagged };
             Api.JetAddColumn(this.sesid, this.tableid, "Boolean", columndef, null, 0, out columnid);
@@ -369,8 +368,8 @@ namespace InteropApiTests
 
             var columnids = new[]
             {
-                new JET_ENUMCOLUMNID { columnid = this.columnidDict["int16"], ctagSequence = 1, rgtagSequence = new [] { 2 }},
-                new JET_ENUMCOLUMNID { columnid = this.columnidDict["int64"], ctagSequence = 1, rgtagSequence = new [] { 3 } },
+                new JET_ENUMCOLUMNID { columnid = this.columnidDict["int16"], ctagSequence = 1, rgtagSequence = new[] { 2 } },
+                new JET_ENUMCOLUMNID { columnid = this.columnidDict["int64"], ctagSequence = 1, rgtagSequence = new[] { 3 } },
             };
 
             int numValues;

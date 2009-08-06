@@ -5,7 +5,6 @@
 //-----------------------------------------------------------------------
 
 using System;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using Microsoft.Isam.Esent.Interop.Vista;
 
@@ -133,13 +132,13 @@ namespace Microsoft.Isam.Esent.Interop
             native.cbStruct = (uint) Marshal.SizeOf(native);
             native.szIndexName = this.szIndexName;
             native.szKey = this.szKey;
-            native.cbKey = (uint) this.cbKey;
+            native.cbKey = checked((uint) this.cbKey);
             native.grbit = (uint) this.grbit;
-            native.ulDensity = (uint) this.ulDensity;
+            native.ulDensity = checked((uint) this.ulDensity);
 
             native.cbVarSegMac = new IntPtr(this.cbVarSegMac);
 
-            native.cConditionalColumn = (uint) this.cConditionalColumn;
+            native.cConditionalColumn = checked((uint) this.cConditionalColumn);
             return native;
         }
 
@@ -151,11 +150,11 @@ namespace Microsoft.Isam.Esent.Interop
         {
             var native = new NATIVE_INDEXCREATE2();
             native.indexcreate = this.GetNativeIndexcreate();
-            native.indexcreate.cbStruct = (uint)Marshal.SizeOf(native);
+            native.indexcreate.cbStruct = (uint) Marshal.SizeOf(native);
             if (0 != this.cbKeyMost)
             {
-                native.cbKeyMost = (uint)this.cbKeyMost;
-                native.indexcreate.grbit |= (uint)VistaGrbits.IndexKeyMost;
+                native.cbKeyMost = checked((uint) this.cbKeyMost);
+                native.indexcreate.grbit |= (uint) VistaGrbits.IndexKeyMost;
             }
 
             return native;

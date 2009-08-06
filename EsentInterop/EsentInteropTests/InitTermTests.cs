@@ -21,7 +21,7 @@ namespace InteropApiTests
         /// Verify that the version returned by JetGetVersion is not zero
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(0)]
         public void VerifyJetVersionIsNotZero()
         {
             JET_INSTANCE instance;
@@ -49,7 +49,7 @@ namespace InteropApiTests
         /// with JetCreateInstance2.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(0)]
         public void CreateInstanceWithJetCreateInstance2()
         {
             JET_INSTANCE instance;
@@ -69,7 +69,7 @@ namespace InteropApiTests
         /// with JetInit2.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(0)]
         public void InitializeInstanceWithJetInit2()
         {
             JET_INSTANCE instance;

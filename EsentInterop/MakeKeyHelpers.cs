@@ -63,7 +63,7 @@ namespace Microsoft.Isam.Esent.Interop
                 {
                     fixed (char* buffer = data)
                     {
-                        Api.JetMakeKey(sesid, tableid, new IntPtr(buffer), data.Length * sizeof(char), grbit);
+                        Api.JetMakeKey(sesid, tableid, (IntPtr) buffer, data.Length * sizeof(char), grbit);
                     }
                 }
             }

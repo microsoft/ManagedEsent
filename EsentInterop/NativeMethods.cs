@@ -365,7 +365,7 @@ namespace Microsoft.Isam.Esent.Interop
             NATIVE_ENUMCOLUMNID* rgEnumColumnId,
             out uint pcEnumColumn,
             out NATIVE_ENUMCOLUMN* prgEnumColumn,
-            IntPtr pfnRealloc,
+            JET_PFNREALLOC pfnRealloc,
             IntPtr pvReallocContext,
             uint cbDataMost,
             uint grbit);
@@ -392,7 +392,7 @@ namespace Microsoft.Isam.Esent.Interop
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static unsafe extern int JetSetColumns(
-            IntPtr sesid, IntPtr tableid, NATIVE_SETCOLUMN* psetcolumn, uint csetcolumn);
+            IntPtr sesid, IntPtr tableid, [In] [Out] NATIVE_SETCOLUMN* psetcolumn, uint csetcolumn);
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetGetLock(IntPtr sesid, IntPtr tableid, uint grbit);

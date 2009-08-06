@@ -4,7 +4,6 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
 using System.Runtime.InteropServices;
 using Microsoft.Isam.Esent.Interop;
 using Microsoft.Isam.Esent.Interop.Vista;

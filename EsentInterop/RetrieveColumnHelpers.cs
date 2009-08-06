@@ -256,7 +256,7 @@ namespace Microsoft.Isam.Esent.Interop
                     char* buffer = stackalloc char[BufferSize];
                     int actualDataSize;
                     wrn = JetRetrieveColumn(
-                        sesid, tableid, columnid, new IntPtr(buffer), BufferSize, out actualDataSize, grbit, null);
+                        sesid, tableid, columnid, (IntPtr) buffer, BufferSize, out actualDataSize, grbit, null);
                     if (JET_wrn.ColumnNull == wrn)
                     {
                         return null;

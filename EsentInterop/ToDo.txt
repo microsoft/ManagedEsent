@@ -1,16 +1,18 @@
-﻿ TODO
- ----
-  - Add XML headers to all functions/fields and re-enable StyleCop errors
-  - More JET_param parameters
-	
-Pri 0 APIs: Needed by clients
+﻿ Pri 0: Tests
+ ------------
+  * Parameter verification for JET_INDEXCREATE.cbKey (w/tests)
+  * Perf tests for JetSetColumns vs JetSetColumn
+  * Verify JetSetColumn sets err member
+  * JetEnumerateColumns on temp table
+  	
+Pri 0: APIs needed by clients
 -----------------------------
   - JetRetrieveColumns
   - JetIdle
   - JetGetRecordSize (Vista)
   	
-Pri 1 APIs: New functionality
-------------------------------
+Pri 1: New functionality
+------------------------
   - JetGetDatabaseInfo
   - JetGetDatabaseFileInfo
   - JetGetTableInfo
@@ -18,15 +20,20 @@ Pri 1 APIs: New functionality
   - JetGetSecondaryIndexBookmark
   - JetGotoSecondaryIndexBookmark 
 
-Pri 2 APIs: Extending functionality
------------------------------------
+Pri 2: Extending functionality
+------------------------------
   - JetSetCurrentIndex2
   - JetSetCurrentIndex3
   - JetCreateTableColumnIndex2
+  - More JET_param parameters
 
-Pri 2 APIs: Obscure functionality
----------------------------------
+Pri 3: Obscure functionality
+----------------------------
   - JetGetInstanceMiscInfo
   - JetRegisterCallback
   - JetUnregisterCallback
   - JetSetCurrentIndex4
+
+Pri 4: Cleanup
+--------------
+  - Add XML headers to all functions/fields and re-enable StyleCop errors

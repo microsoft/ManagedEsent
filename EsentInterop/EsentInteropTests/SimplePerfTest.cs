@@ -5,7 +5,9 @@
 //-----------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.Isam.Esent.Interop;
@@ -20,6 +22,8 @@ namespace InteropApiTests
     public class SimplePerfTest
     {
         private const int DataSize = 32;
+
+        private string directory;
 
         private Instance instance;
         private Session session;
@@ -44,6 +48,8 @@ namespace InteropApiTests
         [TestInitialize]
         public void Setup()
         {
+            this.directory = SetupHelper.CreateRandomDirectory();
+
             this.random = new Random();
             this.data = new byte[DataSize];
             this.random.NextBytes(this.data);
@@ -58,6 +64,9 @@ namespace InteropApiTests
             Api.JetSetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.CacheSizeMin, 16384, null);
 
             this.instance = new Instance("SimplePerfTest");
+            this.instance.Parameters.LogFileDirectory = this.directory;
+            this.instance.Parameters.SystemDirectory = this.directory;
+            this.instance.Parameters.MaxVerPages = 1024;
 
             // Circular logging, 16MB logfiles, 8MB of log buffer
             this.instance.Parameters.CircularLog = true;
@@ -67,7 +76,7 @@ namespace InteropApiTests
             // Create the instance, database and table
             this.instance.Init();
             this.session = new Session(this.instance);
-            Api.JetCreateDatabase(this.session, "esentperftest.db", string.Empty, out dbid, CreateDatabaseGrbit.None);
+            Api.JetCreateDatabase(this.session, Path.Combine(this.directory, "esentperftest.db"), string.Empty, out dbid, CreateDatabaseGrbit.None);
 
             // Create the table
             using (var trx = new Transaction(this.session))
@@ -98,13 +107,14 @@ namespace InteropApiTests
             this.session.End();
             this.instance.Term();
             Api.JetSetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.CacheSizeMin, this.cacheSizeMinSaved, null);
+            Directory.Delete(this.directory, true);
         }
 
         /// <summary>
         /// Test inserting and retrieving records.
         /// </summary>
         [TestMethod]
-        [Priority(3)]
+        [Priority(4)]
         public void BasicPerfTest()
         {
             this.CheckMemoryUsage(this.InsertReadSeek);
@@ -126,23 +136,30 @@ namespace InteropApiTests
             long[] keys = (from x in Enumerable.Range(0, NumRecords) select (long)x).ToArray();
             this.Shuffle(keys);
 
-            TimeAction("Insert records", () => this.InsertRecords(NumRecords));
+            TimeAction("Insert records", () => this.InsertRecords(NumRecords / 2));
+            TimeAction("Insert records with JetSetColumns", () => this.InsertRecordsWithSetColumns(NumRecords / 2));
             TimeAction("Read one record", () => this.RepeatedlyRetrieveOneRecord(NumRecords));
             TimeAction("Read one record with JetEnumerateColumns", () => this.RepeatedlyRetrieveOneRecordWithEnumColumns(NumRecords));
             TimeAction("Read all records", this.RetrieveAllRecords);
             TimeAction("Seek to all records", () => this.SeekToAllRecords(keys));
+            TimeAction("Delete all records", () => this.DeleteAllRecords());
         }
 
         private void CheckMemoryUsage(Action action)
         {
             this.RunGarbageCollection();
             long memoryAtStart = GC.GetTotalMemory(true);
+            int collectionCountAtStart = GC.CollectionCount(0);
 
             action();
 
+            int collectionCountAtEnd = GC.CollectionCount(0);
             this.RunGarbageCollection();
             long memoryAtEnd = GC.GetTotalMemory(true);
-            Console.WriteLine("Memory changed by {0} bytes", memoryAtEnd - memoryAtStart);
+            Console.WriteLine(
+                "Memory changed by {0} bytes ({1} GC cycles)",
+                memoryAtEnd - memoryAtStart,
+                collectionCountAtEnd - collectionCountAtStart);
         }
 
         private void Shuffle<T>(T[] arrayToShuffle)
@@ -175,6 +192,35 @@ namespace InteropApiTests
             }
         }
 
+        private void InsertRecordsWithSetColumns(int numRecords)
+        {
+            var setcolumns = new[]
+            {
+                new JET_SETCOLUMN
+                {
+                    columnid = this.columnidKey,
+                    cbData = sizeof(long),
+                    itagSequence = 1,
+                },
+                new JET_SETCOLUMN
+                {
+                    columnid = this.columnidData,
+                    cbData = this.data.Length,
+                    pvData = this.data,
+                    itagSequence = 1,
+                },
+            };
+            for (int i = 0; i < numRecords; ++i)
+            {
+                Api.JetBeginTransaction(this.session);
+                Api.JetPrepareUpdate(this.session, this.table, JET_prep.Insert);
+                setcolumns[0].pvData = BitConverter.GetBytes(this.nextKey++);
+                Api.JetSetColumns(this.session, this.table, setcolumns, setcolumns.Length);
+                Api.JetUpdate(this.session, this.table);
+                Api.JetCommitTransaction(this.session, CommitTransactionGrbit.LazyFlush);
+            }
+        }
+
         private void RetrieveRecord()
         {
             int actualSize;
@@ -197,6 +243,17 @@ namespace InteropApiTests
             {
                 Api.JetBeginTransaction(this.session);
                 this.RetrieveRecord();
+                Api.JetCommitTransaction(this.session, CommitTransactionGrbit.LazyFlush);
+            }
+        }
+
+        private void DeleteAllRecords()
+        {
+            Api.MoveBeforeFirst(this.session, this.table);
+            while (Api.TryMoveNext(this.session, this.table))
+            {
+                Api.JetBeginTransaction(this.session);
+                Api.JetDelete(this.session, this.table);
                 Api.JetCommitTransaction(this.session, CommitTransactionGrbit.LazyFlush);
             }
         }
@@ -245,7 +302,7 @@ namespace InteropApiTests
             }
         }
 
-        private void SeekToAllRecords(long[] keys)
+        private void SeekToAllRecords(IEnumerable<long> keys)
         {
             foreach (long key in keys)
             {

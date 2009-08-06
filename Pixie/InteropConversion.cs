@@ -117,7 +117,19 @@ namespace Microsoft.Isam.Esent
                     grbit |= Windows7Grbits.ColumnCompressed;
                 }
             }
+
             return grbit;
+        }
+
+        /// <summary>
+        /// Determine if the given ColumndefGrbit option is set in the grbit.
+        /// </summary>
+        /// <param name="grbit">The grbit to look at.</param>
+        /// <param name="option">The option to check for.</param>
+        /// <returns>True if the option is set, false otherwise.</returns>
+        private static bool IsColumndefOptionSet(ColumndefGrbit grbit, ColumndefGrbit option)
+        {
+            return option == (grbit & option);
         }
 
         /// <summary>
@@ -138,17 +150,6 @@ namespace Microsoft.Isam.Esent
             }
 
             return this.coltypToColumnTypeMapping[info.Coltyp];
-        }
-
-        /// <summary>
-        /// Determine if the given ColumndefGrbit option is set in the grbit.
-        /// </summary>
-        /// <param name="grbit">The grbit to look at.</param>
-        /// <param name="option">The option to check for.</param>
-        /// <returns>True if the option is set, false otherwise.</returns>
-        private static bool IsColumndefOptionSet(ColumndefGrbit grbit, ColumndefGrbit option)
-        {
-            return option == (grbit & option);
         }
     }
 }

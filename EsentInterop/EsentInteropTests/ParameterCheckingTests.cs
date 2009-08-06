@@ -6,7 +6,6 @@
 
 using System;
 using System.IO;
-using System.Linq;
 using Microsoft.Isam.Esent.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -159,6 +158,24 @@ namespace InteropApiTests
         }
 
         #endregion EsentErrorException tests
+
+        #region System Parameter tests
+
+        /// <summary>
+        /// Check that an exception is thrown when JetCreateDatabase gets a 
+        /// null database name.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetGetSystemParameterThrowsExceptionWhenMaxParamIsNegative()
+        {
+            int ignored = 0;
+            string value;
+            Api.JetGetSystemParameter(this.instance, this.sesid, JET_param.SystemPath, ref ignored, out value, -1);
+        }
+
+        #endregion
 
         #region Database API
 

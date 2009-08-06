@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace Microsoft.Isam.Esent.Interop.Implementation
 {
@@ -16,35 +15,27 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
     /// A collection of GCHandles for pinned objects. The handles
     /// are freed when this object is disposed.
     /// </summary>
-    internal class GCHandleCollection : IDisposable
+    internal struct GCHandleCollection : IDisposable
     {
         /// <summary>
         /// The handles of the objects being pinned.
         /// </summary>
-        private readonly IList<GCHandle> handles;
-
-        /// <summary>
-        /// Initializes a new instance of the GCHandleCollection class.
-        /// </summary>
-        public GCHandleCollection()
-        {
-            this.handles = new List<GCHandle>();
-        }
-
-        /// <summary>
-        /// Finalizes an instance of the GCHandleCollection class.
-        /// </summary>
-        ~GCHandleCollection()
-        {
-            this.Dispose(false);    
-        }
+        private IList<GCHandle> handles;
 
         /// <summary>
         /// Disposes of the object.
         /// </summary>
         public void Dispose()
         {
-            this.Dispose(true);
+            if (null != this.handles)
+            {
+                foreach (GCHandle handle in this.handles)
+                {
+                    handle.Free();
+                }
+
+                this.handles = null;
+            }
         }
 
         /// <summary>
@@ -63,21 +54,17 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 return IntPtr.Zero;
             }
 
+            if (null == this.handles)
+            {
+                this.handles = new List<GCHandle>();                
+            }
+
             var handle = GCHandle.Alloc(value, GCHandleType.Pinned);
             this.handles.Add(handle);
-            return handle.AddrOfPinnedObject();
-        }
 
-        /// <summary>
-        /// Frees the allocated handles.
-        /// </summary>
-        /// <param name="disposing">True if called from dispose.</param>
-        protected void Dispose(bool disposing)
-        {
-            foreach (GCHandle handle in this.handles)
-            {
-                handle.Free();
-            }
+            IntPtr pinned = handle.AddrOfPinnedObject();
+            Debug.Assert(IntPtr.Zero != pinned, "Pinned object has null address");
+            return pinned;
         }
     }
 }

@@ -109,10 +109,10 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         {
             var openTemporaryTable = new NATIVE_OPENTEMPORARYTABLE();
             openTemporaryTable.cbStruct = (uint) Marshal.SizeOf(openTemporaryTable);
-            openTemporaryTable.ccolumn = (uint) this.ccolumn;
+            openTemporaryTable.ccolumn = checked((uint) this.ccolumn);
             openTemporaryTable.grbit = (uint) this.grbit;
-            openTemporaryTable.cbKeyMost = (uint) this.cbKeyMost;
-            openTemporaryTable.cbVarSegMac = (uint) this.cbVarSegMac;
+            openTemporaryTable.cbKeyMost = checked((uint) this.cbKeyMost);
+            openTemporaryTable.cbVarSegMac = checked((uint) this.cbVarSegMac);
             return openTemporaryTable;
         }
     }

@@ -9,7 +9,6 @@ using Microsoft.Isam.Esent.Interop;
 using Microsoft.Isam.Esent.Interop.Implementation;
 using Microsoft.Isam.Esent.Interop.Vista;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Rhino.Mocks;
 
 namespace InteropApiTests
 {

@@ -729,9 +729,9 @@ namespace Microsoft.Isam.Esent
         {
             if (!this.inUpdate)
             {
-                const string error = "Cursor is not in an update";
-                this.Tracer.TraceError(error);
-                throw new InvalidOperationException(error);
+                const string Error = "Cursor is not in an update";
+                this.Tracer.TraceError(Error);
+                throw new InvalidOperationException(Error);
             }
         }
 

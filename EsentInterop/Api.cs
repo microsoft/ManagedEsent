@@ -901,7 +901,7 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 fixed (byte* pointer = data)
                 {
-                    Api.JetMakeKey(sesid, tableid, new IntPtr(pointer), dataSize, grbit);
+                    Api.JetMakeKey(sesid, tableid, (IntPtr)pointer, dataSize, grbit);
                 }
             }
         }
@@ -1142,7 +1142,7 @@ namespace Microsoft.Isam.Esent.Interop
                 fixed (byte* pointer = data)
                 {
                     return Api.JetRetrieveColumn(
-                        sesid, tableid, columnid, new IntPtr(pointer), dataSize, out actualDataSize, grbit, retinfo);
+                        sesid, tableid, columnid, (IntPtr) pointer, dataSize, out actualDataSize, grbit, retinfo);
                 }
             }
         }
@@ -1310,7 +1310,7 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 fixed (byte* pointer = data)
                 {
-                    Api.JetSetColumn(sesid, tableid, columnid, new IntPtr(pointer), dataSize, grbit, setinfo);
+                    Api.JetSetColumn(sesid, tableid, columnid, (IntPtr) pointer, dataSize, grbit, setinfo);
                 }
             }
         }

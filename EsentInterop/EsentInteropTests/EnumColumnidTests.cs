@@ -5,11 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices;
 using Microsoft.Isam.Esent.Interop;
-using Microsoft.Isam.Esent.Interop.Vista;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace InteropApiTests

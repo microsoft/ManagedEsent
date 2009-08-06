@@ -14,6 +14,7 @@ namespace Microsoft.Isam.Esent.Interop
     [StructLayout(LayoutKind.Sequential)]
     internal struct NATIVE_RETINFO
     {
+        public static readonly int Size = Marshal.SizeOf(typeof(NATIVE_RETINFO));
         public uint cbStruct;
         public uint ibLongValue;
         public uint itagSequence;
@@ -53,9 +54,9 @@ namespace Microsoft.Isam.Esent.Interop
         internal NATIVE_RETINFO GetNativeRetinfo()
         {
             var retinfo = new NATIVE_RETINFO();
-            retinfo.cbStruct = (uint)Marshal.SizeOf(retinfo);
-            retinfo.ibLongValue = (uint)this.ibLongValue;
-            retinfo.itagSequence = (uint)this.itagSequence;
+            retinfo.cbStruct = checked((uint) NATIVE_RETINFO.Size);
+            retinfo.ibLongValue = checked((uint) this.ibLongValue);
+            retinfo.itagSequence = checked((uint) this.itagSequence);
             return retinfo;
         }
 

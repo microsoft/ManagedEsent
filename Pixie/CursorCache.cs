@@ -11,8 +11,8 @@ using System.Linq;
 
 namespace Microsoft.Isam.Esent
 {
-    using Timestamp=Int64;
-    using RecordId=Int64;
+    using RecordId = Int64;
+    using Timestamp = Int64;
 
     /// <summary>
     /// Caches Cursors for Records to use. This structure is not
@@ -103,7 +103,7 @@ namespace Microsoft.Isam.Esent
         /// <returns>True if a matching cursor was found.</returns>
         public bool TryGetCursor(RecordId recordId, out TCursor cursor)
         {
-            foreach(var x in this.cachedCursors)
+            foreach (var x in this.cachedCursors)
             {
                 if (x.Id == recordId)
                 {
@@ -111,6 +111,7 @@ namespace Microsoft.Isam.Esent
                     return true;
                 }
             }
+
             cursor = null;
             return false;
         }

@@ -48,5 +48,38 @@ namespace InteropApiTests
                 Console.WriteLine("SupportsLargeKeys");
             }
         }
+
+        /// <summary>
+        /// If Windows 7 is supported then older features must be 
+        /// supported too.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyWindows7FeaturesIncludesOlderFeatures()
+        {
+            if (EsentVersion.SupportsWindows7Features)
+            {
+                Assert.IsTrue(EsentVersion.SupportsServer2003Features);
+                Assert.IsTrue(EsentVersion.SupportsVistaFeatures);
+                Assert.IsTrue(EsentVersion.SupportsUnicodePaths);
+                Assert.IsTrue(EsentVersion.SupportsLargeKeys);
+            }
+        }
+
+        /// <summary>
+        /// If Windows Vista is supported then older features must be 
+        /// supported too.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyWindowsVistaFeaturesIncludesOlderFeatures()
+        {
+            if (EsentVersion.SupportsVistaFeatures)
+            {
+                Assert.IsTrue(EsentVersion.SupportsServer2003Features);
+                Assert.IsTrue(EsentVersion.SupportsUnicodePaths);
+                Assert.IsTrue(EsentVersion.SupportsLargeKeys);
+            }
+        }
     }
 }

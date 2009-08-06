@@ -5,7 +5,6 @@
 //-----------------------------------------------------------------------
 
 using System;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace Microsoft.Isam.Esent.Interop
@@ -14,7 +13,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native version of the <see cref="JET_SETCOLUMN"/> structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    internal unsafe struct NATIVE_SETCOLUMN
+    internal struct NATIVE_SETCOLUMN
     {
         public uint columnid;
         public IntPtr pvData;
@@ -99,10 +98,10 @@ namespace Microsoft.Isam.Esent.Interop
             var setinfo = new NATIVE_SETCOLUMN
             {
                 columnid = this.columnid.Value,
-                cbData = (uint) this.cbData,
+                cbData = checked((uint) this.cbData),
                 grbit = (uint) this.grbit,
-                ibLongValue = (uint) this.ibLongValue,
-                itagSequence = (uint) this.itagSequence,
+                ibLongValue = checked((uint) this.ibLongValue),
+                itagSequence = checked((uint) this.itagSequence),
             };
             return setinfo;
         }

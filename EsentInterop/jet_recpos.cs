@@ -14,6 +14,7 @@ namespace Microsoft.Isam.Esent.Interop
     [StructLayout(LayoutKind.Sequential)]
     internal struct NATIVE_RECPOS
     {
+        public static readonly int Size = Marshal.SizeOf(typeof(NATIVE_RECPOS));
         public uint cbStruct;
         public uint centriesLT;
         public uint centriesInRange;
@@ -43,9 +44,9 @@ namespace Microsoft.Isam.Esent.Interop
         internal NATIVE_RECPOS GetNativeRecpos()
         {
             var recpos = new NATIVE_RECPOS();
-            recpos.cbStruct = (uint)Marshal.SizeOf(recpos);
-            recpos.centriesLT = (uint)this.centriesLT;
-            recpos.centriesTotal = (uint)this.centriesTotal;
+            recpos.cbStruct = checked((uint) NATIVE_RECPOS.Size);
+            recpos.centriesLT = checked((uint) this.centriesLT);
+            recpos.centriesTotal = checked((uint) this.centriesTotal);
             return recpos;
         }
 

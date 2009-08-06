@@ -22,11 +22,13 @@ namespace InteropApiTests
         [Priority(0)]
         public void ConvertColumndefToNative()
         {
-            var columndef = new JET_COLUMNDEF();
-            columndef.cbMax     = 0x1;
-            columndef.coltyp    = JET_coltyp.Binary;
-            columndef.cp        = JET_CP.Unicode;
-            columndef.grbit     = ColumndefGrbit.ColumnAutoincrement;
+            var columndef = new JET_COLUMNDEF
+            {
+                cbMax = 0x1,
+                coltyp = JET_coltyp.Binary,
+                cp = JET_CP.Unicode,
+                grbit = ColumndefGrbit.ColumnAutoincrement
+            };
 
             NATIVE_COLUMNDEF native = columndef.GetNativeColumndef();
             Assert.AreEqual<uint>(0, native.columnid);

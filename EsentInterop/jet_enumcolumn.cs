@@ -87,7 +87,7 @@ namespace Microsoft.Isam.Esent.Interop
 
             set
             {
-                this.pvData = new IntPtr(value);
+                this.pvData = (IntPtr) value;
             }
         }
     }
