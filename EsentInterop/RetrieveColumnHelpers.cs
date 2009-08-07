@@ -758,32 +758,6 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Retrieves a single column value from the current record and converts it.
-        /// The record is that record associated with the index entry at the current position
-        /// of the cursor.
-        /// </summary>
-        /// <typeparam name="TResult">The return type.</typeparam>
-        /// <param name="sesid">The session to use.</param>
-        /// <param name="tableid">The cursor to retrieve the column from.</param>
-        /// <param name="columnid">The columnid to retrieve.</param>
-        /// <param name="converter">The conversion function to use.</param>
-        /// <returns>The data retrieved from the column. Null if the column is null.</returns>
-        private static TResult? RetrieveColumnAndConvert<TResult>(
-            JET_SESID sesid,
-            JET_TABLEID tableid,
-            JET_COLUMNID columnid,
-            ConversionFunc<TResult> converter) where TResult : struct
-        {
-            byte[] data = RetrieveColumn(sesid, tableid, columnid, RetrieveColumnGrbit.None, null);
-            if (null == data)
-            {
-                return null;
-            }
-
-            return converter(data);
-        }
-
-        /// <summary>
         /// Create the nullable return value.
         /// </summary>
         /// <typeparam name="T">The (struct) type to return.</typeparam>

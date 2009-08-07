@@ -17,7 +17,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
     /// Calls to the ESENT interop layer. These calls take the managed types (e.g. JET_SESID) and
     /// return errors.
     /// </summary>
-    internal class JetApi : IJetApi
+    internal sealed class JetApi : IJetApi
     {
         /// <summary>
         /// API call tracing.

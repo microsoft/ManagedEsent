@@ -12,7 +12,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// Cache allocated chunks of memory that are needed for very short periods
     /// of time. The memory is not zeroed on allocation.
     /// </summary>
-    internal class MemoryCache
+    internal sealed class MemoryCache
     {
         /// <summary>
         /// Default size for newly allocated buffers.

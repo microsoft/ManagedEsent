@@ -5,7 +5,6 @@
 //-----------------------------------------------------------------------
 
 using System;
-using Microsoft.Isam.Esent.Interop.Implementation;
 
 namespace Microsoft.Isam.Esent.Interop
 {

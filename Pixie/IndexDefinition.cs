@@ -4,7 +4,6 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using Microsoft.Isam.Esent.Interop;
 
 namespace Microsoft.Isam.Esent
 {
