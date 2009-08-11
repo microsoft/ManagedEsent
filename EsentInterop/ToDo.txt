@@ -3,9 +3,12 @@
   * Parameter verification for JET_INDEXCREATE.cbKey (w/tests)
   * Perf tests for JetSetColumns vs JetSetColumn
   * Verify JetSetColumn sets err member
+  * Verify SetColumns sets Error member
   * JetEnumerateColumns on temp table
   * Bad arguments for SetColumns
-  * ToString method for ColumnValue
+  * ColumnValue.ToString should print columnid
+  * Test ToString method for ColumnValue
+  * CheckEncodingIsValid should use the CodePage property instead of casting
   	
 Pri 0: APIs needed by clients
 -----------------------------
