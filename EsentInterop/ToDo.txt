@@ -1,9 +1,11 @@
-﻿ Pri 0: Tests
- ------------
+﻿ Pri 0: Tests & Bugs
+ -------------------
   * Parameter verification for JET_INDEXCREATE.cbKey (w/tests)
   * Perf tests for JetSetColumns vs JetSetColumn
   * Verify JetSetColumn sets err member
   * JetEnumerateColumns on temp table
+  * Bad arguments for SetColumns
+  * ToString method for ColumnValue
   	
 Pri 0: APIs needed by clients
 -----------------------------
@@ -11,7 +13,7 @@ Pri 0: APIs needed by clients
   - JetIdle
   - JetGetRecordSize (Vista)
   	
-Pri 1: New functionality
+Pri 1: New functionalitya
 ------------------------
   - JetGetDatabaseInfo
   - JetGetDatabaseFileInfo

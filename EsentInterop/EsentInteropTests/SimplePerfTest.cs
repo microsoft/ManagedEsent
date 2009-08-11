@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using Microsoft.Isam.Esent.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -48,6 +49,8 @@ namespace InteropApiTests
         [TestInitialize]
         public void Setup()
         {
+            Thread.CurrentThread.Priority = ThreadPriority.Highest;
+
             this.directory = SetupHelper.CreateRandomDirectory();
 
             this.random = new Random();
@@ -137,7 +140,7 @@ namespace InteropApiTests
             this.Shuffle(keys);
 
             TimeAction("Insert records", () => this.InsertRecords(NumRecords / 2));
-            TimeAction("Insert records with JetSetColumns", () => this.InsertRecordsWithSetColumns(NumRecords / 2));
+            TimeAction("Insert records with SetColumns", () => this.InsertRecordsWithSetColumns(NumRecords / 2));
             TimeAction("Read one record", () => this.RepeatedlyRetrieveOneRecord(NumRecords));
             TimeAction("Read one record with JetEnumerateColumns", () => this.RepeatedlyRetrieveOneRecordWithEnumColumns(NumRecords));
             TimeAction("Read all records", this.RetrieveAllRecords);
@@ -194,28 +197,17 @@ namespace InteropApiTests
 
         private void InsertRecordsWithSetColumns(int numRecords)
         {
-            var setcolumns = new[]
-            {
-                new JET_SETCOLUMN
-                {
-                    columnid = this.columnidKey,
-                    cbData = sizeof(long),
-                    itagSequence = 1,
-                },
-                new JET_SETCOLUMN
-                {
-                    columnid = this.columnidData,
-                    cbData = this.data.Length,
-                    pvData = this.data,
-                    itagSequence = 1,
-                },
-            };
+            var keyColumn = new Int64ColumnValue { Columnid = this.columnidKey };
+            var dataColumn = new BytesColumnValue { Columnid = this.columnidData, Value = this.data };
+
+            var columns = new ColumnValue[] { keyColumn, dataColumn };
+
             for (int i = 0; i < numRecords; ++i)
             {
                 Api.JetBeginTransaction(this.session);
                 Api.JetPrepareUpdate(this.session, this.table, JET_prep.Insert);
-                setcolumns[0].pvData = BitConverter.GetBytes(this.nextKey++);
-                Api.JetSetColumns(this.session, this.table, setcolumns, setcolumns.Length);
+                keyColumn.Value = this.nextKey++;
+                Api.SetColumns(this.session, this.table, columns);
                 Api.JetUpdate(this.session, this.table);
                 Api.JetCommitTransaction(this.session, CommitTransactionGrbit.LazyFlush);
             }

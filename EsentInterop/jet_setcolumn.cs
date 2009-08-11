@@ -25,7 +25,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Contains input and output parameters for <see cref="Api.JetSetColumns"/>.
+    /// Contains input and output parameters for JetSetColumns.
     /// Fields in the structure describe what column value to set, how to set it,
     /// and where to get the column set data.
     /// </summary>
@@ -68,7 +68,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets the error code or warning returned from the set column operation.
         /// </summary>
-        public JET_wrn err { get; internal set; }
+        public JET_err err { get; internal set; }
 
         /// <summary>
         /// Check to see if cbData is negative or greater than cbData.

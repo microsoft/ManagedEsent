@@ -217,14 +217,14 @@ namespace Microsoft.Isam.Esent.Interop
                     indexlist.columnidcolumnname,
                     NativeMethods.Encoding,
                     RetrieveColumnGrbit.None);
-                var coltyp = (int) RetrieveColumnAsInt32(sesid, indexlist.tableid, indexlist.columnidcoltyp);
+                var coltyp = (JET_coltyp) RetrieveColumnAsInt32(sesid, indexlist.tableid, indexlist.columnidcoltyp);
                 var grbit =
                     (IndexKeyGrbit) RetrieveColumnAsInt32(sesid, indexlist.tableid, indexlist.columnidgrbitColumn);
                 bool isAscending = IndexKeyGrbit.Ascending == grbit;
                 var cp = (JET_CP) RetrieveColumnAsInt16(sesid, indexlist.tableid, indexlist.columnidCp);
                 bool isASCII = JET_CP.ASCII == cp;
 
-                segments[i] = new IndexSegment(columnName, (JET_coltyp) coltyp, isAscending, isASCII);
+                segments[i] = new IndexSegment(columnName, coltyp, isAscending, isASCII);
 
                 if (i < numSegments - 1)
                 {

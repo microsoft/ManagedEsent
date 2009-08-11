@@ -631,6 +631,110 @@ namespace InteropApiTests
             CollectionAssert.AreEqual(data, Api.RetrieveColumn(this.session, this.tableid, this.coltypDict[JET_coltyp.LongBinary]));
         }
 
+        /// <summary>
+        /// Test JetSetColumns
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void SetColumns()
+        {
+            bool bit = Any.Boolean;
+            byte b = Any.Byte;
+            short i16 = Any.Int16;
+            int i32 = Any.Int32;
+            long i64 = Any.Int64;
+            float f = Any.Float;
+            double d = Any.Double;
+            DateTime date = Any.DateTime;
+            string s = Any.String;
+            byte[] bytes = new byte[1023];
+
+            var random = new Random();
+            random.NextBytes(bytes);
+
+            var columnValues = new ColumnValue[]
+            {
+                new BoolColumnValue { Columnid = this.coltypDict[JET_coltyp.Bit], Value = bit },
+                new ByteColumnValue { Columnid = this.coltypDict[JET_coltyp.UnsignedByte], Value = b },
+                new Int16ColumnValue { Columnid = this.coltypDict[JET_coltyp.Short], Value = i16 },
+                new Int32ColumnValue { Columnid = this.coltypDict[JET_coltyp.Long], Value = i32 },
+                new Int64ColumnValue { Columnid = this.coltypDict[JET_coltyp.Currency], Value = i64 },
+                new FloatColumnValue { Columnid = this.coltypDict[JET_coltyp.IEEESingle], Value = f },
+                new DoubleColumnValue { Columnid = this.coltypDict[JET_coltyp.IEEEDouble], Value = d },
+                new DateTimeColumnValue { Columnid = this.coltypDict[JET_coltyp.DateTime], Value = date },
+                new StringColumnValue { Columnid = this.coltypDict[JET_coltyp.LongText], Value = s },
+                new BytesColumnValue { Columnid = this.coltypDict[JET_coltyp.LongBinary], Value = bytes },
+            };
+
+            using (var trx = new Transaction(this.session))
+            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
+            {
+                Api.SetColumns(this.session, this.tableid, columnValues);
+                update.Save();
+                trx.Commit(CommitTransactionGrbit.None);
+            }
+
+            Api.TryMoveFirst(this.session, this.tableid);
+
+            Assert.AreEqual(bit, Api.RetrieveColumnAsBoolean(this.session, this.tableid, this.coltypDict[JET_coltyp.Bit]));
+            Assert.AreEqual(b, Api.RetrieveColumnAsByte(this.session, this.tableid, this.coltypDict[JET_coltyp.UnsignedByte]));
+            Assert.AreEqual(i16, Api.RetrieveColumnAsInt16(this.session, this.tableid, this.coltypDict[JET_coltyp.Short]));
+            Assert.AreEqual(i32, Api.RetrieveColumnAsInt32(this.session, this.tableid, this.coltypDict[JET_coltyp.Long]));
+            Assert.AreEqual(i64, Api.RetrieveColumnAsInt64(this.session, this.tableid, this.coltypDict[JET_coltyp.Currency]));
+            Assert.AreEqual(f, Api.RetrieveColumnAsFloat(this.session, this.tableid, this.coltypDict[JET_coltyp.IEEESingle]));
+            Assert.AreEqual(d, Api.RetrieveColumnAsDouble(this.session, this.tableid, this.coltypDict[JET_coltyp.IEEEDouble]));
+            Assert.AreEqual(date, Api.RetrieveColumnAsDateTime(this.session, this.tableid, this.coltypDict[JET_coltyp.DateTime]));
+            Assert.AreEqual(s, Api.RetrieveColumnAsString(this.session, this.tableid, this.coltypDict[JET_coltyp.LongText]));
+            CollectionAssert.AreEqual(bytes, Api.RetrieveColumn(this.session, this.tableid, this.coltypDict[JET_coltyp.LongBinary]));
+        }
+
+        /// <summary>
+        /// Test JetSetColumns
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void SetColumnsWithNullAndZeroLength()
+        {
+            var columnValues = new ColumnValue[]
+            {
+                new BoolColumnValue { Columnid = this.coltypDict[JET_coltyp.Bit], Value = null },
+                new ByteColumnValue { Columnid = this.coltypDict[JET_coltyp.UnsignedByte], Value = null },
+                new Int16ColumnValue { Columnid = this.coltypDict[JET_coltyp.Short], Value = null },
+                new Int32ColumnValue { Columnid = this.coltypDict[JET_coltyp.Long], Value = null },
+                new Int64ColumnValue { Columnid = this.coltypDict[JET_coltyp.Currency], Value = null },
+                new FloatColumnValue { Columnid = this.coltypDict[JET_coltyp.IEEESingle], Value = null },
+                new DoubleColumnValue { Columnid = this.coltypDict[JET_coltyp.IEEEDouble], Value = null },
+                new DateTimeColumnValue { Columnid = this.coltypDict[JET_coltyp.DateTime], Value = null },
+                new StringColumnValue { Columnid = this.coltypDict[JET_coltyp.LongText], Value = null },
+                new BytesColumnValue { Columnid = this.coltypDict[JET_coltyp.LongBinary], Value = null },
+                new StringColumnValue { Columnid = this.coltypDict[JET_coltyp.Text], Value = String.Empty },
+                new BytesColumnValue { Columnid = this.coltypDict[JET_coltyp.Binary], Value = new byte[0] },
+            };
+
+            using (var trx = new Transaction(this.session))
+            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
+            {
+                Api.SetColumns(this.session, this.tableid, columnValues);
+                update.Save();
+                trx.Commit(CommitTransactionGrbit.None);
+            }
+
+            Api.TryMoveFirst(this.session, this.tableid);
+
+            Assert.IsNull(Api.RetrieveColumnAsBoolean(this.session, this.tableid, this.coltypDict[JET_coltyp.Bit]));
+            Assert.IsNull(Api.RetrieveColumnAsByte(this.session, this.tableid, this.coltypDict[JET_coltyp.UnsignedByte]));
+            Assert.IsNull(Api.RetrieveColumnAsInt16(this.session, this.tableid, this.coltypDict[JET_coltyp.Short]));
+            Assert.IsNull(Api.RetrieveColumnAsInt32(this.session, this.tableid, this.coltypDict[JET_coltyp.Long]));
+            Assert.IsNull(Api.RetrieveColumnAsInt64(this.session, this.tableid, this.coltypDict[JET_coltyp.Currency]));
+            Assert.IsNull(Api.RetrieveColumnAsFloat(this.session, this.tableid, this.coltypDict[JET_coltyp.IEEESingle]));
+            Assert.IsNull(Api.RetrieveColumnAsDouble(this.session, this.tableid, this.coltypDict[JET_coltyp.IEEEDouble]));
+            Assert.IsNull(Api.RetrieveColumnAsDateTime(this.session, this.tableid, this.coltypDict[JET_coltyp.DateTime]));
+            Assert.IsNull(Api.RetrieveColumnAsString(this.session, this.tableid, this.coltypDict[JET_coltyp.LongText]));
+            Assert.IsNull(Api.RetrieveColumn(this.session, this.tableid, this.coltypDict[JET_coltyp.LongBinary]));
+            Assert.AreEqual(String.Empty, Api.RetrieveColumnAsString(this.session, this.tableid, this.coltypDict[JET_coltyp.Text]));
+            CollectionAssert.AreEqual(new byte[0], Api.RetrieveColumn(this.session, this.tableid, this.coltypDict[JET_coltyp.Binary]));
+        }
+
         #endregion
 
         #region DDL Parameter Checking
@@ -1346,7 +1450,8 @@ namespace InteropApiTests
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetSetColumnsThrowsExceptionWhenSetColumnsIsNull()
         {
-            Api.JetSetColumns(this.session, this.tableid, null, 0);
+            JET_SETCOLUMN[] columns = null;
+            Api.JetSetColumns(this.session, this.tableid, columns, 0);
         }
 
         /// <summary>

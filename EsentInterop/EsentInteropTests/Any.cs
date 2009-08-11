@@ -156,6 +156,19 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Gets a random DateTime.
+        /// </summary>
+        public static DateTime DateTime
+        {
+            get
+            {
+                // MSDN sayd: d must be a value between -657435.0 through positive 2958466.0.
+                double d = Any.random.Next(-657435, 2958466);
+                return DateTime.FromOADate(d);
+            }
+        }
+
+        /// <summary>
         /// Gets a random string. The string will only
         /// contain ASCII characters and will be 1 to
         /// 120 characters long.

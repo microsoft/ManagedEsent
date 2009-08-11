@@ -47,6 +47,7 @@
 //      release esent resources (instances, sessions, tables and transactions). 
 
 using System;
+using System.Runtime.InteropServices;
 using Microsoft.Isam.Esent.Interop.Implementation;
 using Microsoft.Isam.Esent.Interop.Vista;
 
@@ -1336,7 +1337,55 @@ namespace Microsoft.Isam.Esent.Interop
         /// </returns>
         public static JET_wrn JetSetColumns(JET_SESID sesid, JET_TABLEID tableid, JET_SETCOLUMN[] setcolumns, int numColumns)
         {
-            return Api.Check(Impl.JetSetColumns(sesid, tableid, setcolumns, numColumns));
+            if (null == setcolumns)
+            {
+                throw new ArgumentNullException("setcolumns");
+            }
+
+            if (numColumns < 0 || numColumns > setcolumns.Length)
+            {
+                throw new ArgumentOutOfRangeException("numColumns", "cannot be negative or greater than setcolumns.Length");
+            }
+
+            using (var gchandles = new GCHandleCollection())
+            {
+                unsafe
+                {
+                    NATIVE_SETCOLUMN* nativeSetColumns = stackalloc NATIVE_SETCOLUMN[numColumns];
+
+                    // For performance, copy small amounts of data into a local buffer instead
+                    // of pinning the data.
+
+                    const int BufferSize = 128;
+                    byte* buffer = stackalloc byte[BufferSize];
+                    int bufferRemaining = BufferSize;
+
+                    for (int i = 0; i < numColumns; ++i)
+                    {
+                        setcolumns[i].CheckDataSize();
+                        nativeSetColumns[i] = setcolumns[i].GetNativeSetcolumn();
+                        if (bufferRemaining >= setcolumns[i].cbData)
+                        {
+                            nativeSetColumns[i].pvData = (IntPtr) buffer;
+                            Marshal.Copy(setcolumns[i].pvData, 0, nativeSetColumns[i].pvData, setcolumns[i].cbData);
+                            buffer += setcolumns[i].cbData;
+                            bufferRemaining -= setcolumns[i].cbData;
+                        }
+                        else
+                        {
+                            nativeSetColumns[i].pvData = gchandles.Add(setcolumns[i].pvData);
+                        }
+                    }
+
+                    int err = Impl.JetSetColumns(sesid, tableid, nativeSetColumns, numColumns);
+                    for (int i = 0; i < numColumns; ++i)
+                    {
+                        setcolumns[i].err = (JET_err) nativeSetColumns[i].err;
+                    }
+
+                    return Api.Check(err);
+                }
+            }
         }
 
         /// <summary>

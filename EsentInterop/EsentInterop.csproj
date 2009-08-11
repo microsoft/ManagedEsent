@@ -85,6 +85,7 @@
     <Compile Include="jet_opentemporarytable.cs" />
     <Compile Include="jet_threadstats.cs" />
     <Compile Include="EsentStopwatch.cs" />
+    <Compile Include="ColumnValues.cs" />
     <Compile Include="VistaApi.cs" />
     <Compile Include="VistaGrbits.cs" />
     <Compile Include="EsentInvalidColumnException.cs" />

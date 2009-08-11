@@ -333,6 +333,31 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Sets columns.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to update. An update should be prepared.</param>
+        /// <param name="values">The values to set.</param>
+        public static void SetColumns(JET_SESID sesid, JET_TABLEID tableid, params ColumnValue[] values)
+        {
+            if (null == values)
+            {
+                throw new ArgumentNullException("values");
+            }
+
+            if (0 == values.Length)
+            {
+                throw new ArgumentException("must have at least one value", "values");
+            }
+
+            unsafe
+            {
+                NATIVE_SETCOLUMN* nativeSetcolumns = stackalloc NATIVE_SETCOLUMN[values.Length];
+                Api.Check(values[0].SetColumns(sesid, tableid, values, nativeSetcolumns, 0));
+            }
+        }
+
+        /// <summary>
         /// Verifies that the given encoding is valid for setting/retrieving data. Only
         /// the ASCII and Unicode encodings are allowed. An <see cref="ArgumentOutOfRangeException"/>
         /// is thrown if the encoding isn't valid.

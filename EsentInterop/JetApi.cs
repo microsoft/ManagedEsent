@@ -1319,66 +1319,24 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         /// <summary>
         /// Allows an application to set multiple column values in a single
-        /// operation. An array of <see cref="JET_SETCOLUMN"/> structures is
+        /// operation. An array of <see cref="NATIVE_SETCOLUMN"/> structures is
         /// used to describe the set of column values to be set, and to describe
         /// input buffers for each column value to be set.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to set the columns on.</param>
         /// <param name="setcolumns">
-        /// An array of <see cref="JET_SETCOLUMN"/> structures describing the
+        /// An array of <see cref="NATIVE_SETCOLUMN"/> structures describing the
         /// data to set.
         /// </param>
         /// <param name="numColumns">
         /// Number of entries in the setcolumns parameter.
         /// </param>
         /// <returns>An error code or warning.</returns>
-        public int JetSetColumns(JET_SESID sesid, JET_TABLEID tableid, JET_SETCOLUMN[] setcolumns, int numColumns)
+        public unsafe int JetSetColumns(JET_SESID sesid, JET_TABLEID tableid, NATIVE_SETCOLUMN* setcolumns, int numColumns)
         {
             this.TraceFunctionCall("JetSetColumns");
-            this.CheckNotNull(setcolumns, "setcolumns");
-            this.CheckDataSize(setcolumns, numColumns, "numColumns");
-
-            using (var gchandles = new GCHandleCollection())
-            {
-                unsafe
-                {
-                    NATIVE_SETCOLUMN* nativeSetColumns = stackalloc NATIVE_SETCOLUMN[numColumns];
-
-                    const int BufferSize = 128;
-                    byte* buffer = stackalloc byte[BufferSize];
-                    int bufferRemaining = BufferSize;
-
-                    for (int i = 0; i < numColumns; ++i)
-                    {
-                        setcolumns[i].CheckDataSize();
-                        nativeSetColumns[i] = setcolumns[i].GetNativeSetcolumn();
-                        if (bufferRemaining >= setcolumns[i].cbData)
-                        {
-                            nativeSetColumns[i].pvData = (IntPtr) buffer;
-                            Marshal.Copy(setcolumns[i].pvData, 0, nativeSetColumns[i].pvData, setcolumns[i].cbData);
-                            buffer += setcolumns[i].cbData;
-                            bufferRemaining -= setcolumns[i].cbData;
-                        }
-                        else
-                        {
-                            nativeSetColumns[i].pvData = gchandles.Add(setcolumns[i].pvData);                            
-                        }
-                    }
-
-                    int err =
-                        this.Err(
-                            NativeMethods.JetSetColumns(
-                                sesid.Value, tableid.Value, nativeSetColumns, checked((uint) numColumns)));
-
-                    for (int i = 0; i < numColumns; ++i)
-                    {
-                        setcolumns[i].err = (JET_wrn) nativeSetColumns[i].err;
-                    }
-
-                    return err;
-                }
-            }
+            return this.Err(NativeMethods.JetSetColumns(sesid.Value, tableid.Value, setcolumns, checked((uint) numColumns)));
         }
 
         public int JetGetLock(JET_SESID sesid, JET_TABLEID tableid, GetLockGrbit grbit)

@@ -469,21 +469,21 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         /// <summary>
         /// Allows an application to set multiple column values in a single
-        /// operation. An array of <see cref="JET_SETCOLUMN"/> structures is
+        /// operation. An array of <see cref="NATIVE_SETCOLUMN"/> structures is
         /// used to describe the set of column values to be set, and to describe
         /// input buffers for each column value to be set.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to set the columns on.</param>
         /// <param name="setcolumns">
-        /// An array of <see cref="JET_SETCOLUMN"/> structures describing the
+        /// An array of <see cref="NATIVE_SETCOLUMN"/> structures describing the
         /// data to set.
         /// </param>
         /// <param name="numColumns">
         /// Number of entries in the setcolumns parameter.
         /// </param>
         /// <returns>An error code or warning.</returns>
-        int JetSetColumns(JET_SESID sesid, JET_TABLEID tableid, JET_SETCOLUMN[] setcolumns, int numColumns);
+        unsafe int JetSetColumns(JET_SESID sesid, JET_TABLEID tableid, NATIVE_SETCOLUMN* setcolumns, int numColumns);
 
         int JetGetLock(JET_SESID sesid, JET_TABLEID tableid, GetLockGrbit grbit);
 
