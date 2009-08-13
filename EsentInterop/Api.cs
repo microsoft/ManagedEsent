@@ -1449,9 +1449,24 @@ namespace Microsoft.Isam.Esent.Interop
 
         #endregion
 
-        #region Error Handling
+		#region Misc
 
-        /// <summary>
+		/// <summary>
+		/// Performs idle cleanup tasks or checks the version store status in ESE.
+		/// </summary>
+		/// <param name="sesid">The session to use.</param>
+		/// <param name="grbit">A combination of JetIdleGrbit flags.</param>
+		/// <returns>An error code if the operation fails.</returns>
+		public static JET_wrn JetIdle(JET_SESID sesid, IdleGrbit grbit)
+		{
+			return Api.Check(Impl.JetIdle(sesid, grbit));
+		}
+
+		#endregion
+
+		#region Error Handling
+
+		/// <summary>
         /// Throw an exception if the parameter is an ESE error,
         /// returns a <see cref="JET_wrn"/> otherwise.
         /// </summary>

@@ -1397,9 +1397,25 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         #endregion
 
-        #region Helper Methods
+		#region Misc
 
-        /// <summary>
+		/// <summary>
+		/// Performs idle cleanup tasks or checks the version store status in ESE.
+		/// </summary>
+		/// <param name="sesid">The session to use.</param>
+		/// <param name="grbit">A combination of JetIdleGrbit flags.</param>
+		/// <returns>An error code if the operation fails.</returns>
+		public int JetIdle(JET_SESID sesid, IdleGrbit grbit)
+		{
+			this.TraceFunctionCall("JetIdle");
+			return NativeMethods.JetIdle(sesid.Value, (uint) grbit);
+		}
+
+		#endregion
+
+		#region Helper Methods
+
+		/// <summary>
         /// Convert managed JET_ENUMCOLUMNID objects to NATIVE_ENUMCOLUMNID
         /// structures.
         /// </summary>

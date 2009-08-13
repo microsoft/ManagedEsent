@@ -108,6 +108,7 @@
     <Compile Include="EscrowUpdateTests.cs" />
     <Compile Include="ExceptionTests.cs" />
     <Compile Include="IndexlistTests.cs" />
+    <Compile Include="JetIdleTests.cs" />
     <Compile Include="EmptyTableFixture.cs" />
     <Compile Include="IndexRangeFromTableidTests.cs" />
     <Compile Include="SeekTests.cs" />

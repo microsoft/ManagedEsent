@@ -410,5 +410,10 @@ namespace Microsoft.Isam.Esent.Interop
             uint grbit);
 
         #endregion
-    }
+
+		#region Misc
+		[DllImport(EsentDll, ExactSpelling = true)]
+		public static extern int JetIdle(IntPtr sesid, uint grbit);
+		#endregion
+	}
 }
