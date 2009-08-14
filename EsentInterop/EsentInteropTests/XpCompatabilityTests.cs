@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System;
+using System.IO;
 using Microsoft.Isam.Esent.Interop;
 using Microsoft.Isam.Esent.Interop.Implementation;
 using Microsoft.Isam.Esent.Interop.Vista;
@@ -122,6 +123,114 @@ namespace InteropApiTests
             var sesid = new JET_SESID();
             var temporarytable = new JET_OPENTEMPORARYTABLE();
             VistaApi.JetOpenTemporaryTable(sesid, temporarytable);
+        }
+
+        /// <summary>
+        /// Getting the LVChunk size should return a default value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyXpReturnsCorrectLVChunkSize()
+        {
+            Assert.AreEqual(SystemParameters.DatabasePageSize - 82, SystemParameters.LVChunkSizeMost);
+        }
+
+        /// <summary>
+        /// Getting the cached closed tables system parameter should return 0 on XP.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyXpReturns0ForCachedClosedTables()
+        {
+            using (var instance = new Instance("XP"))
+            {
+                Assert.AreEqual(0, instance.Parameters.CachedClosedTables);
+            }
+        }
+
+        /// <summary>
+        /// Getting the configuration system parameter should return 0 on XP.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyXpReturns1ForConfiguration()
+        {
+            Assert.AreEqual(1, SystemParameters.Configuration);
+        }
+
+        /// <summary>
+        /// Getting the enable advanced system parameter should return true on XP.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyXpReturnsTrueForEnableAdvanced()
+        {
+            Assert.AreEqual(true, SystemParameters.EnableAdvanced);
+        }
+
+        /// <summary>
+        /// Getting the key most system parameter should return 255 on XP.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyXpReturns255ForKeyMost()
+        {
+            Assert.AreEqual(255, SystemParameters.KeyMost);
+        }
+
+        /// <summary>
+        /// Use JetCreateIndex2 on Xp to test the compatability path.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void CreateIndexesOnXp()
+        {
+            string directory = SetupHelper.CreateRandomDirectory();
+            string database = Path.Combine(directory, "test.db");
+
+            using (var instance = new Instance("XpCompatability"))
+            {
+                instance.Parameters.Recovery = false;
+                instance.Parameters.NoInformationEvent = true;
+                instance.Parameters.PageTempDBMin = SystemParameters.PageTempDBSmallest;
+                instance.Parameters.TempDirectory = directory;
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    JET_DBID dbid;
+                    Api.JetCreateDatabase(session, database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    using (var transaction = new Transaction(session))
+                    {
+                        JET_TABLEID tableid;
+                        Api.JetCreateTable(session, dbid, "table", 0, 100, out tableid);
+                        JET_COLUMNID columnid;
+                        Api.JetAddColumn(
+                            session,
+                            tableid,
+                            "column1",
+                            new JET_COLUMNDEF { coltyp = JET_coltyp.Long },
+                            null,
+                            0,
+                            out columnid);
+
+                        var indexcreates = new[]
+                        {
+                            new JET_INDEXCREATE
+                            {
+                                szKey = "+column1\0",
+                                cbKey = 10,
+                                szIndexName = "index1",
+                                pidxUnicode = new JET_UNICODEINDEX { lcid = 1033 },
+                            },
+                        };
+
+                        Api.JetCreateIndex2(session, tableid, indexcreates, indexcreates.Length);
+                        transaction.Commit(CommitTransactionGrbit.LazyFlush);
+                    }
+                }
+            }
+
+            Directory.Delete(directory, true);
         }
     }
 }

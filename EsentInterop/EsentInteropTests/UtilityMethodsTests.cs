@@ -37,6 +37,17 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Check that Any.BytesOfLength returns a string of the correct length.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void TestAnyBytesOfLengthIsCorrectLength()
+        {
+            byte[] s = Any.BytesOfLength(20);
+            Assert.AreEqual(20, s.Length);
+        }
+
+        /// <summary>
         /// Check that Any.String returns a string of at least 1 character.
         /// </summary>
         [TestMethod]
@@ -71,6 +82,17 @@ namespace InteropApiTests
                 Assert.IsTrue(c <= '~');    // last ASCII character (127)
                 Assert.IsTrue(c >= ' ');    // first ASCII character (32);
             }
+        }
+
+        /// <summary>
+        /// Check that Any.StringOfLength returns a string of the correct length.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void TestAnyStringOfLengthIsCorrectLength()
+        {
+            string s = Any.StringOfLength(10);
+            Assert.AreEqual(10, s.Length);
         }
     }
 }

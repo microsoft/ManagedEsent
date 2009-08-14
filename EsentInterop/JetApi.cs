@@ -158,7 +158,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             int err;
             if (this.Capabilities.SupportsUnicodePaths)
             {
-                err = this.Err(NativeMethods.JetGetSystemParameterW(instance.Value, sesid.Value, (uint)paramid, ref intValue, sb, checked((uint)maxParam * sizeof(char))));
+                err = this.Err(NativeMethods.JetGetSystemParameterW(instance.Value, sesid.Value, (uint)paramid, ref intValue, sb, checked((uint) maxParam * sizeof(char))));
             }
             else
             {
@@ -1239,7 +1239,6 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 //
                 // Because we are using stackalloc all the work has to be done
                 // in the same method.
-
                 NATIVE_ENUMCOLUMNID* nativecolumnids = stackalloc NATIVE_ENUMCOLUMNID[numColumnids];
                 int totalNumTags = ConvertEnumColumnids(columnids, numColumnids, nativecolumnids);
 
@@ -1397,25 +1396,25 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         #endregion
 
-		#region Misc
+        #region Misc
 
-		/// <summary>
-		/// Performs idle cleanup tasks or checks the version store status in ESE.
-		/// </summary>
-		/// <param name="sesid">The session to use.</param>
-		/// <param name="grbit">A combination of JetIdleGrbit flags.</param>
-		/// <returns>An error code if the operation fails.</returns>
-		public int JetIdle(JET_SESID sesid, IdleGrbit grbit)
-		{
-			this.TraceFunctionCall("JetIdle");
-			return NativeMethods.JetIdle(sesid.Value, (uint) grbit);
-		}
+        /// <summary>
+        /// Performs idle cleanup tasks or checks the version store status in ESE.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="grbit">A combination of JetIdleGrbit flags.</param>
+        /// <returns>An error code if the operation fails.</returns>
+        public int JetIdle(JET_SESID sesid, IdleGrbit grbit)
+        {
+            this.TraceFunctionCall("JetIdle");
+            return NativeMethods.JetIdle(sesid.Value, (uint) grbit);
+        }
 
-		#endregion
+        #endregion
 
-		#region Helper Methods
+        #region Helper Methods
 
-		/// <summary>
+        /// <summary>
         /// Convert managed JET_ENUMCOLUMNID objects to NATIVE_ENUMCOLUMNID
         /// structures.
         /// </summary>

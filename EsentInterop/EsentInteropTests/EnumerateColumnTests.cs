@@ -87,7 +87,6 @@ namespace InteropApiTests
             JET_COLUMNID columnid;
 
             // These columns are all tagged so they are not present in the default record.
-
             var columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Bit, grbit = ColumndefGrbit.ColumnTagged };
             Api.JetAddColumn(this.sesid, this.tableid, "Boolean", columndef, null, 0, out columnid);
 

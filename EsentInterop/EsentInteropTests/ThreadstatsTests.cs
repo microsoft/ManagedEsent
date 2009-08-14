@@ -184,5 +184,68 @@ namespace InteropApiTests
             Assert.AreEqual(2, sum.cLogRecord);
             Assert.AreEqual(0, sum.cbLogRecord);
         }
+
+        /// <summary>
+        /// Test JET_THREADSTATS.ToString()
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void TestJetThreadstatsToStringSingular()
+        {
+            var t = new JET_THREADSTATS
+            {
+                cPageReferenced = 1,
+                cPageRead = 1,
+                cPagePreread = 1,
+                cPageDirtied = 1,
+                cPageRedirtied = 1,
+                cLogRecord = 1,
+                cbLogRecord = 1,
+            };
+            const string Expected = "1 page reference, 1 page read, 1 page preread, 1 page dirtied, 1 page redirtied, 1 log record, 1 byte logged";
+            Assert.AreEqual(Expected, t.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_THREADSTATS.ToString()
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void TestJetThreadstatsToStringZero()
+        {
+            var t = new JET_THREADSTATS
+            {
+                cPageReferenced = 0,
+                cPageRead = 0,
+                cPagePreread = 0,
+                cPageDirtied = 0,
+                cPageRedirtied = 0,
+                cLogRecord = 0,
+                cbLogRecord = 0,
+            };
+            const string Expected = "0 page references, 0 pages read, 0 pages preread, 0 pages dirtied, 0 pages redirtied, 0 log records, 0 bytes logged";
+            Assert.AreEqual(Expected, t.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_THREADSTATS.ToString()
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void TestJetThreadstatsToString()
+        {
+            var t = new JET_THREADSTATS
+            {
+                cPageReferenced = 10,
+                cPageRead = 2,
+                cPagePreread = 3,
+                cPageDirtied = 4,
+                cPageRedirtied = 5,
+                cLogRecord = 6,
+                cbLogRecord = 7,
+            };
+            const string Expected = "10 page references, 2 pages read, 3 pages preread, 4 pages dirtied, 5 pages redirtied, 6 log records, 7 bytes logged";
+            Assert.AreEqual(Expected, t.ToString());
+        }
     }
 }

@@ -178,14 +178,7 @@ namespace InteropApiTests
             get
             {
                 int length = Any.random.Next(1, 120);
-                var sb = new StringBuilder();
-                for (int i = 0; i < length; ++i)
-                {
-                    var c = (char)Any.random.Next(32, 127);
-                    sb.Append(c);
-                }
-
-                return sb.ToString();
+                return StringOfLength(length);
             }
         }
 
@@ -198,10 +191,37 @@ namespace InteropApiTests
             get
             {
                 int length = Any.random.Next(1, 255);
-                var data = new byte[length];
-                Any.random.NextBytes(data);
-                return data;
+                return BytesOfLength(length);
             }
+        }
+
+        /// <summary>
+        /// Gets a random string of the specified length.
+        /// </summary>
+        /// <param name="numChars">Number of chars to be in the string.</param>
+        /// <returns>A random ASCII string of the specified length.</returns>
+        public static string StringOfLength(int numChars)
+        {
+            var sb = new StringBuilder(numChars);
+            for (int i = 0; i < numChars; ++i)
+            {
+                var c = (char)Any.random.Next(32, 127);
+                sb.Append(c);
+            }
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Gets a random array of bytes of the specified length.
+        /// </summary>
+        /// <param name="numBytes">Number of bytes to be returned.</param>
+        /// <returns>An array of random bytes of the specified length.</returns>
+        public static byte[] BytesOfLength(int numBytes)
+        {
+            var data = new byte[numBytes];
+            Any.random.NextBytes(data);
+            return data;            
         }
     }
 }

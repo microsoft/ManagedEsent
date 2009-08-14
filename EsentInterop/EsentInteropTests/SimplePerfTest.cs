@@ -54,9 +54,7 @@ namespace InteropApiTests
             this.directory = SetupHelper.CreateRandomDirectory();
 
             this.random = new Random();
-            this.data = new byte[DataSize];
-            this.random.NextBytes(this.data);
-
+            this.data = Any.BytesOfLength(DataSize);
             this.dataBuf = new byte[DataSize];
 
             JET_DBID dbid;
@@ -70,16 +68,22 @@ namespace InteropApiTests
             this.instance.Parameters.LogFileDirectory = this.directory;
             this.instance.Parameters.SystemDirectory = this.directory;
             this.instance.Parameters.MaxVerPages = 1024;
-
-            // Circular logging, 16MB logfiles, 8MB of log buffer
-            this.instance.Parameters.CircularLog = true;
-            this.instance.Parameters.LogFileSize = 16 * 1024; // in KB
-            this.instance.Parameters.LogBuffers = 16 * 1024; // in 512-byte units
+            this.instance.Parameters.Recovery = false;
 
             // Create the instance, database and table
             this.instance.Init();
             this.session = new Session(this.instance);
             Api.JetCreateDatabase(this.session, Path.Combine(this.directory, "esentperftest.db"), string.Empty, out dbid, CreateDatabaseGrbit.None);
+
+            // Create a dummy table to force the database to grow
+            using (var trx = new Transaction(this.session))
+            {
+                JET_TABLEID tableid;
+                Api.JetCreateTable(this.session, dbid, "dummy_table", 64 * 1024 * 1024 / SystemParameters.DatabasePageSize, 100, out tableid);
+                Api.JetCloseTable(this.session, tableid);
+                Api.JetDeleteTable(this.session, dbid, "dummy_table");
+                trx.Commit(CommitTransactionGrbit.LazyFlush);
+            }
 
             // Create the table
             using (var trx = new Transaction(this.session))
@@ -125,10 +129,10 @@ namespace InteropApiTests
 
         private static void TimeAction(string name, Action action)
         {
-            var stopwatch = Stopwatch.StartNew();
+            var stopwatch = EsentStopwatch.StartNew();
             action();
             stopwatch.Stop();
-            Console.WriteLine("{0}: {1}", name, stopwatch.Elapsed);
+            Console.WriteLine("{0}: {1} ({2})", name, stopwatch.Elapsed, stopwatch.ThreadStats);
         }
 
         private void InsertReadSeek()
@@ -145,7 +149,6 @@ namespace InteropApiTests
             TimeAction("Read one record with JetEnumerateColumns", () => this.RepeatedlyRetrieveOneRecordWithEnumColumns(NumRecords));
             TimeAction("Read all records", this.RetrieveAllRecords);
             TimeAction("Seek to all records", () => this.SeekToAllRecords(keys));
-            TimeAction("Delete all records", () => this.DeleteAllRecords());
         }
 
         private void CheckMemoryUsage(Action action)
@@ -235,17 +238,6 @@ namespace InteropApiTests
             {
                 Api.JetBeginTransaction(this.session);
                 this.RetrieveRecord();
-                Api.JetCommitTransaction(this.session, CommitTransactionGrbit.LazyFlush);
-            }
-        }
-
-        private void DeleteAllRecords()
-        {
-            Api.MoveBeforeFirst(this.session, this.table);
-            while (Api.TryMoveNext(this.session, this.table))
-            {
-                Api.JetBeginTransaction(this.session);
-                Api.JetDelete(this.session, this.table);
                 Api.JetCommitTransaction(this.session, CommitTransactionGrbit.LazyFlush);
             }
         }

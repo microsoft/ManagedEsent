@@ -5,10 +5,8 @@
   * Verify JetSetColumn sets err member
   * Verify SetColumns sets Error member
   * JetEnumerateColumns on temp table
-  * Bad arguments for SetColumns
   * ColumnValue.ToString should print columnid
   * Test ToString method for ColumnValue
-  * CheckEncodingIsValid should use the CodePage property instead of casting
   	
 Pri 0: APIs needed by clients
 -----------------------------

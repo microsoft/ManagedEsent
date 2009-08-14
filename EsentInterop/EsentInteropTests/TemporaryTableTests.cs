@@ -288,6 +288,38 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        public void SortDataWithJetOpenTempTable3()
+        {
+            JET_TABLEID tableid;
+            var columns = new[]
+            {
+                new JET_COLUMNDEF { coltyp = JET_coltyp.Long, grbit = ColumndefGrbit.TTKey },
+                new JET_COLUMNDEF { coltyp = JET_coltyp.Text, cp = JET_CP.Unicode },
+            };
+            var columnids = new JET_COLUMNID[columns.Length];
+
+            Api.JetOpenTempTable3(this.session, columns, columns.Length, null, TempTableGrbit.None, out tableid, columnids);
+
+            for (int i = 5; i >= 0; --i)
+            {
+                using (var update = new Update(this.session, tableid, JET_prep.Insert))
+                {
+                    Api.SetColumn(this.session, tableid, columnids[0], i);
+                    Api.SetColumn(this.session, tableid, columnids[1], i.ToString(), Encoding.Unicode);
+                    update.Save();
+                }
+            }
+
+            var expected = new[] { "0", "1", "2", "3", "4", "5" };
+            CollectionAssert.AreEqual(expected, this.RetrieveAllRecordsAsString(tableid, columnids[1]).ToArray());
+            Api.JetCloseTable(this.session, tableid);
+        }
+
+        /// <summary>
+        /// Sort data with a temporary table
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
         public void SortDataCaseSensitiveWithJetOpenTempTable3()
         {
             JET_TABLEID tableid;

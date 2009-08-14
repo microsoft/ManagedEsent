@@ -1077,24 +1077,24 @@ namespace Microsoft.Isam.Esent.Interop
         ErrorOnDuplicateInsertion = 0x20,
     }
 
-	/// <summary>
-	/// Options for JetIdle() API
-	/// </summary>
-	[Flags]
-	public enum IdleGrbit
-	{
-		/// <summary>
-		/// Default options.
-		/// </summary>
-		None = 0x0,
+    /// <summary>
+    /// Options for JetIdle() API
+    /// </summary>
+    [Flags]
+    public enum IdleGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0x0,
 
-		/// <summary>Triggers cleanup of the version store.</summary>
-		FlushBuffers = 0x01,
+        /// <summary>Triggers cleanup of the version store.</summary>
+        FlushBuffers = 0x01,
 
-		/// <summary>Reserverd for future use. If this flag is specified, the API will return JET_errInvalidgrbit.</summary>
-		Compact = 0x02,
+        /// <summary>Reserverd for future use. If this flag is specified, the API will return JET_errInvalidgrbit.</summary>
+        Compact = 0x02,
 
-		/// <summary>Returns <see cref="JET_wrn.IdleFull"/> if version store is more than half full.</summary>
-		GetStatus = 0x04,
-	}
+        /// <summary>Returns <see cref="JET_wrn.IdleFull"/> if version store is more than half full.</summary>
+        GetStatus = 0x04,
+    }
 }

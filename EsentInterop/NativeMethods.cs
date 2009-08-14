@@ -294,7 +294,6 @@ namespace Microsoft.Isam.Esent.Interop
         public static extern int JetGotoBookmark(IntPtr sesid, IntPtr tableid, [In] byte[] pvBookmark, uint cbBookmark);
 
         // This has IntPtr and NATIVE_RETINFO versions because the parameter can be null
-
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetMove(IntPtr sesid, IntPtr tableid, int cRow, uint grbit);
 
@@ -411,9 +410,9 @@ namespace Microsoft.Isam.Esent.Interop
 
         #endregion
 
-		#region Misc
-		[DllImport(EsentDll, ExactSpelling = true)]
-		public static extern int JetIdle(IntPtr sesid, uint grbit);
-		#endregion
-	}
+        #region Misc
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetIdle(IntPtr sesid, uint grbit);
+        #endregion
+    }
 }

@@ -317,6 +317,16 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentNullException("buffer");
             }
 
+            if (offset < 0)
+            {
+                throw new ArgumentOutOfRangeException("offset", offset, "cannot be negative");
+            }
+
+            if (count < 0)
+            {
+                throw new ArgumentOutOfRangeException("count", count, "cannot be negative");
+            }
+
             if (buffer.Length - offset < count)
             {
                 throw new ArgumentOutOfRangeException("count", count, "cannot be larger than the size of the buffer");

@@ -120,6 +120,18 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test the event source key property.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void SetAndRetrieveInstanceParametersEventSourceKey()
+        {
+            string expected = Any.String;
+            this.instanceParameters.EventSourceKey = expected;
+            Assert.AreEqual(expected, this.instanceParameters.EventSourceKey);
+        }
+
+        /// <summary>
         /// Test setting the EventSource property sets the parameter on the instance.
         /// </summary>
         [TestMethod]
@@ -438,15 +450,27 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test the Recovery property.
+        /// Turn on logging with the recovery property.
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        public void SetAndRetrieveInstanceParametersRecovery()
+        public void SetAndRetrieveInstanceParametersRecoveryOn()
         {
-            bool expected = Any.Boolean;
-            this.instanceParameters.Recovery = expected;
-            Assert.AreEqual(expected, this.instanceParameters.Recovery);
+            const bool Expected = true;
+            this.instanceParameters.Recovery = Expected;
+            Assert.AreEqual(Expected, this.instanceParameters.Recovery);
+        }
+
+        /// <summary>
+        /// Turn off logging with the recovery property.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void SetAndRetrieveInstanceParametersRecoveryOff()
+        {
+            const bool Expected = false;
+            this.instanceParameters.Recovery = Expected;
+            Assert.AreEqual(Expected, this.instanceParameters.Recovery);
         }
 
         /// <summary>

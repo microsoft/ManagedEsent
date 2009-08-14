@@ -792,7 +792,20 @@ namespace InteropApiTests
         public void RetrieveLargeString()
         {
             JET_COLUMNID columnid = this.columnidDict["Unicode"];
-            var value = new string('x', 16384);
+            var value = Any.StringOfLength(16384);
+            this.InsertRecord(columnid, Encoding.Unicode.GetBytes(value));
+            Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
+        /// Retrieve a string that is too large for the cached retrieval buffer
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void RetrieveExtremelyLargeString()
+        {
+            JET_COLUMNID columnid = this.columnidDict["Unicode"];
+            var value = Any.StringOfLength(1024 * 1024);
             this.InsertRecord(columnid, Encoding.Unicode.GetBytes(value));
             Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid));
         }
@@ -838,6 +851,19 @@ namespace InteropApiTests
             
             string actual = Encoding.Unicode.GetString(Api.RetrieveColumn(this.sesid, this.tableid, columnid));
             Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test setting a ColumnValue with a string
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void SetColumnsWithString()
+        {
+            JET_COLUMNID columnid = this.columnidDict["unicode"];
+            var value = Any.String;
+            this.InsertRecordWithSetColumns(columnid, new StringColumnValue { Columnid = columnid, Value = value });
+            Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid));
         }
 
         /// <summary>
@@ -963,7 +989,20 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test setting a column from a boolean.
+        /// Test setting a ColumnValue with a boolean
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void SetColumnsWithBoolean()
+        {
+            JET_COLUMNID columnid = this.columnidDict["Boolean"];
+            bool value = Any.Boolean;
+            this.InsertRecordWithSetColumns(columnid, new BoolColumnValue { Columnid = columnid, Value = value });
+            Assert.AreEqual(value, Api.RetrieveColumnAsBoolean(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
+        /// Test SetColumn with a byte
         /// </summary>
         [TestMethod]
         [Priority(2)]
@@ -980,6 +1019,19 @@ namespace InteropApiTests
 
             byte actual = Api.RetrieveColumn(this.sesid, this.tableid, columnid)[0];
             Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test setting a ColumnValue with a byte
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void SetColumnsWithByte()
+        {
+            JET_COLUMNID columnid = this.columnidDict["byte"];
+            var value = Any.Byte;
+            this.InsertRecordWithSetColumns(columnid, new ByteColumnValue { Columnid = columnid, Value = value });
+            Assert.AreEqual(value, Api.RetrieveColumnAsByte(this.sesid, this.tableid, columnid));
         }
 
         /// <summary>
@@ -1003,6 +1055,19 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test setting a ColumnValue with an Int16
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void SetColumnsWithInt16()
+        {
+            JET_COLUMNID columnid = this.columnidDict["int16"];
+            var value = Any.Int16;
+            this.InsertRecordWithSetColumns(columnid, new Int16ColumnValue { Columnid = columnid, Value = value });
+            Assert.AreEqual(value, Api.RetrieveColumnAsInt16(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
         /// Test setting a column from an int.
         /// </summary>
         [TestMethod]
@@ -1020,6 +1085,19 @@ namespace InteropApiTests
 
             int actual = BitConverter.ToInt32(Api.RetrieveColumn(this.sesid, this.tableid, columnid), 0);
             Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test setting a ColumnValue with an Int32
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void SetColumnsWithInt32()
+        {
+            JET_COLUMNID columnid = this.columnidDict["int32"];
+            var value = Any.Int32;
+            this.InsertRecordWithSetColumns(columnid, new Int32ColumnValue { Columnid = columnid, Value = value });
+            Assert.AreEqual(value, Api.RetrieveColumnAsInt32(this.sesid, this.tableid, columnid));
         }
 
         /// <summary>
@@ -1043,6 +1121,19 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test setting a ColumnValue with an Int64
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void SetColumnsWithInt64()
+        {
+            JET_COLUMNID columnid = this.columnidDict["int64"];
+            var value = Any.Int64;
+            this.InsertRecordWithSetColumns(columnid, new Int64ColumnValue { Columnid = columnid, Value = value });
+            Assert.AreEqual(value, Api.RetrieveColumnAsInt64(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
         /// Test setting a column from a ushort.
         /// </summary>
         [TestMethod]
@@ -1060,6 +1151,19 @@ namespace InteropApiTests
 
             ushort actual = BitConverter.ToUInt16(Api.RetrieveColumn(this.sesid, this.tableid, columnid), 0);
             Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test setting a ColumnValue with a UInt16
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void SetColumnsWithUInt16()
+        {
+            JET_COLUMNID columnid = this.columnidDict["uint16"];
+            var value = Any.UInt16;
+            this.InsertRecordWithSetColumns(columnid, new UInt16ColumnValue { Columnid = columnid, Value = value });
+            Assert.AreEqual(value, Api.RetrieveColumnAsUInt16(this.sesid, this.tableid, columnid));
         }
 
         /// <summary>
@@ -1083,6 +1187,19 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test setting a ColumnValue with a UInt32
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void SetColumnsWithUInt32()
+        {
+            JET_COLUMNID columnid = this.columnidDict["uint32"];
+            var value = Any.UInt32;
+            this.InsertRecordWithSetColumns(columnid, new UInt32ColumnValue { Columnid = columnid, Value = value });
+            Assert.AreEqual(value, Api.RetrieveColumnAsUInt32(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
         /// Test setting a column from a ulong.
         /// </summary>
         [TestMethod]
@@ -1100,6 +1217,19 @@ namespace InteropApiTests
 
             ulong actual = BitConverter.ToUInt64(Api.RetrieveColumn(this.sesid, this.tableid, columnid), 0);
             Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test setting a ColumnValue with a UInt64
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void SetColumnsWithUInt64()
+        {
+            JET_COLUMNID columnid = this.columnidDict["uint64"];
+            var value = Any.UInt64;
+            this.InsertRecordWithSetColumns(columnid, new UInt64ColumnValue { Columnid = columnid, Value = value });
+            Assert.AreEqual(value, Api.RetrieveColumnAsUInt64(this.sesid, this.tableid, columnid));
         }
 
         /// <summary>
@@ -1123,6 +1253,19 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test setting a ColumnValue with a Float
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void SetColumnsWithFloat()
+        {
+            JET_COLUMNID columnid = this.columnidDict["Float"];
+            var value = Any.Float;
+            this.InsertRecordWithSetColumns(columnid, new FloatColumnValue { Columnid = columnid, Value = value });
+            Assert.AreEqual(value, Api.RetrieveColumnAsFloat(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
         /// Test setting a column from a double.
         /// </summary>
         [TestMethod]
@@ -1140,6 +1283,19 @@ namespace InteropApiTests
 
             double actual = BitConverter.ToDouble(Api.RetrieveColumn(this.sesid, this.tableid, columnid), 0);
             Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test setting a ColumnValue with a Double
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void SetColumnsWithDouble()
+        {
+            JET_COLUMNID columnid = this.columnidDict["Double"];
+            var value = Any.Double;
+            this.InsertRecordWithSetColumns(columnid, new DoubleColumnValue { Columnid = columnid, Value = value });
+            Assert.AreEqual(value, Api.RetrieveColumnAsDouble(this.sesid, this.tableid, columnid));
         }
 
         /// <summary>
@@ -1163,6 +1319,19 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test setting a ColumnValue with a Guid
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void SetColumnsWithGuid()
+        {
+            JET_COLUMNID columnid = this.columnidDict["Guid"];
+            var value = Any.Guid;
+            this.InsertRecordWithSetColumns(columnid, new GuidColumnValue { Columnid = columnid, Value = value });
+            Assert.AreEqual(value, Api.RetrieveColumnAsGuid(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
         /// Test setting a column from a DateTime.
         /// </summary>
         [TestMethod]
@@ -1183,6 +1352,19 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test setting a ColumnValue with a DateTime
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void SetColumnsWithDateTime()
+        {
+            JET_COLUMNID columnid = this.columnidDict["DateTime"];
+            var value = Any.DateTime;
+            this.InsertRecordWithSetColumns(columnid, new DateTimeColumnValue { Columnid = columnid, Value = value });
+            Assert.AreEqual(value, Api.RetrieveColumnAsDateTime(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
         /// Test setting a column from an array of bytes.
         /// </summary>
         [TestMethod]
@@ -1200,6 +1382,19 @@ namespace InteropApiTests
 
             byte[] actual = Api.RetrieveColumn(this.sesid, this.tableid, columnid);
             CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test setting a ColumnValue with a byte array
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void SetColumnsWithBytes()
+        {
+            JET_COLUMNID columnid = this.columnidDict["binary"];
+            var value = Any.Bytes;
+            this.InsertRecordWithSetColumns(columnid, new BytesColumnValue { Columnid = columnid, Value = value });
+            CollectionAssert.AreEqual(value, Api.RetrieveColumn(this.sesid, this.tableid, columnid));
         }
 
         /// <summary>
@@ -1655,6 +1850,21 @@ namespace InteropApiTests
             Api.JetSetColumn(this.sesid, this.tableid, columnid, data, (null == data) ? 0 : data.Length, SetColumnGrbit.None, null);
             this.UpdateAndGotoBookmark();
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);      
+        }
+
+        /// <summary>
+        /// Creates a record with the given column set to the specified value.
+        /// The tableid is positioned on the new record.
+        /// </summary>
+        /// <param name="columnid">The column to set.</param>
+        /// <param name="values">The data to set.</param>
+        private void InsertRecordWithSetColumns(JET_COLUMNID columnid, params ColumnValue[] values)
+        {
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumns(this.sesid, this.tableid, values);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
         }
 
         /// <summary>

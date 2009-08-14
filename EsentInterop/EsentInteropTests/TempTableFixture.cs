@@ -528,14 +528,68 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test setting DateTime.Min. Dates before Jan 1, year 100 can't be represented
+        /// in ESENT (which uses the OLE Automation Date format), so this generates an
+        /// exceptions.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(OverflowException))]
+        public void SetDateTimeThrowsExceptionWhenDateIsTooSmall()
+        {
+            // Can't represent Dec 31, 99
+            var invalid = new DateTime(99, 12, 31, 23, 59, 59);
+            var columnid = this.coltypDict[JET_coltyp.Binary];
+
+            using (var trx = new Transaction(this.session))
+            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
+            {
+                Api.SetColumn(this.session, this.tableid, columnid, invalid);
+            }
+        }
+
+        /// <summary>
+        /// This is a bit bizarre. DateTime.MinValue.ToOADate gives the OLE Automation
+        /// base date, not the smallest possible OLE Automation Date or an overflow
+        /// exception (either of which would seem to be more sensible).
+        /// This test is documentating, but not endorsing, this behaviour.
+        /// The MSDN documentation says that "An uninitialized DateTime, that is,
+        /// an instance with a tick value of 0, is converted to the equivalent
+        /// uninitialized OLE Automation Date, that is, a date with a value of
+        /// 0.0 which represents midnight, 30 December 1899.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void SetDateTimeMinGivesOleAutomationBaseTime()
+        {
+            // The base OLE Automation Date is midnight, 30 December 1899
+            var expected = new DateTime(1899, 12, 30, 0, 0, 0);
+
+            var columnid = this.coltypDict[JET_coltyp.Binary];
+
+            using (var trx = new Transaction(this.session))
+            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
+            {
+                int bookmarkSize;
+                var bookmark = new byte[SystemParameters.BookmarkMost];
+                Api.SetColumn(this.session, this.tableid, columnid, DateTime.MinValue);
+                update.Save(bookmark, bookmark.Length, out bookmarkSize);
+                trx.Commit(CommitTransactionGrbit.None);
+                Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
+            }
+
+            Assert.AreEqual(expected, Api.RetrieveColumnAsDateTime(this.session, this.tableid, columnid));
+        }
+
+        /// <summary>
         /// Test setting and retrieving the min value of a DateTime
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        public void SetAndRetrieveDateTimeMin()
+        public void SetAndRetrieveDateTimeOleAutomationMin()
         {
-            // MSDN says the base OLE Automation Date is midnight, 30 December 1899.
-            var expected = new DateTime(1899, 12, 30, 23, 59, 59);
+            // The earliest OLE Automation Date is Jan 1, year 100
+            var expected = new DateTime(100, 1, 1, 00, 00, 1);
 
             var columnid = this.coltypDict[JET_coltyp.Binary];
 
@@ -594,10 +648,7 @@ namespace InteropApiTests
             string str = Any.String;
             float f = Any.Float;
             double d = Any.Double;
-            byte[] data = new byte[1023];
-
-            var random = new Random();
-            random.NextBytes(data);
+            byte[] data = Any.BytesOfLength(1023);
 
             var setcolumns = new[]
             {
@@ -647,10 +698,7 @@ namespace InteropApiTests
             double d = Any.Double;
             DateTime date = Any.DateTime;
             string s = Any.String;
-            byte[] bytes = new byte[1023];
-
-            var random = new Random();
-            random.NextBytes(bytes);
+            byte[] bytes = Any.BytesOfLength(1023);
 
             var columnValues = new ColumnValue[]
             {
@@ -1496,6 +1544,30 @@ namespace InteropApiTests
                 },
             };
             Api.JetSetColumns(this.session, this.tableid, setcolumns, setcolumns.Length);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when SetColumns gets a 
+        /// null column name.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void SetColumnsThrowsExceptionWhenColumnValuesIsNull()
+        {
+            Api.SetColumns(this.session, this.tableid, null);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when SetColumns gets a 
+        /// zero-length array.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void SetColumnsThrowsExceptionWhenColumnValuesIsZeroLength()
+        {
+            Api.SetColumns(this.session, this.tableid, new ColumnValue[0]);
         }
 
         /// <summary>

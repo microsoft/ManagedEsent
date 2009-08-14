@@ -20,6 +20,17 @@ namespace InteropApiTests
     public class ExceptionTests
     {
         /// <summary>
+        /// Verify that creating an EsentException with a message sets the message.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyEsentExceptionConstructorSetsMessage()
+        {
+            var ex = new EsentException("hello");
+            Assert.AreEqual("hello", ex.Message);
+        }
+
+        /// <summary>
         /// Verify that creating an EsentException with an innner exception sets
         /// the inner exception property.
         /// </summary>
@@ -42,6 +53,18 @@ namespace InteropApiTests
             var ex = new EsentErrorException(JET_err.AccessDenied);
 
             Assert.AreEqual(JET_err.AccessDenied, ex.Error);
+        }
+
+        /// <summary>
+        /// Verify that the error passed into the constructor is set in the error
+        /// property.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyEsentErrorExceptionHasMessage()
+        {
+            var ex = new EsentErrorException(JET_err.AccessDenied);
+            Assert.IsNotNull(ex.Message);
         }
 
         /// <summary>

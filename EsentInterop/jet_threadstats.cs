@@ -4,7 +4,9 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Microsoft.Isam.Esent.Interop.Vista
 {
@@ -98,6 +100,23 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         }
 
         /// <summary>
+        /// Gets a string representation of this object.
+        /// </summary>
+        /// <returns>A string representation of this object.</returns>
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendFormat("{0} page reference{1}, ", this.cPageReferenced, GetPluralS(this.cPageReferenced));
+            sb.AppendFormat("{0} page{1} read, ", this.cPageRead, GetPluralS(this.cPageRead));
+            sb.AppendFormat("{0} page{1} preread, ", this.cPagePreread, GetPluralS(this.cPagePreread));
+            sb.AppendFormat("{0} page{1} dirtied, ", this.cPageDirtied, GetPluralS(this.cPageDirtied));
+            sb.AppendFormat("{0} page{1} redirtied, ", this.cPageRedirtied, GetPluralS(this.cPageRedirtied));
+            sb.AppendFormat("{0} log record{1}, ", this.cLogRecord, GetPluralS(this.cLogRecord));
+            sb.AppendFormat("{0} byte{1} logged", this.cbLogRecord, GetPluralS(this.cbLogRecord));
+            return sb.ToString();
+        }
+
+        /// <summary>
         /// Sets the fields of the object from a NATIVE_THREADSTATS struct.
         /// </summary>
         /// <param name="value">
@@ -105,13 +124,23 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// </param>
         internal void SetFromNativeThreadstats(NATIVE_THREADSTATS value)
         {
-            this.cPageReferenced = checked((int) value.cPageReferenced);
-            this.cPageRead = checked((int) value.cPageRead);
-            this.cPagePreread = checked((int) value.cPagePreread);
-            this.cPageDirtied = checked((int) value.cPageDirtied);
-            this.cPageRedirtied = checked((int) value.cPageRedirtied);
-            this.cLogRecord = checked((int) value.cLogRecord);
-            this.cbLogRecord = checked((int) value.cbLogRecord);
+            this.cPageReferenced = checked((int)value.cPageReferenced);
+            this.cPageRead = checked((int)value.cPageRead);
+            this.cPagePreread = checked((int)value.cPagePreread);
+            this.cPageDirtied = checked((int)value.cPageDirtied);
+            this.cPageRedirtied = checked((int)value.cPageRedirtied);
+            this.cLogRecord = checked((int)value.cLogRecord);
+            this.cbLogRecord = checked((int)value.cbLogRecord);
+        }
+
+        /// <summary>
+        /// Get the plural suffix ('s') for the given number.
+        /// </summary>
+        /// <param name="n">The number.</param>
+        /// <returns>'s' if n is greater than 1.</returns>
+        private static string GetPluralS(int n)
+        {
+            return n == 1 ? String.Empty : "s";
         }
     }
 

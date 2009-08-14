@@ -1355,7 +1355,6 @@ namespace Microsoft.Isam.Esent.Interop
 
                     // For performance, copy small amounts of data into a local buffer instead
                     // of pinning the data.
-
                     const int BufferSize = 128;
                     byte* buffer = stackalloc byte[BufferSize];
                     int bufferRemaining = BufferSize;
@@ -1449,24 +1448,24 @@ namespace Microsoft.Isam.Esent.Interop
 
         #endregion
 
-		#region Misc
+        #region Misc
 
-		/// <summary>
-		/// Performs idle cleanup tasks or checks the version store status in ESE.
-		/// </summary>
-		/// <param name="sesid">The session to use.</param>
-		/// <param name="grbit">A combination of JetIdleGrbit flags.</param>
-		/// <returns>An error code if the operation fails.</returns>
-		public static JET_wrn JetIdle(JET_SESID sesid, IdleGrbit grbit)
-		{
-			return Api.Check(Impl.JetIdle(sesid, grbit));
-		}
+        /// <summary>
+        /// Performs idle cleanup tasks or checks the version store status in ESE.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="grbit">A combination of JetIdleGrbit flags.</param>
+        /// <returns>An error code if the operation fails.</returns>
+        public static JET_wrn JetIdle(JET_SESID sesid, IdleGrbit grbit)
+        {
+            return Api.Check(Impl.JetIdle(sesid, grbit));
+        }
 
-		#endregion
+        #endregion
 
-		#region Error Handling
+        #region Error Handling
 
-		/// <summary>
+        /// <summary>
         /// Throw an exception if the parameter is an ESE error,
         /// returns a <see cref="JET_wrn"/> otherwise.
         /// </summary>

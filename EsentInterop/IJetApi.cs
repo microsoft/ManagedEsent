@@ -517,12 +517,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out int actualPreviousValueLength,
             EscrowUpdateGrbit grbit);
 
-		/// <summary>
-		/// Performs idle cleanup tasks or checks the version store status in ESE.
-		/// </summary>
-		/// <param name="sesid">The session to use.</param>
-		/// <param name="grbit">A combination of JetIdleGrbit flags.</param>
-		/// <returns>An error code if the operation fails.</returns>
-		int JetIdle(JET_SESID sesid, IdleGrbit grbit);
-	}
+        /// <summary>
+        /// Performs idle cleanup tasks or checks the version store status in ESE.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="grbit">A combination of JetIdleGrbit flags.</param>
+        /// <returns>An error code if the operation fails.</returns>
+        int JetIdle(JET_SESID sesid, IdleGrbit grbit);
+    }
 }

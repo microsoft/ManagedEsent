@@ -192,8 +192,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="data">The data to set.</param>
         public static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, Guid data)
         {
-            byte[] bytes = data.ToByteArray();
-            JetSetColumn(sesid, tableid, columnid, bytes, bytes.Length, SetColumnGrbit.None, null);
+            unsafe
+            {
+                const int DataSize = 16; // sizeof(Guid) isn't a compile-time constant
+                var pointer = new IntPtr(&data);
+                JetSetColumn(sesid, tableid, columnid, pointer, DataSize, SetColumnGrbit.None, null);
+            }
         }
 
         /// <summary>
@@ -347,7 +351,7 @@ namespace Microsoft.Isam.Esent.Interop
 
             if (0 == values.Length)
             {
-                throw new ArgumentException("must have at least one value", "values");
+                throw new ArgumentOutOfRangeException("values", values.Length, "must have at least one value");
             }
 
             unsafe
@@ -365,7 +369,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="encoding">The encoding to check.</param>
         private static void CheckEncodingIsValid(Encoding encoding)
         {
-            if (!((encoding is ASCIIEncoding) || (encoding is UnicodeEncoding)))
+            const int AsciiCodePage = 20127;    // from MSDN
+            const int UnicodeCodePage = 1200;   // from MSDN
+            if (!((encoding.CodePage == AsciiCodePage) || (encoding.CodePage == UnicodeCodePage)))
             {
                 throw new ArgumentOutOfRangeException(
                     "encoding", "Invalid Encoding type. Only ASCII and Unicode encodings are allowed");
