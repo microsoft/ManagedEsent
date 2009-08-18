@@ -1765,6 +1765,39 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        public void GetIndexInformationOneIndexMultipleSegments()
+        {
+            string indexname = "multisegmentindex";
+            string indexdef = "+ascii\0-boolean\0\0";
+            CreateIndexGrbit grbit = CreateIndexGrbit.IndexUnique;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetCreateIndex(this.sesid, this.tableid, indexname, grbit, indexdef, indexdef.Length, 100);
+            IEnumerable<IndexInfo> indexes = Api.GetTableIndexes(this.sesid, this.tableid);
+
+            // There should be only one index
+            IndexInfo info = indexes.Single();
+            Assert.AreEqual(indexname, info.Name);
+            Assert.AreEqual(grbit, info.Grbit);
+
+            Assert.AreEqual(2, info.IndexSegments.Length);
+            Assert.IsTrue(0 == string.Compare("ascii", info.IndexSegments[0].ColumnName, true));
+            Assert.IsTrue(info.IndexSegments[0].IsAscending);
+            Assert.AreEqual(JET_coltyp.LongText, info.IndexSegments[0].Coltyp);
+            Assert.IsTrue(info.IndexSegments[0].IsASCII);
+
+            Assert.IsTrue(0 == string.Compare("boolean", info.IndexSegments[1].ColumnName, true));
+            Assert.IsFalse(info.IndexSegments[1].IsAscending);
+            Assert.AreEqual(JET_coltyp.Bit, info.IndexSegments[1].Coltyp);
+
+            Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
+        }
+
+        /// <summary>
+        /// Get index information for one index
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
         public void GetIndexInformationByTableNameOneIndex()
         {
             string indexname = "myindex";
