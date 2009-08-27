@@ -29,6 +29,10 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 Api.JetMakeKey(sesid, tableid, null, 0, grbit);
             }
+            else if (0 == data.Length)
+            {
+                Api.JetMakeKey(sesid, tableid, data, data.Length, grbit | MakeKeyGrbit.KeyDataZeroLength);                
+            }
             else
             {
                 Api.JetMakeKey(sesid, tableid, data, data.Length, grbit);

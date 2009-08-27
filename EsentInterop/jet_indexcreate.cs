@@ -111,7 +111,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// Gets or sets the maximum allowable size, in bytes, for keys in the index.
         /// The minimum supported maximum key size is JET_cbKeyMostMin (255) which
         /// is the legacy maximum key size. The maximum key size is dependent on
-        /// the database page size <see cref="JET_param.DatabasePageSize"/>.
+        /// the database page size <see cref="JET_param.DatabasePageSize"/>. The
+        /// maximum key size can be retrieved with <see cref="SystemParameters.KeyMost"/>.
         /// <para>
         /// This parameter is ignored on Windows XP and Windows Server 2003.
         /// </para>
@@ -123,11 +124,66 @@ namespace Microsoft.Isam.Esent.Interop
         public int cbKeyMost { get; set; }
 
         /// <summary>
+        /// Check this object to make sure its parameters are valid.
+        /// </summary>
+        internal void CheckMembersAreValid()
+        {
+            if (null == this.szIndexName)
+            {
+                throw new ArgumentNullException("szIndexName");
+            }
+
+            if (null == this.szKey)
+            {
+                throw new ArgumentNullException("szKey");
+            }
+
+            if (this.cbKey > this.szKey.Length + 1)
+            {
+                throw new ArgumentOutOfRangeException("cbKey", this.cbKey, "cannot be greater than the length of szKey");
+            }
+
+            if (this.cbKey < 0)
+            {
+                throw new ArgumentOutOfRangeException("cbKey", this.cbKey, "cannot be negative");
+            }
+
+            if (this.ulDensity < 0)
+            {
+                throw new ArgumentOutOfRangeException("ulDensity", this.ulDensity, "cannot be negative");
+            }
+
+            if (this.cbKeyMost < 0)
+            {
+                throw new ArgumentOutOfRangeException("cbKeyMost", this.cbKeyMost, "cannot be negative");
+            }
+
+            if (this.cbVarSegMac < 0)
+            {
+                throw new ArgumentOutOfRangeException("cbVarSegMac", this.cbVarSegMac, "cannot be negative");
+            }
+
+            if ((this.cConditionalColumn > 0 && null == this.rgconditionalcolumn)
+                || (this.cConditionalColumn > 0 && this.cConditionalColumn > this.rgconditionalcolumn.Length))
+            {
+                throw new ArgumentOutOfRangeException("cConditionalColumn", this.cConditionalColumn, "cannot be greater than the length of rgconditionalcolumn");
+            }
+
+            if (this.cConditionalColumn < 0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    "cConditionalColumn", this.cConditionalColumn, "cannot be negative");
+            }
+        }
+
+        /// <summary>
         /// Gets the native (interop) version of this object.
         /// </summary>
         /// <returns>The native (interop) version of this object.</returns>
         internal NATIVE_INDEXCREATE GetNativeIndexcreate()
         {
+            this.CheckMembersAreValid();
+
             var native = new NATIVE_INDEXCREATE();
             native.cbStruct = (uint) Marshal.SizeOf(native);
             native.szIndexName = this.szIndexName;

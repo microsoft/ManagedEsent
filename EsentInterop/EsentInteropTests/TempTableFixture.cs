@@ -996,6 +996,27 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Check that an exception is thrown when JetCreateIndex2 gets a 
+        /// null index name.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetCreateIndex2ThrowsExceptionWhenIndexNameIsNull()
+        {
+            const string Key = "+column\0";
+            var indexcreates = new[]
+            {
+                new JET_INDEXCREATE
+                {
+                    cbKey = Key.Length,
+                    szKey = Key,
+                },
+            };
+            Api.JetCreateIndex2(this.session, this.tableid, indexcreates, indexcreates.Length);
+        }
+
+        /// <summary>
         /// Check that an exception is thrown when JetDeleteColumn gets a 
         /// null column name.
         /// </summary>
@@ -1528,7 +1549,7 @@ namespace InteropApiTests
 
         /// <summary>
         /// Check that an exception is thrown when JetSetColumns gets a 
-        /// numColumns count that is greater than the number of columns.
+        /// cbData that is greater than the size of the pvData.
         /// </summary>
         [TestMethod]
         [Priority(1)]

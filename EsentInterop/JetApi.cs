@@ -398,6 +398,14 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return this.Err(NativeMethods.JetCreateTable(sesid.Value, dbid.Value, table, pages, density, out tableid.Value));
         }
 
+        public int JetDeleteTable(JET_SESID sesid, JET_DBID dbid, string table)
+        {
+            this.TraceFunctionCall("JetDeleteTable");
+            this.CheckNotNull(table, "table");
+
+            return this.Err(NativeMethods.JetDeleteTable(sesid.Value, dbid.Value, table));
+        }
+
         public int JetAddColumn(JET_SESID sesid, JET_TABLEID tableid, string column, JET_COLUMNDEF columndef, byte[] defaultValue, int defaultValueSize, out JET_COLUMNID columnid)
         {
             this.TraceFunctionCall("JetAddColumn");
@@ -428,22 +436,6 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.CheckNotNull(column, "column");
 
             return this.Err(NativeMethods.JetDeleteColumn(sesid.Value, tableid.Value, column));
-        }
-
-        public int JetDeleteIndex(JET_SESID sesid, JET_TABLEID tableid, string index)
-        {
-            this.TraceFunctionCall("JetDeleteIndex");
-            this.CheckNotNull(index, "index");
-
-            return this.Err(NativeMethods.JetDeleteIndex(sesid.Value, tableid.Value, index));
-        }
-
-        public int JetDeleteTable(JET_SESID sesid, JET_DBID dbid, string table)
-        {
-            this.TraceFunctionCall("JetDeleteTable");
-            this.CheckNotNull(table, "table");
-
-            return this.Err(NativeMethods.JetDeleteTable(sesid.Value, dbid.Value, table));
         }
 
         public int JetCreateIndex(
@@ -504,6 +496,14 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
 
             return this.CreateIndexes(sesid, tableid, indexcreates, numIndexCreates);
+        }
+
+        public int JetDeleteIndex(JET_SESID sesid, JET_TABLEID tableid, string index)
+        {
+            this.TraceFunctionCall("JetDeleteIndex");
+            this.CheckNotNull(index, "index");
+
+            return this.Err(NativeMethods.JetDeleteIndex(sesid.Value, tableid.Value, index));
         }
 
         /// <summary>

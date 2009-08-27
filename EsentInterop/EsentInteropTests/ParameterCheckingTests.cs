@@ -229,6 +229,10 @@ namespace InteropApiTests
             Api.JetDetachDatabase(this.sesid, null);
         }
 
+        #endregion Database API
+
+        #region DDL
+
         /// <summary>
         /// Check that an exception is thrown when JetOpenTable gets a 
         /// null table name.
@@ -238,13 +242,9 @@ namespace InteropApiTests
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetOpenTableThrowsExceptionWhenTableNameIsNull()
         {
-            JET_TABLEID tableid;
-            Api.JetOpenTable(this.sesid, this.dbid, null, null, 0, OpenTableGrbit.None, out tableid);
+            JET_TABLEID ignoredTableid;
+            Api.JetOpenTable(this.sesid, this.dbid, null, null, 0, OpenTableGrbit.None, out ignoredTableid);
         }
-
-        #endregion Database API
-
-        #region DDL
 
         /// <summary>
         /// Check that an exception is thrown when JetCreateTable gets a 
@@ -255,8 +255,8 @@ namespace InteropApiTests
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetCreateTableThrowsExceptionWhenTableNameIsNull()
         {
-            JET_TABLEID tableid;
-            Api.JetCreateTable(this.sesid, this.dbid, null, 0, 100, out tableid);
+            JET_TABLEID ignoredTableid;
+            Api.JetCreateTable(this.sesid, this.dbid, null, 0, 100, out ignoredTableid);
         }
 
         /// <summary>

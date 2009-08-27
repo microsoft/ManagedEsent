@@ -1665,6 +1665,17 @@ namespace InteropApiTests
             Api.MakeKey(this.sesid, this.tableid, null, MakeKeyGrbit.NewKey);
         }
 
+        /// <summary>
+        /// Test make a key from a zero-length array of bytes.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void MakeKeyZeroLengthBinary()
+        {
+            this.CreateIndexOnColumn("binary");
+            Api.MakeKey(this.sesid, this.tableid, new byte[0], MakeKeyGrbit.NewKey);
+        }
+
         #endregion MakeKey Tests
 
         #region MetaData helpers tests

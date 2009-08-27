@@ -3,7 +3,7 @@
   <Description>Code Coverage configuration</Description>
   <CodeCoverage enabled="true">
     <Regular>
-      <CodeCoverageItem binaryFile="bin\Release\Esent.Interop.dll" pdbFile="bin\Release\Esent.Interop.pdb" instrumentInPlace="true" />
+      <CodeCoverageItem binaryFile="bin\Debug\Esent.Interop.dll" pdbFile="bin\Debug\Esent.Interop.pdb" instrumentInPlace="true" />
     </Regular>
   </CodeCoverage>
   <TestTypeSpecific>
