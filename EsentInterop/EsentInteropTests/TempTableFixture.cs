@@ -1314,6 +1314,48 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Check that an exception is thrown when JetRetrieveColumn gets a 
+        /// data offset that is negative.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetRetrieveColumnThrowsExceptionWhenDataOffsetIsNegative()
+        {
+            int actualSize;
+            var data = new byte[1];
+            Api.JetRetrieveColumn(this.session, this.tableid, this.coltypDict[JET_coltyp.UnsignedByte], data, data.Length, -1, out actualSize, RetrieveColumnGrbit.None, null);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetRetrieveColumn gets a 
+        /// data offset that is past the end of the data buffer.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetRetrieveColumnThrowsExceptionWhenDataOffsetIsTooLong()
+        {
+            int actualSize;
+            var data = new byte[1];
+            Api.JetRetrieveColumn(this.session, this.tableid, this.coltypDict[JET_coltyp.UnsignedByte], data, data.Length, data.Length, out actualSize, RetrieveColumnGrbit.None, null);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetRetrieveColumn gets a 
+        /// non-zero data offset with a null buffer.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetRetrieveColumnThrowsExceptionWhenDataOffsetIsNonZeroAndBufferIsNull()
+        {
+            int actualSize;
+            var data = new byte[1];
+            Api.JetRetrieveColumn(this.session, this.tableid, this.coltypDict[JET_coltyp.UnsignedByte], null, 0, 1, out actualSize, RetrieveColumnGrbit.None, null);
+        }
+
+        /// <summary>
         /// Check that an exception is thrown when JetEnumerateColumns gets a 
         /// null allocator callback.
         /// </summary>
@@ -1508,6 +1550,58 @@ namespace InteropApiTests
         {
             var data = new byte[1];
             Api.JetSetColumn(this.session, this.tableid, this.coltypDict[JET_coltyp.UnsignedByte], data, data.Length + 1, SetColumnGrbit.None, null);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetSetColumn gets a 
+        /// negative data offset.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetSetColumnThrowsExceptionWhenDataOffsetIsNegative()
+        {
+            var data = new byte[1];
+            Api.JetSetColumn(this.session, this.tableid, this.coltypDict[JET_coltyp.UnsignedByte], data, data.Length, -1, SetColumnGrbit.None, null);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetSetColumn gets a 
+        /// data offset that is past the end of the buffer.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetSetColumnThrowsExceptionWhenDataOffsetIsTooLong()
+        {
+            var data = new byte[1];
+            Api.JetSetColumn(this.session, this.tableid, this.coltypDict[JET_coltyp.UnsignedByte], data, 1, data.Length, SetColumnGrbit.None, null);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetSetColumn gets a 
+        /// non-zero data offset and a null buffer.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetSetColumnThrowsExceptionWhenDataOffsetIsNonZeroAndBufferIsNull()
+        {
+            var data = new byte[1];
+            Api.JetSetColumn(this.session, this.tableid, this.coltypDict[JET_coltyp.UnsignedByte], null, 0, 1, SetColumnGrbit.None, null);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetSetColumn gets a 
+        /// data offset that is past the end of the buffer.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetSetColumnThrowsExceptionWhenDataOffsetPlusSizeIsTooLong()
+        {
+            var data = new byte[4];
+            Api.JetSetColumn(this.session, this.tableid, this.coltypDict[JET_coltyp.Long], data, data.Length, 1, SetColumnGrbit.None, null);
         }
 
         /// <summary>

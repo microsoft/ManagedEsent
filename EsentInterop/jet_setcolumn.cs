@@ -25,7 +25,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Contains input and output parameters for JetSetColumns.
+    /// Contains input and output parameters for <see cref="Api.JetSetColumns"/>.
     /// Fields in the structure describe what column value to set, how to set it,
     /// and where to get the column set data.
     /// </summary>

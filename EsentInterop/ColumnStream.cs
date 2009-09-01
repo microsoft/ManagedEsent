@@ -11,10 +11,16 @@ namespace Microsoft.Isam.Esent.Interop
 {
     /// <summary>
     /// This class provides a streaming interface to a long-value column
-    /// (i.e. a column of type JET_coltyp.LongBinary or JET_coltyp.LongText).
+    /// (i.e. a column of type <see cref="JET_coltyp.LongBinary"/> or
+    /// <see cref="JET_coltyp.LongText"/>).
     /// </summary>
     public class ColumnStream : Stream
     {
+        /// <summary>
+        /// The size of the biggest long-value column ESENT supports.
+        /// </summary>
+        private const int MaxLongValueSize = 0x7fffffff;
+
         /// <summary>
         /// Session to use.
         /// </summary>
@@ -91,7 +97,7 @@ namespace Microsoft.Isam.Esent.Interop
 
             set
             {
-                if (value < 0 || value > 0x7fffffff)
+                if (value < 0 || value > MaxLongValueSize)
                 {
                     throw new ArgumentOutOfRangeException("value", value, "A long-value offset has to be between 0 and 0x7fffffff bytes");
                 }
@@ -159,7 +165,7 @@ namespace Microsoft.Isam.Esent.Interop
                 length = this.ibLongValue;
             }
 
-            int newIbLongValue = this.ibLongValue + count;
+            int newIbLongValue = checked(this.ibLongValue + count);
             SetColumnGrbit grbit;
             if (this.ibLongValue == length)
             {
@@ -175,18 +181,12 @@ namespace Microsoft.Isam.Esent.Interop
             }
 
             setinfo = new JET_SETINFO { itagSequence = this.Itag, ibLongValue = this.ibLongValue };
-            if (0 == offset)
-            {
-                Api.JetSetColumn(this.sesid, this.tableid, this.columnid, buffer, count, grbit, setinfo);
-            }
-            else
-            {
-                var offsetBuffer = new byte[count];
-                Array.Copy(buffer, offset, offsetBuffer, 0, count);
-                Api.JetSetColumn(this.sesid, this.tableid, this.columnid, offsetBuffer, count, grbit, setinfo);
-            }
+            Api.JetSetColumn(this.sesid, this.tableid, this.columnid, buffer, count, offset, grbit, setinfo);
 
-            this.ibLongValue += count;
+            checked
+            {
+                this.ibLongValue += count;                
+            }
         }
 
         /// <summary>
@@ -210,18 +210,12 @@ namespace Microsoft.Isam.Esent.Interop
 
             int ignored;
             var retinfo = new JET_RETINFO { itagSequence = this.Itag, ibLongValue = this.ibLongValue };
-            if (0 == offset)
-            {
-                Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, buffer, bytesToRead, out ignored, RetrieveGrbit, retinfo);
-            }
-            else
-            {
-                var offsetBuffer = new byte[bytesToRead];
-                Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, offsetBuffer, bytesToRead, out ignored, RetrieveGrbit, retinfo);
-                Array.Copy(offsetBuffer, 0, buffer, offset, bytesToRead);
-            }
+            Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, buffer, bytesToRead, offset, out ignored, RetrieveGrbit, retinfo);
 
-            this.ibLongValue += bytesToRead;
+            checked
+            {
+                this.ibLongValue += bytesToRead;                
+            }
             return bytesToRead;
         }
 
@@ -231,7 +225,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="value">The desired length, in bytes.</param>
         public override void SetLength(long value)
         {
-            if (value > 0x7FFFFFFF || value < 0)
+            if (value > MaxLongValueSize || value < 0)
             {
                 throw new ArgumentOutOfRangeException("value", value, "A LongValueStream cannot be longer than 0x7FFFFFF or less than 0 bytes");
             }
@@ -295,7 +289,7 @@ namespace Microsoft.Isam.Esent.Interop
                     throw new ArgumentOutOfRangeException("origin", origin, "Unknown origin");
             }
 
-            if (newOffset < 0 || newOffset > 0x7fffffff)
+            if (newOffset < 0 || newOffset > MaxLongValueSize)
             {
                 throw new ArgumentOutOfRangeException("offset", offset, "invalid offset/origin combination");
             }

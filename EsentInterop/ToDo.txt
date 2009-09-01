@@ -15,6 +15,7 @@ Pri 0: APIs needed by clients
   	
 Pri 1: New functionalitya
 ------------------------
+  - JetPrereadKeys
   - JetGetDatabaseInfo
   - JetGetDatabaseFileInfo
   - JetGetTableInfo

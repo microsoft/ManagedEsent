@@ -356,6 +356,57 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        public void SortLongValueDataWithJetOpenTempTable3()
+        {
+            JET_TABLEID tableid;
+            var columns = new[]
+            {
+                new JET_COLUMNDEF { coltyp = JET_coltyp.LongText, cp = JET_CP.Unicode, grbit = ColumndefGrbit.TTKey },
+            };
+            var columnids = new JET_COLUMNID[columns.Length];
+
+            var idxunicode = new JET_UNICODEINDEX
+            {
+                dwMapFlags = Conversions.LCMapFlagsFromCompareOptions(CompareOptions.None),
+                lcid = 1033,
+            };
+            Api.JetOpenTempTable3(this.session, columns, columns.Length, idxunicode, TempTableGrbit.None, out tableid, columnids);
+
+            var data = new[]
+            {
+                Any.StringOfLength(1999),
+                Any.StringOfLength(2000),
+                Any.StringOfLength(1999),
+                Any.StringOfLength(2000),
+                Any.StringOfLength(2001),
+                Any.StringOfLength(2000),
+                Any.StringOfLength(1999),
+            };
+
+            using (var transaction = new Transaction(this.session))
+            {
+                foreach (string s in data)
+                {
+                    using (var update = new Update(this.session, tableid, JET_prep.Insert))
+                    {
+                        Api.SetColumn(this.session, tableid, columnids[0], s, Encoding.Unicode);
+                        update.Save();
+                    }
+                }
+
+                transaction.Commit(CommitTransactionGrbit.None);
+            }
+
+            Array.Sort(data);
+            CollectionAssert.AreEqual(data, this.RetrieveAllRecordsAsString(tableid, columnids[0]).ToArray());
+            Api.JetCloseTable(this.session, tableid);
+        }
+
+        /// <summary>
+        /// Sort data with a temporary table
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
         public void SortDataCaseSensitiveWithJetOpenTemporaryTable()
         {
             if (!EsentVersion.SupportsVistaFeatures)

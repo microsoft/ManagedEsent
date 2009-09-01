@@ -1130,22 +1130,34 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>An ESENT warning code.</returns>
         public static JET_wrn JetRetrieveColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, out int actualDataSize, RetrieveColumnGrbit grbit, JET_RETINFO retinfo)
         {
-            if ((null == data && dataSize > 0) || (null != data && dataSize > data.Length))
-            {
-                throw new ArgumentOutOfRangeException(
-                    "dataSize",
-                    dataSize,
-                    "cannot be greater than the length of the data");
-            }
+            return Api.JetRetrieveColumn(sesid, tableid, columnid, data, dataSize, 0, out actualDataSize, grbit, retinfo);
+        }
 
-            unsafe
-            {
-                fixed (byte* pointer = data)
-                {
-                    return Api.JetRetrieveColumn(
-                        sesid, tableid, columnid, (IntPtr) pointer, dataSize, out actualDataSize, grbit, retinfo);
-                }
-            }
+        /// <summary>
+        /// Retrieves multiple column values from the current record in a
+        /// single operation. An array of JET_RETRIEVECOLUMN structures is
+        /// used to describe the set of column values to be retrieved, and
+        /// to describe output buffers for each column value to be retrieved.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the data from.</param>
+        /// <param name="columns">
+        /// An array of one or more <see cref="JET_RETRIEVECOLUMN"/> objects
+        /// describing the data to be retrieved.
+        /// </param>
+        /// <param name="numColumns">
+        /// The number of entries in the columns array.
+        /// </param>
+        /// <returns>
+        /// If any column retrieved is truncated due to an insufficient
+        /// length buffer, then the API will return
+        /// <see cref="JET_wrn.BufferTruncated"/>. However other errors
+        /// JET_wrnColumnNull are returned only in the error field of
+        /// the <see cref="JET_RETRIEVECOLUMN"/> object.
+        /// </returns>
+        public static JET_wrn JetRetrieveColumns(JET_SESID sesid, JET_TABLEID tableid, JET_RETRIEVECOLUMN[] columns, int numColumns)
+        {
+            throw new NotImplementedException("JetRetrieveColumns");
         }
 
         /// <summary>
@@ -1290,6 +1302,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// or update all or part of a long value (a column of type <see cref="JET_coltyp.LongText"/>
         /// or <see cref="JET_coltyp.LongBinary"/>). 
         /// </summary>
+        /// <remarks>
+        /// The SetColumn methods provide datatype-specific overrides which may be more efficient.
+        /// </remarks>
         /// <param name="sesid">The session which is performing the update.</param>
         /// <param name="tableid">The cursor to update. An update should be prepared.</param>
         /// <param name="columnid">The columnid to set.</param>
@@ -1299,21 +1314,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="setinfo">Used to specify itag or long-value offset.</param>
         public static void JetSetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, SetColumnGrbit grbit, JET_SETINFO setinfo)
         {
-            if (null != data && dataSize > data.Length && (SetColumnGrbit.SizeLV != (grbit & SetColumnGrbit.SizeLV)))
-            {
-                throw new ArgumentOutOfRangeException(
-                    "dataSize",
-                    dataSize,
-                    "dataSize cannot be greater than the length of the data (unless the SizeLV option is used)");
-            }
-
-            unsafe
-            {
-                fixed (byte* pointer = data)
-                {
-                    Api.JetSetColumn(sesid, tableid, columnid, (IntPtr) pointer, dataSize, grbit, setinfo);
-                }
-            }
+            Api.JetSetColumn(sesid, tableid, columnid, data, dataSize, 0, grbit, setinfo);
         }
 
         /// <summary>
@@ -1344,7 +1345,7 @@ namespace Microsoft.Isam.Esent.Interop
 
             if (numColumns < 0 || numColumns > setcolumns.Length)
             {
-                throw new ArgumentOutOfRangeException("numColumns", "cannot be negative or greater than setcolumns.Length");
+                throw new ArgumentOutOfRangeException("numColumns", numColumns, "cannot be negative or greater than setcolumns.Length");
             }
 
             using (var gchandles = new GCHandleCollection())
