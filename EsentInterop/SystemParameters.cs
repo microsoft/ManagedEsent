@@ -104,10 +104,6 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets the maximum key size. This depends on the Esent version and database
         /// page size.
-        /// <para>
-        /// Supported on Windows Vista and up. Ignored on Windows XP and
-        /// Windows Server 2003.
-        /// </para>
         /// </summary>
         public static int KeyMost
         {
@@ -148,10 +144,6 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// Gets the lv chunks size. This depends on the database page size.
-        /// <para>
-        /// Supported on Windows 7 and up. Ignored on Windows XP,
-        /// Windows Server 2003, Windows Vista and Windows Server 2008.
-        /// </para>
         /// </summary>
         public static int LVChunkSizeMost
         {

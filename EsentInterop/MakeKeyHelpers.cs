@@ -235,7 +235,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor to create the key on.</param>
         /// <param name="data">Column data for the current key column of the current index.</param>
         /// <param name="grbit">Key options.</param>
-        internal static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, ushort data, MakeKeyGrbit grbit)
+        public static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, ushort data, MakeKeyGrbit grbit)
         {
             unsafe
             {
@@ -253,7 +253,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor to create the key on.</param>
         /// <param name="data">Column data for the current key column of the current index.</param>
         /// <param name="grbit">Key options.</param>
-        internal static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, uint data, MakeKeyGrbit grbit)
+        public static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, uint data, MakeKeyGrbit grbit)
         {
             unsafe
             {
@@ -271,7 +271,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor to create the key on.</param>
         /// <param name="data">Column data for the current key column of the current index.</param>
         /// <param name="grbit">Key options.</param>
-        internal static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, ulong data, MakeKeyGrbit grbit)
+        public static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, ulong data, MakeKeyGrbit grbit)
         {
             unsafe
             {

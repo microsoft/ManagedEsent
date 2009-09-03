@@ -661,9 +661,8 @@ class EsedbMultiThreadingFixture(unittest.TestCase):
 			self.assertEqual(d[k], self._db[k])
 
 	def testMultiThreadedReplaces(self):
-		d = {}
 		for i in xrange(4000):
-			d[i] = 'XXXX'
+			self._db[i] = 'XXXX'
 		threads = [threading.Thread(target = self._insertRange, args = (x*1000, (x+1) * 1000)) for x in range(4)]
 		for t in threads:
 			t.start()

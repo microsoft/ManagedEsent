@@ -61,6 +61,20 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Get the columnid of the specified column.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table containing the column.</param>
+        /// <param name="columnName">The name of the column.</param>
+        /// <returns>The id of the column.</returns>
+        public static JET_COLUMNID GetTableColumnid(JET_SESID sesid, JET_TABLEID tableid, string columnName)
+        {
+            JET_COLUMNDEF columndef;
+            JetGetTableColumnInfo(sesid, tableid, columnName, out columndef);
+            return columndef.columnid;
+        }
+
+        /// <summary>
         /// Iterates over all the columns in the table, returning information about each one.
         /// </summary>
         /// <param name="sesid">The session to use.</param>

@@ -313,6 +313,19 @@ namespace InteropApiTests
             Api.JetGetColumnInfo(this.sesid, this.dbid, null, null, out columnlist);
         }
 
+        /// <summary>
+        /// Check that an exception is thrown when JetGetIndexInfo gets a 
+        /// null index name.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetGetIndexInfoThrowsExceptionWhenTableNameIsNull()
+        {
+            JET_INDEXLIST indexlist;
+            Api.JetGetIndexInfo(this.sesid, this.dbid, null, String.Empty, out indexlist);
+        }
+
         #endregion
     }
 }

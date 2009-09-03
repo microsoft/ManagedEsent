@@ -1718,6 +1718,19 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Use GetTableColumnid to get a 
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void GetTableColumnidsTest()
+        {
+            foreach (string column in this.columnidDict.Keys)
+            {
+                Assert.AreEqual(this.columnidDict[column], Api.GetTableColumnid(this.sesid, this.tableid, column));
+            }
+        }
+
+        /// <summary>
         /// Iterate through the column information structures, using
         /// the dbid and tablename to specify the table.
         /// </summary>
