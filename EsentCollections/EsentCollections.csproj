@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{EB19183E-5224-4801-B073-A15A9AE32C13}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{CF2D4EE4-0D11-404D-B800-C4DCFEC42588}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PixieSample</RootNamespace>
-    <AssemblyName>PixieSample</AssemblyName>
+    <RootNamespace>EsentCollections</RootNamespace>
+    <AssemblyName>Esent.Collections</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -45,8 +45,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PixieSample.cs" />
+    <Compile Include="CollectionsSystemParameters.cs" />
+    <Compile Include="ConstantExpressionEvaluator.cs" />
+    <Compile Include="Key.cs" />
+    <Compile Include="KeyExpressionEvaluator.cs" />
+    <Compile Include="KeyRange.cs" />
+    <Compile Include="PersistentDictionary.cs" />
+    <Compile Include="PersistentDictionaryCollection.cs" />
+    <Compile Include="PersistentDictionaryConfig.cs" />
+    <Compile Include="PersistentDictionaryConverters.cs" />
+    <Compile Include="PersistentDictionaryCursor.cs" />
+    <Compile Include="PersistentDictionaryCursorCache.cs" />
+    <Compile Include="PersistentDictionaryEnumerator.cs" />
+    <Compile Include="PersistentDictionaryKeyCollection.cs" />
+    <Compile Include="PersistentDictionaryLinq.cs" />
+    <Compile Include="PersistentDictionaryValueCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ManagedEsent\EsentInterop\EsentInterop.csproj">
+      <Project>{E929E163-52A0-4AAC-917B-6D7FAF70C45E}</Project>
+      <Name>EsentInterop</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

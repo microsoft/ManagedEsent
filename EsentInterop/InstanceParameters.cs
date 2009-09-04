@@ -6,6 +6,7 @@
 
 using System;
 using System.IO;
+using Microsoft.Isam.Esent.Interop.Server2003;
 using Microsoft.Isam.Esent.Interop.Vista;
 using Microsoft.Isam.Esent.Interop.Windows7;
 
@@ -89,6 +90,39 @@ namespace Microsoft.Isam.Esent.Interop
             set
             {
                 this.SetStringParameter(JET_param.LogFilePath, AddTrailingDirectorySeparator(value));
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the relative or absolute file system path of the
+        /// a folder where crash recovery or a restore operation can find
+        /// the databases referenced in the transaction log in the
+        /// specified folder.
+        /// </summary>
+        /// <remarks>
+        /// This parameter is ignored on Windows XP.
+        /// </remarks>
+        public string AlternateDatabaseRecoveryDirectory
+        {
+            get
+            {
+                if (EsentVersion.SupportsServer2003Features)
+                {
+                    return
+                        AddTrailingDirectorySeparator(
+                            this.GetStringParameter(Server2003Param.AlternateDatabaseRecoveryPath));
+                }
+
+                return null;
+            }
+
+            set
+            {
+                if (EsentVersion.SupportsServer2003Features)
+                {
+                    this.SetStringParameter(
+                        Server2003Param.AlternateDatabaseRecoveryPath, AddTrailingDirectorySeparator(value));
+                }
             }
         }
 

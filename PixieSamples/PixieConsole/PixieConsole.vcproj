@@ -178,10 +178,6 @@
 			AssemblyName="System.Xml, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
 			MinFrameworkVersion="131072"
 		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{C04E3673-CBA3-4B15-8D92-98AC0C676ADB}"
-			RelativePathToProject="..\Pixie\Pixie.csproj"
-		/>
 	</References>
 	<Files>
 		<File

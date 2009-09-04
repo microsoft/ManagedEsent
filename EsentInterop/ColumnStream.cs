@@ -216,6 +216,7 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 this.ibLongValue += bytesToRead;                
             }
+
             return bytesToRead;
         }
 

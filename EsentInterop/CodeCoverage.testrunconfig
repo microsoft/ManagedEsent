@@ -4,6 +4,7 @@
   <CodeCoverage enabled="true">
     <Regular>
       <CodeCoverageItem binaryFile="bin\Debug\Esent.Interop.dll" pdbFile="bin\Debug\Esent.Interop.pdb" instrumentInPlace="true" />
+      <CodeCoverageItem binaryFile="C:\Users\laurionb\Documents\Visual Studio Projects\ManagedEsent\EsentCollections\bin\Debug\Esent.Collections.dll" pdbFile="C:\Users\laurionb\Documents\Visual Studio Projects\ManagedEsent\EsentCollections\bin\Debug\Esent.Collections.pdb" instrumentInPlace="true" />
     </Regular>
   </CodeCoverage>
   <TestTypeSpecific>

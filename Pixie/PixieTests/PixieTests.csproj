@@ -79,10 +79,6 @@
       <Project>{E929E163-52A0-4AAC-917B-6D7FAF70C45E}</Project>
       <Name>EsentInterop</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Pixie.csproj">
-      <Project>{C04E3673-CBA3-4B15-8D92-98AC0C676ADB}</Project>
-      <Name>Pixie</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

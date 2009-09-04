@@ -557,6 +557,21 @@ namespace InteropApiTests
             Assert.AreEqual(@"d:\a\b\c\system\", this.instanceParameters.SystemDirectory);
         }
 
+        /// <summary>
+        /// Test the alternate database recovery directory.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void SetAndRetrieveInstanceParametersAlternateDatabaseRecoveryDirectory()
+        {
+            if (EsentVersion.SupportsServer2003Features)
+            {
+                string dir = @"z:\my\db";
+                this.instanceParameters.AlternateDatabaseRecoveryDirectory = dir;
+                Assert.AreEqual(@"z:\my\db\", this.instanceParameters.AlternateDatabaseRecoveryDirectory);
+            }
+        }
+
         #region Helper Methods
 
         /// <summary>

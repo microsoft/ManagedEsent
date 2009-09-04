@@ -144,7 +144,36 @@ namespace InteropApiTests
         {
             using (var instance = new Instance("XP"))
             {
+                instance.Parameters.CachedClosedTables = 10;
                 Assert.AreEqual(0, instance.Parameters.CachedClosedTables);
+            }
+        }
+
+        /// <summary>
+        /// Getting the waypoint system parameter should return 0 on XP.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyXpReturns0ForWaypoint()
+        {
+            using (var instance = new Instance("XP"))
+            {
+                instance.Parameters.WaypointLatency = 10;
+                Assert.AreEqual(0, instance.Parameters.WaypointLatency);
+            }
+        }
+
+        /// <summary>
+        /// Getting the waypoint system parameter should return 0 on XP.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyXpReturnsNullForAlternateRecoveryDirectory()
+        {
+            using (var instance = new Instance("XP"))
+            {
+                instance.Parameters.AlternateDatabaseRecoveryDirectory = @"c:\foo";
+                Assert.IsNull(instance.Parameters.AlternateDatabaseRecoveryDirectory);
             }
         }
 
@@ -155,6 +184,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void VerifyXpReturns1ForConfiguration()
         {
+            SystemParameters.Configuration = 0;
             Assert.AreEqual(1, SystemParameters.Configuration);
         }
 
@@ -165,6 +195,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void VerifyXpReturnsTrueForEnableAdvanced()
         {
+            SystemParameters.EnableAdvanced = false;
             Assert.AreEqual(true, SystemParameters.EnableAdvanced);
         }
 
