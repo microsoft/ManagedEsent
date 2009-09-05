@@ -7,9 +7,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Threading;
 using Microsoft.Isam.Esent.Interop;
 
 namespace Microsoft.Isam.Esent.Collections.Generic
@@ -23,6 +25,13 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         where TKey : IComparable<TKey>
     {
         /// <summary>
+        /// Number of lock objects. Keys are mapped to lock objects using their
+        /// hash codes. Making this count a prime number reduces the chance of
+        /// collisions.
+        /// </summary>
+        private const int NumUpdateLocks = 31;
+
+        /// <summary>
         /// The ESENT instance this dictionary uses. An Instance object inherits
         /// from SafeHandle so this instance will be (eventually) terminated even
         /// if the dictionary isn't disposed. 
@@ -30,11 +39,13 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         private readonly Instance instance;
 
         /// <summary>
-        /// This object should be locked when the Dictionary is being updated. 
+        /// An update lock should be taken when the Dictionary is being updated. 
         /// Read operations can proceed without any locks (the cursor cache has
-        /// its own lock to control access to the cursors).
+        /// its own lock to control access to the cursors). There are multiple
+        /// update locks, which allows multiple writers. When updating a key
+        /// take the lock which maps to key.GetHashCode() % updateLocks.Length.
         /// </summary>
-        private readonly object updateLock;
+        private readonly object[] updateLocks;
 
         /// <summary>
         /// Methods to set and retrieve data in ESE.
@@ -71,7 +82,12 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 
             Globals.Init();
 
-            this.updateLock = new object();
+            this.updateLocks = new object[NumUpdateLocks];
+            for (int i = 0; i < this.updateLocks.Length; ++i)
+            {
+                this.updateLocks[i] = new object();
+            }
+
             this.converters = new PersistentDictionaryConverters<TKey, TValue>();
             this.config = new PersistentDictionaryConfig();
 
@@ -191,7 +207,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 
             set
             {
-                lock (this.updateLock)
+                lock (this.LockObject(key))
                 {
                     this.UsingCursor(
                         cursor =>
@@ -249,7 +265,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="item">The object to remove from the <see cref="PersistentDictionary{TKey,TValue}"/>.</param>
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
-            lock (this.updateLock)
+            lock (this.LockObject(item.Key))
             {
                 return this.UsingCursor(
                     cursor =>
@@ -278,7 +294,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="item">The object to add to the <see cref="PersistentDictionary{TKey,TValue}"/>.</param>
         public void Add(KeyValuePair<TKey, TValue> item)
         {
-            lock (this.updateLock)
+            lock (this.LockObject(item.Key))
             {
                 this.UsingCursor(
                     cursor =>
@@ -317,7 +333,8 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                     // is deleted after we seek to it.
                     using (var transaction = cursor.BeginTransaction())
                     {
-                        bool isPresent = cursor.TrySeek(item.Key) && cursor.RetrieveCurrentValue().Equals(item.Value);
+                        bool isPresent = cursor.TrySeek(item.Key)
+                                         && Compare.AreEqual(item.Value, cursor.RetrieveCurrentValue());
                         transaction.Commit(CommitTransactionGrbit.LazyFlush);
                         return isPresent;
                     }
@@ -343,7 +360,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </exception>
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
-            throw new NotImplementedException();
+            Copy.CopyTo(this, array, arrayIndex);
         }
 
         /// <summary>
@@ -351,7 +368,13 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         public void Clear()
         {
-            lock (this.updateLock)
+            // We will be deleting all items so take all the update locks
+            foreach (object lockObject in this.updateLocks)
+            {
+                Monitor.Enter(lockObject);
+            }
+
+            try
             {
                 this.UsingCursor(
                     cursor =>
@@ -367,6 +390,14 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                         }
                     });
             }
+            finally
+            {
+                // Remember to unlock everything
+                foreach (object lockObject in this.updateLocks)
+                {
+                    Monitor.Exit(lockObject);
+                }                
+            }
         }
 
         /// <summary>
@@ -379,22 +410,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         public bool ContainsKey(TKey key)
         {
             return this.UsingCursor(cursor => cursor.TrySeek(key));
-        }
-
-        /// <summary>
-        /// Determines whether the <see cref="PersistentDictionary{TKey,TValue}"/> contains an element with the specified value.
-        /// </summary>
-        /// <remarks>
-        /// This method requires a complete enumeration of all items in the dictionary so it can be much slower than
-        /// <see cref="ContainsKey"/>.
-        /// </remarks>
-        /// <returns>
-        /// True if the <see cref="PersistentDictionary{TKey,TValue}"/> contains an element with the value; otherwise, false.
-        /// </returns>
-        /// <param name="value">The value to locate in the <see cref="PersistentDictionary{TKey,TValue}"/>.</param>
-        public bool ContainsValue(TValue value)
-        {
-            return this.Values.Contains(value);
         }
 
         /// <summary>
@@ -418,7 +433,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="key">The key of the element to remove.</param>
         public bool Remove(TKey key)
         {
-            lock (this.updateLock)
+            lock (this.LockObject(key))
             {
                 return this.UsingCursor(
                     cursor =>
@@ -489,15 +504,30 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
+        /// Determines whether the <see cref="PersistentDictionary{TKey,TValue}"/> contains an element with the specified value.
+        /// </summary>
+        /// <remarks>
+        /// This method requires a complete enumeration of all items in the dictionary so it can be much slower than
+        /// <see cref="ContainsKey"/>.
+        /// </remarks>
+        /// <returns>
+        /// True if the <see cref="PersistentDictionary{TKey,TValue}"/> contains an element with the value; otherwise, false.
+        /// </returns>
+        /// <param name="value">The value to locate in the <see cref="PersistentDictionary{TKey,TValue}"/>.</param>
+        public bool ContainsValue(TValue value)
+        {
+            return this.Values.Contains(value);
+        }
+
+        /// <summary>
         /// Force all changes made to this dictionary to be written to disk.
         /// </summary>
         public void Flush()
         {
-            lock (this.updateLock)
-            {
-                this.UsingCursor(c => c.Flush());
-            }
+            this.UsingCursor(c => c.Flush());
         }
+
+        #region Internal
 
         /// <summary>
         /// Returns an enumerator that iterates through the keys.
@@ -574,6 +604,10 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 this.cursors.FreeCursor(iterator);
             }
         }
+
+        #endregion
+
+        #region Private
 
         #region Database Creation
 
@@ -749,5 +783,28 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 this.cursors.FreeCursor(cursor);
             }
         }
+
+        /// <summary>
+        /// Gets an object used to lock updates to the key.
+        /// </summary>
+        /// <param name="key">The key to be locked.</param>
+        /// <returns>
+        /// An object that should be locked when the key is updated.
+        /// </returns>
+        private object LockObject(TKey key)
+        {
+            if (null == key)
+            {
+                return this.updateLocks[0];
+            }
+            
+            // Remember: hash codes can be negative, and we can't negate Int32.MinValue.
+            uint hash = unchecked((uint) key.GetHashCode());
+            hash %= checked((uint) this.updateLocks.Length);
+
+            return this.updateLocks[checked((int) hash)];
+        }
+
+        #endregion
     }
 }

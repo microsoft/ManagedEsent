@@ -46,7 +46,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CollectionsSystemParameters.cs" />
+    <Compile Include="Compare.cs" />
     <Compile Include="ConstantExpressionEvaluator.cs" />
+    <Compile Include="Copy.cs" />
     <Compile Include="Key.cs" />
     <Compile Include="KeyExpressionEvaluator.cs" />
     <Compile Include="KeyRange.cs" />
@@ -67,9 +69,6 @@
       <Project>{E929E163-52A0-4AAC-917B-6D7FAF70C45E}</Project>
       <Name>EsentInterop</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -104,13 +104,13 @@ namespace RssDictionarySample
         {
             var separator = new string('-', 80);
             XDocument xdoc = XDocument.Parse(rssdata);
-            var feeds = (from item in xdoc.Descendants("item")
+            var feeds = from item in xdoc.Descendants("item")
                          select new
                          {
                              Title = (string) item.Element("title"),
                              Date = (string) item.Element("pubDate"),
                              Url = (string) item.Element("link"),
-                         });
+                         };
             foreach (var item in feeds)
             {
                 Console.WriteLine("DATE: {0}", item.Date);

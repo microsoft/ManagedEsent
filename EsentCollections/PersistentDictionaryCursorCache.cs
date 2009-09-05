@@ -109,10 +109,10 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                         return cursor;
                     }
                 }
-
-                // Didn't find a cached cursor, open a new one
-                return this.OpenCursor();            
             }
+
+            // Didn't find a cached cursor, open a new one
+            return this.OpenCursor();
         }
 
         /// <summary>

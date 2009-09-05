@@ -49,7 +49,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             // Values aren't indexed so we have to do this the expensive way
             foreach (var v in this)
             {
-                if (v.Equals(item))
+                if (Compare.AreEqual(v, item))
                 {
                     return true;
                 }

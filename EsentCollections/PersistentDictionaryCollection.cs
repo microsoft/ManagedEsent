@@ -17,7 +17,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
     /// <typeparam name="T">The type to be enumerated.</typeparam>
-    internal abstract class PersistentDictionaryCollection<TKey, TValue, T> : ICollection<T>, ICollection
+    internal abstract class PersistentDictionaryCollection<TKey, TValue, T> : ICollection<T>
         where TKey : IComparable<TKey>
     {
         /// <summary>
@@ -47,35 +47,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             get
             {
                 return this.dictionary.Count;
-            }
-        }
-
-        /// <summary>
-        /// Gets an object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection"/>.
-        /// </summary>
-        /// <returns>
-        /// An object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection"/>.
-        /// </returns>
-        public object SyncRoot
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether access to the <see cref="T:System.Collections.ICollection"/> is synchronized (thread safe).
-        /// </summary>
-        /// <returns>
-        /// true if access to the <see cref="T:System.Collections.ICollection"/> is synchronized (thread safe); otherwise, false.
-        /// </returns>
-        /// <filterpriority>2</filterpriority>
-        public bool IsSynchronized
-        {
-            get
-            {
-                return true;
             }
         }
 
@@ -152,40 +123,12 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         public abstract bool Contains(T item);
 
         /// <summary>
-        /// Copies the elements of the <see cref="T:System.Collections.ICollection"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
-        /// </summary>
-        /// <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:System.Collections.ICollection"/>. The <see cref="T:System.Array"/> must have zero-based indexing. </param><param name="index">The zero-based index in <paramref name="array"/> at which copying begins. </param><exception cref="T:System.ArgumentNullException"><paramref name="array"/> is null. </exception><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is less than zero. </exception><exception cref="T:System.ArgumentException"><paramref name="array"/> is multidimensional.-or- <paramref name="index"/> is equal to or greater than the length of <paramref name="array"/>.-or- The number of elements in the source <see cref="T:System.Collections.ICollection"/> is greater than the available space from <paramref name="index"/> to the end of the destination <paramref name="array"/>. </exception><exception cref="T:System.ArgumentException">The type of the source <see cref="T:System.Collections.ICollection"/> cannot be cast automatically to the type of the destination <paramref name="array"/>. </exception><filterpriority>2</filterpriority>
-        public void CopyTo(Array array, int index)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         /// Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
         /// </summary>
         /// <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1"/>. The <see cref="T:System.Array"/> must have zero-based indexing.</param><param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param><exception cref="T:System.ArgumentNullException"><paramref name="array"/> is null.</exception><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="arrayIndex"/> is less than 0.</exception><exception cref="T:System.ArgumentException"><paramref name="array"/> is multidimensional.-or-<paramref name="arrayIndex"/> is equal to or greater than the length of <paramref name="array"/>.-or-The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1"/> is greater than the available space from <paramref name="arrayIndex"/> to the end of the destination <paramref name="array"/>.-or-Type <paramref name="T"/> cannot be cast automatically to the type of the destination <paramref name="array"/>.</exception>
         public void CopyTo(T[] array, int arrayIndex)
         {
-            if (null == array)
-            {
-                throw new ArgumentNullException("array");
-            }
-
-            if (arrayIndex < 0 || arrayIndex >= array.Length)
-            {
-                throw new ArgumentOutOfRangeException("arrayIndex", arrayIndex, "not inside array");
-            }
-
-            if (array.Length - arrayIndex > this.Count)
-            {
-                throw new ArgumentOutOfRangeException("array", array.Length, "array is not long enough");
-            }
-
-            int i = arrayIndex;
-            foreach(T t in this)
-            {
-                array[i++] = t;
-            }
+            Copy.CopyTo(this, array, arrayIndex);
         }
 
         /// <summary>
