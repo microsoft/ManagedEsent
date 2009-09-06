@@ -7,7 +7,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -65,6 +64,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// Path to the database.
         /// </summary>
+        private readonly string databaseDirectory;
+
+        /// <summary>
+        /// Path to the database.
+        /// </summary>
         private readonly string databasePath;
 
         /// <summary>
@@ -81,15 +85,16 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             }
 
             Globals.Init();
+            this.converters = new PersistentDictionaryConverters<TKey, TValue>();
+            this.config = new PersistentDictionaryConfig();
+            this.databaseDirectory = directory;
+            this.databasePath = Path.Combine(directory, this.config.Database);
 
             this.updateLocks = new object[NumUpdateLocks];
             for (int i = 0; i < this.updateLocks.Length; ++i)
             {
                 this.updateLocks[i] = new object();
             }
-
-            this.converters = new PersistentDictionaryConverters<TKey, TValue>();
-            this.config = new PersistentDictionaryConfig();
 
             this.instance = new Instance(Guid.NewGuid().ToString());            
             this.instance.Parameters.SystemDirectory = directory;
@@ -112,7 +117,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             this.instance.Parameters.PageTempDBMin = 0;
             this.instance.Init();
 
-            this.databasePath = Path.Combine(directory, this.config.Database);
             if (!File.Exists(this.databasePath))
             {
                 this.CreateDatabase(this.databasePath);
@@ -175,6 +179,18 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             get
             {
                 return new PersistentDictionaryValueCollection<TKey, TValue>(this);
+            }
+        }
+
+        /// <summary>
+        /// Gets the path of the directory that contains the dictionary database.
+        /// The database consists of a set of files found in the directory.
+        /// </summary>
+        public string Database
+        {
+            get
+            {
+                return this.databaseDirectory;
             }
         }
 

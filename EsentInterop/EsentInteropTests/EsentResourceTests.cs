@@ -100,7 +100,7 @@ namespace InteropApiTests
         /// <summary>
         /// Mock object that inherits from the EsentResource class.
         /// </summary>
-        private class MockEsesntResource : EsentResource
+        internal class MockEsesntResource : EsentResource
         {
             /// <summary>
             /// Gets a value indicating whether the internal ReleaseResource method 

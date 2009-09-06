@@ -227,6 +227,32 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// Close and delete the database.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void TestCloseAndDelete()
+        {
+            var rand = new Random();
+            for (int i = 0; i < 64; ++i)
+            {
+                string k = rand.NextDouble().ToString();
+                string v = rand.Next().ToString();
+                this.expected.Add(k, v);
+                this.actual.Add(k, v);
+            }
+
+            this.actual.Dispose();
+            PersistentDictionaryFile.DeleteFiles(DictionaryLocation);
+
+            // Deleting the files clears the dictionary
+            this.expected.Clear();
+
+            this.actual = new PersistentDictionary<string, string>(DictionaryLocation);
+            this.CompareDictionaries();
+        }
+
+        /// <summary>
         /// Determine if two enumerations are equivalent. Enumerations are
         /// equivalent if they contain the same members in any order.
         /// </summary>

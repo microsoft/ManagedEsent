@@ -55,6 +55,16 @@ namespace EsentCollectionsTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        public void VerifyDatabasePropertyReturnsDatabaseDirectory()
+        {
+            Assert.AreEqual(DictionaryLocation, this.dictionary.Database);
+        }
+
+        /// <summary>
+        /// A PersistentDictionary is read-write.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
         public void VerifyDictionaryIsNotReadOnly()
         {
             Assert.IsFalse(this.dictionary.IsReadOnly);
@@ -67,7 +77,7 @@ namespace EsentCollectionsTests
         [Priority(2)]
         public void VerifyDictionaryKeysAreReadOnly()
         {
-            Assert.IsTrue(this.dictionary.Keys.IsReadOnly);
+            CheckCollectionIsReadOnly(this.dictionary.Keys);
         }
 
         /// <summary>
@@ -77,7 +87,7 @@ namespace EsentCollectionsTests
         [Priority(2)]
         public void VerifyDictionaryValuesAreReadOnly()
         {
-            Assert.IsTrue(this.dictionary.Values.IsReadOnly);
+            CheckCollectionIsReadOnly(this.dictionary.Values);
         }
 
         /// <summary>
@@ -143,6 +153,19 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// Contains should return false when the value doesn't match.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void VerifyContainsItemReturnsFalseWhenValueDoesNotMatch()
+        {
+            var item = new KeyValuePair<DateTime, Guid>(DateTime.Now, Guid.NewGuid());
+            this.dictionary.Add(item);
+            var otherItem = new KeyValuePair<DateTime, Guid>(item.Key, Guid.NewGuid());
+            Assert.IsFalse(this.dictionary.Contains(otherItem));
+        }
+
+        /// <summary>
         /// Remove should return false for keys that don't exist.
         /// </summary>
         [TestMethod]
@@ -176,6 +199,20 @@ namespace EsentCollectionsTests
             var itemToRemove = new KeyValuePair<DateTime, Guid>(item.Key, Guid.NewGuid());
             Assert.IsFalse(this.dictionary.Remove(itemToRemove));
             Assert.AreEqual(item.Value, this.dictionary[item.Key]);
+        }
+
+        /// <summary>
+        /// Remove should return true (and remove the item) when
+        /// the value does match.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void VerifyRemoveItemReturnsTrueWhenValueDoesMatch()
+        {
+            var item = new KeyValuePair<DateTime, Guid>(DateTime.Now, Guid.NewGuid());
+            this.dictionary.Add(item);
+            Assert.IsTrue(this.dictionary.Remove(item));
+            Assert.IsFalse(this.dictionary.Contains(item));
         }
 
         /// <summary>
@@ -226,6 +263,57 @@ namespace EsentCollectionsTests
         {
             this.dictionary.Add(DateTime.Now, Guid.NewGuid());
             this.dictionary.Flush();
+        }
+
+        /// <summary>
+        /// PersistentDatabaseFile.Exists should return true for this database.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void ExistsReturnsTrue()
+        {
+            Assert.IsTrue(PersistentDictionaryFile.Exists(DictionaryLocation));
+        }
+
+        /// <summary>
+        /// Make sure the given collection is read-only.
+        /// </summary>
+        /// <typeparam name="T">The type of the collection.</typeparam>
+        /// <param name="collection">The collection to check.</param>
+        private static void CheckCollectionIsReadOnly<T>(ICollection<T> collection)
+        {
+            // IsReadOnly is true
+            Assert.IsTrue(collection.IsReadOnly);
+
+            // Add() throws an exception
+            try
+            {
+                collection.Add(default(T));
+                Assert.Fail("Should have thrown a NotSupportedException");
+            }
+            catch (NotSupportedException)
+            {
+            }
+
+            // Remove() throws an exception
+            try
+            {
+                collection.Remove(default(T));
+                Assert.Fail("Should have thrown a NotSupportedException");
+            }
+            catch (NotSupportedException)
+            {
+            }
+
+            // Clear() throws an exception
+            try
+            {
+                collection.Clear();
+                Assert.Fail("Should have thrown a NotSupportedException");
+            }
+            catch (NotSupportedException)
+            {
+            }
         }
     }
 }
