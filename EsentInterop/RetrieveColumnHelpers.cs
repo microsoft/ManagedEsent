@@ -6,6 +6,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 
 namespace Microsoft.Isam.Esent.Interop
@@ -124,7 +125,7 @@ namespace Microsoft.Isam.Esent.Interop
             int dataSize;
             JetRetrieveColumn(
                 sesid, tableid, columnid, null, 0, out dataSize, grbit, retinfo);
-            return 0;
+            return dataSize;
         }
 
         /// <summary>
@@ -754,6 +755,41 @@ namespace Microsoft.Isam.Esent.Interop
                 JET_wrn wrn = JetRetrieveColumn(
                     sesid, tableid, columnid, pointer, DataSize, out actualDataSize, grbit, null);
                 return CreateReturnValue(data, DataSize, wrn, actualDataSize);
+            }
+        }
+
+        /// <summary>
+        /// Deserialize an object from a column.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to read from.</param>
+        /// <param name="columnid">The column to read from.</param>
+        /// <returns>The deserialized object. Null if the column was null.</returns>
+        public static object DeserializeObjectFromColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
+        {
+            return DeserializeObjectFromColumn(sesid, tableid, columnid, RetrieveColumnGrbit.None);
+        }
+
+        /// <summary>
+        /// Deserialize an object from a column.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to read from.</param>
+        /// <param name="columnid">The column to read from.</param>
+        /// <param name="grbit">The retrieval options to use.</param>
+        /// <returns>The deserialized object. Null if the column was null.</returns>
+        public static object DeserializeObjectFromColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
+        {
+            int actualSize;
+            if (JET_wrn.ColumnNull == Api.JetRetrieveColumn(sesid, tableid, columnid, null, 0, out actualSize, grbit, null))
+            {
+                return null;
+            }
+
+            using (var stream = new ColumnStream(sesid, tableid, columnid))
+            {
+                var deseriaizer = new BinaryFormatter();
+                return deseriaizer.Deserialize(stream);
             }
         }
 

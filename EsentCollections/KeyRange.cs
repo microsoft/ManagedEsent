@@ -14,7 +14,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     /// exclusive.
     /// </summary>
     /// <typeparam name="T">The type of the key.</typeparam>
-    internal class KeyRange<T> where T : IComparable<T>
+    internal sealed class KeyRange<T> where T : IComparable<T>
     {
         /// <summary>
         /// Initializes a new instance of the KeyRange class.

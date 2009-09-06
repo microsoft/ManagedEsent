@@ -143,6 +143,21 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Start an update, insert the record, save while goto the bookmark.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void TestSaveAndGotoBookmarkPositionsCursor()
+        {
+            using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            {
+                update.SaveAndGotoBookmark();
+            }
+
+            Api.RetrieveKey(this.sesid, this.tableid, RetrieveKeyGrbit.None);
+        }
+
+        /// <summary>
         /// Start an update and cancel the insert.
         /// </summary>
         [TestMethod]
@@ -236,6 +251,32 @@ namespace InteropApiTests
             var update = new Update(this.sesid, this.tableid, JET_prep.Insert);
             update.Cancel();
             update.Cancel();
+        }
+
+        /// <summary>
+        /// Call SaveAndGotoBookmark on a disposed object, expecting an exception.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [ExpectedException(typeof(ObjectDisposedException))]
+        public void TestSaveAndGotoBookmarkThrowsExceptionWhenUpdateIsDisposed()
+        {
+            var update = new Update(this.sesid, this.tableid, JET_prep.Insert);
+            update.Dispose();
+            update.SaveAndGotoBookmark();
+        }
+
+        /// <summary>
+        /// Call SaveAndGotoBookmark on a cancelled update, expecting an exception
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestSaveAndGotoBookmarkThrowsExceptionWhenUpdateIsCancelled()
+        {
+            var update = new Update(this.sesid, this.tableid, JET_prep.Insert);
+            update.Cancel();
+            update.SaveAndGotoBookmark();
         }
     }
 }

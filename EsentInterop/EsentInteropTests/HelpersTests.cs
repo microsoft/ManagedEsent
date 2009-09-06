@@ -230,7 +230,7 @@ namespace InteropApiTests
             JET_COLUMNID columnid = this.columnidDict["Byte"];
             var b = new byte[] { 0x55 };
             this.InsertRecord(columnid, b);
-            Assert.AreEqual(0, Api.RetrieveColumnSize(this.sesid, this.tableid, columnid));
+            Assert.AreEqual(1, Api.RetrieveColumnSize(this.sesid, this.tableid, columnid));
         }
 
         /// <summary>

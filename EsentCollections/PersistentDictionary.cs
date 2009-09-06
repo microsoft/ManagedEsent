@@ -117,13 +117,27 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             this.instance.Parameters.PageTempDBMin = 0;
             this.instance.Init();
 
-            if (!File.Exists(this.databasePath))
+            try
             {
-                this.CreateDatabase(this.databasePath);
-            }
+                if (!File.Exists(this.databasePath))
+                {
+                    this.CreateDatabase(this.databasePath);
+                }
+                else
+                {
+                    this.CheckDatabaseMetaData(this.databasePath);
+                }
 
-            this.cursors = new PersistentDictionaryCursorCache<TKey, TValue>(
-                this.instance, this.databasePath, this.converters, this.config);
+                this.cursors = new PersistentDictionaryCursorCache<TKey, TValue>(
+                    this.instance, this.databasePath, this.converters, this.config);
+            }
+            catch (Exception)
+            {
+                // We have failed to initialize for some reason. Terminate
+                // the instance.
+                this.instance.Term();                
+                throw;
+            }
         }
 
         /// <summary>
@@ -536,6 +550,25 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
+        /// Returns the last key in the dictionary (the key with the highest value).
+        /// </summary>
+        /// <returns>The last key.</returns>
+        public TKey GetLastKey()
+        {
+            return this.UsingCursor(
+                c =>
+                {
+                    using (var transaction = c.BeginTransaction())
+                    {
+                        c.MoveLastWithKeyNotFoundException();
+                        TKey key = c.RetrieveCurrentKey();
+                        transaction.Commit(CommitTransactionGrbit.LazyFlush);
+                        return key;
+                    }
+                });
+        }
+
+        /// <summary>
         /// Force all changes made to this dictionary to be written to disk.
         /// </summary>
         public void Flush()
@@ -628,6 +661,55 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         #region Database Creation
 
         /// <summary>
+        /// Check the database meta-data. This makes sure the tables and columns exist and
+        /// checks the type of the database.
+        /// </summary>
+        /// <param name="database">The database to check.</param>
+        private void CheckDatabaseMetaData(string database)
+        {
+            using (var session = new Session(this.instance))
+            {
+                JET_DBID dbid;
+                JET_TABLEID tableid;
+
+                Api.JetAttachDatabase(session, database, AttachDatabaseGrbit.None);
+                Api.JetOpenDatabase(session, database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+
+                // Globals table
+                Api.JetOpenTable(session, dbid, this.config.GlobalsTableName, null, 0, OpenTableGrbit.None, out tableid);
+                Api.GetTableColumnid(session, tableid, this.config.CountColumnName);
+                Api.GetTableColumnid(session, tableid, this.config.FlushColumnName);
+                var keyTypeColumnid = Api.GetTableColumnid(session, tableid, this.config.KeyTypeColumnName);
+                var valueTypeColumnid = Api.GetTableColumnid(session, tableid, this.config.ValueTypeColumnName);
+                if (!Api.TryMoveFirst(session, tableid))
+                {
+                    throw new ApplicationException("globals table is empty");
+                }
+
+                var keyType = Api.DeserializeObjectFromColumn(session, tableid, keyTypeColumnid);
+                var valueType = Api.DeserializeObjectFromColumn(session, tableid, valueTypeColumnid);
+                if (keyType != typeof(TKey) || valueType != typeof(TValue))
+                {
+                    var error = String.Format(
+                        "Database is of type <{0}, {1}>, not <{2}, {3}>",
+                        keyType,
+                        valueType,
+                        typeof(TKey),
+                        typeof(TValue));
+                    throw new ArgumentException(error);
+                }
+
+                Api.JetCloseTable(session, tableid);
+
+                // Data table
+                Api.JetOpenTable(session, dbid, this.config.DataTableName, null, 0, OpenTableGrbit.None, out tableid);
+                Api.GetTableColumnid(session, tableid, this.config.KeyColumnName);
+                Api.GetTableColumnid(session, tableid, this.config.ValueColumnName);
+                Api.JetCloseTable(session, tableid);
+            }
+        }
+
+        /// <summary>
         /// Create the database.
         /// </summary>
         /// <param name="database">The name of the database to create.</param>
@@ -669,6 +751,8 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             JET_TABLEID tableid;
             JET_COLUMNID versionColumnid;
             JET_COLUMNID countColumnid;
+            JET_COLUMNID keyTypeColumnid;
+            JET_COLUMNID valueTypeColumnid;
 
             Api.JetCreateTable(session, dbid, this.config.GlobalsTableName, 1, 100, out tableid);
             Api.JetAddColumn(
@@ -700,9 +784,29 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 defaultValue.Length,
                 out countColumnid);
 
+            Api.JetAddColumn(
+                session,
+                tableid,
+                this.config.KeyTypeColumnName,
+                new JET_COLUMNDEF { coltyp = JET_coltyp.LongBinary },
+                null,
+                0,
+                out keyTypeColumnid);
+
+            Api.JetAddColumn(
+                session,
+                tableid,
+                this.config.ValueTypeColumnName,
+                new JET_COLUMNDEF { coltyp = JET_coltyp.LongBinary },
+                null,
+                0,
+                out valueTypeColumnid);
+
             using (var update = new Update(session, tableid, JET_prep.Insert))
             {
-                Api.SetColumn(session, tableid, versionColumnid, "PersistentDictionary V1", Encoding.Unicode);
+                Api.SerializeObjectToColumn(session, tableid, keyTypeColumnid, typeof(TKey));
+                Api.SerializeObjectToColumn(session, tableid, valueTypeColumnid, typeof(TValue));
+                Api.SetColumn(session, tableid, versionColumnid, this.config.Version, Encoding.Unicode);
                 update.Save();
             }
 

@@ -411,10 +411,11 @@ class GenericDictionaryFixture(unittest.TestCase):
 		self._compareDictionaries(expected, actual)
 		
 		# Replace with []
+		# Make sure to try setting every value
 		k = random.choice(keys)
-		v = random.choice(values)
-		self._set(expected, actual, k, v)
-		self._compareDictionaries(expected, actual)
+		for v in values:
+			self._set(expected, actual, k, v)
+			self._compareDictionaries(expected, actual)
 		
 		# Delete key, reinsert with []
 		k = random.choice(keys)
@@ -425,7 +426,10 @@ class GenericDictionaryFixture(unittest.TestCase):
 		self._compareDictionaries(expected, actual)	
 		self._set(expected, actual, k, v)
 		self._compareDictionaries(expected, actual)	
-		
+
+		# for i in actual:
+		# 	print '%s => %.32s' % (i.Key, i.Value)
+			
 		# Clear
 		self._clear(expected, actual)
 		self._compareDictionaries(expected, actual)	
@@ -437,9 +441,8 @@ class GenericDictionaryFixture(unittest.TestCase):
 			self._doTest(expected, dict, data[tkey], data[tvalue])
 		finally:
 			dict.Dispose()
-			
-	
-types = [
+
+keytypes = [
 	System.Boolean,
 	System.Byte,
 	System.Int16,
@@ -451,8 +454,43 @@ types = [
 	System.Single,
 	System.Double,
 	System.DateTime,
+	System.TimeSpan,
 	System.Guid,
 	System.String,
+	]			
+
+nullabletypes = [
+	System.Boolean,
+	System.Byte,
+	System.Int16,
+	System.UInt16,
+	System.Int32,
+	System.UInt32,
+	System.Int64,
+	System.UInt64,
+	System.Single,
+	System.Double,
+	System.DateTime,
+	System.TimeSpan,
+	System.Guid,
+	]			
+	
+valuetypes = [
+	System.Boolean,
+	System.Byte,
+	System.Int16,
+	System.UInt16,
+	System.Int32,
+	System.UInt32,
+	System.Int64,
+	System.UInt64,
+	System.Single,
+	System.Double,
+	System.DateTime,
+	System.TimeSpan,
+	System.Guid,
+	System.String,
+	System.Decimal,
 	]
 	
 r = System.Random()
@@ -520,6 +558,12 @@ data[System.Double] = [
 	System.Double.MinValue,
 	System.Double.MaxValue,
 	r.NextDouble()]
+data[System.Decimal] = [
+	System.Decimal.MinValue,
+	System.Decimal.MaxValue,
+	System.Decimal.MinusOne,
+	System.Decimal.Zero,
+	System.Decimal.One]
 data[System.Guid] = [
 	System.Guid.Empty,
 	System.Guid.NewGuid()]
@@ -529,6 +573,10 @@ data[System.DateTime] = [
 	System.DateTime.Now,
 	System.DateTime.UtcNow,
 	System.DateTime.Today]
+data[System.TimeSpan] = [
+	System.TimeSpan.MinValue,
+	System.TimeSpan.MaxValue,
+	System.TimeSpan(r.Next())]	
 data[System.String] = [
 	System.String.Empty,
 	'foo', 
@@ -539,13 +587,21 @@ data[System.String] = [
 	System.Guid.NewGuid.ToString(),
 	System.DateTime.Now.ToString(),
 	'#'*65000]
-	
+
+# Use this to create a unique closure for tkey and tvalue	
 def makef(tkey, tvalue):
 	return lambda self : self.createDictAndTest(tkey, tvalue)
 	
-for tkey in types:
-	for tvalue in types:
-		name = 'test%s%s' % (tkey().GetType().Name, tvalue().GetType().Name)
+# Make nullable data, which is the non-nullable data + None	
+for t in nullabletypes:
+	data[System.Nullable[t]] = list(data[t])
+	data[System.Nullable[t]].append(None)
+	valuetypes.append(System.Nullable[t])
+	
+# Create the test functions	
+for tkey in keytypes:
+	for tvalue in valuetypes:
+		name = 'test%s%s' % (tkey, tvalue)
 		setattr(GenericDictionaryFixture, name, makef(tkey, tvalue))
 	
 if __name__ == '__main__':

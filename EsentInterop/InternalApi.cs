@@ -31,7 +31,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="dataOffset">The offset in the data buffer to set data from.</param>
         /// <param name="grbit">SetColumn options.</param>
         /// <param name="setinfo">Used to specify itag or long-value offset.</param>
-        public static void JetSetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, int dataOffset, SetColumnGrbit grbit, JET_SETINFO setinfo)
+        /// <returns>A warning value.</returns>
+        public static JET_wrn JetSetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, int dataOffset, SetColumnGrbit grbit, JET_SETINFO setinfo)
         {
             if (dataOffset < 0
                 || (null != data && 0 != dataSize && dataOffset >= data.Length)
@@ -55,7 +56,7 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 fixed (byte* pointer = data)
                 {
-                    Api.JetSetColumn(sesid, tableid, columnid, (IntPtr)(pointer + dataOffset), dataSize, grbit, setinfo);
+                    return Api.JetSetColumn(sesid, tableid, columnid, (IntPtr)(pointer + dataOffset), dataSize, grbit, setinfo);
                 }
             }
         }
@@ -182,9 +183,10 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="dataSize">The size of data to set.</param>
         /// <param name="grbit">SetColumn options.</param>
         /// <param name="setinfo">Used to specify itag or long-value offset.</param>
-        internal static void JetSetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, IntPtr data, int dataSize, SetColumnGrbit grbit, JET_SETINFO setinfo)
+        /// <returns>A warning value.</returns>
+        internal static JET_wrn JetSetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, IntPtr data, int dataSize, SetColumnGrbit grbit, JET_SETINFO setinfo)
         {
-            Api.Check(Impl.JetSetColumn(sesid, tableid, columnid, data, dataSize, grbit, setinfo));
+            return Api.Check(Impl.JetSetColumn(sesid, tableid, columnid, data, dataSize, grbit, setinfo));
         }
     }
 }

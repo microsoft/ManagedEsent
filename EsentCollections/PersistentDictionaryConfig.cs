@@ -9,8 +9,20 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     /// <summary>
     /// Meta-data configuration for the dictionary database.
     /// </summary>
-    internal class PersistentDictionaryConfig
+    internal sealed class PersistentDictionaryConfig
     {
+        /// <summary>
+        /// Gets a string describing the current version of the 
+        /// PersistentDictionary.
+        /// </summary>
+        public string Version
+        {
+            get
+            {
+                return "PersistentDictionary 1.0.0";
+            }
+        }
+
         /// <summary>
         /// Gets the name of the database. The user provides the
         /// directory and the database is always given this name.
@@ -77,6 +89,30 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             get
             {
                 return "Flush";
+            }
+        }
+
+        /// <summary>
+        /// Gets the name of the key type column in the globals table.
+        /// This column stores the type of the key in the dictionary.
+        /// </summary>
+        public string KeyTypeColumnName
+        {
+            get
+            {
+                return "KeyType";
+            }
+        }
+
+        /// <summary>
+        /// Gets the name of the value type column in the globals table.
+        /// This column stores the type of the value in the dictionary.
+        /// </summary>
+        public string ValueTypeColumnName
+        {
+            get
+            {
+                return "ValueType";
             }
         }
 

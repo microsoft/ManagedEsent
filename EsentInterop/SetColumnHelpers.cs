@@ -6,6 +6,8 @@
 
 using System;
 using System.Diagnostics;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 
 namespace Microsoft.Isam.Esent.Interop
@@ -333,6 +335,32 @@ namespace Microsoft.Isam.Esent.Interop
                 const int DataSize = sizeof(ulong);
                 var pointer = new IntPtr(&data);
                 JetSetColumn(sesid, tableid, columnid, pointer, DataSize, SetColumnGrbit.None, null);
+            }
+        }
+
+        /// <summary>
+        /// Write a serialized form of an object to a column.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to write to. An update should be prepared.</param>
+        /// <param name="columnid">The column to write to.</param>
+        /// <param name="value">The object to write. The object must be serializable.</param>
+        public static void SerializeObjectToColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, object value)
+        {
+            if (null == value)
+            {
+                Api.SetColumn(sesid, tableid, columnid, null);
+            }
+            else
+            {
+                using (var stream = new ColumnStream(sesid, tableid, columnid))
+                {
+                    var serializer = new BinaryFormatter
+                    {
+                        Context = new StreamingContext(StreamingContextStates.Persistence)
+                    };
+                    serializer.Serialize(stream, value);
+                }
             }
         }
 

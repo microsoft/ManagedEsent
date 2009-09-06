@@ -30,6 +30,28 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// Creating a dictionary with an invalid key type fails.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyConstructorThrowsExceptionWhenKeyTypeIsInvalid()
+        {
+            var dictionary = new PersistentDictionary<NonSerializableComparable, int>("foo");
+        }
+
+        /// <summary>
+        /// Creating a dictionary with an invalid key type fails.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyConstructorThrowsExceptionWhenValueTypeIsInvalid()
+        {
+            var dictionary = new PersistentDictionary<int, NonSerializable>("foo");
+        }
+
+        /// <summary>
         /// PersistentDictionaryFile.Exists fails when the directory is null.
         /// </summary>
         [TestMethod]
@@ -156,6 +178,66 @@ namespace EsentCollectionsTests
             Assert.IsTrue(PersistentDictionaryFile.Exists(DictionaryLocation));
             PersistentDictionaryFile.DeleteFiles(DictionaryLocation);
             Assert.IsFalse(PersistentDictionaryFile.Exists(DictionaryLocation));
+            Directory.Delete(DictionaryLocation, true);
+        }
+
+        /// <summary>
+        /// Opening a dictionary fails if the types of the keys don't match.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [ExpectedException(typeof(ArgumentException))]
+        public void VerifyOpenFailsOnMistmatchedKeyTypes()
+        {
+            const string DictionaryLocation = "IntIntDictionary";
+            var dict = new PersistentDictionary<int, int>(DictionaryLocation);
+            dict.Dispose();
+            var wrongDict = new PersistentDictionary<long, int>(DictionaryLocation);
+            Directory.Delete(DictionaryLocation, true);
+        }
+
+        /// <summary>
+        /// Opening a dictionary fails if the types of the values don't match.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [ExpectedException(typeof(ArgumentException))]
+        public void VerifyOpenFailsOnMistmatchedValueTypes()
+        {
+            const string DictionaryLocation = "IntIntDictionary";
+            var dict = new PersistentDictionary<int, int>(DictionaryLocation);
+            dict.Dispose();
+            var wrongDict = new PersistentDictionary<int, string>(DictionaryLocation);
+            Directory.Delete(DictionaryLocation, true);
+        }
+
+        /// <summary>
+        /// A dummy class used to test invalid key types.
+        /// </summary>
+        [Serializable]
+        private struct NonSerializableComparable : IComparable<NonSerializableComparable>
+        {
+            /// <summary>
+            /// This dictionary stops the structure from being serializable.
+            /// </summary>
+            private Dictionary<int, int> dict;
+
+            /// <summary>
+            /// Dummy CompareTo method.
+            /// </summary>
+            /// <param name="other">Parameter is ignored.</param>
+            /// <returns>Always returns 0.</returns>
+            public int CompareTo(NonSerializableComparable other)
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// A dummy class used to test invalid value types.
+        /// </summary>
+        private class NonSerializable 
+        {
         }
     }
 }

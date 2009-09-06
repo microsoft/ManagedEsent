@@ -26,7 +26,7 @@ namespace EsentCollectionsTests
         /// <summary>
         /// The dictionary we are testing.
         /// </summary>
-        private PersistentDictionary<DateTime, Guid> dictionary;
+        private PersistentDictionary<DateTime, Guid?> dictionary;
 
         /// <summary>
         /// Test initialization.
@@ -34,7 +34,7 @@ namespace EsentCollectionsTests
         [TestInitialize]
         public void Setup()
         {
-            this.dictionary = new PersistentDictionary<DateTime, Guid>(DictionaryLocation);
+            this.dictionary = new PersistentDictionary<DateTime, Guid?>(DictionaryLocation);
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace EsentCollectionsTests
         [Priority(2)]
         public void VerifyContainsReturnsFalseWhenItemIsNotPresent()
         {
-            var item = new KeyValuePair<DateTime, Guid>(DateTime.Now, Guid.NewGuid());
+            var item = new KeyValuePair<DateTime, Guid?>(DateTime.Now, Guid.NewGuid());
             Assert.IsFalse(this.dictionary.Contains(item));
         }
 
@@ -108,7 +108,7 @@ namespace EsentCollectionsTests
         [Priority(2)]
         public void VerifyTryGetValueReturnsFalseWhenKeyIsNotPresent()
         {
-            Guid v;
+            Guid? v;
             Assert.IsFalse(this.dictionary.TryGetValue(DateTime.Now, out v));
         }
 
@@ -159,9 +159,9 @@ namespace EsentCollectionsTests
         [Priority(2)]
         public void VerifyContainsItemReturnsFalseWhenValueDoesNotMatch()
         {
-            var item = new KeyValuePair<DateTime, Guid>(DateTime.Now, Guid.NewGuid());
+            var item = new KeyValuePair<DateTime, Guid?>(DateTime.Now, Guid.NewGuid());
             this.dictionary.Add(item);
-            var otherItem = new KeyValuePair<DateTime, Guid>(item.Key, Guid.NewGuid());
+            var otherItem = new KeyValuePair<DateTime, Guid?>(item.Key, Guid.NewGuid());
             Assert.IsFalse(this.dictionary.Contains(otherItem));
         }
 
@@ -182,7 +182,7 @@ namespace EsentCollectionsTests
         [Priority(2)]
         public void VerifyRemoveItemReturnsFalseWhenItemIsNotPresent()
         {
-            var item = new KeyValuePair<DateTime, Guid>(DateTime.Now, Guid.NewGuid());
+            var item = new KeyValuePair<DateTime, Guid?>(DateTime.Now, Guid.NewGuid());
             Assert.IsFalse(this.dictionary.Remove(item));
         }
 
@@ -194,9 +194,9 @@ namespace EsentCollectionsTests
         [Priority(2)]
         public void VerifyRemoveItemReturnsFalseWhenValueDoesNotMatch()
         {
-            var item = new KeyValuePair<DateTime, Guid>(DateTime.Now, Guid.NewGuid());
+            var item = new KeyValuePair<DateTime, Guid?>(DateTime.Now, Guid.NewGuid());
             this.dictionary.Add(item);
-            var itemToRemove = new KeyValuePair<DateTime, Guid>(item.Key, Guid.NewGuid());
+            var itemToRemove = new KeyValuePair<DateTime, Guid?>(item.Key, Guid.NewGuid());
             Assert.IsFalse(this.dictionary.Remove(itemToRemove));
             Assert.AreEqual(item.Value, this.dictionary[item.Key]);
         }
@@ -209,7 +209,7 @@ namespace EsentCollectionsTests
         [Priority(2)]
         public void VerifyRemoveItemReturnsTrueWhenValueDoesMatch()
         {
-            var item = new KeyValuePair<DateTime, Guid>(DateTime.Now, Guid.NewGuid());
+            var item = new KeyValuePair<DateTime, Guid?>(DateTime.Now, Guid.NewGuid());
             this.dictionary.Add(item);
             Assert.IsTrue(this.dictionary.Remove(item));
             Assert.IsFalse(this.dictionary.Contains(item));
@@ -240,7 +240,7 @@ namespace EsentCollectionsTests
             var k = DateTime.UtcNow;
             var v = Guid.NewGuid();
             this.dictionary.Add(k, v);
-            this.dictionary.Add(new KeyValuePair<DateTime, Guid>(k, Guid.NewGuid()));
+            this.dictionary.Add(new KeyValuePair<DateTime, Guid?>(k, Guid.NewGuid()));
         }
 
         /// <summary>
@@ -255,6 +255,30 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// Getting the last key throws an exception if the dictionary is empty.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [ExpectedException(typeof(KeyNotFoundException))]
+        public void VerifyGetLastKeyThrowsExceptionIfDictionaryIsEmpty()
+        {
+            this.dictionary.GetLastKey();
+        }
+
+        /// <summary>
+        /// Getting the last key returns the last key.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void VerifyGetLastKeyReturnsLastKey()
+        {
+            var key = DateTime.Now;
+            this.dictionary[key] = Guid.NewGuid();
+            Assert.AreEqual(key, this.dictionary.GetLastKey());
+        }
+
+
+        /// <summary>
         /// Exercise the Flush code path.
         /// </summary>
         [TestMethod]
@@ -263,6 +287,18 @@ namespace EsentCollectionsTests
         {
             this.dictionary.Add(DateTime.Now, Guid.NewGuid());
             this.dictionary.Flush();
+        }
+
+        /// <summary>
+        /// This dictionary has a nullable value. Set a value to null.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void VerifyValueCanBeNull()
+        {
+            var key = DateTime.Now;
+            this.dictionary[key] = null;
+            Assert.IsNull(this.dictionary[key]);
         }
 
         /// <summary>

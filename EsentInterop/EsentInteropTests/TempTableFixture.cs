@@ -635,6 +635,48 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Serialize and deserialize null.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void SerializeAndDeserializeNull()
+        {
+            var columnid = this.coltypDict[JET_coltyp.Binary];
+
+            using (var trx = new Transaction(this.session))
+            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
+            {
+                Api.SerializeObjectToColumn(this.session, this.tableid, columnid, null);
+                update.SaveAndGotoBookmark();
+                trx.Commit(CommitTransactionGrbit.None);
+            }
+
+            Assert.IsNull(Api.DeserializeObjectFromColumn(this.session, this.tableid, columnid));
+        }
+
+        /// <summary>
+        /// Serialize and deserialize and object.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void SerializeAndDeserializeObject()
+        {
+            var columnid = this.coltypDict[JET_coltyp.LongBinary];
+            var expected = new List<double> { Math.PI, Math.E, Double.PositiveInfinity, Double.NegativeInfinity, Double.Epsilon };
+
+            using (var trx = new Transaction(this.session))
+            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
+            {
+                Api.SerializeObjectToColumn(this.session, this.tableid, columnid, expected);
+                update.SaveAndGotoBookmark();
+                trx.Commit(CommitTransactionGrbit.None);
+            }
+
+            var actual = Api.DeserializeObjectFromColumn(this.session, this.tableid, columnid) as List<double>;
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
         /// Test JetSetColumns
         /// </summary>
         [TestMethod]

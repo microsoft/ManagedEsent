@@ -10,7 +10,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     /// Represents a generic key value.
     /// </summary>
     /// <typeparam name="T">The datatype of the key.</typeparam>
-    internal class Key<T>
+    internal sealed class Key<T>
     {
         /// <summary>
         /// Initializes a new instance of the Key class.

@@ -46,8 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CollectionsSystemParameters.cs" />
+    <Compile Include="KeyColumnConverter.cs" />
     <Compile Include="Compare.cs" />
     <Compile Include="ConstantExpressionEvaluator.cs" />
+    <Compile Include="ColumnConverter.cs" />
     <Compile Include="Copy.cs" />
     <Compile Include="Key.cs" />
     <Compile Include="KeyExpressionEvaluator.cs" />
