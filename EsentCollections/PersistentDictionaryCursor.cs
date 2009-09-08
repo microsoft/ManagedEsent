@@ -167,6 +167,27 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
+        /// Position the cursor after the last record in the table.
+        /// A <see cref="TryMovePrevious"/> will then position the cursor
+        /// on the first record.
+        /// </summary>
+        public void MoveAfterLast()
+        {
+            Api.MoveAfterLast(this.session, this.dataTable);
+        }
+
+        /// <summary>
+        /// Try to move to the previous record.
+        /// </summary>
+        /// <returns>
+        /// True if the move was successful, false if there are no more records.
+        /// </returns>
+        public bool TryMovePrevious()
+        {
+            return Api.TryMovePrevious(this.session, this.dataTable);
+        }
+
+        /// <summary>
         /// Move to the last record, throwing an exception if there are no record.
         /// </summary>
         public void MoveLastWithKeyNotFoundException()

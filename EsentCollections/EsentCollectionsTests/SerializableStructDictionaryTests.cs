@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using Microsoft.Isam.Esent.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -56,6 +57,8 @@ namespace EsentCollectionsTests
         {
             var expected = new Bar
             {
+                V = new Uri("http://www.microsoft.com"),
+                W = IPAddress.Any,
                 X = DateTime.Now,
                 Y = Guid.NewGuid(),
                 Z = new Foo
@@ -78,6 +81,8 @@ namespace EsentCollectionsTests
         {
             var expected = new Bar
             {
+                V = new Uri("http://www.contoso.com"),
+                W = IPAddress.Broadcast,
                 X = DateTime.Now,
                 Y = Guid.NewGuid(),
                 Z = new Foo
@@ -90,6 +95,7 @@ namespace EsentCollectionsTests
 
             this.dictionary[Int32.MaxValue] = expected;
             expected.X = DateTime.UtcNow;
+            expected.Y = null;
             this.dictionary[Int32.MaxValue] = expected;
 
             Bar actual = this.dictionary[Int32.MaxValue];
@@ -137,6 +143,23 @@ namespace EsentCollectionsTests
         [Serializable]
         internal struct Bar : IEquatable<Bar>
         {
+            private IPAddress address;
+
+            public Uri V;
+
+            public IPAddress W
+            {
+                get
+                {
+                    return this.address;
+                }
+
+                set
+                {
+                    this.address = value;
+                }
+            }
+
             /// <summary>
             /// Dummy DateTime field
             /// </summary>
@@ -145,7 +168,7 @@ namespace EsentCollectionsTests
             /// <summary>
             /// Dummy guid.
             /// </summary>
-            public Guid Y;
+            public Guid? Y;
 
             /// <summary>
             /// Gets or sets the foo property.
@@ -159,7 +182,9 @@ namespace EsentCollectionsTests
             /// <returns>True if they are equal.</returns>
             public bool Equals(Bar other)
             {
-                return this.X == other.X
+                return this.V == other.V
+                       && this.W == other.W
+                       && this.X == other.X
                        && this.Y == other.Y
                        && this.Z.Equals(other.Z);
             }

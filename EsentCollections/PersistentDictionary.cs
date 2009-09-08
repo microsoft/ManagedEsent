@@ -174,7 +174,21 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>
         /// An <see cref="PersistentDictionaryKeyCollection{TKey,TValue}"/> containing the keys of the object that implements <see cref="PersistentDictionary{TKey,TValue}"/>.
         /// </returns>
-        public ICollection<TKey> Keys
+        ICollection<TKey> IDictionary<TKey, TValue>.Keys
+        {
+            get
+            {
+                return this.Keys;
+            }
+        }
+
+        /// <summary>
+        /// Gets an <see cref="ICollection"/> containing the keys of the <see cref="PersistentDictionary{TKey,TValue}"/>.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="PersistentDictionaryKeyCollection{TKey,TValue}"/> containing the keys of the object that implements <see cref="PersistentDictionary{TKey,TValue}"/>.
+        /// </returns>
+        public PersistentDictionaryKeyCollection<TKey, TValue> Keys
         {
             get
             {
@@ -188,7 +202,21 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>
         /// An <see cref="PersistentDictionary{TKey,TValue}"/> containing the values in the object that implements <see cref="PersistentDictionary{TKey,TValue}"/>.
         /// </returns>
-        public ICollection<TValue> Values
+        ICollection<TValue> IDictionary<TKey, TValue>.Values
+        {
+            get
+            {
+                return this.Values;
+            }
+        }
+
+        /// <summary>
+        /// Gets an <see cref="ICollection"/> containing the values in the <see cref="PersistentDictionary{TKey,TValue}"/>.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="PersistentDictionary{TKey,TValue}"/> containing the values in the object that implements <see cref="PersistentDictionary{TKey,TValue}"/>.
+        /// </returns>
+        public PersistentDictionaryValueCollection<TKey, TValue> Values
         {
             get
             {

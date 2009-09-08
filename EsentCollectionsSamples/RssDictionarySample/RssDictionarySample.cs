@@ -14,6 +14,12 @@ using Microsoft.Isam.Esent.Collections.Generic;
 
 namespace RssDictionarySample
 {
+    internal struct RssFeedData
+    {
+        public DateTime? LastRetrieved { get; set; }
+        public string Data { get; set; }
+    }
+
     /// <summary>
     /// An extremely simple RSS reader. This keeps a URL => data mapping
     /// in a persistent dictionary and supports updates, adding a URL 
@@ -28,8 +34,8 @@ namespace RssDictionarySample
         /// dictionary will be opened. There should be only one dictionary object
         /// per file (directory) but the dictionary can be used by multiple threads.
         /// </summary>
-        private static readonly PersistentDictionary<string, string> dictionary =
-            new PersistentDictionary<string, string>("RssDictionary");
+        private static readonly PersistentDictionary<string, RssFeedData> dictionary =
+            new PersistentDictionary<string, RssFeedData>("RssDictionary");
 
         /// <summary>
         /// A trivial RSS reader with local caching. 
@@ -65,7 +71,11 @@ namespace RssDictionarySample
                 // Don't overwrite an existing entry
                 if (!dictionary.ContainsKey(url))
                 {
-                    dictionary[url] = String.Empty;
+                    dictionary[url] = new RssFeedData
+                    {
+                        LastRetrieved = null,
+                        Data = String.Empty,
+                    };
                 }
             }
         }
@@ -80,7 +90,11 @@ namespace RssDictionarySample
                 // For simplicity, so this synchronously, single-threaded and
                 // without error handling.
                 var response = new StreamReader(WebRequest.Create(url).GetResponse().GetResponseStream());
-                dictionary[url] = response.ReadToEnd();
+                dictionary[url] = new RssFeedData
+                {
+                    LastRetrieved = DateTime.UtcNow,
+                    Data = response.ReadToEnd(),
+                };
             }
         }
 
@@ -91,7 +105,7 @@ namespace RssDictionarySample
         {
             foreach (string url in dictionary.Keys)
             {
-                ParseAndPrintRssData(dictionary[url]);
+                ParseAndPrintRssData(dictionary[url].Data);
             }
         }
 

@@ -14,7 +14,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
-    internal sealed class PersistentDictionaryValueCollection<TKey, TValue> : PersistentDictionaryCollection<TKey, TValue, TValue>
+    public sealed class PersistentDictionaryValueCollection<TKey, TValue> : PersistentDictionaryCollection<TKey, TValue, TValue>
         where TKey : IComparable<TKey>
     {
         /// <summary>

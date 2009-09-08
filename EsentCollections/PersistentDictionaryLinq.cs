@@ -18,9 +18,98 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
-    public partial class PersistentDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IDisposable
-        where TKey : IComparable<TKey>
+    public partial class PersistentDictionary<TKey, TValue>
     {
+        /// <summary>
+        /// Returns the first element of the dictionary.
+        /// </summary>
+        /// <returns>The first element.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown if the dictionary is empty.
+        /// </exception>
+        public KeyValuePair<TKey, TValue> First()
+        {
+            return this.UsingCursor(
+                cursor =>
+                {
+                    using (var transaction = cursor.BeginTransaction())
+                    {
+                        cursor.MoveBeforeFirst();
+                        if (!cursor.TryMoveNext())
+                        {
+                            throw new InvalidOperationException("Sequence contains no elements");
+                        }
+                        var first = cursor.RetrieveCurrent();
+                        transaction.Commit(CommitTransactionGrbit.LazyFlush);
+                        return first;
+                    }
+                });
+        }
+
+        /// <summary>
+        /// Returns the first element of the dictionary or a default value.
+        /// </summary>
+        /// <returns>The first element.</returns>
+        public KeyValuePair<TKey, TValue> FirstOrDefault()
+        {
+            return this.UsingCursor(
+                cursor =>
+                {
+                    using (var transaction = cursor.BeginTransaction())
+                    {
+                        cursor.MoveBeforeFirst();
+                        var first = cursor.TryMoveNext()? cursor.RetrieveCurrent() : new KeyValuePair<TKey, TValue>(default(TKey), default(TValue));
+                        transaction.Commit(CommitTransactionGrbit.LazyFlush);
+                        return first;
+                    }
+                });
+        }
+
+        /// <summary>
+        /// Returns the last element of the dictionary.
+        /// </summary>
+        /// <returns>The last element.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown if the dictionary is empty.
+        /// </exception>
+        public KeyValuePair<TKey, TValue> Last()
+        {
+            return this.UsingCursor(
+                cursor =>
+                {
+                    using (var transaction = cursor.BeginTransaction())
+                    {
+                        cursor.MoveAfterLast();
+                        if (!cursor.TryMovePrevious())
+                        {
+                            throw new InvalidOperationException("Sequence contains no elements");
+                        }
+                        var last = cursor.RetrieveCurrent();
+                        transaction.Commit(CommitTransactionGrbit.LazyFlush);
+                        return last;
+                    }
+                });
+        }
+
+        /// <summary>
+        /// Returns the last element of the dictionary or a default value.
+        /// </summary>
+        /// <returns>The last element.</returns>
+        public KeyValuePair<TKey, TValue> LastOrDefault()
+        {
+            return this.UsingCursor(
+                cursor =>
+                {
+                    using (var transaction = cursor.BeginTransaction())
+                    {
+                        cursor.MoveAfterLast();
+                        var last = cursor.TryMovePrevious() ? cursor.RetrieveCurrent() : new KeyValuePair<TKey, TValue>(default(TKey), default(TValue));
+                        transaction.Commit(CommitTransactionGrbit.LazyFlush);
+                        return last;
+                    }
+                });
+        }
+
         /// <summary>
         /// Optimize a where statement which uses this dictionary.
         /// </summary>
@@ -30,7 +119,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>
         /// An enumerator matching only the records matched by the predicate.
         /// </returns>
-        public IEnumerable<KeyValuePair<TKey, TValue>> Where(
+        private IEnumerable<KeyValuePair<TKey, TValue>> Where(
             Expression<Predicate<KeyValuePair<TKey, TValue>>> expression)
         {
             if (null == expression)

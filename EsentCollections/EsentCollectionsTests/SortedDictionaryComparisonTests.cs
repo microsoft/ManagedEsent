@@ -14,20 +14,20 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace EsentCollectionsTests
 {
     /// <summary>
-    /// Compare a PersistentDictionary against a generic dictionary.
+    /// Compare a PersistentDictionary against a generic SortedDictionary.
     /// </summary>
     [TestClass]
-    public class DictionaryComparisonTests
+    public class SortedDictionaryComparisonTests
     {
         /// <summary>
         /// Where the dictionary will be located.
         /// </summary>
-        private const string DictionaryLocation = "DictionaryComparisonFixture";
+        private const string DictionaryLocation = "SortedDictionaryComparisonFixture";
 
         /// <summary>
-        /// A generic dictionary that we will use as the oracle.
+        /// A generic sorted dictionary that we will use as the oracle.
         /// </summary>
-        private Dictionary<string, string> expected;
+        private SortedDictionary<string, string> expected;
 
         /// <summary>
         /// The dictionary we are testing.
@@ -40,7 +40,7 @@ namespace EsentCollectionsTests
         [TestInitialize]
         public void Setup()
         {
-            this.expected = new Dictionary<string, string>();
+            this.expected = new SortedDictionary<string, string>();
             this.actual = new PersistentDictionary<string, string>(DictionaryLocation);
         }
 
@@ -285,9 +285,7 @@ namespace EsentCollectionsTests
             var enumeratedValues = from i in this.actual select i.Value;
             Assert.IsTrue(AreEquivalent(this.expected.Values, enumeratedValues));
 
-            var expectedItems = this.expected.OrderBy(x => x.Key);
-            var actualItems = this.actual.OrderBy(x => x.Key);
-            Assert.IsTrue(expectedItems.SequenceEqual(actualItems));
+            Assert.IsTrue(this.expected.SequenceEqual(this.actual));
 
             if (expected.Count > 0)
             {

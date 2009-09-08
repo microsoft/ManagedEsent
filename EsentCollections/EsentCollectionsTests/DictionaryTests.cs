@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.Isam.Esent.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -309,6 +310,54 @@ namespace EsentCollectionsTests
         public void ExistsReturnsTrue()
         {
             Assert.IsTrue(PersistentDictionaryFile.Exists(DictionaryLocation));
+        }
+
+        /// <summary>
+        /// Retrieve the first element from an empty dictionary. An exception
+        /// should be thrown.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void VerifyFirstThrowsExceptionWhenDictionaryIsEmpty()
+        {
+            var ignored = this.dictionary.First();
+        }
+
+        /// <summary>
+        /// Retrieve the first element from the keys of an empty dictionary. An exception
+        /// should be thrown.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void VerifyFirstKeyThrowsExceptionWhenDictionaryIsEmpty()
+        {
+            var ignored = this.dictionary.Keys.First();
+        }
+
+        /// <summary>
+        /// Retrieve the last element from an empty dictionary. An exception
+        /// should be thrown.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void VerifyLastThrowsExceptionWhenDictionaryIsEmpty()
+        {
+            var ignored = this.dictionary.Last();
+        }
+
+        /// <summary>
+        /// Retrieve the last element from the keys of an empty dictionary. An exception
+        /// should be thrown.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void VerifyLastKeyThrowsExceptionWhenDictionaryIsEmpty()
+        {
+            var ignored = this.dictionary.Keys.Last();
         }
 
         /// <summary>

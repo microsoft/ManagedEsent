@@ -14,7 +14,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
-    internal sealed class PersistentDictionaryKeyCollection<TKey, TValue> : PersistentDictionaryCollection<TKey, TValue, TKey> 
+    public sealed class PersistentDictionaryKeyCollection<TKey, TValue> : PersistentDictionaryCollection<TKey, TValue, TKey> 
         where TKey : IComparable<TKey>
     {
         /// <summary>
@@ -47,6 +47,74 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         public override bool Contains(TKey item)
         {
             return this.Dictionary.ContainsKey(item);
+        }
+
+        /// <summary>
+        /// Returns the first key in the collection.
+        /// </summary>
+        /// <returns>The first key.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown if the dictionary is empty.
+        /// </exception>
+        public TKey First()
+        {
+            return this.Dictionary.First().Key;
+        }
+
+        /// <summary>
+        /// Returns the first key in the collection or a default value.
+        /// </summary>
+        /// <returns>The first key or a defaut value.</returns>
+        public TKey FirstOrDefault()
+        {
+            return this.Dictionary.FirstOrDefault().Key;
+        }
+
+        /// <summary>
+        /// Returns the minimum key.
+        /// </summary>
+        /// <returns>The minimum key.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown if the key collection is empty.
+        /// </exception>
+        public TKey Min()
+        {
+            // The dictionary is sorted so the first element is the minimum
+            return this.Dictionary.First().Key;
+        }
+
+        /// <summary>
+        /// Returns the last key in the collection.
+        /// </summary>
+        /// <returns>The Last key.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown if the dictionary is empty.
+        /// </exception>
+        public TKey Last()
+        {
+            return this.Dictionary.Last().Key;
+        }
+
+        /// <summary>
+        /// Returns the last key in the collection or a default value.
+        /// </summary>
+        /// <returns>The last key or a defaut value.</returns>
+        public TKey LastOrDefault()
+        {
+            return this.Dictionary.LastOrDefault().Key;
+        }
+
+        /// <summary>
+        /// Returns the maximum key.
+        /// </summary>
+        /// <returns>The maximum key.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown if the key collection is empty.
+        /// </exception>
+        public TKey Max()
+        {
+            // The dictionary is sorted so the Last element is the maximi
+            return this.Dictionary.Last().Key;
         }
     }
 }
