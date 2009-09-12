@@ -578,25 +578,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
-        /// Returns the last key in the dictionary (the key with the highest value).
-        /// </summary>
-        /// <returns>The last key.</returns>
-        public TKey GetLastKey()
-        {
-            return this.UsingCursor(
-                c =>
-                {
-                    using (var transaction = c.BeginTransaction())
-                    {
-                        c.MoveLastWithKeyNotFoundException();
-                        TKey key = c.RetrieveCurrentKey();
-                        transaction.Commit(CommitTransactionGrbit.LazyFlush);
-                        return key;
-                    }
-                });
-        }
-
-        /// <summary>
         /// Force all changes made to this dictionary to be written to disk.
         /// </summary>
         public void Flush()
@@ -670,7 +651,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 
                         T item = getter(iterator);
 
-                        // Commit the transaction before returning (so the external user doesn't keep a 
+                        // Commit the transaction before returning (so the external user doesn't keep it alive) 
                         transaction.Commit(CommitTransactionGrbit.LazyFlush);
                         yield return item;
                     }
@@ -719,6 +700,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 if (keyType != typeof(TKey) || valueType != typeof(TValue))
                 {
                     var error = String.Format(
+                        CultureInfo.InvariantCulture,
                         "Database is of type <{0}, {1}>, not <{2}, {3}>",
                         keyType,
                         valueType,

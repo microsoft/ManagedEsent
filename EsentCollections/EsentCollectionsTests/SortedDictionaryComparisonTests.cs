@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="DictionaryComparisonTests.cs" company="Microsoft Corporation">
+// <copyright file="SortedDictionaryComparisonTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
 //-----------------------------------------------------------------------
@@ -276,37 +276,19 @@ namespace EsentCollectionsTests
             Assert.AreEqual(this.expected.Keys.Count, this.actual.Keys.Count);
             Assert.AreEqual(this.expected.Values.Count, this.actual.Values.Count);
 
-            Assert.IsTrue(AreEquivalent(this.expected.Keys, this.actual.Keys));
-            Assert.IsTrue(AreEquivalent(this.expected.Values, this.actual.Values));
-
-            var enumeratedKeys = from i in this.actual select i.Key;
-            Assert.IsTrue(AreEquivalent(this.expected.Keys, enumeratedKeys));
-
-            var enumeratedValues = from i in this.actual select i.Value;
-            Assert.IsTrue(AreEquivalent(this.expected.Values, enumeratedValues));
-
             Assert.IsTrue(this.expected.SequenceEqual(this.actual));
+            Assert.IsTrue(this.expected.Keys.SequenceEqual(this.actual.Keys));
+            Assert.IsTrue(this.expected.Values.SequenceEqual(this.actual.Values));
 
-            if (expected.Count > 0)
+            Assert.AreEqual(this.expected.Keys.FirstOrDefault(), this.actual.Keys.FirstOrDefault());
+            Assert.AreEqual(this.expected.Keys.LastOrDefault(), this.actual.Keys.LastOrDefault());
+
+            if (this.expected.Count > 0)
             {
                 Assert.AreEqual(this.expected.Keys.Min(), this.actual.Keys.Min());
                 Assert.AreEqual(this.expected.Keys.Max(), this.actual.Keys.Max());
-            }
-
-            foreach (string k in this.expected.Keys)
-            {
-                Assert.IsTrue(this.actual.ContainsKey(k));
-                Assert.IsTrue(this.actual.Keys.Contains(k));
-
-                string v;
-                Assert.IsTrue(this.actual.TryGetValue(k, out v));
-                Assert.AreEqual(this.expected[k], v);
-                Assert.AreEqual(this.expected[k], this.actual[k]);
-
-                Assert.IsTrue(this.actual.ContainsValue(v));
-                Assert.IsTrue(this.actual.Values.Contains(v));
-
-                Assert.IsTrue(this.actual.Contains(new KeyValuePair<string, string>(k, v)));
+                Assert.AreEqual(this.expected.Keys.First(), this.actual.Keys.First());
+                Assert.AreEqual(this.expected.Keys.Last(), this.actual.Keys.Last());
             }
         }
     }

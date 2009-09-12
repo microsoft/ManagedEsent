@@ -39,6 +39,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                         {
                             throw new InvalidOperationException("Sequence contains no elements");
                         }
+
                         var first = cursor.RetrieveCurrent();
                         transaction.Commit(CommitTransactionGrbit.LazyFlush);
                         return first;
@@ -58,7 +59,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                     using (var transaction = cursor.BeginTransaction())
                     {
                         cursor.MoveBeforeFirst();
-                        var first = cursor.TryMoveNext()? cursor.RetrieveCurrent() : new KeyValuePair<TKey, TValue>(default(TKey), default(TValue));
+                        var first = cursor.TryMoveNext() ? cursor.RetrieveCurrent() : new KeyValuePair<TKey, TValue>(default(TKey), default(TValue));
                         transaction.Commit(CommitTransactionGrbit.LazyFlush);
                         return first;
                     }
@@ -84,6 +85,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                         {
                             throw new InvalidOperationException("Sequence contains no elements");
                         }
+
                         var last = cursor.RetrieveCurrent();
                         transaction.Commit(CommitTransactionGrbit.LazyFlush);
                         return last;

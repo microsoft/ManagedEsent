@@ -22,17 +22,65 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// A mapping of types to SetColumn functions.
         /// </summary>
-        private static readonly Dictionary<Type, SetColumnDelegate> SetColumnDelegates;
+        private static readonly Dictionary<Type, SetColumnDelegate> SetColumnDelegates = new Dictionary<Type, SetColumnDelegate>
+        {
+            { typeof(bool), (s, t, c, o) => Api.SetColumn(s, t, c, (bool) o) },
+            { typeof(byte), (s, t, c, o) => Api.SetColumn(s, t, c, (byte) o) },
+            { typeof(short), (s, t, c, o) => Api.SetColumn(s, t, c, (short) o) },
+            { typeof(ushort), (s, t, c, o) => Api.SetColumn(s, t, c, (ushort) o) },
+            { typeof(int), (s, t, c, o) => Api.SetColumn(s, t, c, (int) o) },
+            { typeof(uint), (s, t, c, o) => Api.SetColumn(s, t, c, (uint) o) },
+            { typeof(long), (s, t, c, o) => Api.SetColumn(s, t, c, (long) o) },
+            { typeof(ulong), (s, t, c, o) => Api.SetColumn(s, t, c, (ulong) o) },
+            { typeof(float), (s, t, c, o) => Api.SetColumn(s, t, c, (float) o) },
+            { typeof(double), (s, t, c, o) => Api.SetColumn(s, t, c, (double) o) },
+            { typeof(DateTime), (s, t, c, o) => Api.SetColumn(s, t, c, ((DateTime) o).Ticks) },
+            { typeof(TimeSpan), (s, t, c, o) => Api.SetColumn(s, t, c, ((TimeSpan) o).Ticks) },
+            { typeof(Guid), (s, t, c, o) => Api.SetColumn(s, t, c, ((Guid) o).ToByteArray()) },
+            { typeof(string), (s, t, c, o) => Api.SetColumn(s, t, c, (string) o, Encoding.Unicode) },
+        };
 
         /// <summary>
         /// A mapping of types to RetrieveColumn functions.
         /// </summary>
-        private static readonly Dictionary<Type, RetrieveColumnDelegate> RetrieveColumnDelegates;
+        private static readonly Dictionary<Type, RetrieveColumnDelegate> RetrieveColumnDelegates = new Dictionary<Type, RetrieveColumnDelegate>
+        {
+            { typeof(bool), (s, t, c) => Api.RetrieveColumnAsBoolean(s, t, c) },
+            { typeof(byte), (s, t, c) => Api.RetrieveColumnAsByte(s, t, c) },
+            { typeof(short), (s, t, c) => Api.RetrieveColumnAsInt16(s, t, c) },
+            { typeof(ushort), (s, t, c) => Api.RetrieveColumnAsUInt16(s, t, c) },
+            { typeof(int), (s, t, c) => Api.RetrieveColumnAsInt32(s, t, c) },
+            { typeof(uint), (s, t, c) => Api.RetrieveColumnAsUInt32(s, t, c) },
+            { typeof(long), (s, t, c) => Api.RetrieveColumnAsInt64(s, t, c) },
+            { typeof(ulong), (s, t, c) => Api.RetrieveColumnAsUInt64(s, t, c) },
+            { typeof(float), (s, t, c) => Api.RetrieveColumnAsFloat(s, t, c) },
+            { typeof(double), (s, t, c) => Api.RetrieveColumnAsDouble(s, t, c) },
+            { typeof(Guid), (s, t, c) => Api.RetrieveColumnAsGuid(s, t, c) },
+            { typeof(string), (s, t, c) => Api.RetrieveColumnAsString(s, t, c) },
+            { typeof(DateTime), (s, t, c) => RetrieveDateTime(s, t, c) },
+            { typeof(TimeSpan), (s, t, c) => RetrieveTimeSpan(s, t, c) },
+        };
 
         /// <summary>
         /// A mapping of types to ESENT column types.
         /// </summary>
-        private static readonly Dictionary<Type, JET_coltyp> Coltyps;
+        private static readonly Dictionary<Type, JET_coltyp> Coltyps = new Dictionary<Type, JET_coltyp>
+        {
+            { typeof(bool), JET_coltyp.Bit },
+            { typeof(byte), JET_coltyp.UnsignedByte },
+            { typeof(short), JET_coltyp.Short },
+            { typeof(ushort), JET_coltyp.Binary },
+            { typeof(int), JET_coltyp.Long },
+            { typeof(uint), JET_coltyp.Binary },
+            { typeof(long), JET_coltyp.Currency },
+            { typeof(ulong), JET_coltyp.Binary },
+            { typeof(float), JET_coltyp.IEEESingle },
+            { typeof(double), JET_coltyp.IEEEDouble },
+            { typeof(DateTime), JET_coltyp.Currency },
+            { typeof(TimeSpan), JET_coltyp.Currency },
+            { typeof(Guid), JET_coltyp.Binary },
+            { typeof(string), JET_coltyp.LongText },
+        };
 
         /// <summary>
         /// The CLR type that this column supports.
@@ -60,60 +108,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         static ColumnConverter()
         {
-            SetColumnDelegates = new Dictionary<Type, SetColumnDelegate>
-            {
-                { typeof(bool), (s, t, c, o) => Api.SetColumn(s, t, c, (bool) o) },
-                { typeof(byte), (s, t, c, o) => Api.SetColumn(s, t, c, (byte) o) },
-                { typeof(short), (s, t, c, o) => Api.SetColumn(s, t, c, (short) o) },
-                { typeof(ushort), (s, t, c, o) => Api.SetColumn(s, t, c, (ushort) o) },
-                { typeof(int), (s, t, c, o) => Api.SetColumn(s, t, c, (int) o) },
-                { typeof(uint), (s, t, c, o) => Api.SetColumn(s, t, c, (uint) o) },
-                { typeof(long), (s, t, c, o) => Api.SetColumn(s, t, c, (long) o) },
-                { typeof(ulong), (s, t, c, o) => Api.SetColumn(s, t, c, (ulong) o) },
-                { typeof(float), (s, t, c, o) => Api.SetColumn(s, t, c, (float) o) },
-                { typeof(double), (s, t, c, o) => Api.SetColumn(s, t, c, (double) o) },
-                { typeof(DateTime), (s, t, c, o) => Api.SetColumn(s, t, c, ((DateTime) o).Ticks) },
-                { typeof(TimeSpan), (s, t, c, o) => Api.SetColumn(s, t, c, ((TimeSpan) o).Ticks) },
-                { typeof(Guid), (s, t, c, o) => Api.SetColumn(s, t, c, ((Guid) o).ToByteArray()) },
-                { typeof(string), (s, t, c, o) => Api.SetColumn(s, t, c, (string) o, Encoding.Unicode) },
-            };
-
-            RetrieveColumnDelegates = new Dictionary<Type, RetrieveColumnDelegate>
-            {
-                { typeof(bool), (s, t, c) => Api.RetrieveColumnAsBoolean(s, t, c) },
-                { typeof(byte), (s, t, c) => Api.RetrieveColumnAsByte(s, t, c) },
-                { typeof(short), (s, t, c) => Api.RetrieveColumnAsInt16(s, t, c) },
-                { typeof(ushort), (s, t, c) => Api.RetrieveColumnAsUInt16(s, t, c) },
-                { typeof(int), (s, t, c) => Api.RetrieveColumnAsInt32(s, t, c) },
-                { typeof(uint), (s, t, c) => Api.RetrieveColumnAsUInt32(s, t, c) },
-                { typeof(long), (s, t, c) => Api.RetrieveColumnAsInt64(s, t, c) },
-                { typeof(ulong), (s, t, c) => Api.RetrieveColumnAsUInt64(s, t, c) },
-                { typeof(float), (s, t, c) => Api.RetrieveColumnAsFloat(s, t, c) },
-                { typeof(double), (s, t, c) => Api.RetrieveColumnAsDouble(s, t, c) },
-                { typeof(Guid), (s, t, c) => Api.RetrieveColumnAsGuid(s, t, c) },
-                { typeof(string), (s, t, c) => Api.RetrieveColumnAsString(s, t, c) },
-                { typeof(DateTime), (s, t, c) => RetrieveDateTime(s, t, c) },
-                { typeof(TimeSpan), (s, t, c) => RetrieveTimeSpan(s, t, c) },
-            };
-
-            Coltyps = new Dictionary<Type, JET_coltyp>
-            {
-                { typeof(bool), JET_coltyp.Bit },
-                { typeof(byte), JET_coltyp.UnsignedByte },
-                { typeof(short), JET_coltyp.Short },
-                { typeof(ushort), JET_coltyp.Binary },
-                { typeof(int), JET_coltyp.Long },
-                { typeof(uint), JET_coltyp.Binary },
-                { typeof(long), JET_coltyp.Currency },
-                { typeof(ulong), JET_coltyp.Binary },
-                { typeof(float), JET_coltyp.IEEESingle },
-                { typeof(double), JET_coltyp.IEEEDouble },
-                { typeof(DateTime), JET_coltyp.Currency },
-                { typeof(TimeSpan), JET_coltyp.Currency },
-                { typeof(Guid), JET_coltyp.Binary },
-                { typeof(string), JET_coltyp.LongText },
-            };
-
             AddNullableDelegates<bool>();
             AddNullableDelegates<byte>();
             AddNullableDelegates<short>();

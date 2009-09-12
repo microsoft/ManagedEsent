@@ -51,6 +51,9 @@ namespace EsentCollectionsTests
             }
         }
 
+        /// <summary>
+        /// Insert and retrieve a serializable object.
+        /// </summary>
         [TestMethod]
         [Priority(2)]
         public void InsertAndRetrieveSerializableObject()
@@ -75,6 +78,9 @@ namespace EsentCollectionsTests
             Assert.AreEqual(expected, actual);
         }
 
+        /// <summary>
+        /// Update a serializable object.
+        /// </summary>
         [TestMethod]
         [Priority(2)]
         public void UpdateSerializableObject()
@@ -143,10 +149,29 @@ namespace EsentCollectionsTests
         [Serializable]
         internal struct Bar : IEquatable<Bar>
         {
-            private IPAddress address;
-
+            /// <summary>
+            /// Test Uri field.
+            /// </summary>
             public Uri V;
 
+            /// <summary>
+            /// Dummy DateTime field.
+            /// </summary>
+            public DateTime X;
+
+            /// <summary>
+            /// Dummy guid.
+            /// </summary>
+            public Guid? Y;
+
+            /// <summary>
+            /// Test IPAddress field.
+            /// </summary>
+            private IPAddress address;
+
+            /// <summary>
+            /// Gets or sets the IPAddress field.
+            /// </summary>
             public IPAddress W
             {
                 get
@@ -159,16 +184,6 @@ namespace EsentCollectionsTests
                     this.address = value;
                 }
             }
-
-            /// <summary>
-            /// Dummy DateTime field
-            /// </summary>
-            public DateTime X;
-
-            /// <summary>
-            /// Dummy guid.
-            /// </summary>
-            public Guid? Y;
 
             /// <summary>
             /// Gets or sets the foo property.

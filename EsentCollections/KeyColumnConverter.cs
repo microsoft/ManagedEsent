@@ -19,32 +19,23 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// A mapping of types to MakeKey functions.
         /// </summary>
-        private static readonly Dictionary<Type, MakeKeyDelegate> MakeKeyDelegates;
-
-        /// <summary>
-        /// Initializes static members of the KeyColumnConverter class. This sets up
-        /// the conversion ditionaries.
-        /// </summary>
-        static KeyColumnConverter()
+        private static readonly Dictionary<Type, MakeKeyDelegate> MakeKeyDelegates = new Dictionary<Type, MakeKeyDelegate>
         {
-            MakeKeyDelegates = new Dictionary<Type, MakeKeyDelegate>
-            {
-                { typeof(bool), (s, t, o, g) => Api.MakeKey(s, t, (bool) o, g) },
-                { typeof(byte), (s, t, o, g) => Api.MakeKey(s, t, (byte) o, g) },
-                { typeof(short), (s, t, o, g) => Api.MakeKey(s, t, (short) o, g) },
-                { typeof(ushort), (s, t, o, g) => Api.MakeKey(s, t, (ushort) o, g) },
-                { typeof(int), (s, t, o, g) => Api.MakeKey(s, t, (int) o, g) },
-                { typeof(uint), (s, t, o, g) => Api.MakeKey(s, t, (uint) o, g) },
-                { typeof(long), (s, t, o, g) => Api.MakeKey(s, t, (long) o, g) },
-                { typeof(ulong), (s, t, o, g) => Api.MakeKey(s, t, (ulong) o, g) },
-                { typeof(float), (s, t, o, g) => Api.MakeKey(s, t, (float) o, g) },
-                { typeof(double), (s, t, o, g) => Api.MakeKey(s, t, (double) o, g) },
-                { typeof(DateTime), (s, t, o, g) => Api.MakeKey(s, t, ((DateTime) o).Ticks, g) },
-                { typeof(TimeSpan), (s, t, o, g) => Api.MakeKey(s, t, ((TimeSpan) o).Ticks, g) },
-                { typeof(Guid), (s, t, o, g) => Api.MakeKey(s, t, ((Guid) o).ToByteArray(), g) },
-                { typeof(string), (s, t, o, g) => Api.MakeKey(s, t, (string) o, Encoding.Unicode, g) },
-            };
-        }
+            { typeof(bool), (s, t, o, g) => Api.MakeKey(s, t, (bool) o, g) },
+            { typeof(byte), (s, t, o, g) => Api.MakeKey(s, t, (byte) o, g) },
+            { typeof(short), (s, t, o, g) => Api.MakeKey(s, t, (short) o, g) },
+            { typeof(ushort), (s, t, o, g) => Api.MakeKey(s, t, (ushort) o, g) },
+            { typeof(int), (s, t, o, g) => Api.MakeKey(s, t, (int) o, g) },
+            { typeof(uint), (s, t, o, g) => Api.MakeKey(s, t, (uint) o, g) },
+            { typeof(long), (s, t, o, g) => Api.MakeKey(s, t, (long) o, g) },
+            { typeof(ulong), (s, t, o, g) => Api.MakeKey(s, t, (ulong) o, g) },
+            { typeof(float), (s, t, o, g) => Api.MakeKey(s, t, (float) o, g) },
+            { typeof(double), (s, t, o, g) => Api.MakeKey(s, t, (double) o, g) },
+            { typeof(DateTime), (s, t, o, g) => Api.MakeKey(s, t, ((DateTime) o).Ticks, g) },
+            { typeof(TimeSpan), (s, t, o, g) => Api.MakeKey(s, t, ((TimeSpan) o).Ticks, g) },
+            { typeof(Guid), (s, t, o, g) => Api.MakeKey(s, t, ((Guid) o).ToByteArray(), g) },
+            { typeof(string), (s, t, o, g) => Api.MakeKey(s, t, (string) o, Encoding.Unicode, g) },
+        };
 
         /// <summary>
         /// Initializes a new instance of the KeyColumnConverter class.

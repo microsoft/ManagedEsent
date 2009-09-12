@@ -14,9 +14,20 @@ using Microsoft.Isam.Esent.Collections.Generic;
 
 namespace RssDictionarySample
 {
+    /// <summary>
+    /// Contains information about the RSS feed.
+    /// </summary>
     internal struct RssFeedData
     {
+        /// <summary>
+        /// Gets or sets the (UTC) time that this feed was last successfully
+        /// retrieved. This value is initially null.
+        /// </summary>
         public DateTime? LastRetrieved { get; set; }
+
+        /// <summary>
+        /// Gets or sets the RSS feed data.
+        /// </summary>
         public string Data { get; set; }
     }
 

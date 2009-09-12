@@ -256,28 +256,76 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
-        /// Getting the last key throws an exception if the dictionary is empty.
+        /// Getting the first item throws an exception if the dictionary is empty.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [ExpectedException(typeof(KeyNotFoundException))]
-        public void VerifyGetLastKeyThrowsExceptionIfDictionaryIsEmpty()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void VerifyFirstThrowsExceptionIfDictionaryIsEmpty()
         {
-            this.dictionary.GetLastKey();
+            this.dictionary.First();
         }
 
         /// <summary>
-        /// Getting the last key returns the last key.
+        /// Getting the first item throws an exception if the dictionary is empty.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        public void VerifyGetLastKeyReturnsLastKey()
+        public void VerifyFirstOrDefaultReturnsDefaultIfDictionaryIsEmpty()
         {
-            var key = DateTime.Now;
-            this.dictionary[key] = Guid.NewGuid();
-            Assert.AreEqual(key, this.dictionary.GetLastKey());
+            var expected = new KeyValuePair<DateTime, Guid?>(default(DateTime), default(Guid?));
+            Assert.AreEqual(expected, this.dictionary.FirstOrDefault());
         }
 
+        /// <summary>
+        /// Getting the first item returns the first item.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void VerifyFirstReturnsFirstItem()
+        {
+            var key = DateTime.Now;
+            var value = Guid.NewGuid();
+            this.dictionary[key] = value;
+            var expected = new KeyValuePair<DateTime, Guid?>(key, value);
+            Assert.AreEqual(expected, this.dictionary.First());
+        }
+
+        /// <summary>
+        /// Getting the last item throws an exception if the dictionary is empty.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void VerifyLastThrowsExceptionIfDictionaryIsEmpty()
+        {
+            this.dictionary.Last();
+        }
+
+        /// <summary>
+        /// Getting the last item throws an exception if the dictionary is empty.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void VerifyLastOrDefaultReturnsDefaultIfDictionaryIsEmpty()
+        {
+            var expected = new KeyValuePair<DateTime, Guid?>(default(DateTime), default(Guid?));
+            Assert.AreEqual(expected, this.dictionary.LastOrDefault());
+        }
+
+        /// <summary>
+        /// Getting the last item returns the last item.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void VerifyLastReturnsLastItem()
+        {
+            var key = DateTime.Now;
+            var value = Guid.NewGuid();
+            this.dictionary[key] = value;
+            var expected = new KeyValuePair<DateTime, Guid?>(key, value);
+            Assert.AreEqual(expected, this.dictionary.Last());
+        }
 
         /// <summary>
         /// Exercise the Flush code path.

@@ -289,7 +289,7 @@ namespace EsentCollectionsTests
             var actualItems = this.actual.OrderBy(x => x.Key);
             Assert.IsTrue(expectedItems.SequenceEqual(actualItems));
 
-            if (expected.Count > 0)
+            if (this.expected.Count > 0)
             {
                 Assert.AreEqual(this.expected.Keys.Min(), this.actual.Keys.Min());
                 Assert.AreEqual(this.expected.Keys.Max(), this.actual.Keys.Max());

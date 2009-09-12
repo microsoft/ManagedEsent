@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System;
+using System.Globalization;
 using System.IO;
 
 namespace Microsoft.Isam.Esent.Collections.Generic
@@ -54,8 +55,8 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 var config = new PersistentDictionaryConfig();
                 var databasePath = Path.Combine(directory, config.Database);
                 File.Delete(databasePath);
-                File.Delete(Path.Combine(directory, String.Format("{0}.chk", config.BaseName)));
-                foreach (string file in Directory.GetFiles(directory, String.Format("{0}*.log", config.BaseName)))
+                File.Delete(Path.Combine(directory, String.Format(CultureInfo.InvariantCulture, "{0}.chk", config.BaseName)));
+                foreach (string file in Directory.GetFiles(directory, String.Format(CultureInfo.InvariantCulture, "{0}*.log", config.BaseName)))
                 {
                     File.Delete(file);
                 }
