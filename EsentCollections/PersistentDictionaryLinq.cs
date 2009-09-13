@@ -13,11 +13,9 @@ using Microsoft.Isam.Esent.Interop;
 
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
-    /// <summary>
+    /// <content>
     /// Represents a collection of persistent keys and values.
-    /// </summary>
-    /// <typeparam name="TKey">The type of the key.</typeparam>
-    /// <typeparam name="TValue">The type of the value.</typeparam>
+    /// </content>
     public partial class PersistentDictionary<TKey, TValue>
     {
         /// <summary>

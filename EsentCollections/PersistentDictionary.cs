@@ -112,9 +112,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             this.instance.Parameters.BaseName = this.config.BaseName;
             this.instance.Parameters.EnableIndexChecking = false;       // TODO: fix unicode indexes
             this.instance.Parameters.CircularLog = true;
-            this.instance.Parameters.LogFileSize = 256;    // 256KB logs
-            this.instance.Parameters.LogBuffers = 256;     // buffers = 1/2 of logfile
+            this.instance.Parameters.CheckpointDepthMax = 64 * 1024 * 1025;
+            this.instance.Parameters.LogFileSize = 1024;    // 1MB logs
+            this.instance.Parameters.LogBuffers = 1024;     // buffers = 1/2 of logfile
             this.instance.Parameters.PageTempDBMin = 0;
+            this.instance.Parameters.MaxVerPages = 1024;
             this.instance.Init();
 
             try
@@ -136,6 +138,37 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 // We have failed to initialize for some reason. Terminate
                 // the instance.
                 this.instance.Term();                
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the PersistentDictionary class.
+        /// </summary>
+        /// <param name="dictionary">
+        /// The IDictionary whose contents are copied to the new dictionary.
+        /// </param>
+        /// <param name="directory">
+        /// The directory to create the database in.
+        /// </param>
+        public PersistentDictionary(IDictionary<TKey, TValue> dictionary, string directory) : this(directory)
+        {
+            try
+            {
+                if (null == dictionary)
+                {
+                    throw new ArgumentNullException("dictionary");
+                }
+
+                foreach (KeyValuePair<TKey, TValue> item in dictionary)
+                {
+                    this.Add(item);
+                }
+            }
+            catch (Exception)
+            {
+                // We have failed to copy the dictionary. Terminate the instance.
+                this.instance.Term();
                 throw;
             }
         }

@@ -60,6 +60,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 {
                     File.Delete(file);
                 }
+
+                foreach (string file in Directory.GetFiles(directory, String.Format(CultureInfo.InvariantCulture, "{0}*.jrs", config.BaseName)))
+                {
+                    File.Delete(file);
+                }
             }
         }
     }

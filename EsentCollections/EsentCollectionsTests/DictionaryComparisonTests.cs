@@ -6,8 +6,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using Microsoft.Isam.Esent.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -64,7 +64,7 @@ namespace EsentCollectionsTests
         [Priority(2)]
         public void TestEmptyDictionary()
         {
-            this.CompareDictionaries();
+            DictionaryAssert.AreEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace EsentCollectionsTests
         public void TestInsert()
         {
             this.expected["foo"] = this.actual["foo"] = "1";
-            this.CompareDictionaries();
+            DictionaryAssert.AreEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace EsentCollectionsTests
         {
             this.expected["foo"] = this.actual["foo"] = "1";
             this.expected["foo"] = this.actual["foo"] = "2";
-            this.CompareDictionaries();
+            DictionaryAssert.AreEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace EsentCollectionsTests
             this.expected["bar"] = this.actual["bar"] = "2";
             this.expected.Remove("foo");
             Assert.IsTrue(this.actual.Remove("foo"));
-            this.CompareDictionaries();
+            DictionaryAssert.AreEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace EsentCollectionsTests
             var item = new KeyValuePair<string, string>("thekey", "thevalue");
             ((ICollection<KeyValuePair<string, string>>) this.expected).Add(item);
             this.actual.Add(item);
-            this.CompareDictionaries();
+            DictionaryAssert.AreEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace EsentCollectionsTests
             this.actual.Add(item.Key, item.Value);
             ((ICollection<KeyValuePair<string, string>>) this.expected).Remove(item);
             Assert.IsTrue(this.actual.Remove(item));
-            this.CompareDictionaries();
+            DictionaryAssert.AreEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace EsentCollectionsTests
                 this.actual.Add(i.ToString(), i.ToString());
             }
 
-            this.CompareDictionaries();
+            DictionaryAssert.AreEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace EsentCollectionsTests
         {
             this.expected.Clear();
             this.actual.Clear();
-            this.CompareDictionaries();
+            DictionaryAssert.AreEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace EsentCollectionsTests
 
             this.expected.Clear();
             this.actual.Clear();
-            this.CompareDictionaries();
+            DictionaryAssert.AreEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace EsentCollectionsTests
             this.actual.Clear();
             this.expected.Clear();
             this.actual.Clear();
-            this.CompareDictionaries();
+            DictionaryAssert.AreEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -202,7 +202,7 @@ namespace EsentCollectionsTests
         public void TestNullValue()
         {
             this.expected["a"] = this.actual["a"] = null;
-            this.CompareDictionaries();
+            DictionaryAssert.AreEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -223,7 +223,7 @@ namespace EsentCollectionsTests
 
             this.actual.Dispose();
             this.actual = new PersistentDictionary<string, string>(DictionaryLocation);
-            this.CompareDictionaries();
+            DictionaryAssert.AreEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -249,67 +249,7 @@ namespace EsentCollectionsTests
             this.expected.Clear();
 
             this.actual = new PersistentDictionary<string, string>(DictionaryLocation);
-            this.CompareDictionaries();
-        }
-
-        /// <summary>
-        /// Determine if two enumerations are equivalent. Enumerations are
-        /// equivalent if they contain the same members in any order.
-        /// </summary>
-        /// <typeparam name="T">The type of the enumeration.</typeparam>
-        /// <param name="c1">The first enumeration.</param>
-        /// <param name="c2">The second enumeration.</param>
-        /// <returns>True if the enumerations are equivalent.</returns>
-        private static bool AreEquivalent<T>(IEnumerable<T> c1, IEnumerable<T> c2)
-        {
-            var s1 = c1.OrderBy(x => x);
-            var s2 = c2.OrderBy(x => x);
-            return s1.SequenceEqual(s2);
-        }
-
-        /// <summary>
-        /// Compare the expected and actual dictionaries.
-        /// </summary>
-        private void CompareDictionaries()
-        {
-            Assert.AreEqual(this.expected.Count, this.actual.Count);
-            Assert.AreEqual(this.expected.Keys.Count, this.actual.Keys.Count);
-            Assert.AreEqual(this.expected.Values.Count, this.actual.Values.Count);
-
-            Assert.IsTrue(AreEquivalent(this.expected.Keys, this.actual.Keys));
-            Assert.IsTrue(AreEquivalent(this.expected.Values, this.actual.Values));
-
-            var enumeratedKeys = from i in this.actual select i.Key;
-            Assert.IsTrue(AreEquivalent(this.expected.Keys, enumeratedKeys));
-
-            var enumeratedValues = from i in this.actual select i.Value;
-            Assert.IsTrue(AreEquivalent(this.expected.Values, enumeratedValues));
-
-            var expectedItems = this.expected.OrderBy(x => x.Key);
-            var actualItems = this.actual.OrderBy(x => x.Key);
-            Assert.IsTrue(expectedItems.SequenceEqual(actualItems));
-
-            if (this.expected.Count > 0)
-            {
-                Assert.AreEqual(this.expected.Keys.Min(), this.actual.Keys.Min());
-                Assert.AreEqual(this.expected.Keys.Max(), this.actual.Keys.Max());
-            }
-
-            foreach (string k in this.expected.Keys)
-            {
-                Assert.IsTrue(this.actual.ContainsKey(k));
-                Assert.IsTrue(this.actual.Keys.Contains(k));
-
-                string v;
-                Assert.IsTrue(this.actual.TryGetValue(k, out v));
-                Assert.AreEqual(this.expected[k], v);
-                Assert.AreEqual(this.expected[k], this.actual[k]);
-
-                Assert.IsTrue(this.actual.ContainsValue(v));
-                Assert.IsTrue(this.actual.Values.Contains(v));
-
-                Assert.IsTrue(this.actual.Contains(new KeyValuePair<string, string>(k, v)));
-            }
+            DictionaryAssert.AreEqual(this.expected, this.actual);
         }
     }
 }

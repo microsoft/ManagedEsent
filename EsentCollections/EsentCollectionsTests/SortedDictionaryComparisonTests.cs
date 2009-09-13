@@ -64,7 +64,7 @@ namespace EsentCollectionsTests
         [Priority(2)]
         public void TestEmptyDictionary()
         {
-            this.CompareDictionaries();
+            DictionaryAssert.AreSortedAndEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace EsentCollectionsTests
         public void TestInsert()
         {
             this.expected["foo"] = this.actual["foo"] = "1";
-            this.CompareDictionaries();
+            DictionaryAssert.AreSortedAndEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace EsentCollectionsTests
         {
             this.expected["foo"] = this.actual["foo"] = "1";
             this.expected["foo"] = this.actual["foo"] = "2";
-            this.CompareDictionaries();
+            DictionaryAssert.AreSortedAndEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace EsentCollectionsTests
             this.expected["bar"] = this.actual["bar"] = "2";
             this.expected.Remove("foo");
             Assert.IsTrue(this.actual.Remove("foo"));
-            this.CompareDictionaries();
+            DictionaryAssert.AreSortedAndEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace EsentCollectionsTests
             var item = new KeyValuePair<string, string>("thekey", "thevalue");
             ((ICollection<KeyValuePair<string, string>>) this.expected).Add(item);
             this.actual.Add(item);
-            this.CompareDictionaries();
+            DictionaryAssert.AreSortedAndEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace EsentCollectionsTests
             this.actual.Add(item.Key, item.Value);
             ((ICollection<KeyValuePair<string, string>>) this.expected).Remove(item);
             Assert.IsTrue(this.actual.Remove(item));
-            this.CompareDictionaries();
+            DictionaryAssert.AreSortedAndEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace EsentCollectionsTests
                 this.actual.Add(i.ToString(), i.ToString());
             }
 
-            this.CompareDictionaries();
+            DictionaryAssert.AreSortedAndEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace EsentCollectionsTests
         {
             this.expected.Clear();
             this.actual.Clear();
-            this.CompareDictionaries();
+            DictionaryAssert.AreSortedAndEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace EsentCollectionsTests
 
             this.expected.Clear();
             this.actual.Clear();
-            this.CompareDictionaries();
+            DictionaryAssert.AreSortedAndEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace EsentCollectionsTests
             this.actual.Clear();
             this.expected.Clear();
             this.actual.Clear();
-            this.CompareDictionaries();
+            DictionaryAssert.AreSortedAndEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -202,7 +202,7 @@ namespace EsentCollectionsTests
         public void TestNullValue()
         {
             this.expected["a"] = this.actual["a"] = null;
-            this.CompareDictionaries();
+            DictionaryAssert.AreSortedAndEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -223,7 +223,7 @@ namespace EsentCollectionsTests
 
             this.actual.Dispose();
             this.actual = new PersistentDictionary<string, string>(DictionaryLocation);
-            this.CompareDictionaries();
+            DictionaryAssert.AreSortedAndEqual(this.expected, this.actual);
         }
 
         /// <summary>
@@ -249,47 +249,7 @@ namespace EsentCollectionsTests
             this.expected.Clear();
 
             this.actual = new PersistentDictionary<string, string>(DictionaryLocation);
-            this.CompareDictionaries();
-        }
-
-        /// <summary>
-        /// Determine if two enumerations are equivalent. Enumerations are
-        /// equivalent if they contain the same members in any order.
-        /// </summary>
-        /// <typeparam name="T">The type of the enumeration.</typeparam>
-        /// <param name="c1">The first enumeration.</param>
-        /// <param name="c2">The second enumeration.</param>
-        /// <returns>True if the enumerations are equivalent.</returns>
-        private static bool AreEquivalent<T>(IEnumerable<T> c1, IEnumerable<T> c2)
-        {
-            var s1 = c1.OrderBy(x => x);
-            var s2 = c2.OrderBy(x => x);
-            return s1.SequenceEqual(s2);
-        }
-
-        /// <summary>
-        /// Compare the expected and actual dictionaries.
-        /// </summary>
-        private void CompareDictionaries()
-        {
-            Assert.AreEqual(this.expected.Count, this.actual.Count);
-            Assert.AreEqual(this.expected.Keys.Count, this.actual.Keys.Count);
-            Assert.AreEqual(this.expected.Values.Count, this.actual.Values.Count);
-
-            Assert.IsTrue(this.expected.SequenceEqual(this.actual));
-            Assert.IsTrue(this.expected.Keys.SequenceEqual(this.actual.Keys));
-            Assert.IsTrue(this.expected.Values.SequenceEqual(this.actual.Values));
-
-            Assert.AreEqual(this.expected.Keys.FirstOrDefault(), this.actual.Keys.FirstOrDefault());
-            Assert.AreEqual(this.expected.Keys.LastOrDefault(), this.actual.Keys.LastOrDefault());
-
-            if (this.expected.Count > 0)
-            {
-                Assert.AreEqual(this.expected.Keys.Min(), this.actual.Keys.Min());
-                Assert.AreEqual(this.expected.Keys.Max(), this.actual.Keys.Max());
-                Assert.AreEqual(this.expected.Keys.First(), this.actual.Keys.First());
-                Assert.AreEqual(this.expected.Keys.Last(), this.actual.Keys.Last());
-            }
+            DictionaryAssert.AreSortedAndEqual(this.expected, this.actual);
         }
     }
 }

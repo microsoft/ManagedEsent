@@ -38,6 +38,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayShuffle.cs" />
+    <Compile Include="DictionaryAssert.cs" />
+    <Compile Include="DictionaryPerformanceTests.cs" />
     <Compile Include="SortedDictionaryComparisonTests.cs" />
     <Compile Include="DictionaryCreationTests.cs" />
     <Compile Include="DictionaryTests.cs" />

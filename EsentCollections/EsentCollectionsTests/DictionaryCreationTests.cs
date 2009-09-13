@@ -178,7 +178,7 @@ namespace EsentCollectionsTests
             Assert.IsTrue(PersistentDictionaryFile.Exists(DictionaryLocation));
             PersistentDictionaryFile.DeleteFiles(DictionaryLocation);
             Assert.IsFalse(PersistentDictionaryFile.Exists(DictionaryLocation));
-            Directory.Delete(DictionaryLocation, true);
+            Directory.Delete(DictionaryLocation, false);
         }
 
         /// <summary>
@@ -209,6 +209,38 @@ namespace EsentCollectionsTests
             dict.Dispose();
             var wrongDict = new PersistentDictionary<int, string>(DictionaryLocation);
             Directory.Delete(DictionaryLocation, true);
+        }
+
+        /// <summary>
+        /// Trying to copy a null dictionary generates an exception.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyConstructorThrowsExceptionWhenDictionaryIsNull()
+        {
+            const string DictionaryLocation = "CopiedDictionaryFail";
+            var dict = new PersistentDictionary<int, int>(null, DictionaryLocation);
+        }
+
+        /// <summary>
+        /// Create a copy of a dictionary using the constructor.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void VerifyConstructorCanCopyDictionary()
+        {
+            const string DictionaryLocation = "CopiedDictionary";
+            var expected = new Dictionary<int, Guid?>();
+            for (int i = 0; i < 256; ++i)
+            {
+                expected[i] = Guid.NewGuid();
+            }
+
+            var actual = new PersistentDictionary<int, Guid?>(expected, DictionaryLocation);
+            DictionaryAssert.AreEqual(expected, actual);
+            actual.Dispose();
+            Directory.Delete(DictionaryLocation, true);            
         }
 
         /// <summary>
