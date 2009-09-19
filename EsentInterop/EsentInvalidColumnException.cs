@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Runtime.Serialization;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+    using System.Runtime.Serialization;
+
     /// <summary>
     /// Exception thrown when a column conversion fails.
     /// </summary>

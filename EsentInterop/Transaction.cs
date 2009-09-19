@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Diagnostics;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+    using System.Diagnostics;
+
     /// <summary>
     /// A class that encapsulates a transaction on a JET_SESID.
     /// </summary>

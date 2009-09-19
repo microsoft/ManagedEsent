@@ -4,10 +4,10 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Threading;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System.Threading;
+
     /// <summary>
     /// Cache allocated chunks of memory that are needed for very short periods
     /// of time. The memory is not zeroed on allocation.

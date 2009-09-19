@@ -4,20 +4,26 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using Microsoft.Isam.Esent.Interop;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace InteropApiTests
 {
+    using System;
+    using Microsoft.Isam.Esent.Interop;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     /// <summary>
     /// Test the checking of the JET_INDEXCREATE members
     /// </summary>
     [TestClass]
     public class IndexcreateCheckTests
     {
+        /// <summary>
+        /// Index key.
+        /// </summary>
         private const string Key = "+column\0";
 
+        /// <summary>
+        /// JET_INDEXCREATE structure being tested.
+        /// </summary>
         private JET_INDEXCREATE indexcreate;
 
         /// <summary>

@@ -4,12 +4,12 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using Microsoft.Isam.Esent.Interop;
-using Microsoft.Isam.Esent.Interop.Implementation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace InteropApiTests
 {
+    using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Implementation;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     /// <summary>
     /// Tests for ApiTestHook
     /// </summary>

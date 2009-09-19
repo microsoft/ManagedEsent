@@ -6,6 +6,9 @@
 
 namespace InteropApiTests
 {
+    /// <summary>
+    /// Constants used by tests.
+    /// </summary>
     internal class Constants
     {
         /// <summary>

@@ -4,20 +4,39 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Runtime.InteropServices;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// The native version of the JET_RETINFO structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     internal struct NATIVE_RECPOS
     {
+        /// <summary>
+        /// Size of NATIVE_RECPOS structures.
+        /// </summary>
         public static readonly int Size = Marshal.SizeOf(typeof(NATIVE_RECPOS));
+
+        /// <summary>
+        /// Size of this structure.
+        /// </summary>
         public uint cbStruct;
+
+        /// <summary>
+        /// Approximate number of index entries less than the key.
+        /// </summary>
         public uint centriesLT;
+
+        /// <summary>
+        /// Approximate number of entries in the index range.
+        /// </summary>
         public uint centriesInRange;
+
+        /// <summary>
+        /// Approximate number of entries in the index.
+        /// </summary>
         public uint centriesTotal;
     }
 

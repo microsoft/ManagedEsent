@@ -4,12 +4,12 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using Microsoft.Isam.Esent.Interop.Server2003;
-using Microsoft.Isam.Esent.Interop.Windows7;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+    using Microsoft.Isam.Esent.Interop.Server2003;
+    using Microsoft.Isam.Esent.Interop.Windows7;
+
     /// <summary>
     /// Options for JetCreateInstance2.
     /// </summary>

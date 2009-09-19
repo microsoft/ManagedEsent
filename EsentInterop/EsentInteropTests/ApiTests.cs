@@ -4,14 +4,14 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using Microsoft.Isam.Esent.Interop;
-using Microsoft.Isam.Esent.Interop.Implementation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Rhino.Mocks;
-
 namespace InteropApiTests
 {
+    using System;
+    using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Implementation;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Rhino.Mocks;
+
     /// <summary>
     /// Test the Api class functionality which wraps the IJetApi
     /// implementation.

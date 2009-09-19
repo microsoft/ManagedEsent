@@ -4,12 +4,12 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Diagnostics;
-using Microsoft.Isam.Esent.Interop.Vista;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+    using System.Diagnostics;
+    using Microsoft.Isam.Esent.Interop.Vista;
+
     /// <summary>
     /// Provides a set of methods and properties that you can use to measure
     /// ESENT work statistics for a thread. If the current version of ESENT

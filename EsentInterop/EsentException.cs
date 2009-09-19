@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Runtime.Serialization;
-
 namespace Microsoft.Isam.Esent
 {
+    using System;
+    using System.Runtime.Serialization;
+
     /// <summary>
     /// Base class for ESENT exceptions.
     /// </summary>

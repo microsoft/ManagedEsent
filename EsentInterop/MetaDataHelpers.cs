@@ -4,13 +4,13 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Globalization;
+
     /// <summary>
     /// Helper methods for the ESENT API. These methods deal with database
     /// meta-data.

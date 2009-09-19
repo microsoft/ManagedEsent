@@ -4,20 +4,20 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-
 namespace Microsoft.Isam.Esent.Utilities
 {
+    using System;
+
     /// <summary>
-    /// Contains the static method that starts the program
+    /// Contains the static method that starts the program.
     /// </summary>
     public class Program
     {
         /// <summary>
         /// Main method, called when the program starts.
         /// </summary>
-        /// <param name="args">Arguments to the program</param>
-        /// <returns>0 for success, non-zero for a failure</returns>
+        /// <param name="args">Arguments to the program.</param>
+        /// <returns>0 for success, non-zero for a failure.</returns>
         public static int Main(string[] args)
         {
             var dbutil = new Dbutil();

@@ -4,12 +4,12 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq.Expressions;
+
     /// <summary>
     /// Contains methods to evaluate a predicate Expression and determine
     /// a key range which contains all items matched by the predicate.

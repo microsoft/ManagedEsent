@@ -4,12 +4,12 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+
     /// <summary>
     /// Base class for collections which can be returned from
     /// a PersistentDictionary (i.e. Keys and Values).

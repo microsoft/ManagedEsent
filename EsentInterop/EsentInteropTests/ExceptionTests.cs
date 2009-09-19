@@ -4,15 +4,15 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using Microsoft.Isam.Esent;
-using Microsoft.Isam.Esent.Interop;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace InteropApiTests
 {
+    using System;
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using Microsoft.Isam.Esent;
+    using Microsoft.Isam.Esent.Interop;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     /// <summary>
     /// Test the exception classes.
     /// </summary>

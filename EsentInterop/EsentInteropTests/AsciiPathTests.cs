@@ -4,14 +4,14 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.IO;
-using Microsoft.Isam.Esent.Interop;
-using Microsoft.Isam.Esent.Interop.Implementation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace InteropApiTests
 {
+    using System;
+    using System.IO;
+    using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Implementation;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     /// <summary>
     /// Test files with ASCII paths (forcing the version to the XP version)
     /// </summary>

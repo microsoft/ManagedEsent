@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Collections;
-using System.Collections.Generic;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System.Collections;
+    using System.Collections.Generic;
+
     /// <summary>
     /// Table enumerator object. This can enumerate over a table, returning objects for
     /// each record.

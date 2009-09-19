@@ -4,20 +4,35 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Runtime.InteropServices;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// The native version of the JET_RECORDLIST structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     internal struct NATIVE_RECORDLIST
     {
+        /// <summary>
+        /// Size of the structure.
+        /// </summary>
         public uint cbStruct;
+
+        /// <summary>
+        /// Temporary table containing the bookmarks.
+        /// </summary>
         public IntPtr tableid;
+
+        /// <summary>
+        /// Number of records in the table.
+        /// </summary>
         public uint cRecords;
+
+        /// <summary>
+        /// Column id of the column containing the record bookmarks.
+        /// </summary>
         public uint columnidBookmark;
     }
 

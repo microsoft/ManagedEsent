@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using Microsoft.Isam.Esent.Collections.Generic;
-
 namespace PersistentDictionarySample
 {
+    using System;
+    using Microsoft.Isam.Esent.Collections.Generic;
+
     /// <summary>
     /// A simple 'Hello World' program that uses a PersistentDictionary.
     /// This remembers the names of its previous users.

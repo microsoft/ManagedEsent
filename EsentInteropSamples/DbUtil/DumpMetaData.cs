@@ -4,13 +4,13 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using Microsoft.Isam.Esent.Interop;
-
 namespace Microsoft.Isam.Esent.Utilities
 {
+    using System;
+    using Microsoft.Isam.Esent.Interop;
+
     /// <summary>
-    /// Database utilities
+    /// Database utilities.
     /// </summary>
     internal partial class Dbutil
     {

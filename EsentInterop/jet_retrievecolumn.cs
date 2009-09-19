@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Runtime.InteropServices;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// The native version of the <see cref="JET_RETRIEVECOLUMN"/> structure.
     /// </summary>

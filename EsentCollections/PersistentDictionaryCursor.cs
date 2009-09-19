@@ -4,13 +4,13 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using Microsoft.Isam.Esent.Interop;
-
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using Microsoft.Isam.Esent.Interop;
+
     /// <summary>
     /// Combines a JET_SESID and JET_TABLEID into a cursor which can
     /// retrieve data from and update a PersistentDictionary database.

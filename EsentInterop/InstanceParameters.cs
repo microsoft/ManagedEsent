@@ -4,14 +4,14 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.IO;
-using Microsoft.Isam.Esent.Interop.Server2003;
-using Microsoft.Isam.Esent.Interop.Vista;
-using Microsoft.Isam.Esent.Interop.Windows7;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+    using System.IO;
+    using Microsoft.Isam.Esent.Interop.Server2003;
+    using Microsoft.Isam.Esent.Interop.Vista;
+    using Microsoft.Isam.Esent.Interop.Windows7;
+
     /// <summary>
     /// This class provides properties to set and get system parameters
     /// on an ESENT instance.

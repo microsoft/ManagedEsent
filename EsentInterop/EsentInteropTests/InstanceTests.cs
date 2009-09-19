@@ -4,16 +4,16 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.IO;
-using Microsoft.Isam.Esent.Interop;
-using Microsoft.Isam.Esent.Interop.Implementation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Rhino.Mocks;
-using Rhino.Mocks.Constraints;
-
 namespace InteropApiTests
 {
+    using System;
+    using System.IO;
+    using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Implementation;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Rhino.Mocks;
+    using Rhino.Mocks.Constraints;
+
     /// <summary>
     /// Test the disposable Instance class, which wraps a JET_INSTANCE.
     /// </summary>

@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Linq.Expressions;
-
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
+    using System;
+    using System.Linq.Expressions;
+
     /// <summary>
     /// Methods to evaluate an expression which returns a T.
     /// </summary>

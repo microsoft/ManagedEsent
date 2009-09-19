@@ -4,21 +4,27 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.IO;
-using Microsoft.Isam.Esent.Interop;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace InteropApiTests
 {
+    using System;
+    using System.IO;
+    using Microsoft.Isam.Esent.Interop;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     /// <summary>
     /// Test files with Unicode paths (if ESENT supports them)
     /// </summary>
     [TestClass]
     public class UnicodePathTests
     {
+        /// <summary>
+        /// Unicode directory to contain files.
+        /// </summary>
         private string directory;
 
+        /// <summary>
+        /// Unicode database name.
+        /// </summary>
         private string database;
 
         /// <summary>
@@ -51,7 +57,9 @@ namespace InteropApiTests
         public void SetAndGetUnicodeSystemPath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
+            {
                 return;
+            }
 
             using (var instance = new Instance("unicode"))
             {
@@ -68,7 +76,9 @@ namespace InteropApiTests
         public void SetAndGetUnicodeLogPath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
+            {
                 return;
+            }
 
             using (var instance = new Instance("unicode"))
             {
@@ -85,7 +95,9 @@ namespace InteropApiTests
         public void SetAndGetUnicodeTempDbPath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
+            {
                 return;
+            }
 
             using (var instance = new Instance("unicode"))
             {
@@ -102,7 +114,9 @@ namespace InteropApiTests
         public void CreateDatabaseWithUnicodePath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
+            {
                 return;
+            }
 
             using (var instance = new Instance("unicode"))
             {
@@ -127,7 +141,9 @@ namespace InteropApiTests
         public void DetachDatabaseWithUnicodePath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
+            {
                 return;
+            }
 
             using (var instance = new Instance("unicode"))
             {
@@ -153,7 +169,9 @@ namespace InteropApiTests
         public void AttachDatabaseWithUnicodePath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
+            {
                 return;
+            }
 
             using (var instance = new Instance("unicode"))
             {
@@ -181,7 +199,9 @@ namespace InteropApiTests
         public void OpenDatabaseWithUnicodePath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
+            {
                 return;
+            }
 
             using (var instance = new Instance("unicode"))
             {

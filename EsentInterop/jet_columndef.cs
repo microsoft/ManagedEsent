@@ -4,24 +4,59 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Runtime.InteropServices;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// The native version of the JET_COLUMNDEF structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     internal struct NATIVE_COLUMNDEF
     {
+        /// <summary>
+        /// Size of the structure.
+        /// </summary>
         public uint cbStruct;
+
+        /// <summary>
+        /// Column ID.
+        /// </summary>
         public uint columnid;
+
+        /// <summary>
+        /// Type of the column.
+        /// </summary>
         public uint coltyp;
+
+        /// <summary>
+        /// Reserved. Should be 0.
+        /// </summary>
         public ushort wCountry;
+
+        /// <summary>
+        /// Obsolete. Should be 0.
+        /// </summary>
         public ushort langid;
+
+        /// <summary>
+        /// Code page for text columns.
+        /// </summary>
         public ushort cp;
+
+        /// <summary>
+        /// Reserved. Should be 0.
+        /// </summary>
         public ushort wCollate;
+
+        /// <summary>
+        /// Maximum length of the column.
+        /// </summary>
         public uint cbMax;
+
+        /// <summary>
+        /// Column options.
+        /// </summary>
         public uint grbit;
     }
 
@@ -37,14 +72,14 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// Gets or sets code page of the column. This is only meaningful for columns of type
-        /// JET_coltyp.Text and JET_coltyp.LongText.
+        /// <see cref="JET_coltyp.Text"/> and <see cref="JET_coltyp.LongText"/>.
         /// </summary>
         public JET_CP cp { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum length of the column. This is only meaningful for columns of
-        /// type JET_coltyp.Text, JET_coltyp.LongText, JET_coltyp.Binary and
-        /// JET_coltyp.LongBinary.
+        /// type <see cref="JET_coltyp.Text"/>, <see cref="JET_coltyp.LongText"/>, <see cref="JET_coltyp.Binary"/> and
+        /// <see cref="JET_coltyp.LongBinary"/>.
         /// </summary>
         public int cbMax { get; set; }
 

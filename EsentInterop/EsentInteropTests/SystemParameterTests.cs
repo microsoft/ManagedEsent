@@ -4,15 +4,14 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using Microsoft.Isam.Esent.Interop;
-using Microsoft.Isam.Esent.Interop.Implementation;
-using Microsoft.Isam.Esent.Interop.Vista;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using Rhino.Mocks;
-
 namespace InteropApiTests
 {
+    using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Implementation;
+    using Microsoft.Isam.Esent.Interop.Vista;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Rhino.Mocks;
+
     /// <summary>
     /// Test the SystemParameters class. To avoid changing global parameters
     /// this is tested with a mock IJetApi.

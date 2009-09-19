@@ -4,14 +4,14 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.IO;
-using System.Linq;
-using Microsoft.Isam.Esent.Interop;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace InteropApiTests
 {
+    using System;
+    using System.IO;
+    using System.Linq;
+    using Microsoft.Isam.Esent.Interop;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     /// <summary>
     /// Test JetMove
     /// </summary>
@@ -236,6 +236,10 @@ namespace InteropApiTests
 
         #region Helper methods
 
+        /// <summary>
+        /// Open the table we are using for testing.
+        /// </summary>
+        /// <returns>A newly opened JET_TABLEID.</returns>
         private JET_TABLEID OpenTable()
         {
             JET_TABLEID tableid;
@@ -243,6 +247,12 @@ namespace InteropApiTests
             return tableid;
         }
 
+        /// <summary>
+        /// Add a record to the table.
+        /// </summary>
+        /// <param name="tableid">The cursor to use for the insert.</param>
+        /// <param name="i">The value of the first column.</param>
+        /// <param name="j">The value of the second column.</param>
         private void InsertRecord(JET_TABLEID tableid, int i, int j)
         {
             Api.JetBeginTransaction(this.sesid);

@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Diagnostics;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+    using System.Diagnostics;
+
     /// <summary>
     /// Base class for objects that represent a column value to be set.
     /// </summary>
@@ -42,8 +42,28 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public JET_err Error { get; internal set; }
 
+        /// <summary>
+        /// Recursive SetColumns method for data pinning. This should populate the buffer and
+        /// call the inherited SetColumns method.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// The table to set the columns in. An update should be prepared.
+        /// </param>
+        /// <param name="columnValues">
+        /// Column values to set.
+        /// </param>
+        /// <param name="nativeColumns">
+        /// Structures to put the pinned data in.
+        /// </param>
+        /// <param name="i">Offset of this object in the array.</param>
+        /// <returns>An error code.</returns>
         internal abstract unsafe int SetColumns(JET_SESID sesid, JET_TABLEID tableid, ColumnValue[] columnValues, NATIVE_SETCOLUMN* nativeColumns, int i);
 
+        /// <summary>
+        /// Create a native SetColumn from this object.
+        /// </summary>
+        /// <returns>A NATIVE_SETCOLUMN created from this object.</returns>
         internal NATIVE_SETCOLUMN MakeNativeSetColumn()
         {
             return new NATIVE_SETCOLUMN
@@ -54,6 +74,24 @@ namespace Microsoft.Isam.Esent.Interop
             };
         }
 
+        /// <summary>
+        /// Recursive SetColumns function used to pin data.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// The table to set the columns in. An update should be prepared.
+        /// </param>
+        /// <param name="columnValues">
+        /// Column values to set.
+        /// </param>
+        /// <param name="nativeColumns">
+        /// Structures to put the pinned data in.
+        /// </param>
+        /// <param name="i">Offset of this object in the array.</param>
+        /// <param name="buffer">The buffer for this object.</param>
+        /// <param name="bufferSize">Size of the buffer for ths object.</param>
+        /// <param name="hasValue">True if this object is non null.</param>
+        /// <returns>An error code.</returns>
         internal unsafe int SetColumns(
             JET_SESID sesid,
             JET_TABLEID tableid,
@@ -114,6 +152,22 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     public class BoolColumnValue : ColumnValueOfStruct<bool>
     {
+        /// <summary>
+        /// Recursive SetColumns method for data pinning. This populates the buffer and
+        /// calls the inherited SetColumns method.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// The table to set the columns in. An update should be prepared.
+        /// </param>
+        /// <param name="columnValues">
+        /// Column values to set.
+        /// </param>
+        /// <param name="nativeColumns">
+        /// Structures to put the pinned data in.
+        /// </param>
+        /// <param name="i">Offset of this object in the array.</param>
+        /// <returns>An error code.</returns>
         internal override unsafe int SetColumns(JET_SESID sesid, JET_TABLEID tableid, ColumnValue[] columnValues, NATIVE_SETCOLUMN* nativeColumns, int i)
         {
             byte data = this.Value.GetValueOrDefault() ? (byte)0xFF : (byte)0x00;
@@ -126,6 +180,22 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     public class ByteColumnValue : ColumnValueOfStruct<byte>
     {
+        /// <summary>
+        /// Recursive SetColumns method for data pinning. This populates the buffer and
+        /// calls the inherited SetColumns method.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// The table to set the columns in. An update should be prepared.
+        /// </param>
+        /// <param name="columnValues">
+        /// Column values to set.
+        /// </param>
+        /// <param name="nativeColumns">
+        /// Structures to put the pinned data in.
+        /// </param>
+        /// <param name="i">Offset of this object in the array.</param>
+        /// <returns>An error code.</returns>
         internal override unsafe int SetColumns(JET_SESID sesid, JET_TABLEID tableid, ColumnValue[] columnValues, NATIVE_SETCOLUMN* nativeColumns, int i)
         {
             var data = this.Value.GetValueOrDefault();
@@ -138,6 +208,22 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     public class Int16ColumnValue : ColumnValueOfStruct<short>
     {
+        /// <summary>
+        /// Recursive SetColumns method for data pinning. This populates the buffer and
+        /// calls the inherited SetColumns method.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// The table to set the columns in. An update should be prepared.
+        /// </param>
+        /// <param name="columnValues">
+        /// Column values to set.
+        /// </param>
+        /// <param name="nativeColumns">
+        /// Structures to put the pinned data in.
+        /// </param>
+        /// <param name="i">Offset of this object in the array.</param>
+        /// <returns>An error code.</returns>
         internal override unsafe int SetColumns(JET_SESID sesid, JET_TABLEID tableid, ColumnValue[] columnValues, NATIVE_SETCOLUMN* nativeColumns, int i)
         {
             var data = this.Value.GetValueOrDefault();
@@ -150,6 +236,22 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     public class UInt16ColumnValue : ColumnValueOfStruct<ushort>
     {
+        /// <summary>
+        /// Recursive SetColumns method for data pinning. This populates the buffer and
+        /// calls the inherited SetColumns method.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// The table to set the columns in. An update should be prepared.
+        /// </param>
+        /// <param name="columnValues">
+        /// Column values to set.
+        /// </param>
+        /// <param name="nativeColumns">
+        /// Structures to put the pinned data in.
+        /// </param>
+        /// <param name="i">Offset of this object in the array.</param>
+        /// <returns>An error code.</returns>
         internal override unsafe int SetColumns(JET_SESID sesid, JET_TABLEID tableid, ColumnValue[] columnValues, NATIVE_SETCOLUMN* nativeColumns, int i)
         {
             var data = this.Value.GetValueOrDefault();
@@ -162,6 +264,22 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     public class Int32ColumnValue : ColumnValueOfStruct<int>
     {
+        /// <summary>
+        /// Recursive SetColumns method for data pinning. This populates the buffer and
+        /// calls the inherited SetColumns method.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// The table to set the columns in. An update should be prepared.
+        /// </param>
+        /// <param name="columnValues">
+        /// Column values to set.
+        /// </param>
+        /// <param name="nativeColumns">
+        /// Structures to put the pinned data in.
+        /// </param>
+        /// <param name="i">Offset of this object in the array.</param>
+        /// <returns>An error code.</returns>
         internal override unsafe int SetColumns(JET_SESID sesid, JET_TABLEID tableid, ColumnValue[] columnValues, NATIVE_SETCOLUMN* nativeColumns, int i)
         {
             var data = this.Value.GetValueOrDefault();
@@ -174,6 +292,22 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     public class UInt32ColumnValue : ColumnValueOfStruct<uint>
     {
+        /// <summary>
+        /// Recursive SetColumns method for data pinning. This populates the buffer and
+        /// calls the inherited SetColumns method.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// The table to set the columns in. An update should be prepared.
+        /// </param>
+        /// <param name="columnValues">
+        /// Column values to set.
+        /// </param>
+        /// <param name="nativeColumns">
+        /// Structures to put the pinned data in.
+        /// </param>
+        /// <param name="i">Offset of this object in the array.</param>
+        /// <returns>An error code.</returns>
         internal override unsafe int SetColumns(JET_SESID sesid, JET_TABLEID tableid, ColumnValue[] columnValues, NATIVE_SETCOLUMN* nativeColumns, int i)
         {
             var data = this.Value.GetValueOrDefault();
@@ -186,6 +320,22 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     public class Int64ColumnValue : ColumnValueOfStruct<long>
     {
+        /// <summary>
+        /// Recursive SetColumns method for data pinning. This populates the buffer and
+        /// calls the inherited SetColumns method.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// The table to set the columns in. An update should be prepared.
+        /// </param>
+        /// <param name="columnValues">
+        /// Column values to set.
+        /// </param>
+        /// <param name="nativeColumns">
+        /// Structures to put the pinned data in.
+        /// </param>
+        /// <param name="i">Offset of this object in the array.</param>
+        /// <returns>An error code.</returns>
         internal override unsafe int SetColumns(JET_SESID sesid, JET_TABLEID tableid, ColumnValue[] columnValues, NATIVE_SETCOLUMN* nativeColumns, int i)
         {
             var data = this.Value.GetValueOrDefault();
@@ -198,6 +348,22 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     public class UInt64ColumnValue : ColumnValueOfStruct<ulong>
     {
+        /// <summary>
+        /// Recursive SetColumns method for data pinning. This populates the buffer and
+        /// calls the inherited SetColumns method.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// The table to set the columns in. An update should be prepared.
+        /// </param>
+        /// <param name="columnValues">
+        /// Column values to set.
+        /// </param>
+        /// <param name="nativeColumns">
+        /// Structures to put the pinned data in.
+        /// </param>
+        /// <param name="i">Offset of this object in the array.</param>
+        /// <returns>An error code.</returns>
         internal override unsafe int SetColumns(JET_SESID sesid, JET_TABLEID tableid, ColumnValue[] columnValues, NATIVE_SETCOLUMN* nativeColumns, int i)
         {
             var data = this.Value.GetValueOrDefault();
@@ -210,6 +376,22 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     public class FloatColumnValue : ColumnValueOfStruct<float>
     {
+        /// <summary>
+        /// Recursive SetColumns method for data pinning. This populates the buffer and
+        /// calls the inherited SetColumns method.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// The table to set the columns in. An update should be prepared.
+        /// </param>
+        /// <param name="columnValues">
+        /// Column values to set.
+        /// </param>
+        /// <param name="nativeColumns">
+        /// Structures to put the pinned data in.
+        /// </param>
+        /// <param name="i">Offset of this object in the array.</param>
+        /// <returns>An error code.</returns>
         internal override unsafe int SetColumns(JET_SESID sesid, JET_TABLEID tableid, ColumnValue[] columnValues, NATIVE_SETCOLUMN* nativeColumns, int i)
         {
             var data = this.Value.GetValueOrDefault();
@@ -222,6 +404,22 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     public class DoubleColumnValue : ColumnValueOfStruct<double>
     {
+        /// <summary>
+        /// Recursive SetColumns method for data pinning. This populates the buffer and
+        /// calls the inherited SetColumns method.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// The table to set the columns in. An update should be prepared.
+        /// </param>
+        /// <param name="columnValues">
+        /// Column values to set.
+        /// </param>
+        /// <param name="nativeColumns">
+        /// Structures to put the pinned data in.
+        /// </param>
+        /// <param name="i">Offset of this object in the array.</param>
+        /// <returns>An error code.</returns>
         internal override unsafe int SetColumns(JET_SESID sesid, JET_TABLEID tableid, ColumnValue[] columnValues, NATIVE_SETCOLUMN* nativeColumns, int i)
         {
             var data = this.Value.GetValueOrDefault();
@@ -234,6 +432,22 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     public class DateTimeColumnValue : ColumnValueOfStruct<DateTime>
     {
+        /// <summary>
+        /// Recursive SetColumns method for data pinning. This populates the buffer and
+        /// calls the inherited SetColumns method.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// The table to set the columns in. An update should be prepared.
+        /// </param>
+        /// <param name="columnValues">
+        /// Column values to set.
+        /// </param>
+        /// <param name="nativeColumns">
+        /// Structures to put the pinned data in.
+        /// </param>
+        /// <param name="i">Offset of this object in the array.</param>
+        /// <returns>An error code.</returns>
         internal override unsafe int SetColumns(JET_SESID sesid, JET_TABLEID tableid, ColumnValue[] columnValues, NATIVE_SETCOLUMN* nativeColumns, int i)
         {
             var data = this.Value.GetValueOrDefault().ToOADate();
@@ -246,6 +460,22 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     public class GuidColumnValue : ColumnValueOfStruct<Guid>
     {
+        /// <summary>
+        /// Recursive SetColumns method for data pinning. This populates the buffer and
+        /// calls the inherited SetColumns method.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// The table to set the columns in. An update should be prepared.
+        /// </param>
+        /// <param name="columnValues">
+        /// Column values to set.
+        /// </param>
+        /// <param name="nativeColumns">
+        /// Structures to put the pinned data in.
+        /// </param>
+        /// <param name="i">Offset of this object in the array.</param>
+        /// <returns>An error code.</returns>
         internal override unsafe int SetColumns(JET_SESID sesid, JET_TABLEID tableid, ColumnValue[] columnValues, NATIVE_SETCOLUMN* nativeColumns, int i)
         {
             byte[] data = this.Value.GetValueOrDefault().ToByteArray();
@@ -277,6 +507,22 @@ namespace Microsoft.Isam.Esent.Interop
             return this.Value;
         }
 
+        /// <summary>
+        /// Recursive SetColumns method for data pinning. This populates the buffer and
+        /// calls the inherited SetColumns method.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// The table to set the columns in. An update should be prepared.
+        /// </param>
+        /// <param name="columnValues">
+        /// Column values to set.
+        /// </param>
+        /// <param name="nativeColumns">
+        /// Structures to put the pinned data in.
+        /// </param>
+        /// <param name="i">Offset of this object in the array.</param>
+        /// <returns>An error code.</returns>
         internal override unsafe int SetColumns(JET_SESID sesid, JET_TABLEID tableid, ColumnValue[] columnValues, NATIVE_SETCOLUMN* nativeColumns, int i)
         {
             if (null != this.Value)
@@ -303,6 +549,22 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public byte[] Value { get; set; }
 
+        /// <summary>
+        /// Recursive SetColumns method for data pinning. This populates the buffer and
+        /// calls the inherited SetColumns method.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// The table to set the columns in. An update should be prepared.
+        /// </param>
+        /// <param name="columnValues">
+        /// Column values to set.
+        /// </param>
+        /// <param name="nativeColumns">
+        /// Structures to put the pinned data in.
+        /// </param>
+        /// <param name="i">Offset of this object in the array.</param>
+        /// <returns>An error code.</returns>
         internal override unsafe int SetColumns(JET_SESID sesid, JET_TABLEID tableid, ColumnValue[] columnValues, NATIVE_SETCOLUMN* nativeColumns, int i)
         {
             if (null != this.Value)

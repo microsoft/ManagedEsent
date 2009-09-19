@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using Microsoft.Isam.Esent.Interop;
-
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
+    using System;
+    using Microsoft.Isam.Esent.Interop;
+
     /// <summary>
     /// Global parameters for all collections.
     /// </summary>

@@ -4,16 +4,15 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Xml.Linq;
-
-using Microsoft.Isam.Esent.Collections.Generic;
-
 namespace RssDictionarySample
 {
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Xml.Linq;
+    using Microsoft.Isam.Esent.Collections.Generic;
+
     /// <summary>
     /// Contains information about the RSS feed.
     /// </summary>

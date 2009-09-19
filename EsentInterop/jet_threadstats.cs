@@ -4,12 +4,12 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Runtime.InteropServices;
-using System.Text;
-
 namespace Microsoft.Isam.Esent.Interop.Vista
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using System.Text;
+
     /// <summary>
     /// Contains cumulative statistics on the work performed by the database
     /// engine on the current thread. This information is returned via
@@ -137,7 +137,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// Get the plural suffix ('s') for the given number.
         /// </summary>
         /// <param name="n">The number.</param>
-        /// <returns>'s' if n is greater than 1.</returns>
+        /// <returns>The letter 's' if n is greater than 1.</returns>
         private static string GetPluralS(int n)
         {
             return n == 1 ? String.Empty : "s";

@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Text;
-
 namespace InteropApiTests
 {
+    using System;
+    using System.Text;
+
     /// <summary>
     /// Generate arbitrary (random) values
     /// </summary>

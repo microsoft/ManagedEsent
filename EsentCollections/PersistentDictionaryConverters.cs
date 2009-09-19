@@ -4,12 +4,12 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Text;
-using Microsoft.Isam.Esent.Interop;
-
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
+    using System;
+    using System.Text;
+    using Microsoft.Isam.Esent.Interop;
+
     /// <summary>
     /// Contains methods to set and get data from the ESENT
     /// database.

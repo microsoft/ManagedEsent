@@ -4,15 +4,15 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Isam.Esent.Interop;
-
 namespace Microsoft.Isam.Esent.Utilities
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using Microsoft.Isam.Esent.Interop;
+
     /// <summary>
-    /// Database utilities
+    /// Database utilities.
     /// </summary>
     internal partial class Dbutil
     {
@@ -58,7 +58,7 @@ namespace Microsoft.Isam.Esent.Utilities
         }
 
         /// <summary>
-        /// Create a sample database
+        /// Create a sample database.
         /// </summary>
         /// <param name="args">Arguments for the command.</param>
         private void CreateSampleDb(string[] args)

@@ -4,10 +4,10 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using Microsoft.Isam.Esent.Interop.Implementation;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using Microsoft.Isam.Esent.Interop.Implementation;
+
     /// <summary>
     /// Gives information about the version of esent being used.
     /// </summary>

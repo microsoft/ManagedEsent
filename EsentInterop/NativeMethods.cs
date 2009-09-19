@@ -4,14 +4,14 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Runtime.InteropServices;
-using System.Security;
-using System.Text;
-using Microsoft.Isam.Esent.Interop.Vista;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using System.Security;
+    using System.Text;
+    using Microsoft.Isam.Esent.Interop.Vista;
+
     /// <summary>
     /// Native interop for functions in esent.dll.
     /// </summary>

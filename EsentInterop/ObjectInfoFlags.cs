@@ -4,10 +4,10 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+
     /// <summary>
     /// Flags for ESENT objects (tables).
     /// </summary>

@@ -4,19 +4,25 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using Microsoft.Isam.Esent.Interop.Vista;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace InteropApiTests
 {
+    using Microsoft.Isam.Esent.Interop.Vista;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     /// <summary>
     /// JET_THREADSTATS tests
     /// </summary>
     [TestClass]
     public class ThreadstatTests
     {
+        /// <summary>
+        /// Native version of the threadstats.
+        /// </summary>
         private NATIVE_THREADSTATS native;
 
+        /// <summary>
+        /// Managed version of the threadstats, created from the native.
+        /// </summary>
         private JET_THREADSTATS managed;
  
         /// <summary>

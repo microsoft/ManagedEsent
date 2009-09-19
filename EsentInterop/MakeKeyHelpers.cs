@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Text;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+    using System.Text;
+
     /// <summary>
     /// Helper methods for the ESENT API. These do data conversion for
     /// JetMakeKey.

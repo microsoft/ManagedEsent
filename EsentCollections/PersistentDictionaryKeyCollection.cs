@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
+    using System;
+    using System.Collections.Generic;
+
     /// <summary>
     /// Collection of the keys in a PersistentDictionary.
     /// </summary>

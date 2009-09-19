@@ -4,18 +4,29 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Runtime.InteropServices;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// The native version of the JET_CONDITIONALCOLUMN structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     internal struct NATIVE_CONDITIONALCOLUMN
     {
+        /// <summary>
+        /// Size of the structure.
+        /// </summary>
         public uint cbStruct;
+
+        /// <summary>
+        /// Name of the column.
+        /// </summary>
         public string szColumnName;
+
+        /// <summary>
+        /// Conditional column option.
+        /// </summary>
         public uint grbit;
     }
 

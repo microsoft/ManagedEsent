@@ -4,19 +4,22 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Runtime.InteropServices;
-using Microsoft.Isam.Esent.Interop;
-using Microsoft.Isam.Esent.Interop.Vista;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace InteropApiTests
 {
+    using System.Runtime.InteropServices;
+    using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Vista;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     /// <summary>
     /// Test conversion to NATIVE_OPENTEMPORARYTABLE
     /// </summary>
     [TestClass]
     public class OpenTemporaryTableTests
     {
+        /// <summary>
+        /// Managed object being tested.
+        /// </summary>
         private JET_OPENTEMPORARYTABLE managed;
 
         /// <summary>

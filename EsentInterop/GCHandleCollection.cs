@@ -4,13 +4,13 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-
 namespace Microsoft.Isam.Esent.Interop.Implementation
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// A collection of GCHandles for pinned objects. The handles
     /// are freed when this object is disposed.

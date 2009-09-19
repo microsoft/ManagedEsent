@@ -4,16 +4,15 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using Microsoft.Isam.Esent.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace EsentCollectionsTests
 {
+    using System;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Linq;
+    using Microsoft.Isam.Esent.Collections.Generic;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     /// <summary>
     /// Test PersistentDictionary speed.
     /// </summary>

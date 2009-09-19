@@ -4,20 +4,23 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Runtime.InteropServices;
-using Microsoft.Isam.Esent.Interop;
-using Microsoft.Isam.Esent.Interop.Vista;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace InteropApiTests
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Vista;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     /// <summary>
     /// Test conversion to NATIVE_INDEXCREATE2
     /// </summary>
     [TestClass]
     public class Indexcreate2Tests
     {
+        /// <summary>
+        /// Managed version of the indexcreate structure.
+        /// </summary>
         private JET_INDEXCREATE managed;
 
         /// <summary>

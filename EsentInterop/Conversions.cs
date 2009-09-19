@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Globalization;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System.Collections.Generic;
+    using System.Globalization;
+
     /// <summary>
     /// Provide methods to convert data and flags between 
     /// Win32 and the .NET Framework.

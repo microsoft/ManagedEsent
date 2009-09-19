@@ -4,17 +4,24 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Collections;
-using System.Collections.Generic;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System.Collections;
+    using System.Collections.Generic;
+
     /// <summary>
     /// Iterates over all the columns in the table, returning information about each one.
     /// </summary>
     internal class EnumerableColumnInfo : IEnumerable<ColumnInfo>
     {
+        /// <summary>
+        /// The session to use.
+        /// </summary>
         private readonly JET_SESID sesid;
+
+        /// <summary>
+        /// The table cursor to use.
+        /// </summary>
         private readonly JET_TABLEID tableid;
 
         /// <summary>

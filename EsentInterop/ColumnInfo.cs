@@ -12,6 +12,16 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     public class ColumnInfo
     {
+        /// <summary>
+        /// Initializes a new instance of the ColumnInfo class.
+        /// </summary>
+        /// <param name="name">Name of the column.</param>
+        /// <param name="columnid">ID of the column.</param>
+        /// <param name="coltyp">Type of the column.</param>
+        /// <param name="cp">Codepage of the column.</param>
+        /// <param name="maxLength">Maximum length of the column.</param>
+        /// <param name="defaultValue">Column default value.</param>
+        /// <param name="grbit">Column option.</param>
         internal ColumnInfo(
             string name,
             JET_COLUMNID columnid,

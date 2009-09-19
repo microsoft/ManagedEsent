@@ -4,18 +4,21 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Runtime.InteropServices;
-using Microsoft.Isam.Esent.Interop;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace InteropApiTests
 {
+    using System.Runtime.InteropServices;
+    using Microsoft.Isam.Esent.Interop;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     /// <summary>
     /// Test conversion to NATIVE_COLUMNDEF
     /// </summary>
     [TestClass]
     public class ConditionalColumnTests
     {
+        /// <summary>
+        /// Managed version of the conditional column.
+        /// </summary>
         private JET_CONDITIONALCOLUMN managed;
 
         /// <summary>

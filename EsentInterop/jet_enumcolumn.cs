@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Runtime.InteropServices;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// Native (unmanaged) version of the JET_ENUMCOLUMN structure.
     /// </summary>

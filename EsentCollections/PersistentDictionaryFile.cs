@@ -4,12 +4,12 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Globalization;
-using System.IO;
-
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
+    using System;
+    using System.Globalization;
+    using System.IO;
+
     /// <summary>
     /// Methods that deal with <see cref="PersistentDictionary{TKey,TValue}"/>
     /// database files.

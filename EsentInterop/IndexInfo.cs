@@ -4,16 +4,24 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Globalization;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System.Globalization;
+
     /// <summary>
     /// Information about one esent index. This is not an interop
     /// class, but is used by the meta-data helper methods.
     /// </summary>
     public class IndexInfo
     {
+        /// <summary>
+        /// Initializes a new instance of the IndexInfo class.
+        /// </summary>
+        /// <param name="name">Name of the index.</param>
+        /// <param name="cultureInfo">CultureInfo for string sorting.</param>
+        /// <param name="compareOptions">String comparison options.</param>
+        /// <param name="indexSegments">Array of index segment descriptions.</param>
+        /// <param name="grbit">Index options.</param>
         internal IndexInfo(
             string name,
             CultureInfo cultureInfo,

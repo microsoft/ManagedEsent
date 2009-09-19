@@ -4,10 +4,10 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Runtime.InteropServices;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// The native version of the JET_SETINFO structure.
     /// </summary>

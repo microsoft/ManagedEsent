@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.IO;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+    using System.IO;
+
     /// <summary>
     /// This class provides a streaming interface to a long-value column
     /// (i.e. a column of type <see cref="JET_coltyp.LongBinary"/> or

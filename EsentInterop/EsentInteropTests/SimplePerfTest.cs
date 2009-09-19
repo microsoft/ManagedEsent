@@ -4,43 +4,81 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading;
-using Microsoft.Isam.Esent.Interop;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace InteropApiTests
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Runtime.InteropServices;
+    using System.Threading;
+    using Microsoft.Isam.Esent.Interop;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     /// <summary>
     /// Basic performance tests
     /// </summary>
     [TestClass]
     public class SimplePerfTest
     {
+        /// <summary>
+        /// Size of the data being inserted in the data column.
+        /// </summary>
         private const int DataSize = 32;
 
+        /// <summary>
+        /// The directory to put the database files in.
+        /// </summary>
         private string directory;
 
+        /// <summary>
+        /// The instance to use.
+        /// </summary>
         private Instance instance;
+        
+        /// <summary>
+        /// The session to use.
+        /// </summary>
         private Session session;
+        
+        /// <summary>
+        /// The table to use.
+        /// </summary>
         private Table table;
 
+        /// <summary>
+        /// The columnid of the key column.
+        /// </summary>
         private JET_COLUMNID columnidKey;
+        
+        /// <summary>
+        /// The columnid of the data column.
+        /// </summary>
         private JET_COLUMNID columnidData;
 
-        // Used to insert records
+        /// <summary>
+        /// The next key value to be inserted. Used to insert records.
+        /// </summary>
         private long nextKey = 0;
+        
+        /// <summary>
+        /// Data to be inserted into the data column.
+        /// </summary>
         private byte[] data;
 
-        // Used to retrieve records
+        /// <summary>
+        /// Used to retrieve the data column.
+        /// </summary>
         private byte[] dataBuf;
 
+        /// <summary>
+        /// Random number generation object.
+        /// </summary>
         private Random random;
+        
+        /// <summary>
+        /// Previous minimum cache size. Used to restore the previous setting.
+        /// </summary>
         private int cacheSizeMinSaved = 0;
 
         /// <summary>
@@ -127,6 +165,11 @@ namespace InteropApiTests
             this.CheckMemoryUsage(this.InsertReadSeek);
         }
 
+        /// <summary>
+        /// Perform and time the given action.
+        /// </summary>
+        /// <param name="name">The name of the action.</param>
+        /// <param name="action">The operation to perform.</param>
         private static void TimeAction(string name, Action action)
         {
             var stopwatch = EsentStopwatch.StartNew();
@@ -135,6 +178,9 @@ namespace InteropApiTests
             Console.WriteLine("{0}: {1} ({2})", name, stopwatch.Elapsed, stopwatch.ThreadStats);
         }
 
+        /// <summary>
+        /// Insert come records and then retrieve them.
+        /// </summary>
         private void InsertReadSeek()
         {
             const int NumRecords = 1000000;
@@ -151,6 +197,10 @@ namespace InteropApiTests
             TimeAction("Seek to all records", () => this.SeekToAllRecords(keys));
         }
 
+        /// <summary>
+        /// Perform an action, checking the system's memory usage before and after.
+        /// </summary>
+        /// <param name="action">The action to perform.</param>
         private void CheckMemoryUsage(Action action)
         {
             this.RunGarbageCollection();
@@ -168,6 +218,11 @@ namespace InteropApiTests
                 collectionCountAtEnd - collectionCountAtStart);
         }
 
+        /// <summary>
+        /// Randomly shuffle an array.
+        /// </summary>
+        /// <typeparam name="T">The type of the array.</typeparam>
+        /// <param name="arrayToShuffle">The array to shuffle.</param>
         private void Shuffle<T>(T[] arrayToShuffle)
         {
             for (int i = 0; i < arrayToShuffle.Length; ++i)
@@ -179,6 +234,9 @@ namespace InteropApiTests
             }
         }
 
+        /// <summary>
+        /// Insert a record. The key will be <see cref="nextKey"/>.
+        /// </summary>
         private void InsertRecord()
         {
             long key = this.nextKey++;
@@ -188,6 +246,10 @@ namespace InteropApiTests
             Api.JetUpdate(this.session, this.table);
         }
 
+        /// <summary>
+        /// Insert multiple records.
+        /// </summary>
+        /// <param name="numRecords">The number of records to insert.</param>
         private void InsertRecords(int numRecords)
         {
             for (int i = 0; i < numRecords; ++i)
@@ -198,6 +260,10 @@ namespace InteropApiTests
             }
         }
 
+        /// <summary>
+        /// Insert multiple records with the <see cref="Api.SetColumns"/> API.
+        /// </summary>
+        /// <param name="numRecords">The number of records to insert.</param>
         private void InsertRecordsWithSetColumns(int numRecords)
         {
             var keyColumn = new Int64ColumnValue { Columnid = this.columnidKey };
@@ -216,6 +282,9 @@ namespace InteropApiTests
             }
         }
 
+        /// <summary>
+        /// Retrieve the current record.
+        /// </summary>
         private void RetrieveRecord()
         {
             int actualSize;
@@ -231,6 +300,9 @@ namespace InteropApiTests
                 null);
         }
 
+        /// <summary>
+        /// Retrieve all records in the table.
+        /// </summary>
         private void RetrieveAllRecords()
         {
             Api.MoveBeforeFirst(this.session, this.table);
@@ -242,6 +314,10 @@ namespace InteropApiTests
             }
         }
 
+        /// <summary>
+        /// Retrieve the current record multiple times.
+        /// </summary>
+        /// <param name="numRetrieves">The number of times to retrieve the record.</param>
         private void RepeatedlyRetrieveOneRecord(int numRetrieves)
         {
             Api.JetMove(this.session, this.table, JET_Move.First, MoveGrbit.None);
@@ -253,6 +329,10 @@ namespace InteropApiTests
             }
         }
 
+        /// <summary>
+        /// Repeatedly retrieve one record using <see cref="Api.JetEnumerateColumns"/>.
+        /// </summary>
+        /// <param name="numRetrieves">The number of times to retrieve the record.</param>
         private void RepeatedlyRetrieveOneRecordWithEnumColumns(int numRetrieves)
         {
             Api.JetMove(this.session, this.table, JET_Move.First, MoveGrbit.None);
@@ -286,6 +366,10 @@ namespace InteropApiTests
             }
         }
 
+        /// <summary>
+        /// Seek to, and retrieve the key column from, the specified records.
+        /// </summary>
+        /// <param name="keys">The keys of the records to retrieve.</param>
         private void SeekToAllRecords(IEnumerable<long> keys)
         {
             foreach (long key in keys)
@@ -298,6 +382,9 @@ namespace InteropApiTests
             }
         }
 
+        /// <summary>
+        /// Run garbage collection.
+        /// </summary>
         private void RunGarbageCollection()
         {
             GC.Collect();

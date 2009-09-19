@@ -4,13 +4,20 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using Microsoft.Isam.Esent.Interop.Vista;
-
 namespace Microsoft.Isam.Esent.Interop.Implementation
 {
+    using System;
+    using Microsoft.Isam.Esent.Interop.Vista;
+
+    /// <summary>
+    /// This interface describes all the methods which have a P/Invoke implementation.
+    /// Concrete instances of this interface provide methods that call ESENT.
+    /// </summary>
     internal interface IJetApi
     {
+        /// <summary>
+        /// Gets a description of the capabilities of the current version of ESENT.
+        /// </summary>
         JetCapabilities Capabilities { get;  }
 
         int JetCreateInstance(out JET_INSTANCE instance, string name);

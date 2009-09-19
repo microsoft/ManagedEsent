@@ -46,13 +46,13 @@
 //  -   Disposable objects (public): these disposable object automatically
 //      release esent resources (instances, sessions, tables and transactions). 
 
-using System;
-using System.Runtime.InteropServices;
-using Microsoft.Isam.Esent.Interop.Implementation;
-using Microsoft.Isam.Esent.Interop.Vista;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using Microsoft.Isam.Esent.Interop.Implementation;
+    using Microsoft.Isam.Esent.Interop.Vista;
+
     /// <summary>
     /// Managed versions of the ESENT Api. This class contains static methods corresponding
     /// with the unmanaged ESENT Api. These methods throw exceptions when errors are returned.

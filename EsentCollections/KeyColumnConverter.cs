@@ -4,13 +4,13 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Isam.Esent.Interop;
-
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using Microsoft.Isam.Esent.Interop;
+
     /// <summary>
     /// Extends the ColumnConverter class with methods to make a key.
     /// </summary>

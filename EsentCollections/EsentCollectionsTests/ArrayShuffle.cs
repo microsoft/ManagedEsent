@@ -4,10 +4,10 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-
 namespace EsentCollectionsTests
 {
+    using System;
+
     /// <summary>
     /// Contains an extension method to randomize an array.
     /// </summary>

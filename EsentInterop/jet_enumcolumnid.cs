@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Runtime.InteropServices;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// The native (unmanaged) version of the
     /// <see cref="JET_ENUMCOLUMNID"/> class.
@@ -16,8 +16,19 @@ namespace Microsoft.Isam.Esent.Interop
     [StructLayout(LayoutKind.Sequential)]
     internal unsafe struct NATIVE_ENUMCOLUMNID
     {
+        /// <summary>
+        /// Column ID to enumerate.
+        /// </summary>
         public uint columnid;
+
+        /// <summary>
+        /// Count of column values to enumerate.
+        /// </summary>
         public uint ctagSequence;
+
+        /// <summary>
+        /// Column values to enumerate.
+        /// </summary>
         public uint* rgtagSequence;
     }
 

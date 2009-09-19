@@ -4,28 +4,72 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Runtime.InteropServices;
-using Microsoft.Isam.Esent.Interop.Vista;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using Microsoft.Isam.Esent.Interop.Vista;
+
     /// <summary>
     /// The native version of the JET_INDEXCREATE structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     internal unsafe struct NATIVE_INDEXCREATE
     {
+        /// <summary>
+        /// Size of the structure.
+        /// </summary>
         public uint cbStruct;
+
+        /// <summary>
+        /// Name of the index.
+        /// </summary>
         public string szIndexName;
+
+        /// <summary>
+        /// Index key description.
+        /// </summary>
         public string szKey;
+
+        /// <summary>
+        /// Size of index key description.
+        /// </summary>
         public uint cbKey;
+
+        /// <summary>
+        /// Index options.
+        /// </summary>
         public uint grbit;
+
+        /// <summary>
+        /// Index density.
+        /// </summary>
         public uint ulDensity;
+
+        /// <summary>
+        /// Pointer to unicode sort options.
+        /// </summary>
         public NATIVE_UNICODEINDEX* pidxUnicode;
-        public IntPtr cbVarSegMac;  // can also be JET_TUPLELIMITS*
+
+        /// <summary>
+        /// Maximum size of column data to index. This can also be
+        /// a pointer to a JET_TUPLELIMITS structure.
+        /// </summary>
+        public IntPtr cbVarSegMac;
+
+        /// <summary>
+        /// Pointer to array of conditional columns.
+        /// </summary>
         public IntPtr rgconditionalcolumn;
+
+        /// <summary>
+        /// Count of conditional columns.
+        /// </summary>
         public uint cConditionalColumn;
+
+        /// <summary>
+        /// Returned error from index creation.
+        /// </summary>
         public int err;
     }
 
@@ -36,7 +80,14 @@ namespace Microsoft.Isam.Esent.Interop
     [StructLayout(LayoutKind.Sequential)]
     internal struct NATIVE_INDEXCREATE2
     {
+        /// <summary>
+        /// Nested NATIVE_INDEXCREATE structure.
+        /// </summary>
         public NATIVE_INDEXCREATE indexcreate;
+
+        /// <summary>
+        /// Maximum size of the key.
+        /// </summary>
         public uint cbKeyMost;
     }
 

@@ -4,13 +4,13 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Isam.Esent.Interop;
-
 namespace CsStockSample
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using Microsoft.Isam.Esent.Interop;
+
     /// <summary>
     /// Create a sample database containing some stock prices and
     /// perform some basic queries.

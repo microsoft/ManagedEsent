@@ -4,17 +4,20 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using Microsoft.Isam.Esent.Interop;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 namespace InteropApiTests
 {
+    using Microsoft.Isam.Esent.Interop;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     /// <summary>
     /// Test conversion to NATIVE_COLUMNDEF
     /// </summary>
     [TestClass]
     public class UnicodeIndexTests
     {
+        /// <summary>
+        /// Managed object being tested.
+        /// </summary>
         private JET_UNICODEINDEX managed;
 
         /// <summary>

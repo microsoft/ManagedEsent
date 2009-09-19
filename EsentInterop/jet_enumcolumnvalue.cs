@@ -4,20 +4,35 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Runtime.InteropServices;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// Native (unmanaged) version of the JET_ENUMCOLUMNVALUE class.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     internal struct NATIVE_ENUMCOLUMNVALUE
     {
+        /// <summary>
+        /// The column value that was enumerated.
+        /// </summary>
         public uint itagSequence;
+
+        /// <summary>
+        /// Error or warning from the enumeration.
+        /// </summary>
         public int err;
+
+        /// <summary>
+        /// Size of returned data.
+        /// </summary>
         public uint cbData;
+
+        /// <summary>
+        /// Pointer to returned data.
+        /// </summary>
         public IntPtr pvData;
     }
 

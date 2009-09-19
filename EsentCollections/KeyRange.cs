@@ -4,11 +4,11 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Text;
-
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
+    using System;
+    using System.Text;
+
     /// <summary>
     /// Represents a range of keys, where each end can be inclusive or
     /// exclusive.
