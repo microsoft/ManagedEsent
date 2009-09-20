@@ -252,6 +252,11 @@ namespace EsentCollectionsTests
             /// <summary>
             /// This dictionary stops the structure from being serializable.
             /// </summary>
+            /// <remarks>
+            /// This isn't actually used because this class is never instantiated. The presence
+            /// of this member in the class means it can't be used as the value of a 
+            /// dictionary and that is what we want to test.
+            /// </remarks>
             private Dictionary<int, int> dict;
 
             /// <summary>

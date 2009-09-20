@@ -354,6 +354,10 @@ namespace Microsoft.Isam.Esent.Interop
             [In] [Out] ref NATIVE_RETINFO pretinfo);
 
         [DllImport(EsentDll, ExactSpelling = true)]
+        public static unsafe extern int JetRetrieveColumns(
+            IntPtr sesid, IntPtr tableid, [In] [Out] NATIVE_RETRIEVECOLUMN* psetcolumn, uint csetcolumn);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetRetrieveKey(IntPtr sesid, IntPtr tableid, [Out] byte[] pvData, uint cbMax, out uint cbActual, uint grbit);
 
         [DllImport(EsentDll, ExactSpelling = true)]

@@ -413,6 +413,29 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         int JetRetrieveColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, IntPtr data, int dataSize, out int actualDataSize, RetrieveColumnGrbit grbit, JET_RETINFO retinfo);
 
         /// <summary>
+        /// The JetRetrieveColumns function retrieves multiple column values
+        /// from the current record in a single operation. An array of
+        /// <see cref="NATIVE_RETRIEVECOLUMN"/> structures is used to
+        /// describe the set of column values to be retrieved, and to describe
+        /// output buffers for each column value to be retrieved.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve columns from.</param>
+        /// <param name="retrievecolumns">
+        /// An array of one or more JET_RETRIEVECOLUMN structures. Each
+        /// structure includes descriptions of which column value to retrieve
+        /// and where to store returned data.
+        /// </param>
+        /// <param name="numColumns">
+        /// Number of structures in the array given by retrievecolumns.
+        /// </param>
+        /// <returns>
+        /// An error or warning.
+        /// </returns>
+        unsafe int JetRetrieveColumns(
+            JET_SESID sesid, JET_TABLEID tableid, NATIVE_RETRIEVECOLUMN* retrievecolumns, int numColumns);
+
+        /// <summary>
         /// Efficiently retrieves a set of columns and their values from the
         /// current record of a cursor or the copy buffer of that cursor. The
         /// columns and values retrieved can be restricted by a list of

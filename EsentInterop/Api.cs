@@ -1141,7 +1141,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to retrieve the data from.</param>
-        /// <param name="columns">
+        /// <param name="retrievecolumns">
         /// An array of one or more <see cref="JET_RETRIEVECOLUMN"/> objects
         /// describing the data to be retrieved.
         /// </param>
@@ -1155,9 +1155,47 @@ namespace Microsoft.Isam.Esent.Interop
         /// JET_wrnColumnNull are returned only in the error field of
         /// the <see cref="JET_RETRIEVECOLUMN"/> object.
         /// </returns>
-        public static JET_wrn JetRetrieveColumns(JET_SESID sesid, JET_TABLEID tableid, JET_RETRIEVECOLUMN[] columns, int numColumns)
+        public static JET_wrn JetRetrieveColumns(JET_SESID sesid, JET_TABLEID tableid, JET_RETRIEVECOLUMN[] retrievecolumns, int numColumns)
         {
-            throw new NotImplementedException("JetRetrieveColumns");
+            if (null == retrievecolumns)
+            {
+                throw new ArgumentNullException("retrievecolumns");
+            }
+
+            if (numColumns < 0 || numColumns > retrievecolumns.Length)
+            {
+                throw new ArgumentOutOfRangeException("numColumns", numColumns, "cannot be negative or greater than retrievecolumns.Length");
+            }
+
+            using (var gchandles = new GCHandleCollection())
+            {
+                unsafe
+                {
+                    NATIVE_RETRIEVECOLUMN* nativeretrievecolumns = stackalloc NATIVE_RETRIEVECOLUMN[numColumns];
+
+                    for (int i = 0; i < numColumns; ++i)
+                    {
+                        retrievecolumns[i].CheckDataSize();
+                        nativeretrievecolumns[i] = retrievecolumns[i].GetNativeRetrievecolumn();
+                        if (null == retrievecolumns[i].pvData)
+                        {
+                            nativeretrievecolumns[i].pvData = (IntPtr) 0;
+                        }
+                        else
+                        {
+                            nativeretrievecolumns[i].pvData = gchandles.Add(retrievecolumns[i].pvData);
+                        }
+                    }
+
+                    int err = Impl.JetRetrieveColumns(sesid, tableid, nativeretrievecolumns, numColumns);
+                    for (int i = 0; i < numColumns; ++i)
+                    {
+                        retrievecolumns[i].UpdateFromNativeRetrievecolumn(nativeretrievecolumns[i]);
+                    }
+
+                    return Api.Check(err);
+                }
+            }
         }
 
         /// <summary>
@@ -1364,7 +1402,11 @@ namespace Microsoft.Isam.Esent.Interop
                     {
                         setcolumns[i].CheckDataSize();
                         nativeSetColumns[i] = setcolumns[i].GetNativeSetcolumn();
-                        if (bufferRemaining >= setcolumns[i].cbData)
+                        if (null == setcolumns[i].pvData)
+                        {
+                            nativeSetColumns[i].pvData = (IntPtr) 0;
+                        }
+                        else if (bufferRemaining >= setcolumns[i].cbData)
                         {
                             nativeSetColumns[i].pvData = (IntPtr) buffer;
                             Marshal.Copy(setcolumns[i].pvData, 0, nativeSetColumns[i].pvData, setcolumns[i].cbData);

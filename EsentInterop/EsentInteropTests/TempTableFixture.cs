@@ -725,6 +725,70 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test JetRetrieveColumns
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void JetRetrieveColumns()
+        {
+            short s = Any.Int16;
+            string str = Any.String;
+            double d = Any.Double;
+
+            var setcolumns = new[]
+            {
+                new JET_SETCOLUMN { cbData = sizeof(short), columnid = this.coltypDict[JET_coltyp.Short], pvData = BitConverter.GetBytes(s) },
+                new JET_SETCOLUMN { cbData = sizeof(double), columnid = this.coltypDict[JET_coltyp.IEEEDouble], pvData = BitConverter.GetBytes(d) },
+                new JET_SETCOLUMN { cbData = str.Length * sizeof(char), columnid = this.coltypDict[JET_coltyp.LongText], pvData = Encoding.Unicode.GetBytes(str) },
+                new JET_SETCOLUMN { cbData = 0, columnid = this.coltypDict[JET_coltyp.LongBinary], pvData = null },
+            };
+
+            using (var trx = new Transaction(this.session))
+            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
+            {
+                Api.JetSetColumns(this.session, this.tableid, setcolumns, setcolumns.Length);
+                update.Save();
+                trx.Commit(CommitTransactionGrbit.None);
+            }
+
+            Api.TryMoveFirst(this.session, this.tableid);
+
+            var retrievecolumns = new[]
+            {
+                new JET_RETRIEVECOLUMN { cbData = sizeof(short), columnid = this.coltypDict[JET_coltyp.Short], pvData  = new byte[sizeof(short)] },
+                new JET_RETRIEVECOLUMN { cbData = sizeof(double), columnid = this.coltypDict[JET_coltyp.IEEEDouble], pvData = new byte[sizeof(double)] },
+                new JET_RETRIEVECOLUMN { cbData = str.Length * sizeof(char) * 2, columnid = this.coltypDict[JET_coltyp.LongText], pvData = new byte[str.Length * sizeof(char) * 2] },
+                new JET_RETRIEVECOLUMN { cbData = 10, columnid = this.coltypDict[JET_coltyp.LongBinary], pvData = new byte[10] },
+            };
+
+            for (int i = 0; i < retrievecolumns.Length; ++i)
+            {
+                retrievecolumns[i].itagSequence = 1;    
+            }
+
+            Api.JetRetrieveColumns(this.session, this.tableid, retrievecolumns, retrievecolumns.Length);
+
+            // retrievecolumns[0] = short
+            Assert.AreEqual(sizeof(short), retrievecolumns[0].cbActual);
+            Assert.AreEqual(JET_wrn.Success, retrievecolumns[0].err);
+            Assert.AreEqual(s, BitConverter.ToInt16(retrievecolumns[0].pvData, 0));
+
+            // retrievecolumns[1] = double
+            Assert.AreEqual(sizeof(double), retrievecolumns[1].cbActual);
+            Assert.AreEqual(JET_wrn.Success, retrievecolumns[1].err);
+            Assert.AreEqual(d, BitConverter.ToDouble(retrievecolumns[1].pvData, 0));
+
+            // retrievecolumns[2] = string
+            Assert.AreEqual(str.Length * sizeof(char), retrievecolumns[2].cbActual);
+            Assert.AreEqual(JET_wrn.Success, retrievecolumns[2].err);
+            Assert.AreEqual(str, Encoding.Unicode.GetString(retrievecolumns[2].pvData, 0, retrievecolumns[2].cbActual));
+
+            // retrievecolumns[3] = null
+            Assert.AreEqual(0, retrievecolumns[3].cbActual);
+            Assert.AreEqual(JET_wrn.ColumnNull, retrievecolumns[3].err);
+        }
+
+        /// <summary>
         /// Test JetSetColumns
         /// </summary>
         [TestMethod]
@@ -1398,6 +1462,62 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Check that an exception is thrown when JetRetrieveColumns gets a 
+        /// null setcolumns array. 
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetRetrieveColumnsThrowsExceptionWhenSetColumnsIsNull()
+        {
+            Api.JetRetrieveColumns(this.session, this.tableid, null, 0);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetRetrieveColumns gets a 
+        /// negative number of columns.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetRetrieveColumnsThrowsExceptionWhenNumColumnsIsNegative()
+        {
+            Api.JetRetrieveColumns(this.session, this.tableid, new JET_RETRIEVECOLUMN[1], -1);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetRetrieveColumns gets a 
+        /// numColumns count that is greater than the number of columns.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetRetrieveColumnsThrowsExceptionWhenNumColumnsIsTooLong()
+        {
+            Api.JetRetrieveColumns(this.session, this.tableid, new JET_RETRIEVECOLUMN[1], 2);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetRetrieveColumns gets a 
+        /// cbData that is greater than the size of the pvData.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetRetrieveColumnsThrowsExceptionWhenSetColumnDataIsInvalid()
+        {
+            var setcolumns = new[]
+            {
+                new JET_RETRIEVECOLUMN
+                {
+                    cbData = 100,
+                    pvData = new byte[10],
+                },
+            };
+            Api.JetRetrieveColumns(this.session, this.tableid, setcolumns, setcolumns.Length);
+        }
+
+        /// <summary>
         /// Check that an exception is thrown when JetEnumerateColumns gets a 
         /// null allocator callback.
         /// </summary>
@@ -1678,7 +1798,7 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void JetSetColumnsThrowsExceptionWhenDataSizeIsTooLong()
+        public void JetSetColumnsThrowsExceptionWhenNumColumnsIsTooLong()
         {
             Api.JetSetColumns(this.session, this.tableid, new JET_SETCOLUMN[1], 2);
         }
