@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Globalization;
 
     /// <summary>
     /// A JET_INSTANCE contains a handle to the instance of the database to use for calls to the JET Api.
@@ -56,7 +57,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
-            return String.Format("JET_INSTANCE(0x{0:x})", this.Value.ToInt64());
+            return String.Format(CultureInfo.InvariantCulture, "JET_INSTANCE(0x{0:x})", this.Value.ToInt64());
         }
 
         /// <summary>
@@ -144,7 +145,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
-            return String.Format("JET_SESID(0x{0:x})", this.Value.ToInt64());
+            return String.Format(CultureInfo.InvariantCulture, "JET_SESID(0x{0:x})", this.Value.ToInt64());
         }
 
         /// <summary>
@@ -233,7 +234,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
-            return String.Format("JET_TABLEID(0x{0:x})", this.Value.ToInt64());
+            return String.Format(CultureInfo.InvariantCulture, "JET_TABLEID(0x{0:x})", this.Value.ToInt64());
         }
 
         /// <summary>
@@ -325,7 +326,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
-            return String.Format("JET_DBID({0})", this.Value);
+            return String.Format(CultureInfo.InvariantCulture, "JET_DBID({0})", this.Value);
         }
 
         /// <summary>
@@ -413,7 +414,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
-            return String.Format("JET_COLUMNID(0x{0:x})", this.Value);
+            return String.Format(CultureInfo.InvariantCulture, "JET_COLUMNID(0x{0:x})", this.Value);
         }
 
         /// <summary>

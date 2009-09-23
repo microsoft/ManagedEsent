@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Diagnostics;
+    using System.Globalization;
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Text;
 
@@ -176,6 +177,7 @@ namespace Microsoft.Isam.Esent.Interop
                     if (JET_wrn.Success != wrn)
                     {
                         string error = String.Format(
+                            CultureInfo.CurrentCulture,
                             "Column size changed from {0} to {1}. The record was probably updated by another thread.",
                             data.Length,
                             dataSize);
@@ -294,6 +296,7 @@ namespace Microsoft.Isam.Esent.Interop
                 if (JET_wrn.BufferTruncated == wrn)
                 {
                     string error = String.Format(
+                        CultureInfo.CurrentCulture,
                         "Column size changed from {0} to {1}. The record was probably updated by another thread.",
                         data.Length,
                         dataSize);

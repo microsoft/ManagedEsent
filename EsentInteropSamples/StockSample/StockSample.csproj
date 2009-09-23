@@ -8,8 +8,8 @@
     <ProjectGuid>{B0E6D3AB-26F8-4A77-A7E1-D8024B8FFFCF}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CsStockSample</RootNamespace>
-    <AssemblyName>CsStockSample</AssemblyName>
+    <RootNamespace>StockSample</RootNamespace>
+    <AssemblyName>StockSample</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkSubset>

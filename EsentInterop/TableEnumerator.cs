@@ -6,6 +6,7 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
     using System.Collections;
     using System.Collections.Generic;
 
@@ -89,6 +90,7 @@ namespace Microsoft.Isam.Esent.Interop
         public void Dispose()
         {
             this.Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>

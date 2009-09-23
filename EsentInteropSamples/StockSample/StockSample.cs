@@ -2,9 +2,12 @@
 // <copyright file="StockSample.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
+// <summary>
+// A sample application that uses ManagedEsent.
+// </summary>
 //-----------------------------------------------------------------------
 
-namespace CsStockSample
+namespace SampleApp
 {
     using System;
     using System.Collections.Generic;
@@ -15,7 +18,7 @@ namespace CsStockSample
     /// Create a sample database containing some stock prices and
     /// perform some basic queries.
     /// </summary>
-    public class StockSample
+    public static class StockSample
     {
         /// <summary>
         /// Name of the table that will store the prices.
@@ -45,8 +48,7 @@ namespace CsStockSample
         /// <summary>
         /// Called on program startup.
         /// </summary>
-        /// <param name="args">Arguments to the program. Ignored.</param>
-        public static void Main(string[] args)
+        public static void Main()
         {
             Console.WriteLine();
 
@@ -80,7 +82,10 @@ namespace CsStockSample
                 // automatically.
                 instance.Init();
 
-                // Create a disposable wrapper around the JET_SESID.
+                // Create a disposable wrapper around a new JET_SESID. All database
+                // access is done with a session (JET_SESID). Transactions and database
+                // record visibility are per-session. Do not share sessions between
+                // threads, instead create different sessions for different threads.
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
@@ -458,11 +463,11 @@ namespace CsStockSample
         /// <param name="tableid">The table to dump the records from.</param>
         private static void PrintRecordsToEnd(JET_SESID sesid, JET_TABLEID tableid)
         {
-                do
-                {
-                    PrintOneRow(sesid, tableid);
-                }
-                while (Api.TryMoveNext(sesid, tableid));
+            do
+            {
+                PrintOneRow(sesid, tableid);
+            }
+            while (Api.TryMoveNext(sesid, tableid));
         }
 
         /// <summary>

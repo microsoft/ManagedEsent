@@ -31,7 +31,7 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 // esent treats column names as case-insensitive, so we want the dictionary to be case insensitive as well
                 var dict = new Dictionary<string, JET_COLUMNID>(
-                    columnlist.cRecord, StringComparer.InvariantCultureIgnoreCase);
+                    columnlist.cRecord, StringComparer.OrdinalIgnoreCase);
                 if (columnlist.cRecord > 0)
                 {
                     MoveBeforeFirst(sesid, columnlist.tableid);

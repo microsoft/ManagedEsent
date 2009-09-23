@@ -39,6 +39,7 @@ namespace InteropApiTests
         public void Dispose()
         {
             Api.Impl = this.savedApi;
+            GC.SuppressFinalize(this);
         }
     }
 }

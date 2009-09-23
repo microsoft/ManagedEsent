@@ -16,7 +16,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// Native interop for functions in esent.dll.
     /// </summary>
     [SuppressUnmanagedCodeSecurity]
-    [BestFitMapping(false, ThrowOnUnmappableChar = false)]
+    [BestFitMapping(false, ThrowOnUnmappableChar = true)]
     internal static class NativeMethods
     {
         #region Configuration Constants

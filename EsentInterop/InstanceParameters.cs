@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Globalization;
     using System.IO;
     using Microsoft.Isam.Esent.Interop.Server2003;
     using Microsoft.Isam.Esent.Interop.Vista;
@@ -366,7 +367,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                return 0 == String.Compare(this.GetStringParameter(JET_param.Recovery), "on", true);
+                return 0 == String.Compare(this.GetStringParameter(JET_param.Recovery), "on", true, CultureInfo.InvariantCulture);
             }
 
             set

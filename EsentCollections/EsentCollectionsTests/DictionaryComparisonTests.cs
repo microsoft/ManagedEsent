@@ -8,7 +8,6 @@ namespace EsentCollectionsTests
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.IO;
     using Microsoft.Isam.Esent.Collections.Generic;
     using Microsoft.VisualStudio.TestTools.UnitTesting;

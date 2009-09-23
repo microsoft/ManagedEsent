@@ -725,7 +725,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 var valueTypeColumnid = Api.GetTableColumnid(session, tableid, this.config.ValueTypeColumnName);
                 if (!Api.TryMoveFirst(session, tableid))
                 {
-                    throw new ApplicationException("globals table is empty");
+                    throw new InvalidDataException("globals table is empty");
                 }
 
                 var keyType = Api.DeserializeObjectFromColumn(session, tableid, keyTypeColumnid);

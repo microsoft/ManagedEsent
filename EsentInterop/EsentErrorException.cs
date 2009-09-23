@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Globalization;
     using System.Runtime.Serialization;
 
     /// <summary>
@@ -42,7 +43,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                return String.Format("Error {0} ({1})", this.Error, this.ErrorDescription);
+                return String.Format(CultureInfo.InvariantCulture, "Error {0} ({1})", this.Error, this.ErrorDescription);
             }
         }
 

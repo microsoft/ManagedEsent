@@ -52,7 +52,6 @@ namespace Microsoft.Isam.Esent.Interop
             this.sesid = sesid;
             this.tableid = tableid;
             this.columnid = columnid;
-            this.ibLongValue = 0;
             this.Itag = 1;
         }
 
