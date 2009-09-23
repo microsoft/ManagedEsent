@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System.Collections;
     using System.Collections.Generic;
+    using Microsoft.Isam.Esent.Interop.Implementation;
 
     /// <summary>
     /// Iterates over all the columns in the table, returning information about each one.

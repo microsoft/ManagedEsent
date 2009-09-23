@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace Microsoft.Isam.Esent.Interop
+namespace Microsoft.Isam.Esent.Interop.Implementation
 {
     using System;
     using System.Runtime.InteropServices;

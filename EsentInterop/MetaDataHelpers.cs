@@ -10,6 +10,7 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
+    using Microsoft.Isam.Esent.Interop.Implementation;
 
     /// <summary>
     /// Helper methods for the ESENT API. These methods deal with database
