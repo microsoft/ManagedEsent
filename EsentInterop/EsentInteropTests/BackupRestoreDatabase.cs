@@ -252,9 +252,6 @@ namespace InteropApiTests
                 {
                     Api.JetRestoreInstance(instance, this.backupDirectory, this.databaseDirectory, null);                    
                 }
-
-                // Restoring a database initializes the instance.
-                instance.Term();
             }
         }
 

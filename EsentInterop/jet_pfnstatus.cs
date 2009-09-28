@@ -4,11 +4,10 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Runtime.InteropServices;
-
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Runtime.InteropServices;
 
     /// <summary>
     /// Receives information about the progress of long-running operations,
@@ -81,7 +80,18 @@ namespace Microsoft.Isam.Esent.Interop
         /// Gets or sets the saved exception. If the callback throws an exception
         /// it is saved here and should be rethrown when the API call finishes.
         /// </summary>
-        public Exception SavedException { get; set; }
+        private Exception SavedException { get; set; }
+
+        /// <summary>
+        /// If an exception was generated during a callback throw it.
+        /// </summary>
+        public void ThrowSavedException()
+        {
+            if (null != this.SavedException)
+            {
+                throw this.SavedException;
+            }
+        }
 
         /// <summary>
         /// Callback function for native code.
@@ -101,16 +111,17 @@ namespace Microsoft.Isam.Esent.Interop
                 JET_SNPROG snprog = null;
                 if (IntPtr.Zero != nativeSnprog)
                 {
-                    NATIVE_SNPROG native = (NATIVE_SNPROG) Marshal.PtrToStructure(nativeSnprog, typeof (NATIVE_SNPROG));
+                    NATIVE_SNPROG native = (NATIVE_SNPROG) Marshal.PtrToStructure(nativeSnprog, typeof(NATIVE_SNPROG));
                     snprog = new JET_SNPROG();
                     snprog.SetFromNative(native);
                 }
+
                 return this.wrappedCallback(sesid, (JET_SNP)snp, (JET_SNT)snt, snprog);
             }
             catch (Exception ex)
             {
                 this.SavedException = ex;
-                return JET_err.InternalError;
+                return JET_err.CallbackFailed;
             }
         }
     }

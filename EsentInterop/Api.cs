@@ -312,7 +312,10 @@ namespace Microsoft.Isam.Esent.Interop
         /// with the <see cref="Api.JetBackupInstance"/> function. This is the
         /// simplest and most encapsulated restore function. 
         /// </summary>
-        /// <param name="instance">The instance to use.</param>
+        /// <param name="instance">
+        /// The instance to use. The instance should not be initialized.
+        /// Restoring the files will initialize the instance.
+        /// </param>
         /// <param name="source">
         /// Location of the backup. The backup should have been created with
         /// <see cref="Api.JetBackupInstance"/>.

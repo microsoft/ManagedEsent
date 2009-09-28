@@ -1,6 +1,6 @@
 ﻿ Pri 0: Tests & Bugs
  -------------------
-  * Parameter verification for JET_INDEXCREATE.cbKey (w/tests)
+  * Null value check in JetRestoreInstance
   * Perf tests for JetSetColumns vs JetSetColumn
   * Verify JetSetColumn sets err member
   * Verify SetColumns sets Error member
@@ -8,35 +8,32 @@
   * ColumnValue.ToString should print columnid
   * Test ToString method for ColumnValue
   	
-Pri 0: APIs needed by clients
+APIs to implement
 -----------------------------
-  - JetRetrieveColumns
+  - JetCompact
+  - JetConfigureProcessForCrashDump (Win7)
+  - JetComputeStats  
+  - JetGrowDatabase
+  - JetRenameColumn
+  - JetRenameTable
+  - JetSetColumnDefaultValue
+  - JetStopServiceInstance
+  - JetDefragment / JetDefragment2
+  
   - JetGetRecordSize (Vista)
-  	
-Pri 1: New functionalitya
-------------------------
+  - JetGetSecondaryIndexBookmark
+  - JetGotoSecondaryIndexBookmark 
   - JetPrereadKeys
   - JetGetDatabaseInfo
   - JetGetDatabaseFileInfo
   - JetGetTableInfo
   - JetGetInstanceInfo
-  - JetGetSecondaryIndexBookmark
-  - JetGotoSecondaryIndexBookmark 
-
-Pri 2: Extending functionality
-------------------------------
   - JetSetCurrentIndex2
   - JetSetCurrentIndex3
+  - JetSetCurrentIndex4
   - JetCreateTableColumnIndex2
-  - More JET_param parameters
-
-Pri 3: Obscure functionality
-----------------------------
   - JetGetInstanceMiscInfo
   - JetRegisterCallback
   - JetUnregisterCallback
-  - JetSetCurrentIndex4
-
-Pri 4: Cleanup
---------------
-  - Add XML headers to all functions/fields and re-enable StyleCop errors
+  - JetSetDatabaseSize
+  

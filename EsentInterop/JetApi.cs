@@ -302,11 +302,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 err = this.Err(NativeMethods.JetBackupInstance(instance.Value, destination, (uint)grbit, nativeCallback));                
             }
 
-            if (null != callbackWrapper.SavedException)
-            {
-                throw callbackWrapper.SavedException;
-            }
-
+            callbackWrapper.ThrowSavedException();
             return err;
         }
 
@@ -348,11 +344,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 err = this.Err(NativeMethods.JetRestoreInstance(instance.Value, source, destination, nativeCallback));                
             }
 
-            if (null != callbackWrapper.SavedException)
-            {
-                throw callbackWrapper.SavedException;
-            }
-
+            callbackWrapper.ThrowSavedException();
             return err;
         }
 

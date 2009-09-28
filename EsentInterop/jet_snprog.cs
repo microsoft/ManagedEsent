@@ -4,10 +4,9 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System.Diagnostics;
-
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System.Diagnostics;
     using System.Runtime.InteropServices;
 
     /// <summary>
