@@ -263,5 +263,16 @@ namespace InteropApiTests
 
             Directory.Delete(directory, true);
         }
+
+        /// <summary>
+        /// Tests for JetBackupInstance and JetRestoreInstance on XP.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void BackupRestoreDatabaseOnXp()
+        {
+            var test = new BackupRestoreDatabase("database", "backup", false);
+            test.TestBackupRestore();
+        }
     }
 }

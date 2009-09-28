@@ -117,6 +117,24 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         #endregion
 
+        #region Backup/Restore
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetBackupInstance(
+            IntPtr instance, string szBackupPath, uint grbit, IntPtr pfnStatus);
+
+        [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
+        public static extern int JetBackupInstanceW(
+            IntPtr instance, string szBackupPath, uint grbit, IntPtr pfnStatus);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetRestoreInstance(IntPtr instance, string sz, string szDest, IntPtr pfn);
+
+        [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
+        public static extern int JetRestoreInstanceW(IntPtr instance, string sz, string szDest, IntPtr pfn);
+
+        #endregion
+
         #region sessions
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]

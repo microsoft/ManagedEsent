@@ -221,5 +221,21 @@ namespace InteropApiTests
                 }
             }
         }
+
+        /// <summary>
+        /// Backup and restore a database using unicode paths.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void BackupRestoreDatabaseWithUnicodePath()
+        {
+            if (!EsentVersion.SupportsUnicodePaths)
+            {
+                return;
+            }
+
+            var test = new BackupRestoreDatabase(this.directory, "한글", false);
+            test.TestBackupRestore();
+        }
     }
 }

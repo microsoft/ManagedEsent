@@ -123,6 +123,21 @@ namespace InteropApiTests
 
         #endregion Setup/Teardown
 
+        /// <summary>
+        /// When a string can't be converted to ASCII for an API call
+        /// an exception should be generated. If this code is converted
+        /// to use the Unicode version of all APIs this test should
+        /// start failing.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ApiThrowsArgumentExceptionOnUnmappableChar()
+        {
+            JET_INSTANCE instance;
+            Api.JetCreateInstance(out instance, "한글");
+        }
+
         #region EsentErrorException tests
 
         /// <summary>

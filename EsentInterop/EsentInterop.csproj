@@ -81,9 +81,13 @@
     <Compile Include="jet_enumcolumnid.cs" />
     <Compile Include="jet_enumcolumnvalue.cs" />
     <Compile Include="jet_pfnrealloc.cs" />
+    <Compile Include="jet_pfnstatus.cs" />
     <Compile Include="jet_retrievecolumn.cs" />
     <Compile Include="jet_setcolumn.cs" />
     <Compile Include="jet_opentemporarytable.cs" />
+    <Compile Include="jet_snp.cs" />
+    <Compile Include="jet_snprog.cs" />
+    <Compile Include="jet_snt.cs" />
     <Compile Include="jet_threadstats.cs" />
     <Compile Include="EsentStopwatch.cs" />
     <Compile Include="ColumnValues.cs" />

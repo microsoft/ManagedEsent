@@ -35,6 +35,32 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Options for JetTerm2.
+    /// </summary>
+    /// <seealso cref="Windows7Grbits.Dirty"/>
+    public enum TermGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+        
+        /// <summary>
+        /// Requests that the instance be shut down cleanly. Any optional
+        /// cleanup work that would ordinarily be done in the background at
+        /// run time is completed immediately.
+        /// </summary>
+        Complete = 1,
+
+        /// <summary>
+        /// Requests that the instance be shut down as quickly as possible.
+        /// Any optional work that would ordinarily be done in the
+        /// background at run time is abandoned. 
+        /// </summary>
+        Abrupt = 2,
+    }
+
+    /// <summary>
     /// Options for JetCreateDatabase.
     /// </summary>
     [Flags]
@@ -119,10 +145,9 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetTerm2.
+    /// Options for <see cref="Api.JetBackupInstance"/>.
     /// </summary>
-    /// <seealso cref="Windows7Grbits.Dirty"/>
-    public enum TermGrbit
+    public enum BackupGrbit
     {
         /// <summary>
         /// Default options.
@@ -130,18 +155,17 @@ namespace Microsoft.Isam.Esent.Interop
         None = 0,
         
         /// <summary>
-        /// Requests that the instance be shut down cleanly. Any optional
-        /// cleanup work that would ordinarily be done in the background at
-        /// run time is completed immediately.
+        /// Creates an incremental backup as opposed to a full backup. This
+        /// means that only the log files created since the last full or
+        /// incremental backup will be backed up.
         /// </summary>
-        Complete = 1,
+        Incremental = 0x1,
 
         /// <summary>
-        /// Requests that the instance be shut down as quickly as possible.
-        /// Any optional work that would ordinarily be done in the
-        /// background at run time is abandoned. 
+        /// Creates a full backup of the database. This allows the preservation
+        /// of an existing backup in the same directory if the new backup fails.
         /// </summary>
-        Abrupt = 2,
+        Atomic = 0x4,
     }
 
     /// <summary>

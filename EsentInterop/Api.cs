@@ -285,6 +285,53 @@ namespace Microsoft.Isam.Esent.Interop
 
         #endregion
 
+        #region Backup/Restore
+
+        /// <summary>
+        /// Performs a streaming backup of an instance, including all the attached
+        /// databases, to a directory. With multiple backup methods supported by
+        /// the engine, this is the simplest and most encapsulated function.
+        /// </summary>
+        /// <param name="instance">The instance to backup.</param>
+        /// <param name="destination">
+        /// The directory where the backup is to be stored. If the backup path is
+        /// null to use the function will truncate the logs, if possible.
+        /// </param>
+        /// <param name="grbit">Backup options.</param>
+        /// <param name="statusCallback">
+        /// Optional status notification callback.
+        /// </param>
+        public static void JetBackupInstance(JET_INSTANCE instance, string destination, BackupGrbit grbit, JET_PFNSTATUS statusCallback)
+        {
+            Api.Check(Impl.JetBackupInstance(instance, destination, grbit, statusCallback));
+        }
+
+        /// <summary>
+        /// Restores and recovers a streaming backup of an instance including all
+        /// the attached databases. It is designed to work with a backup created
+        /// with the <see cref="Api.JetBackupInstance"/> function. This is the
+        /// simplest and most encapsulated restore function. 
+        /// </summary>
+        /// <param name="instance">The instance to use.</param>
+        /// <param name="source">
+        /// Location of the backup. The backup should have been created with
+        /// <see cref="Api.JetBackupInstance"/>.
+        /// </param>
+        /// <param name="destination">
+        /// Name of the folder where the database files from the backup set will
+        /// be copied and recovered. If this is set to null, the database files
+        /// will be copied and recovered to their original location.
+        /// </param>
+        /// <param name="statusCallback">
+        /// Optional status notification callback.
+        /// </param>
+        public static void JetRestoreInstance(JET_INSTANCE instance, string source, string destination, JET_PFNSTATUS statusCallback)
+        {
+            Api.Check(Impl.JetRestoreInstance(instance, source, destination, statusCallback));
+        }
+
+        #endregion
+
         #region sessions
 
         /// <summary>
