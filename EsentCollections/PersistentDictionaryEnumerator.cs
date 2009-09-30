@@ -1,8 +1,11 @@
-//-----------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PersistentDictionaryEnumerator.cs" company="Microsoft Corporation">
-//     Copyright (c) Microsoft Corporation.
+//   Copyright (c) Microsoft Corporation.
 // </copyright>
-//-----------------------------------------------------------------------
+// <summary>
+//   An object which can enumerate a specified key range in a PersistentDictionary.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
@@ -39,8 +42,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             this.range = range;
         }
 
-        #region Implementation of IEnumerable
-
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
         /// </summary>
@@ -62,7 +63,5 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             return this.GetEnumerator();
         }
-
-        #endregion
     }
 }

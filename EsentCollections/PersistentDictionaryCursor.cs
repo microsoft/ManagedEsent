@@ -1,8 +1,12 @@
-//-----------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PersistentDictionaryCursor.cs" company="Microsoft Corporation">
-//     Copyright (c) Microsoft Corporation.
+//   Copyright (c) Microsoft Corporation.
 // </copyright>
-//-----------------------------------------------------------------------
+// <summary>
+//   A PersistentDictionaryCursor combines a JET_SESID and JET_TABLEID 
+//   into a cursor which can retrieve data from and update a PersistentDictionary database.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
@@ -112,8 +116,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             return new Transaction(this.session);
         }
-
-        #region Navigation
 
         /// <summary>
         /// Try to find the specified key. If the key is found
@@ -243,10 +245,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             return true;
         }
 
-        #endregion
-
-        #region Data Retrieval
-
         /// <summary>
         /// Retrieve the key column of the record the cursor is currently positioned on.
         /// </summary>
@@ -284,10 +282,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             return (int)Api.RetrieveColumnAsInt32(this.session, this.globalsTable, this.countColumn);
         }
-
-        #endregion
-
-        #region DML
 
         /// <summary>
         /// Insert data into the data table. No record with the same key
@@ -340,10 +334,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             }
         }
 
-        #endregion
-
-        #region Implementation of IDisposable
-
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
@@ -352,8 +342,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             this.session.Dispose();
             GC.SuppressFinalize(this);
         }
-
-        #endregion
 
         /// <summary>
         /// Calls JetMakeKey.

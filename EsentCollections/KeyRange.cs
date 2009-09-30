@@ -1,8 +1,12 @@
-//-----------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="KeyRange.cs" company="Microsoft Corporation">
-//     Copyright (c) Microsoft Corporation.
+//   Copyright (c) Microsoft Corporation.
 // </copyright>
-//-----------------------------------------------------------------------
+// <summary>
+//   Code that represents a range of keys, where each end can be inclusive or
+//   exclusive.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Microsoft.Isam.Esent.Collections.Generic
 {

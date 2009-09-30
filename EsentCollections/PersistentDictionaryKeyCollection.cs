@@ -1,8 +1,11 @@
-//-----------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PersistentDictionaryKeyCollection.cs" company="Microsoft Corporation">
-//     Copyright (c) Microsoft Corporation.
+//   Copyright (c) Microsoft Corporation.
 // </copyright>
-//-----------------------------------------------------------------------
+// <summary>
+//   Code that implements a collection of the keys in a PersistentDictionary.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Microsoft.Isam.Esent.Collections.Generic
 {

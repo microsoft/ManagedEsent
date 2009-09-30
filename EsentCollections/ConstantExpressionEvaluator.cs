@@ -1,8 +1,11 @@
-//-----------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ConstantExpressionEvaluator.cs" company="Microsoft Corporation">
-//     Copyright (c) Microsoft Corporation.
+//   Copyright (c) Microsoft Corporation.
 // </copyright>
-//-----------------------------------------------------------------------
+// <summary>
+//   Methods to evaluate an expression which returns a T.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Microsoft.Isam.Esent.Collections.Generic
 {

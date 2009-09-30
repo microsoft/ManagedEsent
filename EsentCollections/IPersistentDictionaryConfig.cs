@@ -1,157 +1,85 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PersistentDictionaryConfig.cs" company="Microsoft Corporation">
+// <copyright file="IPersistentDictionaryConfig.cs" company="Microsoft Corporation">
 //   Copyright (c) Microsoft Corporation.
 // </copyright>
 // <summary>
-//  Code that supports meta-data configuration for the dictionary database.
+//   An interface for meta-data configuration for the dictionary database.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
     /// <summary>
-    /// Meta-data configuration for the dictionary database.
+    /// An interface for meta-data configuration for the dictionary database.
     /// </summary>
-    internal sealed class PersistentDictionaryConfig : IPersistentDictionaryConfig
+    internal interface IPersistentDictionaryConfig
     {
         /// <summary>
         /// Gets a string describing the current version of the 
         /// PersistentDictionary.
         /// </summary>
-        public string Version
-        {
-            get
-            {
-                return "PersistentDictionary 1.0.0";
-            }
-        }
+        string Version { get; }
 
         /// <summary>
         /// Gets the name of the database. The user provides the
         /// directory and the database is always given this name.
         /// </summary>
-        public string Database
-        {
-            get
-            {
-                return "PersistentDictionary.edb";
-            }
-        }
+        string Database { get; }
 
         /// <summary>
         /// Gets the basename of the logfiles for the instance.
         /// </summary>
-        public string BaseName
-        {
-            get
-            {
-                return "epc";
-            }
-        }
+        string BaseName { get; }
 
         /// <summary>
         /// Gets the name of the globals table.
         /// </summary>
-        public string GlobalsTableName
-        {
-            get
-            {
-                return "Globals";
-            }
-        }
+        string GlobalsTableName { get; }
 
         /// <summary>
         /// Gets the name of the version column in the globals table.
         /// </summary>
-        public string VersionColumnName
-        {
-            get
-            {
-                return "Version";
-            }
-        }
+        string VersionColumnName { get; }
 
         /// <summary>
         /// Gets the name of the count column in the globals table.
         /// This column tracks the number of items in the collection.
         /// </summary>
-        public string CountColumnName
-        {
-            get
-            {
-                return "Count";
-            }
-        }
+        string CountColumnName { get; }
 
         /// <summary>
         /// Gets the name of the flush column in the globals table.
         /// This column is updated when a Flush operation is performed.
         /// </summary>
-        public string FlushColumnName
-        {
-            get
-            {
-                return "Flush";
-            }
-        }
+        string FlushColumnName { get; }
 
         /// <summary>
         /// Gets the name of the key type column in the globals table.
         /// This column stores the type of the key in the dictionary.
         /// </summary>
-        public string KeyTypeColumnName
-        {
-            get
-            {
-                return "KeyType";
-            }
-        }
+        string KeyTypeColumnName { get; }
 
         /// <summary>
         /// Gets the name of the value type column in the globals table.
         /// This column stores the type of the value in the dictionary.
         /// </summary>
-        public string ValueTypeColumnName
-        {
-            get
-            {
-                return "ValueType";
-            }
-        }
+        string ValueTypeColumnName { get; }
 
         /// <summary>
         /// Gets the name of the data table.
         /// </summary>
-        public string DataTableName
-        {
-            get
-            {
-                return "Data";
-            }
-        }
+        string DataTableName { get; }
 
         /// <summary>
         /// Gets the name of the key column in the data table.
         /// This column stores the key of the item.
         /// </summary>
-        public string KeyColumnName
-        {
-            get
-            {
-                return "Key";
-            }
-        }
+        string KeyColumnName { get; }
 
         /// <summary>
         /// Gets the name of the value column in the data table.
         /// This column stores the value of the item.
         /// </summary>
-        public string ValueColumnName
-        {
-            get
-            {
-                return "Value";
-            }
-        }
+        string ValueColumnName { get; }
     }
 }

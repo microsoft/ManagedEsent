@@ -1,8 +1,12 @@
-//-----------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PersistentDictionaryCollection.cs" company="Microsoft Corporation">
-//     Copyright (c) Microsoft Corporation.
+//   Copyright (c) Microsoft Corporation.
 // </copyright>
-//-----------------------------------------------------------------------
+// <summary>
+//   A base class for collections which can be returned from
+//   a PersistentDictionary (i.e. Keys and Values).
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
@@ -39,9 +43,9 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
         /// </summary>
-        /// <returns>
+        /// <value>
         /// The number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
-        /// </returns>
+        /// </value>
         public int Count
         {
             get
@@ -53,9 +57,9 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
         /// </summary>
-        /// <returns>
-        /// true if the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only; otherwise, false.
-        /// </returns>
+        /// <value>
+        /// True if the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only; otherwise, false.
+        /// </value>
         public bool IsReadOnly
         {
             get
@@ -67,6 +71,9 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// Gets the dictionary being enumerated by this collection.
         /// </summary>
+        /// <value>
+        /// The dictionary being enumerated by this collection.
+        /// </value>
         protected PersistentDictionary<TKey, TValue> Dictionary
         {
             get

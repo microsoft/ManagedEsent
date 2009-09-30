@@ -1,8 +1,12 @@
-//-----------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PersistentDictionaryCursorCache.cs" company="Microsoft Corporation">
-//     Copyright (c) Microsoft Corporation.
+//   Copyright (c) Microsoft Corporation.
 // </copyright>
-//-----------------------------------------------------------------------
+// <summary>
+//   We don't want to open and close dictionary cursors too frequently. This code provides
+//   a cache of unused cursors. 
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
@@ -70,8 +74,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             this.lockObject = new object();
         }
 
-        #region IDisposable
-
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
@@ -88,8 +90,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 
             GC.SuppressFinalize(this);
         }
-
-        #endregion
 
         /// <summary>
         /// Gets a new cursor. This will return a cached cursor if available,

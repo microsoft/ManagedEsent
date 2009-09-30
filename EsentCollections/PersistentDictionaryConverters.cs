@@ -1,13 +1,16 @@
-//-----------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PersistentDictionaryConverters.cs" company="Microsoft Corporation">
-//     Copyright (c) Microsoft Corporation.
+//   Copyright (c) Microsoft Corporation.
 // </copyright>
-//-----------------------------------------------------------------------
+// <summary>
+//   A dictionary can contain many types of columns and exposes a strongly typed
+//   interface. This code maps between .NET types and functions to set and retrieve
+//   data in a PersistentDictionary.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
-    using System;
-    using System.Text;
     using Microsoft.Isam.Esent.Interop;
 
     /// <summary>

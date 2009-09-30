@@ -1,8 +1,12 @@
-//-----------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PersistentDictionary.cs" company="Microsoft Corporation">
-//     Copyright (c) Microsoft Corporation.
+//   Copyright (c) Microsoft Corporation.
 // </copyright>
-//-----------------------------------------------------------------------
+// <summary>
+//   Implementation of the PersistentDictionary. The dictionary is a collection
+//   of persistent keys and values.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
@@ -176,9 +180,9 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// Gets the number of elements contained in the <see cref="PersistentDictionary{TKey,TValue}"/>.
         /// </summary>
-        /// <returns>
+        /// <value>
         /// The number of elements contained in the <see cref="PersistentDictionary{TKey,TValue}"/>.
-        /// </returns>
+        /// </value>
         public int Count
         {
             get
@@ -190,9 +194,9 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// Gets a value indicating whether the <see cref="PersistentDictionary{TKey,TValue}"/> is read-only.
         /// </summary>
-        /// <returns>
+        /// <value>
         /// True if the <see cref="PersistentDictionary{TKey,TValue}"/> is read-only; otherwise, false.
-        /// </returns>
+        /// </value>
         public bool IsReadOnly
         {
             get
@@ -218,9 +222,9 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// Gets an <see cref="ICollection"/> containing the keys of the <see cref="PersistentDictionary{TKey,TValue}"/>.
         /// </summary>
-        /// <returns>
+        /// <value>
         /// An <see cref="PersistentDictionaryKeyCollection{TKey,TValue}"/> containing the keys of the object that implements <see cref="PersistentDictionary{TKey,TValue}"/>.
-        /// </returns>
+        /// </value>
         public PersistentDictionaryKeyCollection<TKey, TValue> Keys
         {
             get
@@ -232,9 +236,9 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// Gets an <see cref="ICollection"/> containing the values in the <see cref="PersistentDictionary{TKey,TValue}"/>.
         /// </summary>
-        /// <returns>
+        /// <value>
         /// An <see cref="PersistentDictionary{TKey,TValue}"/> containing the values in the object that implements <see cref="PersistentDictionary{TKey,TValue}"/>.
-        /// </returns>
+        /// </value>
         ICollection<TValue> IDictionary<TKey, TValue>.Values
         {
             get
@@ -246,9 +250,9 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// Gets an <see cref="ICollection"/> containing the values in the <see cref="PersistentDictionary{TKey,TValue}"/>.
         /// </summary>
-        /// <returns>
+        /// <value>
         /// An <see cref="PersistentDictionary{TKey,TValue}"/> containing the values in the object that implements <see cref="PersistentDictionary{TKey,TValue}"/>.
-        /// </returns>
+        /// </value>
         public PersistentDictionaryValueCollection<TKey, TValue> Values
         {
             get
@@ -261,6 +265,9 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// Gets the path of the directory that contains the dictionary database.
         /// The database consists of a set of files found in the directory.
         /// </summary>
+        /// <value>
+        /// The path of the directory that contains the dictionary database.
+        /// </value>
         public string Database
         {
             get
@@ -618,8 +625,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             this.UsingCursor(c => c.Flush());
         }
 
-        #region Internal
-
         /// <summary>
         /// Returns an enumerator that iterates through the keys.
         /// </summary>
@@ -695,12 +700,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 this.cursors.FreeCursor(iterator);
             }
         }
-
-        #endregion
-
-        #region Private
-
-        #region Database Creation
 
         /// <summary>
         /// Check the database meta-data. This makes sure the tables and columns exist and
@@ -908,8 +907,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             Api.JetCloseTable(session, tableid);
         }
 
-        #endregion
-
         /// <summary>
         /// Get a cursor, perform the specified action and release the cursor.
         /// </summary>
@@ -967,7 +964,5 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 
             return this.updateLocks[checked((int) hash)];
         }
-
-        #endregion
     }
 }
