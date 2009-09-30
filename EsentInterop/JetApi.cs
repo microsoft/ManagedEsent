@@ -10,6 +10,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
+    using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
     using System.Text;
     using Microsoft.Isam.Esent.Interop.Vista;
@@ -31,6 +32,22 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// with <see cref="JetGetVersion"/>.
         /// </summary>
         private readonly uint versionOverride;
+
+        /// <summary>
+        /// Initializes static members of the JetApi class.
+        /// </summary>
+        static JetApi()
+        {
+            // Prepare these methods for inclusion in a constrained execution region (CER).
+            // This is needed by the Instance class. Instance accesses these methods virtually
+            // so RemoveUnnecessaryCode won't be able to prepare them.
+            RuntimeHelpers.PrepareMethod(typeof(JetApi).GetMethod("JetCreateInstance").MethodHandle);
+            RuntimeHelpers.PrepareMethod(typeof(JetApi).GetMethod("JetCreateInstance2").MethodHandle);
+            RuntimeHelpers.PrepareMethod(typeof(JetApi).GetMethod("JetInit").MethodHandle);
+            RuntimeHelpers.PrepareMethod(typeof(JetApi).GetMethod("JetInit2").MethodHandle);
+            RuntimeHelpers.PrepareMethod(typeof(JetApi).GetMethod("JetTerm").MethodHandle);
+            RuntimeHelpers.PrepareMethod(typeof(JetApi).GetMethod("JetTerm2").MethodHandle);
+        }
 
         /// <summary>
         /// Initializes a new instance of the JetApi class. This allows the version

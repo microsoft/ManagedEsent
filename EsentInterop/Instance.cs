@@ -7,6 +7,8 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Runtime.CompilerServices;
     using Microsoft.Win32.SafeHandles;
 
     /// <summary>
@@ -45,11 +47,36 @@ namespace Microsoft.Isam.Esent.Interop
         /// A display name for the instance. This will be used in eventlog
         /// entries.
         /// </param>
+        [SuppressMessage(
+            "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+            "SA1409:RemoveUnnecessaryCode",
+            Justification = "CER code belongs in the finally block, so the try clause is empty")]
         public Instance(string name, string displayName) : base(true)
         {
             JET_INSTANCE instance;
-            Api.JetCreateInstance2(out instance, name, displayName, CreateInstanceGrbit.None);
-            this.SetHandle(instance.Value);
+            RuntimeHelpers.PrepareConstrainedRegions();
+            try
+            {
+                // This try block deliberately left blank.
+            }
+            finally
+            {
+                // This is the code that we want in a constrained execution region.
+                // We need to avoid the situation where JetCreateInstance2 is called
+                // but the handle isn't set, so the instance is never terminated.
+                // This would happen, for example, if there was a ThreadAbortException
+                // between the call to JetCreateInstance2 and the call to SetHandle.
+                //
+                // If an Esent exception is generated we do not want to call SetHandle
+                // because the instance isn't valid. On the other hand if a different 
+                // exception (out of memory or thread abort) is generated we still need
+                // to set the handle to avoid losing track of the instance. The call to
+                // JetCreateInstance2 is in the CER to make sure that the only exceptions
+                // which can be generated are from ESENT failures.
+                Api.JetCreateInstance2(out instance, name, displayName, CreateInstanceGrbit.None);
+                this.SetHandle(instance.Value);
+            }
+
             this.parameters = new InstanceParameters(instance);
         }
 
@@ -107,6 +134,10 @@ namespace Microsoft.Isam.Esent.Interop
         {
             this.CheckObjectIsNotDisposed();
             JET_INSTANCE instance = this.JetInstance;
+
+            // Use a constrained region so that the handle is
+            // always set after JetInit2 is called.
+            RuntimeHelpers.PrepareConstrainedRegions();
             try
             {
                 // Remember that a failure in JetInit can zero the handle

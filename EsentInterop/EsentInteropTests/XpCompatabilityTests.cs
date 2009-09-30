@@ -128,7 +128,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Verify that JetOpenTemporaryTable throws an exception when using the
+        /// Verify that JetConfigureCrashDump throws an exception when using the
         /// XP version of ESENT.
         /// </summary>
         [TestMethod]
@@ -275,7 +275,7 @@ namespace InteropApiTests
                 }
             }
 
-            Directory.Delete(directory, true);
+            Cleanup.DeleteDirectoryWithRetry(directory);
         }
 
         /// <summary>

@@ -30,5 +30,10 @@ namespace Microsoft.Isam.Esent.Interop
         /// Callback for failure during the operation.
         /// </summary>
         Fail = 3,
+
+        /// <summary>
+        /// Callback for recovery control.
+        /// </summary>
+        RecoveryStep = 8,
     }
 }

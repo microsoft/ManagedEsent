@@ -52,7 +52,7 @@ namespace EsentCollectionsTests
             this.actual.Dispose();
             if (Directory.Exists(DictionaryLocation))
             {
-                Directory.Delete(DictionaryLocation, true);
+                Cleanup.DeleteDirectoryWithRetry(DictionaryLocation);
             }
         }
 

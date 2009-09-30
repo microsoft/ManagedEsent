@@ -52,7 +52,7 @@ namespace InteropApiTests
         public void Teardown()
         {
             Api.JetTerm(this.instance);
-            Directory.Delete(this.directory, true);
+            Cleanup.DeleteDirectoryWithRetry(this.directory);
         }
 
         /// <summary>

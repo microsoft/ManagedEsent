@@ -152,7 +152,7 @@ namespace InteropApiTests
             this.session.End();
             this.instance.Term();
             Api.JetSetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.CacheSizeMin, this.cacheSizeMinSaved, null);
-            Directory.Delete(this.directory, true);
+            Cleanup.DeleteDirectoryWithRetry(this.directory);
         }
 
         /// <summary>

@@ -7,7 +7,11 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Diagnostics;
+    using System.Reflection;
+    using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
+    using System.Threading;
 
     /// <summary>
     /// Receives information about the progress of long-running operations,
@@ -50,9 +54,28 @@ namespace Microsoft.Isam.Esent.Interop
     internal class StatusCallbackWrapper
     {
         /// <summary>
+        /// API call tracing.
+        /// </summary>
+        private readonly TraceSwitch traceSwitch = new TraceSwitch("ESENT StatusCallbackWrapper", "Wrapper around unmanaged ESENT status callback");
+
+        /// <summary>
         /// The wrapped status callback.
         /// </summary>
         private readonly JET_PFNSTATUS wrappedCallback;
+
+        /// <summary>
+        /// Initializes static members of the <see cref="StatusCallbackWrapper"/> class. 
+        /// </summary>
+        static StatusCallbackWrapper()
+        {
+            // We don't want a JIT failure when trying to execute the callback
+            // because that would throw an exception through ESENT, corrupting it.
+            // It is fine for the wrapped callback to fail because CallbackImpl
+            // will catch the exception and deal with it.
+            RuntimeHelpers.PrepareMethod(typeof(StatusCallbackWrapper).GetMethod(
+                "CallbackImpl",
+                BindingFlags.NonPublic | BindingFlags.Instance).MethodHandle);    
+        }
 
         /// <summary>
         /// Initializes a new instance of the StatusCallbackWrapper class.
@@ -83,10 +106,21 @@ namespace Microsoft.Isam.Esent.Interop
         private Exception SavedException { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the thread was aborted during
+        /// the callback.
+        /// </summary>
+        private bool ThreadWasAborted { get; set; }
+
+        /// <summary>
         /// If an exception was generated during a callback throw it.
         /// </summary>
         public void ThrowSavedException()
         {
+            if (this.ThreadWasAborted)
+            {
+                Thread.CurrentThread.Abort();
+            }
+
             if (null != this.SavedException)
             {
                 throw this.SavedException;
@@ -99,30 +133,49 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="nativeSesid">
         /// The session with which the long running operation was called.
         /// </param>
-        /// <param name="snp">The type of operation.</param>
-        /// <param name="snt">The status of the operation.</param>
+        /// <param name="nativeSnp">The type of operation.</param>
+        /// <param name="nativeSnt">The status of the operation.</param>
         /// <param name="nativeSnprog">Optional <see cref="NATIVE_SNPROG"/>.</param>
         /// <returns>An error code.</returns>
-        private JET_err CallbackImpl(IntPtr nativeSesid, uint snp, uint snt, IntPtr nativeSnprog)
+        private JET_err CallbackImpl(IntPtr nativeSesid, uint nativeSnp, uint nativeSnt, IntPtr nativeSnprog)
         {
+            RuntimeHelpers.PrepareConstrainedRegions();
             try
             {
                 var sesid = new JET_SESID { Value = nativeSesid };
+                JET_SNP snp = (JET_SNP) nativeSnp;
+                JET_SNT snt = (JET_SNT) nativeSnt;
                 JET_SNPROG snprog = null;
-                if (IntPtr.Zero != nativeSnprog)
+
+                // Other callback types can have pointers to different structures.
+                if (IntPtr.Zero != nativeSnprog && JET_SNT.Progress == snt)
                 {
                     NATIVE_SNPROG native = (NATIVE_SNPROG) Marshal.PtrToStructure(nativeSnprog, typeof(NATIVE_SNPROG));
                     snprog = new JET_SNPROG();
                     snprog.SetFromNative(native);
                 }
 
-                return this.wrappedCallback(sesid, (JET_SNP)snp, (JET_SNT)snt, snprog);
+                return this.wrappedCallback(sesid, snp, snt, snprog);
+            }
+            catch (ThreadAbortException)
+            {
+                Trace.WriteLineIf(this.traceSwitch.TraceWarning, "Caught ThreadAbortException");
+
+                // Stop the thread abort and let the unmanaged ESENT code finish.
+                // ThrowSavedException will call Thread.Abort() again.
+                this.ThreadWasAborted = true;
+                Thread.ResetAbort();
+                return JET_err.CallbackFailed;
             }
             catch (Exception ex)
             {
+                Trace.WriteLineIf(this.traceSwitch.TraceWarning, "Caught Exception");
                 this.SavedException = ex;
                 return JET_err.CallbackFailed;
             }
+
+            // What happens if the thread is aborted here, outside of the CER?
+            // We probably throw the exception through ESENT, which isn't good.
         }
     }
 }

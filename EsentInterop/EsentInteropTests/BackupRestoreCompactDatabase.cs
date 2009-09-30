@@ -77,8 +77,8 @@ namespace InteropApiTests
             }
             finally
             {
-                DeleteDirectoryIfExists(this.databaseDirectory);
-                DeleteDirectoryIfExists(this.backupDirectory);
+                Cleanup.DeleteDirectoryWithRetry(this.databaseDirectory);
+                Cleanup.DeleteDirectoryWithRetry(this.backupDirectory);
             }
         }
 
@@ -95,7 +95,7 @@ namespace InteropApiTests
             }
             finally
             {
-                DeleteDirectoryIfExists(this.databaseDirectory);
+                Cleanup.DeleteDirectoryWithRetry(this.databaseDirectory);
             }
         }
 
@@ -115,8 +115,8 @@ namespace InteropApiTests
             }
             finally
             {
-                DeleteDirectoryIfExists(this.databaseDirectory);
-                DeleteDirectoryIfExists(this.backupDirectory);
+                Cleanup.DeleteDirectoryWithRetry(this.databaseDirectory);
+                Cleanup.DeleteDirectoryWithRetry(this.backupDirectory);
             }
         }
 
@@ -138,8 +138,8 @@ namespace InteropApiTests
             }
             finally
             {
-                DeleteDirectoryIfExists(this.databaseDirectory);
-                DeleteDirectoryIfExists(this.backupDirectory);
+                Cleanup.DeleteDirectoryWithRetry(this.databaseDirectory);
+                Cleanup.DeleteDirectoryWithRetry(this.backupDirectory);
             }
         }
 
@@ -158,19 +158,7 @@ namespace InteropApiTests
             }
             finally
             {
-                DeleteDirectoryIfExists(this.databaseDirectory);
-            }
-        }
-
-        /// <summary>
-        /// Delete the directory if it exists.
-        /// </summary>
-        /// <param name="directory">The directory to delete.</param>
-        private static void DeleteDirectoryIfExists(string directory)
-        {
-            if (Directory.Exists(directory))
-            {
-                Directory.Delete(directory, true);
+                Cleanup.DeleteDirectoryWithRetry(this.databaseDirectory);
             }
         }
 
@@ -266,7 +254,7 @@ namespace InteropApiTests
         /// </summary>
         private void DeleteDatabaseFiles()
         {            
-            DeleteDirectoryIfExists(this.databaseDirectory);
+            Cleanup.DeleteDirectoryWithRetry(this.databaseDirectory);
             Directory.CreateDirectory(this.databaseDirectory);
         }
 

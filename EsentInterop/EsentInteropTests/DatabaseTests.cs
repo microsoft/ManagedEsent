@@ -46,7 +46,7 @@ namespace InteropApiTests
             finally
             {
                 Api.JetTerm(instance);
-                Directory.Delete(dir, true);
+                Cleanup.DeleteDirectoryWithRetry(dir);
             }
         }
 
@@ -79,7 +79,7 @@ namespace InteropApiTests
             finally
             {
                 Api.JetTerm(instance);
-                Directory.Delete(dir, true);
+                Cleanup.DeleteDirectoryWithRetry(dir);
             }
         }
     }

@@ -86,6 +86,7 @@
     <Compile Include="BackupRestoreCompactDatabase.cs" />
     <Compile Include="BackupRestoreTests.cs" />
     <Compile Include="BasicTableTests.cs" />
+    <Compile Include="Cleanup.cs" />
     <Compile Include="ColumndefTests.cs" />
     <Compile Include="ColumnlistTests.cs" />
     <Compile Include="ColumnStreamTests.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="ConversionsTests.cs" />
     <Compile Include="AsciiPathTests.cs" />
+    <Compile Include="StatusCallbackWrapperTests.cs" />
     <Compile Include="RetrieveColumnConversionTests.cs" />
     <Compile Include="IndexCreateChecksTests.cs" />
     <Compile Include="RetrieveColumnTests.cs" />

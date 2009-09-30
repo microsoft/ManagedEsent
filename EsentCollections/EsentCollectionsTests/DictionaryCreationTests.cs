@@ -162,7 +162,7 @@ namespace EsentCollectionsTests
             File.WriteAllText(testFile, "hello world");
             PersistentDictionaryFile.DeleteFiles(TestDirectory);
             Assert.IsTrue(File.Exists(testFile));
-            Directory.Delete(TestDirectory, true);
+            Cleanup.DeleteDirectoryWithRetry(TestDirectory);
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace EsentCollectionsTests
             var dict = new PersistentDictionary<int, int>(DictionaryLocation);
             dict.Dispose();
             var wrongDict = new PersistentDictionary<long, int>(DictionaryLocation);
-            Directory.Delete(DictionaryLocation, true);
+            Cleanup.DeleteDirectoryWithRetry(DictionaryLocation);
         }
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace EsentCollectionsTests
             var dict = new PersistentDictionary<int, int>(DictionaryLocation);
             dict.Dispose();
             var wrongDict = new PersistentDictionary<int, string>(DictionaryLocation);
-            Directory.Delete(DictionaryLocation, true);
+            Cleanup.DeleteDirectoryWithRetry(DictionaryLocation);
         }
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace EsentCollectionsTests
             var actual = new PersistentDictionary<int, Guid?>(expected, DictionaryLocation);
             DictionaryAssert.AreEqual(expected, actual);
             actual.Dispose();
-            Directory.Delete(DictionaryLocation, true);            
+            Cleanup.DeleteDirectoryWithRetry(DictionaryLocation);            
         }
 
         /// <summary>

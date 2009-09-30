@@ -122,7 +122,7 @@ namespace InteropApiTests
             }
             finally
             {
-                Directory.Delete(dir, true);
+                Cleanup.DeleteDirectoryWithRetry(dir);
             }
         }
 
@@ -142,7 +142,7 @@ namespace InteropApiTests
             }
             finally
             {
-                Directory.Delete(dir, true);
+                Cleanup.DeleteDirectoryWithRetry(dir);
             }
         }
 
@@ -165,7 +165,7 @@ namespace InteropApiTests
             }
             finally
             {
-                Directory.Delete(dir, true);
+                Cleanup.DeleteDirectoryWithRetry(dir);
             }
         }
 
@@ -189,8 +189,8 @@ namespace InteropApiTests
             }
             finally
             {
-                Directory.Delete(dir1, true);
-                Directory.Delete(dir2, true);
+                Cleanup.DeleteDirectoryWithRetry(dir1);
+                Cleanup.DeleteDirectoryWithRetry(dir2);
             }
         }
 
@@ -216,7 +216,7 @@ namespace InteropApiTests
             }
             finally
             {
-                Directory.Delete(dir, true);
+                Cleanup.DeleteDirectoryWithRetry(dir);
             }
         }
     }

@@ -55,7 +55,7 @@ namespace InteropApiTests
             Api.Impl = this.savedImpl;
             if (Directory.Exists(this.directory))
             {
-                Directory.Delete(this.directory, true);
+                Cleanup.DeleteDirectoryWithRetry(this.directory);
             }
         }
 

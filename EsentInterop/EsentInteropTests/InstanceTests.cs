@@ -8,6 +8,7 @@ namespace InteropApiTests
 {
     using System;
     using System.IO;
+    using System.Threading;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Implementation;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -38,7 +39,7 @@ namespace InteropApiTests
                 instance.Parameters.TempDirectory = dir;
             }
 
-            Directory.Delete(dir, true);
+            Cleanup.DeleteDirectoryWithRetry(dir);
         }
 
         /// <summary>
@@ -154,7 +155,7 @@ namespace InteropApiTests
                 instance.Init();
             }
 
-            Directory.Delete(dir, true);
+            Cleanup.DeleteDirectoryWithRetry(dir);
         }
 
         /// <summary>
@@ -188,7 +189,7 @@ namespace InteropApiTests
                 instance.Parameters.NoInformationEvent = true;
                 instance.Init();
                 instance.Term();
-                Directory.Delete(dir, true);    // only works if the instance is terminated
+                Cleanup.DeleteDirectoryWithRetry(dir);    // only works if the instance is terminated
             }
         }
 
@@ -282,6 +283,97 @@ namespace InteropApiTests
             var instance = new Instance("theinstance");
             instance.Dispose();
             instance.Term();
+        }
+
+        /// <summary>
+        /// Make sure that calling Term on a disposed object throws an
+        /// exception.
+        /// </summary>
+        [TestMethod]
+        [Priority(3)]
+        public void TestThreadAbortDuringInstanceInitTerm()
+        {
+            var rand = new Random();
+            var timeToRun = TimeSpan.FromSeconds(19);
+            var startTime = DateTime.UtcNow;
+
+            const string InstanceNameTemplate = "ThreadAbortTest{0}";
+            int numThreads = Environment.ProcessorCount;
+
+            int iteration = 0;
+            while (DateTime.UtcNow < (startTime + timeToRun))
+            {
+                var threads = new Thread[numThreads];
+
+                for (int i = 0; i < numThreads; ++i)
+                {
+                    string instanceName = String.Format(InstanceNameTemplate, i);
+                    threads[i] = new Thread(() => InstanceInitTermThread(instanceName));
+                    threads[i].Start();
+                }
+
+                Thread.Sleep(TimeSpan.FromMilliseconds(rand.Next(0, 200)));
+
+                foreach (Thread thread in threads)
+                {
+                    thread.Abort();
+                }
+
+                foreach (Thread thread in threads)
+                {
+                    thread.Join();
+                }
+
+                iteration++;
+            }
+
+            // Make sure the instance name is still available
+            for (int i = 0; i < numThreads; ++i)
+            {
+                string instanceName = String.Format(InstanceNameTemplate, i);
+                using (new Instance(instanceName))
+                {
+                }
+            }
+
+            Console.WriteLine("{0} iterations", iteration);
+        }
+
+        /// <summary>
+        /// Init and term an instance. This is used to make sure the instance
+        /// is always cleaned up when the thread is terminated. If the cleanup
+        /// is missed the next instance create will fail.
+        /// </summary>
+        /// <param name="instanceName">
+        /// The name of the instance to create.
+        /// </param>
+        private static void InstanceInitTermThread(string instanceName)
+        {
+            try
+            {
+                while (true)
+                {
+                    using (var instance = new Instance(instanceName))
+                    {
+                        instance.Parameters.Recovery = false;
+                        instance.Parameters.NoInformationEvent = true;
+                        instance.Parameters.MaxTemporaryTables = 0;
+                        instance.Init();
+                        instance.Term();
+                    }
+                }
+            }
+            catch (ThreadAbortException)
+            {
+                // Actually letting the thread abort will fail the test, exit
+                // gracefully instead.
+                Thread.ResetAbort();
+            }
+            catch (EsentErrorException ex)
+            {
+                Console.WriteLine("Got exception {0}", ex);
+                Assert.Fail("Got exception {0}", ex);
+            }
         }
 
         /// <summary>

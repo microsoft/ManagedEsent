@@ -113,7 +113,7 @@ namespace InteropApiTests
         {
             Api.JetEndSession(this.sesid, EndSessionGrbit.None);
             Api.JetTerm(this.instance);
-            Directory.Delete(this.directory, true);
+            Cleanup.DeleteDirectoryWithRetry(this.directory);
         }
 
         /// <summary>
