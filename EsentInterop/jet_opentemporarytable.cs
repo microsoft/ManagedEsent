@@ -7,12 +7,21 @@
 namespace Microsoft.Isam.Esent.Interop.Vista
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
 
     /// <summary>
     /// The native version of the JET_OPENTEMPORARYTABLE structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.DocumentationRules",
+        "SA1600:ElementsMustBeDocumented",
+        Justification = "Internal interop struct only.")]
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     internal unsafe struct NATIVE_OPENTEMPORARYTABLE
     {
         public uint cbStruct;
@@ -29,6 +38,10 @@ namespace Microsoft.Isam.Esent.Interop.Vista
     /// <summary>
     /// A collection of parameters for the JetOpenTemporaryTable method.
     /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1300:ElementMustBeginWithUpperCaseLetter",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     public class JET_OPENTEMPORARYTABLE
     {
         /// <summary>

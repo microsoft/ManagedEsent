@@ -24,9 +24,9 @@ namespace Microsoft.Isam.Esent.Interop
     /// </param>
     /// <param name="snp">The type of operation.</param>
     /// <param name="snt">The status of the operation.</param>
-    /// <param name="snprog">Optional <see cref="JET_SNPROG"/>.</param>
+    /// <param name="data">Optional data. May be a <see cref="JET_SNPROG"/>.</param>
     /// <returns>An error code.</returns>
-    public delegate JET_err JET_PFNSTATUS(JET_SESID sesid, JET_SNP snp, JET_SNT snt, JET_SNPROG snprog);
+    public delegate JET_err JET_PFNSTATUS(JET_SESID sesid, JET_SNP snp, JET_SNT snt, object data);
 
     /// <summary>
     /// Receives information about the progress of long-running operations,

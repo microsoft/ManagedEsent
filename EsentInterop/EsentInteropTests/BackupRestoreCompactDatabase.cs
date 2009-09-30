@@ -402,9 +402,9 @@ namespace InteropApiTests
         /// <param name="sesid">The session performing the operation.</param>
         /// <param name="snp">The operation type.</param>
         /// <param name="snt">The type of the progress report.</param>
-        /// <param name="snprog">Progress info.</param>
+        /// <param name="data">Progress info.</param>
         /// <returns>An error code.</returns>
-        private JET_err StatusCallback(JET_SESID sesid, JET_SNP snp, JET_SNT snt, JET_SNPROG snprog)
+        private JET_err StatusCallback(JET_SESID sesid, JET_SNP snp, JET_SNT snt, object data)
         {
             this.statusCallbackWasCalled = true;
             Assert.IsTrue(
@@ -414,6 +414,7 @@ namespace InteropApiTests
                 "Unexpected snp (progress type)");
             if (JET_SNT.Progress == snt)
             {
+                var snprog = data as JET_SNPROG;
                 Assert.IsNotNull(snprog, "Expected an snprog in a progress callback");
                 Assert.IsTrue(snprog.cunitDone <= snprog.cunitTotal, "done > total in the snprog");
             }

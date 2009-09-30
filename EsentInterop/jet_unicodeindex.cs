@@ -6,12 +6,21 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
 
     /// <summary>
     /// The native version of the JET_UNICODEINDEX structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.DocumentationRules",
+        "SA1600:ElementsMustBeDocumented",
+        Justification = "Internal interop struct only.")]
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     internal struct NATIVE_UNICODEINDEX
     {
         public uint lcid;
@@ -21,6 +30,10 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Customizes how Unicode data gets normalized when an index is created over a Unicode column.
     /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1300:ElementMustBeginWithUpperCaseLetter",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     public class JET_UNICODEINDEX
     {
         /// <summary>

@@ -30,8 +30,10 @@ namespace InteropApiTests
         public void VerifyStatusCallbackWrapperConvertsArguments()
         {
             var wrapper = new StatusCallbackWrapper(
-                (session, snp, snt, snprog) =>
+                (session, snp, snt, obj) =>
                 {
+                    Assert.IsInstanceOfType(obj, typeof(JET_SNPROG));
+                    var snprog = obj as JET_SNPROG;
                     Assert.AreEqual(this.sesid, session);
                     Assert.AreEqual(JET_SNP.Backup, snp);
                     Assert.AreEqual(JET_SNT.Progress, snt);

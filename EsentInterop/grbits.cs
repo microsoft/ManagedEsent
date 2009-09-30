@@ -206,6 +206,25 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Options for <see cref="Api.JetBeginTransaction2"/>.
+    /// </summary>
+    public enum BeginTransactionGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// The transaction will not modify the database. If an update is attempted,
+        /// that operation will fail with <see cref="JET_err.TransReadOnly"/>. This
+        /// option is ignored unless it is requested when the given session is not
+        /// already in a transaction.
+        /// </summary>
+        ReadOnly = 0x1,
+    }
+
+    /// <summary>
     /// Options for JetCommitTransaction.
     /// </summary>
     [Flags]
@@ -1139,7 +1158,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetIdle() API
+    /// Options for <see cref="Api.JetIdle"/>.
     /// </summary>
     [Flags]
     public enum IdleGrbit

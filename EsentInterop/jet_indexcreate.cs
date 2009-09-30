@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
     using Microsoft.Isam.Esent.Interop.Vista;
 
@@ -14,6 +15,10 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native version of the JET_INDEXCREATE structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     internal unsafe struct NATIVE_INDEXCREATE
     {
         /// <summary>
@@ -78,6 +83,10 @@ namespace Microsoft.Isam.Esent.Interop
     /// member, which is only valid on Windows Vista and above.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     internal struct NATIVE_INDEXCREATE2
     {
         /// <summary>
@@ -94,6 +103,10 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Contains the information needed to create an index over data in an ESE database.
     /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1300:ElementMustBeginWithUpperCaseLetter",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     public class JET_INDEXCREATE
     {
         /// <summary>

@@ -1,8 +1,11 @@
-//-----------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ArrayShuffle.cs" company="Microsoft Corporation">
-//     Copyright (c) Microsoft Corporation.
+//   Copyright (c) Microsoft Corporation.
 // </copyright>
-//-----------------------------------------------------------------------
+// <summary>
+//   Contains an extension method to randomize an array.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace EsentCollectionsTests
 {

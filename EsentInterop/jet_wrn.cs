@@ -6,9 +6,19 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System.Diagnostics.CodeAnalysis;
+
     /// <summary>
     /// ESENT warning codes.
     /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.DocumentationRules",
+        "SA1629:DocumentationTextMustEndWithAPeriod",
+        Justification = "Auto-generated comments.")]
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.DocumentationRules",
+        "SA1628:DocumentationTextMustBeginWithACapitalLetter",
+        Justification = "Auto-generated comments.")]
     public enum JET_wrn
     {
         /// <summary>

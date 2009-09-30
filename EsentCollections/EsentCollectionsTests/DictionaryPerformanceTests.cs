@@ -1,8 +1,11 @@
-﻿//-----------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DictionaryPerformanceTests.cs" company="Microsoft Corporation">
-//     Copyright (c) Microsoft Corporation.
+//   Copyright (c) Microsoft Corporation.
 // </copyright>
-//-----------------------------------------------------------------------
+// <summary>
+//   Test PersistentDictionary speed.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace EsentCollectionsTests
 {

@@ -4,8 +4,6 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using Microsoft.Isam.Esent.Interop.Windows7;
-
 namespace InteropApiTests
 {
     using System;
@@ -13,6 +11,8 @@ namespace InteropApiTests
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Implementation;
     using Microsoft.Isam.Esent.Interop.Vista;
+    using Microsoft.Isam.Esent.Interop.Windows7;
+
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>

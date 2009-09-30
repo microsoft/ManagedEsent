@@ -1,8 +1,11 @@
-﻿//-----------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DictionaryCreationTests.cs" company="Microsoft Corporation">
-//     Copyright (c) Microsoft Corporation.
+//   Copyright (c) Microsoft Corporation.
 // </copyright>
-//-----------------------------------------------------------------------
+// <summary>
+//   Test creating a PersistentDictionary.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace EsentCollectionsTests
 {

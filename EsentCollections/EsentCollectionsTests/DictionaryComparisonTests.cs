@@ -1,8 +1,11 @@
-﻿//-----------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DictionaryComparisonTests.cs" company="Microsoft Corporation">
-//     Copyright (c) Microsoft Corporation.
+//   Copyright (c) Microsoft Corporation.
 // </copyright>
-//-----------------------------------------------------------------------
+// <summary>
+//   Compare a PersistentDictionary against a generic dictionary.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace EsentCollectionsTests
 {

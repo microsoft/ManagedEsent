@@ -601,6 +601,31 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Using JetBeginTransaction2, insert a record, update it and rollback the update.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void TestJetBeginTransaction2()
+        {
+            string before = Any.String;
+            string after = Any.String;
+
+            Api.JetBeginTransaction2(this.sesid, BeginTransactionGrbit.None);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            this.SetColumnFromString(before);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Replace);
+            this.SetColumnFromString(after);
+            this.UpdateAndGotoBookmark();
+            Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
+
+            Assert.AreEqual(before, this.RetrieveColumnAsString());
+        }
+
+        /// <summary>
         /// Inserts a record, updates it and rollback the transaction.
         /// This uses the Transaction helper class.
         /// </summary>

@@ -60,7 +60,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Free the underlying JET_SESID
+        /// Free the underlying JET_SESID.
         /// </summary>
         protected override void ReleaseResource()
         {

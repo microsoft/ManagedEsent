@@ -7,12 +7,21 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
 
     /// <summary>
     /// The native version of the JET_INDEXLIST structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.DocumentationRules",
+        "SA1600:ElementsMustBeDocumented",
+        Justification = "Internal interop struct only.")]
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     internal struct NATIVE_INDEXLIST
     {
         public uint cbStruct;
@@ -40,6 +49,10 @@ namespace Microsoft.Isam.Esent.Interop
     /// Information about a temporary table containing information
     /// about all indexes for a given table.
     /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1300:ElementMustBeginWithUpperCaseLetter",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     public class JET_INDEXLIST
     {
         /// <summary>
@@ -139,7 +152,7 @@ namespace Microsoft.Isam.Esent.Interop
         internal void SetFromNativeIndexlist(NATIVE_INDEXLIST value)
         {
             this.tableid = new JET_TABLEID { Value = value.tableid };
-            this.cRecord = checked((int) value.cRecord);
+            this.cRecord = checked((int)value.cRecord);
             this.columnidindexname = new JET_COLUMNID { Value = value.columnidindexname };
             this.columnidgrbitIndex = new JET_COLUMNID { Value = value.columnidgrbitIndex };
             this.columnidcColumn = new JET_COLUMNID { Value = value.columnidcColumn };
@@ -154,4 +167,3 @@ namespace Microsoft.Isam.Esent.Interop
         }
     }
 }
-

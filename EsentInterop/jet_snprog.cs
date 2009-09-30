@@ -7,12 +7,17 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
 
     /// <summary>
     /// The native version of the JET_SNPROG structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     internal struct NATIVE_SNPROG
     {
         /// <summary>
@@ -41,6 +46,10 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Contains information about the progress of a long-running operation.
     /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1300:ElementMustBeginWithUpperCaseLetter",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     public class JET_SNPROG
     {
         /// <summary>

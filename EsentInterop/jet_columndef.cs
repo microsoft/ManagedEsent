@@ -6,12 +6,17 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
 
     /// <summary>
     /// The native version of the JET_COLUMNDEF structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     internal struct NATIVE_COLUMNDEF
     {
         /// <summary>
@@ -63,6 +68,10 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Describes a column in a table of an ESENT database.
     /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1300:ElementMustBeginWithUpperCaseLetter",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     public class JET_COLUMNDEF
     {
         /// <summary>
@@ -99,12 +108,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>A native (interop) version of the JET_COLUMNDEF.</returns>
         internal NATIVE_COLUMNDEF GetNativeColumndef()
         {
-            var columndef       = new NATIVE_COLUMNDEF();
-            columndef.cbStruct  = checked((uint) Marshal.SizeOf(columndef));
-            columndef.cp        = (ushort)this.cp;
-            columndef.cbMax     = checked((uint) this.cbMax);
-            columndef.grbit     = (uint)this.grbit;
-            columndef.coltyp    = checked((uint) this.coltyp);
+            var columndef = new NATIVE_COLUMNDEF();
+            columndef.cbStruct = checked((uint)Marshal.SizeOf(columndef));
+            columndef.cp = (ushort)this.cp;
+            columndef.cbMax = checked((uint)this.cbMax);
+            columndef.grbit = (uint)this.grbit;
+            columndef.coltyp = checked((uint)this.coltyp);
             return columndef;
         }
 
@@ -118,7 +127,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             this.coltyp = (JET_coltyp)value.coltyp;
             this.cp = (JET_CP)value.cp;
-            this.cbMax = checked((int) value.cbMax);
+            this.cbMax = checked((int)value.cbMax);
             this.grbit = (ColumndefGrbit)value.grbit;
             this.columnid = new JET_COLUMNID { Value = value.columnid };
         }

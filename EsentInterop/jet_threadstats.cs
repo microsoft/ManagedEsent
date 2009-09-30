@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop.Vista
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
     using System.Text;
 
@@ -15,6 +16,10 @@ namespace Microsoft.Isam.Esent.Interop.Vista
     /// engine on the current thread. This information is returned via
     /// <see cref="VistaApi.JetGetThreadStats"/>.
     /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1300:ElementMustBeginWithUpperCaseLetter",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     public struct JET_THREADSTATS
     {
         /// <summary>
@@ -148,6 +153,14 @@ namespace Microsoft.Isam.Esent.Interop.Vista
     /// The native version of the JET_THREADSTATS structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.DocumentationRules",
+        "SA1600:ElementsMustBeDocumented",
+        Justification = "Internal interop struct only.")]
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     internal struct NATIVE_THREADSTATS
     {
         public static readonly int Size = Marshal.SizeOf(typeof(NATIVE_THREADSTATS));

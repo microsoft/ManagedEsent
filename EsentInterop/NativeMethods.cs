@@ -184,6 +184,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern int JetBeginTransaction(IntPtr sesid);
 
         [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetBeginTransaction2(IntPtr sesid, uint grbit);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetCommitTransaction(IntPtr sesid, uint grbit);
 
         [DllImport(EsentDll, ExactSpelling = true)]

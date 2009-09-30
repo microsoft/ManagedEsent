@@ -84,7 +84,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         internal static IJetApi Impl { get; set; }
 
-        #region init/term
+        #region Init/Term
 
         /// <summary>
         /// Allocates a new instance of the database engine.
@@ -366,7 +366,7 @@ namespace Microsoft.Isam.Esent.Interop
 
         #endregion
 
-        #region sessions
+        #region Sessions
 
         /// <summary>
         /// Initialize a new ESENT session.
@@ -408,7 +408,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Ends a session.
         /// </summary>
         /// <param name="sesid">The session to end.</param>
-        /// <param name="grbit">The parameter is not used.</param>
+        /// <param name="grbit">This parameter is not used.</param>
         public static void JetEndSession(JET_SESID sesid, EndSessionGrbit grbit)
         {
             Api.Check(Impl.JetEndSession(sesid, grbit));
@@ -426,7 +426,7 @@ namespace Microsoft.Isam.Esent.Interop
 
         #endregion
 
-        #region tables
+        #region Tables
 
         /// <summary>
         /// Opens a cursor on a previously created table.
@@ -484,6 +484,17 @@ namespace Microsoft.Isam.Esent.Interop
         public static void JetBeginTransaction(JET_SESID sesid)
         {
             Api.Check(Impl.JetBeginTransaction(sesid));
+        }
+
+        /// <summary>
+        /// Causes a session to enter a transaction or create a new save point in an existing
+        /// transaction.
+        /// </summary>
+        /// <param name="sesid">The session to begin the transaction for.</param>
+        /// <param name="grbit">Transaction options.</param>
+        public static void JetBeginTransaction2(JET_SESID sesid, BeginTransactionGrbit grbit)
+        {
+            Api.Check(Impl.JetBeginTransaction2(sesid, grbit));
         }
 
         /// <summary>
