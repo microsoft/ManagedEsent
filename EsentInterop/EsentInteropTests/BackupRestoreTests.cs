@@ -7,6 +7,7 @@
 namespace InteropApiTests
 {
     using System;
+    using Microsoft.Isam.Esent.Interop;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -16,13 +17,28 @@ namespace InteropApiTests
     public class BackupRestoreTests
     {
         /// <summary>
+        /// JetRestoreInstance should throw an exception when
+        /// the source database is null.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void TestJetRestoreInstanceThrowsExceptionWhenSourceIsNull()
+        {
+            using (var instance = new Instance("BackupRestoreTests"))
+            {
+                Api.JetRestoreInstance(instance, null, "somewhere", null);
+            }
+        }
+
+        /// <summary>
         /// Test backup and restore of a database.
         /// </summary>
         [TestMethod]
         [Priority(2)]
         public void TestBackupRestore()
         {
-            var test = new BackupRestoreDatabase("database", "backup", true);
+            var test = new BackupRestoreCompactDatabase("database", "backup", true);
             test.TestBackupRestore();
         }
 
@@ -36,7 +52,7 @@ namespace InteropApiTests
         public void TestBackupCallbackExceptionHandling()
         {
             var ex = new ArgumentNullException();
-            var test = new BackupRestoreDatabase("database", "backup", true);
+            var test = new BackupRestoreCompactDatabase("database", "backup", true);
             test.TestBackupCallbackExceptionHandling(ex);
         }
 
@@ -51,7 +67,7 @@ namespace InteropApiTests
         {
             Assert.Inconclusive("test is disabled because instance isn't torn down correctly");
             var ex = new ArgumentNullException();
-            var test = new BackupRestoreDatabase("database", "backup", true);
+            var test = new BackupRestoreCompactDatabase("database", "backup", true);
             test.TestRestoreCallbackExceptionHandling(ex);
         }
     }

@@ -234,8 +234,24 @@ namespace InteropApiTests
                 return;
             }
 
-            var test = new BackupRestoreDatabase(this.directory, "한글", false);
+            var test = new BackupRestoreCompactDatabase(this.directory, "한글", false);
             test.TestBackupRestore();
+        }
+
+        /// <summary>
+        /// Backup and restore a database using unicode paths.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void TestJetCompactDatabaseWithUnicodePath()
+        {
+            if (!EsentVersion.SupportsUnicodePaths)
+            {
+                return;
+            }
+
+            var test = new BackupRestoreCompactDatabase(this.directory, "ignored", false);
+            test.TestCompactDatabase();
         }
     }
 }

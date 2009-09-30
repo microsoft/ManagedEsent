@@ -145,6 +145,43 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Options for <see cref="Api.JetCompact"/>.
+    /// </summary>
+    [Flags]
+    public enum CompactGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// Causes JetCompact to dump statistics on the source database to a file
+        ///  named DFRGINFO.TXT. Statistics include the name of each table in
+        /// source database, number of rows in each table, total size in bytes of
+        /// all rows in each table, total size in bytes of all columns of type
+        /// <see cref="JET_coltyp.LongText"/> or <see cref="JET_coltyp.LongBinary"/>
+        /// that were large enough to be stored separate from the record, number
+        /// of clustered index leaf pages, and the number of long value leaf pages.
+        /// In addition, summary statistics including the size of the source database,
+        /// destination database, time required for database compaction, temporary
+        /// database space are all dumped as well.
+        /// </summary>
+        Stats = 0x20,
+
+        /// <summary>
+        /// Used when the source database is known to be corrupt. It enables a
+        /// whole set of new behaviors intended to salvage as much data as
+        /// possible from the source database. JetCompact with this option set
+        /// may return <see cref="JET_err.Success"/> but not copy all of the data
+        /// created in the source database. Data that was in damaged portions of
+        /// the source database will be skipped.
+        /// </summary>
+        [Obsolete]
+        Repair = 0x40,        
+    }
+
+    /// <summary>
     /// Options for <see cref="Api.JetBackupInstance"/>.
     /// </summary>
     public enum BackupGrbit
@@ -1115,10 +1152,14 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>Triggers cleanup of the version store.</summary>
         FlushBuffers = 0x01,
 
-        /// <summary>Reserverd for future use. If this flag is specified, the API will return JET_errInvalidgrbit.</summary>
+        /// <summary>
+        /// Reserved for future use. If this flag is specified, the API will return <see cref="JET_err.InvalidGrbit"/>.
+        /// </summary>
         Compact = 0x02,
 
-        /// <summary>Returns <see cref="JET_wrn.IdleFull"/> if version store is more than half full.</summary>
+        /// <summary>
+        /// Returns <see cref="JET_wrn.IdleFull"/> if version store is more than half full.
+        /// </summary>
         GetStatus = 0x04,
     }
 }

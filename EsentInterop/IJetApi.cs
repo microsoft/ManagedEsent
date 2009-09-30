@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 {
     using System;
     using Microsoft.Isam.Esent.Interop.Vista;
+    using Microsoft.Isam.Esent.Interop.Windows7;
 
     /// <summary>
     /// This interface describes all the methods which have a P/Invoke implementation.
@@ -81,6 +82,34 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         int JetCloseDatabase(JET_SESID sesid, JET_DBID dbid, CloseDatabaseGrbit grbit);
 
         int JetDetachDatabase(JET_SESID sesid, string database);
+
+        /// <summary>
+        /// Makes a copy of an existing database. The copy is compacted to a
+        /// state optimal for usage. Data in the copied data will be packed
+        /// according to the measures chosen for the indexes at index create.
+        /// In this way, compacted data may be stored as densely as possible.
+        /// Alternatively, compacted data may reserve space for subsequent
+        /// record growth or index insertions.
+        /// </summary>
+        /// <param name="sesid">The session to use for the call.</param>
+        /// <param name="sourceDatabase">The source database that will be compacted.</param>
+        /// <param name="destinationDatabase">The name to use for the compacted database.</param>
+        /// <param name="statusCallback">
+        /// A callback function that can be called periodically through the
+        /// database compact operation to report progress.
+        /// </param>
+        /// <param name="ignored">
+        /// This parameter is ignored and should be null.
+        /// </param>
+        /// <param name="grbit">Compact options.</param>
+        /// <returns>An error code.</returns>
+        int JetCompact(
+            JET_SESID sesid,
+            string sourceDatabase,
+            string destinationDatabase,
+            JET_PFNSTATUS statusCallback,
+            object ignored,
+            CompactGrbit grbit);
 
         /// <summary>
         /// Performs a streaming backup of an instance, including all the attached
@@ -594,5 +623,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="grbit">A combination of JetIdleGrbit flags.</param>
         /// <returns>An error code if the operation fails.</returns>
         int JetIdle(JET_SESID sesid, IdleGrbit grbit);
+
+        /// <summary>
+        /// Crash dump options for Watson.
+        /// </summary>
+        /// <param name="grbit">Crash dump options.</param>
+        /// <returns>An error code.</returns>
+        int JetConfigureProcessForCrashDump(CrashDumpGrbit grbit);
     }
 }

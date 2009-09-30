@@ -115,6 +115,14 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetCloseDatabase(IntPtr sesid, uint dbid, uint grbit);
 
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetCompact(
+            IntPtr sesid, string szDatabaseSrc, string szDatabaseDest, IntPtr pfnStatus, IntPtr pconvert, uint grbit);
+
+        [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
+        public static extern int JetCompactW(
+            IntPtr sesid, string szDatabaseSrc, string szDatabaseDest, IntPtr pfnStatus, IntPtr pconvert, uint grbit);
+
         #endregion
 
         #region Backup/Restore
@@ -433,8 +441,13 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         #endregion
 
         #region Misc
+
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetIdle(IntPtr sesid, uint grbit);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetConfigureProcessForCrashDump(uint grbit);
+
         #endregion
     }
 }

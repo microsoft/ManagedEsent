@@ -13,6 +13,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
     using System.Runtime.InteropServices;
     using System.Text;
     using Microsoft.Isam.Esent.Interop.Vista;
+    using Microsoft.Isam.Esent.Interop.Windows7;
 
     /// <summary>
     /// Calls to the ESENT interop layer. These calls take the managed types (e.g. JET_SESID) and
@@ -265,6 +266,61 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return this.Err(NativeMethods.JetDetachDatabase(sesid.Value, database));
         }
 
+        /// <summary>
+        /// Makes a copy of an existing database. The copy is compacted to a
+        /// state optimal for usage. Data in the copied data will be packed
+        /// according to the measures chosen for the indexes at index create.
+        /// In this way, compacted data may be stored as densely as possible.
+        /// Alternatively, compacted data may reserve space for subsequent
+        /// record growth or index insertions.
+        /// </summary>
+        /// <param name="sesid">The session to use for the call.</param>
+        /// <param name="sourceDatabase">The source database that will be compacted.</param>
+        /// <param name="destinationDatabase">The name to use for the compacted database.</param>
+        /// <param name="statusCallback">
+        /// A callback function that can be called periodically through the
+        /// database compact operation to report progress.
+        /// </param>
+        /// <param name="ignored">
+        /// This parameter is ignored and should be null.
+        /// </param>
+        /// <param name="grbit">Compact options.</param>
+        /// <returns>An error code.</returns>
+        public int JetCompact(
+            JET_SESID sesid,
+            string sourceDatabase,
+            string destinationDatabase,
+            JET_PFNSTATUS statusCallback,
+            object ignored,
+            CompactGrbit grbit)
+        {
+            this.TraceFunctionCall("JetCompact");
+            this.CheckNotNull(sourceDatabase, "sourceDatabase");
+            this.CheckNotNull(destinationDatabase, "destinationDatabase");
+            if (null != ignored)
+            {
+                throw new ArgumentException("must be null", "ignored");
+            }
+
+            var callbackWrapper = new StatusCallbackWrapper(statusCallback);
+            IntPtr nativeCallback = (null == statusCallback) ? IntPtr.Zero : Marshal.GetFunctionPointerForDelegate(callbackWrapper.Callback);
+
+            int err;
+            if (this.Capabilities.SupportsUnicodePaths)
+            {
+                err = this.Err(NativeMethods.JetCompactW(
+                            sesid.Value, sourceDatabase, destinationDatabase, nativeCallback, IntPtr.Zero, (uint) grbit));
+            }
+            else
+            {
+                err = this.Err(NativeMethods.JetCompact(
+                            sesid.Value, sourceDatabase, destinationDatabase, nativeCallback, IntPtr.Zero, (uint)grbit));
+            }
+
+            callbackWrapper.ThrowSavedException();
+            return err;
+        }
+
         #endregion
 
         #region Backup/Restore
@@ -411,7 +467,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the operation fails.</returns>
         public int JetGetThreadStats(out JET_THREADSTATS threadstats)
         {
-            this.CheckSupportsVistaFeatures();
+            this.CheckSupportsVistaFeatures("JetGetThreadStats");
 
             NATIVE_THREADSTATS native;
             int err = this.Err(NativeMethods.JetGetThreadStats(out native, (uint) NATIVE_THREADSTATS.Size));
@@ -789,7 +845,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetOpenTemporaryTable(JET_SESID sesid, JET_OPENTEMPORARYTABLE temporarytable)
         {
             this.TraceFunctionCall("JetOpenTemporaryTable");
-            this.CheckSupportsVistaFeatures();
+            this.CheckSupportsVistaFeatures("JetOpenTemporaryTables");
 
             NATIVE_OPENTEMPORARYTABLE nativetemporarytable = temporarytable.GetNativeOpenTemporaryTable();
             var nativecolumnids = new uint[nativetemporarytable.ccolumn];
@@ -1520,6 +1576,18 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return NativeMethods.JetIdle(sesid.Value, (uint) grbit);
         }
 
+        /// <summary>
+        /// Crash dump options for Watson.
+        /// </summary>
+        /// <param name="grbit">Crash dump options.</param>
+        /// <returns>An error code.</returns>
+        public int JetConfigureProcessForCrashDump(CrashDumpGrbit grbit)
+        {
+            this.TraceFunctionCall("JetConfigureProcessForCrashDump");
+            this.CheckSupportsWindows7Features("JetConfigureProcessForCrashDump");
+            return NativeMethods.JetConfigureProcessForCrashDump((uint) grbit);
+        }
+
         #endregion
 
         #region Helper Methods
@@ -1805,11 +1873,25 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// Check that ESENT supports Vista features. Throws an exception if Vista features
         /// aren't supported.
         /// </summary>
-        private void CheckSupportsVistaFeatures()
+        /// <param name="api">The API that is being called.</param>
+        private void CheckSupportsVistaFeatures(string api)
         {
             if (!this.Capabilities.SupportsVistaFeatures)
             {
-                this.ThrowUnsupportedApiException("JetOpenTemporaryTable");
+                this.ThrowUnsupportedApiException(api);
+            }
+        }
+
+        /// <summary>
+        /// Check that ESENT supports Windows7 features. Throws an exception if Windows7 features
+        /// aren't supported.
+        /// </summary>
+        /// <param name="api">The API that is being called.</param>
+        private void CheckSupportsWindows7Features(string api)
+        {
+            if (!this.Capabilities.SupportsWindows7Features)
+            {
+                this.ThrowUnsupportedApiException(api);
             }
         }
 

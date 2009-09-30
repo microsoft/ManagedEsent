@@ -283,6 +283,37 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetDetachDatabase(sesid, database));
         }
 
+        /// <summary>
+        /// Makes a copy of an existing database. The copy is compacted to a
+        /// state optimal for usage. Data in the copied data will be packed
+        /// according to the measures chosen for the indexes at index create.
+        /// In this way, compacted data may be stored as densely as possible.
+        /// Alternatively, compacted data may reserve space for subsequent
+        /// record growth or index insertions.
+        /// </summary>
+        /// <param name="sesid">The session to use for the call.</param>
+        /// <param name="sourceDatabase">The source database that will be compacted.</param>
+        /// <param name="destinationDatabase">The name to use for the compacted database.</param>
+        /// <param name="statusCallback">
+        /// A callback function that can be called periodically through the
+        /// database compact operation to report progress.
+        /// </param>
+        /// <param name="ignored">
+        /// This parameter is ignored and should be null.
+        /// </param>
+        /// <param name="grbit">Compact options.</param>
+        public static void JetCompact(
+            JET_SESID sesid,
+            string sourceDatabase,
+            string destinationDatabase,
+            JET_PFNSTATUS statusCallback,
+            object ignored,
+            CompactGrbit grbit)
+        {
+            Api.Check(
+                Impl.JetCompact(sesid, sourceDatabase, destinationDatabase, statusCallback, ignored, grbit));
+        }
+
         #endregion
 
         #region Backup/Restore

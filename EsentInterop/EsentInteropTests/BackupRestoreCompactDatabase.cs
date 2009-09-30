@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------
-// <copyright file="BackupRestoreDatabase.cs" company="Microsoft Corporation">
+// <copyright file="BackupRestoreCompactDatabase.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
 //-----------------------------------------------------------------------
@@ -12,9 +12,9 @@ namespace InteropApiTests
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
-    /// Implementation of a backup/restore test.
+    /// Implementation of a backup/restore/compact test.
     /// </summary>
-    public class BackupRestoreDatabase
+    public class BackupRestoreCompactDatabase
     {
         /// <summary>
         /// The directory containing the database.
@@ -42,7 +42,7 @@ namespace InteropApiTests
         private bool statusCallbackWasCalled;
 
         /// <summary>
-        /// Initializes a new instance of the BackupRestoreDatabase class.
+        /// Initializes a new instance of the BackupRestoreCompactDatabase class.
         /// </summary>
         /// <param name="databaseDirectory">
         /// The directory to create a database in.
@@ -53,10 +53,10 @@ namespace InteropApiTests
         /// <param name="useStatusCallback">
         /// True if a status callback should be used.
         /// </param>
-        public BackupRestoreDatabase(string databaseDirectory, string backupDirectory, bool useStatusCallback)
+        public BackupRestoreCompactDatabase(string databaseDirectory, string backupDirectory, bool useStatusCallback)
         {
             this.databaseDirectory = databaseDirectory;
-            this.database = Path.Combine(this.databaseDirectory, "backmeup.edb");
+            this.database = Path.Combine(this.databaseDirectory, "database.edb");
             this.backupDirectory = backupDirectory;
             this.useStatusCallback = useStatusCallback;
         }
@@ -79,6 +79,23 @@ namespace InteropApiTests
             {
                 DeleteDirectoryIfExists(this.databaseDirectory);
                 DeleteDirectoryIfExists(this.backupDirectory);
+            }
+        }
+
+        /// <summary>
+        /// Create a database and then compact it.
+        /// </summary>
+        public void TestCompactDatabase()
+        {
+            try
+            {
+                this.CreateDatabase();
+                this.CompactDatabase();
+                this.CheckDatabase();
+            }
+            finally
+            {
+                DeleteDirectoryIfExists(this.databaseDirectory);
             }
         }
 
@@ -123,6 +140,25 @@ namespace InteropApiTests
             {
                 DeleteDirectoryIfExists(this.databaseDirectory);
                 DeleteDirectoryIfExists(this.backupDirectory);
+            }
+        }
+
+        /// <summary>
+        /// Create a database and then have the status callback throw an
+        /// exception during compaction.
+        /// </summary>
+        /// <param name="ex">The exception to throw.</param>
+        public void TestCompactDatabaseCallbackExceptionHandling(Exception ex)
+        {
+            try
+            {
+                this.CreateDatabase();
+                this.CompactDatabaseWithCallbackException(ex);
+                this.CheckDatabase();
+            }
+            finally
+            {
+                DeleteDirectoryIfExists(this.databaseDirectory);
             }
         }
 
@@ -275,6 +311,65 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Compact the database.
+        /// </summary>
+        private void CompactDatabase()
+        {
+            string defraggedDatabase = Path.Combine(this.databaseDirectory, "defragged.edb");
+            using (var instance = this.CreateInstance())
+            {
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    // For JetCompact to work the database has to be attached, but not opened
+                    Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
+                    if (this.useStatusCallback)
+                    {
+                        this.statusCallbackWasCalled = false;
+                        Api.JetCompact(session, this.database, defraggedDatabase, this.StatusCallback, null, CompactGrbit.None);
+                        Assert.IsTrue(
+                            this.statusCallbackWasCalled, "expected the status callback to be called during compact");
+                    }
+                    else
+                    {
+                        Api.JetCompact(session, this.database, defraggedDatabase, null, null, CompactGrbit.None);
+                    }
+                }
+            }
+
+            Assert.IsTrue(File.Exists(defraggedDatabase));
+            File.Delete(this.database);
+            File.Move(defraggedDatabase, this.database);
+        }
+
+        /// <summary>
+        /// Compact the database and have the status callback throw an exception.
+        /// </summary>
+        /// <param name="ex">The exception to throw.</param>
+        private void CompactDatabaseWithCallbackException(Exception ex)
+        {
+            using (var instance = this.CreateInstance())
+            {
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    // For JetCompact to work the database has to be attached, but not opened
+                    Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
+                    Api.JetCompact(
+                        session,
+                        this.database,
+                        this.database,
+                        (sesid, snt, snp, snprog) =>
+                        {
+                            throw ex;
+                        },
+                        null,
+                        CompactGrbit.None);
+                }
+            }
+        }
+
+        /// <summary>
         /// Check the database files have been restored.
         /// </summary>
         private void CheckDatabase()
@@ -303,12 +398,13 @@ namespace InteropApiTests
         /// <returns>A new instance.</returns>
         private Instance CreateInstance()
         {
-            var instance = new Instance("BackupRestoreDatabase");
+            var instance = new Instance("BackupRestoreCompactDatabase");
             instance.Parameters.LogFileSize = 256;
             instance.Parameters.LogFileDirectory = this.databaseDirectory;
             instance.Parameters.TempDirectory = this.databaseDirectory;
             instance.Parameters.SystemDirectory = this.databaseDirectory;
             instance.Parameters.CreatePathIfNotExist = true;
+            instance.Parameters.NoInformationEvent = true;
             return instance;
         }
 
@@ -323,7 +419,11 @@ namespace InteropApiTests
         private JET_err StatusCallback(JET_SESID sesid, JET_SNP snp, JET_SNT snt, JET_SNPROG snprog)
         {
             this.statusCallbackWasCalled = true;
-            Assert.IsTrue(JET_SNP.Backup == snp || JET_SNP.Restore == snp, "Unexpected snp (progress type)");
+            Assert.IsTrue(
+                JET_SNP.Backup == snp
+                || JET_SNP.Restore == snp
+                || JET_SNP.Compact == snp,
+                "Unexpected snp (progress type)");
             if (JET_SNT.Progress == snt)
             {
                 Assert.IsNotNull(snprog, "Expected an snprog in a progress callback");

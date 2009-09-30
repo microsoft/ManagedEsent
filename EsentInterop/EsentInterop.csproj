@@ -156,6 +156,7 @@
     <Compile Include="JetApi.cs" />
     <Compile Include="VistaColtyp.cs" />
     <Compile Include="Server2003Grbits.cs" />
+    <Compile Include="Windows7Api.cs" />
     <Compile Include="Windows7Grbits.cs" />
     <Compile Include="Windows7Param.cs" />
   </ItemGroup>

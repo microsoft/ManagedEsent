@@ -1,6 +1,6 @@
 ﻿ Pri 0: Tests & Bugs
  -------------------
-  * Null value check in JetRestoreInstance
+  * JetConfigureProcessForCrashDump
   * Perf tests for JetSetColumns vs JetSetColumn
   * Verify JetSetColumn sets err member
   * Verify SetColumns sets Error member
@@ -10,16 +10,13 @@
   	
 APIs to implement
 -----------------------------
-  - JetCompact
-  - JetConfigureProcessForCrashDump (Win7)
   - JetComputeStats  
   - JetGrowDatabase
   - JetRenameColumn
   - JetRenameTable
   - JetSetColumnDefaultValue
   - JetStopServiceInstance
-  - JetDefragment / JetDefragment2
-  
+  - JetDefragment / JetDefragment2  
   - JetGetRecordSize (Vista)
   - JetGetSecondaryIndexBookmark
   - JetGotoSecondaryIndexBookmark 

@@ -7,6 +7,55 @@
 namespace Microsoft.Isam.Esent.Interop.Windows7
 {
     /// <summary>
+    /// Options for JetConfigureProcessForCrashDump.
+    /// </summary>
+    public enum CrashDumpGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// Dump minimum includes <see cref="CacheMinimum"/>.
+        /// </summary>
+        Minimum = 0x1,
+
+        /// <summary>
+        /// Dump maximum includes <see cref="CacheMaximum"/>.
+        /// </summary>
+        Maximum = 0x2,
+
+        /// <summary>
+        /// CacheMinimum includes pages that are latched.
+        /// CacheMinimum includes pages that are used for memory.
+        /// CacheMinimum includes pages that are flagged with errors.
+        /// </summary>
+        CacheMinimum = 0x4,
+
+        /// <summary>
+        /// Cache maximum includes cache minimum.
+        /// Cache maximum includes the entire cache image.
+        /// </summary>
+        CacheMaximum = 0x8,
+
+        /// <summary>
+        /// Dump includes pages that are modified.
+        /// </summary>
+        CacheIncludeDirtyPages = 0x10,
+
+        /// <summary>
+        /// Dump includes pages that contain valid data.
+        /// </summary>
+        CacheIncludeCachedPages = 0x20,
+
+        /// <summary>
+        /// Dump includes pages that are corrupted (expensive to compute).
+        /// </summary>
+        CacheIncludeCorruptedPages = 0x40,
+    }
+
+    /// <summary>
     /// Grbits that have been added to the Windows 7 version of ESENT.
     /// </summary>
     public static class Windows7Grbits

@@ -4,6 +4,8 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using Microsoft.Isam.Esent.Interop.Windows7;
+
 namespace InteropApiTests
 {
     using System;
@@ -123,6 +125,18 @@ namespace InteropApiTests
             var sesid = new JET_SESID();
             var temporarytable = new JET_OPENTEMPORARYTABLE();
             VistaApi.JetOpenTemporaryTable(sesid, temporarytable);
+        }
+
+        /// <summary>
+        /// Verify that JetOpenTemporaryTable throws an exception when using the
+        /// XP version of ESENT.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void VerifyXpThrowsExceptionOnJetConfigureProcessForCrashDump()
+        {
+            Windows7Api.JetConfigureProcessForCrashDump(CrashDumpGrbit.None);
         }
 
         /// <summary>
@@ -271,8 +285,19 @@ namespace InteropApiTests
         [Priority(2)]
         public void BackupRestoreDatabaseOnXp()
         {
-            var test = new BackupRestoreDatabase("database", "backup", false);
+            var test = new BackupRestoreCompactDatabase("database", "backup", false);
             test.TestBackupRestore();
+        }
+
+        /// <summary>
+        /// Tests for JetBackupInstance and JetRestoreInstance on XP.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void TestJetCompactDatabaseOnXp()
+        {
+            var test = new BackupRestoreCompactDatabase("database", "ignored", false);
+            test.TestCompactDatabase();
         }
     }
 }
