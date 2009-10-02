@@ -789,13 +789,43 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test JetRetrieveColumns with a null buffer
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void JetRetrieveColumnsNullBuffer()
+        {
+            byte[] data = Any.Bytes;
+
+            using (var trx = new Transaction(this.session))
+            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
+            {
+                Api.SetColumn(this.session, this.tableid, this.coltypDict[JET_coltyp.LongBinary], data);
+                update.SaveAndGotoBookmark();
+                trx.Commit(CommitTransactionGrbit.None);
+            }
+
+            var retrievecolumns = new[]
+            {
+                new JET_RETRIEVECOLUMN { columnid = this.coltypDict[JET_coltyp.LongBinary], itagSequence = 1 },
+            };
+
+            Assert.AreEqual(
+                JET_wrn.BufferTruncated,
+                Api.JetRetrieveColumns(this.session, this.tableid, retrievecolumns, retrievecolumns.Length));
+
+            Assert.AreEqual(data.Length, retrievecolumns[0].cbActual);
+            Assert.AreEqual(JET_wrn.BufferTruncated, retrievecolumns[0].err);
+        }
+
+        /// <summary>
         /// Test JetSetColumns
         /// </summary>
         [TestMethod]
         [Priority(1)]
         public void SetColumns()
         {
-            bool bit = Any.Boolean;
+            bool bit = true;
             byte b = Any.Byte;
             short i16 = Any.Int16;
             int i32 = Any.Int32;

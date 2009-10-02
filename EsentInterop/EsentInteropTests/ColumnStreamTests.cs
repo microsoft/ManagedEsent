@@ -632,6 +632,22 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Trying to seek to a negative offset generates an exception.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void ColumnStreamThrowsExceptionWhenSeekOffsetIsNegative()
+        {
+            using (var t = new Transaction(this.sesid))
+            using (var u = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                stream.Seek(-1, SeekOrigin.Begin);
+            }
+        }
+
+        /// <summary>
         /// Trying to seek to an invalid offset generates an exception.
         /// </summary>
         [TestMethod]
@@ -644,6 +660,22 @@ namespace InteropApiTests
             using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
             {
                 stream.Seek(0x800000000, SeekOrigin.Begin);
+            }
+        }
+
+        /// <summary>
+        /// Trying to seek with an invalid origin.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void ColumnStreamThrowsExceptionWhenSeekOriginIsInvalid()
+        {
+            using (var t = new Transaction(this.sesid))
+            using (var u = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                stream.Seek(0x800000000, (SeekOrigin) 0x1234);
             }
         }
 

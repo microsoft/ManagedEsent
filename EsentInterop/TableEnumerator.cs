@@ -15,7 +15,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// each record.
     /// </summary>
     /// <typeparam name="TReturn">The type of object returned by the enumerator.</typeparam>
-    internal class TableEnumerator<TReturn> : IEnumerator<TReturn>
+    internal sealed class TableEnumerator<TReturn> : IEnumerator<TReturn>
     {
         /// <summary>
         /// Function that produces the enumerated object.
@@ -120,7 +120,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Called when the object is being disposed or finalized.
         /// </summary>
         /// <param name="disposing">True if the function was called from Dispose.</param>
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             Api.JetCloseTable(this.sesid, this.tableid);
         }

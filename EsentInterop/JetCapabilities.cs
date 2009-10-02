@@ -9,7 +9,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
     /// <summary>
     /// Describes the functionality exposed by an object which implements IJetApi.
     /// </summary>
-    internal class JetCapabilities
+    internal sealed class JetCapabilities
     {
         /// <summary>
         /// Gets or sets a value indicating whether Windows Server 2003 features

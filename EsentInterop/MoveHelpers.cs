@@ -61,7 +61,7 @@ namespace Microsoft.Isam.Esent.Interop
             }
 
             Api.Check((int)err);
-            throw new InvalidOperationException("Unreachable code");
+            throw new NotImplementedException("Unreachable code");
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Microsoft.Isam.Esent.Interop
             }
 
             Api.Check((int)err);
-            throw new InvalidOperationException("Unreachable code");
+            throw new NotImplementedException("Unreachable code");
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace Microsoft.Isam.Esent.Interop
             }
 
             Api.Check((int)err);
-            throw new InvalidOperationException("Unreachable code");
+            throw new NotImplementedException("Unreachable code");
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace Microsoft.Isam.Esent.Interop
             }
 
             Api.Check((int)err);
-            throw new InvalidOperationException("Unreachable code");
+            throw new NotImplementedException("Unreachable code");
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace Microsoft.Isam.Esent.Interop
             }
 
             Api.Check((int)err);
-            throw new InvalidOperationException("Unreachable code");
+            throw new NotImplementedException("Unreachable code");
         }
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace Microsoft.Isam.Esent.Interop
             }
 
             Api.Check((int)err);
-            throw new InvalidOperationException("Unreachable code");
+            throw new NotImplementedException("Unreachable code");
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace Microsoft.Isam.Esent.Interop
             }
 
             Api.Check((int)err);
-            throw new InvalidOperationException("Unreachable code");
+            throw new NotImplementedException("Unreachable code");
         }
 
         /// <summary>

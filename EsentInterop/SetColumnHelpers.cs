@@ -68,7 +68,7 @@ namespace Microsoft.Isam.Esent.Interop
                             tableid,
                             columnid,
                             (IntPtr) buffer,
-                            data.Length * sizeof(char),
+                            checked(data.Length * sizeof(char)),
                             grbit,
                             null);
                     }

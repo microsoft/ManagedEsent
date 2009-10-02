@@ -51,7 +51,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// Wraps a NATIVE_PFNSTATUS callback around a JET_PFNSTATUS. This is
     /// used to convert the snprog argument to a managed snprog.
     /// </summary>
-    internal class StatusCallbackWrapper
+    internal sealed class StatusCallbackWrapper
     {
         /// <summary>
         /// API call tracing.

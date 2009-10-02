@@ -72,36 +72,42 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// <returns>A JET_THREADSTATS containing the result of adding the stats in t1 and t2.</returns>
         public static JET_THREADSTATS operator +(JET_THREADSTATS t1, JET_THREADSTATS t2)
         {
-            return new JET_THREADSTATS
+            checked
             {
-                cPageReferenced = t1.cPageReferenced + t2.cPageReferenced,
-                cPageRead = t1.cPageRead + t2.cPageRead,
-                cPagePreread = t1.cPagePreread + t2.cPagePreread,
-                cPageDirtied = t1.cPageDirtied + t2.cPageDirtied,
-                cPageRedirtied = t1.cPageRedirtied + t2.cPageRedirtied,
-                cLogRecord = t1.cLogRecord + t2.cLogRecord,
-                cbLogRecord = t1.cbLogRecord + t2.cbLogRecord,
-            };
+                return new JET_THREADSTATS
+                {
+                    cPageReferenced = t1.cPageReferenced + t2.cPageReferenced,
+                    cPageRead = t1.cPageRead + t2.cPageRead,
+                    cPagePreread = t1.cPagePreread + t2.cPagePreread,
+                    cPageDirtied = t1.cPageDirtied + t2.cPageDirtied,
+                    cPageRedirtied = t1.cPageRedirtied + t2.cPageRedirtied,
+                    cLogRecord = t1.cLogRecord + t2.cLogRecord,
+                    cbLogRecord = t1.cbLogRecord + t2.cbLogRecord,
+                };                
+            }
         }
 
         /// <summary>
-        /// Calculate the differeence in stats between two JET_THREADSTATS structures.
+        /// Calculate the difference in stats between two JET_THREADSTATS structures.
         /// </summary>
         /// <param name="t1">The first JET_THREADSTATS.</param>
         /// <param name="t2">The second JET_THREADSTATS.</param>
         /// <returns>A JET_THREADSTATS containing the difference in stats between t1 and t2.</returns>
         public static JET_THREADSTATS operator -(JET_THREADSTATS t1, JET_THREADSTATS t2)
         {
-            return new JET_THREADSTATS
+            checked
             {
-                cPageReferenced = t1.cPageReferenced - t2.cPageReferenced,
-                cPageRead = t1.cPageRead - t2.cPageRead,
-                cPagePreread = t1.cPagePreread - t2.cPagePreread,
-                cPageDirtied = t1.cPageDirtied - t2.cPageDirtied,
-                cPageRedirtied = t1.cPageRedirtied - t2.cPageRedirtied,
-                cLogRecord = t1.cLogRecord - t2.cLogRecord,
-                cbLogRecord = t1.cbLogRecord - t2.cbLogRecord,
-            };
+                return new JET_THREADSTATS
+                {
+                    cPageReferenced = t1.cPageReferenced - t2.cPageReferenced,
+                    cPageRead = t1.cPageRead - t2.cPageRead,
+                    cPagePreread = t1.cPagePreread - t2.cPagePreread,
+                    cPageDirtied = t1.cPageDirtied - t2.cPageDirtied,
+                    cPageRedirtied = t1.cPageRedirtied - t2.cPageRedirtied,
+                    cLogRecord = t1.cLogRecord - t2.cLogRecord,
+                    cbLogRecord = t1.cbLogRecord - t2.cbLogRecord,
+                };
+            }
         }
 
         /// <summary>

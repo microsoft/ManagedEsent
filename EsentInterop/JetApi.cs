@@ -852,7 +852,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.CheckNotNull(indexName, "indexName");
             this.CheckNotNegative(keyDescriptionLength, "keyDescriptionLength");
             this.CheckNotNegative(density, "density");
-            if (keyDescriptionLength > keyDescription.Length + 1)
+            if (keyDescriptionLength > checked(keyDescription.Length + 1))
             {
                 throw new ArgumentOutOfRangeException(
                     "keyDescriptionLength", keyDescriptionLength, "cannot be greater than keyDescription.Length");

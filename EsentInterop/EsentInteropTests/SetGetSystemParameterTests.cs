@@ -26,7 +26,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void SystemPathParameter()
         {
-            this.PathParameterTest(JET_param.SystemPath, @"foo\system\");
+            PathParameterTest(JET_param.SystemPath, @"foo\system\");
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void LogPathParameter()
         {
-            this.PathParameterTest(JET_param.LogFilePath, @"foo\log\");
+            PathParameterTest(JET_param.LogFilePath, @"foo\log\");
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void BaseNameParameter()
         {
-            this.StringParameterTest(JET_param.BaseName, "foo");
+            StringParameterTest(JET_param.BaseName, "foo");
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void EventSourceParameter()
         {
-            this.StringParameterTest(JET_param.EventSource, "My source");
+            StringParameterTest(JET_param.EventSource, "My source");
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void MaxSessionsParameter()
         {
-            this.IntegerParameterTest(JET_param.MaxSessions, 4);
+            IntegerParameterTest(JET_param.MaxSessions, 4);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void MaxOpenTablesParameter()
         {
-            this.IntegerParameterTest(JET_param.MaxOpenTables, 100);
+            IntegerParameterTest(JET_param.MaxOpenTables, 100);
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void MaxCursorsParameter()
         {
-            this.IntegerParameterTest(JET_param.MaxCursors, 2500);
+            IntegerParameterTest(JET_param.MaxCursors, 2500);
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void MaxVerPagesParameter()
         {
-            this.IntegerParameterTest(JET_param.MaxVerPages, 100);
+            IntegerParameterTest(JET_param.MaxVerPages, 100);
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void MaxTemporaryTablesParameter()
         {
-            this.IntegerParameterTest(JET_param.MaxTemporaryTables, 0);
+            IntegerParameterTest(JET_param.MaxTemporaryTables, 0);
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void LogFileSizeParameter()
         {
-            this.IntegerParameterTest(JET_param.LogFileSize, 2048);
+            IntegerParameterTest(JET_param.LogFileSize, 2048);
         }
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void LogBuffersParameter()
         {
-            this.IntegerParameterTest(JET_param.LogBuffers, 128);
+            IntegerParameterTest(JET_param.LogBuffers, 128);
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void CircularLogParameter()
         {
-            this.IntegerParameterTest(JET_param.CircularLog, 1);
+            IntegerParameterTest(JET_param.CircularLog, 1);
         }
 
         /// <summary>
@@ -178,7 +178,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void PageTempDBMinParameter()
         {
-            this.IntegerParameterTest(JET_param.PageTempDBMin, 50);
+            IntegerParameterTest(JET_param.PageTempDBMin, 50);
         }
 
         /// <summary>
@@ -188,7 +188,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void CheckpointDepthMaxParameter()
         {
-            this.IntegerParameterTest(JET_param.CheckpointDepthMax, 20000);
+            IntegerParameterTest(JET_param.CheckpointDepthMax, 20000);
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void RecoveryParameter()
         {
-            this.StringParameterTest(JET_param.Recovery, "off");
+            StringParameterTest(JET_param.Recovery, "off");
         }
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void EnableIndexCheckingParameter()
         {
-            this.BooleanParameterTest(JET_param.EnableIndexChecking, Any.Boolean);
+            BooleanParameterTest(JET_param.EnableIndexChecking, Any.Boolean);
         }
 
         /// <summary>
@@ -218,7 +218,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void EventSourceKeyParameter()
         {
-            this.StringParameterTest(JET_param.EventSourceKey, Any.String);
+            StringParameterTest(JET_param.EventSourceKey, Any.String);
         }
 
         /// <summary>
@@ -228,7 +228,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void NoInformationEventParameter()
         {
-            this.BooleanParameterTest(JET_param.NoInformationEvent, Any.Boolean);
+            BooleanParameterTest(JET_param.NoInformationEvent, Any.Boolean);
         }
 
         /// <summary>
@@ -238,7 +238,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void CreatePathIfNotExistParameter()
         {
-            this.BooleanParameterTest(JET_param.CreatePathIfNotExist, Any.Boolean);
+            BooleanParameterTest(JET_param.CreatePathIfNotExist, Any.Boolean);
         }
 
         /// <summary>
@@ -250,7 +250,7 @@ namespace InteropApiTests
         {
             if (EsentVersion.SupportsVistaFeatures)
             {
-                this.IntegerParameterTest(VistaParam.Configuration, 1);
+                IntegerParameterTest(VistaParam.Configuration, 1);
             }
         }
 
@@ -263,7 +263,7 @@ namespace InteropApiTests
         {
             if (EsentVersion.SupportsVistaFeatures)
             {
-                this.BooleanParameterTest(VistaParam.EnableAdvanced, Any.Boolean);
+                BooleanParameterTest(VistaParam.EnableAdvanced, Any.Boolean);
             }
         }
 
@@ -276,7 +276,7 @@ namespace InteropApiTests
         {
             if (EsentVersion.SupportsVistaFeatures)
             {
-                this.IntegerParameterTest(VistaParam.CachedClosedTables, 500);
+                IntegerParameterTest(VistaParam.CachedClosedTables, 500);
             }
         }
 
@@ -315,7 +315,7 @@ namespace InteropApiTests
         {
             if (EsentVersion.SupportsWindows7Features)
             {
-                this.IntegerParameterTest(Windows7Param.WaypointLatency, 1);
+                IntegerParameterTest(Windows7Param.WaypointLatency, 1);
             }
         }
 
@@ -341,6 +341,118 @@ namespace InteropApiTests
             }
         }
 
+        /// <summary>
+        /// Check that the BookmarkMost system parameter is at least 
+        /// the legacy minimum.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyBookmarkMostIsAtLeast255()
+        {
+            Assert.IsTrue(SystemParameters.BookmarkMost >= 255);
+        }
+
+        /// <summary>
+        /// Test that SystemParameters.CacheSize can be set and retrieved.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyGetAndSetCacheSize()
+        {
+            int cacheSizeOld = SystemParameters.CacheSize;
+            SystemParameters.CacheSize = 4096;
+
+            // The setting doesn't take effect immediately,
+            // so no assert here.
+            SystemParameters.CacheSize = cacheSizeOld;
+        }
+
+        /// <summary>
+        /// Test that SystemParameters.CacheSizeMax can be set and retrieved.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyGetAndSetCacheSizeMax()
+        {
+            int cacheSizeMaxOld = SystemParameters.CacheSizeMax;
+            SystemParameters.CacheSizeMax = 4096;
+            Assert.AreEqual(4096, SystemParameters.CacheSizeMax);
+            SystemParameters.CacheSizeMax = cacheSizeMaxOld;
+        }
+
+        /// <summary>
+        /// Test that SystemParameters.CacheSizeMin can be set and retrieved.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyGetAndSetCacheSizeMin()
+        {
+            int cacheSizeMinOld = SystemParameters.CacheSizeMin;
+            SystemParameters.CacheSizeMin = 4096;
+            Assert.AreEqual(4096, SystemParameters.CacheSizeMin);
+            SystemParameters.CacheSizeMin = cacheSizeMinOld;
+        }
+
+        /// <summary>
+        /// Check that the ColumnsKeyMost system parameter is at least 
+        /// the legacy minimum.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyColumnsKeyMostIsAtLeast12()
+        {
+            Assert.IsTrue(SystemParameters.ColumnsKeyMost >= 12);
+        }
+
+        /// <summary>
+        /// Test that SystemParameters.DatabasePageSize can be set and retrieved.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyGetAndSetDatabasePageSize()
+        {
+            int databasePageSizeOld = SystemParameters.DatabasePageSize;
+            SystemParameters.DatabasePageSize = 4096;
+            Assert.AreEqual(4096, SystemParameters.DatabasePageSize);
+            SystemParameters.DatabasePageSize = databasePageSizeOld;
+        }
+
+        /// <summary>
+        /// Check that the KeyMost system parameter is at least 
+        /// the legacy minimum.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyKeyMostIsAtLeast255()
+        {
+            Assert.IsTrue(SystemParameters.KeyMost >= 255);
+        }
+
+        /// <summary>
+        /// Check that the LVChunkSizeMost system parameter is at least 
+        /// a sensible minimum.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyLvChunkSizeMostIsNonZero()
+        {
+            // 1966 is the chunk size of 2Kb pages.
+            Assert.IsTrue(SystemParameters.LVChunkSizeMost >= 1966);
+        }
+
+        /// <summary>
+        /// Test that SystemParameters.MaxInstances can be set and retrieved.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyGetAndSetMaxInstances()
+        {
+            int maxInstancesOld = SystemParameters.MaxInstances;
+            SystemParameters.MaxInstances = 16;
+            Assert.AreEqual(16, SystemParameters.MaxInstances);
+            SystemParameters.MaxInstances = maxInstancesOld;
+        }
+
         #region Helper Methods
 
         /// <summary>
@@ -349,7 +461,7 @@ namespace InteropApiTests
         /// </summary>
         /// <param name="param">The parameter to set.</param>
         /// <param name="expected">The path to set it to.</param>
-        private void PathParameterTest(JET_param param, string expected)
+        private static void PathParameterTest(JET_param param, string expected)
         {
             JET_INSTANCE instance;
             Api.JetCreateInstance(out instance, "PathParameterTest");
@@ -374,7 +486,7 @@ namespace InteropApiTests
         /// </summary>
         /// <param name="param">The parameter to set.</param>
         /// <param name="expected">The string to set it to.</param>
-        private void StringParameterTest(JET_param param, string expected)
+        private static void StringParameterTest(JET_param param, string expected)
         {
             JET_INSTANCE instance;
             Api.JetCreateInstance(out instance, "StringParameterTest");
@@ -399,7 +511,7 @@ namespace InteropApiTests
         /// </summary>
         /// <param name="param">The parameter to set.</param>
         /// <param name="expected">The string to set it to.</param>
-        private void IntegerParameterTest(JET_param param, int expected)
+        private static void IntegerParameterTest(JET_param param, int expected)
         {
             JET_INSTANCE instance;
             Api.JetCreateInstance(out instance, "IntParameterTest");
@@ -425,7 +537,7 @@ namespace InteropApiTests
         /// </summary>
         /// <param name="param">The parameter to set.</param>
         /// <param name="expected">The string to set it to.</param>
-        private void BooleanParameterTest(JET_param param, bool expected)
+        private static void BooleanParameterTest(JET_param param, bool expected)
         {
             int value = expected ? 1 : 0;
 

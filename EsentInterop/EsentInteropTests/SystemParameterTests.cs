@@ -160,13 +160,28 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        public void VerifySettingEnableAdvanced()
+        public void VerifySettingEnableAdvancedToTrue()
         {
             Expect.Call(
                 this.mockApi.JetSetSystemParameter(
                     JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.EnableAdvanced, 1, null)).Return(1);
             this.repository.ReplayAll();
             SystemParameters.EnableAdvanced = true;
+            this.repository.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verify that setting the property sets the system parameter
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void VerifySettingEnableAdvancedToFalse()
+        {
+            Expect.Call(
+                this.mockApi.JetSetSystemParameter(
+                    JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.EnableAdvanced, 0, null)).Return(1);
+            this.repository.ReplayAll();
+            SystemParameters.EnableAdvanced = false;
             this.repository.VerifyAll();
         }
     }

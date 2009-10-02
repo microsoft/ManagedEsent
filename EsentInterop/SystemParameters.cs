@@ -260,7 +260,7 @@ namespace Microsoft.Isam.Esent.Interop
         private static void SetBoolParameter(JET_param param, bool value)
         {
             int setting = value ? 1 : 0;
-            Api.JetSetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, param, 1, null);
+            Api.JetSetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, param, setting, null);
         }
 
         /// <summary>

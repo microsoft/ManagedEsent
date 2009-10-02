@@ -530,7 +530,7 @@ namespace Microsoft.Isam.Esent.Interop
                 fixed (void* buffer = this.Value)
                 {
                     return this.SetColumns(
-                        sesid, tableid, columnValues, nativeColumns, i, buffer, this.Value.Length * sizeof(char), true);
+                        sesid, tableid, columnValues, nativeColumns, i, buffer, checked(this.Value.Length * sizeof(char)), true);
                 }
             }
 

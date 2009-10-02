@@ -197,6 +197,8 @@ namespace InteropApiTests
             object objA = x;
             object objB = y;
             Assert.IsFalse(objA.Equals(objB));
+            Assert.IsFalse(objA.Equals(null));
+            Assert.IsFalse(objA.Equals(new Exception()));
         }
     }
 }

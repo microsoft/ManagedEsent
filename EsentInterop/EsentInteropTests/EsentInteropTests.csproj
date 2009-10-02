@@ -95,6 +95,9 @@
     <Compile Include="Constants.cs" />
     <Compile Include="ConversionsTests.cs" />
     <Compile Include="AsciiPathTests.cs" />
+    <Compile Include="EsentStopwatchTests.cs" />
+    <Compile Include="HelperMethodErrorHandlingTests.cs" />
+    <Compile Include="MetaDataHelpersTests.cs" />
     <Compile Include="StatusCallbackWrapperTests.cs" />
     <Compile Include="RetrieveColumnConversionTests.cs" />
     <Compile Include="IndexCreateChecksTests.cs" />

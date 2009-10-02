@@ -13,7 +13,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Iterates over all the columns in the table, returning information about each one.
     /// </summary>
-    internal class EnumerableColumnInfo : IEnumerable<ColumnInfo>
+    internal sealed class EnumerableColumnInfo : IEnumerable<ColumnInfo>
     {
         /// <summary>
         /// The session to use.

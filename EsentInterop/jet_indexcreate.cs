@@ -202,7 +202,7 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentNullException("szKey");
             }
 
-            if (this.cbKey > this.szKey.Length + 1)
+            if (this.cbKey > checked(this.szKey.Length + 1))
             {
                 throw new ArgumentOutOfRangeException("cbKey", this.cbKey, "cannot be greater than the length of szKey");
             }
