@@ -462,6 +462,25 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetEndExternalBackupInstance(instance));
         }
 
+        /// <summary>
+        /// Opens an attached database, database patch file, or transaction log
+        /// file of an active instance for the purpose of performing a streaming
+        /// fuzzy backup. The data from these files can subsequently be read
+        /// through the returned handle using JetReadFileInstance. The returned
+        /// handle must be closed using JetCloseFileInstance. An external backup
+        /// of the instance must have been previously initiated using
+        /// JetBeginExternalBackupInstance.
+        /// </summary>
+        /// <param name="instance">The instance to use.</param>
+        /// <param name="file">The file to open.</param>
+        /// <param name="handle">Returns a handle to the file.</param>
+        /// <param name="fileSizeLow">Returns the least significant 32 bits of the file size.</param>
+        /// <param name="fileSizeHigh">Returns the most significant 32 bits of the file size.</param>
+        public static void JetOpenFileInstance(JET_INSTANCE instance, string file, out JET_HANDLE handle, out long fileSizeLow, out long fileSizeHigh)
+        {
+            Api.Check(Impl.JetOpenFileInstance(instance, file, out handle, out fileSizeLow, out fileSizeHigh));
+        }
+
         #endregion
 
         #region Sessions

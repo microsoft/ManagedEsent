@@ -686,6 +686,44 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return this.Err(NativeMethods.JetEndExternalBackupInstance2(instance.Value, (uint)grbit));
         }
 
+        /// <summary>
+        /// Opens an attached database, database patch file, or transaction log
+        /// file of an active instance for the purpose of performing a streaming
+        /// fuzzy backup. The data from these files can subsequently be read
+        /// through the returned handle using JetReadFileInstance. The returned
+        /// handle must be closed using JetCloseFileInstance. An external backup
+        /// of the instance must have been previously initiated using
+        /// JetBeginExternalBackupInstance.
+        /// </summary>
+        /// <param name="instance">The instance to use.</param>
+        /// <param name="file">The file to open.</param>
+        /// <param name="handle">Returns a handle to the file.</param>
+        /// <param name="fileSizeLow">Returns the least significant 32 bits of the file size.</param>
+        /// <param name="fileSizeHigh">Returns the most significant 32 bits of the file size.</param>
+        /// <returns>An error code if the call fails.</returns>
+        public int JetOpenFileInstance(JET_INSTANCE instance, string file, out JET_HANDLE handle, out long fileSizeLow, out long fileSizeHigh)
+        {
+            this.TraceFunctionCall("JetOpenFileInstance");
+            handle = new JET_HANDLE();
+            int err;
+            uint nativeFileSizeLow;
+            uint nativeFileSizeHigh;
+            if (this.Capabilities.SupportsUnicodePaths)
+            {
+                err = this.Err(NativeMethods.JetOpenFileInstanceW(
+                            instance.Value, file, out handle.Value, out nativeFileSizeLow, out nativeFileSizeHigh));
+            }
+            else
+            {
+                err = this.Err(NativeMethods.JetOpenFileInstance(
+                            instance.Value, file, out handle.Value, out nativeFileSizeLow, out nativeFileSizeHigh));                
+            }
+
+            fileSizeLow = nativeFileSizeLow;
+            fileSizeHigh = nativeFileSizeHigh;
+            return err;                 
+        }
+
         #endregion
 
         #region Sessions
