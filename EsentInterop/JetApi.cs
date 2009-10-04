@@ -646,6 +646,20 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return this.Err(NativeMethods.JetBeginExternalBackupInstance(instance.Value, (uint) grbit));
         }
 
+        /// <summary>
+        /// Closes a file that was opened with JetOpenFileInstance after the
+        /// data from that file has been extracted using JetReadFileInstance.
+        /// </summary>
+        /// <param name="instance">The instance to use.</param>
+        /// <param name="handle">The handle to close.</param>
+        /// <returns>An error code if the call fails.</returns>
+        public int JetCloseFileInstance(JET_INSTANCE instance, JET_HANDLE handle)
+        {
+            this.TraceFunctionCall("JetCloseFileInstance");
+            return this.Err(NativeMethods.JetCloseFileInstance(instance.Value, handle.Value));
+        }
+
+
         #endregion
 
         #region Sessions

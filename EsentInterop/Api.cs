@@ -428,6 +428,17 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetBeginExternalBackupInstance(instance, grbit));
         }
 
+        /// <summary>
+        /// Closes a file that was opened with JetOpenFileInstance after the
+        /// data from that file has been extracted using JetReadFileInstance.
+        /// </summary>
+        /// <param name="instance">The instance to use.</param>
+        /// <param name="handle">The handle to close.</param>
+        public static void JetCloseFileInstance(JET_INSTANCE instance, JET_HANDLE handle)
+        {
+            Api.Check(Impl.JetCloseFileInstance(instance, handle));
+        }
+
         #endregion
 
         #region Sessions

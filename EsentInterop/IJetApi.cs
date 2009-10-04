@@ -332,6 +332,15 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the call fails.</returns>
         int JetBeginExternalBackupInstance(JET_INSTANCE instance, BeginExternalBackupGrbit grbit);
 
+        /// <summary>
+        /// Closes a file that was opened with JetOpenFileInstance after the
+        /// data from that file has been extracted using JetReadFileInstance.
+        /// </summary>
+        /// <param name="instance">The instance to use.</param>
+        /// <param name="handle">The handle to close.</param>
+        /// <returns>An error code if the call fails.</returns>
+        int JetCloseFileInstance(JET_INSTANCE instance, JET_HANDLE handle);
+
         #endregion
 
         #region Sessions

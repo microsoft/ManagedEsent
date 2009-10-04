@@ -175,6 +175,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetBeginExternalBackupInstance(IntPtr instance, uint grbit);
 
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetCloseFileInstance(IntPtr instance, IntPtr handle);
+
         #endregion
 
         #region sessions
