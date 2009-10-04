@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------
-// <copyright file="BackupRestoreCompactDatabase.cs" company="Microsoft Corporation">
+// <copyright file="DatabaseFileTestHelper.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
 //-----------------------------------------------------------------------
@@ -12,9 +12,9 @@ namespace InteropApiTests
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
-    /// Implementation of a backup/restore/compact test.
+    /// Implementation of a backup/restore/compact/setsize test.
     /// </summary>
-    public class BackupRestoreCompactDatabase
+    public class DatabaseFileTestHelper
     {
         /// <summary>
         /// The directory containing the database.
@@ -42,7 +42,31 @@ namespace InteropApiTests
         private bool statusCallbackWasCalled;
 
         /// <summary>
-        /// Initializes a new instance of the BackupRestoreCompactDatabase class.
+        /// Initializes a new instance of the DatabaseFileTestHelper class.
+        /// </summary>
+        /// <param name="databaseDirectory">
+        /// The directory to create a database in.
+        /// </param>
+        public DatabaseFileTestHelper(string databaseDirectory) : this(databaseDirectory, null, false)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the DatabaseFileTestHelper class.
+        /// </summary>
+        /// <param name="databaseDirectory">
+        /// The directory to create a database in.
+        /// </param>
+        /// <param name="useStatusCallback">
+        /// True if a status callback should be used.
+        /// </param>
+        public DatabaseFileTestHelper(string databaseDirectory, bool useStatusCallback)
+            : this(databaseDirectory, null, useStatusCallback)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the DatabaseFileTestHelper class.
         /// </summary>
         /// <param name="databaseDirectory">
         /// The directory to create a database in.
@@ -53,7 +77,7 @@ namespace InteropApiTests
         /// <param name="useStatusCallback">
         /// True if a status callback should be used.
         /// </param>
-        public BackupRestoreCompactDatabase(string databaseDirectory, string backupDirectory, bool useStatusCallback)
+        public DatabaseFileTestHelper(string databaseDirectory, string backupDirectory, bool useStatusCallback)
         {
             this.databaseDirectory = databaseDirectory;
             this.database = Path.Combine(this.databaseDirectory, "database.edb");
@@ -154,6 +178,23 @@ namespace InteropApiTests
             {
                 this.CreateDatabase();
                 this.CompactDatabaseWithCallbackException(ex);
+                this.CheckDatabase();
+            }
+            finally
+            {
+                Cleanup.DeleteDirectoryWithRetry(this.databaseDirectory);
+            }
+        }
+
+        /// <summary>
+        /// Create a database and then set the size of the database.
+        /// </summary>
+        public void TestSetDatabaseSize()
+        {
+            try
+            {
+                this.CreateDatabase();
+                this.SetDatabaseSize();
                 this.CheckDatabase();
             }
             finally
@@ -358,6 +399,24 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Set the database's size.
+        /// </summary>
+        private void SetDatabaseSize()
+        {
+            using (var instance = this.CreateInstance())
+            {
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    const int ExpectedPages = 1024;
+                    int actualPages;
+                    Api.JetSetDatabaseSize(session, this.database, ExpectedPages, out actualPages);
+                    Assert.IsTrue(actualPages >= ExpectedPages, "Database isn't large enough");
+                }
+            }
+        }
+
+        /// <summary>
         /// Check the database files have been restored.
         /// </summary>
         private void CheckDatabase()
@@ -386,7 +445,7 @@ namespace InteropApiTests
         /// <returns>A new instance.</returns>
         private Instance CreateInstance()
         {
-            var instance = new Instance("BackupRestoreCompactDatabase");
+            var instance = new Instance("DatabaseFileTestHelper");
             instance.Parameters.LogFileSize = 256;
             instance.Parameters.LogFileDirectory = this.databaseDirectory;
             instance.Parameters.TempDirectory = this.databaseDirectory;
