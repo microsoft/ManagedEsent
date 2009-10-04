@@ -439,7 +439,6 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [ExpectedException(typeof(EsentErrorException))]
         public void DeleteIndex()
         {
             string indexDescription = "+TestColumn\0";
@@ -452,15 +451,22 @@ namespace InteropApiTests
             Api.JetDeleteIndex(this.sesid, this.tableid, indexName);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
-            Api.JetSetCurrentIndex(this.sesid, this.tableid, indexName);
+            try
+            {
+                Api.JetSetCurrentIndex(this.sesid, this.tableid, indexName);
+                Assert.Fail("Index is still visible");
+            }
+            catch (EsentErrorException)
+            {
+            }
+
         }
 
         /// <summary>
-        /// Delete a column and make sure we can't see it afterwards
+        /// Delete a column and make sure we can't see it afterwards.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [ExpectedException(typeof(EsentErrorException))]
         public void DeleteColumn()
         {
             string columnName = "column_to_delete";
@@ -474,7 +480,42 @@ namespace InteropApiTests
             Api.JetDeleteColumn(this.sesid, this.tableid, columnName);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
-            Api.JetGetTableColumnInfo(this.sesid, this.tableid, columnName, out columndef);
+            try
+            {
+                Api.JetGetTableColumnInfo(this.sesid, this.tableid, columnName, out columndef);
+                Assert.Fail("Column is still visible");
+            }
+            catch (EsentErrorException)
+            {
+            }
+        }
+
+        /// <summary>
+        /// Delete a column with JetDeleteColumn2 and make sure we can't see it afterwards.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void DeleteColumn2()
+        {
+            string columnName = "column_to_delete";
+            Api.JetBeginTransaction(this.sesid);
+            var columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Long };
+            JET_COLUMNID columnid;
+            Api.JetAddColumn(this.sesid, this.tableid, columnName, columndef, null, 0, out columnid);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetDeleteColumn2(this.sesid, this.tableid, columnName, DeleteColumnGrbit.None);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            try
+            {
+                Api.JetGetTableColumnInfo(this.sesid, this.tableid, columnName, out columndef);
+                Assert.Fail("Column is still visible");
+            }
+            catch (EsentErrorException)
+            {
+            }
         }
 
         /// <summary>
@@ -482,7 +523,6 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [ExpectedException(typeof(EsentErrorException))]
         public void DeleteTable()
         {
             string tableName = "table_to_delete";
@@ -496,7 +536,15 @@ namespace InteropApiTests
             Api.JetDeleteTable(this.sesid, this.dbid, tableName);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
-            Api.JetOpenTable(this.sesid, this.dbid, tableName, null, 0, OpenTableGrbit.None, out tableid);
+            try
+            {
+                Api.JetOpenTable(this.sesid, this.dbid, tableName, null, 0, OpenTableGrbit.None, out tableid);
+                Assert.Fail("Column is still visible");
+            }
+            catch (EsentErrorException)
+            {
+            }
+
         }
 
         #endregion DDL Tests

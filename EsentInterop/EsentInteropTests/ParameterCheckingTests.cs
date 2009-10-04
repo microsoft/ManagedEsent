@@ -518,6 +518,18 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Check that an exception is thrown when JetDeleteColumn gets a 
+        /// null column name.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetDeleteColumn2ThrowsExceptionWhenColumnNameIsNull()
+        {
+            Api.JetDeleteColumn2(this.sesid, this.tableid, null, DeleteColumnGrbit.None);
+        }
+
+        /// <summary>
         /// Check that an exception is thrown when JetDeleteIndex gets a 
         /// null index name.
         /// </summary>

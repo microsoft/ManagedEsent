@@ -246,6 +246,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern int JetDeleteColumn(IntPtr sesid, IntPtr tableid, string szColumnName);
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetDeleteColumn2(IntPtr sesid, IntPtr tableid, string szColumnName, uint grbit);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetDeleteIndex(IntPtr sesid, IntPtr tableid, string szIndexName);
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]

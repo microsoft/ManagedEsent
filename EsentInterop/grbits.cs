@@ -1176,6 +1176,23 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Options for <see cref="Api.JetDeleteColumn2"/>.
+    /// </summary>
+    public enum DeleteColumnGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// The API should only attempt to delete columns in the derived table.
+        /// If a column of that name exists in the base table it will be ignored.
+        /// </summary>
+        IgnoreTemplateColumns = 0x1,
+    }
+
+    /// <summary>
     /// Options for <see cref="Api.JetIdle"/>.
     /// </summary>
     [Flags]

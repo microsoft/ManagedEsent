@@ -660,6 +660,18 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Deletes a column from a database table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">A cursor on the table to delete the column from.</param>
+        /// <param name="column">The name of the column to be deleted.</param>
+        /// <param name="grbit">Column deletion options.</param>
+        public static void JetDeleteColumn2(JET_SESID sesid, JET_TABLEID tableid, string column, DeleteColumnGrbit grbit)
+        {
+            Api.Check(Impl.JetDeleteColumn2(sesid, tableid, column, grbit));
+        }
+
+        /// <summary>
         /// Deletes an index from a database table.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
