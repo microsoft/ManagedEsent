@@ -459,7 +459,6 @@ namespace InteropApiTests
             catch (EsentErrorException)
             {
             }
-
         }
 
         /// <summary>
@@ -544,7 +543,6 @@ namespace InteropApiTests
             catch (EsentErrorException)
             {
             }
-
         }
 
         #endregion DDL Tests

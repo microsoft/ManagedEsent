@@ -659,6 +659,18 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return this.Err(NativeMethods.JetCloseFileInstance(instance.Value, handle.Value));
         }
 
+        /// <summary>
+        /// Ends an external backup session. This API is the last API in a series
+        /// of APIs that must be called to execute a successful online
+        /// (non-VSS based) backup.
+        /// </summary>
+        /// <param name="instance">The instance to end the backup for.</param>
+        /// <returns>An error code if the call fails.</returns>
+        public int JetEndExternalBackupInstance(JET_INSTANCE instance)
+        {
+            this.TraceFunctionCall("JetEndExternalBackupInstance");
+            return this.Err(NativeMethods.JetEndExternalBackupInstance(instance.Value));  
+        }
 
         #endregion
 

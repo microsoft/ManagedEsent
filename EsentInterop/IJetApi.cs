@@ -341,6 +341,15 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the call fails.</returns>
         int JetCloseFileInstance(JET_INSTANCE instance, JET_HANDLE handle);
 
+        /// <summary>
+        /// Ends an external backup session. This API is the last API in a series
+        /// of APIs that must be called to execute a successful online
+        /// (non-VSS based) backup.
+        /// </summary>
+        /// <param name="instance">The instance to end the backup for.</param>
+        /// <returns>An error code if the call fails.</returns>
+        int JetEndExternalBackupInstance(JET_INSTANCE instance);
+
         #endregion
 
         #region Sessions
