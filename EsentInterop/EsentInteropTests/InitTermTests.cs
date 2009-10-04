@@ -195,6 +195,40 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Call JetStopBackupInstance on a running instance.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void TestJetStopBackupInstance()
+        {
+            using (var instance = new Instance("TestJetStopBackupInstance"))
+            {
+                instance.Parameters.Recovery = false;
+                instance.Parameters.NoInformationEvent = true;
+                instance.Parameters.MaxTemporaryTables = 0;
+                instance.Init();
+                Api.JetStopBackupInstance(instance);
+            }
+        }
+
+        /// <summary>
+        /// Call JetStopServiceInstance on a running instance.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void TestJetStopServieInstance()
+        {
+            using (var instance = new Instance("TestJetStopServiceInstance"))
+            {
+                instance.Parameters.Recovery = false;
+                instance.Parameters.NoInformationEvent = true;
+                instance.Parameters.MaxTemporaryTables = 0;
+                instance.Init();
+                Api.JetStopServiceInstance(instance);
+            }
+        }
+
+        /// <summary>
         /// Duplicate a session
         /// </summary>
         [TestMethod]

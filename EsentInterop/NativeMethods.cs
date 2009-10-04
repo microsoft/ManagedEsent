@@ -63,6 +63,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern int JetInit2(ref IntPtr instance, uint grbit);
 
         [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetStopBackupInstance(IntPtr instance);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetStopServiceInstance(IntPtr instance);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetTerm(IntPtr instance);
 
         [DllImport(EsentDll, ExactSpelling = true)]
@@ -123,6 +129,15 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern int JetCompactW(
             IntPtr sesid, string szDatabaseSrc, string szDatabaseDest, IntPtr pfnStatus, IntPtr pconvert, uint grbit);
 
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetGrowDatabase(IntPtr sesid, uint dbid, uint cpg, out uint pcpgReal);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetSetDatabaseSize(IntPtr sesid, string szDatabaseName, uint cpg, out uint pcpgReal);
+
+        [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
+        public static extern int JetSetDatabaseSizeW(IntPtr sesid, string szDatabaseName, uint cpg, out uint pcpgReal);
+
         #endregion
 
         #region Backup/Restore
@@ -140,6 +155,25 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
         public static extern int JetRestoreInstanceW(IntPtr instance, string sz, string szDest, IntPtr pfn);
+
+        #endregion
+
+        #region Snapshot Backup
+
+        // Introduced in Windows Server 2003
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetOSSnapshotAbort(IntPtr snapId, uint grbit);
+
+        // Introduced in Windows Vista
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetOSSnapshotEnd(IntPtr snapId, uint grbit);
+
+        #endregion
+
+        #region Snapshot Backup/Restore
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetBeginExternalBackupInstance(IntPtr instance, uint grbit);
 
         #endregion
 
@@ -175,6 +209,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetDupCursor(IntPtr sesid, IntPtr tableid, out IntPtr tableidNew, uint grbit);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetComputeStats(IntPtr sesid, IntPtr tableid);
 
         #endregion
 
@@ -315,6 +352,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             uint cbResult,
             uint InfoLevel);
 
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetRenameTable(IntPtr sesid, uint dbid, string szName, string szNameNew);
+
         #endregion
 
         #region Navigation
@@ -450,6 +490,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetConfigureProcessForCrashDump(uint grbit);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetFreeBuffer(IntPtr pbBuf);
 
         #endregion
     }

@@ -10,6 +10,7 @@ namespace InteropApiTests
     using System.IO;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Implementation;
+    using Microsoft.Isam.Esent.Interop.Server2003;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Isam.Esent.Interop.Windows7;
 
@@ -137,6 +138,30 @@ namespace InteropApiTests
         public void VerifyXpThrowsExceptionOnJetConfigureProcessForCrashDump()
         {
             Windows7Api.JetConfigureProcessForCrashDump(CrashDumpGrbit.None);
+        }
+
+        /// <summary>
+        /// Verify that JetOSSnapshotAbort throws an exception when using the
+        /// XP version of ESENT.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void VerifyXpThrowsExceptionOnJetOSSnapshotAbort()
+        {
+            Server2003Api.JetOSSnapshotAbort(JET_OSSNAPID.Nil, SnapshotAbortGrbit.None);
+        }
+
+        /// <summary>
+        /// Verify that JetOSSnapshotEnd throws an exception when using the
+        /// XP version of ESENT.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void VerifyXpThrowsExceptionOnJetOSSnapshotEnd()
+        {
+            VistaApi.JetOSSnapshotEnd(JET_OSSNAPID.Nil, SnapshotEndGrbit.None);
         }
 
         /// <summary>
@@ -276,28 +301,6 @@ namespace InteropApiTests
             }
 
             Cleanup.DeleteDirectoryWithRetry(directory);
-        }
-
-        /// <summary>
-        /// Tests for JetBackupInstance and JetRestoreInstance on XP.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        public void BackupRestoreDatabaseOnXp()
-        {
-            var test = new BackupRestoreCompactDatabase("database", "backup", false);
-            test.TestBackupRestore();
-        }
-
-        /// <summary>
-        /// Tests for JetBackupInstance and JetRestoreInstance on XP.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        public void TestJetCompactDatabaseOnXp()
-        {
-            var test = new BackupRestoreCompactDatabase("database", "ignored", false);
-            test.TestCompactDatabase();
         }
     }
 }

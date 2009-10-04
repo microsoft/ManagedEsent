@@ -50,5 +50,15 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         {
             Api.Check(Api.Impl.JetGetThreadStats(out threadstats));
         }
+
+        /// <summary>
+        /// Notifies the engine that the snapshot session finished.
+        /// </summary>
+        /// <param name="snapid">The identifier of the snapshot session.</param>
+        /// <param name="grbit">Snapshot end options.</param>
+        public static void JetOSSnapshotEnd(JET_OSSNAPID snapid, SnapshotEndGrbit grbit)
+        {
+            Api.Check(Api.Impl.JetOSSnapshotEnd(snapid, grbit));
+        }
     }
 }

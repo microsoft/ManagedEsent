@@ -249,7 +249,7 @@ namespace InteropApiTests
                 return;
             }
 
-            var test = new BackupRestoreCompactDatabase(this.directory, "한글", false);
+            var test = new DatabaseFileTestHelper(this.directory, "한글", false);
             test.TestBackupRestore();
         }
 
@@ -265,8 +265,19 @@ namespace InteropApiTests
                 return;
             }
 
-            var test = new BackupRestoreCompactDatabase(this.directory, "ignored", false);
+            var test = new DatabaseFileTestHelper(this.directory);
             test.TestCompactDatabase();
+        }
+
+        /// <summary>
+        /// Tests for JetCompactDatabase with an ASCII path.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void TestJetSetDatabaseSizeDatabaseWithUnicodePath()
+        {
+            var test = new DatabaseFileTestHelper(this.directory);
+            test.TestSetDatabaseSize();
         }
     }
 }

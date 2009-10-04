@@ -7,6 +7,17 @@
 namespace Microsoft.Isam.Esent.Interop.Server2003
 {
     /// <summary>
+    /// Options for <see cref="Server2003Api.JetOSSnapshotAbort"/>.
+    /// </summary>
+    public enum SnapshotAbortGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,    
+    }
+
+    /// <summary>
     /// Grbits that have been added to the Windows Server 2003 version of ESENT.
     /// </summary>
     public static class Server2003Grbits

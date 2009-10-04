@@ -65,7 +65,9 @@ namespace InteropApiTests
             {
                 using (var session = new Session(instance))
                 {
-                    Api.JetCompact(session, "source", "destination", null, new object(), CompactGrbit.None);
+#pragma warning disable 618,612 // JET_CONVERT is obsolete
+                    Api.JetCompact(session, "source", "destination", null, new JET_CONVERT(), CompactGrbit.None);
+#pragma warning restore 618,612
                 }
             }
         }
@@ -77,7 +79,7 @@ namespace InteropApiTests
         [Priority(2)]
         public void TestJetCompact()
         {
-            var test = new BackupRestoreCompactDatabase("database", "ignored", true);
+            var test = new DatabaseFileTestHelper("database", true);
             test.TestCompactDatabase();
         }
 
@@ -90,7 +92,7 @@ namespace InteropApiTests
         public void TestJetCompactExceptionHandling()
         {
             var ex = new ArgumentNullException();
-            var test = new BackupRestoreCompactDatabase("database", "ignored", true);
+            var test = new DatabaseFileTestHelper("database", true);
             test.TestCompactDatabaseCallbackExceptionHandling(ex);
         }
 

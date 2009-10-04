@@ -7,6 +7,22 @@
 namespace Microsoft.Isam.Esent.Interop.Vista
 {
     /// <summary>
+    /// Options for <see cref="VistaApi.JetOSSnapshotEnd"/>.
+    /// </summary>
+    public enum SnapshotEndGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+    
+        /// <summary>
+        /// The snapshot session aborted.
+        /// </summary>
+        AbortSnapshot = 0x1,
+    }
+
+    /// <summary>
     /// Grbits that have been added to the Vista version of ESENT.
     /// </summary>
     public static class VistaGrbits

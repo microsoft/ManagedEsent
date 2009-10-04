@@ -167,6 +167,66 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Check that JET_OSSNAPID structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyJetOsSnapidEquality()
+        {
+            var x = JET_OSSNAPID.Nil;
+            var y = JET_OSSNAPID.Nil;
+            TestEqualObjects(x, y);
+            Assert.IsTrue(x == y);
+            Assert.IsFalse(x != y);
+        }
+
+        /// <summary>
+        /// Check that JET_OSSNAPID structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyJetOsSnapidInequality()
+        {
+            var x = JET_OSSNAPID.Nil;
+            var y = new JET_OSSNAPID { Value = (IntPtr)0x7 };
+            TestUnequalObjects(x, y);
+            Assert.IsTrue(x != y);
+            Assert.IsFalse(x == y);
+        }
+
+        /// <summary>
+        /// Check that JET_HANDLE structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyJetHandleEquality()
+        {
+            var x = JET_HANDLE.Nil;
+            var y = JET_HANDLE.Nil;
+            TestEqualObjects(x, y);
+            Assert.IsTrue(x == y);
+            Assert.IsFalse(x != y);
+        }
+
+        /// <summary>
+        /// Check that JET_HANDLE structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyJetHandleInequality()
+        {
+            var x = JET_HANDLE.Nil;
+            var y = new JET_HANDLE { Value = (IntPtr)0x7 };
+            TestUnequalObjects(x, y);
+            Assert.IsTrue(x != y);
+            Assert.IsFalse(x == y);
+        }
+
+        /// <summary>
         /// Helper method to compare two equal objects.
         /// </summary>
         /// <typeparam name="T">The object type.</typeparam>

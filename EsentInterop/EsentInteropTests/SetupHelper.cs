@@ -55,6 +55,17 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Turns off logging, disables the temp DB and turns off events.
+        /// </summary>
+        /// <param name="instance">The instance to configure.</param>
+        public static void SetLightweightConfiguration(Instance instance)
+        {
+            instance.Parameters.Recovery = false;
+            instance.Parameters.NoInformationEvent = true;
+            instance.Parameters.MaxTemporaryTables = 0;
+        }
+
+        /// <summary>
         /// Creates a unique name for a new instance.
         /// </summary>
         /// <returns>An index name.</returns>

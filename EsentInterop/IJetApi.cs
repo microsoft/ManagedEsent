@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop.Implementation
 {
     using System;
+    using Microsoft.Isam.Esent.Interop.Server2003;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Isam.Esent.Interop.Windows7;
 
@@ -73,6 +74,22 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </param>
         /// <returns>An error or warning.</returns>
         int JetInit2(ref JET_INSTANCE instance, InitGrbit grbit);
+
+        /// <summary>
+        /// Prevents streaming backup-related activity from continuing on a
+        /// specific running instance, thus ending the streaming backup in
+        /// a predictable way.
+        /// </summary>
+        /// <param name="instance">The instance to use.</param>
+        /// <returns>An error code.</returns>
+        int JetStopBackupInstance(JET_INSTANCE instance);
+
+        /// <summary>
+        /// Prepares an instance for termination.
+        /// </summary>
+        /// <param name="instance">The (running) instance to use.</param>
+        /// <returns>An error code.</returns>
+        int JetStopServiceInstance(JET_INSTANCE instance);
 
         /// <summary>
         /// Terminate an instance that was created with <see cref="JetInit"/> or
@@ -214,6 +231,30 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             object ignored,
             CompactGrbit grbit);
 
+        /// <summary>
+        /// Extends the size of a database that is currently open.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database to grow.</param>
+        /// <param name="desiredPages">The desired size of the database, in pages.</param>
+        /// <param name="actualPages">
+        /// The size of the database, in pages, after the call.
+        /// </param>
+        /// <returns>An error if the call fails.</returns>
+        int JetGrowDatabase(JET_SESID sesid, JET_DBID dbid, int desiredPages, out int actualPages);
+
+        /// <summary>
+        /// Extends the size of a database that is currently open.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="database">The name of the database to grow.</param>
+        /// <param name="desiredPages">The desired size of the database, in pages.</param>
+        /// <param name="actualPages">
+        /// The size of the database, in pages, after the call.
+        /// </param>
+        /// <returns>An error if the call fails.</returns>
+        int JetSetDatabaseSize(JET_SESID sesid, string database, int desiredPages, out int actualPages);
+
         #endregion
 
         #region Backup/Restore
@@ -257,6 +298,39 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </param>
         /// <returns>An error code.</returns>
         int JetRestoreInstance(JET_INSTANCE instance, string source, string destination, JET_PFNSTATUS statusCallback);
+
+        #endregion
+
+        #region Snapshot Backup
+
+        /// <summary>
+        /// Notifies the engine that it can resume normal IO operations after a
+        /// freeze period ended with a failed snapshot.
+        /// </summary>
+        /// <param name="snapid">Identifier of the snapshot session.</param>
+        /// <param name="grbit">Options for this call.</param>
+        /// <returns>An error code.</returns>
+        int JetOSSnapshotAbort(JET_OSSNAPID snapid, SnapshotAbortGrbit grbit);
+
+        /// <summary>
+        /// Notifies the engine that the snapshot session finished.
+        /// </summary>
+        /// <param name="snapid">The identifier of the snapshot session.</param>
+        /// <param name="grbit">Snapshot end options.</param>
+        /// <returns>An error code.</returns>
+        int JetOSSnapshotEnd(JET_OSSNAPID snapid, SnapshotEndGrbit grbit);
+
+        #endregion
+
+        #region Streaming Backup/Restore
+
+        /// <summary>
+        /// Initiates an external backup while the engine and database are online and active. 
+        /// </summary>
+        /// <param name="instance">The instance prepare for backup.</param>
+        /// <param name="grbit">Backup options.</param>
+        /// <returns>An error code if the call fails.</returns>
+        int JetBeginExternalBackupInstance(JET_INSTANCE instance, BeginExternalBackupGrbit grbit);
 
         #endregion
 
@@ -360,6 +434,19 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="grbit">Reserved for future use.</param>
         /// <returns>An error if the call fails.</returns>
         int JetDupCursor(JET_SESID sesid, JET_TABLEID tableid, out JET_TABLEID newTableid, DupCursorGrbit grbit);
+
+        /// <summary>
+        /// Walks each index of a table to exactly compute the number of entries
+        /// in an index, and the number of distinct keys in an index. This
+        /// information, together with the number of database pages allocated
+        /// for an index and the current time of the computation is stored in
+        /// index metadata in the database. This data can be subsequently retrieved
+        /// with information operations.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table that the statistics will be computed on.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetComputeStats(JET_SESID sesid, JET_TABLEID tableid);
 
         #endregion
 
@@ -763,6 +850,16 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_TABLEID tableid,
             string ignored,
             out JET_INDEXLIST indexlist);
+
+        /// <summary>
+        /// Changes the name of an existing table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database containing the table.</param>
+        /// <param name="tableName">The name of the table.</param>
+        /// <param name="newTableName">The new name of the table.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetRenameTable(JET_SESID sesid, JET_DBID dbid, string tableName, string newTableName);
 
         #endregion
 
@@ -1204,6 +1301,16 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="grbit">Crash dump options.</param>
         /// <returns>An error code.</returns>
         int JetConfigureProcessForCrashDump(CrashDumpGrbit grbit);
+
+        /// <summary>
+        /// Frees memory that was allocated by a database engine call.
+        /// </summary>
+        /// <param name="buffer">
+        /// The buffer allocated by a call to the database engine.
+        /// <see cref="IntPtr.Zero"/> is acceptable, and will be ignored.
+        /// </param>
+        /// <returns>An error code.</returns>
+        int JetFreeBuffer(IntPtr buffer);
 
         #endregion
     }

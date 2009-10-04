@@ -206,6 +206,24 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Options for <see cref="Api.JetBeginExternalBackupInstance"/>.
+    /// </summary>
+    public enum BeginExternalBackupGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// Creates an incremental backup as opposed to a full backup. This
+        /// means that only the log files since the last full or incremental
+        /// backup will be backed up.
+        /// </summary>
+        Incremental = 0x1,
+    }
+
+    /// <summary>
     /// Options for <see cref="Api.JetBeginTransaction2"/>.
     /// </summary>
     public enum BeginTransactionGrbit

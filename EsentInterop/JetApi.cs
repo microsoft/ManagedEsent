@@ -13,6 +13,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
     using System.Text;
+    using Microsoft.Isam.Esent.Interop.Server2003;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Isam.Esent.Interop.Windows7;
 
@@ -146,6 +147,30 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetInit2");
             return this.Err(NativeMethods.JetInit2(ref instance.Value, (uint) grbit));
+        }
+
+        /// <summary>
+        /// Prevents streaming backup-related activity from continuing on a
+        /// specific running instance, thus ending the streaming backup in
+        /// a predictable way.
+        /// </summary>
+        /// <param name="instance">The instance to use.</param>
+        /// <returns>An error code.</returns>
+        public int JetStopBackupInstance(JET_INSTANCE instance)
+        {
+            this.TraceFunctionCall("JetStopBackupInstance");
+            return this.Err(NativeMethods.JetStopBackupInstance(instance.Value));
+        }
+
+        /// <summary>
+        /// Prepares an instance for termination.
+        /// </summary>
+        /// <param name="instance">The (running) instance to use.</param>
+        /// <returns>An error code.</returns>
+        public int JetStopServiceInstance(JET_INSTANCE instance)
+        {
+            this.TraceFunctionCall("JetStopServiceInstance");
+            return this.Err(NativeMethods.JetStopServiceInstance(instance.Value));            
         }
 
         /// <summary>
@@ -438,6 +463,59 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return err;
         }
 
+        /// <summary>
+        /// Extends the size of a database that is currently open.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database to grow.</param>
+        /// <param name="desiredPages">The desired size of the database, in pages.</param>
+        /// <param name="actualPages">
+        /// The size of the database, in pages, after the call.
+        /// </param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGrowDatabase(JET_SESID sesid, JET_DBID dbid, int desiredPages, out int actualPages)
+        {
+            this.TraceFunctionCall("JetGrowDatabase");
+            this.CheckNotNegative(desiredPages, "desiredPages");
+            uint actualPagesNative;
+            int err = this.Err(NativeMethods.JetGrowDatabase(
+                        sesid.Value, dbid.Value, checked((uint) desiredPages), out actualPagesNative));
+            actualPages = checked((int) actualPagesNative);
+            return err;
+        }
+
+        /// <summary>
+        /// Extends the size of a database that is currently open.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="database">The name of the database to grow.</param>
+        /// <param name="desiredPages">The desired size of the database, in pages.</param>
+        /// <param name="actualPages">
+        /// The size of the database, in pages, after the call.
+        /// </param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetSetDatabaseSize(JET_SESID sesid, string database, int desiredPages, out int actualPages)
+        {
+            this.TraceFunctionCall("JetSetDatabaseSize");
+            this.CheckNotNegative(desiredPages, "desiredPages");
+            this.CheckNotNull(database, "database");
+            uint actualPagesNative;
+            int err;
+            if (this.Capabilities.SupportsUnicodePaths)
+            {
+                err = this.Err(NativeMethods.JetSetDatabaseSizeW(
+                            sesid.Value, database, checked((uint)desiredPages), out actualPagesNative));
+            }
+            else
+            {
+                err = this.Err(NativeMethods.JetSetDatabaseSize(
+                            sesid.Value, database, checked((uint)desiredPages), out actualPagesNative));                
+            }
+
+            actualPages = checked((int)actualPagesNative);
+            return err;            
+        }
+
         #endregion
 
         #region Backup/Restore
@@ -519,6 +597,53 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             callbackWrapper.ThrowSavedException();
             return err;
+        }
+
+        #endregion
+
+        #region Snapshot Backup
+
+        /// <summary>
+        /// Notifies the engine that it can resume normal IO operations after a
+        /// freeze period ended with a failed snapshot.
+        /// </summary>
+        /// <param name="snapid">Identifier of the snapshot session.</param>
+        /// <param name="grbit">Options for this call.</param>
+        /// <returns>An error code.</returns>
+        public int JetOSSnapshotAbort(JET_OSSNAPID snapid, SnapshotAbortGrbit grbit)
+        {
+            this.TraceFunctionCall("JetOSSnapshotAbort");
+            this.CheckSupportsServer2003Features("JetOSSnapshotAbort");
+            return this.Err(NativeMethods.JetOSSnapshotAbort(snapid.Value, (uint) grbit));
+        }
+
+        /// <summary>
+        /// Notifies the engine that the snapshot session finished.
+        /// </summary>
+        /// <param name="snapid">The identifier of the snapshot session.</param>
+        /// <param name="grbit">Snapshot end options.</param>
+        /// <returns>An error code.</returns>
+        public int JetOSSnapshotEnd(JET_OSSNAPID snapid, SnapshotEndGrbit grbit)
+        {
+            this.TraceFunctionCall("JetOSSnapshotEnd");
+            this.CheckSupportsVistaFeatures("JetOSSnapshotEnd");
+            return this.Err(NativeMethods.JetOSSnapshotEnd(snapid.Value, (uint)grbit));            
+        }
+
+        #endregion
+
+        #region Streaming Backup/Restore
+
+        /// <summary>
+        /// Initiates an external backup while the engine and database are online and active. 
+        /// </summary>
+        /// <param name="instance">The instance prepare for backup.</param>
+        /// <param name="grbit">Backup options.</param>
+        /// <returns>An error code if the call fails.</returns>
+        public int JetBeginExternalBackupInstance(JET_INSTANCE instance, BeginExternalBackupGrbit grbit)
+        {
+            this.TraceFunctionCall("JetBeginExternalBackupInstance");
+            return this.Err(NativeMethods.JetBeginExternalBackupInstance(instance.Value, (uint) grbit));
         }
 
         #endregion
@@ -670,6 +795,23 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.TraceFunctionCall("JetDupCursor");
             newTableid = JET_TABLEID.Nil;
             return this.Err(NativeMethods.JetDupCursor(sesid.Value, tableid.Value, out newTableid.Value, (uint)grbit));
+        }
+
+        /// <summary>
+        /// Walks each index of a table to exactly compute the number of entries
+        /// in an index, and the number of distinct keys in an index. This
+        /// information, together with the number of database pages allocated
+        /// for an index and the current time of the computation is stored in
+        /// index metadata in the database. This data can be subsequently retrieved
+        /// with information operations.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table that the statistics will be computed on.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetComputeStats(JET_SESID sesid, JET_TABLEID tableid)
+        {
+            this.TraceFunctionCall("JetComputeStats");
+            return this.Err(NativeMethods.JetComputeStats(sesid.Value, tableid.Value));           
         }
 
         #endregion
@@ -1428,6 +1570,22 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return err;
         }
 
+        /// <summary>
+        /// Changes the name of an existing table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database containing the table.</param>
+        /// <param name="tableName">The name of the table.</param>
+        /// <param name="newTableName">The new name of the table.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetRenameTable(JET_SESID sesid, JET_DBID dbid, string tableName, string newTableName)
+        {
+            this.TraceFunctionCall("JetRenameTable");
+            this.CheckNotNull(tableName, "tableName");
+            this.CheckNotNull(newTableName, "newTableName");
+            return this.Err(NativeMethods.JetRenameTable(sesid.Value, dbid.Value, tableName, newTableName));
+        }
+
         #endregion
 
         #region Navigation
@@ -2144,6 +2302,20 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return NativeMethods.JetConfigureProcessForCrashDump((uint) grbit);
         }
 
+        /// <summary>
+        /// Frees memory that was allocated by a database engine call.
+        /// </summary>
+        /// <param name="buffer">
+        /// The buffer allocated by a call to the database engine.
+        /// <see cref="IntPtr.Zero"/> is acceptable, and will be ignored.
+        /// </param>
+        /// <returns>An error code.</returns>
+        public int JetFreeBuffer(IntPtr buffer)
+        {
+            this.TraceFunctionCall("JetFreeBuffer");
+            return NativeMethods.JetFreeBuffer(buffer);
+        }
+
         #endregion
 
         #region Helper Methods
@@ -2422,6 +2594,19 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             finally
             {
                 this.JetTerm(instance);
+            }
+        }
+
+        /// <summary>
+        /// Check that ESENT supports Server 2003 features. Throws an exception if Server 2003 features
+        /// aren't supported.
+        /// </summary>
+        /// <param name="api">The API that is being called.</param>
+        private void CheckSupportsServer2003Features(string api)
+        {
+            if (!this.Capabilities.SupportsServer2003Features)
+            {
+                this.ThrowUnsupportedApiException(api);
             }
         }
 

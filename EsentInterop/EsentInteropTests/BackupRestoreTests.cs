@@ -38,7 +38,7 @@ namespace InteropApiTests
         [Priority(2)]
         public void TestBackupRestore()
         {
-            var test = new BackupRestoreCompactDatabase("database", "backup", true);
+            var test = new DatabaseFileTestHelper("database", "backup", true);
             test.TestBackupRestore();
         }
 
@@ -52,7 +52,7 @@ namespace InteropApiTests
         public void TestBackupCallbackExceptionHandling()
         {
             var ex = new ArgumentNullException();
-            var test = new BackupRestoreCompactDatabase("database", "backup", true);
+            var test = new DatabaseFileTestHelper("database", "backup", true);
             test.TestBackupCallbackExceptionHandling(ex);
         }
 
@@ -67,7 +67,7 @@ namespace InteropApiTests
         {
             Assert.Inconclusive("test is disabled because instance isn't torn down correctly");
             var ex = new ArgumentNullException();
-            var test = new BackupRestoreCompactDatabase("database", "backup", true);
+            var test = new DatabaseFileTestHelper("database", "backup", true);
             test.TestRestoreCallbackExceptionHandling(ex);
         }
     }

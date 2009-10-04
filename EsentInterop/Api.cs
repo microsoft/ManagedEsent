@@ -149,6 +149,26 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Prevents streaming backup-related activity from continuing on a
+        /// specific running instance, thus ending the streaming backup in
+        /// a predictable way.
+        /// </summary>
+        /// <param name="instance">The instance to use.</param>
+        public static void JetStopBackupInstance(JET_INSTANCE instance)
+        {
+            Api.Check(Impl.JetStopBackupInstance(instance));
+        }
+
+        /// <summary>
+        /// Prepares an instance for termination.
+        /// </summary>
+        /// <param name="instance">The (running) instance to use.</param>
+        public static void JetStopServiceInstance(JET_INSTANCE instance)
+        {
+            Api.Check(Impl.JetStopServiceInstance(instance));            
+        }
+
+        /// <summary>
         /// Terminate an instance that was created with <see cref="JetInit"/> or
         /// <see cref="JetCreateInstance"/>.
         /// </summary>
@@ -283,6 +303,7 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetDetachDatabase(sesid, database));
         }
 
+#pragma warning disable 618,612 // Disable warning that JET_CONVERT is obsolete
         /// <summary>
         /// Makes a copy of an existing database. The copy is compacted to a
         /// state optimal for usage. Data in the copied data will be packed
@@ -307,11 +328,40 @@ namespace Microsoft.Isam.Esent.Interop
             string sourceDatabase,
             string destinationDatabase,
             JET_PFNSTATUS statusCallback,
-            object ignored,
+            JET_CONVERT ignored,
             CompactGrbit grbit)
         {
             Api.Check(
                 Impl.JetCompact(sesid, sourceDatabase, destinationDatabase, statusCallback, ignored, grbit));
+        }
+#pragma warning restore 618,612
+
+        /// <summary>
+        /// Extends the size of a database that is currently open.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database to grow.</param>
+        /// <param name="desiredPages">The desired size of the database, in pages.</param>
+        /// <param name="actualPages">
+        /// The size of the database, in pages, after the call.
+        /// </param>
+        public static void JetGrowDatabase(JET_SESID sesid, JET_DBID dbid, int desiredPages, out int actualPages)
+        {
+            Api.Check(Impl.JetGrowDatabase(sesid, dbid, desiredPages, out actualPages));
+        }
+
+        /// <summary>
+        /// Sets the size of an unopened database file.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="database">The name of the database.</param>
+        /// <param name="desiredPages">The desired size of the database, in pages.</param>
+        /// <param name="actualPages">
+        /// The size of the database, in pages, after the call.
+        /// </param>
+        public static void JetSetDatabaseSize(JET_SESID sesid, string database, int desiredPages, out int actualPages)
+        {
+            Api.Check(Impl.JetSetDatabaseSize(sesid, database, desiredPages, out actualPages));
         }
 
         #endregion
@@ -362,6 +412,20 @@ namespace Microsoft.Isam.Esent.Interop
         public static void JetRestoreInstance(JET_INSTANCE instance, string source, string destination, JET_PFNSTATUS statusCallback)
         {
             Api.Check(Impl.JetRestoreInstance(instance, source, destination, statusCallback));
+        }
+
+        #endregion
+
+        #region Streaming Backup/Restore
+
+        /// <summary>
+        /// Initiates an external backup while the engine and database are online and active. 
+        /// </summary>
+        /// <param name="instance">The instance prepare for backup.</param>
+        /// <param name="grbit">Backup options.</param>
+        public static void JetBeginExternalBackupInstance(JET_INSTANCE instance, BeginExternalBackupGrbit grbit)
+        {
+            Api.Check(Impl.JetBeginExternalBackupInstance(instance, grbit));
         }
 
         #endregion
@@ -470,6 +534,21 @@ namespace Microsoft.Isam.Esent.Interop
         public static void JetDupCursor(JET_SESID sesid, JET_TABLEID tableid, out JET_TABLEID newTableid, DupCursorGrbit grbit)
         {
             Api.Check(Impl.JetDupCursor(sesid, tableid, out newTableid, grbit));
+        }
+
+        /// <summary>
+        /// Walks each index of a table to exactly compute the number of entries
+        /// in an index, and the number of distinct keys in an index. This
+        /// information, together with the number of database pages allocated
+        /// for an index and the current time of the computation is stored in
+        /// index metadata in the database. This data can be subsequently retrieved
+        /// with information operations.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table that the statistics will be computed on.</param>
+        public static void JetComputeStats(JET_SESID sesid, JET_TABLEID tableid)
+        {
+            Api.Check(Impl.JetComputeStats(sesid, tableid));
         }
 
         #endregion
@@ -917,6 +996,18 @@ namespace Microsoft.Isam.Esent.Interop
                 out JET_INDEXLIST indexlist)
         {
             Api.Check(Impl.JetGetTableIndexInfo(sesid, tableid, ignored, out indexlist));
+        }
+
+        /// <summary>
+        /// Changes the name of an existing table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database containing the table.</param>
+        /// <param name="tableName">The name of the table.</param>
+        /// <param name="newTableName">The new name of the table.</param>
+        public static void JetRenameTable(JET_SESID sesid, JET_DBID dbid, string tableName, string newTableName)
+        {
+            Api.Check(Impl.JetRenameTable(sesid, dbid, tableName, newTableName));
         }
 
         #endregion
@@ -1594,6 +1685,17 @@ namespace Microsoft.Isam.Esent.Interop
         public static JET_wrn JetIdle(JET_SESID sesid, IdleGrbit grbit)
         {
             return Api.Check(Impl.JetIdle(sesid, grbit));
+        }
+
+        /// <summary>
+        /// Frees memory that was allocated by a database engine call.
+        /// </summary>
+        /// <param name="buffer">
+        /// The buffer allocated by a call to the database engine.
+        /// <see cref="IntPtr.Zero"/> is acceptable, and will be ignored.
+        /// </param>
+        public static void JetFreeBuffer(IntPtr buffer)
+        {            
         }
 
         #endregion

@@ -196,5 +196,38 @@ namespace InteropApiTests
                 }
             }
         }
+
+        /// <summary>
+        /// Tests for JetBackupInstance and JetRestoreInstance with an ASCII path.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void BackupRestoreDatabaseWithAsciiPath()
+        {
+            var test = new DatabaseFileTestHelper("database", "backup", false);
+            test.TestBackupRestore();
+        }
+
+        /// <summary>
+        /// Tests for JetCompactDatabase with an ASCII path.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void TestJetCompactDatabaseWithAsciiPath()
+        {
+            var test = new DatabaseFileTestHelper("database");
+            test.TestCompactDatabase();
+        }
+
+        /// <summary>
+        /// Tests for JetCompactDatabase with an ASCII path.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void TestJetSetDatabaseSizeDatabaseWithAsciiPath()
+        {
+            var test = new DatabaseFileTestHelper("database");
+            test.TestSetDatabaseSize();
+        }
     }
 }

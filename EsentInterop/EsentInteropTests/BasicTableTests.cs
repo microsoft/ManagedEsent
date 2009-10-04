@@ -750,6 +750,25 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Call JetComputeStats.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void TestJetComputeStats()
+        {
+            Api.JetBeginTransaction(this.sesid);
+            for (int i = 0; i < 10; ++i)
+            {
+                Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+                this.SetColumnFromString(Any.String);
+                this.UpdateAndGotoBookmark();
+            }
+
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            Api.JetComputeStats(this.sesid, this.tableid);
+        }
+
+        /// <summary>
         /// Test JetGetThreadStats
         /// </summary>
         [TestMethod]
@@ -760,8 +779,6 @@ namespace InteropApiTests
             {
                 return;
             }
-
-            string s = Any.String;
 
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);

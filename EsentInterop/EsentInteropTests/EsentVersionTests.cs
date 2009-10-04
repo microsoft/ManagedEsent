@@ -7,7 +7,13 @@
 namespace InteropApiTests
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Server2003;
+    using Microsoft.Isam.Esent.Interop.Vista;
+    using Microsoft.Isam.Esent.Interop.Windows7;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -80,6 +86,61 @@ namespace InteropApiTests
                 Assert.IsTrue(EsentVersion.SupportsUnicodePaths);
                 Assert.IsTrue(EsentVersion.SupportsLargeKeys);
             }
+        }
+
+        /// <summary>
+        /// Print a list of all the Jet APIs.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void ListAllApis()
+        {            
+            Console.WriteLine("Api");
+            int totalApis = PrintJetApiNames(typeof(Api));
+            Console.WriteLine("Server2003Api");
+            totalApis += PrintJetApiNames(typeof(Server2003Api));
+            Console.WriteLine("VistaApi");
+            totalApis += PrintJetApiNames(typeof(VistaApi));
+            Console.WriteLine("Windows7Api");
+            totalApis += PrintJetApiNames(typeof(Windows7Api));
+            Console.WriteLine("Total APIs: {0}", totalApis);
+        }
+
+        /// <summary>
+        /// Prints a sorted list of the Jet apis in the given type.
+        /// </summary>
+        /// <param name="type">The type to inspect.</param>
+        /// <returns>The number of APIs found in the type.</returns>
+        private static int PrintJetApiNames(Type type)
+        {
+            int numApisFound = 0;
+            foreach (string method in GetJetApiNames(type).OrderBy(x => x).Distinct())
+            {
+                Console.WriteLine("\t{0}", method);
+                numApisFound++;
+            }
+
+            return numApisFound;
+        }
+
+        /// <summary>
+        /// Returns the names of all the static methods in the given type
+        /// that start with 'Jet'.
+        /// </summary>
+        /// <param name="type">The type to look at.</param>
+        /// <returns>
+        /// An enumeration of all the static methods in the type that
+        /// start with 'Jet'.
+        /// </returns>
+        private static IEnumerable<string> GetJetApiNames(Type type)
+        {
+            foreach (MemberInfo member in type.GetMembers(BindingFlags.Public | BindingFlags.Static))
+            {
+                if (member.Name.StartsWith("Jet") && (member.MemberType == MemberTypes.Method))
+                {
+                    yield return member.Name;
+                }
+            }            
         }
     }
 }

@@ -70,5 +70,16 @@ namespace InteropApiTests
             var columnid = new JET_COLUMNID() { Value = 0x12EC };
             Assert.AreEqual("JET_COLUMNID(0x12ec)", columnid.ToString());
         }
+
+        /// <summary>
+        /// Test JET_OSSNAPID.ToString()
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void JetOsSnapidToString()
+        {
+            var ossnapid = new JET_OSSNAPID { Value = (IntPtr)0x123ABC };
+            Assert.AreEqual("JET_OSSNAPID(0x123abc)", ossnapid.ToString());
+        }
     }
 }

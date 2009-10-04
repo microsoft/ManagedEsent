@@ -35,7 +35,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        public void VerifyApiTestHookResetsApi()
+        public void VerifyDisposingApiTestHookResetsApi()
         {
             var oldImpl = Api.Impl;
             var newImpl = new JetApi();
