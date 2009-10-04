@@ -224,6 +224,27 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Options for <see cref="Api.JetEndExternalBackupInstance"/>.
+    /// </summary>
+    public enum EndExternalBackupGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// The client application finished the backup completely, and is ending normally.
+        /// </summary>
+        Normal = 0x1,
+
+        /// <summary>
+        /// The client application is aborting the backup.
+        /// </summary>
+        Abort = 0x2,
+    }
+
+    /// <summary>
     /// Options for <see cref="Api.JetBeginTransaction2"/>.
     /// </summary>
     public enum BeginTransactionGrbit

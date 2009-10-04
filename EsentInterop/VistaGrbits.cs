@@ -58,6 +58,12 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         public const CreateIndexGrbit IndexNestedTable = (CreateIndexGrbit)0x20000;
 
         /// <summary>
+        /// The engine can mark the database headers as appropriate (for example,
+        /// a full backup completed), even though the call to truncate was not completed.
+        /// </summary>
+        public const EndExternalBackupGrbit TruncateDone = (EndExternalBackupGrbit)0x100;
+
+        /// <summary>
         /// Specifying this flag will cause the index to use the maximum key size
         /// specified in the cbKeyMost field in the structure. Otherwise, the
         /// index will use JET_cbKeyMost (255) as its maximum key size.
