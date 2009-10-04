@@ -388,6 +388,15 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the call fails.</returns>
         int JetReadFileInstance(JET_INSTANCE instance, JET_HANDLE file, byte[] buffer, int bufferSize, out int bytesRead);
 
+        /// <summary>
+        /// Used during a backup initiated by JetBeginExternalBackup to delete
+        /// any transaction log files that will no longer be needed once the
+        /// current backup completes successfully.
+        /// </summary>
+        /// <param name="instance">The instance to truncate.</param>
+        /// <returns>An error code if the call fails.</returns>
+        int JetTruncateLogInstance(JET_INSTANCE instance);
+
         #endregion
 
         #region Sessions

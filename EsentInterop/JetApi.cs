@@ -748,6 +748,19 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return err;
         }
 
+        /// <summary>
+        /// Used during a backup initiated by JetBeginExternalBackup to delete
+        /// any transaction log files that will no longer be needed once the
+        /// current backup completes successfully.
+        /// </summary>
+        /// <param name="instance">The instance to truncate.</param>
+        /// <returns>An error code if the call fails.</returns>
+        public int JetTruncateLogInstance(JET_INSTANCE instance)
+        {
+            this.TraceFunctionCall("JetTruncateLogInstance");
+            return this.Err(NativeMethods.JetTruncateLogInstance(instance.Value));
+        }
+
         #endregion
 
         #region Sessions

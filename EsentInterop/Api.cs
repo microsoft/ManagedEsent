@@ -494,6 +494,17 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetReadFileInstance(instance, file, buffer, bufferSize, out bytesRead));
         }
 
+        /// <summary>
+        /// Used during a backup initiated by JetBeginExternalBackup to delete
+        /// any transaction log files that will no longer be needed once the
+        /// current backup completes successfully.
+        /// </summary>
+        /// <param name="instance">The instance to truncate.</param>
+        public static void JetTruncateLogInstance(JET_INSTANCE instance)
+        {
+            Api.Check(Impl.JetTruncateLogInstance(instance));
+        }
+
         #endregion
 
         #region Sessions

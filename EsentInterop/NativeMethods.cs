@@ -196,6 +196,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern int JetReadFileInstance(
             IntPtr instance, IntPtr handle, byte[] pv, uint cb, out uint pcbActual);
 
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetTruncateLogInstance(IntPtr instance);
+
         #endregion
 
         #region sessions
