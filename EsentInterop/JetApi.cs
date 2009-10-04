@@ -704,6 +704,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetOpenFileInstance(JET_INSTANCE instance, string file, out JET_HANDLE handle, out long fileSizeLow, out long fileSizeHigh)
         {
             this.TraceFunctionCall("JetOpenFileInstance");
+            this.CheckNotNull(file, "file");
             handle = new JET_HANDLE();
             int err;
             uint nativeFileSizeLow;
@@ -722,6 +723,29 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             fileSizeLow = nativeFileSizeLow;
             fileSizeHigh = nativeFileSizeHigh;
             return err;                 
+        }
+
+        /// <summary>
+        /// Retrieves the contents of a file opened with <see cref="Api.JetOpenFileInstance"/>.
+        /// </summary>
+        /// <param name="instance">The instance to use.</param>
+        /// <param name="file">The file to read from.</param>
+        /// <param name="buffer">The buffer to read into.</param>
+        /// <param name="bufferSize">The size of the buffer.</param>
+        /// <param name="bytesRead">Returns the amount of data read into the buffer.</param>
+        /// <returns>An error code if the call fails.</returns>
+        public int JetReadFileInstance(JET_INSTANCE instance, JET_HANDLE file, byte[] buffer, int bufferSize, out int bytesRead)
+        {
+            this.TraceFunctionCall("JetReadFileInstance");
+            this.CheckNotNull(buffer, "buffer");
+            this.CheckDataSize(buffer, bufferSize, "bufferSize");
+            uint nativeBytesRead;
+            int err =
+                this.Err(
+                    NativeMethods.JetReadFileInstance(
+                        instance.Value, file.Value, buffer, checked((uint)bufferSize), out nativeBytesRead));
+            bytesRead = checked((int)nativeBytesRead);
+            return err;
         }
 
         #endregion

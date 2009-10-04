@@ -153,6 +153,64 @@ namespace InteropApiTests
 
         #endregion Database API
 
+        #region Streaming Backup/Restore
+
+        /// <summary>
+        /// Check that an exception is thrown when JetOpenFileInstance gets a 
+        /// null file name.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetOpenFileInstanceThrowsExceptionWhenFileNameIsNull()
+        {
+            JET_HANDLE handle;
+            long fileSizeLow;
+            long fileSizeHigh;
+            Api.JetOpenFileInstance(JET_INSTANCE.Nil, null, out handle, out fileSizeLow, out fileSizeHigh);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetReadFileInstance gets a 
+        /// null buffer.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetReadFileInstanceThrowsExceptionWhenBufferIsNull()
+        {
+            int bytesRead;
+            Api.JetReadFileInstance(JET_INSTANCE.Nil, JET_HANDLE.Nil, null, 0, out bytesRead);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetReadFileInstance gets a 
+        /// negative buffer size.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetReadFileInstanceThrowsExceptionWhenBufferSizeIsNegative()
+        {
+            int bytesRead;
+            Api.JetReadFileInstance(JET_INSTANCE.Nil, JET_HANDLE.Nil, new byte[1], -1, out bytesRead);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetReadFileInstance gets a 
+        /// buffer size that is too long.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetReadFileInstanceThrowsExceptionWhenBufferSizeIsTooLong()
+        {
+            int bytesRead;
+            Api.JetReadFileInstance(JET_INSTANCE.Nil, JET_HANDLE.Nil, new byte[1], 2, out bytesRead);
+        }
+
+        #endregion
+
         #region DDL
 
         /// <summary>

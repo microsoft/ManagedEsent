@@ -481,6 +481,19 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetOpenFileInstance(instance, file, out handle, out fileSizeLow, out fileSizeHigh));
         }
 
+        /// <summary>
+        /// Retrieves the contents of a file opened with <see cref="Api.JetOpenFileInstance"/>.
+        /// </summary>
+        /// <param name="instance">The instance to use.</param>
+        /// <param name="file">The file to read from.</param>
+        /// <param name="buffer">The buffer to read into.</param>
+        /// <param name="bufferSize">The size of the buffer.</param>
+        /// <param name="bytesRead">Returns the amount of data read into the buffer.</param>
+        public static void JetReadFileInstance(JET_INSTANCE instance, JET_HANDLE file, byte[] buffer, int bufferSize, out int bytesRead)
+        {
+            Api.Check(Impl.JetReadFileInstance(instance, file, buffer, bufferSize, out bytesRead));
+        }
+
         #endregion
 
         #region Sessions

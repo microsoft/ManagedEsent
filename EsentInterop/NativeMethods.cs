@@ -192,6 +192,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern int JetOpenFileInstanceW(
             IntPtr instance, string szFileName, out IntPtr phfFile, out uint pulFileSizeLow, out uint pulFileSizeHigh);
 
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetReadFileInstance(
+            IntPtr instance, IntPtr handle, byte[] pv, uint cb, out uint pcbActual);
+
         #endregion
 
         #region sessions
