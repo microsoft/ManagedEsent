@@ -135,8 +135,7 @@ namespace InteropApiTests
 
             using (var instance = new Instance("unicode"))
             {
-                instance.Parameters.MaxTemporaryTables = 0;
-                instance.Parameters.Recovery = false;
+                SetupHelper.SetLightweightConfiguration(instance);
                 instance.Parameters.CreatePathIfNotExist = true;
                 instance.Init();
                 using (var session = new Session(instance))
@@ -162,8 +161,7 @@ namespace InteropApiTests
 
             using (var instance = new Instance("unicode"))
             {
-                instance.Parameters.MaxTemporaryTables = 0;
-                instance.Parameters.Recovery = false;
+                SetupHelper.SetLightweightConfiguration(instance);
                 instance.Parameters.CreatePathIfNotExist = true;
                 instance.Init();
                 using (var session = new Session(instance))
@@ -190,8 +188,7 @@ namespace InteropApiTests
 
             using (var instance = new Instance("unicode"))
             {
-                instance.Parameters.MaxTemporaryTables = 0;
-                instance.Parameters.Recovery = false;
+                SetupHelper.SetLightweightConfiguration(instance);
                 instance.Parameters.CreatePathIfNotExist = true;
                 instance.Init();
                 using (var session = new Session(instance))
@@ -220,8 +217,7 @@ namespace InteropApiTests
 
             using (var instance = new Instance("unicode"))
             {
-                instance.Parameters.MaxTemporaryTables = 0;
-                instance.Parameters.Recovery = false;
+                SetupHelper.SetLightweightConfiguration(instance);
                 instance.Parameters.CreatePathIfNotExist = true;
                 instance.Init();
                 using (var session = new Session(instance))
@@ -251,6 +247,23 @@ namespace InteropApiTests
 
             var test = new DatabaseFileTestHelper(this.directory, "한글", false);
             test.TestBackupRestore();
+        }
+
+        /// <summary>
+        /// Tests for streaming backup.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Ignore]
+        public void StreamingBackupWithUnicodePAth()
+        {
+            if (!EsentVersion.SupportsUnicodePaths)
+            {
+                return;
+            }
+
+            var test = new DatabaseFileTestHelper(this.directory, "한글", false);
+            test.TestStreamingBackup();
         }
 
         /// <summary>

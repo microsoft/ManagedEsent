@@ -65,10 +65,22 @@ namespace InteropApiTests
         [ExpectedException(typeof(ArgumentNullException))]
         public void TestBackupRestoreCallbackExceptionHandling()
         {
-            Assert.Inconclusive("test is disabled because instance isn't torn down correctly");
             var ex = new ArgumentNullException();
             var test = new DatabaseFileTestHelper("database", "backup", true);
+            Assert.Inconclusive("test is disabled because instance isn't torn down correctly");
             test.TestRestoreCallbackExceptionHandling(ex);
+        }
+
+        /// <summary>
+        /// Tests for streaming backup.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Ignore]
+        public void TestStreamingBackup()
+        {
+            var test = new DatabaseFileTestHelper("database", "backup", false);
+            test.TestStreamingBackup();
         }
     }
 }

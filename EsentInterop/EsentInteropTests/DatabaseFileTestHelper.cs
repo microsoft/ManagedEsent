@@ -204,6 +204,23 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Create a database and do a streaming backup.
+        /// </summary>
+        public void TestStreamingBackup()
+        {
+            try
+            {
+                this.CreateDatabase();
+                this.StreamingBackup();
+                this.CheckDatabase();
+            }
+            finally
+            {
+                Cleanup.DeleteDirectoryWithRetry(this.databaseDirectory);
+            }
+        }
+
+        /// <summary>
         /// Create the database.
         /// </summary>
         private void CreateDatabase()
@@ -286,6 +303,35 @@ namespace InteropApiTests
                         {
                             throw ex;
                         });
+                }
+            }
+        }
+
+        /// <summary>
+        /// Perform a streaming backup.
+        /// </summary>
+        private void StreamingBackup()
+        {
+            using (var instance = this.CreateInstance())
+            {
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
+                    JET_DBID dbid;
+                    Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+
+                    Api.JetBeginExternalBackupInstance(instance, BeginExternalBackupGrbit.None);
+                    JET_HANDLE handle;
+                    long fileSizeLow;
+                    long fileSizeHigh;
+                    Api.JetOpenFileInstance(instance, this.database, out handle, out fileSizeLow, out fileSizeHigh);
+                    var buffer = new byte[64 * 1024];
+                    int bytesRead;
+                    Api.JetReadFileInstance(instance, handle, buffer, buffer.Length, out bytesRead);
+                    Api.JetCloseFileInstance(instance, handle);
+                    Api.JetTruncateLogInstance(instance);
+                    Api.JetEndExternalBackupInstance(instance);
                 }
             }
         }

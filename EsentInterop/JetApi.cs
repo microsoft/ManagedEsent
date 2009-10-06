@@ -705,7 +705,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetOpenFileInstance");
             this.CheckNotNull(file, "file");
-            handle = new JET_HANDLE();
+            handle = JET_HANDLE.Nil;
             int err;
             uint nativeFileSizeLow;
             uint nativeFileSizeHigh;
@@ -2266,9 +2266,21 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.TraceFunctionCall("JetUpdate");
             this.CheckDataSize(bookmark, bookmarkSize, "bookmarkSize");
 
-            uint cbActual;
-            int err = this.Err(NativeMethods.JetUpdate(sesid.Value, tableid.Value, bookmark, checked((uint) bookmarkSize), out cbActual));
-            actualBookmarkSize = checked((int) cbActual);
+            const uint CbActualDefault = 0xDDDDDDDD;
+            uint cbActual = CbActualDefault;
+            int err = this.Err(NativeMethods.JetUpdate(sesid.Value, tableid.Value, bookmark, checked((uint) bookmarkSize), ref cbActual));
+
+            // BUG: Work around a problem in older versions of ESENT where the bookmark args are not set on
+            // output for TTs in insert mode. 
+            if (CbActualDefault == cbActual)
+            {
+                actualBookmarkSize = 0;
+            }
+            else
+            {
+                actualBookmarkSize = checked((int) cbActual);
+            }
+
             return err;
         }
 

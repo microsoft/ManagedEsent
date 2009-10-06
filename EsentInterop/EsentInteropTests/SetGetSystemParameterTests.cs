@@ -453,6 +453,51 @@ namespace InteropApiTests
             SystemParameters.MaxInstances = maxInstancesOld;
         }
 
+        /// <summary>
+        /// Test that SystemParameters.Configuration can be set and retrieved.
+        /// This test only works on Windows Vista and up.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyGetAndSetConfiguration()
+        {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
+            int configurationOld = SystemParameters.Configuration;
+            try
+            {
+                SystemParameters.Configuration = 0;
+                ////Assert.AreEqual(0, SystemParameters.Configuration);
+                Assert.Inconclusive("ESENT bug prevents retrieving the configuration");
+            }
+            finally
+            {
+                SystemParameters.Configuration = configurationOld;
+            }
+        }
+
+        /// <summary>
+        /// Test that SystemParameters.EnableAdvanced can be set and retrieved.
+        /// This test only works on Windows Vista and up.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        public void VerifyGetAndSetEnableAdvanced()
+        {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
+            bool enableAdvanced = SystemParameters.EnableAdvanced;
+            SystemParameters.EnableAdvanced = true;
+            Assert.AreEqual(true, SystemParameters.EnableAdvanced);
+            SystemParameters.EnableAdvanced = enableAdvanced;
+        }
+
         #region Helper Methods
 
         /// <summary>
