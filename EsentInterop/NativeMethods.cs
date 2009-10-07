@@ -63,6 +63,13 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern int JetInit2(ref IntPtr instance, uint grbit);
 
         [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern unsafe int JetGetInstanceInfo(out uint pcInstanceInfo, out NATIVE_INSTANCE_INFO* prgInstanceInfo);
+
+        // Returns unicode strings in the NATIVE_INSTANCE_INFO.
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern unsafe int JetGetInstanceInfoW(out uint pcInstanceInfo, out NATIVE_INSTANCE_INFO* prgInstanceInfo);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetStopBackupInstance(IntPtr instance);
 
         [DllImport(EsentDll, ExactSpelling = true)]
@@ -168,6 +175,27 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetOSSnapshotEnd(IntPtr snapId, uint grbit);
 
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern unsafe int JetOSSnapshotFreeze(
+            IntPtr snapId,
+            out uint pcInstanceInfo,
+            out NATIVE_INSTANCE_INFO* prgInstanceInfo,
+            uint grbit);
+
+        // Returns unicode strings in the NATIVE_INSTANCE_INFO.
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern unsafe int JetOSSnapshotFreezeW(
+            IntPtr snapId,
+            out uint pcInstanceInfo,
+            out NATIVE_INSTANCE_INFO* prgInstanceInfo,
+            uint grbit);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetOSSnapshotPrepare(out IntPtr snapId, uint grbit);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetOSSnapshotThaw(IntPtr snapId, uint grbit);
+
         #endregion
 
         #region Snapshot Backup/Restore
@@ -194,7 +222,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetReadFileInstance(
-            IntPtr instance, IntPtr handle, byte[] pv, uint cb, out uint pcbActual);
+            IntPtr instance, IntPtr handle, IntPtr pv, uint cb, out uint pcbActual);
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetTruncateLogInstance(IntPtr instance);

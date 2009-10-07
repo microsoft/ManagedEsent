@@ -149,6 +149,21 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Retrieves information about the instances that are running.
+        /// </summary>
+        /// <param name="numInstances">
+        /// Returns the number of instances.
+        /// </param>
+        /// <param name="instances">
+        /// Returns an array of instance info objects, one for each running
+        /// instance.
+        /// </param>
+        public static void JetGetInstanceInfo(out int numInstances, out JET_INSTANCE_INFO[] instances)
+        {
+            Api.Check(Impl.JetGetInstanceInfo(out numInstances, out instances));
+        }
+
+        /// <summary>
         /// Prevents streaming backup-related activity from continuing on a
         /// specific running instance, thus ending the streaming backup in
         /// a predictable way.
@@ -412,6 +427,53 @@ namespace Microsoft.Isam.Esent.Interop
         public static void JetRestoreInstance(JET_INSTANCE instance, string source, string destination, JET_PFNSTATUS statusCallback)
         {
             Api.Check(Impl.JetRestoreInstance(instance, source, destination, statusCallback));
+        }
+
+        #endregion
+
+        #region Snapshot Backup
+
+        /// <summary>
+        /// Starts a snapshot. While the snapshot is in progress, no
+        /// write-to-disk activity by the engine can take place.
+        /// </summary>
+        /// <param name="snapshot">The snapshot session.</param>
+        /// <param name="numInstances">
+        /// Returns the number of instances that are part of the snapshot session.
+        /// </param>
+        /// <param name="instances">
+        /// Returns information about the instances that are part of the snapshot session.
+        /// </param>
+        /// <param name="grbit">
+        /// Snapshot freeze options.
+        /// </param>
+        public static void JetOSSnapshotFreeze(JET_OSSNAPID snapshot, out int numInstances, out JET_INSTANCE_INFO[] instances, SnapshotFreezeGrbit grbit)
+        {
+            Api.Check(Impl.JetOSSnapshotFreeze(snapshot, out numInstances, out instances, grbit));
+        }
+
+        /// <summary>
+        /// Begins the preparations for a snapshot session. A snapshot session
+        /// is a short time interval in which the engine does not issue any
+        /// write IOs to disk, so that the engine can participate in a volume
+        /// snapshot session (when driven by a snapshot writer).
+        /// </summary>
+        /// <param name="snapshot">Returns the ID of the snapshot session.</param>
+        /// <param name="grbit">Snapshot options.</param>
+        public static void JetOSSnapshotPrepare(out JET_OSSNAPID snapshot, SnapshotPrepareGrbit grbit)
+        {
+            Api.Check(Impl.JetOSSnapshotPrepare(out snapshot, grbit));
+        }
+
+        /// <summary>
+        /// Notifies the engine that it can resume normal IO operations after a
+        /// freeze period and a successful snapshot.
+        /// </summary>
+        /// <param name="snapshot">The ID of the snapshot.</param>
+        /// <param name="grbit">Thaw options.</param>
+        public static void JetOSSnapshotThaw(JET_OSSNAPID snapshot, SnapshotThawGrbit grbit)
+        {
+            Api.Check(Impl.JetOSSnapshotThaw(snapshot, grbit));
         }
 
         #endregion
@@ -1779,12 +1841,17 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Frees memory that was allocated by a database engine call.
         /// </summary>
+        /// <remarks>
+        /// This method is internal because we never expose the memory
+        /// allocated by ESENT to our callers.
+        /// </remarks>
         /// <param name="buffer">
         /// The buffer allocated by a call to the database engine.
         /// <see cref="IntPtr.Zero"/> is acceptable, and will be ignored.
         /// </param>
         public static void JetFreeBuffer(IntPtr buffer)
-        {            
+        {
+            Api.Check(Impl.JetFreeBuffer(buffer));
         }
 
         #endregion

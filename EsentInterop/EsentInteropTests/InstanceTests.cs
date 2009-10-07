@@ -7,7 +7,6 @@
 namespace InteropApiTests
 {
     using System;
-    using System.IO;
     using System.Threading;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Implementation;
@@ -221,9 +220,7 @@ namespace InteropApiTests
         public void JetInstanceThrowsExceptionWhenInstanceIsClosed()
         {
             var instance = new Instance("theinstance");
-            instance.Parameters.NoInformationEvent = true;
-            instance.Parameters.Recovery = false;
-            instance.Parameters.MaxTemporaryTables = 0;
+            SetupHelper.SetLightweightConfiguration(instance);
             instance.Init();
             instance.Term();
             JET_INSTANCE x = instance.JetInstance;
@@ -355,9 +352,7 @@ namespace InteropApiTests
                 {
                     using (var instance = new Instance(instanceName))
                     {
-                        instance.Parameters.Recovery = false;
-                        instance.Parameters.NoInformationEvent = true;
-                        instance.Parameters.MaxTemporaryTables = 0;
+                        SetupHelper.SetLightweightConfiguration(instance);
                         instance.Init();
                         instance.Term();
                     }
@@ -383,9 +378,7 @@ namespace InteropApiTests
         private static void CreateOneInstance()
         {
             var instance = new Instance("finalize_me");
-            instance.Parameters.NoInformationEvent = true;
-            instance.Parameters.Recovery = false;
-            instance.Parameters.MaxTemporaryTables = 0;
+            SetupHelper.SetLightweightConfiguration(instance);
             instance.Init();
         }
     }

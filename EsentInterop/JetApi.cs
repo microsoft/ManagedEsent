@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Diagnostics;
     using System.Globalization;
     using System.Runtime.CompilerServices;
@@ -16,6 +17,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
     using Microsoft.Isam.Esent.Interop.Server2003;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Isam.Esent.Interop.Windows7;
+    using Win32 = Microsoft.Isam.Esent.Interop.Win32;
 
     /// <summary>
     /// Calls to the ESENT interop layer. These calls take the managed types (e.g. JET_SESID) and
@@ -147,6 +149,42 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetInit2");
             return this.Err(NativeMethods.JetInit2(ref instance.Value, (uint) grbit));
+        }
+
+        /// <summary>
+        /// Retrieves information about the instances that are running.
+        /// </summary>
+        /// <param name="numInstances">
+        /// Returns the number of instances.
+        /// </param>
+        /// <param name="instances">
+        /// Returns an array of instance info objects, one for each running
+        /// instance.
+        /// </param>
+        /// <returns>An error code if the call fails.</returns>
+        public int JetGetInstanceInfo(out int numInstances, out JET_INSTANCE_INFO[] instances)
+        {
+            this.TraceFunctionCall("JetGetInstanceInfo");
+
+            unsafe
+            {
+                uint nativeNumInstance;
+                NATIVE_INSTANCE_INFO* nativeInstanceInfos;
+                int err;
+                if (this.Capabilities.SupportsUnicodePaths)
+                {
+                    err = NativeMethods.JetGetInstanceInfoW(out nativeNumInstance, out nativeInstanceInfos);
+                    instances = this.ConvertInstanceInfosUnicode(nativeNumInstance, nativeInstanceInfos);
+                }
+                else
+                {
+                    err = NativeMethods.JetGetInstanceInfo(out nativeNumInstance, out nativeInstanceInfos);
+                    instances = this.ConvertInstanceInfosAscii(nativeNumInstance, nativeInstanceInfos);                    
+                }
+
+                numInstances = instances.Length;
+                return this.Err(err);                
+            }
         }
 
         /// <summary>
@@ -630,6 +668,75 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return this.Err(NativeMethods.JetOSSnapshotEnd(snapid.Value, (uint)grbit));            
         }
 
+        /// <summary>
+        /// Starts a snapshot. While the snapshot is in progress, no
+        /// write-to-disk activity by the engine can take place.
+        /// </summary>
+        /// <param name="snapshot">The snapshot session.</param>
+        /// <param name="numInstances">
+        /// Returns the number of instances that are part of the snapshot session.
+        /// </param>
+        /// <param name="instances">
+        /// Returns information about the instances that are part of the snapshot session.
+        /// </param>
+        /// <param name="grbit">
+        /// Snapshot freeze options.
+        /// </param>
+        /// <returns>An error code if the call fails.</returns>
+        public int JetOSSnapshotFreeze(JET_OSSNAPID snapshot, out int numInstances, out JET_INSTANCE_INFO[] instances, SnapshotFreezeGrbit grbit)
+        {
+            this.TraceFunctionCall("JetOSSnapshotFreeze");
+
+            unsafe
+            {
+                uint nativeNumInstance;
+                NATIVE_INSTANCE_INFO* nativeInstanceInfos;
+                int err;
+                if (this.Capabilities.SupportsUnicodePaths)
+                {
+                    err = NativeMethods.JetOSSnapshotFreezeW(snapshot.Value, out nativeNumInstance, out nativeInstanceInfos, (uint)grbit);
+                    instances = this.ConvertInstanceInfosUnicode(nativeNumInstance, nativeInstanceInfos);
+                }
+                else
+                {
+                    err = NativeMethods.JetOSSnapshotFreeze(snapshot.Value, out nativeNumInstance, out nativeInstanceInfos, (uint)grbit);
+                    instances = this.ConvertInstanceInfosAscii(nativeNumInstance, nativeInstanceInfos);
+                }
+
+                numInstances = instances.Length;
+                return this.Err(err);
+            }            
+        }
+
+        /// <summary>
+        /// Begins the preparations for a snapshot session. A snapshot session
+        /// is a short time interval in which the engine does not issue any
+        /// write IOs to disk, so that the engine can participate in a volume
+        /// snapshot session (when driven by a snapshot writer).
+        /// </summary>
+        /// <param name="snapid">Returns the ID of the snapshot session.</param>
+        /// <param name="grbit">Snapshot options.</param>
+        /// <returns>An error code if the call fails.</returns>
+        public int JetOSSnapshotPrepare(out JET_OSSNAPID snapid, SnapshotPrepareGrbit grbit)
+        {
+            this.TraceFunctionCall("JetOSSnapshotPrepare");
+            snapid = JET_OSSNAPID.Nil;
+            return this.Err(NativeMethods.JetOSSnapshotPrepare(out snapid.Value, (uint)grbit));
+        }
+
+        /// <summary>
+        /// Notifies the engine that it can resume normal IO operations after a
+        /// freeze period and a successful snapshot.
+        /// </summary>
+        /// <param name="snapid">The ID of the snapshot.</param>
+        /// <param name="grbit">Thaw options.</param>
+        /// <returns>An error code if the call fails.</returns>
+        public int JetOSSnapshotThaw(JET_OSSNAPID snapid, SnapshotThawGrbit grbit)
+        {
+            this.TraceFunctionCall("JetOSSnapshotThaw");
+            return this.Err(NativeMethods.JetOSSnapshotThaw(snapid.Value, (uint)grbit));
+        }
+
         #endregion
 
         #region Streaming Backup/Restore
@@ -739,13 +846,39 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.TraceFunctionCall("JetReadFileInstance");
             this.CheckNotNull(buffer, "buffer");
             this.CheckDataSize(buffer, bufferSize, "bufferSize");
-            uint nativeBytesRead;
-            int err =
-                this.Err(
-                    NativeMethods.JetReadFileInstance(
-                        instance.Value, file.Value, buffer, checked((uint)bufferSize), out nativeBytesRead));
-            bytesRead = checked((int)nativeBytesRead);
-            return err;
+
+            // ESENT requires that the buffer be aligned on a page allocation boundary.
+            // VirtualAlloc is the API used to do that, so we use P/Invoke to call it.
+            IntPtr alignedBuffer = Win32.NativeMethods.VirtualAlloc(
+                IntPtr.Zero,
+                (UIntPtr)bufferSize,
+                (uint)(Win32.AllocationType.MEM_COMMIT | Win32.AllocationType.MEM_RESERVE),
+                (uint)Win32.MemoryProtection.PAGE_READWRITE);
+            if (IntPtr.Zero == alignedBuffer)
+            {
+                throw new Win32Exception(Marshal.GetLastWin32Error(), "VirtualAlloc");
+            }
+
+            try
+            {
+                uint nativeBytesRead;
+                int err =
+                    this.Err(
+                        NativeMethods.JetReadFileInstance(
+                            instance.Value, file.Value, alignedBuffer, checked((uint)bufferSize), out nativeBytesRead));
+                bytesRead = checked((int)nativeBytesRead);
+
+                // Copy the memory out of the aligned buffer into the user buffer.
+                Marshal.Copy(alignedBuffer, buffer, 0, bytesRead);
+                return err;
+            }
+            finally
+            {
+                if (!Win32.NativeMethods.VirtualFree(alignedBuffer, UIntPtr.Zero, (uint)Win32.FreeType.MEM_RELEASE))
+                {
+                    throw new Win32Exception(Marshal.GetLastWin32Error(), "VirtualFree");
+                }
+            }
         }
 
         /// <summary>
@@ -2578,6 +2711,56 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 columnids[i] = new JET_COLUMNID { Value = nativecolumnids[i] };
                 columns[i].columnid = columnids[i];
             }
+        }
+
+        /// <summary>
+        /// Convert native instance info structures to managed, treating the
+        /// unmanaged strings as Unicode.
+        /// </summary>
+        /// <param name="nativeNumInstance">The number of native structures.</param>
+        /// <param name="nativeInstanceInfos">
+        /// A pointer to the native structures. This pointer will be freed with JetFreeBuffer.
+        /// </param>
+        /// <returns>
+        /// An array of JET_INSTANCE_INFO structures created from the unmanaged.
+        /// </returns>
+        private unsafe JET_INSTANCE_INFO[] ConvertInstanceInfosUnicode(uint nativeNumInstance, NATIVE_INSTANCE_INFO* nativeInstanceInfos)
+        {
+            int numInstances = checked((int)nativeNumInstance);
+            var instances = new JET_INSTANCE_INFO[numInstances];
+            for (int i = 0; i < numInstances; ++i)
+            {
+                instances[i] = new JET_INSTANCE_INFO();
+                instances[i].SetFromNativeUnicode(nativeInstanceInfos[i]);
+            }
+
+            this.JetFreeBuffer((IntPtr)nativeInstanceInfos);
+            return instances;
+        }
+
+        /// <summary>
+        /// Convert native instance info structures to managed, treating the
+        /// unmanaged string as Unicode.
+        /// </summary>
+        /// <param name="nativeNumInstance">The number of native structures.</param>
+        /// <param name="nativeInstanceInfos">
+        /// A pointer to the native structures. This pointer will be freed with JetFreeBuffer.
+        /// </param>
+        /// <returns>
+        /// An array of JET_INSTANCE_INFO structures created from the unmanaged.
+        /// </returns>
+        private unsafe JET_INSTANCE_INFO[] ConvertInstanceInfosAscii(uint nativeNumInstance, NATIVE_INSTANCE_INFO* nativeInstanceInfos)
+        {
+            int numInstances = checked((int)nativeNumInstance);
+            var instances = new JET_INSTANCE_INFO[numInstances];
+            for (int i = 0; i < numInstances; ++i)
+            {
+                instances[i] = new JET_INSTANCE_INFO();
+                instances[i].SetFromNativeAscii(nativeInstanceInfos[i]);
+            }
+
+            this.JetFreeBuffer((IntPtr)nativeInstanceInfos);
+            return instances;
         }
 
         /// <summary>

@@ -205,11 +205,21 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Tests for snapshot backups with an ASCII path.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void SnapshotBackupWithAsciiPath()
+        {
+            var test = new DatabaseFileTestHelper("database");
+            test.TestSnapshotBackup();
+        }
+
+        /// <summary>
         /// Tests for streaming backups with an ASCII path.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Ignore]
         public void StreamingBackupWithAsciiPath()
         {
             var test = new DatabaseFileTestHelper("database", "backup", false);
@@ -236,6 +246,42 @@ namespace InteropApiTests
         {
             var test = new DatabaseFileTestHelper("database");
             test.TestSetDatabaseSize();
+        }
+
+        /// <summary>
+        /// Test JetGetInstanceInfo with ASCII path.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void TestJetGetInstanceInfo()
+        {
+            const string InstanceName = "MyInstance";
+            string database1 = Path.GetFullPath(Path.Combine(this.directory, "instanceinfo1.edb"));
+            string database2 = Path.GetFullPath(Path.Combine(this.directory, "instanceinfo2.edb"));
+            using (var instance = new Instance(InstanceName))
+            {
+                instance.Parameters.CreatePathIfNotExist = true;
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    JET_DBID dbid;
+                    Api.JetCreateDatabase(session, database1, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, database2, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    int numInstances;
+                    JET_INSTANCE_INFO[] instances;
+                    Api.JetGetInstanceInfo(out numInstances, out instances);
+
+                    Assert.AreEqual(1, numInstances);
+                    Assert.AreEqual(numInstances, instances.Length);
+                    Assert.AreEqual(InstanceName, instances[0].szInstanceName);
+
+                    Assert.AreEqual(2, instances[0].cDatabases);
+                    Assert.AreEqual(instances[0].cDatabases, instances[0].szDatabaseFileName.Length);
+                    CollectionAssert.AreEquivalent(
+                        new[] { database1, database2 },
+                        instances[0].szDatabaseFileName);
+                }
+            }
         }
     }
 }

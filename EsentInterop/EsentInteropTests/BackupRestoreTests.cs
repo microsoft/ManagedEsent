@@ -70,17 +70,5 @@ namespace InteropApiTests
             Assert.Inconclusive("test is disabled because instance isn't torn down correctly");
             test.TestRestoreCallbackExceptionHandling(ex);
         }
-
-        /// <summary>
-        /// Tests for streaming backup.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        [Ignore]
-        public void TestStreamingBackup()
-        {
-            var test = new DatabaseFileTestHelper("database", "backup", false);
-            test.TestStreamingBackup();
-        }
     }
 }

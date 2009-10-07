@@ -76,6 +76,19 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         int JetInit2(ref JET_INSTANCE instance, InitGrbit grbit);
 
         /// <summary>
+        /// Retrieves information about the instances that are running.
+        /// </summary>
+        /// <param name="numInstances">
+        /// Returns the number of instances.
+        /// </param>
+        /// <param name="instances">
+        /// Returns an array of instance info objects, one for each running
+        /// instance.
+        /// </param>
+        /// <returns>An error code if the call fails.</returns>
+        int JetGetInstanceInfo(out int numInstances, out JET_INSTANCE_INFO[] instances);
+
+        /// <summary>
         /// Prevents streaming backup-related activity from continuing on a
         /// specific running instance, thus ending the streaming backup in
         /// a predictable way.
@@ -309,7 +322,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </summary>
         /// <param name="snapid">Identifier of the snapshot session.</param>
         /// <param name="grbit">Options for this call.</param>
-        /// <returns>An error code.</returns>
+        /// <returns>An error code if the call fails.</returns>
         int JetOSSnapshotAbort(JET_OSSNAPID snapid, SnapshotAbortGrbit grbit);
 
         /// <summary>
@@ -317,8 +330,45 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </summary>
         /// <param name="snapid">The identifier of the snapshot session.</param>
         /// <param name="grbit">Snapshot end options.</param>
-        /// <returns>An error code.</returns>
+        /// <returns>An error code if the call fails.</returns>
         int JetOSSnapshotEnd(JET_OSSNAPID snapid, SnapshotEndGrbit grbit);
+
+        /// <summary>
+        /// Starts a snapshot. While the snapshot is in progress, no
+        /// write-to-disk activity by the engine can take place.
+        /// </summary>
+        /// <param name="snapshot">The snapshot session.</param>
+        /// <param name="numInstances">
+        /// Returns the number of instances that are part of the snapshot session.
+        /// </param>
+        /// <param name="instances">
+        /// Returns information about the instances that are part of the snapshot session.
+        /// </param>
+        /// <param name="grbit">
+        /// Snapshot freeze options.
+        /// </param>
+        /// <returns>An error code if the call fails.</returns>
+        int JetOSSnapshotFreeze(JET_OSSNAPID snapshot, out int numInstances, out JET_INSTANCE_INFO[] instances, SnapshotFreezeGrbit grbit);
+
+        /// <summary>
+        /// Begins the preparations for a snapshot session. A snapshot session
+        /// is a short time interval in which the engine does not issue any
+        /// write IOs to disk, so that the engine can participate in a volume
+        /// snapshot session (when driven by a snapshot writer).
+        /// </summary>
+        /// <param name="snapid">Returns the ID of the snapshot session.</param>
+        /// <param name="grbit">Snapshot options.</param>
+        /// <returns>An error code if the call fails.</returns>
+        int JetOSSnapshotPrepare(out JET_OSSNAPID snapid, SnapshotPrepareGrbit grbit);
+
+        /// <summary>
+        /// Notifies the engine that it can resume normal IO operations after a
+        /// freeze period and a successful snapshot.
+        /// </summary>
+        /// <param name="snapid">The ID of the snapshot.</param>
+        /// <param name="grbit">Thaw options.</param>
+        /// <returns>An error code if the call fails.</returns>
+        int JetOSSnapshotThaw(JET_OSSNAPID snapid, SnapshotThawGrbit grbit);
 
         #endregion
 

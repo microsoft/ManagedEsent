@@ -250,12 +250,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Tests for streaming backup.
+        /// Tests for streaming backup using unicode paths.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Ignore]
-        public void StreamingBackupWithUnicodePAth()
+        public void StreamingBackupWithUnicodePath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
             {
@@ -264,6 +263,22 @@ namespace InteropApiTests
 
             var test = new DatabaseFileTestHelper(this.directory, "한글", false);
             test.TestStreamingBackup();
+        }
+
+        /// <summary>
+        /// Tests for streaming backup using unicode paths.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void SnapshotBackupWithUnicodePath()
+        {
+            if (!EsentVersion.SupportsUnicodePaths)
+            {
+                return;
+            }
+
+            var test = new DatabaseFileTestHelper(this.directory);
+            test.TestSnapshotBackup();
         }
 
         /// <summary>
@@ -283,14 +298,55 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Tests for JetCompactDatabase with an ASCII path.
+        /// Tests for JetCompactDatabase with a unicode path.
         /// </summary>
         [TestMethod]
         [Priority(2)]
         public void TestJetSetDatabaseSizeDatabaseWithUnicodePath()
         {
+            if (!EsentVersion.SupportsUnicodePaths)
+            {
+                return;
+            }
+
             var test = new DatabaseFileTestHelper(this.directory);
             test.TestSetDatabaseSize();
+        }
+
+        /// <summary>
+        /// Test JetGetInstanceInfo with a unicode path.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void TestJetGetInstanceInfoWithUnicodePath()
+        {
+            if (!EsentVersion.SupportsUnicodePaths)
+            {
+                return;
+            }
+
+            const string InstanceName = "MyInstance";
+            using (var instance = new Instance(InstanceName))
+            {
+                instance.Parameters.CreatePathIfNotExist = true;
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    JET_DBID dbid;
+                    Api.JetCreateDatabase(session, this.database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    int numInstances;
+                    JET_INSTANCE_INFO[] instances;
+                    Api.JetGetInstanceInfo(out numInstances, out instances);
+
+                    Assert.AreEqual(1, numInstances);
+                    Assert.AreEqual(numInstances, instances.Length);
+                    Assert.AreEqual(InstanceName, instances[0].szInstanceName);
+
+                    Assert.AreEqual(1, instances[0].cDatabases);
+                    Assert.AreEqual(instances[0].cDatabases, instances[0].szDatabaseFileName.Length);
+                    Assert.AreEqual(Path.GetFullPath(this.database), instances[0].szDatabaseFileName[0]);
+                }
+            }
         }
     }
 }

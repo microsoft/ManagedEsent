@@ -204,6 +204,23 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Create a database and do a snapshot backup.
+        /// </summary>
+        public void TestSnapshotBackup()
+        {
+            try
+            {
+                this.CreateDatabase();
+                this.SnapshotBackup();
+                this.CheckDatabase();
+            }
+            finally
+            {
+                Cleanup.DeleteDirectoryWithRetry(this.databaseDirectory);
+            }
+        }
+
+        /// <summary>
         /// Create a database and do a streaming backup.
         /// </summary>
         public void TestStreamingBackup()
@@ -308,6 +325,34 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Perform a snapshot backup.
+        /// </summary>
+        private void SnapshotBackup()
+        {
+            using (var instance = this.CreateInstance())
+            {
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
+                    JET_DBID dbid;
+                    Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+
+                    JET_OSSNAPID snapshot;
+                    Api.JetOSSnapshotPrepare(out snapshot, SnapshotPrepareGrbit.None);
+                    int numInstances;
+                    JET_INSTANCE_INFO[] instances;
+                    Api.JetOSSnapshotFreeze(snapshot, out numInstances, out instances, SnapshotFreezeGrbit.None);
+                    Api.JetOSSnapshotThaw(snapshot, SnapshotThawGrbit.None);
+
+                    Assert.AreEqual(1, instances.Length);
+                    Assert.AreEqual(1, instances[0].cDatabases);
+                    Assert.AreEqual(Path.GetFullPath(this.database), instances[0].szDatabaseFileName[0]);
+                }
+            }
+        }
+
+        /// <summary>
         /// Perform a streaming backup.
         /// </summary>
         private void StreamingBackup()
@@ -330,7 +375,6 @@ namespace InteropApiTests
                     int bytesRead;
                     Api.JetReadFileInstance(instance, handle, buffer, buffer.Length, out bytesRead);
                     Api.JetCloseFileInstance(instance, handle);
-                    Api.JetTruncateLogInstance(instance);
                     Api.JetEndExternalBackupInstance(instance);
                 }
             }

@@ -182,6 +182,56 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Options for <see cref="Api.JetOSSnapshotFreeze"/>.
+    /// </summary>
+    public enum SnapshotFreezeGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+    }
+
+    /// <summary>
+    /// Options for <see cref="Api.JetOSSnapshotPrepare"/>.
+    /// </summary>
+    [Flags]
+    public enum SnapshotPrepareGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+    
+        /// <summary>
+        /// Only logfiles will be taken.
+        /// </summary>
+        IncrementalSnapshot = 0x1,
+
+        /// <summary>
+        /// A copy snapshot (normal or incremental) with no log truncation.
+        /// </summary>
+        CopySnapshot = 0x2,
+
+        /// <summary>
+        /// The snapshot session continues after JetOSSnapshotThaw and will
+        /// require a JetOSSnapshotEnd function call.
+        /// </summary>
+        ContinueAfterThaw = 0x4,
+    }
+
+    /// <summary>
+    /// Options for <see cref="Api.JetOSSnapshotThaw"/>.
+    /// </summary>
+    public enum SnapshotThawGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+    }
+
+    /// <summary>
     /// Options for <see cref="Api.JetBackupInstance"/>.
     /// </summary>
     public enum BackupGrbit
