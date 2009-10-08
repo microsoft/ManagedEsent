@@ -80,10 +80,11 @@ namespace InteropApiTests
         #endregion
 
         /// <summary>
-        /// Test JetRenameTable
+        /// Test JetRenameTable.
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test JetRenameTable.")]
         public void TestJetRenameTable()
         {
             JET_TABLEID tableid;
@@ -91,6 +92,23 @@ namespace InteropApiTests
             Api.JetCloseTable(this.sesid, tableid);
             Api.JetRenameTable(this.sesid, this.dbid, "table", "newtable");
             Api.JetOpenTable(this.sesid, this.dbid, "newtable", null, 0, OpenTableGrbit.None, out tableid);
+        }
+
+        /// <summary>
+        /// Test JetRenameColumn.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test JetRenameColumn.")]
+        public void TestJetRenameColumn()
+        {
+            JET_TABLEID tableid;
+            Api.JetCreateTable(this.sesid, this.dbid, "table", 1, 100, out tableid);
+            JET_COLUMNID columnid;
+            Api.JetAddColumn(this.sesid, tableid, "old", new JET_COLUMNDEF { coltyp = JET_coltyp.Long }, null, 0, out columnid);
+            Api.JetRenameColumn(this.sesid, tableid, "old", "new", RenameColumnGrbit.None);
+            Api.GetTableColumnid(this.sesid, tableid, "new");
+            Api.JetCloseTable(this.sesid, tableid);
         }
     }
 }

@@ -320,7 +320,7 @@ namespace InteropApiTests
 
         /// <summary>
         /// Check that an exception is thrown when JetRenameTable gets a 
-        /// null table name.
+        /// null new table name.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -328,6 +328,32 @@ namespace InteropApiTests
         public void JetRenameTableThrowsExceptionWhenNewTableNameIsNull()
         {
             Api.JetRenameTable(this.sesid, this.dbid, "oldtable", null);
+        }
+
+        /// <summary>
+        /// Verify that an exception is thrown when JetRenameColumn gets a 
+        /// null column name.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that an exception is thrown when JetRenameColumn gets a null column name.")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyJetRenameColumnThrowsExceptionWhencolumnNameIsNull()
+        {
+            Api.JetRenameColumn(this.sesid, this.tableid, null, "newcolumn", RenameColumnGrbit.None);
+        }
+
+        /// <summary>
+        /// Verify that an exception is thrown when JetRenameColumn gets a 
+        /// null new column name.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentNullException))]
+        [Description("Verify that an exception is thrown when JetRenameColumn gets a null new column name.")]
+        public void VerifyJetRenameColumnThrowsExceptionWhenNewcolumnNameIsNull()
+        {
+            Api.JetRenameColumn(this.sesid, this.tableid, "oldcolumn", null, RenameColumnGrbit.None);
         }
 
         #endregion

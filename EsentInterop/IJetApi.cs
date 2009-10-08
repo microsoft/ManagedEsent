@@ -986,6 +986,17 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         int JetRenameTable(JET_SESID sesid, JET_DBID dbid, string tableName, string newTableName);
 
+        /// <summary>
+        /// Changes the name of an existing column.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table containing the column.</param>
+        /// <param name="name">The name of the column.</param>
+        /// <param name="newName">The new name of the column.</param>
+        /// <param name="grbit">Column rename options.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetRenameColumn(JET_SESID sesid, JET_TABLEID tableid, string name, string newName, RenameColumnGrbit grbit);
+
         #endregion
 
         #region Navigation

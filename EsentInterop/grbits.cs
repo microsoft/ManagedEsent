@@ -1264,6 +1264,17 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Options for <see cref="Api.JetRenameColumn"/>.
+    /// </summary>
+    public enum RenameColumnGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+    }
+
+    /// <summary>
     /// Options for <see cref="Api.JetIdle"/>.
     /// </summary>
     [Flags]

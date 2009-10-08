@@ -1848,6 +1848,24 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return this.Err(NativeMethods.JetRenameTable(sesid.Value, dbid.Value, tableName, newTableName));
         }
 
+        /// <summary>
+        /// Changes the name of an existing column.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table containing the column.</param>
+        /// <param name="name">The name of the column.</param>
+        /// <param name="newName">The new name of the column.</param>
+        /// <param name="grbit">Column rename options.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetRenameColumn(JET_SESID sesid, JET_TABLEID tableid, string name, string newName, RenameColumnGrbit grbit)
+        {
+            this.TraceFunctionCall("JetRenameColumn");    
+            this.CheckNotNull(name, "name");
+            this.CheckNotNull(newName, "newName");
+            return this.Err(
+                NativeMethods.JetRenameColumn(sesid.Value, tableid.Value, name, newName, (uint)grbit));
+        }
+
         #endregion
 
         #region Navigation

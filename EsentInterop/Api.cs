@@ -1161,6 +1161,19 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetRenameTable(sesid, dbid, tableName, newTableName));
         }
 
+        /// <summary>
+        /// Changes the name of an existing column.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table containing the column.</param>
+        /// <param name="name">The name of the column.</param>
+        /// <param name="newName">The new name of the column.</param>
+        /// <param name="grbit">Column rename options.</param>
+        public static void JetRenameColumn(JET_SESID sesid, JET_TABLEID tableid, string name, string newName, RenameColumnGrbit grbit)
+        {
+            Api.Check(Impl.JetRenameColumn(sesid, tableid, name, newName, grbit));
+        }
+
         #endregion
 
         #region Navigation
