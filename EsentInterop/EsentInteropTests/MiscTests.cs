@@ -37,7 +37,7 @@ namespace InteropApiTests
         [Priority(1)]
         public void VerifyAllTestMethodsHavePriorities()
         {
-            Assembly assembly = typeof(MiscTests).Assembly;
+            Assembly assembly = this.GetType().Assembly;
             VerifyAllTestMethodsHaveAttribute<PriorityAttribute>(assembly);
         }
 
@@ -49,7 +49,7 @@ namespace InteropApiTests
         [Priority(1)]
         public void VerifyAllTestMethodsHaveDescriptions()
         {
-            Assembly assembly = typeof(MiscTests).Assembly;
+            Assembly assembly = this.GetType().Assembly;
             VerifyAllTestMethodsHaveAttribute<DescriptionAttribute>(assembly);
         }
 
@@ -62,7 +62,7 @@ namespace InteropApiTests
         [Priority(1)]
         public void VerifyAllPublicMethodsAreTests()
         {
-            Assembly assembly = typeof(MiscTests).Assembly;
+            Assembly assembly = this.GetType().Assembly;
             var methods = FindPublicNonTestMethods(assembly);
             if (methods.Length > 0)
             {

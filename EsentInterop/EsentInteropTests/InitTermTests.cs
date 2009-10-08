@@ -7,7 +7,7 @@
 namespace InteropApiTests
 {
     using System;
-    using System.IO;
+    using System.Threading;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -18,10 +18,11 @@ namespace InteropApiTests
     public class InitTermTests
     {
         /// <summary>
-        /// Verify that the version returned by JetGetVersion is not zero
+        /// Verify that the version returned by JetGetVersion is not zero.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that the version returned by JetGetVersion is not zero.")]
         public void VerifyJetVersionIsNotZero()
         {
             JET_INSTANCE instance;
@@ -50,6 +51,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Initialize and terminate one instance.")]
         public void CreateInstanceWithJetCreateInstance2()
         {
             JET_INSTANCE instance;
@@ -70,6 +72,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Initialize and terminate one instance.")]
         public void InitializeInstanceWithJetInit2()
         {
             JET_INSTANCE instance;
@@ -85,10 +88,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Terminating an uninitialized instance should work
+        /// Terminating an uninitialized instance should work.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Terminating an uninitialized instance should work.")]
         public void VerifyTermUninitializedInstanceDoesNotThrowException()
         {
             var instance = new JET_INSTANCE();
@@ -96,10 +100,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Terminating an uninitialized instance should work
+        /// Terminating an uninitialized instance should work (JetTerm2).
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Terminating an uninitialized instance should work (JetTerm2).")]
         public void VerifyTerm2UninitializedInstanceDoesNotThrowException()
         {
             var instance = new JET_INSTANCE();
@@ -110,40 +115,30 @@ namespace InteropApiTests
         /// Initialize and terminate one instance.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(0)]
+        [Description("Initialize and terminate one instance.")]
         public void InitAndTermOneInstance()
         {
-            string dir = SetupHelper.CreateRandomDirectory();
-            try
-            {
-                JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
-                Api.JetInit(ref instance);
-                Api.JetTerm(instance);
-            }
-            finally
-            {
-                Cleanup.DeleteDirectoryWithRetry(dir);
-            }
+            JET_INSTANCE instance = SetupHelper.CreateNewInstance("instance");
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
+            Api.JetInit(ref instance);
+            Api.JetTerm(instance);
         }
 
         /// <summary>
-        /// Initialize and terminate one instance abruptly.
+        /// Initialize and abruptly terminate one instance.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(0)]
+        [Description("Initialize and abruptly terminate one instance.")]
         public void InitAndTermOneInstanceAbruptly()
         {
-            string dir = SetupHelper.CreateRandomDirectory();
-            try
-            {
-                JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
-                Api.JetInit(ref instance);
-                Api.JetTerm2(instance, TermGrbit.Abrupt);
-            }
-            finally
-            {
-                Cleanup.DeleteDirectoryWithRetry(dir);
-            }
+            JET_INSTANCE instance = SetupHelper.CreateNewInstance("instance");
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
+            Api.JetInit(ref instance);
+            Api.JetTerm2(instance, TermGrbit.Abrupt);
         }
 
         /// <summary>
@@ -151,47 +146,37 @@ namespace InteropApiTests
         /// (Init/Term/Init/Term).
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
+        [Description("Initialize and terminate one instance twice.")]
         public void InitAndTermOneInstanceTwice()
         {
-            string dir = SetupHelper.CreateRandomDirectory();
-            try
-            {
-                JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
-                Api.JetInit(ref instance);
-                Api.JetTerm(instance);
-                Api.JetInit(ref instance);
-                Api.JetTerm(instance);
-            }
-            finally
-            {
-                Cleanup.DeleteDirectoryWithRetry(dir);
-            }
+            JET_INSTANCE instance = SetupHelper.CreateNewInstance("instance");
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
+            Api.JetInit(ref instance);
+            Api.JetTerm(instance);
+            Api.JetInit(ref instance);
+            Api.JetTerm(instance);
         }
 
         /// <summary>
-        /// Initialize and terminate two instances
+        /// Initialize and terminate two instances.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Initialize and terminate two instances.")]
         public void InitAndTermTwoInstances()
         {    
-            string dir1 = SetupHelper.CreateRandomDirectory();
-            string dir2 = SetupHelper.CreateRandomDirectory();
-            try
-            {
-                JET_INSTANCE instance1 = SetupHelper.CreateNewInstance(dir1);
-                JET_INSTANCE instance2 = SetupHelper.CreateNewInstance(dir2);
-                Api.JetInit(ref instance1);
-                Api.JetInit(ref instance2);
-                Api.JetTerm(instance1);
-                Api.JetTerm(instance2);
-            }
-            finally
-            {
-                Cleanup.DeleteDirectoryWithRetry(dir1);
-                Cleanup.DeleteDirectoryWithRetry(dir2);
-            }
+            JET_INSTANCE instance1 = SetupHelper.CreateNewInstance("instance1");
+            Api.JetSetSystemParameter(instance1, JET_SESID.Nil, JET_param.Recovery, 0, "off");
+            Api.JetSetSystemParameter(instance1, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
+            JET_INSTANCE instance2 = SetupHelper.CreateNewInstance("instance2");
+            Api.JetSetSystemParameter(instance2, JET_SESID.Nil, JET_param.Recovery, 0, "off");
+            Api.JetSetSystemParameter(instance2, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
+            Api.JetInit(ref instance1);
+            Api.JetInit(ref instance2);
+            Api.JetTerm(instance1);
+            Api.JetTerm(instance2);
         }
 
         /// <summary>
@@ -199,6 +184,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Call JetStopBackupInstance on a running instance.")]
         public void TestJetStopBackupInstance()
         {
             using (var instance = new Instance("TestJetStopBackupInstance"))
@@ -216,7 +202,8 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        public void TestJetStopServieInstance()
+        [Description("Call JetStopServiceInstance on a running instance.")]
+        public void TestJetStopServiceInstance()
         {
             using (var instance = new Instance("TestJetStopServiceInstance"))
             {
@@ -229,28 +216,57 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Duplicate a session
+        /// Duplicate a session.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(0)]
+        [Description("Duplicate a session.")]
         public void TestJetDupSession()
         {
-            string dir = SetupHelper.CreateRandomDirectory();
-            try
+            JET_INSTANCE instance = SetupHelper.CreateNewInstance("instance");
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
+            Api.JetInit(ref instance);
+            JET_SESID sesid;
+            Api.JetBeginSession(instance, out sesid, null, null);
+            JET_SESID sesidDup;
+            Api.JetDupSession(sesid, out sesidDup);
+            Assert.AreNotEqual(sesid, sesidDup);
+            Assert.AreNotEqual(sesidDup, JET_SESID.Nil);
+            Api.JetTerm(instance);
+        }
+
+        /// <summary>
+        /// Test moving a transaction between threads.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test moving a transaction between threads.")]
+        public void VerifyJetSetSessionContextAllowsThreadMigration()
+        {
+            using (var instance = new Instance("JetSetSessionContext"))
             {
-                JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
-                Api.JetInit(ref instance);
-                JET_SESID sesid;
-                Api.JetBeginSession(instance, out sesid, null, null);
-                JET_SESID sesidDup;
-                Api.JetDupSession(sesid, out sesidDup);
-                Assert.AreNotEqual(sesid, sesidDup);
-                Assert.AreNotEqual(sesidDup, JET_SESID.Nil);
-                Api.JetTerm(instance);
-            }
-            finally
-            {
-                Cleanup.DeleteDirectoryWithRetry(dir);
+                SetupHelper.SetLightweightConfiguration(instance);
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    // Without the calls to JetSetSessionContext/JetResetSessionContext
+                    // this will generate a session sharing violation.
+                    var context = new IntPtr(Any.Int32);
+
+                    var thread = new Thread(() =>
+                    {
+                        Api.JetSetSessionContext(session, context);
+                        Api.JetBeginTransaction(session);
+                        Api.JetResetSessionContext(session);
+                    });
+                    thread.Start();
+                    thread.Join();
+
+                    Api.JetSetSessionContext(session, context);
+                    Api.JetCommitTransaction(session, CommitTransactionGrbit.None);
+                    Api.JetResetSessionContext(session);                    
+                }
             }
         }
     }

@@ -7,7 +7,6 @@
 namespace InteropApiTests
 {
     using System;
-    using System.IO;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -22,11 +21,6 @@ namespace InteropApiTests
         /// The directory being used for the database and its files.
         /// </summary>
         private string directory;
-
-        /// <summary>
-        /// The path to the database being used by the test.
-        /// </summary>
-        private string database;
 
         /// <summary>
         /// The name of the table.
@@ -44,11 +38,6 @@ namespace InteropApiTests
         private JET_SESID sesid;
 
         /// <summary>
-        /// Identifies the database used by the test.
-        /// </summary>
-        private JET_DBID dbid;
-
-        /// <summary>
         /// Identifies the table used by the test.
         /// </summary>
         private JET_TABLEID tableid;
@@ -60,33 +49,33 @@ namespace InteropApiTests
         /// All DDL should be done in this method.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the UpdateTests fixture.")]
         public void Setup()
         {
             this.directory = SetupHelper.CreateRandomDirectory();
-            this.database = Path.Combine(this.directory, "database.edb");
             this.tableName = "table";
             this.instance = SetupHelper.CreateNewInstance(this.directory);
 
             // turn off logging so initialization is faster
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
-            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
             Api.JetInit(ref this.instance);
             Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
-            Api.JetCreateDatabase(this.sesid, this.database, String.Empty, out this.dbid, CreateDatabaseGrbit.None);
 
-            Api.JetBeginTransaction(this.sesid);
-            JET_TABLEID tableid;
-            Api.JetCreateTable(this.sesid, this.dbid, this.tableName, 0, 100, out tableid);
-            Api.JetCloseTable(this.sesid, tableid);
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.None);
+            var columns = new[]
+            {
+                new JET_COLUMNDEF { coltyp = JET_coltyp.Long, grbit = ColumndefGrbit.TTKey }
+            };
 
-            Api.JetOpenTable(this.sesid, this.dbid, this.tableName, null, 0, OpenTableGrbit.None, out this.tableid);
+            var columnids = new JET_COLUMNID[columns.Length];
+            Api.JetOpenTempTable(
+                this.sesid, columns, columns.Length, TempTableGrbit.ForceMaterialization, out this.tableid, columnids);
         }
 
         /// <summary>
         /// Cleanup after all tests have run.
         /// </summary>
         [TestCleanup]
+        [Description("Cleanup the UpdateTests fixture.")]
         public void Teardown()
         {
             Api.JetEndSession(this.sesid, EndSessionGrbit.None);
@@ -95,10 +84,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Verify that the test class has setup the test fixture properly.
+        /// Verify that the UpdateTests.Setup has setup the test fixture properly.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
+        [Description("Verify that the UpdateTests.Setup has setup the test fixture properly.")]
         public void VerifyFixtureSetup()
         {
             Assert.IsNotNull(this.tableName);
@@ -112,7 +102,8 @@ namespace InteropApiTests
         /// Start an update and insert the record.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
+        [Description("Start an update and insert the record.")]
         public void TestSaveUpdate()
         {
             Assert.IsFalse(Api.TryMoveFirst(this.sesid, this.tableid));
@@ -129,7 +120,8 @@ namespace InteropApiTests
         /// Start an update, insert the record and goto the bookmark.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
+        [Description("Start an update, insert the record and goto the bookmark.")]
         public void TestSaveUpdateGetsBookmark()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -146,7 +138,8 @@ namespace InteropApiTests
         /// Start an update, insert the record, save while goto the bookmark.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
+        [Description("Start an update, insert the record, save while goto the bookmark.")]
         public void TestSaveAndGotoBookmarkPositionsCursor()
         {
             using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
@@ -161,7 +154,8 @@ namespace InteropApiTests
         /// Start an update and cancel the insert.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
+        [Description("Start an update and cancel the insert.")]
         public void TestCancelUpdate()
         {
             Assert.IsFalse(Api.TryMoveFirst(this.sesid, this.tableid));
@@ -178,7 +172,8 @@ namespace InteropApiTests
         /// Start an update and cancel the insert.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
+        [Description("Start an update and cancel the insert.")]
         public void TestAutoCancelUpdate()
         {
             Assert.IsFalse(Api.TryMoveFirst(this.sesid, this.tableid));
@@ -191,10 +186,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Create an Update with JET_prep.Cancel, expecting an exception
+        /// Create an Update with JET_prep.Cancel, expecting an exception.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
+        [Description("Create an Update with JET_prep.Cancel, expecting an exception.")]
         [ExpectedException(typeof(ArgumentException))]
         public void TestPrepCancelThrowsException()
         {
@@ -205,7 +201,8 @@ namespace InteropApiTests
         /// Call Cancel on a disposed object, expecting an exception.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
+        [Description("Call Cancel on a disposed object, expecting an exception.")]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void TestCancelThrowsExceptionWhenUpdateIsDisposed()
         {
@@ -218,7 +215,8 @@ namespace InteropApiTests
         /// Call Save on a disposed object, expecting an exception.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
+        [Description("Call Save on a disposed object, expecting an exception.")]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void TestSaveThrowsExceptionWhenUpdateIsDisposed()
         {
@@ -228,10 +226,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Call Save on a cancelled update, expecting an exception
+        /// Call Save on a cancelled update, expecting an exception.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
+        [Description("Call Save on a cancelled update, expecting an exception.")]
         [ExpectedException(typeof(InvalidOperationException))]
         public void TestSaveThrowsExceptionWhenUpdateIsCancelled()
         {
@@ -241,10 +240,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Call Cancel on a cancelled update, expecting an exception
+        /// Call Cancel on a cancelled update, expecting an exception.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
+        [Description("Call Cancel on a cancelled update, expecting an exception.")]
         [ExpectedException(typeof(InvalidOperationException))]
         public void TestCancelThrowsExceptionWhenUpdateIsCancelled()
         {
@@ -257,7 +257,8 @@ namespace InteropApiTests
         /// Call SaveAndGotoBookmark on a disposed object, expecting an exception.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
+        [Description("Call SaveAndGotoBookmark on a disposed object, expecting an exception.")]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void TestSaveAndGotoBookmarkThrowsExceptionWhenUpdateIsDisposed()
         {
@@ -267,10 +268,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Call SaveAndGotoBookmark on a cancelled update, expecting an exception
+        /// Call SaveAndGotoBookmark on a cancelled update, expecting an exception.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
+        [Description("Call SaveAndGotoBookmark on a cancelled update, expecting an exception.")]
         [ExpectedException(typeof(InvalidOperationException))]
         public void TestSaveAndGotoBookmarkThrowsExceptionWhenUpdateIsCancelled()
         {

@@ -8,7 +8,6 @@ namespace InteropApiTests
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Text;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -46,6 +45,7 @@ namespace InteropApiTests
         /// All DDL should be done in this method.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the TempTableFixture fixture.")]
         public void Setup()
         {
             this.instance = new Instance("TempTableFixture");
@@ -86,6 +86,7 @@ namespace InteropApiTests
         /// Cleanup after all tests have run.
         /// </summary>
         [TestCleanup]
+        [Description("Cleanup the TempTableFixture fixture.")]
         public void Teardown()
         {
             this.instance.Term();
@@ -96,591 +97,11 @@ namespace InteropApiTests
         #region Set and Retrieve Columns
 
         /// <summary>
-        /// Test setting and retrieving the min value of an Byte
+        /// Test JetSetColumns.
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        public void SetAndRetrieveByteMin()
-        {
-            var columnid = this.coltypDict[JET_coltyp.UnsignedByte];
-            const byte Expected = Byte.MinValue;
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                int bookmarkSize;
-                var bookmark = new byte[SystemParameters.BookmarkMost];
-                Api.SetColumn(this.session, this.tableid, columnid, Expected);
-                update.Save(bookmark, bookmark.Length, out bookmarkSize);
-                trx.Commit(CommitTransactionGrbit.None);
-                Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
-            }
-
-            Assert.AreEqual(Expected, Api.RetrieveColumnAsByte(this.session, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Test setting and retrieving the max value of an Byte
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void SetAndRetrieveByteMax()
-        {
-            var columnid = this.coltypDict[JET_coltyp.UnsignedByte];
-            const byte Expected = Byte.MaxValue;
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                int bookmarkSize;
-                var bookmark = new byte[SystemParameters.BookmarkMost];
-                Api.SetColumn(this.session, this.tableid, columnid, Expected);
-                update.Save(bookmark, bookmark.Length, out bookmarkSize);
-                trx.Commit(CommitTransactionGrbit.None);
-                Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
-            }
-
-            Assert.AreEqual(Expected, Api.RetrieveColumnAsByte(this.session, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Test setting and retrieving the min value of an Int16
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void SetAndRetrieveInt16Min()
-        {
-            var columnid = this.coltypDict[JET_coltyp.Short];
-            const short Expected = Int16.MinValue;
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                int bookmarkSize;
-                var bookmark = new byte[SystemParameters.BookmarkMost];
-                Api.SetColumn(this.session, this.tableid, columnid, Expected);
-                update.Save(bookmark, bookmark.Length, out bookmarkSize);
-                trx.Commit(CommitTransactionGrbit.None);
-                Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
-            }
-
-            Assert.AreEqual(Expected, Api.RetrieveColumnAsInt16(this.session, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Test setting and retrieving the max value of an Int16
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void SetAndRetrieveInt16Max()
-        {
-            var columnid = this.coltypDict[JET_coltyp.Short];
-            const short Expected = Int16.MaxValue;
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                int bookmarkSize;
-                var bookmark = new byte[SystemParameters.BookmarkMost];
-                Api.SetColumn(this.session, this.tableid, columnid, Expected);
-                update.Save(bookmark, bookmark.Length, out bookmarkSize);
-                trx.Commit(CommitTransactionGrbit.None);
-                Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
-            }
-
-            Assert.AreEqual(Expected, Api.RetrieveColumnAsInt16(this.session, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Test setting and retrieving the min value of a UInt16
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void SetAndRetrieveUInt16Min()
-        {
-            var columnid = this.coltypDict[JET_coltyp.Binary];
-            const ushort Expected = UInt16.MinValue;
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                int bookmarkSize;
-                var bookmark = new byte[SystemParameters.BookmarkMost];
-                Api.SetColumn(this.session, this.tableid, columnid, Expected);
-                update.Save(bookmark, bookmark.Length, out bookmarkSize);
-                trx.Commit(CommitTransactionGrbit.None);
-                Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
-            }
-
-            Assert.AreEqual(Expected, Api.RetrieveColumnAsUInt16(this.session, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Test setting and retrieving the max value of a UInt16
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void SetAndRetrieveUInt16Max()
-        {
-            var columnid = this.coltypDict[JET_coltyp.Binary];
-            const ushort Expected = UInt16.MaxValue;
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                int bookmarkSize;
-                var bookmark = new byte[SystemParameters.BookmarkMost];
-                Api.SetColumn(this.session, this.tableid, columnid, Expected);
-                update.Save(bookmark, bookmark.Length, out bookmarkSize);
-                trx.Commit(CommitTransactionGrbit.None);
-                Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
-            }
-
-            Assert.AreEqual(Expected, Api.RetrieveColumnAsUInt16(this.session, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Test setting and retrieving the min value of an Int32
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void SetAndRetrieveInt32Min()
-        {
-            var columnid = this.coltypDict[JET_coltyp.Long];
-            const int Expected = Int32.MinValue;
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                int bookmarkSize;
-                var bookmark = new byte[SystemParameters.BookmarkMost];
-                Api.SetColumn(this.session, this.tableid, columnid, Expected);
-                update.Save(bookmark, bookmark.Length, out bookmarkSize);
-                trx.Commit(CommitTransactionGrbit.None);
-                Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
-            }
-
-            Assert.AreEqual(Expected, Api.RetrieveColumnAsInt32(this.session, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Test setting and retrieving the max value of an Int32
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void SetAndRetrieveInt32Max()
-        {
-            var columnid = this.coltypDict[JET_coltyp.Long];
-            const int Expected = Int32.MaxValue;
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                int bookmarkSize;
-                var bookmark = new byte[SystemParameters.BookmarkMost];
-                Api.SetColumn(this.session, this.tableid, columnid, Expected);
-                update.Save(bookmark, bookmark.Length, out bookmarkSize);
-                trx.Commit(CommitTransactionGrbit.None);
-                Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
-            }
-
-            Assert.AreEqual(Expected, Api.RetrieveColumnAsInt32(this.session, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Test setting and retrieving the min value of a UInt32
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void SetAndRetrieveUInt32Min()
-        {
-            var columnid = this.coltypDict[JET_coltyp.Binary];
-            const uint Expected = UInt32.MinValue;
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                int bookmarkSize;
-                var bookmark = new byte[SystemParameters.BookmarkMost];
-                Api.SetColumn(this.session, this.tableid, columnid, Expected);
-                update.Save(bookmark, bookmark.Length, out bookmarkSize);
-                trx.Commit(CommitTransactionGrbit.None);
-                Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
-            }
-
-            Assert.AreEqual(Expected, Api.RetrieveColumnAsUInt32(this.session, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Test setting and retrieving the max value of a UInt32
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void SetAndRetrieveUInt32Max()
-        {
-            var columnid = this.coltypDict[JET_coltyp.Binary];
-            const uint Expected = UInt32.MaxValue;
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                int bookmarkSize;
-                var bookmark = new byte[SystemParameters.BookmarkMost];
-                Api.SetColumn(this.session, this.tableid, columnid, Expected);
-                update.Save(bookmark, bookmark.Length, out bookmarkSize);
-                trx.Commit(CommitTransactionGrbit.None);
-                Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
-            }
-
-            Assert.AreEqual(Expected, Api.RetrieveColumnAsUInt32(this.session, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Test setting and retrieving the min value of an Int64
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void SetAndRetrieveInt64Min()
-        {
-            var columnid = this.coltypDict[JET_coltyp.Currency];
-            const long Expected = Int64.MinValue;
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                int bookmarkSize;
-                var bookmark = new byte[SystemParameters.BookmarkMost];
-                Api.SetColumn(this.session, this.tableid, columnid, Expected);
-                update.Save(bookmark, bookmark.Length, out bookmarkSize);
-                trx.Commit(CommitTransactionGrbit.None);
-                Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
-            }
-
-            Assert.AreEqual(Expected, Api.RetrieveColumnAsInt64(this.session, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Test setting and retrieving the max value of an Int64
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void SetAndRetrieveInt64Max()
-        {
-            var columnid = this.coltypDict[JET_coltyp.Currency];
-            const long Expected = Int64.MaxValue;
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                int bookmarkSize;
-                var bookmark = new byte[SystemParameters.BookmarkMost];
-                Api.SetColumn(this.session, this.tableid, columnid, Expected);
-                update.Save(bookmark, bookmark.Length, out bookmarkSize);
-                trx.Commit(CommitTransactionGrbit.None);
-                Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
-            }
-
-            Assert.AreEqual(Expected, Api.RetrieveColumnAsInt64(this.session, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Test setting and retrieving the min value of a UInt64
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void SetAndRetrieveUInt64Min()
-        {
-            var columnid = this.coltypDict[JET_coltyp.Binary];
-            const ulong Expected = UInt64.MinValue;
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                int bookmarkSize;
-                var bookmark = new byte[SystemParameters.BookmarkMost];
-                Api.SetColumn(this.session, this.tableid, columnid, Expected);
-                update.Save(bookmark, bookmark.Length, out bookmarkSize);
-                trx.Commit(CommitTransactionGrbit.None);
-                Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
-            }
-
-            Assert.AreEqual(Expected, Api.RetrieveColumnAsUInt64(this.session, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Test setting and retrieving the max value of a UInt64
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void SetAndRetrieveUInt64Max()
-        {
-            var columnid = this.coltypDict[JET_coltyp.Binary];
-            const ulong Expected = UInt64.MaxValue;
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                int bookmarkSize;
-                var bookmark = new byte[SystemParameters.BookmarkMost];
-                Api.SetColumn(this.session, this.tableid, columnid, Expected);
-                update.Save(bookmark, bookmark.Length, out bookmarkSize);
-                trx.Commit(CommitTransactionGrbit.None);
-                Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
-            }
-
-            Assert.AreEqual(Expected, Api.RetrieveColumnAsUInt64(this.session, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Test setting and retrieving the min value of an Float
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void SetAndRetrieveFloatMin()
-        {
-            var columnid = this.coltypDict[JET_coltyp.IEEESingle];
-            const float Expected = Single.MinValue;
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                int bookmarkSize;
-                var bookmark = new byte[SystemParameters.BookmarkMost];
-                Api.SetColumn(this.session, this.tableid, columnid, Expected);
-                update.Save(bookmark, bookmark.Length, out bookmarkSize);
-                trx.Commit(CommitTransactionGrbit.None);
-                Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
-            }
-
-            Assert.AreEqual(Expected, Api.RetrieveColumnAsFloat(this.session, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Test setting and retrieving the max value of an Float
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void SetAndRetrieveFloatMax()
-        {
-            var columnid = this.coltypDict[JET_coltyp.IEEESingle];
-            const float Expected = Single.MaxValue;
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                int bookmarkSize;
-                var bookmark = new byte[SystemParameters.BookmarkMost];
-                Api.SetColumn(this.session, this.tableid, columnid, Expected);
-                update.Save(bookmark, bookmark.Length, out bookmarkSize);
-                trx.Commit(CommitTransactionGrbit.None);
-                Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
-            }
-
-            Assert.AreEqual(Expected, Api.RetrieveColumnAsFloat(this.session, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Test setting and retrieving the min value of an Double
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void SetAndRetrieveDoubleMin()
-        {
-            var columnid = this.coltypDict[JET_coltyp.IEEEDouble];
-            const double Expected = Double.MinValue;
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                int bookmarkSize;
-                var bookmark = new byte[SystemParameters.BookmarkMost];
-                Api.SetColumn(this.session, this.tableid, columnid, Expected);
-                update.Save(bookmark, bookmark.Length, out bookmarkSize);
-                trx.Commit(CommitTransactionGrbit.None);
-                Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
-            }
-
-            Assert.AreEqual(Expected, Api.RetrieveColumnAsDouble(this.session, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Test setting and retrieving the max value of an Double
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void SetAndRetrieveDoubleMax()
-        {
-            var columnid = this.coltypDict[JET_coltyp.IEEEDouble];
-            const double Expected = Double.MaxValue;
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                int bookmarkSize;
-                var bookmark = new byte[SystemParameters.BookmarkMost];
-                Api.SetColumn(this.session, this.tableid, columnid, Expected);
-                update.Save(bookmark, bookmark.Length, out bookmarkSize);
-                trx.Commit(CommitTransactionGrbit.None);
-                Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
-            }
-
-            Assert.AreEqual(Expected, Api.RetrieveColumnAsDouble(this.session, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Test setting DateTime.Min. Dates before Jan 1, year 100 can't be represented
-        /// in ESENT (which uses the OLE Automation Date format), so this generates an
-        /// exceptions.
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        [ExpectedException(typeof(OverflowException))]
-        public void SetDateTimeThrowsExceptionWhenDateIsTooSmall()
-        {
-            // Can't represent Dec 31, 99
-            var invalid = new DateTime(99, 12, 31, 23, 59, 59);
-            var columnid = this.coltypDict[JET_coltyp.Binary];
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                Api.SetColumn(this.session, this.tableid, columnid, invalid);
-            }
-        }
-
-        /// <summary>
-        /// This is a bit bizarre. DateTime.MinValue.ToOADate gives the OLE Automation
-        /// base date, not the smallest possible OLE Automation Date or an overflow
-        /// exception (either of which would seem to be more sensible).
-        /// This test is documentating, but not endorsing, this behaviour.
-        /// The MSDN documentation says that "An uninitialized DateTime, that is,
-        /// an instance with a tick value of 0, is converted to the equivalent
-        /// uninitialized OLE Automation Date, that is, a date with a value of
-        /// 0.0 which represents midnight, 30 December 1899.
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void SetDateTimeMinGivesOleAutomationBaseTime()
-        {
-            // The base OLE Automation Date is midnight, 30 December 1899
-            var expected = new DateTime(1899, 12, 30, 0, 0, 0);
-
-            var columnid = this.coltypDict[JET_coltyp.Binary];
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                int bookmarkSize;
-                var bookmark = new byte[SystemParameters.BookmarkMost];
-                Api.SetColumn(this.session, this.tableid, columnid, DateTime.MinValue);
-                update.Save(bookmark, bookmark.Length, out bookmarkSize);
-                trx.Commit(CommitTransactionGrbit.None);
-                Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
-            }
-
-            Assert.AreEqual(expected, Api.RetrieveColumnAsDateTime(this.session, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Test setting and retrieving the min value of a DateTime
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void SetAndRetrieveDateTimeOleAutomationMin()
-        {
-            // The earliest OLE Automation Date is Jan 1, year 100
-            var expected = new DateTime(100, 1, 1, 00, 00, 1);
-
-            var columnid = this.coltypDict[JET_coltyp.Binary];
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                int bookmarkSize;
-                var bookmark = new byte[SystemParameters.BookmarkMost];
-                Api.SetColumn(this.session, this.tableid, columnid, expected);
-                update.Save(bookmark, bookmark.Length, out bookmarkSize);
-                trx.Commit(CommitTransactionGrbit.None);
-                Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
-            }
-
-            Assert.AreEqual(expected, Api.RetrieveColumnAsDateTime(this.session, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Test setting and retrieving the max value of a DateTime
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void SetAndRetrieveDateTimeMax()
-        {
-            // MSDN says the maximum OLE Automation Date is the same as
-            // DateTime.MaxValue, the last moment of 31 December 9999.
-            var expected = new DateTime(9999, 12, 31, 23, 59, 59);
-
-            var columnid = this.coltypDict[JET_coltyp.Binary];
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                int bookmarkSize;
-                var bookmark = new byte[SystemParameters.BookmarkMost];
-                Api.SetColumn(this.session, this.tableid, columnid, expected);
-                update.Save(bookmark, bookmark.Length, out bookmarkSize);
-                trx.Commit(CommitTransactionGrbit.None);
-                Api.JetGotoBookmark(this.session, this.tableid, bookmark, bookmarkSize);
-            }
-
-            Assert.AreEqual(expected, Api.RetrieveColumnAsDateTime(this.session, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Serialize and deserialize null.
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void SerializeAndDeserializeNull()
-        {
-            var columnid = this.coltypDict[JET_coltyp.Binary];
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                Api.SerializeObjectToColumn(this.session, this.tableid, columnid, null);
-                update.SaveAndGotoBookmark();
-                trx.Commit(CommitTransactionGrbit.None);
-            }
-
-            Assert.IsNull(Api.DeserializeObjectFromColumn(this.session, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Serialize and deserialize and object.
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void SerializeAndDeserializeObject()
-        {
-            var columnid = this.coltypDict[JET_coltyp.LongBinary];
-            var expected = new List<double> { Math.PI, Math.E, Double.PositiveInfinity, Double.NegativeInfinity, Double.Epsilon };
-
-            using (var trx = new Transaction(this.session))
-            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
-            {
-                Api.SerializeObjectToColumn(this.session, this.tableid, columnid, expected);
-                update.SaveAndGotoBookmark();
-                trx.Commit(CommitTransactionGrbit.None);
-            }
-
-            var actual = Api.DeserializeObjectFromColumn(this.session, this.tableid, columnid) as List<double>;
-            CollectionAssert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        /// Test JetSetColumns
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
+        [Description("Test JetSetColumns.")]
         public void JetSetColumns()
         {
             byte b = Any.Byte;
@@ -725,10 +146,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test JetRetrieveColumns
+        /// Test JetRetrieveColumns.
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test JetRetrieveColumns.")]
         public void JetRetrieveColumns()
         {
             short s = Any.Int16;
@@ -789,10 +211,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test JetRetrieveColumns with a null buffer
+        /// Test JetRetrieveColumns with a null buffer.
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test JetRetrieveColumns with a null buffer.")]
         public void JetRetrieveColumnsNullBuffer()
         {
             byte[] data = Any.Bytes;
@@ -819,10 +242,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test JetSetColumns
+        /// Test JetSetColumns.
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test JetSetColumns.")]
         public void SetColumns()
         {
             bool bit = true;
@@ -873,10 +297,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test JetSetColumns
+        /// Test JetSetColumns with null and zero-length data.
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test JetSetColumns with null and zero-length data.")]
         public void SetColumnsWithNullAndZeroLength()
         {
             var columnValues = new ColumnValue[]

@@ -54,6 +54,7 @@ namespace InteropApiTests
         /// All DDL should be done in this method.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the TableTests fixture.")]
         public void Setup()
         {
             this.directory = SetupHelper.CreateRandomDirectory();
@@ -63,6 +64,7 @@ namespace InteropApiTests
 
             // turn off logging so initialization is faster
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
+            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
             Api.JetInit(ref this.instance);
             Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
             Api.JetCreateDatabase(this.sesid, this.database, String.Empty, out this.dbid, CreateDatabaseGrbit.None);
@@ -78,6 +80,7 @@ namespace InteropApiTests
         /// Cleanup after all tests have run.
         /// </summary>
         [TestCleanup]
+        [Description("Cleanup the TableTests fixture.")]
         public void Teardown()
         {
             Api.JetEndSession(this.sesid, EndSessionGrbit.None);
@@ -86,10 +89,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Verify that the test class has setup the test fixture properly.
+        /// Verify that TableTests.Setup has setup the test fixture properly.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Verify that TableTests.Setup has setup the test fixture properly.")]
         public void VerifyFixtureSetup()
         {
             Assert.IsNotNull(this.tableName);
@@ -100,10 +104,11 @@ namespace InteropApiTests
         #endregion Setup/Teardown
 
         /// <summary>
-        /// Creating a table object should open the table.
+        /// Verify that creating a table object gets a tableid.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Verify that creating a table object gets a tableid.")]
         public void TestTableCreateOpensTable()
         {
             using (var table = new Table(this.sesid, this.dbid, this.tableName, OpenTableGrbit.None))
@@ -113,11 +118,12 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Creating a table object should set the name.
+        /// Verify that creating a table object sets the name.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        public void TestTableCreateSetsName()
+        [Description("Verify that creating a table object sets the name.")]
+        public void VerifyTableCreateSetsName()
         {
             using (var table = new Table(this.sesid, this.dbid, this.tableName, OpenTableGrbit.None))
             {
@@ -126,11 +132,12 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// A Table object can be implicitly converted to a JET_TABLEID
+        /// Verify that a Table object can be implicitly converted to a JET_TABLEID.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        public void TestTableCanConvertToJetTableid()
+        [Description("Verify that a Table object can be implicitly converted to a JET_TABLEID.")]
+        public void VerifyTableCanConvertToJetTableid()
         {
             using (var table = new Table(this.sesid, this.dbid, this.tableName, OpenTableGrbit.None))
             {
@@ -140,11 +147,12 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Allocate a table and close it.
+        /// Verify that Table.Close zeroes the tableid.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        public void TestTableCloseZeroesJetTableid()
+        [Description("Verify that Table.Close zeroes the tableid.")]
+        public void VerifyTableCloseZeroesJetTableid()
         {
             using (var table = new Table(this.sesid, this.dbid, this.tableName, OpenTableGrbit.None))
             {
@@ -154,16 +162,17 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Allocate a table and close it.
+        /// Verify that Table.Close sets the name to null.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Verify that Table.Close sets the name to null.")]
         public void TestTableCloseZeroesName()
         {
             using (var table = new Table(this.sesid, this.dbid, this.tableName, OpenTableGrbit.None))
             {
                 table.Close();
-                Assert.AreEqual(JET_TABLEID.Nil, table.JetTableid);
+                Assert.AreEqual(null, table.Name);
             }
         }
 
@@ -172,6 +181,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Try to close a disposed table, expecting an exception.")]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void TestCloseThrowsExceptionIfTableIsDisposed()
         {
@@ -186,6 +196,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Try to access the JetTableid property of a disposed table, expecting an exception.")]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void TestJetTableidThrowsExceptionIfTableIsDisposed()
         {
@@ -200,6 +211,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Try to access the Name property of a disposed table, expecting an exception.")]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void TestNamePropertyThrowsExceptionIfTableIsDisposed()
         {
