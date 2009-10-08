@@ -35,8 +35,12 @@ namespace InteropApiTests
                 JET_DBID dbid;
                 Api.JetBeginSession(instance, out sesid, String.Empty, String.Empty);
                 Api.JetCreateDatabase(sesid, database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+
+                // BUG: ESENT requires that JetGrowDatabase be in a transaction (Win7 and below)
+                Api.JetBeginTransaction(sesid);
                 int actualPages;
                 Api.JetGrowDatabase(sesid, dbid, 512, out actualPages);
+                Api.JetCommitTransaction(sesid, CommitTransactionGrbit.None);
                 Assert.IsTrue(actualPages >= 512, "Database didn't grow");
             }
             finally

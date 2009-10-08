@@ -17,10 +17,11 @@ namespace InteropApiTests
     public class ColumnlistTests
     {
         /// <summary>
-        /// Test conversion from the native stuct
+        /// Test conversion from NATIVE_COLUMNLIST to JET_COLUMNLIST.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test conversion from NATIVE_COLUMNLIST to JET_COLUMNLIST.")]
         public void ConvertColumnlistFromNative()
         {
             var tableid = new JET_TABLEID { Value = (IntPtr)0x1000 };

@@ -317,7 +317,7 @@ namespace InteropApiTests
         /// Test JetGetInstanceInfo with a unicode path.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         public void TestJetGetInstanceInfoWithUnicodePath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
@@ -328,6 +328,8 @@ namespace InteropApiTests
             const string InstanceName = "MyInstance";
             using (var instance = new Instance(InstanceName))
             {
+                instance.Parameters.NoInformationEvent = true;
+                instance.Parameters.MaxTemporaryTables = 0;
                 instance.Parameters.CreatePathIfNotExist = true;
                 instance.Init();
                 using (var session = new Session(instance))

@@ -71,7 +71,6 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </summary>
         public JetApi()
         {
-            Debug.Assert(0 == this.versionOverride, "Expected version to be 0");
             this.DetermineCapabilities();
         }
 
@@ -2417,13 +2416,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.TraceFunctionCall("JetUpdate");
             this.CheckDataSize(bookmark, bookmarkSize, "bookmarkSize");
 
-            const uint CbActualDefault = 0xDDDDDDDD;
-            uint cbActual = CbActualDefault;
-            int err = this.Err(NativeMethods.JetUpdate(sesid.Value, tableid.Value, bookmark, checked((uint) bookmarkSize), ref cbActual));
+            // BUG: debug builds of ESENT can fill cbActual with this value if no bookmark is given
+            const uint CbActualDebugFill = 0xDDDDDDDD;
+            uint cbActual;
+            int err = this.Err(NativeMethods.JetUpdate(sesid.Value, tableid.Value, bookmark, checked((uint) bookmarkSize), out cbActual));
 
-            // BUG: Work around a problem in older versions of ESENT where the bookmark args are not set on
-            // output for TTs in insert mode. 
-            if (CbActualDefault == cbActual)
+            if (CbActualDebugFill == cbActual)
             {
                 actualBookmarkSize = 0;
             }

@@ -232,7 +232,7 @@ namespace Microsoft.Isam.Esent.Interop
 
             if (value < this.Length && value > 0)
             {
-                // Shrinking the column multiple times and then growing it can sometimes hit an unpleasant
+                // BUG: Shrinking the column multiple times and then growing it can sometimes hit an unpleasant
                 // ESENT defect which causes a hang. To make sure we never have that problem we read out the data,
                 // and insert into a new long-value. This is not efficient.
                 var data = new byte[value];

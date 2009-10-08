@@ -510,10 +510,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetPrepareUpdate(IntPtr sesid, IntPtr tableid, uint prep);
 
-        // BUG: cbActual should be an out parameter, but we are working around a problem in older versions
-        // of ESENT. See JetApi.JetUpdate.
         [DllImport(EsentDll, ExactSpelling = true)]
-        public static extern int JetUpdate(IntPtr sesid, IntPtr tableid, [Out] byte[] pvBookmark, uint cbBookmark, ref uint cbActual);
+        public static extern int JetUpdate(IntPtr sesid, IntPtr tableid, [Out] byte[] pvBookmark, uint cbBookmark, out uint cbActual);
 
         // This has IntPtr and NATIVE_SETINFO versions because the parameter can be null
         [DllImport(EsentDll, ExactSpelling = true)]

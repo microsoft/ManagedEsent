@@ -21,6 +21,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test that the ApiTestHook constructor sets the implementation.")]
         public void VerifyApiTestHookSetsApi()
         {
             var newImpl = new JetApi();
@@ -35,6 +36,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test that disposing of an ApiTestHook resets the implementation.")]
         public void VerifyDisposingApiTestHookResetsApi()
         {
             var oldImpl = Api.Impl;

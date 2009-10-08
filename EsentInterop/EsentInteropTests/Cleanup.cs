@@ -13,7 +13,7 @@ namespace InteropApiTests
     /// <summary>
     /// Methods for test cleanup.
     /// </summary>
-    public static class Cleanup
+    internal static class Cleanup
     {
         /// <summary>
         /// Delete a directory, retrying the operation if the delete fails.

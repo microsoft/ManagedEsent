@@ -16,10 +16,11 @@ namespace InteropApiTests
     public class ColumndefTests
     {
         /// <summary>
-        /// Test conversion to the native stuct
+        /// Test conversion from JET_COLUMNDEF to NATIVE_COLUMNDEF.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test conversion from JET_COLUMNDEF to NATIVE_COLUMNDEF.")]
         public void ConvertColumndefToNative()
         {
             var columndef = new JET_COLUMNDEF
@@ -42,10 +43,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion from the native stuct
+        /// Test conversion from NATIVE_COLUMNDEF to JET_COLUMNDEF.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test conversion from NATIVE_COLUMNDEF to JET_COLUMNDEF.")]
         public void ConvertColumndefFromNative()
         {
             var native = new NATIVE_COLUMNDEF()

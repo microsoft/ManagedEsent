@@ -61,7 +61,7 @@ namespace EsentCollectionsTests
         [Priority(4)]
         public void TestSequentialInsertAndLookupSpeed()
         {
-            const int NumInserts = 1000000;
+            const int NumInserts = 500000;
             var keys = Enumerable.Range(0, NumInserts).ToArray();
             const string Data = "01234567890ABCDEF01234567890ABCDEF";
             var stopwatch = Stopwatch.StartNew();
@@ -128,7 +128,7 @@ namespace EsentCollectionsTests
         [Priority(4)]
         public void TestRandomInsertSpeed()
         {
-            const int NumInserts = 100000;
+            const int NumInserts = 50000;
             var keys = Enumerable.Range(0, NumInserts).ToArray();
             keys.Shuffle();
 

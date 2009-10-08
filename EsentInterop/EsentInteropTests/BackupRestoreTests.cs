@@ -17,11 +17,11 @@ namespace InteropApiTests
     public class BackupRestoreTests
     {
         /// <summary>
-        /// JetRestoreInstance should throw an exception when
-        /// the source database is null.
+        /// Verify JetRestoreInstance throws an exception when the source database is null.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify JetRestoreInstance throws an exception when the source database is null.")]
         [ExpectedException(typeof(ArgumentNullException))]
         public void TestJetRestoreInstanceThrowsExceptionWhenSourceIsNull()
         {
@@ -32,22 +32,12 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test backup and restore of a database.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        public void TestBackupRestore()
-        {
-            var test = new DatabaseFileTestHelper("database", "backup", true);
-            test.TestBackupRestore();
-        }
-
-        /// <summary>
         /// Test exception handling for exceptions thrown from
-        /// the status callback during backup.
+        /// the status callback during JetBackup.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Test exception handling for exceptions thrown from the status callback during JetBackup.")]
         [ExpectedException(typeof(ArgumentNullException))]
         public void TestBackupCallbackExceptionHandling()
         {
@@ -58,16 +48,17 @@ namespace InteropApiTests
 
         /// <summary>
         /// Test exception handling for exceptions thrown from
-        /// the status callback during restore.
+        /// the status callback during JetRestore.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Test exception handling for exceptions thrown from the status callback during JetRestore.")]
         [ExpectedException(typeof(ArgumentNullException))]
         public void TestBackupRestoreCallbackExceptionHandling()
         {
             var ex = new ArgumentNullException();
             var test = new DatabaseFileTestHelper("database", "backup", true);
-            Assert.Inconclusive("test is disabled because instance isn't torn down correctly");
+            Assert.Inconclusive("ESENT bug means instance isn't torn down correctly");
             test.TestRestoreCallbackExceptionHandling(ex);
         }
     }

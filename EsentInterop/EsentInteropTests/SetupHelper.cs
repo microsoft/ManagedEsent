@@ -13,7 +13,7 @@ namespace InteropApiTests
     /// <summary>
     /// Create a directory and an instance pointed at the directory.
     /// </summary>
-    public static class SetupHelper
+    internal static class SetupHelper
     {
         /// <summary>
         /// Static object used for locking.

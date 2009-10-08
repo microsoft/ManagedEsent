@@ -68,6 +68,7 @@ namespace InteropApiTests
         /// All DDL should be done in this method.
         /// </summary>
         [TestInitialize]
+        [Description("Setup for BasicTableTests.")]
         public void Setup()
         {
             this.directory = SetupHelper.CreateRandomDirectory();
@@ -98,6 +99,7 @@ namespace InteropApiTests
         /// Cleanup after all tests have run.
         /// </summary>
         [TestCleanup]
+        [Description("Cleanup for BasicTableTests.")]
         public void Teardown()
         {
             Api.JetCloseTable(this.sesid, this.tableid);
@@ -107,10 +109,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Verify that the test class has setup the test fixture properly.
+        /// Verify that BasicTableTests has setup the test fixture properly.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Verify that BasicTableTests has setup the test fixture properly.")]
         public void VerifyFixtureSetup()
         {
             Assert.IsNotNull(this.table);
@@ -130,10 +133,11 @@ namespace InteropApiTests
         #region Session tests
 
         /// <summary>
-        /// Move a transaction between threads.
+        /// Test moving a transaction between threads.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Test moving a transaction between threads.")]
         public void VerifyJetSetSessionContextAllowsThreadMigration()
         {
             // Without the calls to JetSetSessionContext/JetResetSessionContext
@@ -159,11 +163,12 @@ namespace InteropApiTests
         #region JetDupCursor
 
         /// <summary>
-        /// JetDupCursor should return a different tableid.
+        /// Verify JetDupCursor returns a different tableid.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        public void JetDupCursorReturnsDifferentTableid()
+        [Description("Verify JetDupCursor returns a different tableid.")]
+        public void VerifyJetDupCursorReturnsDifferentTableid()
         {
             JET_TABLEID newTableid;
             Api.JetDupCursor(this.sesid, this.tableid, out newTableid, DupCursorGrbit.None);
@@ -172,11 +177,12 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// JetDupCursor should return a tableid on the same table.
+        /// Verify JetDupCursor should returns a tableid on the same table.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        public void JetDupCursorReturnsCursorOnSameTable()
+        [Description("Verify JetDupCursor should returns a tableid on the same table.")]
+        public void VerifyJetDupCursorReturnsCursorOnSameTable()
         {
             string expected = Any.String;
 
@@ -199,10 +205,11 @@ namespace InteropApiTests
         #region DDL Tests
 
         /// <summary>
-        /// Create one column of each type
+        /// Create one column of each type.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Create one column of each type.")]
         public void CreateOneColumnOfEachType()
         {
             Api.JetBeginTransaction(this.sesid);
@@ -221,10 +228,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Create a column with a default value
+        /// Create a column with a default value.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Create a column with a default value.")]
         public void CreateColumnWithDefaultValue()
         {
             int expected = Any.Int32;
@@ -244,13 +252,14 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Add a column and retrieve its information using JetGetTableColumnInfo
+        /// Add a column and retrieve its information using JetGetTableColumnInfo.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Add a column and retrieve its information using JetGetTableColumnInfo.")]
         public void JetGetTableColumnInfo()
         {
-            string columnName = "column1";
+            const string ColumnName = "column1";
             Api.JetBeginTransaction(this.sesid);
             var columndef = new JET_COLUMNDEF()
             {
@@ -261,11 +270,11 @@ namespace InteropApiTests
             };
             
             JET_COLUMNID columnid;
-            Api.JetAddColumn(this.sesid, this.tableid, columnName, columndef, null, 0, out columnid);
+            Api.JetAddColumn(this.sesid, this.tableid, ColumnName, columndef, null, 0, out columnid);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
             JET_COLUMNDEF retrievedColumndef;
-            Api.JetGetTableColumnInfo(this.sesid, this.tableid, columnName, out retrievedColumndef);
+            Api.JetGetTableColumnInfo(this.sesid, this.tableid, ColumnName, out retrievedColumndef);
 
             Assert.AreEqual(columndef.cbMax, retrievedColumndef.cbMax);
             Assert.AreEqual(columndef.cp, retrievedColumndef.cp);
@@ -276,13 +285,14 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Add a column and retrieve its information using JetGetTableColumnInfo
+        /// Add a column and retrieve its information using JetGetTableColumnInfo.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Add a column and retrieve its information using JetGetTableColumnInfo.")]
         public void JetGetTableColumnInfoByColumnid()
         {
-            string columnName = "column2";
+            const string ColumnName = "column2";
             Api.JetBeginTransaction(this.sesid);
             var columndef = new JET_COLUMNDEF()
             {
@@ -293,7 +303,7 @@ namespace InteropApiTests
             };
 
             JET_COLUMNID columnid;
-            Api.JetAddColumn(this.sesid, this.tableid, columnName, columndef, null, 0, out columnid);
+            Api.JetAddColumn(this.sesid, this.tableid, ColumnName, columndef, null, 0, out columnid);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
             JET_COLUMNDEF retrievedColumndef;
@@ -308,13 +318,14 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Add a column and retrieve its information using JetGetColumnInfo
+        /// Add a column and retrieve its information using JetGetColumnInfo.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Add a column and retrieve its information using JetGetColumnInfo.")]
         public void JetGetColumnInfo()
         {
-            string columnName = "column3";
+            const string ColumnName = "column3";
             Api.JetBeginTransaction(this.sesid);
             var columndef = new JET_COLUMNDEF()
             {
@@ -325,10 +336,10 @@ namespace InteropApiTests
             };
 
             JET_COLUMNID columnid;
-            Api.JetAddColumn(this.sesid, this.tableid, columnName, columndef, null, 0, out columnid);
+            Api.JetAddColumn(this.sesid, this.tableid, ColumnName, columndef, null, 0, out columnid);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
             JET_COLUMNDEF retrievedColumndef;
-            Api.JetGetColumnInfo(this.sesid, this.dbid, this.table, columnName, out retrievedColumndef);
+            Api.JetGetColumnInfo(this.sesid, this.dbid, this.table, ColumnName, out retrievedColumndef);
 
             Assert.AreEqual(columndef.cbMax, retrievedColumndef.cbMax);
             Assert.AreEqual(columndef.cp, retrievedColumndef.cp);
@@ -339,13 +350,14 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Add a column and retrieve its information using GetColumnDictionary
+        /// Add a column and retrieve its information using GetColumnDictionary.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Add a column and retrieve its information using GetColumnDictionary.")]
         public void GetColumnDictionary()
         {
-            string columnName = "column4";
+            const string ColumnName = "column4";
             Api.JetBeginTransaction(this.sesid);
             var columndef = new JET_COLUMNDEF()
             {
@@ -356,46 +368,49 @@ namespace InteropApiTests
             };
 
             JET_COLUMNID columnid;
-            Api.JetAddColumn(this.sesid, this.tableid, columnName, columndef, null, 0, out columnid);
+            Api.JetAddColumn(this.sesid, this.tableid, ColumnName, columndef, null, 0, out columnid);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
             IDictionary<string, JET_COLUMNID> dict = Api.GetColumnDictionary(this.sesid, this.tableid);
-            Assert.AreEqual(columnid, dict[columnName]);
+            Assert.AreEqual(columnid, dict[ColumnName]);
         }
 
         /// <summary>
-        /// Check that the dictionary returned by GetColumnDictionary is case-insensitive
+        /// Check that the dictionary returned by GetColumnDictionary is case-insensitive.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        public void GetColumnDictionaryIsCaseInsensitive()
+        [Description("Check that the dictionary returned by GetColumnDictionary is case-insensitive.")]
+        public void VerifyGetColumnDictionaryReturnsCaseInsensitiveDictionary()
         {
             IDictionary<string, JET_COLUMNID> dict = Api.GetColumnDictionary(this.sesid, this.tableid);
             Assert.AreEqual(this.columnidLongText, dict["tEsTcOLuMn"]);
         }
 
         /// <summary>
-        /// Creates an index
+        /// Create an index.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        public void CreateIndex()
+        [Description("Create an index.")]
+        public void JetCreateIndex()
         {
-            string indexDescription = "+TestColumn\0";
-            string indexName = "new_index";
+            const string IndexDescription = "+TestColumn\0";
+            const string IndexName = "new_index";
             Api.JetBeginTransaction(this.sesid);
-            Api.JetCreateIndex(this.sesid, this.tableid, indexName, CreateIndexGrbit.None, indexDescription, indexDescription.Length + 1, 100); 
+            Api.JetCreateIndex(this.sesid, this.tableid, IndexName, CreateIndexGrbit.None, IndexDescription, IndexDescription.Length + 1, 100); 
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
-            Api.JetSetCurrentIndex(this.sesid, this.tableid, indexName);
+            Api.JetSetCurrentIndex(this.sesid, this.tableid, IndexName);
         }
 
         /// <summary>
-        /// Creates an index with JetCreateIndex2
+        /// Creates an index with JetCreateIndex2.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        public void CreateIndex2()
+        [Description("Creates an index with JetCreateIndex2.")]
+        public void JetCreateIndex2()
         {
             Api.JetBeginTransaction(this.sesid);
 
@@ -416,44 +431,46 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Creates an index
+        /// Verify that JetGetCurrentIndex returns the name of the index.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Verify that JetGetCurrentIndex returns the name of the index.")]
         public void VerifyJetGetCurrentIndexReturnsIndexName()
         {
-            string indexDescription = "+TestColumn\0";
-            string indexName = "myindexname";
+            const string IndexDescription = "+TestColumn\0";
+            const string IndexName = "myindexname";
             Api.JetBeginTransaction(this.sesid);
-            Api.JetCreateIndex(this.sesid, this.tableid, indexName, CreateIndexGrbit.None, indexDescription, indexDescription.Length + 1, 100);
+            Api.JetCreateIndex(this.sesid, this.tableid, IndexName, CreateIndexGrbit.None, IndexDescription, IndexDescription.Length + 1, 100);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
-            Api.JetSetCurrentIndex(this.sesid, this.tableid, indexName);
+            Api.JetSetCurrentIndex(this.sesid, this.tableid, IndexName);
             string actual;
             Api.JetGetCurrentIndex(this.sesid, this.tableid, out actual, SystemParameters.NameMost);
-            Assert.AreEqual(indexName, actual);
+            Assert.AreEqual(IndexName, actual);
         }
 
         /// <summary>
-        /// Delete an index and make sure we can't use it afterwards
+        /// Delete an index and make sure we can't use it afterwards.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        public void DeleteIndex()
+        [Description("Delete an index and make sure we can't use it afterwards.")]
+        public void JetDeleteIndex()
         {
-            string indexDescription = "+TestColumn\0";
-            string indexName = "index_to_delete";
+            const string IndexDescription = "+TestColumn\0";
+            const string IndexName = "index_to_delete";
             Api.JetBeginTransaction(this.sesid);
-            Api.JetCreateIndex(this.sesid, this.tableid, indexName, CreateIndexGrbit.None, indexDescription, indexDescription.Length + 1, 100);
+            Api.JetCreateIndex(this.sesid, this.tableid, IndexName, CreateIndexGrbit.None, IndexDescription, IndexDescription.Length + 1, 100);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
             Api.JetBeginTransaction(this.sesid);
-            Api.JetDeleteIndex(this.sesid, this.tableid, indexName);
+            Api.JetDeleteIndex(this.sesid, this.tableid, IndexName);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
             try
             {
-                Api.JetSetCurrentIndex(this.sesid, this.tableid, indexName);
+                Api.JetSetCurrentIndex(this.sesid, this.tableid, IndexName);
                 Assert.Fail("Index is still visible");
             }
             catch (EsentErrorException)
@@ -466,22 +483,24 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        public void DeleteColumn()
+        [Description("Delete a column and make sure we can't see it afterwards.")]
+        public void TestJetDeleteColumn()
         {
-            string columnName = "column_to_delete";
+            const string ColumnName = "column_to_delete";
             Api.JetBeginTransaction(this.sesid);
             var columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Long };
             JET_COLUMNID columnid;
-            Api.JetAddColumn(this.sesid, this.tableid, columnName, columndef, null, 0, out columnid);
+            Api.JetAddColumn(this.sesid, this.tableid, ColumnName, columndef, null, 0, out columnid);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
             Api.JetBeginTransaction(this.sesid);
-            Api.JetDeleteColumn(this.sesid, this.tableid, columnName);
+            Api.JetDeleteColumn(this.sesid, this.tableid, ColumnName);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
             try
             {
-                Api.JetGetTableColumnInfo(this.sesid, this.tableid, columnName, out columndef);
+                // TODO: deal with versions of this API that return info on the deleted column
+                Api.JetGetTableColumnInfo(this.sesid, this.tableid, ColumnName, out columndef);
                 Assert.Fail("Column is still visible");
             }
             catch (EsentErrorException)
@@ -494,22 +513,24 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        public void DeleteColumn2()
+        [Description("Delete a column with JetDeleteColumn2 and make sure we can't see it afterwards.")]
+        public void TestJetDeleteColumn2()
         {
-            string columnName = "column_to_delete";
+            const string ColumnName = "column_to_delete";
             Api.JetBeginTransaction(this.sesid);
             var columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Long };
             JET_COLUMNID columnid;
-            Api.JetAddColumn(this.sesid, this.tableid, columnName, columndef, null, 0, out columnid);
+            Api.JetAddColumn(this.sesid, this.tableid, ColumnName, columndef, null, 0, out columnid);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
             Api.JetBeginTransaction(this.sesid);
-            Api.JetDeleteColumn2(this.sesid, this.tableid, columnName, DeleteColumnGrbit.None);
+            Api.JetDeleteColumn2(this.sesid, this.tableid, ColumnName, DeleteColumnGrbit.None);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
             try
             {
-                Api.JetGetTableColumnInfo(this.sesid, this.tableid, columnName, out columndef);
+                // TODO: deal with versions of this API that return info on the deleted column
+                Api.JetGetTableColumnInfo(this.sesid, this.tableid, ColumnName, out columndef);
                 Assert.Fail("Column is still visible");
             }
             catch (EsentErrorException)
@@ -518,26 +539,27 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Delete a table and make sure we can't see it afterwards
+        /// Delete a table and make sure we can't see it afterwards.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Delete a table and make sure we can't see it afterwards.")]
         public void DeleteTable()
         {
-            string tableName = "table_to_delete";
+            const string TableName = "table_to_delete";
             Api.JetBeginTransaction(this.sesid);
-            JET_TABLEID tableid;
-            Api.JetCreateTable(this.sesid, this.dbid, tableName, 16, 100, out tableid);
-            Api.JetCloseTable(this.sesid, tableid);
+            JET_TABLEID newtable;
+            Api.JetCreateTable(this.sesid, this.dbid, TableName, 16, 100, out newtable);
+            Api.JetCloseTable(this.sesid, newtable);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
             Api.JetBeginTransaction(this.sesid);
-            Api.JetDeleteTable(this.sesid, this.dbid, tableName);
+            Api.JetDeleteTable(this.sesid, this.dbid, TableName);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
             try
             {
-                Api.JetOpenTable(this.sesid, this.dbid, tableName, null, 0, OpenTableGrbit.None, out tableid);
+                Api.JetOpenTable(this.sesid, this.dbid, TableName, null, 0, OpenTableGrbit.None, out newtable);
                 Assert.Fail("Column is still visible");
             }
             catch (EsentErrorException)
@@ -550,10 +572,11 @@ namespace InteropApiTests
         #region DML Tests
 
         /// <summary>
-        /// Inserts a record and retrieve it.
+        /// Insert a record and retrieve it.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Insert a record and retrieve it.")]
         public void InsertRecord()
         {
             string s = Any.String;
@@ -567,10 +590,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Inserts a record and update it.
+        /// Insert a record and update it.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Insert a record and update it.")]
         public void ReplaceRecord()
         {
             string before = Any.String;
@@ -592,11 +616,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Inserts a record and update it. This uses the Transaction helper
-        /// class.
+        /// Insert a record and update it. This uses the Transaction class.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Inserts a record and update it. This uses the Transaction class.")]
         public void ReplaceRecordWithTransactionClass()
         {
             string before = Any.String;
@@ -622,10 +646,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Inserts a record, update it and rollback the update.
+        /// Insert a record, update it and rollback the update.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Inserts a record, update it and rollback the update.")]
         public void ReplaceAndRollback()
         {
             string before = Any.String;
@@ -651,6 +676,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Using JetBeginTransaction2, insert a record, update it and rollback the update.")]
         public void TestJetBeginTransaction2()
         {
             string before = Any.String;
@@ -672,11 +698,12 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Inserts a record, updates it and rollback the transaction.
-        /// This uses the Transaction helper class.
+        /// Insert a record, update it and rollback the transaction.
+        /// This uses the Transaction class.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Insert a record, update it and rollback the transaction. This uses the Transaction class.")]
         public void ReplaceAndRollbackWithTransactionClass()
         {
             string before = Any.String;
@@ -707,6 +734,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Insert a record and delete it.")]
         public void InsertRecordAndDelete()
         {
             Api.JetBeginTransaction(this.sesid);
@@ -730,11 +758,12 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test JetGetLock()
+        /// Test JetGetLock.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        public void GetLock()
+        [Description("Test JetGetLock.")]
+        public void JetGetLock()
         {
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
@@ -748,12 +777,13 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test that JetGetLock throws an exception when incompatible
+        /// Verify that JetGetLock throws an exception when incompatible
         /// locks are requested.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        public void GetLockThrowsExceptionOnWriteConflict()
+        [Description("Verify that JetGetLock throws an exception when incompatible locks are requested.")]
+        public void VerifyJetGetLockThrowsExceptionOnWriteConflict()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
             int bookmarkSize;
@@ -800,7 +830,8 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        public void TestJetComputeStats()
+        [Description("Call JetComputeStats.")]
+        public void JetComputeStats()
         {
             Api.JetBeginTransaction(this.sesid);
             for (int i = 0; i < 10; ++i)
@@ -815,11 +846,12 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test JetGetThreadStats
+        /// Call JetGetThreadStats.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        public void GetThreadStats()
+        [Description("Call JetGetThreadStats.")]
+        public void JetGetThreadStats()
         {
             if (!EsentVersion.SupportsVistaFeatures)
             {
@@ -844,10 +876,11 @@ namespace InteropApiTests
         #region Navigation Tests
 
         /// <summary>
-        /// Inserts a record and retrieve its bookmark
+        /// Insert a record and retrieve its bookmark.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Insert a record and retrieve its bookmark.")]
         public void JetGetBookmark()
         {
             var expectedBookmark = new byte[256];
@@ -871,10 +904,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Inserts a record and retrieve its bookmark
+        /// Insert a record and retrieve its bookmark.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Insert a record and retrieve its bookmark.")]
         public void GetBookmark()
         {
             var expectedBookmark = new byte[256];
@@ -896,10 +930,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Insert a record and retrieve its key
+        /// Insert a record and retrieve its key.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Insert a record and retrieve its key.")]
         public void JetRetrieveKey()
         {
             string expected = Any.String;
@@ -923,10 +958,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Insert a record and retrieve its key
+        /// Insert a record and retrieve its key.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Insert a record and retrieve its key.")]
         public void RetrieveKey()
         {
             string expected = Any.String;

@@ -47,11 +47,6 @@ namespace InteropApiTests
         private JET_SESID sesid;
 
         /// <summary>
-        /// Identifies the database used by the test.
-        /// </summary>
-        private JET_DBID dbid;
-
-        /// <summary>
         /// The tableid being used by the test.
         /// </summary>
         private JET_TABLEID tableid;
@@ -75,23 +70,19 @@ namespace InteropApiTests
             this.table = "table";
             this.instance = SetupHelper.CreateNewInstance(this.directory);
 
-            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
+            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
+            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.PageTempDBMin, SystemParameters.PageTempDBSmallest, null);
             Api.JetInit(ref this.instance);
             Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
-            Api.JetCreateDatabase(this.sesid, this.database, String.Empty, out this.dbid, CreateDatabaseGrbit.None);
-            Api.JetBeginTransaction(this.sesid);
-            Api.JetCreateTable(this.sesid, this.dbid, this.table, 0, 100, out this.tableid);
 
-            var columndef = new JET_COLUMNDEF()
+            var columndefs = new[]
             {
-                cp = JET_CP.Unicode,
-                coltyp = JET_coltyp.LongText,
+                new JET_COLUMNDEF { coltyp = JET_coltyp.LongText, cp = JET_CP.Unicode },
             };
-            Api.JetAddColumn(this.sesid, this.tableid, "TestColumn", columndef, null, 0, out this.columnidLongText);
 
-            Api.JetCloseTable(this.sesid, this.tableid);
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-            Api.JetOpenTable(this.sesid, this.dbid, this.table, null, 0, OpenTableGrbit.None, out this.tableid);
+            var columnids = new JET_COLUMNID[columndefs.Length];
+            Api.JetOpenTempTable(this.sesid, columndefs, columndefs.Length, TempTableGrbit.ForceMaterialization, out this.tableid, columnids);
+            this.columnidLongText = columnids[0];
         }
 
         /// <summary>
@@ -102,7 +93,7 @@ namespace InteropApiTests
         {
             Api.JetCloseTable(this.sesid, this.tableid);
             Api.JetEndSession(this.sesid, EndSessionGrbit.None);
-            Api.JetTerm(this.instance);
+            Api.JetTerm2(this.instance, TermGrbit.Abrupt);
             Cleanup.DeleteDirectoryWithRetry(this.directory);
         }
 
@@ -110,19 +101,14 @@ namespace InteropApiTests
         /// Verify that the test class has setup the test fixture properly.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         public void VerifyFixtureSetup()
         {
             Assert.IsNotNull(this.table);
             Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
             Assert.AreNotEqual(JET_SESID.Nil, this.sesid);
-            Assert.AreNotEqual(JET_DBID.Nil, this.dbid);
             Assert.AreNotEqual(JET_TABLEID.Nil, this.tableid);
             Assert.AreNotEqual(JET_COLUMNID.Nil, this.columnidLongText);
-
-            JET_COLUMNDEF columndef;
-            Api.JetGetTableColumnInfo(this.sesid, this.tableid, this.columnidLongText, out columndef);
-            Assert.AreEqual(JET_coltyp.LongText, columndef.coltyp);
         }
 
         #endregion Setup/Teardown
@@ -133,7 +119,7 @@ namespace InteropApiTests
         /// Test that a ColumnStream supports reading.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         public void ColumnStreamSupportsRead()
         {
             using (var t = new Transaction(this.sesid))
@@ -148,7 +134,7 @@ namespace InteropApiTests
         /// Test that a ColumnStream supports writing.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         public void ColumnStreamSupportsWrite()
         {
             using (var t = new Transaction(this.sesid))
@@ -163,7 +149,7 @@ namespace InteropApiTests
         /// Test that a ColumnStream supports seeking.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         public void ColumnStreamSupportsSeek()
         {
             using (var t = new Transaction(this.sesid))
@@ -178,7 +164,7 @@ namespace InteropApiTests
         /// Test setting the length of a ColumnStream.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         public void SetColumnStreamLength()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -208,7 +194,7 @@ namespace InteropApiTests
         /// Test setting the position of a ColumnStream.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         public void SetColumnStreamPosition()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -235,7 +221,7 @@ namespace InteropApiTests
         /// Test writing to a column stream with a non-zero buffer offset.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         public void WriteAtNonZeroOffset()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -269,7 +255,7 @@ namespace InteropApiTests
         /// Test reading from a column stream with a non-zero buffer offset.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         public void ReadAtNonZeroOffset()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -302,7 +288,7 @@ namespace InteropApiTests
         /// Test writing to a column stream with a non-zero buffer offset.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         public void OverwriteColumnStream()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -342,7 +328,7 @@ namespace InteropApiTests
         /// but with a length that goes past the end.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         public void ExtendingColumnStream()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -378,7 +364,7 @@ namespace InteropApiTests
         /// This also tests seeking from the end.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         public void ReadReturnsNumberOfBytesRead()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -409,7 +395,7 @@ namespace InteropApiTests
         /// Test shrinking a column stream. There is special code to handle this.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         public void ShrinkColumnStream()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -447,7 +433,7 @@ namespace InteropApiTests
         /// Test setting the length of a ColumnStream.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         public void GrowColumnStreamByWritingPastEnd()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -483,7 +469,7 @@ namespace InteropApiTests
         /// Test setting the length of a ColumnStream.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         public void SetColumnStreamToZeroLength()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -511,7 +497,7 @@ namespace InteropApiTests
         /// Test setting and retrieving a column with the ColumnStream class.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         public void SetAndRetrieveColumnStream()
         {
             string s = Any.String;
@@ -537,7 +523,7 @@ namespace InteropApiTests
         /// Buffer a ColumnStream
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         public void BufferColumnStream()
         {
             var data = new byte[1024];
@@ -573,7 +559,7 @@ namespace InteropApiTests
         /// Test that seeking beyond the length of the stream doesn't grow the stream.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         public void SeekingPastEndOfColumnStreamDoesNotGrowStream()
         {
             const int Offset = 1200;
@@ -599,7 +585,7 @@ namespace InteropApiTests
         /// and multivalues.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         public void SetAndRetrieveMultiValueColumnStream()
         {
             string[] data = { Any.String, Any.String, Any.String, Any.String, Any.String, Any.String };                                
@@ -635,7 +621,7 @@ namespace InteropApiTests
         /// Trying to seek to a negative offset generates an exception.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ColumnStreamThrowsExceptionWhenSeekOffsetIsNegative()
         {
@@ -651,7 +637,7 @@ namespace InteropApiTests
         /// Trying to seek to an invalid offset generates an exception.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ColumnStreamThrowsExceptionWhenSeekOffsetIsTooLarge()
         {
@@ -667,7 +653,7 @@ namespace InteropApiTests
         /// Trying to seek with an invalid origin.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ColumnStreamThrowsExceptionWhenSeekOriginIsInvalid()
         {
@@ -683,7 +669,7 @@ namespace InteropApiTests
         /// Setting the size past the maximum LV size generates an exception.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ColumnStreamSetLengthThrowsExceptionWhenLengthIsTooLong()
         {
@@ -699,7 +685,7 @@ namespace InteropApiTests
         /// Setting the size to a negative number generates an exception.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ColumnStreamSetLengthThrowsExceptionWhenLengthIsNegative()
         {
@@ -715,7 +701,7 @@ namespace InteropApiTests
         /// Setting the position to a negative number generates an exception.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void SettingPositionThrowsExceptionWhenPositionIsNegative()
         {
@@ -731,7 +717,7 @@ namespace InteropApiTests
         /// Setting the position past the maximum LV size generates an exception.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void SettingPositionThrowsExceptionWhenPositionIsTooLong()
         {
@@ -747,7 +733,7 @@ namespace InteropApiTests
         /// Writing throws an exception when the buffer is null
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentNullException))]
         public void WriteThrowsExceptionWhenBufferIsNull()
         {
@@ -763,7 +749,7 @@ namespace InteropApiTests
         /// Writing throws an exception when the buffer offset is negative
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void WriteThrowsExceptionWhenBufferOffsetIsNegative()
         {
@@ -781,7 +767,7 @@ namespace InteropApiTests
         /// the buffer.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void WriteThrowsExceptionWhenBufferOffsetIsTooBig()
         {
@@ -799,7 +785,7 @@ namespace InteropApiTests
         /// negative.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void WriteThrowsExceptionWhenNumberOfBytesIsNegative()
         {
@@ -817,7 +803,7 @@ namespace InteropApiTests
         /// too large.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void WriteThrowsExceptionWhenNumberOfBytesIsTooLarge()
         {
@@ -834,7 +820,7 @@ namespace InteropApiTests
         /// Test that a ColumnStream can serialize an object.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         public void ColumnStreamCanSerializeBasicType()
         {
             var expected = Any.Int64;
@@ -865,7 +851,7 @@ namespace InteropApiTests
         /// Test that a ColumnStream can serialize an object.
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         public void ColumnStreamCanSerializeObject()
         {
             var expected = new Dictionary<string, long> { { "foo", 1 }, { "bar", 2 }, { "baz", 3 } };

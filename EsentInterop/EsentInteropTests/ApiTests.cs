@@ -33,6 +33,7 @@ namespace InteropApiTests
         /// Setup the mock object repository.
         /// </summary>
         [TestInitialize]
+        [Description("Initialization for ApiTests.")]
         public void Setup()
         {
             this.savedImpl = Api.Impl;
@@ -43,16 +44,18 @@ namespace InteropApiTests
         /// Cleanup after the test.
         /// </summary>
         [TestCleanup]
+        [Description("Cleanup for ApiTests.")]
         public void Teardown()
         {
             Api.Impl = this.savedImpl;
         }
 
         /// <summary>
-        /// Verify that the internal IJetApi has default implementation.
+        /// Verify that the internal IJetApi has a default implementation.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(0)]
+        [Description("Verify that the internal IJetApi has a default implementation.")]
         public void VerifyApiHasDefaultImplementation()
         {
             Assert.IsNotNull(Api.Impl);
@@ -60,11 +63,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Verify that the internal IJetApi can be substituted with a different
-        /// object.
+        /// Verify that the internal IJetApi can be replaced with a different object.
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify that the internal IJetApi can be replaced with a different object.")]
         public void VerifyJetApiImplementationCanBeChanged()
         {
             var jetApi = this.mocks.StrictMock<IJetApi>();
@@ -87,6 +90,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify that an error returned from the IJetApi implementation causes an exception to be thrown.")]
         [ExpectedException(typeof(EsentErrorException))]
         public void VerifyErrorFromJetApiImplementationGeneratesException()
         {
@@ -103,11 +107,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Verify that the ErrorHandler event is invoked when an error is
-        /// generated.
+        /// Verify that the ErrorHandler event is invoked when an error is encountered.
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify that the ErrorHandler event is invoked when an error is encountered.")]
         public void VerifyErrorHandlerIsInvokedOnException()
         {
             var jetApi = this.mocks.Stub<IJetApi>();
@@ -146,6 +150,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify that the ExceptionHandler event can wrap exceptions.")]
         public void VerifyExceptionHandlerCanWrapExceptions()
         {
             var jetApi = this.mocks.Stub<IJetApi>();

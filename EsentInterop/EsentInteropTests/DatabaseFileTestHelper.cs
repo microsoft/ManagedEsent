@@ -14,7 +14,7 @@ namespace InteropApiTests
     /// <summary>
     /// Implementation of a backup/restore/compact/setsize test.
     /// </summary>
-    public class DatabaseFileTestHelper
+    internal class DatabaseFileTestHelper
     {
         /// <summary>
         /// The directory containing the database.
@@ -500,6 +500,8 @@ namespace InteropApiTests
                 {
                     const int ExpectedPages = 1024;
                     int actualPages;
+
+                    // BUG: this seems to have problems (JET_err.InvalidParameter) on Vista and below
                     Api.JetSetDatabaseSize(session, this.database, ExpectedPages, out actualPages);
                     Assert.IsTrue(actualPages >= ExpectedPages, "Database isn't large enough");
                 }

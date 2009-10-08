@@ -238,10 +238,13 @@ namespace Microsoft.Isam.Esent.Interop
 
             try
             {
-                Api.MoveBeforeFirst(sesid, recordlist.tableid);
-                while (Api.TryMoveNext(sesid, recordlist.tableid))
+                if (Api.TryMoveFirst(sesid, recordlist.tableid))
                 {
-                    yield return Api.RetrieveColumn(sesid, recordlist.tableid, recordlist.columnidBookmark);   
+                    do
+                    {
+                        yield return Api.RetrieveColumn(sesid, recordlist.tableid, recordlist.columnidBookmark);
+                    }
+                    while (Api.TryMoveNext(sesid, recordlist.tableid));
                 }
             }
             finally

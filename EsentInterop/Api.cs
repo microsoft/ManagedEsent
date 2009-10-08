@@ -1348,7 +1348,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             if (0 == maxRecordsToCount)
             {
-                // Older versions of esent (e.g. Windows XP) don't use 0 as an unlimited count,
+                // BUG: Older versions of esent (e.g. Windows XP) don't use 0 as an unlimited count,
                 // instead they simply count zero records (which isn't very useful). To make
                 // sure this API works as advertised we will increase the maximum record count.
                 maxRecordsToCount = int.MaxValue;

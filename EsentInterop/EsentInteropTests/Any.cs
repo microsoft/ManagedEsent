@@ -12,7 +12,7 @@ namespace InteropApiTests
     /// <summary>
     /// Generate arbitrary (random) values
     /// </summary>
-    public static class Any
+    internal static class Any
     {
         /// <summary>
         /// Random object used to generate the values.

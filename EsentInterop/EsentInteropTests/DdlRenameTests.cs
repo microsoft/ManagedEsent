@@ -83,7 +83,7 @@ namespace InteropApiTests
         /// Test JetRenameTable.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [Description("Test JetRenameTable.")]
         public void TestJetRenameTable()
         {

@@ -37,6 +37,7 @@ namespace InteropApiTests
         /// Test setup
         /// </summary>
         [TestInitialize]
+        [Description("Initialization for AsciiPathTests.")]
         public void Setup()
         {
             this.directory = "ascii_directory";
@@ -50,6 +51,7 @@ namespace InteropApiTests
         /// directory, if it was created.
         /// </summary>
         [TestCleanup]
+        [Description("Cleanup for AsciiPathTests.")]
         public void Teardown()
         {
             Api.Impl = this.savedImpl;
@@ -60,10 +62,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Set the system path.
+        /// Set and retrieve an ASCII system path.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Set and retrieve an ASCII system path.")]
         public void SetAndGetAsciiSystemPath()
         {
             using (var instance = new Instance("ascii"))
@@ -74,10 +77,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Set the logfile path.
+        /// Set and retrieve an ASCII log path.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Set and retrieve an ASCII log path.")]
         public void SetAndGetAsciiLogPath()
         {
             using (var instance = new Instance("ascii"))
@@ -88,10 +92,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Set the temp database path.
+        /// Set and retrieve an ASCII temporary directory.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Set and retrieve an ASCII temporary directory.")]
         public void SetAndGetAsciiTempDbPath()
         {
             using (var instance = new Instance("ascii"))
@@ -106,6 +111,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Create a database with an ASCII path.")]
         public void CreateDatabaseWithAsciiPath()
         {
             using (var instance = new Instance("ascii"))
@@ -127,6 +133,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Detach a database with an ASCII path.")]
         public void DetachDatabaseWithAsciiPath()
         {
             using (var instance = new Instance("ascii"))
@@ -149,6 +156,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Attach a database with an ASCII path.")]
         public void AttachDatabaseWithAsciiPath()
         {
             using (var instance = new Instance("ascii"))
@@ -173,6 +181,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Open a database with an ASCII path.")]
         public void OpenDatabaseWithAsciiPath()
         {
             using (var instance = new Instance("ascii"))
@@ -194,10 +203,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Tests for JetBackupInstance and JetRestoreInstance with an ASCII path.
+        /// Test JetBackupInstance and JetRestoreInstance with an ASCII path.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Test JetBackupInstance and JetRestoreInstance with an ASCII path.")]
         public void BackupRestoreDatabaseWithAsciiPath()
         {
             var test = new DatabaseFileTestHelper("database", "backup", false);
@@ -205,10 +215,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Tests for snapshot backups with an ASCII path.
+        /// Test snapshot backups with an ASCII path.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Test snapshot backups with an ASCII path.")]
         public void SnapshotBackupWithAsciiPath()
         {
             var test = new DatabaseFileTestHelper("database");
@@ -216,10 +227,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Tests for streaming backups with an ASCII path.
+        /// Test streaming backups with an ASCII path.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Test streaming backups with an ASCII path.")]
         public void StreamingBackupWithAsciiPath()
         {
             var test = new DatabaseFileTestHelper("database", "backup", false);
@@ -227,10 +239,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Tests for JetCompactDatabase with an ASCII path.
+        /// Test JetCompactDatabase with an ASCII path.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Test JetCompactDatabase with an ASCII path.")]
         public void TestJetCompactDatabaseWithAsciiPath()
         {
             var test = new DatabaseFileTestHelper("database");
@@ -238,10 +251,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Tests for JetCompactDatabase with an ASCII path.
+        /// Test JetSetDatabaseSize with an ASCII path.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Test JetSetDatabaseSize with an ASCII path.")]
         public void TestJetSetDatabaseSizeDatabaseWithAsciiPath()
         {
             var test = new DatabaseFileTestHelper("database");
@@ -249,17 +263,22 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test JetGetInstanceInfo with ASCII path.
+        /// Test JetGetInstanceInfo with ASCII paths.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
-        public void TestJetGetInstanceInfo()
+        [Priority(2)]
+        [Description("Test JetGetInstanceInfo with ASCII paths.")]
+        public void TestJetGetInstanceInfoWithAsciiPaths()
         {
             const string InstanceName = "MyInstance";
             string database1 = Path.GetFullPath(Path.Combine(this.directory, "instanceinfo1.edb"));
             string database2 = Path.GetFullPath(Path.Combine(this.directory, "instanceinfo2.edb"));
             using (var instance = new Instance(InstanceName))
             {
+                // Don't turn off logging -- JetGetInstanceInfo only returns information for
+                // databases that have logging on.
+                instance.Parameters.NoInformationEvent = true;
+                instance.Parameters.MaxTemporaryTables = 0;
                 instance.Parameters.CreatePathIfNotExist = true;
                 instance.Init();
                 using (var session = new Session(instance))
