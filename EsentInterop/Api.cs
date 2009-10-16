@@ -1249,7 +1249,7 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 fixed (byte* pointer = data)
                 {
-                    Api.JetMakeKey(sesid, tableid, (IntPtr)pointer, dataSize, grbit);
+                    Api.JetMakeKey(sesid, tableid, new IntPtr(pointer), dataSize, grbit);
                 }
             }
         }
@@ -1526,7 +1526,7 @@ namespace Microsoft.Isam.Esent.Interop
                         nativeretrievecolumns[i] = retrievecolumns[i].GetNativeRetrievecolumn();
                         if (null == retrievecolumns[i].pvData)
                         {
-                            nativeretrievecolumns[i].pvData = (IntPtr) 0;
+                            nativeretrievecolumns[i].pvData = IntPtr.Zero;
                         }
                         else
                         {
@@ -1751,11 +1751,11 @@ namespace Microsoft.Isam.Esent.Interop
                         nativeSetColumns[i] = setcolumns[i].GetNativeSetcolumn();
                         if (null == setcolumns[i].pvData)
                         {
-                            nativeSetColumns[i].pvData = (IntPtr) 0;
+                            nativeSetColumns[i].pvData = IntPtr.Zero;
                         }
                         else if (bufferRemaining >= setcolumns[i].cbData)
                         {
-                            nativeSetColumns[i].pvData = (IntPtr) buffer;
+                            nativeSetColumns[i].pvData = new IntPtr(buffer);
                             Marshal.Copy(setcolumns[i].pvData, 0, nativeSetColumns[i].pvData, setcolumns[i].cbData);
                             buffer += setcolumns[i].cbData;
                             bufferRemaining -= setcolumns[i].cbData;
@@ -1881,7 +1881,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             if (err < 0)
             {
-                var error = (JET_err) err;
+                var error = unchecked((JET_err)err);
 
                 var handler = Api.HandleError;
                 if (handler != null)
@@ -1894,7 +1894,7 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new EsentErrorException(error);
             }
 
-            return (JET_wrn)err;
+            return unchecked((JET_wrn)err);
         }
 
         #endregion Error Handling

@@ -79,8 +79,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="value">The NATIVE_RETINFO which will be used to set the fields.</param>
         internal void SetFromNativeRetinfo(NATIVE_RETINFO value)
         {
-            this.ibLongValue = checked((int) value.ibLongValue);
-            this.itagSequence = checked((int) value.itagSequence);
+            this.ibLongValue = checked((int)value.ibLongValue);
+            this.itagSequence = checked((int)value.itagSequence);
 
             var columnid = new JET_COLUMNID { Value = value.columnidNextTagged };
             this.columnidNextTagged = columnid;

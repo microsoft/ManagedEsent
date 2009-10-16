@@ -67,7 +67,7 @@ namespace Microsoft.Isam.Esent.Interop
                             sesid,
                             tableid,
                             columnid,
-                            (IntPtr) buffer,
+                            new IntPtr(buffer),
                             checked(data.Length * sizeof(char)),
                             grbit,
                             null);
@@ -399,7 +399,8 @@ namespace Microsoft.Isam.Esent.Interop
         {
             const int AsciiCodePage = 20127;    // from MSDN
             const int UnicodeCodePage = 1200;   // from MSDN
-            if (!((encoding.CodePage == AsciiCodePage) || (encoding.CodePage == UnicodeCodePage)))
+            int codePage = encoding.CodePage;
+            if ((AsciiCodePage != codePage) && (UnicodeCodePage != codePage))
             {
                 throw new ArgumentOutOfRangeException(
                     "encoding", "Invalid Encoding type. Only ASCII and Unicode encodings are allowed");

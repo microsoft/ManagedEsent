@@ -265,10 +265,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 IntPtr* pinstance = (IntPtr.Zero == instance.Value) ? null : &instance.Value;
                 if (this.Capabilities.SupportsUnicodePaths)
                 {
-                    return this.Err(NativeMethods.JetSetSystemParameterW(pinstance, sesid.Value, (uint)paramid, (IntPtr)paramValue, paramString));
+                    return this.Err(NativeMethods.JetSetSystemParameterW(pinstance, sesid.Value, (uint)paramid, new IntPtr(paramValue), paramString));
                 }
 
-                return this.Err(NativeMethods.JetSetSystemParameter(pinstance, sesid.Value, (uint)paramid, (IntPtr)paramValue, paramString));                
+                return this.Err(NativeMethods.JetSetSystemParameter(pinstance, sesid.Value, (uint)paramid, new IntPtr(paramValue), paramString));                
             }
         }
 
@@ -292,7 +292,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.TraceFunctionCall("JetGetSystemParameter");
             this.CheckNotNegative(maxParam, "maxParam");
 
-            var intValue = (IntPtr)paramValue;
+            var intValue = new IntPtr(paramValue);
             var sb = new StringBuilder(maxParam);
             int err;
             if (this.Capabilities.SupportsUnicodePaths)
@@ -1087,7 +1087,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetBeginTransaction2(JET_SESID sesid, BeginTransactionGrbit grbit)
         {
             this.TraceFunctionCall("JetBeginTransaction2");
-            return this.Err(NativeMethods.JetBeginTransaction2(sesid.Value, (uint)grbit));
+            return this.Err(NativeMethods.JetBeginTransaction2(sesid.Value, unchecked((uint)grbit)));
         }
 
         /// <summary>
@@ -1102,7 +1102,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetCommitTransaction(JET_SESID sesid, CommitTransactionGrbit grbit)
         {
             this.TraceFunctionCall("JetCommitTransaction");
-            return this.Err(NativeMethods.JetCommitTransaction(sesid.Value, (uint)grbit));
+            return this.Err(NativeMethods.JetCommitTransaction(sesid.Value, unchecked((uint)grbit)));
         }
 
         /// <summary>
@@ -1117,7 +1117,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetRollback(JET_SESID sesid, RollbackTransactionGrbit grbit)
         {
             this.TraceFunctionCall("JetRollback");
-            return this.Err(NativeMethods.JetRollback(sesid.Value, (uint)grbit));
+            return this.Err(NativeMethods.JetRollback(sesid.Value, unchecked((uint)grbit)));
         }
 
         #endregion
@@ -1906,7 +1906,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetMakeKey");
             this.CheckNotNegative(dataSize, "dataSize");
-            return this.Err(NativeMethods.JetMakeKey(sesid.Value, tableid.Value, data, checked((uint) dataSize), (uint)grbit));
+            return this.Err(NativeMethods.JetMakeKey(sesid.Value, tableid.Value, data, checked((uint)dataSize), unchecked((uint)grbit)));
         }
 
         /// <summary>
@@ -1922,7 +1922,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetSeek(JET_SESID sesid, JET_TABLEID tableid, SeekGrbit grbit)
         {
             this.TraceFunctionCall("JetSeek");
-            return this.Err(NativeMethods.JetSeek(sesid.Value, tableid.Value, (uint)grbit));
+            return this.Err(NativeMethods.JetSeek(sesid.Value, tableid.Value, unchecked((uint)grbit)));
         }
 
         /// <summary>
@@ -1938,7 +1938,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetMove(JET_SESID sesid, JET_TABLEID tableid, int numRows, MoveGrbit grbit)
         {
             this.TraceFunctionCall("JetMove");
-            return this.Err(NativeMethods.JetMove(sesid.Value, tableid.Value, numRows, (uint)grbit));
+            return this.Err(NativeMethods.JetMove(sesid.Value, tableid.Value, numRows, unchecked((uint)grbit)));
         }
 
         /// <summary>
@@ -1956,7 +1956,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetSetIndexRange(JET_SESID sesid, JET_TABLEID tableid, SetIndexRangeGrbit grbit)
         {
             this.TraceFunctionCall("JetSetIndexRange");
-            return this.Err(NativeMethods.JetSetIndexRange(sesid.Value, tableid.Value, (uint)grbit));
+            return this.Err(NativeMethods.JetSetIndexRange(sesid.Value, tableid.Value, unchecked((uint)grbit)));
         }
 
         /// <summary>
@@ -2151,7 +2151,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     checked((uint) bookmarkSize),
                     out cbActual));
 
-            actualBookmarkSize = checked((int) cbActual);
+            actualBookmarkSize = checked((int)cbActual);
             return err;
         }
 
@@ -2171,9 +2171,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.CheckDataSize(data, dataSize, "dataSize");
 
             uint cbActual;
-            int err = this.Err(NativeMethods.JetRetrieveKey(sesid.Value, tableid.Value, data, checked((uint) dataSize), out cbActual, (uint)grbit));
+            int err = this.Err(NativeMethods.JetRetrieveKey(sesid.Value, tableid.Value, data, checked((uint) dataSize), out cbActual, unchecked((uint)grbit)));
 
-            actualDataSize = checked((int) cbActual);
+            actualDataSize = checked((int)cbActual);
             return err;
         }
 
@@ -2219,9 +2219,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                         tableid.Value,
                         columnid.Value,
                         data,
-                        checked((uint) dataSize),
+                        checked((uint)dataSize),
                         out cbActual,
-                        (uint)grbit,
+                        unchecked((uint)grbit),
                         ref nativeRetinfo));
                 retinfo.SetFromNativeRetinfo(nativeRetinfo);
             }
@@ -2232,13 +2232,13 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                         tableid.Value,
                         columnid.Value,
                         data,
-                        checked((uint) dataSize),
+                        checked((uint)dataSize),
                         out cbActual,
-                        (uint)grbit,
+                        unchecked((uint)grbit),
                         IntPtr.Zero));
             }
 
-            actualDataSize = checked((int) cbActual);
+            actualDataSize = checked((int)cbActual);
             return err;
         }
 
@@ -2390,7 +2390,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetPrepareUpdate(JET_SESID sesid, JET_TABLEID tableid, JET_prep prep)
         {
             this.TraceFunctionCall("JetPrepareUpdate");
-            return this.Err(NativeMethods.JetPrepareUpdate(sesid.Value, tableid.Value, (uint)prep));
+            return this.Err(NativeMethods.JetPrepareUpdate(sesid.Value, tableid.Value, unchecked((uint)prep)));
         }
 
         /// <summary>
@@ -2419,7 +2419,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             // BUG: debug builds of ESENT can fill cbActual with this value if no bookmark is given
             const uint CbActualDebugFill = 0xDDDDDDDD;
             uint cbActual;
-            int err = this.Err(NativeMethods.JetUpdate(sesid.Value, tableid.Value, bookmark, checked((uint) bookmarkSize), out cbActual));
+            int err = this.Err(NativeMethods.JetUpdate(sesid.Value, tableid.Value, bookmark, checked((uint)bookmarkSize), out cbActual));
 
             if (CbActualDebugFill == cbActual)
             {
@@ -2427,7 +2427,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-                actualBookmarkSize = checked((int) cbActual);
+                actualBookmarkSize = checked((int)cbActual);
             }
 
             return err;
@@ -2469,10 +2469,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             if (null != setinfo)
             {
                 NATIVE_SETINFO nativeSetinfo = setinfo.GetNativeSetinfo();
-                return this.Err(NativeMethods.JetSetColumn(sesid.Value, tableid.Value, columnid.Value, data, checked((uint) dataSize), (uint)grbit, ref nativeSetinfo));
+                return this.Err(NativeMethods.JetSetColumn(sesid.Value, tableid.Value, columnid.Value, data, checked((uint)dataSize), unchecked((uint)grbit), ref nativeSetinfo));
             }
 
-            return this.Err(NativeMethods.JetSetColumn(sesid.Value, tableid.Value, columnid.Value, data, checked((uint) dataSize), (uint)grbit, IntPtr.Zero));
+            return this.Err(NativeMethods.JetSetColumn(sesid.Value, tableid.Value, columnid.Value, data, checked((uint)dataSize), unchecked((uint)grbit), IntPtr.Zero));
         }
 
         /// <summary>
@@ -2511,7 +2511,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetGetLock(JET_SESID sesid, JET_TABLEID tableid, GetLockGrbit grbit)
         {
             this.TraceFunctionCall("JetGetLock");
-            return this.Err(NativeMethods.JetGetLock(sesid.Value, tableid.Value, (uint)grbit));
+            return this.Err(NativeMethods.JetGetLock(sesid.Value, tableid.Value, unchecked((uint)grbit)));
         }
 
         /// <summary>
@@ -2559,8 +2559,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                                   previousValue,
                                   checked((uint) previousValueLength),
                                   out cbOldActual,
-                                  (uint)grbit));
-            actualPreviousValueLength = checked((int) cbOldActual);
+                                  unchecked((uint)grbit)));
+            actualPreviousValueLength = checked((int)cbOldActual);
             return err;
         }
 
@@ -2684,14 +2684,14 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
                     // the NATIVE_ENUMCOLUMNVALUES have been converted
                     // free their memory
-                    allocator(allocatorContext, (IntPtr) nativeenumcolumns[i].rgEnumColumnValue, 0);
+                    allocator(allocatorContext, new IntPtr(nativeenumcolumns[i].rgEnumColumnValue), 0);
                     nativeenumcolumns[i].rgEnumColumnValue = null;
                 }
             }
 
             // Now we have converted all the NATIVE_ENUMCOLUMNS we can
             // free the memory they use
-            allocator(allocatorContext, (IntPtr) nativeenumcolumns, 0);
+            allocator(allocatorContext, new IntPtr(nativeenumcolumns), 0);
             nativeenumcolumns = null;
         }
 
@@ -2750,7 +2750,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 instances[i].SetFromNativeUnicode(nativeInstanceInfos[i]);
             }
 
-            this.JetFreeBuffer((IntPtr)nativeInstanceInfos);
+            this.JetFreeBuffer(new IntPtr(nativeInstanceInfos));
             return instances;
         }
 
@@ -2775,7 +2775,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 instances[i].SetFromNativeAscii(nativeInstanceInfos[i]);
             }
 
-            this.JetFreeBuffer((IntPtr)nativeInstanceInfos);
+            this.JetFreeBuffer(new IntPtr(nativeInstanceInfos));
             return instances;
         }
 
@@ -3037,7 +3037,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="method">The name of the method.</param>
         private void ThrowUnsupportedApiException(string method)
         {
-            string error = String.Format(CultureInfo.InvariantCulture, "Method {0} is not supported by this version of esent", method);
+            string error = String.Format(CultureInfo.InvariantCulture, "Method {0} is not supported by this version of ESENT", method);
             Trace.WriteLineIf(this.traceSwitch.TraceError, error);
             throw new InvalidOperationException(error);
         }
@@ -3059,20 +3059,29 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>The error.</returns>
         private int Err(int err)
         {
+            this.TraceErr(err);
+            return err;
+        }
+
+        /// <summary>
+        /// Trace an error generated by a call to ESENT.
+        /// </summary>
+        /// <param name="err">The error to trace.</param>
+        [Conditional("TRACE")]
+        private void TraceErr(int err)
+        {
             if (0 == err)
             {
                 Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "JET_err.Success");
             }
             else if (err > 0)
             {
-                Trace.WriteLineIf(this.traceSwitch.TraceWarning, (JET_wrn)err);
+                Trace.WriteLineIf(this.traceSwitch.TraceWarning, unchecked((JET_wrn)err));
             }
             else
             {
-                Trace.WriteLineIf(this.traceSwitch.TraceError, (JET_err)err);
+                Trace.WriteLineIf(this.traceSwitch.TraceError, unchecked((JET_err)err));
             }
-
-            return err;
         }
 
         #endregion Parameter Checking and Tracing
