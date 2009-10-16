@@ -1,7 +1,10 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="AssemblyInfo.cs" company="Microsoft Corporation">
-//     Copyright (c) Microsoft Corporation.
+//  Copyright (c) Microsoft Corporation.
 // </copyright>
+// <summary>
+//  Assembly configuration for DbUtilTests.
+// </summary>
 //-----------------------------------------------------------------------
 
 using System.Reflection;
@@ -10,12 +13,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("InteropApiTests")]
+[assembly: AssemblyTitle("DbUtilTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("InteropApiTests")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2008")]
+[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyProduct("DbUtilTests")]
+[assembly: AssemblyCopyright("Copyright © Microsoft")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -25,7 +28,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("1fb1d707-27dc-4215-a322-dfc837b532e5")]
+[assembly: Guid("fa5cee94-8836-4e47-89b4-7a1140725e10")]
 
 // Version information for an assembly consists of the following four values:
 //

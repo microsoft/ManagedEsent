@@ -139,7 +139,6 @@
     <Compile Include="UpdateTests.cs" />
     <Compile Include="TransactionTests.cs" />
     <Compile Include="SessionTests.cs" />
-    <Compile Include="DbutilTests.cs" />
     <Compile Include="EsentResourceTests.cs" />
     <Compile Include="InstanceTests.cs" />
     <Compile Include="ObjectlistTests.cs" />
@@ -160,11 +159,11 @@
     <Compile Include="XpCompatabilityTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\EsentInteropSamples\DbUtil\DbUtil.csproj">
+    <ProjectReference Include="..\EsentInteropSamples\DbUtil\DbUtil.csproj">
       <Project>{E0B163B0-5AC6-4304-B932-BFC1F6A2A4EB}</Project>
       <Name>DbUtil</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EsentInterop.csproj">
+    <ProjectReference Include="..\EsentInterop\EsentInterop.csproj">
       <Project>{E929E163-52A0-4AAC-917B-6D7FAF70C45E}</Project>
       <Name>EsentInterop</Name>
     </ProjectReference>

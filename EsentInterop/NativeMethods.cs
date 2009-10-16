@@ -17,7 +17,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
     /// </summary>
     [SuppressUnmanagedCodeSecurity]
     [BestFitMapping(false, ThrowOnUnmappableChar = true)]
-    internal static class NativeMethods
+    internal static partial class NativeMethods
     {
         #region Configuration Constants
 
@@ -25,11 +25,6 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// The CharSet for the methods in the DLL.
         /// </summary>
         private const CharSet EsentCharSet = CharSet.Ansi;
-
-        /// <summary>
-        /// The name of the DLL that the methods should be loaded from.
-        /// </summary>
-        private const string EsentDll = "esent.dll";
 
         /// <summary>
         /// Initializes static members of the NativeMethods class.

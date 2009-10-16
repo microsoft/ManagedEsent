@@ -14,6 +14,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
     using System.Text;
+    using System.Threading;
     using Microsoft.Isam.Esent.Interop.Server2003;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Isam.Esent.Interop.Windows7;
@@ -23,7 +24,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
     /// Calls to the ESENT interop layer. These calls take the managed types (e.g. JET_SESID) and
     /// return errors.
     /// </summary>
-    internal sealed class JetApi : IJetApi
+    internal sealed partial class JetApi : IJetApi
     {
         /// <summary>
         /// API call tracing.
@@ -2855,85 +2856,6 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                         this.Err(
                             NativeMethods.JetCreateIndex2(sesid.Value, tableid.Value, nativeIndexcreates, checked((uint)numIndexCreates)));
                 }                
-            }
-        }
-
-        /// <summary>
-        /// Calculates the capabilities of the current Esent version.
-        /// </summary>
-        private void DetermineCapabilities()
-        {
-            const int Server2003BuildNumber = 2700;
-            const int VisaBuildNumber = 6000;
-            const int Windows7BuildNumber = 7000; // includes beta as well as RTM
-
-            // Create new capabilities, set as all false. This will allow
-            // us to call into Esent.
-            this.Capabilities = new JetCapabilities { ColumnsKeyMost = 12 };
-
-            var version = this.GetVersionFromEsent();
-            var buildNumber = (int)((version & 0xFFFFFF) >> 8);
-
-            Trace.WriteLineIf(
-                this.traceSwitch.TraceVerbose,
-                String.Format("Version = {0}, BuildNumber = {1}", version, buildNumber));
-
-            if (buildNumber >= Server2003BuildNumber)
-            {
-                Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports Server 2003 features");
-                this.Capabilities.SupportsServer2003Features = true;
-            }
-
-            if (buildNumber >= VisaBuildNumber)
-            {
-                Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports Vista features");
-                this.Capabilities.SupportsVistaFeatures = true;
-                Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports Unicode paths");
-                this.Capabilities.SupportsUnicodePaths = true;
-                Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports large keys");
-                this.Capabilities.SupportsLargeKeys = true;
-                Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports 16-column keys");
-                this.Capabilities.ColumnsKeyMost = 16;
-            }
-
-            if (buildNumber >= Windows7BuildNumber)
-            {
-                Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports Windows 7 features");
-                this.Capabilities.SupportsWindows7Features = true;
-            }
-        }
-
-        /// <summary>
-        /// Create an instance and get the current version of Esent.
-        /// </summary>
-        /// <returns>The current version of Esent.</returns>
-        private uint GetVersionFromEsent()
-        {
-            JET_INSTANCE instance;
-            this.JetCreateInstance(out instance, "GettingEsentVersion");
-            try
-            {
-                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
-                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.NoInformationEvent, 1, null);
-                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
-                this.JetInit(ref instance);
-
-                JET_SESID sesid;
-                this.JetBeginSession(instance, out sesid, String.Empty, String.Empty);
-                try
-                {
-                    uint version;
-                    this.JetGetVersion(sesid, out version);
-                    return version;
-                }
-                finally
-                {
-                    this.JetEndSession(sesid, EndSessionGrbit.None);
-                }
-            }
-            finally
-            {
-                this.JetTerm(instance);
             }
         }
 

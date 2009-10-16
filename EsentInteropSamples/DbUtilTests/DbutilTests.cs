@@ -17,20 +17,20 @@ namespace InteropApiTests
     public class DbutilTests
     {
         /// <summary>
-        /// Test FormatBytes
+        /// Test FormatBytes.
         /// </summary>
         [TestMethod]
         [Priority(0)]
         public void FormatBytes()
         {
             var data = new byte[] { 0x1, 0xf, 0x22, 0xee };
-            string expected = "010f22ee";
+            const string Expected = "010f22ee";
             string actual = Dbutil.FormatBytes(data);
-            Assert.AreEqual(expected, actual);
+            Assert.AreEqual(Expected, actual);
         }
 
         /// <summary>
-        /// Test FormatBytes with null data
+        /// Test FormatBytes with null data.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -40,7 +40,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test FormatBytes with zero-length data
+        /// Test FormatBytes with zero-length data.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -53,7 +53,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test QuoteForCsv with text that is null
+        /// Test QuoteForCsv with text that is null.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -63,7 +63,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test QuoteForCsv with text that is null
+        /// Test QuoteForCsv with text that is empty.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -73,7 +73,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test QuoteForCsv with text that doesn't need quoting
+        /// Test QuoteForCsv with text that doesn't need quoting.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -83,7 +83,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test QuoteForCsv with text that is a single character
+        /// Test QuoteForCsv with text that is a single character.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -93,7 +93,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test QuoteForCsv with text that contains quotes
+        /// Test QuoteForCsv with text that contains quotes.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -104,7 +104,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test QuoteForCsv with text that contains a comma
+        /// Test QuoteForCsv with text that contains a comma.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -114,17 +114,17 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test QuoteForCsv with text that contains a newline
+        /// Test QuoteForCsv with text that contains a newline.
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        public void QuoteForCsvContainsNewline()
+        public void QuoteForCsvContainsNewLine()
         {
             Assert.AreEqual("\"\r\n\"", Dbutil.QuoteForCsv("\r\n"));
         }
 
         /// <summary>
-        /// Test QuoteForCsv with text that starts with a space
+        /// Test QuoteForCsv with text that starts with a space.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -134,7 +134,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test QuoteForCsv with text that starts with a space
+        /// Test QuoteForCsv with text that starts with a tab.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -144,7 +144,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test QuoteForCsv with text that ends with a space
+        /// Test QuoteForCsv with text that ends with a space.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -154,7 +154,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test QuoteForCsv with text that ends with a space
+        /// Test QuoteForCsv with text that ends with a tab.
         /// </summary>
         [TestMethod]
         [Priority(0)]

@@ -15,7 +15,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
     /// This interface describes all the methods which have a P/Invoke implementation.
     /// Concrete instances of this interface provide methods that call ESENT.
     /// </summary>
-    internal interface IJetApi
+    internal partial interface IJetApi
     {
         /// <summary>
         /// Gets a description of the capabilities of the current version of ESENT.

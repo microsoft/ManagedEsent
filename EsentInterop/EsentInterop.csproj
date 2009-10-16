@@ -75,13 +75,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiConstants.cs" />
     <Compile Include="Conversions.cs" />
+    <Compile Include="Esent\EsentJetApi.cs" />
+    <Compile Include="Esent\EsentNativeMethods.cs" />
     <Compile Include="jet_convert.cs" />
     <Compile Include="jet_instance_info.cs" />
     <Compile Include="Server2003Api.cs" />

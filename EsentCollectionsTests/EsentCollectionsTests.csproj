@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D3A1C1C8-6119-4827-AC24-1FF49FACFD4D}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -50,7 +50,7 @@
     <Compile Include="SerializableStructDictionaryTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EsentCollections.csproj">
+    <ProjectReference Include="..\EsentCollections\EsentCollections.csproj">
       <Project>{CF2D4EE4-0D11-404D-B800-C4DCFEC42588}</Project>
       <Name>EsentCollections</Name>
     </ProjectReference>
