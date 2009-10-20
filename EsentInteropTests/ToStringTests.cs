@@ -17,10 +17,11 @@ namespace InteropApiTests
     public class ToStringTests
     {
         /// <summary>
-        /// Test JET_INSTANCE.ToString()
+        /// Test JET_INSTANCE.ToString().
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test JET_INSTANCE.ToString()")]
         public void JetInstanceToString()
         {
             var instance = new JET_INSTANCE() { Value = (IntPtr)0x123ABC };
@@ -28,10 +29,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test JET_SESID.ToString()
+        /// Test JET_SESID.ToString().
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test JET_SESID.ToString()")]
         public void JetSesidToString()
         {
             var sesid = new JET_SESID() { Value = (IntPtr)0x123ABC };
@@ -39,10 +41,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test JET_DBID.ToString()
+        /// Test JET_DBID.ToString().
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test JET_DBID.ToString()")]
         public void JetDbidToString()
         {
             var dbid = new JET_DBID() { Value = 23 };
@@ -50,10 +53,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test JET_TABLEID.ToString()
+        /// Test JET_TABLEID.ToString().
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test JET_TABLEID.ToString()")]
         public void JetTableidToString()
         {
             var tableid = new JET_TABLEID() { Value = (IntPtr)0x123ABC };
@@ -61,10 +65,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test JET_COLUMNID.ToString()
+        /// Test JET_COLUMNID.ToString().
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test JET_COLUMNID.ToString()")]
         public void JetColumnidToString()
         {
             var columnid = new JET_COLUMNID() { Value = 0x12EC };
@@ -72,14 +77,27 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test JET_OSSNAPID.ToString()
+        /// Test JET_OSSNAPID.ToString().
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test JET_OSSNAPID.ToString()")]
         public void JetOsSnapidToString()
         {
             var ossnapid = new JET_OSSNAPID { Value = (IntPtr)0x123ABC };
             Assert.AreEqual("JET_OSSNAPID(0x123abc)", ossnapid.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_HANDLE.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_HANDLE.ToString()")]
+        public void JetHandleToString()
+        {
+            var handle = new JET_HANDLE { Value = (IntPtr)0x123ABC };
+            Assert.AreEqual("JET_HANDLE(0x123abc)", handle.ToString());
         }
     }
 }

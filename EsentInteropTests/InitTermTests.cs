@@ -146,7 +146,7 @@ namespace InteropApiTests
         /// (Init/Term/Init/Term).
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(2)]
         [Description("Initialize and terminate one instance twice.")]
         public void InitAndTermOneInstanceTwice()
         {

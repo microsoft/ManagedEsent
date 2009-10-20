@@ -50,6 +50,7 @@ namespace InteropApiTests
             Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.LogFilePath, 0, myDir);
             Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.SystemPath, 0, myDir);
             Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.TempPath, 0, myDir);
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.PageTempDBMin, SystemParameters.PageTempDBSmallest, null);
             Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.NoInformationEvent, 1, null);
             return instance;
         }

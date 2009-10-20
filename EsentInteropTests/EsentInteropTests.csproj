@@ -83,6 +83,8 @@
     <Compile Include="ApiTestHook.cs" />
     <Compile Include="ApiTestHookTests.cs" />
     <Compile Include="ApiTests.cs" />
+    <Compile Include="MakeKeyHelpersTests.cs" />
+    <Compile Include="TempTableNavigationTests.cs" />
     <Compile Include="HelpersTempTableFixtureTests.cs" />
     <Compile Include="DatabaseFileTestHelper.cs" />
     <Compile Include="BackupRestoreTests.cs" />
@@ -144,7 +146,7 @@
     <Compile Include="ObjectlistTests.cs" />
     <Compile Include="DatabaseTests.cs" />
     <Compile Include="InstanceParameterTests.cs" />
-    <Compile Include="MoveTests.cs" />
+    <Compile Include="NavigationTests.cs" />
     <Compile Include="ParameterCheckingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="InitTermTests.cs" />

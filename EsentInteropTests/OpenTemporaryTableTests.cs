@@ -36,12 +36,14 @@ namespace InteropApiTests
         public void Setup()
         {
             this.managed = new JET_OPENTEMPORARYTABLE()
-                           {
-                              ccolumn = 2,
-                              grbit = TempTableGrbit.SortNullsHigh,
-                              cbKeyMost = 3,
-                              cbVarSegMac = 4,
-                           };
+            {
+                prgcolumndef = new JET_COLUMNDEF[2],
+                prgcolumnid = new JET_COLUMNID[2],
+                ccolumn = 2,
+                grbit = TempTableGrbit.SortNullsHigh,
+                cbKeyMost = 3,
+                cbVarSegMac = 4,
+            };
             this.native = this.managed.GetNativeOpenTemporaryTable();
         }
 

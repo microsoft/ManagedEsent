@@ -1518,6 +1518,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetOpenTemporaryTable");
             this.CheckSupportsVistaFeatures("JetOpenTemporaryTables");
+            this.CheckNotNull(temporarytable, "temporarytable");
 
             NATIVE_OPENTEMPORARYTABLE nativetemporarytable = temporarytable.GetNativeOpenTemporaryTable();
             var nativecolumnids = new uint[nativetemporarytable.ccolumn];

@@ -120,13 +120,45 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// </returns>
         internal NATIVE_OPENTEMPORARYTABLE GetNativeOpenTemporaryTable()
         {
+            this.CheckDataSize();
             var openTemporaryTable = new NATIVE_OPENTEMPORARYTABLE();
-            openTemporaryTable.cbStruct = (uint) Marshal.SizeOf(openTemporaryTable);
+            openTemporaryTable.cbStruct = checked((uint)Marshal.SizeOf(openTemporaryTable));
             openTemporaryTable.ccolumn = checked((uint) this.ccolumn);
-            openTemporaryTable.grbit = (uint) this.grbit;
+            openTemporaryTable.grbit = (uint)this.grbit;
             openTemporaryTable.cbKeyMost = checked((uint) this.cbKeyMost);
             openTemporaryTable.cbVarSegMac = checked((uint) this.cbVarSegMac);
             return openTemporaryTable;
+        }
+
+        /// <summary>
+        /// Make sure the data and count members are the correct size.
+        /// </summary>
+        private void CheckDataSize()
+        {
+            if (null == this.prgcolumndef)
+            {
+                throw new ArgumentNullException("prgcolumndef");
+            }
+
+            if (null == this.prgcolumnid)
+            {
+                throw new ArgumentNullException("prgcolumnid");
+            }
+
+            if (this.ccolumn < 0)
+            {
+                throw new ArgumentOutOfRangeException("ccolumn", this.ccolumn, "cannot be negative");
+            }
+
+            if (this.ccolumn > this.prgcolumndef.Length)
+            {
+                throw new ArgumentOutOfRangeException("ccolumn", this.ccolumn, "cannot be greater than prgcolumndef.Length");
+            }
+
+            if (this.ccolumn > this.prgcolumnid.Length)
+            {
+                throw new ArgumentOutOfRangeException("ccolumn", this.ccolumn, "cannot be greater than prgcolumndef.Length");
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ namespace InteropApiTests
     using System;
     using System.Linq;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -356,10 +357,6 @@ namespace InteropApiTests
             Api.JetRenameColumn(this.sesid, this.tableid, "oldcolumn", null, RenameColumnGrbit.None);
         }
 
-        #endregion
-
-        #region DDL Parameter Checking
-
         /// <summary>
         /// Check that an exception is thrown when JetAddColumn gets a 
         /// null column name.
@@ -640,7 +637,360 @@ namespace InteropApiTests
 
         #endregion
 
-        #region Navigation Parameter Checking
+        #region Temporary Table Creation
+
+        /// <summary>
+        /// Null columns is invalid.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JetOpenTempTable throws an Exception when columns parameter is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyJetOpenTempTableThrowsExceptionWhenColumnsIsNull()
+        {
+            JET_TABLEID tableidIgnored;
+            var columnids = new JET_COLUMNID[1];
+            Api.JetOpenTempTable(this.sesid, null, 0, TempTableGrbit.None, out tableidIgnored, columnids);
+        }
+
+        /// <summary>
+        /// Null columnids is invalid.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentNullException))]
+        [Description("Verify JetOpenTempTable throws an Exception when columnids parameter is null")]
+        public void VerifyJetOpenTempTableThrowsExceptionWhenColumnidsIsNull()
+        {
+            JET_TABLEID tableidIgnored;
+            var columns = new[] { new JET_COLUMNDEF() };
+            Api.JetOpenTempTable(this.sesid, columns, columns.Length, TempTableGrbit.None, out tableidIgnored, null);
+        }
+
+        /// <summary>
+        /// Columnids must match columndefs in length.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Description("Verify JetOpenTempTable throws an Exception when columnids parameter is the wrong length")]
+        public void VerifyJetOpenTempTableThrowsExceptionWhenColumnidsIsTooShort()
+        {
+            JET_TABLEID tableidIgnored;
+            var columns = new[] { new JET_COLUMNDEF(), new JET_COLUMNDEF() };
+            var columnids = new JET_COLUMNID[columns.Length - 1];
+            Api.JetOpenTempTable(this.sesid, columns, columns.Length, TempTableGrbit.None, out tableidIgnored, columnids);
+        }
+
+        /// <summary>
+        /// Negative column count is invalid.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Description("Verify JetOpenTempTable throws an Exception when column count is negative")]
+        public void VerifyJetOpenTempTableThrowsExceptionWhenColumnCountIsNegative()
+        {
+            JET_TABLEID tableidIgnored;
+            var columns = new[] { new JET_COLUMNDEF() };
+            var columnids = new JET_COLUMNID[1];
+            Api.JetOpenTempTable(this.sesid, columns, -1, TempTableGrbit.None, out tableidIgnored, columnids);
+        }
+
+        /// <summary>
+        /// Too-long column count is invalid.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JetOpenTempTable throws an Exception when column count is too long")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyJetOpenTempTableThrowsExceptionWhenColumnCountIsTooLong()
+        {
+            JET_TABLEID tableidIgnored;
+            var columns = new[] { new JET_COLUMNDEF() };
+            var columnids = new JET_COLUMNID[1];
+            Api.JetOpenTempTable(this.sesid, columns, 2, TempTableGrbit.None, out tableidIgnored, columnids);
+        }
+
+        /// <summary>
+        /// Null columns is invalid.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JetOpenTempTable2 throws an Exception when columns parameter is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyJetOpenTempTable2ThrowsExceptionWhenColumnsIsNull()
+        {
+            JET_TABLEID tableidIgnored;
+            var columnids = new JET_COLUMNID[1];
+            Api.JetOpenTempTable2(this.sesid, null, 0, 1033, TempTableGrbit.None, out tableidIgnored, columnids);
+        }
+
+        /// <summary>
+        /// Null columnids is invalid.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JetOpenTempTable2 throws an Exception when columnids parameter is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyJetOpenTempTable2ThrowsExceptionWhenColumnidsIsNull()
+        {
+            JET_TABLEID tableidIgnored;
+            var columns = new[] { new JET_COLUMNDEF() };
+            Api.JetOpenTempTable2(this.sesid, columns, columns.Length, 1033, TempTableGrbit.None, out tableidIgnored, null);
+        }
+
+        /// <summary>
+        /// Columnids must match columndefs in length.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Description("Verify JetOpenTempTable2 throws an Exception when columnids parameter is the wrong length")]
+        public void VerifyJetOpenTempTable2ThrowsExceptionWhenColumnidsIsTooShort()
+        {
+            JET_TABLEID tableidIgnored;
+            var columns = new[] { new JET_COLUMNDEF(), new JET_COLUMNDEF() };
+            var columnids = new JET_COLUMNID[columns.Length - 1];
+            Api.JetOpenTempTable2(this.sesid, columns, columns.Length, 1033, TempTableGrbit.None, out tableidIgnored, columnids);
+        }
+
+        /// <summary>
+        /// Negative column count is invalid.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JetOpenTempTable2 throws an Exception when column count is negative")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyJetOpenTempTable2ThrowsExceptionWhenColumnCountIsNegative()
+        {
+            JET_TABLEID tableidIgnored;
+            var columns = new[] { new JET_COLUMNDEF() };
+            var columnids = new JET_COLUMNID[1];
+            Api.JetOpenTempTable2(this.sesid, columns, -1, 1033, TempTableGrbit.None, out tableidIgnored, columnids);
+        }
+
+        /// <summary>
+        /// Too-long column count is invalid.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JetOpenTempTable2 throws an Exception when column count is too long")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyJetOpenTempTable2ThrowsExceptionWhenColumnCountIsTooLong()
+        {
+            JET_TABLEID tableidIgnored;
+            var columns = new[] { new JET_COLUMNDEF() };
+            var columnids = new JET_COLUMNID[1];
+            Api.JetOpenTempTable2(this.sesid, columns, 2, 1033, TempTableGrbit.None, out tableidIgnored, columnids);
+        }
+
+        /// <summary>
+        /// Null columns is invalid.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JetOpenTempTable3 throws an Exception when columns parameter is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyJetOpenTempTable3ThrowsExceptionWhenColumnsIsNull()
+        {
+            JET_TABLEID tableidIgnored;
+            var columnids = new JET_COLUMNID[1];
+            Api.JetOpenTempTable3(this.sesid, null, 0, null, TempTableGrbit.None, out tableidIgnored, columnids);
+        }
+
+        /// <summary>
+        /// Null columnids is invalid.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JetOpenTempTable3 throws an Exception when columnids parameter is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyJetOpenTempTable3ThrowsExceptionWhenColumnidsIsNull()
+        {
+            JET_TABLEID tableidIgnored;
+            var columns = new[] { new JET_COLUMNDEF() };
+            Api.JetOpenTempTable3(this.sesid, columns, columns.Length, null, TempTableGrbit.None, out tableidIgnored, null);
+        }
+
+        /// <summary>
+        /// Columnids must match columndefs in length.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Description("Verify JetOpenTempTable3 throws an Exception when columnids parameter is the wrong length")]
+        public void VerifyJetOpenTempTable3ThrowsExceptionWhenColumnidsIsTooShort()
+        {
+            JET_TABLEID tableidIgnored;
+            var columns = new[] { new JET_COLUMNDEF(), new JET_COLUMNDEF() };
+            var columnids = new JET_COLUMNID[columns.Length - 1];
+            Api.JetOpenTempTable3(this.sesid, columns, columns.Length, null, TempTableGrbit.None, out tableidIgnored, columnids);
+        }
+
+        /// <summary>
+        /// Negative column count is invalid.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JetOpenTempTable3 throws an Exception when column count is negative")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyJetOpenTempTable3ThrowsExceptionWhenColumnCountIsNegative()
+        {
+            JET_TABLEID tableidIgnored;
+            var columns = new[] { new JET_COLUMNDEF() };
+            var columnids = new JET_COLUMNID[1];
+            Api.JetOpenTempTable3(this.sesid, columns, -1, null, TempTableGrbit.None, out tableidIgnored, columnids);
+        }
+
+        /// <summary>
+        /// Too-long column count is invalid.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JetOpenTempTable3 throws an Exception when column count is too long")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyJetOpenTempTable3ThrowsExceptionWhenColumnCountIsTooLong()
+        {
+            JET_TABLEID tableidIgnored;
+            var columns = new[] { new JET_COLUMNDEF() };
+            var columnids = new JET_COLUMNID[1];
+            Api.JetOpenTempTable3(this.sesid, columns, 2, null, TempTableGrbit.None, out tableidIgnored, columnids);
+        }
+
+        /// <summary>
+        /// Verify JetOpenTemporaryTable throws an exception when the TemporaryTable parameter is null.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JetOpenTemporaryTable throws an exception when the TemporaryTable parameter is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyJetOpenTemporaryTableThrowsExceptionWhenTemporaryTableIsNull()
+        {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
+            VistaApi.JetOpenTemporaryTable(this.sesid, null);
+        }
+
+        /// <summary>
+        /// Verify JetOpenTemporaryTable throws an exception when the columns member is null.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JetOpenTemporaryTable throws an Exception when columns member is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyJetOpenTemporaryTableThrowsExceptionWhenColumnsIsNull()
+        {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
+            var opentemporarytable = new JET_OPENTEMPORARYTABLE
+            {
+                ccolumn = 1,
+                prgcolumnid = new JET_COLUMNID[1],
+            };
+            VistaApi.JetOpenTemporaryTable(this.sesid, opentemporarytable);
+        }
+
+        /// <summary>
+        /// Verify JetOpenTemporaryTable throws an exception when the columnids member is null.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JetOpenTemporaryTable throws an Exception when columnids member is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyJetOpenTemporaryTableThrowsExceptionWhenColumnidsIsNull()
+        {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
+            var opentemporarytable = new JET_OPENTEMPORARYTABLE
+            {
+                prgcolumndef = new[] { new JET_COLUMNDEF() },
+                ccolumn = 1,
+            };
+            VistaApi.JetOpenTemporaryTable(this.sesid, opentemporarytable);
+        }
+
+        /// <summary>
+        /// Verify JetOpenTemporaryTable throws an exception when the columnids member is null.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JetOpenTemporaryTable throws an Exception when columnids member isn't long enough")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyJetOpenTemporaryTableThrowsExceptionWhenColumnidsIsTooShort()
+        {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
+            var opentemporarytable = new JET_OPENTEMPORARYTABLE
+            {
+                prgcolumndef = new[] { new JET_COLUMNDEF(), new JET_COLUMNDEF() },
+                ccolumn = 2,
+                prgcolumnid = new JET_COLUMNID[1],
+            };
+            VistaApi.JetOpenTemporaryTable(this.sesid, opentemporarytable);
+        }
+
+        /// <summary>
+        /// Verify JetOpenTemporaryTable throws an exception when the column count member is negative.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JetOpenTemporaryTable throws an Exception when column count is negative")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyJetOpenTemporaryTableThrowsExceptionWhenColumnCountIsNegative()
+        {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
+            var opentemporarytable = new JET_OPENTEMPORARYTABLE
+            {
+                prgcolumndef = new[] { new JET_COLUMNDEF() },
+                ccolumn = -1,
+                prgcolumnid = new JET_COLUMNID[1],
+            };
+            VistaApi.JetOpenTemporaryTable(this.sesid, opentemporarytable);
+        }
+
+        /// <summary>
+        /// Verify JetOpenTemporaryTable throws an exception when the column count member is too long.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JetOpenTemporaryTable throws an Exception when column count is negative")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyJetOpenTemporaryTableThrowsExceptionWhenColumnCountIsTooLong()
+        {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
+            var opentemporarytable = new JET_OPENTEMPORARYTABLE
+            {
+                prgcolumndef = new[] { new JET_COLUMNDEF() },
+                ccolumn = 2,
+                prgcolumnid = new JET_COLUMNID[1],
+            };
+            VistaApi.JetOpenTemporaryTable(this.sesid, opentemporarytable);
+        }
+
+        #endregion
+
+        #region Navigation
 
         /// <summary>
         /// Check that an exception is thrown when JetGotoBookmark gets a 
@@ -773,7 +1123,7 @@ namespace InteropApiTests
 
         #endregion
 
-        #region Data Retrieval Parameter Checking
+        #region Data Retrieval
 
         /// <summary>
         /// Check that an exception is thrown when JetGetBookmark gets a 
@@ -1153,7 +1503,7 @@ namespace InteropApiTests
 
         #endregion
 
-        #region DML Parameter Checking
+        #region DML
 
         /// <summary>
         /// Check that an exception is thrown when JetSetColumn gets a 

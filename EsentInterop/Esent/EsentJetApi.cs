@@ -79,6 +79,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
                 this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.NoInformationEvent, 1, null);
                 this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
+                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxCursors, 16, null);
+                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxOpenTables, 16, null);
+                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxVerPages, 4, null);
+                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxSessions, 1, null);
                 this.JetInit(ref instance);
 
                 JET_SESID sesid;
