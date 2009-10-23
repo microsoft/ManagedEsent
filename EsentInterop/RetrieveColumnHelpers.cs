@@ -95,7 +95,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor to retrieve the column from.</param>
         /// <param name="columnid">The columnid to retrieve.</param>
         /// <returns>The size of the column. 0 if the column is null.</returns>
-        public static int RetrieveColumnSize(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
+        public static int? RetrieveColumnSize(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
             return RetrieveColumnSize(sesid, tableid, columnid, 1, RetrieveColumnGrbit.None);
         }
@@ -119,13 +119,18 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         /// <param name="grbit">Retrieve column options.</param>
         /// <returns>The size of the column. 0 if the column is null.</returns>
-        public static int RetrieveColumnSize(
+        public static int? RetrieveColumnSize(
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, int itagSequence, RetrieveColumnGrbit grbit)
         {
             var retinfo = new JET_RETINFO() { itagSequence = itagSequence };
             int dataSize;
-            JetRetrieveColumn(
+            JET_wrn wrn = JetRetrieveColumn(
                 sesid, tableid, columnid, null, 0, out dataSize, grbit, retinfo);
+            if (JET_wrn.ColumnNull == wrn)
+            {
+                return null;
+            }
+
             return dataSize;
         }
 

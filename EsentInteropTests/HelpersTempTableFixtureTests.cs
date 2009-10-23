@@ -176,16 +176,30 @@ namespace InteropApiTests
         #region RetrieveColumn tests
 
         /// <summary>
-        /// Verify that retrieving the size of a null column returns 0.
+        /// Verify that retrieving the size of a null column returns null.
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Verify that retrieving the size of a null column returns 0.")]
-        public void VerifyNullColumnSizeIsZero()
+        [Description("Verify that retrieving the size of a null column returns null.")]
+        public void VerifyNullColumnSizeIsNull()
         {
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
             this.UpdateAndGotoBookmark();
-            Assert.AreEqual(0, Api.RetrieveColumnSize(this.sesid, this.tableid, this.columnidDict["Int32"]));
+            Assert.IsNull(Api.RetrieveColumnSize(this.sesid, this.tableid, this.columnidDict["Int32"]));
+        }
+
+        /// <summary>
+        /// Check that retrieving the size of a zero-length column returns the amount of data
+        /// in the column.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Check that retrieving the size of a zero-length column returns 0.")]
+        public void VerifyZeroLengthColumnSizeIsZero()
+        {
+            JET_COLUMNID columnid = this.columnidDict["Binary"];
+            this.InsertRecord(columnid, new byte[0]);
+            Assert.AreEqual(0, Api.RetrieveColumnSize(this.sesid, this.tableid, columnid));
         }
 
         /// <summary>
@@ -2038,7 +2052,8 @@ namespace InteropApiTests
         {
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
-            Api.JetSetColumn(this.sesid, this.tableid, columnid, data, (null == data) ? 0 : data.Length, SetColumnGrbit.None, null);
+            SetColumnGrbit grbit = (null != data && 0 == data.Length) ? SetColumnGrbit.ZeroLength : SetColumnGrbit.None;
+            Api.JetSetColumn(this.sesid, this.tableid, columnid, data, (null == data) ? 0 : data.Length, grbit, null);
             this.UpdateAndGotoBookmark();
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);      
         }
