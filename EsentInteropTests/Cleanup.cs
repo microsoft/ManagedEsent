@@ -16,6 +16,11 @@ namespace InteropApiTests
     internal static class Cleanup
     {
         /// <summary>
+        /// The maximum number of attempts for the cleanup.
+        /// </summary>
+        private const int MaxAttempts = 3;
+
+        /// <summary>
         /// Delete a directory, retrying the operation if the delete fails.
         /// </summary>
         /// <param name="directory">
@@ -23,16 +28,39 @@ namespace InteropApiTests
         /// </param>
         public static void DeleteDirectoryWithRetry(string directory)
         {
-            const int MaxAttempts = 3;
-            for (int attempt = 1; attempt <= MaxAttempts; ++attempt)
-            {
-                try
+            PerformActionWithRetry(
+                () =>
                 {
                     if (Directory.Exists(directory))
                     {
                         Directory.Delete(directory, true);
                     }
+                });
+        }
 
+        /// <summary>
+        /// Delete a file, retrying the operation if the delete fails.
+        /// </summary>
+        /// <param name="file">
+        /// The file to delete.
+        /// </param>
+        public static void DeleteFileWithRetry(string file)
+        {
+            PerformActionWithRetry(() => File.Delete(file));
+        }
+
+        /// <summary>
+        /// Perform an action and retry on I/O failure, with a 1 second
+        /// sleep between retries.
+        /// </summary>
+        /// <param name="action">The action to perform.</param>
+        private static void PerformActionWithRetry(Action action)
+        {
+            for (int attempt = 1; attempt <= MaxAttempts; ++attempt)
+            {
+                try
+                {
+                    action();
                     return;
                 }
                 catch (UnauthorizedAccessException)

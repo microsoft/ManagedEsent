@@ -9,6 +9,7 @@ namespace InteropApiTests
     using System;
     using System.Linq;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Server2003;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -869,7 +870,7 @@ namespace InteropApiTests
         {
             if (!EsentVersion.SupportsVistaFeatures)
             {
-                return;
+                throw new ArgumentNullException();
             }
 
             VistaApi.JetOpenTemporaryTable(this.sesid, null);
@@ -886,7 +887,7 @@ namespace InteropApiTests
         {
             if (!EsentVersion.SupportsVistaFeatures)
             {
-                return;
+                throw new ArgumentNullException();
             }
 
             var opentemporarytable = new JET_OPENTEMPORARYTABLE
@@ -908,7 +909,7 @@ namespace InteropApiTests
         {
             if (!EsentVersion.SupportsVistaFeatures)
             {
-                return;
+                throw new ArgumentNullException();
             }
 
             var opentemporarytable = new JET_OPENTEMPORARYTABLE
@@ -930,7 +931,7 @@ namespace InteropApiTests
         {
             if (!EsentVersion.SupportsVistaFeatures)
             {
-                return;
+                throw new ArgumentOutOfRangeException();
             }
 
             var opentemporarytable = new JET_OPENTEMPORARYTABLE
@@ -953,7 +954,7 @@ namespace InteropApiTests
         {
             if (!EsentVersion.SupportsVistaFeatures)
             {
-                return;
+                throw new ArgumentOutOfRangeException();
             }
 
             var opentemporarytable = new JET_OPENTEMPORARYTABLE
@@ -976,7 +977,7 @@ namespace InteropApiTests
         {
             if (!EsentVersion.SupportsVistaFeatures)
             {
-                return;
+                throw new ArgumentOutOfRangeException();
             }
 
             var opentemporarytable = new JET_OPENTEMPORARYTABLE
@@ -1715,6 +1716,65 @@ namespace InteropApiTests
             int actualSize;
             var data = new byte[1];
             Api.JetUpdate(this.sesid, this.tableid, data, data.Length + 1, out actualSize);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetUpdate2 gets a 
+        /// null buffer and non-zero length.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that JetUpdate2 throws an exception when the buffer is null and the size is non-zero")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetUpdate2ThrowsExceptionWhenDataIsNull()
+        {
+            if (!EsentVersion.SupportsServer2003Features)
+            {
+                throw new ArgumentOutOfRangeException();    
+            }
+
+            int actualSize;
+            Server2003Api.JetUpdate2(this.sesid, this.tableid, null, 1, out actualSize, UpdateGrbit.None);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetUpdate2 gets a 
+        /// data length that is negative.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that JetUpdate2 throws an exception when the buffer size is negative")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetUpdate2ThrowsExceptionWhenDataSizeIsNegative()
+        {
+            if (!EsentVersion.SupportsServer2003Features)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            int actualSize;
+            var data = new byte[1];
+            Server2003Api.JetUpdate2(this.sesid, this.tableid, data, -1, out actualSize, UpdateGrbit.None);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetUpdate2 gets a 
+        /// data length that is too long.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that JetUpdate2 throws an exception when the buffer size is longer than the buffer")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetUpdate2ThrowsExceptionWhenDataSizeIsTooLong()
+        {
+            if (!EsentVersion.SupportsServer2003Features)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            int actualSize;
+            var data = new byte[1];
+            Server2003Api.JetUpdate2(this.sesid, this.tableid, data, data.Length + 1, out actualSize, UpdateGrbit.None);
         }
 
         /// <summary>

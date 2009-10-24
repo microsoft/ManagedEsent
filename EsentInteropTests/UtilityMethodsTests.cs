@@ -6,6 +6,7 @@
 
 namespace InteropApiTests
 {
+    using System.IO;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -19,6 +20,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that Any.Bytes returns an array of at least 1 byte")]
         public void TestAnyBytesIsAtLeastOneByte()
         {
             byte[] bytes = Any.Bytes;
@@ -30,6 +32,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that Any.Bytes returns an array of no more than 255 bytes")]
         public void TestAnyBytesIsNoMoreThan255Bytes()
         {
             byte[] bytes = Any.Bytes;
@@ -41,6 +44,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that Any.BytesOfLength returns a string of the correct length")]
         public void TestAnyBytesOfLengthIsCorrectLength()
         {
             byte[] s = Any.BytesOfLength(20);
@@ -52,6 +56,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that Any.String returns a string of at least 1 character")]
         public void TestAnyStringIsAtLeastOneCharacter()
         {
             string s = Any.String;
@@ -63,6 +68,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that Any.String returns a string of no more than 120 characters")]
         public void TestAnyStringIsNoMoreThan120Characters()
         {
             string s = Any.String;
@@ -74,6 +80,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that Any.String returns a string of ASCII characters")]
         public void TestAnyStringIsASCIICharacters()
         {
             string s = Any.String;
@@ -89,10 +96,52 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that Any.StringOfLength returns a string of the correct length")]
         public void TestAnyStringOfLengthIsCorrectLength()
         {
             string s = Any.StringOfLength(10);
             Assert.AreEqual(10, s.Length);
+        }
+
+        /// <summary>
+        /// Verify that Cleanup.DeleteDirectoryWithRetry removes a directory.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify that DeleteDirectoryWithRetry removes a directory")]
+        public void VerifyDeleteDirectoryWithRetryRemovesDirectory()
+        {
+            // Create a random directory with a file in it
+            string directory = Path.GetRandomFileName();
+            Directory.CreateDirectory(directory);
+            File.WriteAllText(Path.Combine(directory, "foo.txt"), "hello");
+            Assert.IsTrue(Directory.Exists(directory));
+
+            // Delete the directory
+            Cleanup.DeleteDirectoryWithRetry(directory);
+
+            // The directory should no longer exist
+            Assert.IsFalse(Directory.Exists(directory));
+        }
+
+        /// <summary>
+        /// Verify that Cleanup.DeleteFileWithRetry removes a file.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify that DeleteFileWithRetry removes a file")]
+        public void VerifyDeleteFileWithRetryRemovesFile()
+        {
+            // Create a random file
+            string file = Path.GetRandomFileName();
+            File.WriteAllText(file, "hello");
+            Assert.IsTrue(File.Exists(file));
+
+            // Delete the directory
+            Cleanup.DeleteFileWithRetry(file);
+
+            // The directory should no longer exist
+            Assert.IsFalse(File.Exists(file));
         }
     }
 }

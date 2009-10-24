@@ -14,7 +14,6 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
     using System.Text;
-    using System.Threading;
     using Microsoft.Isam.Esent.Interop.Server2003;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Isam.Esent.Interop.Windows7;
@@ -2433,6 +2432,47 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
 
             return err;
+        }
+
+        /// <summary>
+        /// The JetUpdate2 function performs an update operation including inserting a new row into
+        /// a table or updating an existing row. Deleting a table row is performed by calling
+        /// <see cref="JetDelete"/>.
+        /// </summary>
+        /// <param name="sesid">The session which started the update.</param>
+        /// <param name="tableid">The cursor to update. An update should be prepared.</param>
+        /// <param name="bookmark">Returns the bookmark of the updated record. This can be null.</param>
+        /// <param name="bookmarkSize">The size of the bookmark buffer.</param>
+        /// <param name="actualBookmarkSize">Returns the actual size of the bookmark.</param>
+        /// <param name="grbit">Update options.</param>
+        /// <remarks>
+        /// JetUpdate is the final step in performing an insert or an update. The update is begun by
+        /// calling <see cref="JetPrepareUpdate"/> and then by calling
+        /// JetSetColumn one or more times to set the record state. Finally, JetUpdate
+        /// is called to complete the update operation. Indexes are updated only by JetUpdate or and not during JetSetColumn.
+        /// </remarks>
+        /// <returns>An error if the call fails.</returns>
+        public int JetUpdate2(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize, out int actualBookmarkSize, UpdateGrbit grbit)
+        {
+            this.TraceFunctionCall("JetUpdate2");
+            this.CheckDataSize(bookmark, bookmarkSize, "bookmarkSize");
+            this.CheckSupportsServer2003Features("JetUpdate2");
+
+            // BUG: debug builds of ESENT can fill cbActual with this value if no bookmark is given
+            const uint CbActualDebugFill = 0xDDDDDDDD;
+            uint cbActual;
+            int err = this.Err(NativeMethods.JetUpdate2(sesid.Value, tableid.Value, bookmark, checked((uint)bookmarkSize), out cbActual, (uint)grbit));
+
+            if (CbActualDebugFill == cbActual)
+            {
+                actualBookmarkSize = 0;
+            }
+            else
+            {
+                actualBookmarkSize = checked((int)cbActual);
+            }
+
+            return err;            
         }
 
         /// <summary>

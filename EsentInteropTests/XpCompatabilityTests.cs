@@ -28,9 +28,10 @@ namespace InteropApiTests
         private IJetApi savedImpl;
 
         /// <summary>
-        /// Setup the mock object repository.
+        /// Create an implementation with a fixed version.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the XpCompatabilityTests fixture")]
         public void Setup()
         {
             this.savedImpl = Api.Impl;
@@ -41,61 +42,62 @@ namespace InteropApiTests
         /// Cleanup after the test.
         /// </summary>
         [TestCleanup]
+        [Description("Cleanup the XpCompatabilityTests fixture")]
         public void Teardown()
         {
             Api.Impl = this.savedImpl;
         }
 
         /// <summary>
-        /// Verify that the XP version of ESENT doesn't support
-        /// large keys.
+        /// Verify the XP version of ESENT doesn't support large keys.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify the XP version of ESENT doesn't support large keys")]
         public void VerifyXpDoesNotSupportLargeKeys()
         {
             Assert.IsFalse(EsentVersion.SupportsLargeKeys);
         }
 
         /// <summary>
-        /// Verify that the XP version of ESENT doesn't support
-        /// Windows Server 2003 features.
+        /// Verify the XP version of ESENT doesn't support Windows Server 2003 features.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify the XP version of ESENT doesn't support Windows Server 2003 features")]
         public void VerifyXpDoesNotSupportServer2003Features()
         {
             Assert.IsFalse(EsentVersion.SupportsServer2003Features);
         }
 
         /// <summary>
-        /// Verify that the XP version of ESENT doesn't support
-        /// Unicode paths.
+        /// Verify the XP version of ESENT doesn't support Unicode paths.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify the XP version of ESENT doesn't support Unicode paths")]
         public void VerifyXpDoesNotSupportUnicodePaths()
         {
             Assert.IsFalse(EsentVersion.SupportsUnicodePaths);
         }
 
         /// <summary>
-        /// Verify that the XP version of ESENT doesn't support
-        /// Windows Vista features.
+        /// Verify the XP version of ESENT doesn't support Windows Vista features.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify the XP version of ESENT doesn't support Windows Vista features")]
         public void VerifyXpDoesNotSupportVistaFeatures()
         {
             Assert.IsFalse(EsentVersion.SupportsVistaFeatures);
         }
 
         /// <summary>
-        /// Verify that the XP version of ESENT doesn't support
-        /// Windows 7 features.
+        /// Verify the XP version of ESENT doesn't support Windows 7 features.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify the XP version of ESENT doesn't support Windows 7 features")]
         public void VerifyXpDoesNotSupportWindows7Features()
         {
             Assert.IsFalse(EsentVersion.SupportsWindows7Features);
@@ -107,6 +109,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that JetGetThreadStats throws an exception when using the XP version of ESENT")]
         [ExpectedException(typeof(InvalidOperationException))]
         public void VerifyXpThrowsExceptionOnJetGetThreadStats()
         {
@@ -120,6 +123,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that JetOpenTemporaryTable throws an exception when using the XP version of ESENT")]
         [ExpectedException(typeof(InvalidOperationException))]
         public void VerifyXpThrowsExceptionOnJetOpenTemporaryTable()
         {
@@ -134,6 +138,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that JetConfigureCrashDump throws an exception when using the XP version of ESENT")]
         [ExpectedException(typeof(InvalidOperationException))]
         public void VerifyXpThrowsExceptionOnJetConfigureProcessForCrashDump()
         {
@@ -146,6 +151,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that JetOSSnapshotAbort throws an exception when using the XP version of ESENT")]
         [ExpectedException(typeof(InvalidOperationException))]
         public void VerifyXpThrowsExceptionOnJetOSSnapshotAbort()
         {
@@ -158,6 +164,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that JetOSSnapshotEnd throws an exception when using the XP version of ESENT")]
         [ExpectedException(typeof(InvalidOperationException))]
         public void VerifyXpThrowsExceptionOnJetOSSnapshotEnd()
         {
@@ -165,20 +172,36 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Getting the LVChunk size should return a default value.
+        /// Verify that JetUpdate2 throws an exception when using the
+        /// XP version of ESENT.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that JetUpdate2 throws an exception when using the XP version of ESENT")]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void VerifyXpThrowsExceptionOnJetUpdate2()
+        {
+            int actual;
+            Server2003Api.JetUpdate2(JET_SESID.Nil, JET_TABLEID.Nil, null, 0, out actual, UpdateGrbit.None);
+        }
+
+        /// <summary>
+        /// Verify getting the LVChunk size on XP returns a default value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify getting the LVChunk size on XP returns a default value")]
         public void VerifyXpReturnsCorrectLVChunkSize()
         {
             Assert.AreEqual(SystemParameters.DatabasePageSize - 82, SystemParameters.LVChunkSizeMost);
         }
 
         /// <summary>
-        /// Getting the cached closed tables system parameter should return 0 on XP.
+        /// Verify getting the cached closed tables system parameter on XP returns 0.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify getting the cached closed tables system parameter on XP returns 0")]
         public void VerifyXpReturns0ForCachedClosedTables()
         {
             using (var instance = new Instance("XP"))
@@ -189,10 +212,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Getting the waypoint system parameter should return 0 on XP.
+        /// Verify getting the waypoint system parameter on XP returns 0.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify getting the waypoint system parameter on XP returns 0")]
         public void VerifyXpReturns0ForWaypoint()
         {
             using (var instance = new Instance("XP"))
@@ -203,10 +227,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Getting the waypoint system parameter should return 0 on XP.
+        /// Verify getting the waypoint system parameter on XP returns 0.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify getting the waypoint system parameter on XP returns 0")]
         public void VerifyXpReturnsNullForAlternateRecoveryDirectory()
         {
             using (var instance = new Instance("XP"))
@@ -217,10 +242,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Getting the configuration system parameter should return 0 on XP.
+        /// Verify getting the configuration system parameter on XP returns 0.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify getting the configuration system parameter on XP returns 0")]
         public void VerifyXpReturns1ForConfiguration()
         {
             SystemParameters.Configuration = 0;
@@ -228,10 +254,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Getting the enable advanced system parameter should return true on XP.
+        /// Verify getting the enable advanced system parameter on XP returns true.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify getting the enable advanced system parameter on XP returns true")]
         public void VerifyXpReturnsTrueForEnableAdvanced()
         {
             SystemParameters.EnableAdvanced = false;
@@ -239,20 +266,22 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Getting the key most system parameter should return 255 on XP.
+        /// Verify getting the key most system parameter on XP returns 255.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify getting the key most system parameter on XP returns 255")]
         public void VerifyXpReturns255ForKeyMost()
         {
             Assert.AreEqual(255, SystemParameters.KeyMost);
         }
 
         /// <summary>
-        /// Use JetCreateIndex2 on Xp to test the compatability path.
+        /// Use JetCreateIndex2 on XP to test the compatability path.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Use JetCreateIndex2 on XP to test the compatability path")]
         public void CreateIndexesOnXp()
         {
             string directory = SetupHelper.CreateRandomDirectory();

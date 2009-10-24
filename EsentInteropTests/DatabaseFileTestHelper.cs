@@ -457,7 +457,7 @@ namespace InteropApiTests
             }
 
             Assert.IsTrue(File.Exists(defraggedDatabase));
-            File.Delete(this.database);
+            Cleanup.DeleteFileWithRetry(this.database);
             File.Move(defraggedDatabase, this.database);
         }
 

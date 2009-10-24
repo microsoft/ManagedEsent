@@ -10,6 +10,7 @@ namespace InteropApiTests
     using System.Collections.Generic;
     using System.Text;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Server2003;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -45,7 +46,7 @@ namespace InteropApiTests
         /// All DDL should be done in this method.
         /// </summary>
         [TestInitialize]
-        [Description("Setup the TempTableFixture fixture.")]
+        [Description("Setup the TempTableFixture fixture")]
         public void Setup()
         {
             this.instance = new Instance("TempTableFixture");
@@ -86,13 +87,42 @@ namespace InteropApiTests
         /// Cleanup after all tests have run.
         /// </summary>
         [TestCleanup]
-        [Description("Cleanup the TempTableFixture fixture.")]
+        [Description("Cleanup the TempTableFixture fixture")]
         public void Teardown()
         {
             this.instance.Term();
         }
 
         #endregion Setup/Teardown
+
+        /// <summary>
+        /// Test JetUpdate2.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Test JetUpdate2")]
+        public void TestJetUpdate2()
+        {
+            if (!EsentVersion.SupportsServer2003Features)
+            {
+                return;
+            }
+
+            JET_COLUMNID columnid = this.coltypDict[JET_coltyp.Long];
+            int value = Any.Int32;
+
+            using (var trx = new Transaction(this.session))
+            {
+                Api.JetPrepareUpdate(this.session, this.tableid, JET_prep.Insert);
+                Api.SetColumn(this.session, this.tableid, columnid, value);
+                int ignored;
+                Server2003Api.JetUpdate2(this.session, this.tableid, null, 0, out ignored, UpdateGrbit.None);
+                trx.Commit(CommitTransactionGrbit.None);
+            }
+
+            Api.TryMoveFirst(this.session, this.tableid);
+            Assert.AreEqual(value, Api.RetrieveColumnAsInt32(this.session, this.tableid, columnid));
+        }
 
         #region Set and Retrieve Columns
 
@@ -101,7 +131,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test JetSetColumns.")]
+        [Description("Test JetSetColumns")]
         public void JetSetColumns()
         {
             byte b = Any.Byte;
@@ -150,7 +180,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test JetRetrieveColumns.")]
+        [Description("Test JetRetrieveColumns")]
         public void JetRetrieveColumns()
         {
             short s = Any.Int16;
@@ -215,7 +245,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test JetRetrieveColumns with a null buffer.")]
+        [Description("Test JetRetrieveColumns with a null buffer")]
         public void JetRetrieveColumnsNullBuffer()
         {
             byte[] data = Any.Bytes;
@@ -246,7 +276,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test JetSetColumns.")]
+        [Description("Test JetSetColumns")]
         public void SetColumns()
         {
             bool bit = true;
@@ -301,7 +331,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test JetSetColumns with null and zero-length data.")]
+        [Description("Test JetSetColumns with null and zero-length data")]
         public void SetColumnsWithNullAndZeroLength()
         {
             var columnValues = new ColumnValue[]
