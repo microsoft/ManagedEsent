@@ -560,14 +560,14 @@ namespace SampleApp
 
                 // Current price, stored in cents : 32-bit integer
                 columndef = new JET_COLUMNDEF
-                    {
-                        coltyp = JET_coltyp.Long,
+                {
+                    coltyp = JET_coltyp.Long,
 
-                        // Be careful with ColumndefGrbit.ColumnNotNULL. Older versions of ESENT
-                        // (e.g. Windows XP) do not support this grbit for tagged or variable columns
-                        // (JET_coltyp.Text, JET_coltyp.LongText, JET_coltyp.Binary, JET_coltyp.LongBinary)
-                        grbit = ColumndefGrbit.ColumnNotNULL
-                    };
+                    // Be careful with ColumndefGrbit.ColumnNotNULL. Older versions of ESENT
+                    // (e.g. Windows XP) do not support this grbit for tagged or variable columns
+                    // (JET_coltyp.Text, JET_coltyp.LongText, JET_coltyp.Binary, JET_coltyp.LongBinary)
+                    grbit = ColumndefGrbit.ColumnNotNULL
+                };
 
                 Api.JetAddColumn(sesid, tableid, "price", columndef, null, 0, out columnid);
 

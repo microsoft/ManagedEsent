@@ -112,7 +112,7 @@ namespace InteropApiTests
         /// Verify that the HelpersTests.Setup has setup the test fixture properly.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(0)]
         [Description("Verify that the HelpersTests.Setup has setup the test fixture properly.")]
         public void VerifyFixtureSetup()
         {
