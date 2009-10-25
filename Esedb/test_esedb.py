@@ -198,9 +198,17 @@ class EsedbIterationFixture(unittest.TestCase):
         self._db.first()
         self.assertEqual(('b', '2'), self._db.next())
 
+    def testNextRaisesKeyErrorOnLastRecord(self):
+        self._db.last()
+        self.assertRaises(KeyError, self._db.next)
+        
     def testPreviousReturnsNextRecord(self):
         self._db.last()
         self.assertEqual(('c', '3'), self._db.previous())
+
+    def testPreviousRaisesKeyErrorOnFirstRecord(self):
+        self._db.first()
+        self.assertRaises(KeyError, self._db.previous)
         
     def testKeysReturnsKeys(self):
         self.assertEqual(['a', 'b', 'c', 'd'], self._db.keys())
