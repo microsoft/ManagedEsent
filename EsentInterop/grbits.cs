@@ -1275,6 +1275,17 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Options for <see cref="Api.JetSetColumnDefaultValue"/>.
+    /// </summary>
+    public enum SetColumnDefaultValueGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+    }
+
+    /// <summary>
     /// Options for <see cref="Api.JetIdle"/>.
     /// </summary>
     [Flags]
@@ -1305,11 +1316,6 @@ namespace Microsoft.Isam.Esent.Interop
     [Flags]
     public enum DefragGrbit
     {
-        /// <summary>
-        /// Default options.
-        /// </summary>
-        None = 0x0,
-
         /// <summary>
         /// Defragments the available space portion of ESE database space
         /// allocation. Database space is divided into two types, owned

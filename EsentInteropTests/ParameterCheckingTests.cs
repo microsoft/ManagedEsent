@@ -338,7 +338,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Verify that an exception is thrown when JetRenameColumn gets a null column name.")]
+        [Description("Verify that an exception is thrown when JetRenameColumn gets a null column name")]
         [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyJetRenameColumnThrowsExceptionWhencolumnNameIsNull()
         {
@@ -351,11 +351,59 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that an exception is thrown when JetRenameColumn gets a null new column name")]
         [ExpectedException(typeof(ArgumentNullException))]
-        [Description("Verify that an exception is thrown when JetRenameColumn gets a null new column name.")]
-        public void VerifyJetRenameColumnThrowsExceptionWhenNewcolumnNameIsNull()
+        public void VerifyJetRenameColumnThrowsExceptionWhenNewColumnNameIsNull()
         {
             Api.JetRenameColumn(this.sesid, this.tableid, "oldcolumn", null, RenameColumnGrbit.None);
+        }
+
+        /// <summary>
+        /// Verify that an exception is thrown when JetSetColumnDefaultValue gets a null table name.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description(" Verify that an exception is thrown when JetSetColumnDefaultValue gets a null table name")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyJetSetColumnDefaultValueThrowsExceptionWhenTableNameIsNull()
+        {
+            Api.JetSetColumnDefaultValue(this.sesid, this.dbid, null, "column", new byte[1], 1, SetColumnDefaultValueGrbit.None);
+        }
+
+        /// <summary>
+        /// Verify that an exception is thrown when JetSetColumnDefaultValue gets a null column name.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description(" Verify that an exception is thrown when JetSetColumnDefaultValue gets a null column name")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyJetSetColumnDefaultValueThrowsExceptionWhenColumnNameIsNull()
+        {
+            Api.JetSetColumnDefaultValue(this.sesid, this.dbid, "table", null, new byte[1], 1, SetColumnDefaultValueGrbit.None);
+        }
+
+        /// <summary>
+        /// Verify that an exception is thrown when JetSetColumnDefaultValue gets a negative data size.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that an exception is thrown when JetSetColumnDefaultValue gets a negative data size")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyJetSetColumnDefaultValueThrowsExceptionWhenDataSizeIsNegative()
+        {
+            Api.JetSetColumnDefaultValue(this.sesid, this.dbid, "table", "column", null, -1, SetColumnDefaultValueGrbit.None);
+        }
+
+        /// <summary>
+        /// Verify that an exception is thrown when JetSetColumnDefaultValue gets a data size that is too long.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that an exception is thrown when JetSetColumnDefaultValue gets a data size that is too long")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyJetSetColumnDefaultValueThrowsExceptionWhenDataSizeIsTooLong()
+        {
+            Api.JetSetColumnDefaultValue(this.sesid, this.dbid, "table", "column", new byte[1], 2, SetColumnDefaultValueGrbit.None);
         }
 
         /// <summary>

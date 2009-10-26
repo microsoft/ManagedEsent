@@ -1866,6 +1866,29 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 NativeMethods.JetRenameColumn(sesid.Value, tableid.Value, name, newName, (uint)grbit));
         }
 
+        /// <summary>
+        /// Changes the default value of an existing column.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database containing the column.</param>
+        /// <param name="tableName">The name of the table containing the column.</param>
+        /// <param name="columnName">The name of the column.</param>
+        /// <param name="data">The new default value.</param>
+        /// <param name="dataSize">Size of the new default value.</param>
+        /// <param name="grbit">Column default value options.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetSetColumnDefaultValue(
+            JET_SESID sesid, JET_DBID dbid, string tableName, string columnName, byte[] data, int dataSize, SetColumnDefaultValueGrbit grbit)
+        {
+            this.TraceFunctionCall("JetSetColumnDefaultValue");  
+            this.CheckNotNull(tableName, "tableName");
+            this.CheckNotNull(columnName, "columnName");
+            this.CheckDataSize(data, dataSize, "dataSize");
+            return this.Err(
+                NativeMethods.JetSetColumnDefaultValue(
+                    sesid.Value, dbid.Value, tableName, columnName, data, checked((uint)dataSize), (uint)grbit));
+        }
+
         #endregion
 
         #region Navigation
@@ -2118,7 +2141,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetGotoRecordPosition");
             NATIVE_RECPOS native = recpos.GetNativeRecpos();
-            return NativeMethods.JetGotoPosition(sesid.Value, tableid.Value, ref native);
+            return this.Err(NativeMethods.JetGotoPosition(sesid.Value, tableid.Value, ref native));
         }
 
         #endregion
@@ -2635,10 +2658,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetDefragment(JET_SESID sesid, JET_DBID dbid, string tableName, ref int passes, ref int seconds, DefragGrbit grbit)
         {
             this.TraceFunctionCall("JetIdle");
-            ulong nativePasses = unchecked((ulong)passes);
-            ulong nativeSeconds = unchecked((ulong)seconds);
-            return this.Err(NativeMethods.JetDefragment(sesid.Value, dbid.Value, tableName, ref nativePasses, ref nativeSeconds,
-                                               (uint)grbit));    
+            uint nativePasses = unchecked((uint)passes);
+            uint nativeSeconds = unchecked((uint)seconds);
+            return this.Err(NativeMethods.JetDefragment(
+                sesid.Value, dbid.Value, tableName, ref nativePasses, ref nativeSeconds, (uint)grbit));    
         }
 
         /// <summary>

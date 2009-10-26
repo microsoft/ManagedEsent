@@ -1174,6 +1174,22 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetRenameColumn(sesid, tableid, name, newName, grbit));
         }
 
+        /// <summary>
+        /// Changes the default value of an existing column.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database containing the column.</param>
+        /// <param name="tableName">The name of the table containing the column.</param>
+        /// <param name="columnName">The name of the column.</param>
+        /// <param name="data">The new default value.</param>
+        /// <param name="dataSize">Size of the new default value.</param>
+        /// <param name="grbit">Column default value options.</param>
+        public static void JetSetColumnDefaultValue(
+            JET_SESID sesid, JET_DBID dbid, string tableName, string columnName, byte[] data, int dataSize, SetColumnDefaultValueGrbit grbit)
+        {
+            Api.Check(Impl.JetSetColumnDefaultValue(sesid, dbid, tableName, columnName, data, dataSize, grbit));
+        }
+
         #endregion
 
         #region Navigation
@@ -1864,7 +1880,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>A warning code.</returns>
         public static JET_wrn JetDefragment(JET_SESID sesid, JET_DBID dbid, string tableName, ref int passes, ref int seconds, DefragGrbit grbit)
         {
-            return JET_wrn.Success;  
+            return Api.Check(Impl.JetDefragment(sesid, dbid, tableName, ref passes, ref seconds, grbit));
         }
 
         /// <summary>

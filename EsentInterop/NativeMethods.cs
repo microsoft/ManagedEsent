@@ -408,6 +408,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetRenameColumn(IntPtr sesid, IntPtr tableid, string szName, string szNameNew, uint grbit);
 
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetSetColumnDefaultValue(
+            IntPtr sesid, uint tableid, string szTableName, string szColumnName, byte[] pvData, uint cbData, uint grbit);
+
         #endregion
 
         #region Navigation
@@ -543,7 +547,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetDefragment(
-            IntPtr sesid, ulong dbid, string szTableName, ref ulong pcPasses, ref ulong pcSeconds, uint grbit);
+            IntPtr sesid, uint dbid, string szTableName, ref uint pcPasses, ref uint pcSeconds, uint grbit);
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetIdle(IntPtr sesid, uint grbit);

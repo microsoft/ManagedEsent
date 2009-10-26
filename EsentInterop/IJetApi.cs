@@ -997,6 +997,20 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         int JetRenameColumn(JET_SESID sesid, JET_TABLEID tableid, string name, string newName, RenameColumnGrbit grbit);
 
+        /// <summary>
+        /// Changes the default value of an existing column.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database containing the column.</param>
+        /// <param name="tableName">The name of the table containing the column.</param>
+        /// <param name="columnName">The name of the column.</param>
+        /// <param name="data">The new default value.</param>
+        /// <param name="dataSize">Size of the new default value.</param>
+        /// <param name="grbit">Column default value options.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetSetColumnDefaultValue(
+            JET_SESID sesid, JET_DBID dbid, string tableName, string columnName, byte[] data, int dataSize, SetColumnDefaultValueGrbit grbit);
+
         #endregion
 
         #region Navigation

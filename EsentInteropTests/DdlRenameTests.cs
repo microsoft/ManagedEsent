@@ -84,7 +84,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Test JetRenameTable.")]
+        [Description("Test JetRenameTable")]
         public void TestJetRenameTable()
         {
             JET_TABLEID tableid;
@@ -99,7 +99,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Test JetRenameColumn.")]
+        [Description("Test JetRenameColumn")]
         public void TestJetRenameColumn()
         {
             JET_TABLEID tableid;
@@ -109,6 +109,52 @@ namespace InteropApiTests
             Api.JetRenameColumn(this.sesid, tableid, "old", "new", RenameColumnGrbit.None);
             Api.GetTableColumnid(this.sesid, tableid, "new");
             Api.JetCloseTable(this.sesid, tableid);
+        }
+
+        /// <summary>
+        /// Test JetSetColumnDefaultValue.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test JetSetColumnDefaultValue")]
+        public void TestJetSetColumnDefaultValue()
+        {
+            JET_TABLEID tableid;
+            Api.JetCreateTable(this.sesid, this.dbid, "table", 1, 100, out tableid);
+
+            // The column needs to be a tagged column so the default value isn't persisted
+            // in the record at insert time.
+            var columndef = new JET_COLUMNDEF
+                {
+                coltyp = JET_coltyp.LongText,
+                cp = JET_CP.Unicode,
+                };
+            byte[] defaultValue = Encoding.ASCII.GetBytes("default");
+            JET_COLUMNID columnid;
+            Api.JetAddColumn(this.sesid, tableid, "column", columndef, defaultValue, defaultValue.Length, out columnid);
+            Api.JetPrepareUpdate(this.sesid, tableid, JET_prep.Insert);
+            Api.JetUpdate(this.sesid, tableid);
+            Assert.AreEqual("default", this.RetrieveAsciiColumnFromFirstRecord(tableid, columnid));
+            Api.JetCloseTable(this.sesid, tableid);
+
+            byte[] newDefaultValue = Encoding.ASCII.GetBytes("newfault");
+            Api.JetSetColumnDefaultValue(
+                this.sesid, this.dbid, "table", "column", newDefaultValue, newDefaultValue.Length, SetColumnDefaultValueGrbit.None);
+
+            Api.JetOpenTable(this.sesid, this.dbid, "table", null, 0, OpenTableGrbit.None, out tableid);
+            Assert.AreEqual("newfault", this.RetrieveAsciiColumnFromFirstRecord(tableid, columnid));
+        }
+
+        /// <summary>
+        /// Go to the first record in the table and retrieve the specified column as a string.
+        /// </summary>
+        /// <param name="tableid">The table containing the record.</param>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <returns>The column as a string.</returns>
+        private string RetrieveAsciiColumnFromFirstRecord(JET_TABLEID tableid, JET_COLUMNID columnid)
+        {
+            Api.JetMove(this.sesid, tableid, JET_Move.First, MoveGrbit.None);
+            return Api.RetrieveColumnAsString(this.sesid, tableid, columnid, Encoding.ASCII);
         }
     }
 }
