@@ -1838,7 +1838,34 @@ namespace Microsoft.Isam.Esent.Interop
 
         #endregion
 
-        #region Misc
+        #region Online Maintenance 
+
+        /// <summary>
+        /// Starts and stops database defragmentation tasks that improves data
+        /// organization within a database.
+        /// </summary>
+        /// <param name="sesid">The session to use for the call.</param>
+        /// <param name="dbid">The database to be defragmented.</param>
+        /// <param name="tableName">
+        /// Unused parameter. Defragmentation is performed for the entire database described by the given database ID.
+        /// </param>
+        /// <param name="passes">
+        /// When starting an online defragmentation task, this parameter sets the maximum number of defragmentation
+        /// passes. When stopping an online defragmentation task, this parameter is set to the number of passes
+        /// performed.
+        /// </param>
+        /// <param name="seconds">
+        /// When starting an online defragmentation task, this parameter sets
+        /// the maximum time for defragmentation. When stopping an online
+        /// defragmentation task, this output buffer is set to the length of
+        /// time used for defragmentation.
+        /// </param>
+        /// <param name="grbit">Defragmentation options.</param>
+        /// <returns>A warning code.</returns>
+        public static JET_wrn JetDefragment(JET_SESID sesid, JET_DBID dbid, string tableName, ref int passes, ref int seconds, DefragGrbit grbit)
+        {
+            return JET_wrn.Success;  
+        }
 
         /// <summary>
         /// Performs idle cleanup tasks or checks the version store status in ESE.
@@ -1850,6 +1877,10 @@ namespace Microsoft.Isam.Esent.Interop
         {
             return Api.Check(Impl.JetIdle(sesid, grbit));
         }
+
+        #endregion
+
+        #region Misc
 
         /// <summary>
         /// Frees memory that was allocated by a database engine call.

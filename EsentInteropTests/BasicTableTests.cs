@@ -985,6 +985,24 @@ namespace InteropApiTests
 
         #endregion Navigation Tests
 
+        #region JetDefragment Tests
+
+        /// <summary>
+        /// Test starting and stoppping OLD with JetDefragment.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Start and stop online defragmentation JetDefragment")]
+        public void TestStartAndStopJetDefragment()
+        {
+            int passes = 1;
+            int seconds = 1;
+            Api.JetDefragment(this.sesid, this.dbid, null, ref passes, ref seconds, DefragGrbit.BatchStart);
+            Api.JetDefragment(this.sesid, this.dbid, null, ref passes, ref seconds, DefragGrbit.BatchStop);
+        }
+
+        #endregion
+
         #region Helper Methods
 
         /// <summary>

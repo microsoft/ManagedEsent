@@ -1298,4 +1298,37 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         GetStatus = 0x04,
     }
+
+    /// <summary>
+    /// Options for <see cref="Api.JetDefragment"/>.
+    /// </summary>
+    [Flags]
+    public enum DefragGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0x0,
+
+        /// <summary>
+        /// Defragments the available space portion of ESE database space
+        /// allocation. Database space is divided into two types, owned
+        /// space and available space. Owned space is allocated to a table
+        /// or index while available space is ready for use within the table
+        /// or index, respectively. Available space is much more dynamic in
+        /// behavior and requires on-line defragmentation more so than owned
+        /// space or table or index data.
+        /// </summary>
+        AvailSpaceTreesOnly = 0x40,
+
+        /// <summary>
+        /// Starts a new defragmentation task.
+        /// </summary>
+        BatchStart = 0x1,
+
+        /// <summary>
+        /// Stops a defragmentation task.
+        /// </summary>
+        BatchStop = 0x2, 
+    }
 }

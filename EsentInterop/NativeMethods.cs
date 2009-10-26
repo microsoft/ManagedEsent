@@ -539,10 +539,18 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         #endregion
 
-        #region Misc
+        #region Online Maintenance
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetDefragment(
+            IntPtr sesid, ulong dbid, string szTableName, ref ulong pcPasses, ref ulong pcSeconds, uint grbit);
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetIdle(IntPtr sesid, uint grbit);
+
+        #endregion
+
+        #region Misc
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetConfigureProcessForCrashDump(uint grbit);
