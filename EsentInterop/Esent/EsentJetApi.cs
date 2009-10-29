@@ -11,6 +11,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 {
     using System;
     using System.Diagnostics;
+    using System.Runtime.CompilerServices;
     using System.Threading;
 
     /// <summary>
@@ -72,10 +73,11 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             // Create a unique name so that multiple threads can call this simultaneously.
             // This can happen if there are multiple AppDomains.
             string instanceName = String.Format("GettingEsentVersion{0}", Thread.CurrentThread.ManagedThreadId);
-            JET_INSTANCE instance;
-            this.JetCreateInstance(out instance, instanceName);
+            JET_INSTANCE instance = JET_INSTANCE.Nil;
+            RuntimeHelpers.PrepareConstrainedRegions();            
             try
             {
+                this.JetCreateInstance(out instance, instanceName);
                 this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
                 this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.NoInformationEvent, 1, null);
                 this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
@@ -100,7 +102,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             finally
             {
-                this.JetTerm(instance);
+                if (JET_INSTANCE.Nil != instance)
+                {
+                    this.JetTerm(instance);
+                }
             }
         }
     }

@@ -21,7 +21,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Cached retrieve buffers.
         /// </summary>
-        private static readonly MemoryCache memoryCache = new MemoryCache();
+        private static readonly MemoryCache memoryCache = new MemoryCache(64 * 1024, 16);
 
         #region Nested type: ConversionFunc
 
@@ -284,7 +284,8 @@ namespace Microsoft.Isam.Esent.Interop
             // Retrieving a string happens in two stages: first the data is retrieved into a data
             // buffer and then the buffer is converted to a string. The buffer isn't needed for
             // very long so we try to use a cached buffer.
-            byte[] data = memoryCache.Allocate();
+            byte[] cachedBuffer = memoryCache.Allocate();
+            byte[] data = cachedBuffer;
 
             int dataSize;
             wrn = JetRetrieveColumn(sesid, tableid, columnid, data, data.Length, out dataSize, grbit, null);
@@ -313,7 +314,7 @@ namespace Microsoft.Isam.Esent.Interop
             string s = encoding.GetString(data, 0, dataSize);
 
             // Now we have extracted the string from the buffer we can free (cache) the buffer.
-            memoryCache.Free(data);
+            memoryCache.Free(cachedBuffer);
 
             return s;
         }

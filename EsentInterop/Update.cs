@@ -14,6 +14,11 @@ namespace Microsoft.Isam.Esent.Interop
     public class Update : EsentResource
     {
         /// <summary>
+        /// Cached retrieve buffers.
+        /// </summary>
+        private static readonly MemoryCache bookmarkCache = new MemoryCache(SystemParameters.BookmarkMost, 8);
+
+        /// <summary>
         /// The underlying JET_SESID.
         /// </summary>
         private readonly JET_SESID sesid;
@@ -96,10 +101,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// </remarks>
         public void SaveAndGotoBookmark()
         {
-            var bookmark = new byte[SystemParameters.BookmarkMost];
+            var bookmark = bookmarkCache.Allocate();
             int actualBookmarkSize;
             this.Save(bookmark, bookmark.Length, out actualBookmarkSize);
             Api.JetGotoBookmark(this.sesid, this.tableid, bookmark, actualBookmarkSize);
+            bookmarkCache.Free(bookmark);
         }
 
         /// <summary>
