@@ -365,7 +365,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Sets columns.
+        /// Sets columns from ColumnValue objects.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to update. An update should be prepared.</param>

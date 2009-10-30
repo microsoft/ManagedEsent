@@ -83,6 +83,8 @@
     <Compile Include="ApiTestHook.cs" />
     <Compile Include="ApiTestHookTests.cs" />
     <Compile Include="ApiTests.cs" />
+    <Compile Include="CallbackWrappersTests.cs" />
+    <Compile Include="ColumnValueTests.cs" />
     <Compile Include="MakeKeyHelpersTests.cs" />
     <Compile Include="TempTableNavigationTests.cs" />
     <Compile Include="HelpersTempTableFixtureTests.cs" />

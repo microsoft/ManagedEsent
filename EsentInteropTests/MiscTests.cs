@@ -22,7 +22,7 @@ namespace InteropApiTests
         /// Test calling JetFreeBuffer on a null buffer.
         /// </summary>
         [TestMethod]
-        [Description("Test calling JetFreeBuffer on a null buffer.")]
+        [Description("Test calling JetFreeBuffer on a null buffer")]
         [Priority(0)]
         public void FreeNullBuffer()
         {
@@ -33,7 +33,7 @@ namespace InteropApiTests
         /// Verify that all TestMethods in this assembly have priorities.
         /// </summary>
         [TestMethod]
-        [Description("Verify that all TestMethods in this assembly have priorities.")]
+        [Description("Verify that all TestMethods in this assembly have priorities")]
         [Priority(1)]
         public void VerifyAllTestMethodsHavePriorities()
         {
@@ -45,7 +45,7 @@ namespace InteropApiTests
         /// Verify that all TestMethods in this assembly have descriptions.
         /// </summary>
         [TestMethod]
-        [Description("Verify that all TestMethods in this assembly have descriptions.")]
+        [Description("Verify that all TestMethods in this assembly have descriptions")]
         [Priority(1)]
         public void VerifyAllTestMethodsHaveDescriptions()
         {
@@ -58,7 +58,7 @@ namespace InteropApiTests
         /// have the [TestMethod] attribute.
         /// </summary>
         [TestMethod]
-        [Description("Verify that all public methods on public types in the assembly have the [TestMethod] attribute.")]
+        [Description("Verify that all public methods on public types in the assembly have the [TestMethod] attribute")]
         [Priority(1)]
         public void VerifyAllPublicMethodsAreTests()
         {
@@ -94,7 +94,7 @@ namespace InteropApiTests
                     Console.WriteLine("\t{0}", m);
                 }
 
-                Assert.Fail("A test method does not have a required attribute.");
+                Assert.Fail("A test method does not have a required attribute");
             }
         }
 

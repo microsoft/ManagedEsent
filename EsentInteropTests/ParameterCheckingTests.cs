@@ -1550,6 +1550,45 @@ namespace InteropApiTests
                 EnumerateColumnsGrbit.None);
         }
 
+        /// <summary>
+        /// Check that an exception is thrown when RetrieveColumns gets a 
+        /// null column name.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when RetrieveColumns gets a null column name.")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void TestRetrieveColumnsThrowsExceptionWhenColumnValuesIsNull()
+        {
+            Api.RetrieveColumns(this.sesid, this.tableid, null);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when RetrieveColumns gets a 
+        /// zero-length array.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when RetrieveColumns gets a zero-length array.")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void TestRetrieveColumnsThrowsExceptionWhenColumnValuesIsZeroLength()
+        {
+            Api.RetrieveColumns(this.sesid, this.tableid, new ColumnValue[0]);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when RetrieveColumns gets too many columns
+        /// to retrieve.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Description("Check that an exception is thrown when RetrieveColumns gets too many columns to retrieve")]
+        public void TestRetrieveColumnsThrowsExceptionWhenRetrievingTooManyColumns()
+        {
+            Api.RetrieveColumns(this.sesid, this.tableid, new ColumnValue[4096]);
+        }
+
         #endregion
 
         #region DML

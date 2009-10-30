@@ -27,8 +27,8 @@ namespace Microsoft.Isam.Esent.Interop
         JET_DBID dbid,
         JET_TABLEID tableid,
         JET_cbtyp cbtyp,
-        IntPtr arg1,
-        IntPtr arg2,
+        object arg1,
+        object arg2,
         IntPtr context,
         IntPtr unused);
 }

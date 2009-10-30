@@ -63,67 +63,7 @@ namespace InteropApiTests
             Api.JetInit(ref this.instance);
             Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
 
-            var columnDefs = new List<JET_COLUMNDEF>();
-            var columnNames = new List<string>();
-
-            columnDefs.Add(new JET_COLUMNDEF() { coltyp = JET_coltyp.Long, grbit = ColumndefGrbit.TTKey });
-            columnNames.Add("Key");
-            
-            columnDefs.Add(new JET_COLUMNDEF() { coltyp = JET_coltyp.Bit });
-            columnNames.Add("Boolean");
-
-            columnDefs.Add(new JET_COLUMNDEF() { coltyp = JET_coltyp.UnsignedByte });
-            columnNames.Add("Byte");
-
-            columnDefs.Add(new JET_COLUMNDEF() { coltyp = JET_coltyp.Short });
-            columnNames.Add("Int16");
-
-            columnDefs.Add(new JET_COLUMNDEF() { coltyp = JET_coltyp.Long });
-            columnNames.Add("Int32");
-
-            columnDefs.Add(new JET_COLUMNDEF() { coltyp = JET_coltyp.Currency });
-            columnNames.Add("Int64");
-
-            columnDefs.Add(new JET_COLUMNDEF() { coltyp = JET_coltyp.IEEESingle });
-            columnNames.Add("Float");
-
-            columnDefs.Add(new JET_COLUMNDEF() { coltyp = JET_coltyp.IEEEDouble });
-            columnNames.Add("Double");
-
-            columnDefs.Add(new JET_COLUMNDEF() { coltyp = JET_coltyp.DateTime });
-            columnNames.Add("DateTime");
-
-            columnDefs.Add(new JET_COLUMNDEF() { coltyp = JET_coltyp.LongBinary });
-            columnNames.Add("Binary");
-
-            columnDefs.Add(new JET_COLUMNDEF() { coltyp = JET_coltyp.LongText, cp = JET_CP.ASCII });
-            columnNames.Add("ASCII");
-
-            columnDefs.Add(new JET_COLUMNDEF() { coltyp = JET_coltyp.LongText, cp = JET_CP.Unicode });
-            columnNames.Add("Unicode");
-
-            // BUG: Older version of ESENT don't support these column types for temp tables so we'll just use binary columns.
-            columnDefs.Add(new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 2 });
-            columnNames.Add("UInt16");
-
-            columnDefs.Add(new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 4 });
-            columnNames.Add("UInt32");
-
-            columnDefs.Add(new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 16 });
-            columnNames.Add("Guid");
-
-            // Not natively supported by any version of ESENT
-            columnDefs.Add(new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 8 });
-            columnNames.Add("UInt64");
-
-            JET_COLUMNDEF[] columns = columnDefs.ToArray();
-            JET_COLUMNID[] columnids = new JET_COLUMNID[columns.Length];
-            Api.JetOpenTempTable(this.sesid, columns, columns.Length, TempTableGrbit.None, out this.tableid, columnids);
-            this.columnidDict = new Dictionary<string, JET_COLUMNID>(StringComparer.OrdinalIgnoreCase);
-            for (int i = 0; i < columnids.Length; i++)
-            {
-                this.columnidDict[columnNames[i]] = columnids[i];
-            }
+            this.columnidDict = SetupHelper.CreateTempTableWithAllColumns(this.sesid, TempTableGrbit.None, out this.tableid);
         }
 
         /// <summary>

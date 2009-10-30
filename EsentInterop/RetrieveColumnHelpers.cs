@@ -641,16 +641,7 @@ namespace Microsoft.Isam.Esent.Interop
             double? oadate = RetrieveColumnAsDouble(sesid, tableid, columnid, grbit);
             if (oadate.HasValue)
             {
-                try
-                {
-                    return DateTime.FromOADate(oadate.Value);
-                }
-                catch (ArgumentException)
-                {
-                    // Not all double values are valid OADates. We deal with out-of-range values
-                    // by returning either min or max
-                    return oadate.Value < 0 ? DateTime.MinValue : DateTime.MaxValue;
-                }
+                return Conversions.ConvertDoubleToDateTime(oadate.Value);
             }
 
             return new DateTime?();
@@ -800,6 +791,27 @@ namespace Microsoft.Isam.Esent.Interop
                 var deseriaizer = new BinaryFormatter();
                 return deseriaizer.Deserialize(stream);
             }
+        }
+
+        /// <summary>
+        /// Retrieves columns into ColumnValue objects.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor retrieve the data from. The cursor should be positioned on a record.</param>
+        /// <param name="values">The values to retrieve.</param>
+        public static void RetrieveColumns(JET_SESID sesid, JET_TABLEID tableid, params ColumnValue[] values)
+        {
+            if (null == values)
+            {
+                throw new ArgumentNullException("values");
+            }
+
+            if (0 == values.Length)
+            {
+                throw new ArgumentOutOfRangeException("values", values.Length, "must have at least one value");
+            }
+
+            Api.Check(ColumnValue.RetrieveColumns(sesid, tableid, values));
         }
 
         /// <summary>

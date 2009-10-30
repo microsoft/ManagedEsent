@@ -2657,7 +2657,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code.</returns>
         public int JetDefragment(JET_SESID sesid, JET_DBID dbid, string tableName, ref int passes, ref int seconds, DefragGrbit grbit)
         {
-            this.TraceFunctionCall("JetIdle");
+            this.TraceFunctionCall("JetDefragment");
             uint nativePasses = unchecked((uint)passes);
             uint nativeSeconds = unchecked((uint)seconds);
             return this.Err(NativeMethods.JetDefragment(

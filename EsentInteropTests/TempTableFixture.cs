@@ -35,9 +35,9 @@ namespace InteropApiTests
         private JET_TABLEID tableid;
 
         /// <summary>
-        /// A dictionary that maps column types to column ids.
+        /// A dictionary that maps column type names to column ids.
         /// </summary>
-        private IDictionary<JET_coltyp, JET_COLUMNID> coltypDict;
+        private IDictionary<string, JET_COLUMNID> columnDict;
 
         #region Setup/Teardown
 
@@ -56,31 +56,7 @@ namespace InteropApiTests
             this.instance.Init();
 
             this.session = new Session(this.instance);
-
-            var columndefs = new[]
-            {
-                new JET_COLUMNDEF { coltyp = JET_coltyp.Binary },
-                new JET_COLUMNDEF { coltyp = JET_coltyp.Bit },
-                new JET_COLUMNDEF { coltyp = JET_coltyp.Currency },
-                new JET_COLUMNDEF { coltyp = JET_coltyp.DateTime },
-                new JET_COLUMNDEF { coltyp = JET_coltyp.IEEEDouble },
-                new JET_COLUMNDEF { coltyp = JET_coltyp.IEEESingle },
-                new JET_COLUMNDEF { coltyp = JET_coltyp.Long },
-                new JET_COLUMNDEF { coltyp = JET_coltyp.LongBinary },
-                new JET_COLUMNDEF { coltyp = JET_coltyp.LongText, cp = JET_CP.Unicode },
-                new JET_COLUMNDEF { coltyp = JET_coltyp.Short },
-                new JET_COLUMNDEF { coltyp = JET_coltyp.Text, cp = JET_CP.Unicode },
-                new JET_COLUMNDEF { coltyp = JET_coltyp.UnsignedByte },
-            };
-
-            var columnids = new JET_COLUMNID[columndefs.Length];
-            Api.JetOpenTempTable(this.session, columndefs, columndefs.Length, TempTableGrbit.ForceMaterialization, out this.tableid, columnids);
-
-            this.coltypDict = new Dictionary<JET_coltyp, JET_COLUMNID>(columndefs.Length);
-            for (int i = 0; i < columndefs.Length; ++i)
-            {
-                this.coltypDict[columndefs[i].coltyp] = columnids[i];
-            }
+            this.columnDict = SetupHelper.CreateTempTableWithAllColumns(this.session, TempTableGrbit.None, out this.tableid);
         }
 
         /// <summary>
@@ -108,7 +84,7 @@ namespace InteropApiTests
                 return;
             }
 
-            JET_COLUMNID columnid = this.coltypDict[JET_coltyp.Long];
+            JET_COLUMNID columnid = this.columnDict["Int32"];
             int value = Any.Int32;
 
             using (var trx = new Transaction(this.session))
@@ -145,14 +121,14 @@ namespace InteropApiTests
 
             var setcolumns = new[]
             {
-                new JET_SETCOLUMN { cbData = sizeof(byte), columnid = this.coltypDict[JET_coltyp.UnsignedByte], pvData = BitConverter.GetBytes(b) },
-                new JET_SETCOLUMN { cbData = sizeof(short), columnid = this.coltypDict[JET_coltyp.Short], pvData = BitConverter.GetBytes(s) },
-                new JET_SETCOLUMN { cbData = sizeof(int), columnid = this.coltypDict[JET_coltyp.Long], pvData = BitConverter.GetBytes(i) },
-                new JET_SETCOLUMN { cbData = sizeof(long), columnid = this.coltypDict[JET_coltyp.Currency], pvData = BitConverter.GetBytes(l) },
-                new JET_SETCOLUMN { cbData = sizeof(float), columnid = this.coltypDict[JET_coltyp.IEEESingle], pvData = BitConverter.GetBytes(f) },
-                new JET_SETCOLUMN { cbData = sizeof(double), columnid = this.coltypDict[JET_coltyp.IEEEDouble], pvData = BitConverter.GetBytes(d) },
-                new JET_SETCOLUMN { cbData = str.Length * sizeof(char), columnid = this.coltypDict[JET_coltyp.LongText], pvData = Encoding.Unicode.GetBytes(str) },
-                new JET_SETCOLUMN { cbData = data.Length, columnid = this.coltypDict[JET_coltyp.LongBinary], pvData = data },
+                new JET_SETCOLUMN { cbData = sizeof(byte), columnid = this.columnDict["Byte"], pvData = BitConverter.GetBytes(b) },
+                new JET_SETCOLUMN { cbData = sizeof(short), columnid = this.columnDict["Int16"], pvData = BitConverter.GetBytes(s) },
+                new JET_SETCOLUMN { cbData = sizeof(int), columnid = this.columnDict["Int32"], pvData = BitConverter.GetBytes(i) },
+                new JET_SETCOLUMN { cbData = sizeof(long), columnid = this.columnDict["Int64"], pvData = BitConverter.GetBytes(l) },
+                new JET_SETCOLUMN { cbData = sizeof(float), columnid = this.columnDict["Float"], pvData = BitConverter.GetBytes(f) },
+                new JET_SETCOLUMN { cbData = sizeof(double), columnid = this.columnDict["Double"], pvData = BitConverter.GetBytes(d) },
+                new JET_SETCOLUMN { cbData = str.Length * sizeof(char), columnid = this.columnDict["Unicode"], pvData = Encoding.Unicode.GetBytes(str) },
+                new JET_SETCOLUMN { cbData = data.Length, columnid = this.columnDict["Binary"], pvData = data },
             };
 
             using (var trx = new Transaction(this.session))
@@ -165,14 +141,14 @@ namespace InteropApiTests
 
             Api.TryMoveFirst(this.session, this.tableid);
 
-            Assert.AreEqual(b, Api.RetrieveColumnAsByte(this.session, this.tableid, this.coltypDict[JET_coltyp.UnsignedByte]));
-            Assert.AreEqual(s, Api.RetrieveColumnAsInt16(this.session, this.tableid, this.coltypDict[JET_coltyp.Short]));
-            Assert.AreEqual(i, Api.RetrieveColumnAsInt32(this.session, this.tableid, this.coltypDict[JET_coltyp.Long]));
-            Assert.AreEqual(l, Api.RetrieveColumnAsInt64(this.session, this.tableid, this.coltypDict[JET_coltyp.Currency]));
-            Assert.AreEqual(f, Api.RetrieveColumnAsFloat(this.session, this.tableid, this.coltypDict[JET_coltyp.IEEESingle]));
-            Assert.AreEqual(d, Api.RetrieveColumnAsDouble(this.session, this.tableid, this.coltypDict[JET_coltyp.IEEEDouble]));
-            Assert.AreEqual(str, Api.RetrieveColumnAsString(this.session, this.tableid, this.coltypDict[JET_coltyp.LongText]));
-            CollectionAssert.AreEqual(data, Api.RetrieveColumn(this.session, this.tableid, this.coltypDict[JET_coltyp.LongBinary]));
+            Assert.AreEqual(b, Api.RetrieveColumnAsByte(this.session, this.tableid, this.columnDict["Byte"]));
+            Assert.AreEqual(s, Api.RetrieveColumnAsInt16(this.session, this.tableid, this.columnDict["Int16"]));
+            Assert.AreEqual(i, Api.RetrieveColumnAsInt32(this.session, this.tableid, this.columnDict["Int32"]));
+            Assert.AreEqual(l, Api.RetrieveColumnAsInt64(this.session, this.tableid, this.columnDict["Int64"]));
+            Assert.AreEqual(f, Api.RetrieveColumnAsFloat(this.session, this.tableid, this.columnDict["Float"]));
+            Assert.AreEqual(d, Api.RetrieveColumnAsDouble(this.session, this.tableid, this.columnDict["Double"]));
+            Assert.AreEqual(str, Api.RetrieveColumnAsString(this.session, this.tableid, this.columnDict["Unicode"]));
+            CollectionAssert.AreEqual(data, Api.RetrieveColumn(this.session, this.tableid, this.columnDict["Binary"]));
         }
 
         /// <summary>
@@ -189,10 +165,10 @@ namespace InteropApiTests
 
             var setcolumns = new[]
             {
-                new JET_SETCOLUMN { cbData = sizeof(short), columnid = this.coltypDict[JET_coltyp.Short], pvData = BitConverter.GetBytes(s) },
-                new JET_SETCOLUMN { cbData = sizeof(double), columnid = this.coltypDict[JET_coltyp.IEEEDouble], pvData = BitConverter.GetBytes(d) },
-                new JET_SETCOLUMN { cbData = str.Length * sizeof(char), columnid = this.coltypDict[JET_coltyp.LongText], pvData = Encoding.Unicode.GetBytes(str) },
-                new JET_SETCOLUMN { cbData = 0, columnid = this.coltypDict[JET_coltyp.LongBinary], pvData = null },
+                new JET_SETCOLUMN { cbData = sizeof(short), columnid = this.columnDict["Int16"], pvData = BitConverter.GetBytes(s) },
+                new JET_SETCOLUMN { cbData = sizeof(double), columnid = this.columnDict["Double"], pvData = BitConverter.GetBytes(d) },
+                new JET_SETCOLUMN { cbData = str.Length * sizeof(char), columnid = this.columnDict["Unicode"], pvData = Encoding.Unicode.GetBytes(str) },
+                new JET_SETCOLUMN { cbData = 0, columnid = this.columnDict["Binary"], pvData = null },
             };
 
             using (var trx = new Transaction(this.session))
@@ -207,10 +183,10 @@ namespace InteropApiTests
 
             var retrievecolumns = new[]
             {
-                new JET_RETRIEVECOLUMN { cbData = sizeof(short), columnid = this.coltypDict[JET_coltyp.Short], pvData  = new byte[sizeof(short)] },
-                new JET_RETRIEVECOLUMN { cbData = sizeof(double), columnid = this.coltypDict[JET_coltyp.IEEEDouble], pvData = new byte[sizeof(double)] },
-                new JET_RETRIEVECOLUMN { cbData = str.Length * sizeof(char) * 2, columnid = this.coltypDict[JET_coltyp.LongText], pvData = new byte[str.Length * sizeof(char) * 2] },
-                new JET_RETRIEVECOLUMN { cbData = 10, columnid = this.coltypDict[JET_coltyp.LongBinary], pvData = new byte[10] },
+                new JET_RETRIEVECOLUMN { cbData = sizeof(short), columnid = this.columnDict["Int16"], pvData  = new byte[sizeof(short)] },
+                new JET_RETRIEVECOLUMN { cbData = sizeof(double), columnid = this.columnDict["Double"], pvData = new byte[sizeof(double)] },
+                new JET_RETRIEVECOLUMN { cbData = str.Length * sizeof(char) * 2, columnid = this.columnDict["Unicode"], pvData = new byte[str.Length * sizeof(char) * 2] },
+                new JET_RETRIEVECOLUMN { cbData = 10, columnid = this.columnDict["Binary"], pvData = new byte[10] },
             };
 
             for (int i = 0; i < retrievecolumns.Length; ++i)
@@ -253,14 +229,14 @@ namespace InteropApiTests
             using (var trx = new Transaction(this.session))
             using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
             {
-                Api.SetColumn(this.session, this.tableid, this.coltypDict[JET_coltyp.LongBinary], data);
+                Api.SetColumn(this.session, this.tableid, this.columnDict["Binary"], data);
                 update.SaveAndGotoBookmark();
                 trx.Commit(CommitTransactionGrbit.None);
             }
 
             var retrievecolumns = new[]
             {
-                new JET_RETRIEVECOLUMN { columnid = this.coltypDict[JET_coltyp.LongBinary], itagSequence = 1 },
+                new JET_RETRIEVECOLUMN { columnid = this.columnDict["Binary"], itagSequence = 1 },
             };
 
             Assert.AreEqual(
@@ -272,36 +248,44 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test JetSetColumns.
+        /// Test SetColumns.
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test JetSetColumns")]
+        [Description("Test SetColumns")]
         public void SetColumns()
         {
             bool bit = true;
             byte b = Any.Byte;
             short i16 = Any.Int16;
+            ushort ui16 = Any.UInt16;
             int i32 = Any.Int32;
+            uint ui32 = Any.UInt32;
             long i64 = Any.Int64;
+            ulong ui64 = Any.UInt64;
             float f = Any.Float;
             double d = Any.Double;
             DateTime date = Any.DateTime;
+            Guid guid = Any.Guid;
             string s = Any.String;
             byte[] bytes = Any.BytesOfLength(1023);
 
             var columnValues = new ColumnValue[]
             {
-                new BoolColumnValue { Columnid = this.coltypDict[JET_coltyp.Bit], Value = bit },
-                new ByteColumnValue { Columnid = this.coltypDict[JET_coltyp.UnsignedByte], Value = b },
-                new Int16ColumnValue { Columnid = this.coltypDict[JET_coltyp.Short], Value = i16 },
-                new Int32ColumnValue { Columnid = this.coltypDict[JET_coltyp.Long], Value = i32 },
-                new Int64ColumnValue { Columnid = this.coltypDict[JET_coltyp.Currency], Value = i64 },
-                new FloatColumnValue { Columnid = this.coltypDict[JET_coltyp.IEEESingle], Value = f },
-                new DoubleColumnValue { Columnid = this.coltypDict[JET_coltyp.IEEEDouble], Value = d },
-                new DateTimeColumnValue { Columnid = this.coltypDict[JET_coltyp.DateTime], Value = date },
-                new StringColumnValue { Columnid = this.coltypDict[JET_coltyp.LongText], Value = s },
-                new BytesColumnValue { Columnid = this.coltypDict[JET_coltyp.LongBinary], Value = bytes },
+                new BoolColumnValue { Columnid = this.columnDict["Boolean"], Value = bit },
+                new ByteColumnValue { Columnid = this.columnDict["Byte"], Value = b },
+                new Int16ColumnValue { Columnid = this.columnDict["Int16"], Value = i16 },
+                new UInt16ColumnValue { Columnid = this.columnDict["UInt16"], Value = ui16 },
+                new Int32ColumnValue { Columnid = this.columnDict["Int32"], Value = i32 },
+                new UInt32ColumnValue { Columnid = this.columnDict["UInt32"], Value = ui32 },
+                new Int64ColumnValue { Columnid = this.columnDict["Int64"], Value = i64 },
+                new UInt64ColumnValue { Columnid = this.columnDict["UInt64"], Value = ui64 },
+                new FloatColumnValue { Columnid = this.columnDict["Float"], Value = f },
+                new DoubleColumnValue { Columnid = this.columnDict["Double"], Value = d },
+                new DateTimeColumnValue { Columnid = this.columnDict["DateTime"], Value = date },
+                new GuidColumnValue() { Columnid = this.columnDict["Guid"], Value = guid },
+                new StringColumnValue { Columnid = this.columnDict["Unicode"], Value = s },
+                new BytesColumnValue { Columnid = this.columnDict["Binary"], Value = bytes },
             };
 
             using (var trx = new Transaction(this.session))
@@ -314,40 +298,42 @@ namespace InteropApiTests
 
             Api.TryMoveFirst(this.session, this.tableid);
 
-            Assert.AreEqual(bit, Api.RetrieveColumnAsBoolean(this.session, this.tableid, this.coltypDict[JET_coltyp.Bit]));
-            Assert.AreEqual(b, Api.RetrieveColumnAsByte(this.session, this.tableid, this.coltypDict[JET_coltyp.UnsignedByte]));
-            Assert.AreEqual(i16, Api.RetrieveColumnAsInt16(this.session, this.tableid, this.coltypDict[JET_coltyp.Short]));
-            Assert.AreEqual(i32, Api.RetrieveColumnAsInt32(this.session, this.tableid, this.coltypDict[JET_coltyp.Long]));
-            Assert.AreEqual(i64, Api.RetrieveColumnAsInt64(this.session, this.tableid, this.coltypDict[JET_coltyp.Currency]));
-            Assert.AreEqual(f, Api.RetrieveColumnAsFloat(this.session, this.tableid, this.coltypDict[JET_coltyp.IEEESingle]));
-            Assert.AreEqual(d, Api.RetrieveColumnAsDouble(this.session, this.tableid, this.coltypDict[JET_coltyp.IEEEDouble]));
-            Assert.AreEqual(date, Api.RetrieveColumnAsDateTime(this.session, this.tableid, this.coltypDict[JET_coltyp.DateTime]));
-            Assert.AreEqual(s, Api.RetrieveColumnAsString(this.session, this.tableid, this.coltypDict[JET_coltyp.LongText]));
-            CollectionAssert.AreEqual(bytes, Api.RetrieveColumn(this.session, this.tableid, this.coltypDict[JET_coltyp.LongBinary]));
+            Assert.AreEqual(bit, Api.RetrieveColumnAsBoolean(this.session, this.tableid, this.columnDict["Boolean"]));
+            Assert.AreEqual(b, Api.RetrieveColumnAsByte(this.session, this.tableid, this.columnDict["Byte"]));
+            Assert.AreEqual(i16, Api.RetrieveColumnAsInt16(this.session, this.tableid, this.columnDict["Int16"]));
+            Assert.AreEqual(ui16, Api.RetrieveColumnAsUInt16(this.session, this.tableid, this.columnDict["UInt16"]));
+            Assert.AreEqual(i32, Api.RetrieveColumnAsInt32(this.session, this.tableid, this.columnDict["Int32"]));
+            Assert.AreEqual(ui32, Api.RetrieveColumnAsUInt32(this.session, this.tableid, this.columnDict["UInt32"]));
+            Assert.AreEqual(i64, Api.RetrieveColumnAsInt64(this.session, this.tableid, this.columnDict["Int64"]));
+            Assert.AreEqual(ui64, Api.RetrieveColumnAsUInt64(this.session, this.tableid, this.columnDict["UInt64"]));
+            Assert.AreEqual(f, Api.RetrieveColumnAsFloat(this.session, this.tableid, this.columnDict["Float"]));
+            Assert.AreEqual(d, Api.RetrieveColumnAsDouble(this.session, this.tableid, this.columnDict["Double"]));
+            Assert.AreEqual(date, Api.RetrieveColumnAsDateTime(this.session, this.tableid, this.columnDict["DateTime"]));
+            Assert.AreEqual(guid, Api.RetrieveColumnAsGuid(this.session, this.tableid, this.columnDict["Guid"]));
+            Assert.AreEqual(s, Api.RetrieveColumnAsString(this.session, this.tableid, this.columnDict["Unicode"]));
+            CollectionAssert.AreEqual(bytes, Api.RetrieveColumn(this.session, this.tableid, this.columnDict["Binary"]));
         }
 
         /// <summary>
-        /// Test JetSetColumns with null and zero-length data.
+        /// Test SetColumns with null data.
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test JetSetColumns with null and zero-length data")]
-        public void SetColumnsWithNullAndZeroLength()
+        [Description("Test SetColumns with null data")]
+        public void SetColumnsWithNull()
         {
             var columnValues = new ColumnValue[]
             {
-                new BoolColumnValue { Columnid = this.coltypDict[JET_coltyp.Bit], Value = null },
-                new ByteColumnValue { Columnid = this.coltypDict[JET_coltyp.UnsignedByte], Value = null },
-                new Int16ColumnValue { Columnid = this.coltypDict[JET_coltyp.Short], Value = null },
-                new Int32ColumnValue { Columnid = this.coltypDict[JET_coltyp.Long], Value = null },
-                new Int64ColumnValue { Columnid = this.coltypDict[JET_coltyp.Currency], Value = null },
-                new FloatColumnValue { Columnid = this.coltypDict[JET_coltyp.IEEESingle], Value = null },
-                new DoubleColumnValue { Columnid = this.coltypDict[JET_coltyp.IEEEDouble], Value = null },
-                new DateTimeColumnValue { Columnid = this.coltypDict[JET_coltyp.DateTime], Value = null },
-                new StringColumnValue { Columnid = this.coltypDict[JET_coltyp.LongText], Value = null },
-                new BytesColumnValue { Columnid = this.coltypDict[JET_coltyp.LongBinary], Value = null },
-                new StringColumnValue { Columnid = this.coltypDict[JET_coltyp.Text], Value = String.Empty },
-                new BytesColumnValue { Columnid = this.coltypDict[JET_coltyp.Binary], Value = new byte[0] },
+                new BoolColumnValue { Columnid = this.columnDict["Boolean"], Value = null },
+                new ByteColumnValue { Columnid = this.columnDict["Byte"], Value = null },
+                new Int16ColumnValue { Columnid = this.columnDict["Int16"], Value = null },
+                new Int32ColumnValue { Columnid = this.columnDict["Int32"], Value = null },
+                new Int64ColumnValue { Columnid = this.columnDict["Int64"], Value = null },
+                new FloatColumnValue { Columnid = this.columnDict["Float"], Value = null },
+                new DoubleColumnValue { Columnid = this.columnDict["Double"], Value = null },
+                new DateTimeColumnValue { Columnid = this.columnDict["DateTime"], Value = null },
+                new StringColumnValue { Columnid = this.columnDict["Unicode"], Value = null },
+                new BytesColumnValue { Columnid = this.columnDict["Binary"], Value = null },
             };
 
             using (var trx = new Transaction(this.session))
@@ -360,18 +346,253 @@ namespace InteropApiTests
 
             Api.TryMoveFirst(this.session, this.tableid);
 
-            Assert.IsNull(Api.RetrieveColumnAsBoolean(this.session, this.tableid, this.coltypDict[JET_coltyp.Bit]));
-            Assert.IsNull(Api.RetrieveColumnAsByte(this.session, this.tableid, this.coltypDict[JET_coltyp.UnsignedByte]));
-            Assert.IsNull(Api.RetrieveColumnAsInt16(this.session, this.tableid, this.coltypDict[JET_coltyp.Short]));
-            Assert.IsNull(Api.RetrieveColumnAsInt32(this.session, this.tableid, this.coltypDict[JET_coltyp.Long]));
-            Assert.IsNull(Api.RetrieveColumnAsInt64(this.session, this.tableid, this.coltypDict[JET_coltyp.Currency]));
-            Assert.IsNull(Api.RetrieveColumnAsFloat(this.session, this.tableid, this.coltypDict[JET_coltyp.IEEESingle]));
-            Assert.IsNull(Api.RetrieveColumnAsDouble(this.session, this.tableid, this.coltypDict[JET_coltyp.IEEEDouble]));
-            Assert.IsNull(Api.RetrieveColumnAsDateTime(this.session, this.tableid, this.coltypDict[JET_coltyp.DateTime]));
-            Assert.IsNull(Api.RetrieveColumnAsString(this.session, this.tableid, this.coltypDict[JET_coltyp.LongText]));
-            Assert.IsNull(Api.RetrieveColumn(this.session, this.tableid, this.coltypDict[JET_coltyp.LongBinary]));
-            Assert.AreEqual(String.Empty, Api.RetrieveColumnAsString(this.session, this.tableid, this.coltypDict[JET_coltyp.Text]));
-            CollectionAssert.AreEqual(new byte[0], Api.RetrieveColumn(this.session, this.tableid, this.coltypDict[JET_coltyp.Binary]));
+            Assert.IsNull(Api.RetrieveColumnAsBoolean(this.session, this.tableid, this.columnDict["Boolean"]));
+            Assert.IsNull(Api.RetrieveColumnAsByte(this.session, this.tableid, this.columnDict["Byte"]));
+            Assert.IsNull(Api.RetrieveColumnAsInt16(this.session, this.tableid, this.columnDict["Int16"]));
+            Assert.IsNull(Api.RetrieveColumnAsInt32(this.session, this.tableid, this.columnDict["Int32"]));
+            Assert.IsNull(Api.RetrieveColumnAsInt64(this.session, this.tableid, this.columnDict["Int64"]));
+            Assert.IsNull(Api.RetrieveColumnAsFloat(this.session, this.tableid, this.columnDict["Float"]));
+            Assert.IsNull(Api.RetrieveColumnAsDouble(this.session, this.tableid, this.columnDict["Double"]));
+            Assert.IsNull(Api.RetrieveColumnAsDateTime(this.session, this.tableid, this.columnDict["DateTime"]));
+            Assert.IsNull(Api.RetrieveColumnAsString(this.session, this.tableid, this.columnDict["Unicode"]));
+            Assert.IsNull(Api.RetrieveColumn(this.session, this.tableid, this.columnDict["Binary"]));
+        }
+
+        /// <summary>
+        /// Test SetColumns with zero length data.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Test SetColumns with zero length data")]
+        public void SetColumnsWithZeroLength()
+        {
+            var columnValues = new ColumnValue[]
+            {
+                new StringColumnValue { Columnid = this.columnDict["Unicode"], Value = String.Empty },
+                new BytesColumnValue { Columnid = this.columnDict["Binary"], Value = new byte[0] },
+            };
+
+            using (var trx = new Transaction(this.session))
+            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
+            {
+                Api.SetColumns(this.session, this.tableid, columnValues);
+                update.Save();
+                trx.Commit(CommitTransactionGrbit.None);
+            }
+
+            Api.TryMoveFirst(this.session, this.tableid);
+
+            Assert.AreEqual(String.Empty, Api.RetrieveColumnAsString(this.session, this.tableid, this.columnDict["Unicode"]));
+            CollectionAssert.AreEqual(new byte[0], Api.RetrieveColumn(this.session, this.tableid, this.columnDict["Binary"]));
+        }
+
+        /// <summary>
+        /// Test RetrieveColumns.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Test RetrieveColumns")]
+        public void RetrieveColumns()
+        {
+            bool bit = Any.Boolean;
+            byte b = Any.Byte;
+            short i16 = Any.Int16;
+            ushort ui16 = Any.UInt16;
+            int i32 = Any.Int32;
+            uint ui32 = Any.UInt32;
+            long i64 = Any.Int64;
+            ulong ui64 = Any.UInt64;
+            float f = Any.Float;
+            double d = Any.Double;
+            DateTime date = Any.DateTime;
+            Guid guid = Any.Guid;
+            string str = Any.String;
+            byte[] bytes = Any.BytesOfLength(1023);
+
+            using (var trx = new Transaction(this.session))
+            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
+            {
+                Api.SetColumn(this.session, this.tableid, this.columnDict["Boolean"], bit);
+                Api.SetColumn(this.session, this.tableid, this.columnDict["Byte"], b);
+                Api.SetColumn(this.session, this.tableid, this.columnDict["Int16"], i16);
+                Api.SetColumn(this.session, this.tableid, this.columnDict["UInt16"], ui16);
+                Api.SetColumn(this.session, this.tableid, this.columnDict["Int32"], i32);
+                Api.SetColumn(this.session, this.tableid, this.columnDict["UInt32"], ui32);
+                Api.SetColumn(this.session, this.tableid, this.columnDict["Int64"], i64);
+                Api.SetColumn(this.session, this.tableid, this.columnDict["UInt64"], ui64);
+                Api.SetColumn(this.session, this.tableid, this.columnDict["Float"], f);
+                Api.SetColumn(this.session, this.tableid, this.columnDict["Double"], d);
+                Api.SetColumn(this.session, this.tableid, this.columnDict["DateTime"], date);
+                Api.SetColumn(this.session, this.tableid, this.columnDict["Guid"], guid);
+                Api.SetColumn(this.session, this.tableid, this.columnDict["Unicode"], str, Encoding.Unicode);
+                Api.SetColumn(this.session, this.tableid, this.columnDict["Binary"], bytes);
+
+                update.SaveAndGotoBookmark();
+                trx.Commit(CommitTransactionGrbit.None);
+            }
+
+            var columnValues = new ColumnValue[]
+            {
+                new BoolColumnValue { Columnid = this.columnDict["Boolean"] },
+                new ByteColumnValue { Columnid = this.columnDict["Byte"] },
+                new Int16ColumnValue { Columnid = this.columnDict["Int16"] },
+                new UInt16ColumnValue { Columnid = this.columnDict["UInt16"] },
+                new Int32ColumnValue { Columnid = this.columnDict["Int32"] },
+                new UInt32ColumnValue { Columnid = this.columnDict["UInt32"] },
+                new Int64ColumnValue { Columnid = this.columnDict["Int64"] },
+                new UInt64ColumnValue { Columnid = this.columnDict["UInt64"] },
+                new FloatColumnValue { Columnid = this.columnDict["Float"] },
+                new DoubleColumnValue { Columnid = this.columnDict["Double"] },
+                new DateTimeColumnValue { Columnid = this.columnDict["DateTime"] },
+                new GuidColumnValue { Columnid = this.columnDict["Guid"] },
+                new StringColumnValue { Columnid = this.columnDict["Unicode"] },
+                new BytesColumnValue { Columnid = this.columnDict["Binary"] },
+            };
+
+            Api.RetrieveColumns(this.session, this.tableid, columnValues);
+
+            Assert.AreEqual(bit, columnValues[0].ValueAsObject);
+            Assert.AreEqual(b, columnValues[1].ValueAsObject);
+            Assert.AreEqual(i16, columnValues[2].ValueAsObject);
+            Assert.AreEqual(ui16, columnValues[3].ValueAsObject);
+            Assert.AreEqual(i32, columnValues[4].ValueAsObject);
+            Assert.AreEqual(ui32, columnValues[5].ValueAsObject);
+            Assert.AreEqual(i64, columnValues[6].ValueAsObject);
+            Assert.AreEqual(ui64, columnValues[7].ValueAsObject);
+            Assert.AreEqual(f, columnValues[8].ValueAsObject);
+            Assert.AreEqual(d, columnValues[9].ValueAsObject);
+            Assert.AreEqual(date, columnValues[10].ValueAsObject);
+            Assert.AreEqual(guid, columnValues[11].ValueAsObject);
+            Assert.AreEqual(str, columnValues[12].ValueAsObject);
+            CollectionAssert.AreEqual(bytes, columnValues[13].ValueAsObject as byte[]);
+        }
+
+        /// <summary>
+        /// Test RetrieveColumns with large values.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test RetrieveColumns with large values")]
+        public void RetrieveColumnsWithLargeValues()
+        {
+            string str = Any.StringOfLength(129 * 1024);
+            byte[] bytes = Any.BytesOfLength(127 * 1024);
+
+            using (var trx = new Transaction(this.session))
+            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
+            {
+                Api.SetColumn(this.session, this.tableid, this.columnDict["Unicode"], str, Encoding.Unicode);
+                Api.SetColumn(this.session, this.tableid, this.columnDict["Binary"], bytes);
+
+                update.SaveAndGotoBookmark();
+                trx.Commit(CommitTransactionGrbit.None);
+            }
+
+            var columnValues = new ColumnValue[]
+            {
+                new StringColumnValue { Columnid = this.columnDict["Unicode"] },
+                new BytesColumnValue { Columnid = this.columnDict["Binary"] },
+            };
+
+            Api.RetrieveColumns(this.session, this.tableid, columnValues);
+
+            Assert.AreEqual(str, columnValues[0].ValueAsObject);
+            CollectionAssert.AreEqual(bytes, columnValues[1].ValueAsObject as byte[]);
+        }
+
+        /// <summary>
+        /// Test RetrieveColumns with zero-length columns.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Test RetrieveColumns with zero length columns")]
+        public void RetrieveColumnsWithZeroLength()
+        {
+            using (var trx = new Transaction(this.session))
+            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
+            {
+                Api.SetColumn(this.session, this.tableid, this.columnDict["Unicode"], String.Empty, Encoding.Unicode);
+                Api.SetColumn(this.session, this.tableid, this.columnDict["Binary"], new byte[0]);
+                update.SaveAndGotoBookmark();
+                trx.Commit(CommitTransactionGrbit.None);
+            }
+
+            var columnValues = new ColumnValue[]
+            {
+                new StringColumnValue { Columnid = this.columnDict["Unicode"] },
+                new BytesColumnValue { Columnid = this.columnDict["Binary"] },
+            };
+
+            Api.RetrieveColumns(this.session, this.tableid, columnValues);
+
+            Assert.AreEqual(String.Empty, columnValues[0].ValueAsObject);
+            CollectionAssert.AreEqual(new byte[0], columnValues[1].ValueAsObject as byte[]);
+        }
+
+        /// <summary>
+        /// Test RetrieveColumns with null values.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Test RetrieveColumns with nulls")]
+        public void RetrieveColumnsWithNull()
+        {
+            using (var trx = new Transaction(this.session))
+            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
+            {
+                update.SaveAndGotoBookmark();
+                trx.Commit(CommitTransactionGrbit.None);
+            }
+
+            var columnValues = new ColumnValue[]
+            {
+                new BoolColumnValue { Columnid = this.columnDict["Boolean"] },
+                new ByteColumnValue { Columnid = this.columnDict["Byte"] },
+                new Int16ColumnValue { Columnid = this.columnDict["Int16"] },
+                new UInt16ColumnValue { Columnid = this.columnDict["UInt16"] },
+                new Int32ColumnValue { Columnid = this.columnDict["Int32"] },
+                new UInt32ColumnValue { Columnid = this.columnDict["UInt32"] },
+                new Int64ColumnValue { Columnid = this.columnDict["Int64"] },
+                new UInt64ColumnValue { Columnid = this.columnDict["UInt64"] },
+                new FloatColumnValue { Columnid = this.columnDict["Float"] },
+                new DoubleColumnValue { Columnid = this.columnDict["Double"] },
+                new DateTimeColumnValue { Columnid = this.columnDict["DateTime"] },
+                new GuidColumnValue { Columnid = this.columnDict["Guid"] },
+                new StringColumnValue { Columnid = this.columnDict["Unicode"] },
+                new BytesColumnValue { Columnid = this.columnDict["Binary"] },
+            };
+
+            Api.RetrieveColumns(this.session, this.tableid, columnValues);
+
+            foreach (var c in columnValues)
+            {
+                Assert.IsNull(c.ValueAsObject);
+            }
+        }
+
+        /// <summary>
+        /// Test RetrieveColumns with an invalid column.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Test RetrieveColumns with an invalid column")]
+        [ExpectedException(typeof(EsentInvalidColumnException))]
+        public void RetrieveColumnsWithInvalidColumn()
+        {
+            using (var trx = new Transaction(this.session))
+            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
+            {
+                Api.SetColumn(this.session, this.tableid, this.columnDict["Int64"], Any.Int64);
+                update.SaveAndGotoBookmark();
+                trx.Commit(CommitTransactionGrbit.None);
+            }
+
+            var columnValues = new ColumnValue[]
+            {
+                new GuidColumnValue { Columnid = this.columnDict["Int64"] },
+            };
+
+            Api.RetrieveColumns(this.session, this.tableid, columnValues);
         }
 
         #endregion

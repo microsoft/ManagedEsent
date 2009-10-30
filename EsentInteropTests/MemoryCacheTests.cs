@@ -92,6 +92,19 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify allocating multiple buffers gives different buffers.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify allocating a buffer gives different buffers")]
+        public void VerifyMultipleAllocationsReturnUniqueBuffers()
+        {
+            byte[] buffer1 = this.memoryCache.Allocate();
+            byte[] buffer2 = this.memoryCache.Allocate();
+            Assert.AreNotSame(buffer1, buffer2);
+        }
+
+        /// <summary>
         /// Allocating a buffer, freeing it and reallocating should
         /// give back the same buffer.
         /// </summary>

@@ -47,11 +47,6 @@ namespace InteropApiTests
         /// </summary>
         private JET_COLUMNID columnid;
 
-        /// <summary>
-        /// Map a type name to the columndef used to create it.
-        /// </summary>
-        private Dictionary<string, JET_COLUMNDEF> columndefDictionary;
-
         #region Setup/Teardown
 
         /// <summary>
@@ -70,25 +65,6 @@ namespace InteropApiTests
             Api.JetInit(ref this.instance);
             Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
             this.tableid = JET_TABLEID.Nil;
-
-            this.columndefDictionary = new Dictionary<string, JET_COLUMNDEF>(StringComparer.OrdinalIgnoreCase)
-            {
-                { "Boolean", new JET_COLUMNDEF() { coltyp = JET_coltyp.Bit } },
-                { "Byte", new JET_COLUMNDEF() { coltyp = JET_coltyp.UnsignedByte } },
-                { "Int16", new JET_COLUMNDEF() { coltyp = JET_coltyp.Short } },
-                { "UInt16", new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 2 } },
-                { "Int32", new JET_COLUMNDEF() { coltyp = JET_coltyp.Long } },
-                { "UInt32", new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 4 } },            
-                { "Int64", new JET_COLUMNDEF() { coltyp = JET_coltyp.Currency } },
-                { "UInt64", new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 8 } },            
-                { "Guid", new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 16 } },            
-                { "ASCII", new JET_COLUMNDEF() { coltyp = JET_coltyp.Text, cp = JET_CP.ASCII } },            
-                { "Unicode", new JET_COLUMNDEF() { coltyp = JET_coltyp.Text, cp = JET_CP.Unicode } },            
-                { "Float", new JET_COLUMNDEF() { coltyp = JET_coltyp.IEEESingle } },
-                { "Double", new JET_COLUMNDEF() { coltyp = JET_coltyp.IEEEDouble } },
-                { "DateTime", new JET_COLUMNDEF() { coltyp = JET_coltyp.DateTime } },
-                { "Binary", new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary } },
-            };
         }
 
         /// <summary>
@@ -119,25 +95,25 @@ namespace InteropApiTests
             Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
             Assert.AreNotEqual(JET_SESID.Nil, this.sesid);
             Assert.AreEqual(JET_TABLEID.Nil, this.tableid);
-            Assert.IsNotNull(this.columndefDictionary);
+            Assert.IsNotNull(SetupHelper.ColumndefDictionary);
 
-            Assert.IsTrue(this.columndefDictionary.ContainsKey("boolean"));
-            Assert.IsTrue(this.columndefDictionary.ContainsKey("byte"));
-            Assert.IsTrue(this.columndefDictionary.ContainsKey("int16"));
-            Assert.IsTrue(this.columndefDictionary.ContainsKey("int32"));
-            Assert.IsTrue(this.columndefDictionary.ContainsKey("int64"));
-            Assert.IsTrue(this.columndefDictionary.ContainsKey("float"));
-            Assert.IsTrue(this.columndefDictionary.ContainsKey("double"));
-            Assert.IsTrue(this.columndefDictionary.ContainsKey("binary"));
-            Assert.IsTrue(this.columndefDictionary.ContainsKey("ascii"));
-            Assert.IsTrue(this.columndefDictionary.ContainsKey("unicode"));
-            Assert.IsTrue(this.columndefDictionary.ContainsKey("guid"));
-            Assert.IsTrue(this.columndefDictionary.ContainsKey("datetime"));
-            Assert.IsTrue(this.columndefDictionary.ContainsKey("uint16"));
-            Assert.IsTrue(this.columndefDictionary.ContainsKey("uint32"));
-            Assert.IsTrue(this.columndefDictionary.ContainsKey("uint64"));
+            Assert.IsTrue(SetupHelper.ColumndefDictionary.ContainsKey("boolean"));
+            Assert.IsTrue(SetupHelper.ColumndefDictionary.ContainsKey("byte"));
+            Assert.IsTrue(SetupHelper.ColumndefDictionary.ContainsKey("int16"));
+            Assert.IsTrue(SetupHelper.ColumndefDictionary.ContainsKey("int32"));
+            Assert.IsTrue(SetupHelper.ColumndefDictionary.ContainsKey("int64"));
+            Assert.IsTrue(SetupHelper.ColumndefDictionary.ContainsKey("float"));
+            Assert.IsTrue(SetupHelper.ColumndefDictionary.ContainsKey("double"));
+            Assert.IsTrue(SetupHelper.ColumndefDictionary.ContainsKey("binary"));
+            Assert.IsTrue(SetupHelper.ColumndefDictionary.ContainsKey("ascii"));
+            Assert.IsTrue(SetupHelper.ColumndefDictionary.ContainsKey("unicode"));
+            Assert.IsTrue(SetupHelper.ColumndefDictionary.ContainsKey("guid"));
+            Assert.IsTrue(SetupHelper.ColumndefDictionary.ContainsKey("datetime"));
+            Assert.IsTrue(SetupHelper.ColumndefDictionary.ContainsKey("uint16"));
+            Assert.IsTrue(SetupHelper.ColumndefDictionary.ContainsKey("uint32"));
+            Assert.IsTrue(SetupHelper.ColumndefDictionary.ContainsKey("uint64"));
 
-            Assert.IsFalse(this.columndefDictionary.ContainsKey("nosuchcolumn"));
+            Assert.IsFalse(SetupHelper.ColumndefDictionary.ContainsKey("nosuchcolumn"));
         }
 
         #endregion Setup/Teardown
@@ -492,7 +468,7 @@ namespace InteropApiTests
         /// <param name="column">Name of the column. Used to look up the column definition</param>
         private void CreateTempTableOnColumn(string column)
         {
-            var columns = new[] { this.columndefDictionary[column] };
+            var columns = new[] { SetupHelper.ColumndefDictionary[column] };
             columns[0].grbit |= ColumndefGrbit.TTKey;
             var columnids = new JET_COLUMNID[1];
 

@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="ApiConstants.cs" />
     <Compile Include="Conversions.cs" />
+    <Compile Include="JetCallbackWrapper.cs" />
     <Compile Include="jet_callback.cs" />
     <Compile Include="Esent\EsentJetApi.cs" />
     <Compile Include="Esent\EsentNativeMethods.cs" />
@@ -167,6 +168,7 @@
     <Compile Include="Windows7Api.cs" />
     <Compile Include="Windows7Grbits.cs" />
     <Compile Include="Windows7Param.cs" />
+    <Compile Include="CallbackWrappers.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ToDo.txt" />

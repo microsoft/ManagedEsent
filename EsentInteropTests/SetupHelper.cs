@@ -7,6 +7,7 @@
 namespace InteropApiTests
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using Microsoft.Isam.Esent.Interop;
 
@@ -16,6 +17,29 @@ namespace InteropApiTests
     internal static class SetupHelper
     {
         /// <summary>
+        /// A dictionary mapping column types to column definitions.
+        /// </summary>
+        public static readonly Dictionary<string, JET_COLUMNDEF> ColumndefDictionary = new Dictionary<string, JET_COLUMNDEF>(StringComparer.OrdinalIgnoreCase)
+        {
+            // BUG: Older version of ESENT don't support all column types for temp tables so we'll just use binary columns for the new types.
+            { "Boolean", new JET_COLUMNDEF() { coltyp = JET_coltyp.Bit } },
+            { "Byte", new JET_COLUMNDEF() { coltyp = JET_coltyp.UnsignedByte } },
+            { "Int16", new JET_COLUMNDEF() { coltyp = JET_coltyp.Short } },
+            { "UInt16", new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 2 } },
+            { "Int32", new JET_COLUMNDEF() { coltyp = JET_coltyp.Long } },
+            { "UInt32", new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 4 } },            
+            { "Int64", new JET_COLUMNDEF() { coltyp = JET_coltyp.Currency } },
+            { "UInt64", new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 8 } },            
+            { "Guid", new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 16 } },            
+            { "ASCII", new JET_COLUMNDEF() { coltyp = JET_coltyp.LongText, cp = JET_CP.ASCII } },            
+            { "Unicode", new JET_COLUMNDEF() { coltyp = JET_coltyp.LongText, cp = JET_CP.Unicode } },            
+            { "Float", new JET_COLUMNDEF() { coltyp = JET_coltyp.IEEESingle } },
+            { "Double", new JET_COLUMNDEF() { coltyp = JET_coltyp.IEEEDouble } },
+            { "DateTime", new JET_COLUMNDEF() { coltyp = JET_coltyp.DateTime } },
+            { "Binary", new JET_COLUMNDEF() { coltyp = JET_coltyp.LongBinary } },
+        };
+
+        /// <summary>
         /// Static object used for locking.
         /// </summary>
         private static readonly object lockObject = new object();
@@ -24,6 +48,7 @@ namespace InteropApiTests
         /// Number of instances that have been created. Used to create unique names.
         /// </summary>
         private static int instanceNum;
+
 
         /// <summary>
         /// Creates a new random directory in the current working directory. This
@@ -64,6 +89,43 @@ namespace InteropApiTests
             instance.Parameters.Recovery = false;
             instance.Parameters.NoInformationEvent = true;
             instance.Parameters.MaxTemporaryTables = 0;
+        }
+
+        /// <summary>
+        /// Creates a standard temp table with a column for each type.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="grbit">Temporary table options.</param>
+        /// <param name="tableid">Returns the temporary table.</param>
+        /// <returns>A dictionary mapping types to columns.</returns>
+        public static Dictionary<string, JET_COLUMNID> CreateTempTableWithAllColumns(JET_SESID sesid, TempTableGrbit grbit, out JET_TABLEID tableid)
+        {
+            var columnDefs = new List<JET_COLUMNDEF>();
+            var columnNames = new List<string>();
+
+            foreach (KeyValuePair<string, JET_COLUMNDEF> def in ColumndefDictionary)
+            {
+                columnNames.Add(def.Key);
+                columnDefs.Add(def.Value);
+            }
+
+            JET_COLUMNDEF[] columns = columnDefs.ToArray();
+
+            // Make all the columns tagged so they don't appear by default
+            for (int i = 0; i < columns.Length; ++i)
+            {
+                columns[i].grbit |= ColumndefGrbit.ColumnTagged;
+            }
+
+            var columnids = new JET_COLUMNID[columns.Length];
+            Api.JetOpenTempTable(sesid, columns, columns.Length, grbit, out tableid, columnids);
+            var columnidDict = new Dictionary<string, JET_COLUMNID>(StringComparer.OrdinalIgnoreCase);
+            for (int i = 0; i < columnids.Length; i++)
+            {
+                columnidDict[columnNames[i]] = columnids[i];
+            }
+
+            return columnidDict;
         }
 
         /// <summary>

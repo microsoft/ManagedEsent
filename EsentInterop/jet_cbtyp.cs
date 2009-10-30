@@ -95,5 +95,3 @@ namespace Microsoft.Isam.Esent.Interop
         FreeTableLS = 0x400,
     }
 }
-
-
