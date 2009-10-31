@@ -387,6 +387,43 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test SetColumns with multivalues.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Test SetColumns with multivalues")]
+        public void SetColumnsWithMultivalues()
+        {
+            short expected = Any.Int16;
+
+            var columnValues = new ColumnValue[]
+            {
+                new Int16ColumnValue() { Columnid = this.columnDict["Int16"], Value = 0 },
+                new Int16ColumnValue() { Columnid = this.columnDict["Int16"], Value = expected, ItagSequence = 2 },
+            };
+
+            using (var trx = new Transaction(this.session))
+            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
+            {
+                Api.SetColumns(this.session, this.tableid, columnValues);
+                update.Save();
+                trx.Commit(CommitTransactionGrbit.None);
+            }
+
+            Api.TryMoveFirst(this.session, this.tableid);
+
+            short actual = BitConverter.ToInt16(
+                Api.RetrieveColumn(
+                    this.session,
+                    this.tableid,
+                    this.columnDict["int16"],
+                    RetrieveColumnGrbit.None,
+                    new JET_RETINFO { itagSequence = 2 }),
+                0);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
         /// Test RetrieveColumns.
         /// </summary>
         [TestMethod]
@@ -593,6 +630,49 @@ namespace InteropApiTests
             };
 
             Api.RetrieveColumns(this.session, this.tableid, columnValues);
+        }
+
+        /// <summary>
+        /// Test RetrieveColumns with multivalues.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Test RetrieveColumns with multivalues")]
+        public void RetrieveColumnsWithMultivalues()
+        {
+            using (var trx = new Transaction(this.session))
+            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
+            {
+                Api.JetSetColumn(
+                    this.session,
+                    this.tableid,
+                    this.columnDict["uint64"],
+                    BitConverter.GetBytes(5UL),
+                    sizeof(ulong),
+                    SetColumnGrbit.None,
+                    new JET_SETINFO { itagSequence = 1 });
+                Api.JetSetColumn(
+                    this.session,
+                    this.tableid,
+                    this.columnDict["uint64"],
+                    BitConverter.GetBytes(99UL),
+                    sizeof(ulong),
+                    SetColumnGrbit.None,
+                    new JET_SETINFO { itagSequence = 2 });
+                update.SaveAndGotoBookmark();
+                trx.Commit(CommitTransactionGrbit.None);
+            }
+
+            var columnValues = new ColumnValue[]
+            {
+                new UInt64ColumnValue { Columnid = this.columnDict["UInt64"], ItagSequence = 1 },
+                new UInt64ColumnValue { Columnid = this.columnDict["UInt64"], ItagSequence = 2 },
+            };
+
+            Api.RetrieveColumns(this.session, this.tableid, columnValues);
+
+            Assert.AreEqual(5UL, columnValues[0].ValueAsObject);
+            Assert.AreEqual(99UL, columnValues[1].ValueAsObject);
         }
 
         #endregion
