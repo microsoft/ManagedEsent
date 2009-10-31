@@ -63,6 +63,7 @@ namespace InteropApiTests
         /// All DDL should be done in this method.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the ColumnStreamTests fixture")]
         public void Setup()
         {
             this.directory = SetupHelper.CreateRandomDirectory();
@@ -89,6 +90,7 @@ namespace InteropApiTests
         /// Cleanup after all tests have run.
         /// </summary>
         [TestCleanup]
+        [Description("Cleanup the ColumnStreamTests fixture")]
         public void Teardown()
         {
             Api.JetCloseTable(this.sesid, this.tableid);
@@ -102,6 +104,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Check the setup of the ColumnStreamTests fixture")]
         public void VerifyFixtureSetup()
         {
             Assert.IsNotNull(this.table);
@@ -120,6 +123,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify that a ColumnStream supports read")]
         public void ColumnStreamSupportsRead()
         {
             using (var t = new Transaction(this.sesid))
@@ -135,6 +139,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify that a ColumnStream supports write")]
         public void ColumnStreamSupportsWrite()
         {
             using (var t = new Transaction(this.sesid))
@@ -150,6 +155,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify that a ColumnStream supports seek")]
         public void ColumnStreamSupportsSeek()
         {
             using (var t = new Transaction(this.sesid))
@@ -165,6 +171,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test setting the length of a ColumnStream")]
         public void SetColumnStreamLength()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -195,6 +202,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test setting the position of a ColumnStream")]
         public void SetColumnStreamPosition()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -218,10 +226,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test writing to a column stream with a non-zero buffer offset.
+        /// Test writing to a ColumnStream with a non-zero buffer offset.
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test writing to a ColumnStream with a non-zero buffer offset")]
         public void WriteAtNonZeroOffset()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -252,10 +261,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test reading from a column stream with a non-zero buffer offset.
+        /// Test reading from a ColumnStream with a non-zero buffer offset.
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test reading from a ColumnStream with a non-zero buffer offset")]
         public void ReadAtNonZeroOffset()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -285,10 +295,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test writing to a column stream with a non-zero buffer offset.
+        /// Test overwriting data in a ColumnStream.
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test overwriting data in a ColumnStream")]
         public void OverwriteColumnStream()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -324,11 +335,12 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test extending a column stream by writing to an offset before the end
+        /// Test extending a ColumnStream by writing to an offset before the end
         /// but with a length that goes past the end.
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test extending a ColumnStream by writing to an offset before the end but with a length that goes past the end")]
         public void ExtendingColumnStream()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -365,6 +377,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify ColumnStream.Read returns the number of bytes read")]
         public void ReadReturnsNumberOfBytesRead()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -392,10 +405,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test shrinking a column stream. There is special code to handle this.
+        /// Test shrinking a ColumnStream. There is special code to handle this.
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Shrink a ColumnStream")]
         public void ShrinkColumnStream()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -430,10 +444,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test setting the length of a ColumnStream.
+        /// Test growing a ColumnStream by writing at a position past the end of the stream.
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test growing a ColumnStream by writing at a position past the end of the stream")]
         public void GrowColumnStreamByWritingPastEnd()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -466,10 +481,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test setting the length of a ColumnStream.
+        /// Test setting the length of a ColumnStream to zero.
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test setting the length of a ColumnStream to zero")]
         public void SetColumnStreamToZeroLength()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -494,10 +510,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test setting and retrieving a column with the ColumnStream class.
+        /// Test setting and retrieving a column using the ColumnStream class.
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test setting and retrieving a column using the ColumnStream class")]
         public void SetAndRetrieveColumnStream()
         {
             string s = Any.String;
@@ -520,10 +537,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Buffer a ColumnStream
+        /// Buffer a ColumnStream.
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Buffer a ColumnStream")]
         public void BufferColumnStream()
         {
             var data = new byte[1024];
@@ -556,11 +574,12 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test that seeking beyond the length of the stream doesn't grow the stream.
+        /// Verify that seeking beyond the length of the stream doesn't grow the stream.
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        public void SeekingPastEndOfColumnStreamDoesNotGrowStream()
+        [Description("Verify that seeking beyond the length of the ColumnStream doesn't grow the stream")]
+        public void VerifySeekingPastEndOfColumnStreamDoesNotGrowStream()
         {
             const int Offset = 1200;
 
@@ -581,11 +600,40 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test setting and retrieving a column with the ColumnStream class
-        /// and multivalues.
+        /// Test retrieving a column from the copy buffer.
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test retrieving a column from the copy buffer")]
+        public void RetrieveFromCopyBuffer()
+        {
+            string expected = Any.String;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            var writeStream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText);
+            using (var writer = new StreamWriter(writeStream))
+            {
+                writer.WriteLine(expected);
+            }
+
+            var readStream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText);
+            using (var reader = new StreamReader(readStream))
+            {
+                string actual = reader.ReadLine();
+                Assert.AreEqual(expected, actual);
+            }
+
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Cancel);
+            Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
+        }
+
+        /// <summary>
+        /// Test setting and retrieving a multivalued column using a ColumnStream.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Test setting and retrieving a multivalued column using a ColumnStream")]
         public void SetAndRetrieveMultiValueColumnStream()
         {
             string[] data = { Any.String, Any.String, Any.String, Any.String, Any.String, Any.String };                                
@@ -618,12 +666,13 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Trying to seek to a negative offset generates an exception.
+        /// Verify seeking to a negative offset generates an exception.
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify seeking to a negative offset generates an exception")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void ColumnStreamThrowsExceptionWhenSeekOffsetIsNegative()
+        public void VerifyColumnStreamThrowsExceptionWhenSeekOffsetIsNegative()
         {
             using (var t = new Transaction(this.sesid))
             using (var u = new Update(this.sesid, this.tableid, JET_prep.Insert))
@@ -638,6 +687,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify seeking to an invalid offset generates an exception")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ColumnStreamThrowsExceptionWhenSeekOffsetIsTooLarge()
         {
@@ -654,6 +704,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify seeking with an invalid origin generates an exception")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ColumnStreamThrowsExceptionWhenSeekOriginIsInvalid()
         {
@@ -670,6 +721,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify setting the size past the maximum LV size generates an exception")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ColumnStreamSetLengthThrowsExceptionWhenLengthIsTooLong()
         {
@@ -686,6 +738,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify setting the size to a negative number generates an exception")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ColumnStreamSetLengthThrowsExceptionWhenLengthIsNegative()
         {
@@ -702,6 +755,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify setting the position to a negative number generates an exception")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void SettingPositionThrowsExceptionWhenPositionIsNegative()
         {
@@ -718,6 +772,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify setting the position past the maximum LV size generates an exception")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void SettingPositionThrowsExceptionWhenPositionIsTooLong()
         {
@@ -730,10 +785,103 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Reading throws an exception when the buffer is null
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify ColumnStream.Read throws an exception when the buffer is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ReadThrowsExceptionWhenBufferIsNull()
+        {
+            using (var t = new Transaction(this.sesid))
+            using (var u = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                stream.Read(null, 0, 0);
+            }
+        }
+
+        /// <summary>
+        /// Reading throws an exception when the buffer offset is negative
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify ColumnStream.Read throws an exception when the buffer offset is negative")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void ReadThrowsExceptionWhenBufferOffsetIsNegative()
+        {
+            using (var t = new Transaction(this.sesid))
+            using (var u = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                var buffer = new byte[10];
+                stream.Read(buffer, -1, 1);
+            }
+        }
+
+        /// <summary>
+        /// Reading throws an exception when the buffer offset is past the end of 
+        /// the buffer.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify ColumnStream.Read throws an exception when the buffer offset is past the end of the buffer")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void ReadThrowsExceptionWhenBufferOffsetIsTooBig()
+        {
+            using (var t = new Transaction(this.sesid))
+            using (var u = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                var buffer = new byte[10];
+                stream.Read(buffer, buffer.Length, 1);
+            }
+        }
+
+        /// <summary>
+        /// Reading throws an exception when the number of bytes to Read is
+        /// negative.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify ColumnStream.Read throws an exception when the number of bytes is negative")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void ReadThrowsExceptionWhenNumberOfBytesIsNegative()
+        {
+            using (var t = new Transaction(this.sesid))
+            using (var u = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                var buffer = new byte[10];
+                stream.Read(buffer, 0, -1);
+            }
+        }
+
+        /// <summary>
+        /// Reading throws an exception when the number of bytes to Read is
+        /// too large.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify ColumnStream.Read throws an exception when the number of bytes is larger than the buffer")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void ReadThrowsExceptionWhenNumberOfBytesIsTooLarge()
+        {
+            using (var t = new Transaction(this.sesid))
+            using (var u = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                var buffer = new byte[10];
+                stream.Read(buffer, 1, buffer.Length);
+            }
+        }
+
+        /// <summary>
         /// Writing throws an exception when the buffer is null
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify ColumnStream.Write throws an exception when the buffer is null")]
         [ExpectedException(typeof(ArgumentNullException))]
         public void WriteThrowsExceptionWhenBufferIsNull()
         {
@@ -750,6 +898,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify ColumnStream.Write throws an exception when the buffer offset is negative")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void WriteThrowsExceptionWhenBufferOffsetIsNegative()
         {
@@ -768,6 +917,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify ColumnStream.Write throws an exception when the buffer offset is past the end of the buffer")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void WriteThrowsExceptionWhenBufferOffsetIsTooBig()
         {
@@ -786,6 +936,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify ColumnStream.Write throws an exception when the number of bytes is negative")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void WriteThrowsExceptionWhenNumberOfBytesIsNegative()
         {
@@ -804,6 +955,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify ColumnStream.Write throws an exception when the number of bytes is larger than the buffer")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void WriteThrowsExceptionWhenNumberOfBytesIsTooLarge()
         {
@@ -821,6 +973,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify ColumnStream can serialize a basic type")]
         public void ColumnStreamCanSerializeBasicType()
         {
             var expected = Any.Int64;
@@ -852,6 +1005,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify ColumnStream can serialize an object")]
         public void ColumnStreamCanSerializeObject()
         {
             var expected = new Dictionary<string, long> { { "foo", 1 }, { "bar", 2 }, { "baz", 3 } };
