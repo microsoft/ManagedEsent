@@ -63,7 +63,7 @@ namespace InteropApiTests
                 // "temp\" will give back "temp\tmp.edb". Here we just assert that the returned string
                 // starts with the expected value.
                 string expected = Path.Combine(Environment.CurrentDirectory, dir);
-                Assert.IsTrue(actual.StartsWith(expected));
+                StringAssert.StartsWith(actual, expected);
             }
             finally
             {

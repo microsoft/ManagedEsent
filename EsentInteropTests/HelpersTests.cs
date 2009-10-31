@@ -312,7 +312,7 @@ namespace InteropApiTests
             Assert.AreEqual(grbit, info.Grbit);
 
             Assert.AreEqual(1, info.IndexSegments.Length);
-            Assert.IsTrue(0 == string.Compare("ascii", info.IndexSegments[0].ColumnName, true));
+            Assert.AreEqual("ascii", info.IndexSegments[0].ColumnName, true);
             Assert.IsTrue(info.IndexSegments[0].IsAscending);
             Assert.AreEqual(JET_coltyp.LongText, info.IndexSegments[0].Coltyp);
             Assert.IsTrue(info.IndexSegments[0].IsASCII);
@@ -342,12 +342,12 @@ namespace InteropApiTests
             Assert.AreEqual(grbit, info.Grbit);
 
             Assert.AreEqual(2, info.IndexSegments.Length);
-            Assert.IsTrue(0 == string.Compare("ascii", info.IndexSegments[0].ColumnName, true));
+            Assert.AreEqual("ascii", info.IndexSegments[0].ColumnName, true);
             Assert.IsTrue(info.IndexSegments[0].IsAscending);
             Assert.AreEqual(JET_coltyp.LongText, info.IndexSegments[0].Coltyp);
             Assert.IsTrue(info.IndexSegments[0].IsASCII);
 
-            Assert.IsTrue(0 == string.Compare("boolean", info.IndexSegments[1].ColumnName, true));
+            Assert.AreEqual("boolean", info.IndexSegments[1].ColumnName, true);
             Assert.IsFalse(info.IndexSegments[1].IsAscending);
             Assert.AreEqual(JET_coltyp.Bit, info.IndexSegments[1].Coltyp);
 
@@ -376,7 +376,7 @@ namespace InteropApiTests
             Assert.AreEqual(grbit, info.Grbit);
 
             Assert.AreEqual(1, info.IndexSegments.Length);
-            Assert.IsTrue(0 == string.Compare("ascii", info.IndexSegments[0].ColumnName, true));
+            Assert.AreEqual("ascii", info.IndexSegments[0].ColumnName, true);
             Assert.IsTrue(info.IndexSegments[0].IsAscending);
             Assert.AreEqual(JET_coltyp.LongText, info.IndexSegments[0].Coltyp);
             Assert.IsTrue(info.IndexSegments[0].IsASCII);
@@ -420,7 +420,7 @@ namespace InteropApiTests
             Assert.AreEqual(CreateIndexGrbit.IndexDisallowNull, info.Grbit);
 
             Assert.AreEqual(1, info.IndexSegments.Length);
-            Assert.IsTrue(0 == string.Compare("unicode", info.IndexSegments[0].ColumnName, true));
+            Assert.AreEqual("unicode", info.IndexSegments[0].ColumnName, true);
             Assert.IsFalse(info.IndexSegments[0].IsAscending);
             Assert.AreEqual(JET_coltyp.LongText, info.IndexSegments[0].Coltyp);
             Assert.IsFalse(info.IndexSegments[0].IsASCII);

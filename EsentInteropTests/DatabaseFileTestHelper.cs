@@ -498,7 +498,7 @@ namespace InteropApiTests
                 instance.Init();
                 using (var session = new Session(instance))
                 {
-                    const int ExpectedPages = 1024;
+                    const int ExpectedPages = 512;
                     int actualPages;
 
                     // BUG: this seems to have problems (JET_err.InvalidParameter) on Vista and below

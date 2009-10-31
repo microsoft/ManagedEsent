@@ -79,7 +79,7 @@ namespace InteropApiTests
             using (var instance = new Instance("unicode"))
             {
                 instance.Parameters.SystemDirectory = this.directory;
-                Assert.IsTrue(instance.Parameters.SystemDirectory.Contains(this.directory));
+                StringAssert.Contains(instance.Parameters.SystemDirectory, this.directory);
             }
         }
 
@@ -98,7 +98,7 @@ namespace InteropApiTests
             using (var instance = new Instance("unicode"))
             {
                 instance.Parameters.LogFileDirectory = this.directory;
-                Assert.IsTrue(instance.Parameters.LogFileDirectory.Contains(this.directory));
+                StringAssert.Contains(instance.Parameters.LogFileDirectory, this.directory);
             }
         }
 
@@ -117,7 +117,7 @@ namespace InteropApiTests
             using (var instance = new Instance("unicode"))
             {
                 instance.Parameters.TempDirectory = this.directory;
-                Assert.IsTrue(instance.Parameters.TempDirectory.Contains(this.directory));
+                StringAssert.Contains(instance.Parameters.TempDirectory, this.directory);
             }
         }
 
