@@ -103,6 +103,9 @@ namespace InteropApiTests
             var columnDefs = new List<JET_COLUMNDEF>();
             var columnNames = new List<string>();
 
+            columnDefs.Add(new JET_COLUMNDEF { coltyp = JET_coltyp.Long, grbit = ColumndefGrbit.TTKey });
+            columnNames.Add("key");
+
             foreach (KeyValuePair<string, JET_COLUMNDEF> def in ColumndefDictionary)
             {
                 columnNames.Add(def.Key);
