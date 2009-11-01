@@ -51,7 +51,7 @@ namespace InteropApiTests
         /// All DDL should be done in this method.
         /// </summary>
         [TestInitialize]
-        [Description("Fixture setup for HelpersTempTableFixtureTests.")]
+        [Description("Fixture setup for HelpersTempTableFixtureTests")]
         public void Setup()
         {
             this.directory = SetupHelper.CreateRandomDirectory();
@@ -70,7 +70,7 @@ namespace InteropApiTests
         /// Cleanup after all tests have run.
         /// </summary>
         [TestCleanup]
-        [Description("Fixture cleanup for HelpersTempTableFixtureTests.")]
+        [Description("Fixture cleanup for HelpersTempTableFixtureTests")]
         public void Teardown()
         {
             Api.JetCloseTable(this.sesid, this.tableid);
@@ -84,7 +84,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Verify that HelpersTempTableFixtureTests.Setup created the fixture properly.")]
+        [Description("Verify that HelpersTempTableFixtureTests.Setup created the fixture properly")]
         public void VerifyFixtureSetup()
         {
             Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
@@ -120,7 +120,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Verify that retrieving the size of a null column returns null.")]
+        [Description("Verify that retrieving the size of a null column returns null")]
         public void VerifyNullColumnSizeIsNull()
         {
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
@@ -134,7 +134,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Check that retrieving the size of a zero-length column returns 0.")]
+        [Description("Check that retrieving the size of a zero-length column returns 0")]
         public void VerifyZeroLengthColumnSizeIsZero()
         {
             JET_COLUMNID columnid = this.columnidDict["Binary"];
@@ -148,7 +148,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Check that retrieving the size of a column returns the amount of data in the column.")]
+        [Description("Check that retrieving the size of a column returns the amount of data in the column")]
         public void VerifyRetrieveColumnSizeReturnsColumnSize()
         {
             JET_COLUMNID columnid = this.columnidDict["Byte"];
@@ -162,7 +162,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Retrieve a column that exceeds the cached buffer size used by RetrieveColumn.")]
+        [Description("Retrieve a column that exceeds the cached buffer size used by RetrieveColumn")]
         public void RetrieveLargeColumn()
         {
             JET_COLUMNID columnid = this.columnidDict["Binary"];
@@ -182,12 +182,12 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Check that retrieving a null column returns null.")]
+        [Description("Check that retrieving a null column returns null")]
         public void RetrieveNullColumn()
         {
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
             this.UpdateAndGotoBookmark();
-            Assert.IsNull(Api.RetrieveColumnAsInt32(this.sesid, this.tableid, this.columnidDict["Int32"]));
+            Assert.IsNull(Api.RetrieveColumn(this.sesid, this.tableid, this.columnidDict["Int32"]));
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a column as boolean.")]
+        [Description("Retrieve a column as boolean")]
         public void RetrieveAsBoolean()
         {
             JET_COLUMNID columnid = this.columnidDict["Boolean"];
@@ -209,10 +209,22 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a null column as boolean.")]
+        [Description("Retrieve a null column as boolean")]
         public void RetrieveNullAsBoolean()
         {
             this.NullColumnTest<bool>("Boolean", Api.RetrieveColumnAsBoolean);
+        }
+
+        /// <summary>
+        /// Retrieve a column. This makes sure the grbit passed to the
+        /// RetrieveColumn helper is respected.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Retrieve a boolean column from the copy buffer")]
+        public void RetrieveBooleanFromCopyBuffer()
+        {
+            this.RetrieveFromCopyBufferTest(Api.SetColumn, Api.RetrieveColumnAsBoolean, Any.Boolean);
         }
 
         /// <summary>
@@ -220,7 +232,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a column as a byte.")]
+        [Description("Retrieve a column as a byte")]
         public void RetrieveAsByte()
         {
             JET_COLUMNID columnid = this.columnidDict["Byte"];
@@ -234,10 +246,22 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a null column as byte.")]
+        [Description("Retrieve a null column as byte")]
         public void RetrieveNullAsByte()
         {
             this.NullColumnTest<byte>("Byte", Api.RetrieveColumnAsByte);
+        }
+
+        /// <summary>
+        /// Retrieve a column. This makes sure the grbit passed to the
+        /// RetrieveColumn helper is respected.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Retrieve a byte column from the copy buffer")]
+        public void RetrieveByteFromCopyBuffer()
+        {
+            this.RetrieveFromCopyBufferTest(Api.SetColumn, Api.RetrieveColumnAsByte, Any.Byte);
         }
 
         /// <summary>
@@ -245,7 +269,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a column as a short.")]
+        [Description("Retrieve a column as a short")]
         public void RetrieveAsInt16()
         {
             JET_COLUMNID columnid = this.columnidDict["Int16"];
@@ -259,10 +283,22 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a null column as a short.")]
+        [Description("Retrieve a null column as a short")]
         public void RetrieveNullAsInt16()
         {
             this.NullColumnTest<short>("Int16", Api.RetrieveColumnAsInt16);
+        }
+
+        /// <summary>
+        /// Retrieve a column. This makes sure the grbit passed to the
+        /// RetrieveColumn helper is respected.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Retrieve an Int16 column from the copy buffer")]
+        public void RetrieveInt16FromCopyBuffer()
+        {
+            this.RetrieveFromCopyBufferTest(Api.SetColumn, Api.RetrieveColumnAsInt16, Any.Int16);
         }
 
         /// <summary>
@@ -271,7 +307,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Verify retrieving a column as a short throws an exception when the column is too short.")]
+        [Description("Verify retrieving a column as a short throws an exception when the column is too short")]
         [ExpectedException(typeof(EsentInvalidColumnException))]
         public void VerifyRetrieveAsInt16ThrowsExceptionWhenColumnIsTooShort()
         {
@@ -286,7 +322,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a column as a ushort.")]
+        [Description("Retrieve a column as a ushort")]
         public void RetrieveAsUInt16()
         {
             JET_COLUMNID columnid = this.columnidDict["UInt16"];
@@ -300,10 +336,22 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a null column as a ushort.")]
+        [Description("Retrieve a null column as a ushort")]
         public void RetrieveNullAsUInt16()
         {
             this.NullColumnTest<ushort>("UInt16", Api.RetrieveColumnAsUInt16);
+        }
+
+        /// <summary>
+        /// Retrieve a column. This makes sure the grbit passed to the
+        /// RetrieveColumn helper is respected.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Retrieve a UInt16 column from the copy buffer")]
+        public void RetrieveUInt16FromCopyBuffer()
+        {
+            this.RetrieveFromCopyBufferTest(Api.SetColumn, Api.RetrieveColumnAsUInt16, Any.UInt16);
         }
 
         /// <summary>
@@ -312,7 +360,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieving a byte as a ushort throws an exception when the column is too short.")]
+        [Description("Retrieving a byte as a ushort throws an exception when the column is too short")]
         [ExpectedException(typeof(EsentInvalidColumnException))]
         public void VerifyRetrieveAsUInt16ThrowsExceptionWhenColumnIsTooShort()
         {
@@ -327,7 +375,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a column as an int.")]
+        [Description("Retrieve a column as an int")]
         public void RetrieveAsInt32()
         {
             JET_COLUMNID columnid = this.columnidDict["Int32"];
@@ -341,10 +389,22 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a null column as an int.")]
+        [Description("Retrieve a null column as an int")]
         public void RetrieveNullAsInt32()
         {
             this.NullColumnTest<int>("Int32", Api.RetrieveColumnAsInt32);
+        }
+
+        /// <summary>
+        /// Retrieve a column. This makes sure the grbit passed to the
+        /// RetrieveColumn helper is respected.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Retrieve an Int32 column from the copy buffer")]
+        public void RetrieveInt32FromCopyBuffer()
+        {
+            this.RetrieveFromCopyBufferTest(Api.SetColumn, Api.RetrieveColumnAsInt32, Any.Int32);
         }
 
         /// <summary>
@@ -353,7 +413,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Verify retrieving a column as an int throws an exception when the column is too short.")]
+        [Description("Verify retrieving a column as an int throws an exception when the column is too short")]
         [ExpectedException(typeof(EsentInvalidColumnException))]
         public void VerifyRetrieveAsInt32ThrowsExceptionWhenColumnIsTooShort()
         {
@@ -368,7 +428,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a column as a uint.")]
+        [Description("Retrieve a column as a uint")]
         public void RetrieveAsUInt32()
         {
             JET_COLUMNID columnid = this.columnidDict["UInt32"];
@@ -382,10 +442,22 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a null column as a uint.")]
+        [Description("Retrieve a null column as a uint")]
         public void RetrieveNullAsUInt32()
         {
             this.NullColumnTest<uint>("UInt32", Api.RetrieveColumnAsUInt32);
+        }
+
+        /// <summary>
+        /// Retrieve a column. This makes sure the grbit passed to the
+        /// RetrieveColumn helper is respected.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Retrieve a UInt32 column from the copy buffer")]
+        public void RetrieveUInt32FromCopyBuffer()
+        {
+            this.RetrieveFromCopyBufferTest(Api.SetColumn, Api.RetrieveColumnAsUInt32, Any.UInt32);
         }
 
         /// <summary>
@@ -394,7 +466,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Verify retrieving a column as a uint throws an exception when the column is too short.")]
+        [Description("Verify retrieving a column as a uint throws an exception when the column is too short")]
         [ExpectedException(typeof(EsentInvalidColumnException))]
         public void VerifyRetrieveAsUInt32ThrowsExceptionWhenColumnIsTooShort()
         {
@@ -409,7 +481,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a column as a long.")]
+        [Description("Retrieve a column as a long")]
         public void RetrieveAsInt64()
         {
             JET_COLUMNID columnid = this.columnidDict["Int64"];
@@ -423,10 +495,22 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a null column as a long.")]
+        [Description("Retrieve a null column as a long")]
         public void RetrieveNullAsInt64()
         {
             this.NullColumnTest<long>("Int64", Api.RetrieveColumnAsInt64);
+        }
+
+        /// <summary>
+        /// Retrieve a column. This makes sure the grbit passed to the
+        /// RetrieveColumn helper is respected.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Retrieve an Int64 column from the copy buffer")]
+        public void RetrieveInt64FromCopyBuffer()
+        {
+            this.RetrieveFromCopyBufferTest(Api.SetColumn, Api.RetrieveColumnAsInt64, Any.Int64);
         }
 
         /// <summary>
@@ -435,7 +519,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Verify retrieving a column as a long throws an exception when the column is too short.")]
+        [Description("Verify retrieving a column as a long throws an exception when the column is too short")]
         [ExpectedException(typeof(EsentInvalidColumnException))]
         public void VerifyRetrieveAsInt64ThrowsExceptionWhenColumnIsTooShort()
         {
@@ -450,7 +534,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a column as a ulong.")]
+        [Description("Retrieve a column as a ulong")]
         public void RetrieveAsUInt64()
         {
             JET_COLUMNID columnid = this.columnidDict["UInt64"];
@@ -464,10 +548,22 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a null column as a ulong.")]
+        [Description("Retrieve a null column as a ulong")]
         public void RetrieveNullAsUInt64()
         {
             this.NullColumnTest<ulong>("UInt64", Api.RetrieveColumnAsUInt64);
+        }
+
+        /// <summary>
+        /// Retrieve a column. This makes sure the grbit passed to the
+        /// RetrieveColumn helper is respected.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Retrieve a UInt64 column from the copy buffer")]
+        public void RetrieveUInt64FromCopyBuffer()
+        {
+            this.RetrieveFromCopyBufferTest(Api.SetColumn, Api.RetrieveColumnAsUInt64, Any.UInt64);
         }
 
         /// <summary>
@@ -476,7 +572,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Verify retrieving a column as a ulong throws an exception when the column is too short.")]
+        [Description("Verify retrieving a column as a ulong throws an exception when the column is too short")]
         [ExpectedException(typeof(EsentInvalidColumnException))]
         public void VerifyRetrieveAsUInt64ThrowsExceptionWhenColumnIsTooShort()
         {
@@ -491,7 +587,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a column as a float.")]
+        [Description("Retrieve a column as a float")]
         public void RetrieveAsFloat()
         {
             JET_COLUMNID columnid = this.columnidDict["Float"];
@@ -505,10 +601,22 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a null column as a float.")]
+        [Description("Retrieve a null column as a float")]
         public void RetrieveNullAsFloat()
         {
             this.NullColumnTest<float>("float", Api.RetrieveColumnAsFloat);
+        }
+
+        /// <summary>
+        /// Retrieve a column. This makes sure the grbit passed to the
+        /// RetrieveColumn helper is respected.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Retrieve a Float column from the copy buffer")]
+        public void RetrieveFloatFromCopyBuffer()
+        {
+            this.RetrieveFromCopyBufferTest(Api.SetColumn, Api.RetrieveColumnAsFloat, Any.Float);
         }
 
         /// <summary>
@@ -517,7 +625,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Verify retrieving a column as a float throws an exception when the column is too short.")]
+        [Description("Verify retrieving a column as a float throws an exception when the column is too short")]
         [ExpectedException(typeof(EsentInvalidColumnException))]
         public void VerifyRetrieveAsFloatThrowsExceptionWhenColumnIsTooShort()
         {
@@ -532,7 +640,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a column as a double.")]
+        [Description("Retrieve a column as a double")]
         public void RetrieveAsDouble()
         {
             JET_COLUMNID columnid = this.columnidDict["Double"];
@@ -546,10 +654,22 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a null column as a double.")]
+        [Description("Retrieve a null column as a double")]
         public void RetrieveNullAsDouble()
         {
             this.NullColumnTest<double>("double", Api.RetrieveColumnAsDouble);
+        }
+
+        /// <summary>
+        /// Retrieve a column. This makes sure the grbit passed to the
+        /// RetrieveColumn helper is respected.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Retrieve a Double column from the copy buffer")]
+        public void RetrieveDoubleFromCopyBuffer()
+        {
+            this.RetrieveFromCopyBufferTest(Api.SetColumn, Api.RetrieveColumnAsDouble, Any.Double);
         }
 
         /// <summary>
@@ -558,7 +678,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Verify retrieving a column as a double throws an exception when the column is too short.")]
+        [Description("Verify retrieving a column as a double throws an exception when the column is too short")]
         [ExpectedException(typeof(EsentInvalidColumnException))]
         public void VerifyRetrieveAsDoubleThrowsExceptionWhenColumnIsTooShort()
         {
@@ -573,7 +693,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a column as a Guid.")]
+        [Description("Retrieve a column as a Guid")]
         public void RetrieveAsGuid()
         {
             JET_COLUMNID columnid = this.columnidDict["Guid"];
@@ -587,10 +707,22 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a null column as a guid.")]
+        [Description("Retrieve a null column as a guid")]
         public void RetrieveNullAsGuid()
         {
             this.NullColumnTest<Guid>("Guid", Api.RetrieveColumnAsGuid);
+        }
+
+        /// <summary>
+        /// Retrieve a column. This makes sure the grbit passed to the
+        /// RetrieveColumn helper is respected.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Retrieve a Guid column from the copy buffer")]
+        public void RetrieveGuidFromCopyBuffer()
+        {
+            this.RetrieveFromCopyBufferTest(Api.SetColumn, Api.RetrieveColumnAsGuid, Any.Guid);
         }
 
         /// <summary>
@@ -599,7 +731,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Verify retrieving a column as a guid throws an exception when the column is too short.")]
+        [Description("Verify retrieving a column as a guid throws an exception when the column is too short")]
         [ExpectedException(typeof(EsentInvalidColumnException))]
         public void VerifyRetrieveAsGuidThrowsExceptionWhenColumnIsTooShort()
         {
@@ -614,7 +746,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a column as a DateTime.")]
+        [Description("Retrieve a column as a DateTime")]
         public void RetrieveAsDateTime()
         {
             JET_COLUMNID columnid = this.columnidDict["DateTime"];
@@ -631,7 +763,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a column as a DateTime when the value is invalid (too small).")]
+        [Description("Retrieve a column as a DateTime when the value is invalid (too small)")]
         public void RetrieveAsDateTimeReturnsMinWhenValueIsTooSmall()
         {
             JET_COLUMNID columnid = this.columnidDict["DateTime"];
@@ -646,7 +778,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a column as a DateTime when the value is invalid (too large).")]
+        [Description("Retrieve a column as a DateTime when the value is invalid (too large)")]
         public void RetrieveAsDateTimeReturnsMaxWhenValueIsTooLarge()
         {
             JET_COLUMNID columnid = this.columnidDict["DateTime"];
@@ -661,10 +793,22 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a null column as a DateTime.")]
+        [Description("Retrieve a null column as a DateTime")]
         public void RetrieveNullAsDateTime()
         {
             this.NullColumnTest<DateTime>("DateTime", Api.RetrieveColumnAsDateTime);
+        }
+
+        /// <summary>
+        /// Retrieve a column. This makes sure the grbit passed to the
+        /// RetrieveColumn helper is respected.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Retrieve a DateTime column from the copy buffer")]
+        public void RetrieveDateTimeFromCopyBuffer()
+        {
+            this.RetrieveFromCopyBufferTest(Api.SetColumn, Api.RetrieveColumnAsDateTime, Any.DateTime);
         }
 
         /// <summary>
@@ -673,7 +817,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Verify retrieving a column as a DateTime throws an exception when the column is too short.")]
+        [Description("Verify retrieving a column as a DateTime throws an exception when the column is too short")]
         [ExpectedException(typeof(EsentInvalidColumnException))]
         public void VerifyRetrieveAsDateTimeThrowsExceptionWhenColumnIsTooShort()
         {
@@ -688,7 +832,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a column as ASCII.")]
+        [Description("Retrieve a column as ASCII")]
         public void RetrieveAsAscii()
         {
             JET_COLUMNID columnid = this.columnidDict["ASCII"];
@@ -702,7 +846,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a null column as ASCII.")]
+        [Description("Retrieve a null column as ASCII")]
         public void RetrieveNullAsAscii()
         {
             JET_COLUMNID columnid = this.columnidDict["ASCII"];
@@ -715,7 +859,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a column as Unicode.")]
+        [Description("Retrieve a column as Unicode")]
         public void RetrieveAsUnicode()
         {
             JET_COLUMNID columnid = this.columnidDict["Unicode"];
@@ -729,7 +873,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a null column as Unicode.")]
+        [Description("Retrieve a null column as Unicode")]
         public void RetrieveNullAsUnicode()
         {
             JET_COLUMNID columnid = this.columnidDict["Unicode"];
@@ -742,7 +886,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a column as a (unicode) string.")]
+        [Description("Retrieve a column as a (unicode) string")]
         public void RetrieveAsString()
         {
             JET_COLUMNID columnid = this.columnidDict["Unicode"];
@@ -769,7 +913,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Retrieve a string that is too large for the cached retrieval buffer.")]
+        [Description("Retrieve a string that is too large for the cached retrieval buffer")]
         public void RetrieveExtremelyLargeString()
         {
             JET_COLUMNID columnid = this.columnidDict["Unicode"];
@@ -783,7 +927,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve an empty string to make sure it is handled differently from a null column.")]
+        [Description("Retrieve an empty string to make sure it is handled differently from a null column")]
         public void RetrieveEmptyString()
         {
             JET_COLUMNID columnid = this.columnidDict["Unicode"];
@@ -797,6 +941,39 @@ namespace InteropApiTests
             Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, Encoding.Unicode));
         }
 
+        /// <summary>
+        /// Retrieve an empty string to make sure it is handled differently from a null column.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Retrieve a string from the copy buffer")]
+        public void RetrieveStringFromCopyBuffer()
+        {
+            // A binary column can hold any type
+            JET_COLUMNID columnid = this.columnidDict["binary"];
+            string expected = Any.String;
+
+            using (var trx = new Transaction(this.sesid))
+            {
+                using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
+                {
+                    update.Save();
+                }
+
+                Assert.IsTrue(Api.TryMoveFirst(this.sesid, this.tableid));
+
+                using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
+                {
+                    Api.SetColumn(this.sesid, this.tableid, columnid, expected, Encoding.Unicode);
+                    Assert.AreEqual(null, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, Encoding.Unicode, RetrieveColumnGrbit.None));
+                    Assert.AreEqual(expected, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, Encoding.Unicode, RetrieveColumnGrbit.RetrieveCopy));
+                    update.Cancel();
+                }
+
+                trx.Commit(CommitTransactionGrbit.None);
+            }
+        }
+
         #endregion RetrieveColumnAs tests
 
         #region SetColumn Tests
@@ -806,7 +983,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a unicode column from a string.")]
+        [Description("Test setting a unicode column from a string")]
         public void SetUnicodeString()
         {
             JET_COLUMNID columnid = this.columnidDict["unicode"];
@@ -827,7 +1004,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a ColumnValue with a string.")]
+        [Description("Test setting a ColumnValue with a string")]
         public void SetColumnsWithString()
         {
             JET_COLUMNID columnid = this.columnidDict["unicode"];
@@ -841,7 +1018,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting an ASCII column from a string.")]
+        [Description("Test setting an ASCII column from a string")]
         public void SetASCIIString()
         {
             JET_COLUMNID columnid = this.columnidDict["ascii"];
@@ -862,7 +1039,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Verify using an encoding which is neither ASCII nor Unicode throws an exception.")]
+        [Description("Verify using an encoding which is neither ASCII nor Unicode throws an exception")]
         public void VerifySetStringWithInvalidEncodingThrowsException()
         {
             JET_COLUMNID columnid = this.columnidDict["unicode"];
@@ -885,7 +1062,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a column from an empty string.")]
+        [Description("Test setting a column from an empty string")]
         public void SetEmptyString()
         {
             JET_COLUMNID columnid = this.columnidDict["unicode"];
@@ -906,7 +1083,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a column from a null string.")]
+        [Description("Test setting a column from a null string")]
         public void SetNullString()
         {
             JET_COLUMNID columnid = this.columnidDict["unicode"];
@@ -927,7 +1104,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a column from true.")]
+        [Description("Test setting a column from true")]
         public void SetBooleanTrue()
         {
             JET_COLUMNID columnid = this.columnidDict["boolean"];
@@ -948,7 +1125,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a column from false.")]
+        [Description("Test setting a column from false")]
         public void SetBooleanFalse()
         {
             JET_COLUMNID columnid = this.columnidDict["boolean"];
@@ -969,7 +1146,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a ColumnValue with a boolean.")]
+        [Description("Test setting a ColumnValue with a boolean")]
         public void SetColumnsWithBoolean()
         {
             JET_COLUMNID columnid = this.columnidDict["Boolean"];
@@ -983,7 +1160,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test SetColumn with a byte.")]
+        [Description("Test SetColumn with a byte")]
         public void SetByte()
         {
             JET_COLUMNID columnid = this.columnidDict["byte"];
@@ -1004,7 +1181,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a ColumnValue with a byte.")]
+        [Description("Test setting a ColumnValue with a byte")]
         public void SetColumnsWithByte()
         {
             JET_COLUMNID columnid = this.columnidDict["byte"];
@@ -1018,7 +1195,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a column from a short.")]
+        [Description("Test setting a column from a short")]
         public void SetInt16()
         {
             JET_COLUMNID columnid = this.columnidDict["int16"];
@@ -1039,7 +1216,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a ColumnValue with an Int16.")]
+        [Description("Test setting a ColumnValue with an Int16")]
         public void SetColumnsWithInt16()
         {
             JET_COLUMNID columnid = this.columnidDict["int16"];
@@ -1053,7 +1230,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a column from an int.")]
+        [Description("Test setting a column from an int")]
         public void SetInt32()
         {
             JET_COLUMNID columnid = this.columnidDict["int32"];
@@ -1074,7 +1251,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a ColumnValue with an Int32.")]
+        [Description("Test setting a ColumnValue with an Int32")]
         public void SetColumnsWithInt32()
         {
             JET_COLUMNID columnid = this.columnidDict["int32"];
@@ -1088,7 +1265,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a column from a long.")]
+        [Description("Test setting a column from a long")]
         public void SetInt64()
         {
             JET_COLUMNID columnid = this.columnidDict["int64"];
@@ -1109,7 +1286,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a ColumnValue with an Int64.")]
+        [Description("Test setting a ColumnValue with an Int64")]
         public void SetColumnsWithInt64()
         {
             JET_COLUMNID columnid = this.columnidDict["int64"];
@@ -1123,7 +1300,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a column from a ushort.")]
+        [Description("Test setting a column from a ushort")]
         public void SetUInt16()
         {
             JET_COLUMNID columnid = this.columnidDict["uint16"];
@@ -1144,7 +1321,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a ColumnValue with a UInt16.")]
+        [Description("Test setting a ColumnValue with a UInt16")]
         public void SetColumnsWithUInt16()
         {
             JET_COLUMNID columnid = this.columnidDict["uint16"];
@@ -1158,7 +1335,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a column from a uint.")]
+        [Description("Test setting a column from a uint")]
         public void SetUInt32()
         {
             JET_COLUMNID columnid = this.columnidDict["uint32"];
@@ -1179,7 +1356,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a ColumnValue with a UInt32.")]
+        [Description("Test setting a ColumnValue with a UInt32")]
         public void SetColumnsWithUInt32()
         {
             JET_COLUMNID columnid = this.columnidDict["uint32"];
@@ -1193,7 +1370,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a column from a ulong.")]
+        [Description("Test setting a column from a ulong")]
         public void SetUInt64()
         {
             JET_COLUMNID columnid = this.columnidDict["uint64"];
@@ -1214,7 +1391,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a ColumnValue with a UInt64.")]
+        [Description("Test setting a ColumnValue with a UInt64")]
         public void SetColumnsWithUInt64()
         {
             JET_COLUMNID columnid = this.columnidDict["uint64"];
@@ -1228,7 +1405,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a column from a float.")]
+        [Description("Test setting a column from a float")]
         public void SetFloat()
         {
             JET_COLUMNID columnid = this.columnidDict["float"];
@@ -1249,7 +1426,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a ColumnValue with a Float.")]
+        [Description("Test setting a ColumnValue with a Float")]
         public void SetColumnsWithFloat()
         {
             JET_COLUMNID columnid = this.columnidDict["Float"];
@@ -1263,7 +1440,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a column from a double.")]
+        [Description("Test setting a column from a double")]
         public void SetDouble()
         {
             JET_COLUMNID columnid = this.columnidDict["double"];
@@ -1284,7 +1461,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a ColumnValue with a Double.")]
+        [Description("Test setting a ColumnValue with a Double")]
         public void SetColumnsWithDouble()
         {
             JET_COLUMNID columnid = this.columnidDict["Double"];
@@ -1298,7 +1475,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a column from a guid.")]
+        [Description("Test setting a column from a guid")]
         public void SetGuid()
         {
             JET_COLUMNID columnid = this.columnidDict["guid"];
@@ -1319,7 +1496,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a ColumnValue with a Guid.")]
+        [Description("Test setting a ColumnValue with a Guid")]
         public void SetColumnsWithGuid()
         {
             JET_COLUMNID columnid = this.columnidDict["Guid"];
@@ -1333,7 +1510,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a column from a DateTime.")]
+        [Description("Test setting a column from a DateTime")]
         public void SetDateTime()
         {
             JET_COLUMNID columnid = this.columnidDict["DateTime"];
@@ -1354,7 +1531,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a ColumnValue with a DateTime.")]
+        [Description("Test setting a ColumnValue with a DateTime")]
         public void SetColumnsWithDateTime()
         {
             JET_COLUMNID columnid = this.columnidDict["DateTime"];
@@ -1368,7 +1545,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a column from an array of bytes.")]
+        [Description("Test setting a column from an array of bytes")]
         public void SetBytes()
         {
             JET_COLUMNID columnid = this.columnidDict["binary"];
@@ -1389,7 +1566,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a ColumnValue with a byte array.")]
+        [Description("Test setting a ColumnValue with a byte array")]
         public void SetColumnsWithBytes()
         {
             JET_COLUMNID columnid = this.columnidDict["binary"];
@@ -1403,7 +1580,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a binary column from a zero-length array.")]
+        [Description("Test setting a binary column from a zero-length array")]
         public void SetZeroLengthBytes()
         {
             JET_COLUMNID columnid = this.columnidDict["binary"];
@@ -1422,7 +1599,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a binary column from a null object.")]
+        [Description("Test setting a binary column from a null object")]
         public void SetNullBytes()
         {
             JET_COLUMNID columnid = this.columnidDict["binary"];
@@ -1441,7 +1618,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting and retrieving the min value of a Byte.")]
+        [Description("Test setting and retrieving the min value of a Byte")]
         public void SetAndRetrieveByteMin()
         {
             var columnid = this.columnidDict["Byte"];
@@ -1463,7 +1640,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting and retrieving the max value of a Byte.")]
+        [Description("Test setting and retrieving the max value of a Byte")]
         public void SetAndRetrieveByteMax()
         {
             var columnid = this.columnidDict["Byte"];
@@ -1485,7 +1662,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting and retrieving the min value of an Int16.")]
+        [Description("Test setting and retrieving the min value of an Int16")]
         public void SetAndRetrieveInt16Min()
         {
             var columnid = this.columnidDict["Int16"];
@@ -1507,7 +1684,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting and retrieving the max value of an Int16.")]
+        [Description("Test setting and retrieving the max value of an Int16")]
         public void SetAndRetrieveInt16Max()
         {
             var columnid = this.columnidDict["Int16"];
@@ -1529,7 +1706,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting and retrieving the min value of a UInt16.")]
+        [Description("Test setting and retrieving the min value of a UInt16")]
         public void SetAndRetrieveUInt16Min()
         {
             var columnid = this.columnidDict["Binary"];
@@ -1551,7 +1728,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting and retrieving the max value of a UInt16.")]
+        [Description("Test setting and retrieving the max value of a UInt16")]
         public void SetAndRetrieveUInt16Max()
         {
             var columnid = this.columnidDict["Binary"];
@@ -1573,7 +1750,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting and retrieving the min value of an Int32.")]
+        [Description("Test setting and retrieving the min value of an Int32")]
         public void SetAndRetrieveInt32Min()
         {
             var columnid = this.columnidDict["Int32"];
@@ -1595,7 +1772,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting and retrieving the max value of an Int32.")]
+        [Description("Test setting and retrieving the max value of an Int32")]
         public void SetAndRetrieveInt32Max()
         {
             var columnid = this.columnidDict["Int32"];
@@ -1617,7 +1794,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting and retrieving the min value of a UInt32.")]
+        [Description("Test setting and retrieving the min value of a UInt32")]
         public void SetAndRetrieveUInt32Min()
         {
             var columnid = this.columnidDict["Binary"];
@@ -1639,7 +1816,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting and retrieving the max value of a UInt32.")]
+        [Description("Test setting and retrieving the max value of a UInt32")]
         public void SetAndRetrieveUInt32Max()
         {
             var columnid = this.columnidDict["Binary"];
@@ -1661,7 +1838,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting and retrieving the min value of an Int64.")]
+        [Description("Test setting and retrieving the min value of an Int64")]
         public void SetAndRetrieveInt64Min()
         {
             var columnid = this.columnidDict["Int64"];
@@ -1683,7 +1860,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting and retrieving the max value of an Int64.")]
+        [Description("Test setting and retrieving the max value of an Int64")]
         public void SetAndRetrieveInt64Max()
         {
             var columnid = this.columnidDict["Int64"];
@@ -1705,7 +1882,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting and retrieving the min value of a UInt64.")]
+        [Description("Test setting and retrieving the min value of a UInt64")]
         public void SetAndRetrieveUInt64Min()
         {
             var columnid = this.columnidDict["Binary"];
@@ -1727,7 +1904,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting and retrieving the max value of a UInt64.")]
+        [Description("Test setting and retrieving the max value of a UInt64")]
         public void SetAndRetrieveUInt64Max()
         {
             var columnid = this.columnidDict["Binary"];
@@ -1749,7 +1926,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting and retrieving the min value of a Float.")]
+        [Description("Test setting and retrieving the min value of a Float")]
         public void SetAndRetrieveFloatMin()
         {
             var columnid = this.columnidDict["Float"];
@@ -1771,7 +1948,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting and retrieving the max value of a Float.")]
+        [Description("Test setting and retrieving the max value of a Float")]
         public void SetAndRetrieveFloatMax()
         {
             var columnid = this.columnidDict["Float"];
@@ -1793,7 +1970,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting and retrieving the min value of a Double.")]
+        [Description("Test setting and retrieving the min value of a Double")]
         public void SetAndRetrieveDoubleMin()
         {
             var columnid = this.columnidDict["Double"];
@@ -1815,7 +1992,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting and retrieving the max value of a Double.")]
+        [Description("Test setting and retrieving the max value of a Double")]
         public void SetAndRetrieveDoubleMax()
         {
             var columnid = this.columnidDict["Double"];
@@ -1839,7 +2016,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting a date that is too small.")]
+        [Description("Test setting a date that is too small")]
         [ExpectedException(typeof(OverflowException))]
         public void SetDateTimeThrowsExceptionWhenDateIsTooSmall()
         {
@@ -1862,11 +2039,11 @@ namespace InteropApiTests
         /// The MSDN documentation says that "An uninitialized DateTime, that is,
         /// an instance with a tick value of 0, is converted to the equivalent
         /// uninitialized OLE Automation Date, that is, a date with a value of
-        /// 0.0 which represents midnight, 30 December 1899."
+        /// 0.0 which represents midnight, 30 December 1899"
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting DateTime.Min.")]
+        [Description("Test setting DateTime.Min")]
         public void SetDateTimeMinGivesOleAutomationBaseTime()
         {
             // The base OLE Automation Date is midnight, 30 December 1899
@@ -1890,7 +2067,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting and retrieving the min value of a DateTime.")]
+        [Description("Test setting and retrieving the min value of a DateTime")]
         public void SetAndRetrieveDateTimeOleAutomationMin()
         {
             // The earliest OLE Automation Date is Jan 1, year 100
@@ -1914,7 +2091,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Test setting and retrieving the max value of a DateTime.")]
+        [Description("Test setting and retrieving the max value of a DateTime")]
         public void SetAndRetrieveDateTimeMax()
         {
             // MSDN says the maximum OLE Automation Date is the same as
@@ -1939,7 +2116,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Serialize and deserialize null.")]
+        [Description("Serialize and deserialize null")]
         public void SerializeAndDeserializeNull()
         {
             var columnid = this.columnidDict["Binary"];
@@ -1960,7 +2137,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Serialize and deserialize an object.")]
+        [Description("Serialize and deserialize an object")]
         public void SerializeAndDeserializeObject()
         {
             var columnid = this.columnidDict["Binary"];
@@ -2024,6 +2201,42 @@ namespace InteropApiTests
             JET_COLUMNID columnid = this.columnidDict[column];
             this.InsertRecord(columnid, null);
             Assert.IsNull(retrieveFunc(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
+        /// Set a column and retrieve it from the copy buffer. This makes sure the grbit is respected.
+        /// </summary>
+        /// <typeparam name="T">The (struct) value to set and get.</typeparam>
+        /// <param name="setcolumn">A method to set the column.</param>
+        /// <param name="retrievecolumn">A method to retrieve the column.</param>
+        /// <param name="value">The value to set.</param>
+        private void RetrieveFromCopyBufferTest<T>(
+            Action<JET_SESID, JET_TABLEID, JET_COLUMNID, T> setcolumn,
+            Func<JET_SESID, JET_TABLEID, JET_COLUMNID, RetrieveColumnGrbit, T?> retrievecolumn,
+            T value) where T : struct
+        {
+            // A binary column can hold any type
+            JET_COLUMNID columnid = this.columnidDict["binary"];
+
+            using (var trx = new Transaction(this.sesid))
+            {
+                using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
+                {
+                    update.Save();
+                }
+
+                Assert.IsTrue(Api.TryMoveFirst(this.sesid, this.tableid));
+
+                using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
+                {
+                    setcolumn(this.sesid, this.tableid, columnid, value);
+                    Assert.AreEqual(null, retrievecolumn(this.sesid, this.tableid, columnid, RetrieveColumnGrbit.None));
+                    Assert.AreEqual(value, retrievecolumn(this.sesid, this.tableid, columnid, RetrieveColumnGrbit.RetrieveCopy));
+                    update.Cancel();
+                }
+
+                trx.Commit(CommitTransactionGrbit.None);
+            }
         }
 
         /// <summary>

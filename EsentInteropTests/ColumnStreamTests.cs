@@ -82,7 +82,7 @@ namespace InteropApiTests
             };
 
             var columnids = new JET_COLUMNID[columndefs.Length];
-            Api.JetOpenTempTable(this.sesid, columndefs, columndefs.Length, TempTableGrbit.ForceMaterialization, out this.tableid, columnids);
+            Api.JetOpenTempTable(this.sesid, columndefs, columndefs.Length, TempTableGrbit.None, out this.tableid, columnids);
             this.columnidLongText = columnids[0];
         }
 

@@ -49,7 +49,6 @@ namespace InteropApiTests
         /// </summary>
         private static int instanceNum;
 
-
         /// <summary>
         /// Creates a new random directory in the current working directory. This
         /// should be used to ensure that each test runs in its own directory.
