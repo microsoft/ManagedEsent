@@ -122,7 +122,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static int? RetrieveColumnSize(
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, int itagSequence, RetrieveColumnGrbit grbit)
         {
-            var retinfo = new JET_RETINFO() { itagSequence = itagSequence };
+            var retinfo = new JET_RETINFO { itagSequence = itagSequence };
             int dataSize;
             JET_wrn wrn = JetRetrieveColumn(
                 sesid, tableid, columnid, null, 0, out dataSize, grbit, retinfo);
@@ -311,6 +311,7 @@ namespace Microsoft.Isam.Esent.Interop
                 }
             }
 
+            // TODO: for Unicode strings ping the buffer and use the String(char*) constructor.
             string s = encoding.GetString(data, 0, dataSize);
 
             // Now we have extracted the string from the buffer we can free (cache) the buffer.
@@ -846,6 +847,52 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 throw new EsentInvalidColumnException();
             }
+        }
+
+        /// <summary>
+        /// Recursively pin the retrieve buffers in the JET_RETRIEVECOLUMN
+        /// structures and then retrieve the columns. This is done to avoid
+        /// creating GCHandles which is very expensive. This function pins
+        /// the current retrievecolumn structure (indicated by i) and then
+        /// recursively calls itself until all structures are pinned. This
+        /// is done because it isn't possible to create an arbitrary number
+        /// of pinned variables in a method.
+        /// </summary>
+        /// <param name="sesid">
+        /// The session to use.
+        /// </param>
+        /// <param name="tableid">
+        /// The table to retrieve from.
+        /// </param>
+        /// <param name="nativeretrievecolumns">
+        /// The nativeretrievecolumns structure.</param>
+        /// <param name="retrievecolumns">
+        /// The managed retrieve columns structure.
+        /// </param>
+        /// <param name="numColumns">The number of columns.</param>
+        /// <param name="i">The column currently being processed.</param>
+        /// <returns>An error code from JetRetrieveColumns.</returns>
+        private static unsafe int PinColumnsAndRetrieve(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            NATIVE_RETRIEVECOLUMN* nativeretrievecolumns,
+            JET_RETRIEVECOLUMN[] retrievecolumns,
+            int numColumns,
+            int i)
+        {
+            retrievecolumns[i].CheckDataSize();
+            nativeretrievecolumns[i] = retrievecolumns[i].GetNativeRetrievecolumn();
+            fixed (byte* pinnedBuffer = retrievecolumns[i].pvData)
+            {
+                nativeretrievecolumns[i].pvData = new IntPtr(pinnedBuffer);
+            }
+
+            if (numColumns - 1 == i)
+            {
+                return Impl.JetRetrieveColumns(sesid, tableid, nativeretrievecolumns, numColumns);
+            }
+
+            return PinColumnsAndRetrieve(sesid, tableid, nativeretrievecolumns, retrievecolumns, numColumns, i + 1);
         }
     }
 }

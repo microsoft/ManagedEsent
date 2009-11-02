@@ -169,7 +169,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>A NATIVE_RETRIEVECOLUMN structure whose fields match the class.</returns>
         internal NATIVE_RETRIEVECOLUMN GetNativeRetrievecolumn()
         {
-            var retinfo = new NATIVE_RETRIEVECOLUMN
+            var retrievecolumn = new NATIVE_RETRIEVECOLUMN
             {
                 columnid = this.columnid.Value,
                 cbData = checked((uint)this.cbData),
@@ -177,7 +177,7 @@ namespace Microsoft.Isam.Esent.Interop
                 ibLongValue = checked((uint)this.ibLongValue),
                 itagSequence = checked((uint)this.itagSequence),
             };
-            return retinfo;
+            return retrievecolumn;
         }
 
         /// <summary>

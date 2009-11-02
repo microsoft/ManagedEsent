@@ -1530,34 +1530,17 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentOutOfRangeException("numColumns", numColumns, "cannot be negative or greater than retrievecolumns.Length");
             }
 
-            using (var gchandles = new GCHandleCollection())
+            unsafe
             {
-                unsafe
+                NATIVE_RETRIEVECOLUMN* nativeretrievecolumns = stackalloc NATIVE_RETRIEVECOLUMN[numColumns];
+
+                int err = Api.PinColumnsAndRetrieve(sesid, tableid, nativeretrievecolumns, retrievecolumns, numColumns, 0);
+                for (int i = 0; i < numColumns; ++i)
                 {
-                    NATIVE_RETRIEVECOLUMN* nativeretrievecolumns = stackalloc NATIVE_RETRIEVECOLUMN[numColumns];
-
-                    for (int i = 0; i < numColumns; ++i)
-                    {
-                        retrievecolumns[i].CheckDataSize();
-                        nativeretrievecolumns[i] = retrievecolumns[i].GetNativeRetrievecolumn();
-                        if (null == retrievecolumns[i].pvData)
-                        {
-                            nativeretrievecolumns[i].pvData = IntPtr.Zero;
-                        }
-                        else
-                        {
-                            nativeretrievecolumns[i].pvData = gchandles.Add(retrievecolumns[i].pvData);
-                        }
-                    }
-
-                    int err = Impl.JetRetrieveColumns(sesid, tableid, nativeretrievecolumns, numColumns);
-                    for (int i = 0; i < numColumns; ++i)
-                    {
-                        retrievecolumns[i].UpdateFromNativeRetrievecolumn(nativeretrievecolumns[i]);
-                    }
-
-                    return Api.Check(err);
+                    retrievecolumns[i].UpdateFromNativeRetrievecolumn(nativeretrievecolumns[i]);
                 }
+
+                return Api.Check(err);
             }
         }
 

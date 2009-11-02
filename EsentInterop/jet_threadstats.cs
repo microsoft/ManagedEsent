@@ -117,13 +117,13 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendFormat("{0} page reference{1}, ", this.cPageReferenced, GetPluralS(this.cPageReferenced));
-            sb.AppendFormat("{0} page{1} read, ", this.cPageRead, GetPluralS(this.cPageRead));
-            sb.AppendFormat("{0} page{1} preread, ", this.cPagePreread, GetPluralS(this.cPagePreread));
-            sb.AppendFormat("{0} page{1} dirtied, ", this.cPageDirtied, GetPluralS(this.cPageDirtied));
-            sb.AppendFormat("{0} page{1} redirtied, ", this.cPageRedirtied, GetPluralS(this.cPageRedirtied));
-            sb.AppendFormat("{0} log record{1}, ", this.cLogRecord, GetPluralS(this.cLogRecord));
-            sb.AppendFormat("{0} byte{1} logged", this.cbLogRecord, GetPluralS(this.cbLogRecord));
+            sb.AppendFormat("{0:N0} page reference{1}, ", this.cPageReferenced, GetPluralS(this.cPageReferenced));
+            sb.AppendFormat("{0:N0} page{1} read, ", this.cPageRead, GetPluralS(this.cPageRead));
+            sb.AppendFormat("{0:N0} page{1} preread, ", this.cPagePreread, GetPluralS(this.cPagePreread));
+            sb.AppendFormat("{0:N0} page{1} dirtied, ", this.cPageDirtied, GetPluralS(this.cPageDirtied));
+            sb.AppendFormat("{0:N0} page{1} redirtied, ", this.cPageRedirtied, GetPluralS(this.cPageRedirtied));
+            sb.AppendFormat("{0:N0} log record{1}, ", this.cLogRecord, GetPluralS(this.cLogRecord));
+            sb.AppendFormat("{0:N0} byte{1} logged", this.cbLogRecord, GetPluralS(this.cbLogRecord));
             return sb.ToString();
         }
 

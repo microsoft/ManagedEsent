@@ -85,6 +85,7 @@ namespace InteropApiTests
         /// Setup for a test -- this creates the database
         /// </summary>
         [TestInitialize]
+        [Description("Setup the SimplePerfTest fixture")]
         public void Setup()
         {
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
@@ -146,6 +147,7 @@ namespace InteropApiTests
         /// Cleanup after the test
         /// </summary>
         [TestCleanup]
+        [Description("Cleanup the SimplePerfTest fixture")]
         public void Teardown()
         {
             this.table.Close();
@@ -153,6 +155,7 @@ namespace InteropApiTests
             this.instance.Term();
             Api.JetSetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.CacheSizeMin, this.cacheSizeMinSaved, null);
             Cleanup.DeleteDirectoryWithRetry(this.directory);
+            Thread.CurrentThread.Priority = ThreadPriority.Normal;
         }
 
         /// <summary>
@@ -160,6 +163,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(4)]
+        [Description("Run a basic performance test")]
         public void BasicPerfTest()
         {
             this.CheckMemoryUsage(this.InsertReadSeek);
@@ -192,6 +196,8 @@ namespace InteropApiTests
             TimeAction("Insert records", () => this.InsertRecords(NumRecords / 2));
             TimeAction("Insert records with SetColumns", () => this.InsertRecordsWithSetColumns(NumRecords / 2));
             TimeAction("Read one record", () => this.RepeatedlyRetrieveOneRecord(NumRecords));
+            TimeAction("Read one record with JetRetrieveColumns", () => this.RepeatedlyRetrieveOneRecordWithJetRetrieveColumns(NumRecords));
+            TimeAction("Read one record with RetrieveColumns", () => this.RepeatedlyRetrieveOneRecordWithRetrieveColumns(NumRecords));
             TimeAction("Read one record with JetEnumerateColumns", () => this.RepeatedlyRetrieveOneRecordWithEnumColumns(NumRecords));
             TimeAction("Read all records", this.RetrieveAllRecords);
             TimeAction("Seek to all records", () => this.SeekToAllRecords(keys));
@@ -325,6 +331,64 @@ namespace InteropApiTests
             {
                 Api.JetBeginTransaction(this.session);
                 this.RetrieveRecord();
+                Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
+            }
+        }
+
+        /// <summary>
+        /// Repeatedly retrieve one record using <see cref="Api.JetRetrieveColumns"/>.
+        /// </summary>
+        /// <param name="numRetrieves">The number of times to retrieve the record.</param>
+        private void RepeatedlyRetrieveOneRecordWithJetRetrieveColumns(int numRetrieves)
+        {
+            Api.JetMove(this.session, this.table, JET_Move.First, MoveGrbit.None);
+
+            var keyBuffer = new byte[sizeof(long)];
+            var retcols = new[]
+            {
+                new JET_RETRIEVECOLUMN
+                {
+                    columnid = this.columnidKey,
+                    pvData = keyBuffer,
+                    cbData = keyBuffer.Length,
+                    itagSequence = 1,
+                },
+                new JET_RETRIEVECOLUMN
+                {
+                    columnid = this.columnidData,
+                    pvData = this.dataBuf,
+                    cbData = this.dataBuf.Length,
+                    itagSequence = 1,
+                },
+            };
+
+            for (int i = 0; i < numRetrieves; ++i)
+            {
+                Api.JetBeginTransaction(this.session);
+                Api.JetRetrieveColumns(this.session, this.table, retcols, retcols.Length);
+                Assert.AreEqual(0, BitConverter.ToInt64(keyBuffer, 0));
+                Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
+            }
+        }
+
+        /// <summary>
+        /// Repeatedly retrieve one record using <see cref="Api.RetrieveColumns"/>.
+        /// </summary>
+        /// <param name="numRetrieves">The number of times to retrieve the record.</param>
+        private void RepeatedlyRetrieveOneRecordWithRetrieveColumns(int numRetrieves)
+        {
+            Api.JetMove(this.session, this.table, JET_Move.First, MoveGrbit.None);
+
+            var columnValues = new ColumnValue[]
+            {
+                new Int64ColumnValue { Columnid = this.columnidKey },
+                new BytesColumnValue { Columnid = this.columnidData },
+            };
+
+            for (int i = 0; i < numRetrieves; ++i)
+            {
+                Api.JetBeginTransaction(this.session);
+                Api.RetrieveColumns(this.session, this.table, columnValues);
                 Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
             }
         }

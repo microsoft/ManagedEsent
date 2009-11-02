@@ -99,7 +99,7 @@ namespace Microsoft.Isam.Esent.Interop
                     {
                         if (0 != columnValues[i].Size)
                         {
-                            nativeRetrievecolumns[i] = columnValues[i].MakeNativeRetrieveColumn();
+                            columnValues[i].MakeNativeRetrieveColumn(ref nativeRetrievecolumns[i]);
                             nativeRetrievecolumns[i].pvData = new IntPtr(currentBuffer);
                             nativeRetrievecolumns[i].cbData = checked((uint)columnValues[i].Size);
 
@@ -123,7 +123,7 @@ namespace Microsoft.Isam.Esent.Interop
                         {
                             if (0 == columnValues[i].Size)
                             {
-                                nativeRetrievecolumns[i] = columnValues[i].MakeNativeRetrieveColumn();
+                                columnValues[i].MakeNativeRetrieveColumn(ref nativeRetrievecolumns[i]);
                                 nativeRetrievecolumns[i].pvData = new IntPtr(currentBuffer);
                                 nativeRetrievecolumns[i].cbData = checked((uint) bufferPerColumn);
                                 currentBuffer += nativeRetrievecolumns[i].cbData;
@@ -136,7 +136,7 @@ namespace Microsoft.Isam.Esent.Interop
                     // Retrieve the columns
                     err = Api.Impl.JetRetrieveColumns(sesid, tableid, nativeRetrievecolumns, columnValues.Length);
 
-                    // Propagate the errors
+                    // Propagate the errors.
                     for (int i = 0; i < columnValues.Length; ++i)
                     {
                         columnValues[i].Error = (JET_err) nativeRetrievecolumns[i].err;
@@ -220,19 +220,17 @@ namespace Microsoft.Isam.Esent.Interop
             bool hasValue)
         {
             Debug.Assert(this == columnValues[i], "SetColumns should be called on the current object");
-            NATIVE_SETCOLUMN setcolumn = this.MakeNativeSetColumn();
+            this.MakeNativeSetColumn(ref nativeColumns[i]);
 
             if (hasValue)
             {
-                setcolumn.cbData = checked((uint)bufferSize);
-                setcolumn.pvData = new IntPtr(buffer);
+                nativeColumns[i].cbData = checked((uint)bufferSize);
+                nativeColumns[i].pvData = new IntPtr(buffer);
                 if (0 == bufferSize)
                 {
-                    setcolumn.grbit |= (uint)SetColumnGrbit.ZeroLength;
+                    nativeColumns[i].grbit |= (uint)SetColumnGrbit.ZeroLength;
                 }
             }
-
-            nativeColumns[i] = setcolumn;
 
             int err = i == columnValues.Length - 1
                           ? Api.Impl.JetSetColumns(sesid, tableid, nativeColumns, columnValues.Length)
@@ -299,29 +297,25 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Create a native SetColumn from this object.
         /// </summary>
-        /// <returns>A NATIVE_SETCOLUMN created from this object.</returns>
-        private NATIVE_SETCOLUMN MakeNativeSetColumn()
+        /// <param name="setcolumn">The native setcolumn structure to fill in.</param>
+        private void MakeNativeSetColumn(ref NATIVE_SETCOLUMN setcolumn)
         {
-            return new NATIVE_SETCOLUMN
-                   {
-                       columnid = this.Columnid.Value,
-                       grbit = (uint)this.SetGrbit,
-                       itagSequence = checked((uint)this.ItagSequence),
-                   };
+            setcolumn.columnid = this.Columnid.Value;
+            setcolumn.grbit = (uint)this.SetGrbit;
+            setcolumn.itagSequence = checked((uint)this.ItagSequence);
         }
 
         /// <summary>
         /// Create a native RetrieveColumn from this object.
         /// </summary>
-        /// <returns>A NATIVE_RETCOL created from this object.</returns>
-        private NATIVE_RETRIEVECOLUMN MakeNativeRetrieveColumn()
+        /// <param name="retrievecolumn">
+        /// The retrieve column structure to fill in.
+        /// </param>
+        private void MakeNativeRetrieveColumn(ref NATIVE_RETRIEVECOLUMN retrievecolumn)
         {
-            return new NATIVE_RETRIEVECOLUMN
-                   {
-                       columnid = this.Columnid.Value,
-                       grbit = (uint)this.RetrieveGrbit,
-                       itagSequence = checked((uint)this.ItagSequence),
-                   };
+            retrievecolumn.columnid = this.Columnid.Value;
+            retrievecolumn.grbit = (uint)this.RetrieveGrbit;
+            retrievecolumn.itagSequence = checked((uint)this.ItagSequence);
         }
     }
 
@@ -1153,7 +1147,18 @@ namespace Microsoft.Isam.Esent.Interop
             }
             else
             {
-                this.Value = Encoding.Unicode.GetString(value, startIndex, count);
+                // Encoding.Unicode.GetString copies the data to an array of chars and then
+                // makes a string from it, copying the data twice. Use the more efficient
+                // char* constructor.
+                unsafe
+                {
+                    fixed (byte* data = value)
+                    {
+                        char* chars = (char*)(data + startIndex);
+                        int numChars = count / 2;
+                        this.Value = new string(chars, 0, numChars);
+                    }
+                }
             }
         }
     }

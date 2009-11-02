@@ -86,6 +86,7 @@
     <Compile Include="CallbackWrappersTests.cs" />
     <Compile Include="ColumnValueTests.cs" />
     <Compile Include="MakeKeyHelpersTests.cs" />
+    <Compile Include="RetrieveColumnsPerfTest.cs" />
     <Compile Include="TempTableNavigationTests.cs" />
     <Compile Include="HelpersTempTableFixtureTests.cs" />
     <Compile Include="DatabaseFileTestHelper.cs" />
