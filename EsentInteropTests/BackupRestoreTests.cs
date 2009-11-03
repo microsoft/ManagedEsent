@@ -21,7 +21,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Verify JetRestoreInstance throws an exception when the source database is null.")]
+        [Description("Verify JetRestoreInstance throws an exception when the source database is null")]
         [ExpectedException(typeof(ArgumentNullException))]
         public void TestJetRestoreInstanceThrowsExceptionWhenSourceIsNull()
         {
@@ -37,7 +37,20 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Test exception handling for exceptions thrown from the status callback during JetBackup.")]
+        [Description("Test JetRestore without a status callback")]
+        public void TestBackupRestoreWithoutStatusCallback()
+        {
+            var test = new DatabaseFileTestHelper("database", "backup", false);
+            test.TestBackupRestore();
+        }
+
+        /// <summary>
+        /// Test exception handling for exceptions thrown from
+        /// the status callback during JetBackup.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test exception handling for exceptions thrown from the status callback during JetBackup")]
         [ExpectedException(typeof(ArgumentNullException))]
         public void TestBackupCallbackExceptionHandling()
         {
@@ -52,7 +65,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Test exception handling for exceptions thrown from the status callback during JetRestore.")]
+        [Description("Test exception handling for exceptions thrown from the status callback during JetRestore")]
         [ExpectedException(typeof(ArgumentNullException))]
         public void TestBackupRestoreCallbackExceptionHandling()
         {

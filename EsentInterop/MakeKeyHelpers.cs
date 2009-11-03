@@ -104,7 +104,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             unsafe
             {
-                const int DataSize = 1;
+                const int DataSize = sizeof(byte);
                 var pointer = new IntPtr(&data);
                 Api.JetMakeKey(sesid, tableid, pointer, DataSize, grbit);
             }
@@ -122,7 +122,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             unsafe
             {
-                const int DataSize = 2;
+                const int DataSize = sizeof(short);
                 var pointer = new IntPtr(&data);
                 Api.JetMakeKey(sesid, tableid, pointer, DataSize, grbit);
             }
@@ -140,7 +140,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             unsafe
             {
-                const int DataSize = 4;
+                const int DataSize = sizeof(int);
                 var pointer = new IntPtr(&data);
                 Api.JetMakeKey(sesid, tableid, pointer, DataSize, grbit);
             }
@@ -158,7 +158,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             unsafe
             {
-                const int DataSize = 8;
+                const int DataSize = sizeof(long);
                 var pointer = new IntPtr(&data);
                 Api.JetMakeKey(sesid, tableid, pointer, DataSize, grbit);
             }
@@ -174,8 +174,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Key options.</param>
         public static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, Guid data, MakeKeyGrbit grbit)
         {
-            byte[] bytes = data.ToByteArray();
-            Api.JetMakeKey(sesid, tableid, bytes, bytes.Length, grbit);
+            unsafe
+            {
+                const int DataSize = 16 /* sizeof(Guid) */;
+                var pointer = new IntPtr(&data);
+                Api.JetMakeKey(sesid, tableid, pointer, DataSize, grbit);
+            }
         }
 
         /// <summary>
@@ -203,7 +207,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             unsafe
             {
-                const int DataSize = 4;
+                const int DataSize = sizeof(float);
                 var pointer = new IntPtr(&data);
                 Api.JetMakeKey(sesid, tableid, pointer, DataSize, grbit);
             }
@@ -221,7 +225,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             unsafe
             {
-                const int DataSize = 8;
+                const int DataSize = sizeof(double);
                 var pointer = new IntPtr(&data);
                 Api.JetMakeKey(sesid, tableid, pointer, DataSize, grbit);
             }
@@ -239,7 +243,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             unsafe
             {
-                const int DataSize = 2;
+                const int DataSize = sizeof(ushort);
                 var pointer = new IntPtr(&data);
                 Api.JetMakeKey(sesid, tableid, pointer, DataSize, grbit);
             }
@@ -257,7 +261,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             unsafe
             {
-                const int DataSize = 4;
+                const int DataSize = sizeof(uint);
                 var pointer = new IntPtr(&data);
                 Api.JetMakeKey(sesid, tableid, pointer, DataSize, grbit);
             }
@@ -275,7 +279,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             unsafe
             {
-                const int DataSize = 8;
+                const int DataSize = sizeof(ulong);
                 var pointer = new IntPtr(&data);
                 Api.JetMakeKey(sesid, tableid, pointer, DataSize, grbit);
             }

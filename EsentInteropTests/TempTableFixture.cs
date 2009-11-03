@@ -100,6 +100,33 @@ namespace InteropApiTests
             Assert.AreEqual(value, Api.RetrieveColumnAsInt32(this.session, this.tableid, columnid));
         }
 
+        /// <summary>
+        /// Test GetBookmark
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Test GetBookmark")]
+        public void TestGetBookmark()
+        {
+            JET_COLUMNID columnid = this.columnDict["Key"];
+            int value = Any.Int32;
+
+            var bookmark = new byte[5]; // Primary key is an int
+            int bookmarkSize;
+            using (var trx = new Transaction(this.session))
+            {
+                Api.JetPrepareUpdate(this.session, this.tableid, JET_prep.Insert);
+                Api.SetColumn(this.session, this.tableid, columnid, value);
+                Api.JetUpdate(this.session, this.tableid, bookmark, bookmark.Length, out bookmarkSize);
+                trx.Commit(CommitTransactionGrbit.None);
+            }
+
+            Api.TryMoveFirst(this.session, this.tableid);
+            byte[] actualBookmark = Api.GetBookmark(this.session, this.tableid);
+            Assert.AreEqual(bookmarkSize, actualBookmark.Length);
+            CollectionAssert.AreEqual(bookmark, actualBookmark);
+        }
+
         #region Set and Retrieve Columns
 
         /// <summary>

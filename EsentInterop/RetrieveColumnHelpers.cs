@@ -53,7 +53,7 @@ namespace Microsoft.Isam.Esent.Interop
             // Get the size of the bookmark, allocate memory, retrieve the bookmark.
             int bookmarkSize;
             var err = (JET_err) Impl.JetGetBookmark(sesid, tableid, null, 0, out bookmarkSize);
-            if (err < JET_err.Success && JET_err.BufferTooSmall != err)
+            if (JET_err.BufferTooSmall != err)
             {
                 Check((int) err);
             }

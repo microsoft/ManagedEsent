@@ -105,6 +105,7 @@ namespace InteropApiTests
 
             Api.TryMoveFirst(this.session, this.tableid);
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
+            Thread.BeginThreadAffinity();
         }
 
         /// <summary>
@@ -114,6 +115,7 @@ namespace InteropApiTests
         [Description("Fixture cleanup for RetrieveColumnsPerfTest")]
         public void Teardown()
         {
+            Thread.EndThreadAffinity();
             Thread.CurrentThread.Priority = ThreadPriority.Normal;
             Api.JetCloseTable(this.session, this.tableid);
             this.session.End();
