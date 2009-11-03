@@ -885,14 +885,14 @@ namespace Microsoft.Isam.Esent.Interop
             fixed (byte* pinnedBuffer = retrievecolumns[i].pvData)
             {
                 nativeretrievecolumns[i].pvData = new IntPtr(pinnedBuffer);
-            }
 
-            if (numColumns - 1 == i)
-            {
-                return Impl.JetRetrieveColumns(sesid, tableid, nativeretrievecolumns, numColumns);
-            }
+                if (numColumns - 1 == i)
+                {
+                    return Impl.JetRetrieveColumns(sesid, tableid, nativeretrievecolumns, numColumns);
+                }
 
-            return PinColumnsAndRetrieve(sesid, tableid, nativeretrievecolumns, retrievecolumns, numColumns, i + 1);
+                return PinColumnsAndRetrieve(sesid, tableid, nativeretrievecolumns, retrievecolumns, numColumns, i + 1);
+            }
         }
     }
 }

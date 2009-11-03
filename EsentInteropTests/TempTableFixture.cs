@@ -111,7 +111,7 @@ namespace InteropApiTests
             JET_COLUMNID columnid = this.columnDict["Key"];
             int value = Any.Int32;
 
-            var bookmark = new byte[5]; // Primary key is an int
+            var bookmark = new byte[SystemParameters.BookmarkMost];
             int bookmarkSize;
             using (var trx = new Transaction(this.session))
             {
@@ -122,9 +122,11 @@ namespace InteropApiTests
             }
 
             Api.TryMoveFirst(this.session, this.tableid);
+            var expectedBookmark = new byte[bookmarkSize];
+            Array.Copy(bookmark, expectedBookmark, bookmarkSize);
             byte[] actualBookmark = Api.GetBookmark(this.session, this.tableid);
             Assert.AreEqual(bookmarkSize, actualBookmark.Length);
-            CollectionAssert.AreEqual(bookmark, actualBookmark);
+            CollectionAssert.AreEqual(expectedBookmark, actualBookmark);
         }
 
         #region Set and Retrieve Columns
