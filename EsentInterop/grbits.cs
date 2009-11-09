@@ -662,6 +662,37 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Options for <see cref="Api.JetGetSecondaryIndexBookmark"/>.
+    /// </summary>
+    public enum GetSecondaryIndexBookmarkGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+    }
+
+    /// <summary>
+    /// Options for <see cref="Api.JetGotoSecondaryIndexBookmark"/>.
+    /// </summary>
+    public enum GotoSecondaryIndexBookmarkGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// In the event that the index entry can no longer be found, the cursor
+        /// will be left positioned where that index entry was previously found.
+        /// The operation will still fail with JET_errRecordDeleted; however,
+        /// it will be possible to move to the next or previous index entry
+        /// relative to the index entry that is now missing.
+        /// </summary>
+        BookmarkPermitVirtualCurrency = 0x1,
+    }
+
+    /// <summary>
     /// Options for JetMove.
     /// </summary>
     public enum MoveGrbit
@@ -669,7 +700,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Default options.
         /// </summary>
-        None,
+        None = 0,
 
         /// <summary>
         /// Moves the cursor forward or backward by the number of index entries

@@ -1915,6 +1915,47 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         }
 
         /// <summary>
+        /// Positions a cursor to an index entry that is associated with the
+        /// specified secondary index bookmark. The secondary index bookmark
+        /// must be used with the same index over the same table from which it
+        /// was originally retrieved. The secondary index bookmark for an index
+        /// entry can be retrieved using <see cref="JetGotoSecondaryIndexBookmark"/>.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table cursor to position.</param>
+        /// <param name="secondaryKey">The buffer that contains the secondary key.</param>
+        /// <param name="secondaryKeySize">The size of the secondary key.</param>
+        /// <param name="primaryKey">The buffer that contains the primary key.</param>
+        /// <param name="primaryKeySize">The size of the primary key.</param>
+        /// <param name="grbit">Options for positioning the bookmark.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGotoSecondaryIndexBookmark(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            byte[] secondaryKey,
+            int secondaryKeySize,
+            byte[] primaryKey,
+            int primaryKeySize,
+            GotoSecondaryIndexBookmarkGrbit grbit)
+        {
+            this.TraceFunctionCall("JetGotoSecondaryIndexBookmark");
+            this.CheckNotNull(secondaryKey, "secondaryKey");
+            this.CheckDataSize(secondaryKey, secondaryKeySize, "secondaryKeySize");
+            this.CheckDataSize(primaryKey, primaryKeySize, "primaryKeySize");
+
+            return
+                this.Err(
+                    NativeMethods.JetGotoSecondaryIndexBookmark(
+                        sesid.Value,
+                        tableid.Value,
+                        secondaryKey,
+                        checked((uint)secondaryKeySize),
+                        primaryKey,
+                        checked((uint)primaryKeySize),
+                        (uint)grbit));
+        }
+
+        /// <summary>
         /// Constructs search keys that may then be used by <see cref="IJetApi.JetSeek"/> and <see cref="IJetApi.JetSetIndexRange"/>.
         /// </summary>
         /// <remarks>
@@ -2176,6 +2217,59 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     out cbActual));
 
             actualBookmarkSize = checked((int)cbActual);
+            return err;
+        }
+
+        /// <summary>
+        /// Retrieves a special bookmark for the secondary index entry at the
+        /// current position of a cursor. This bookmark can then be used to
+        /// efficiently reposition that cursor back to the same index entry
+        /// using JetGotoSecondaryIndexBookmark. This is most useful when
+        /// repositioning on a secondary index that contains duplicate keys or
+        /// that contains multiple index entries for the same record.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the bookmark from.</param>
+        /// <param name="secondaryKey">Output buffer for the secondary key.</param>
+        /// <param name="secondaryKeySize">Size of the secondary key buffer.</param>
+        /// <param name="actualSecondaryKeySize">Returns the size of the secondary key.</param>
+        /// <param name="primaryKey">Output buffer for the primary key.</param>
+        /// <param name="primaryKeySize">Size of the primary key buffer.</param>
+        /// <param name="actualPrimaryKeySize">Returns the size of the primary key.</param>
+        /// <param name="grbit">Options for the call.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetSecondaryIndexBookmark(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            byte[] secondaryKey,
+            int secondaryKeySize,
+            out int actualSecondaryKeySize,
+            byte[] primaryKey,
+            int primaryKeySize,
+            out int actualPrimaryKeySize,
+            GetSecondaryIndexBookmarkGrbit grbit)
+        {
+            this.TraceFunctionCall("JetGetSecondaryIndexBookmark");
+            this.CheckDataSize(secondaryKey, secondaryKeySize, "secondaryKeySize");
+            this.CheckDataSize(primaryKey, primaryKeySize, "primaryKeySize");
+
+            uint cbSecondaryKey;
+            uint cbPrimaryKey;
+            int err = this.Err(
+                NativeMethods.JetGetSecondaryIndexBookmark(
+                    sesid.Value,
+                    tableid.Value,
+                    secondaryKey,
+                    checked((uint)secondaryKeySize),
+                    out cbSecondaryKey,
+                    primaryKey,
+                    checked((uint)primaryKeySize),
+                    out cbPrimaryKey,
+                    (uint)grbit));
+
+            actualSecondaryKeySize = checked((int)cbSecondaryKey);
+            actualPrimaryKeySize = checked((int)cbPrimaryKey);
+
             return err;
         }
 

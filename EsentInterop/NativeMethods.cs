@@ -419,6 +419,16 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetGotoBookmark(IntPtr sesid, IntPtr tableid, [In] byte[] pvBookmark, uint cbBookmark);
 
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetGotoSecondaryIndexBookmark(
+            IntPtr sesid,
+            IntPtr tableid,
+            [In] byte[] pvSecondaryKey,
+            uint cbSecondaryKey,
+            [In] byte[] pvPrimaryBookmark,
+            uint cbPrimaryBookmark,
+            uint grbit);
+
         // This has IntPtr and NATIVE_RETINFO versions because the parameter can be null
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetMove(IntPtr sesid, IntPtr tableid, int cRow, uint grbit);
@@ -464,6 +474,18 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetGetBookmark(IntPtr sesid, IntPtr tableid, [Out] byte[] pvBookmark, uint cbMax, out uint cbActual);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetGetSecondaryIndexBookmark(
+            IntPtr sesid,
+            IntPtr tableid,
+            [Out] byte[] secondaryKey,
+            uint secondaryKeySize,
+            out uint actualSecondaryKeySize,
+            [Out] byte[] primaryKey,
+            uint primaryKeySize,
+            out uint actualPrimaryKeySize,
+            uint grbit);
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetRetrieveColumn(IntPtr sesid, IntPtr tableid, uint columnid, IntPtr pvData, uint cbData, out uint cbActual, uint grbit, IntPtr pretinfo);

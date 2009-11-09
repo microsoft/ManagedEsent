@@ -1023,8 +1023,33 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to position.</param>
         /// <param name="bookmark">The bookmark used to position the cursor.</param>
-        /// <param name="bookmarkSize">The size of the bookmark.</param>        /// <returns>An error if the call fails.</returns>
+        /// <param name="bookmarkSize">The size of the bookmark.</param>        
+        /// <returns>An error if the call fails.</returns>
         int JetGotoBookmark(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize);
+
+        /// <summary>
+        /// Positions a cursor to an index entry that is associated with the
+        /// specified secondary index bookmark. The secondary index bookmark
+        /// must be used with the same index over the same table from which it
+        /// was originally retrieved. The secondary index bookmark for an index
+        /// entry can be retrieved using <see cref="JetGotoSecondaryIndexBookmark"/>.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table cursor to position.</param>
+        /// <param name="secondaryKey">The buffer that contains the secondary key.</param>
+        /// <param name="secondaryKeySize">The size of the secondary key.</param>
+        /// <param name="primaryKey">The buffer that contains the primary key.</param>
+        /// <param name="primaryKeySize">The size of the primary key.</param>
+        /// <param name="grbit">Options for positioning the bookmark.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetGotoSecondaryIndexBookmark(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            byte[] secondaryKey,
+            int secondaryKeySize,
+            byte[] primaryKey,
+            int primaryKeySize,
+            GotoSecondaryIndexBookmarkGrbit grbit);
 
         /// <summary>
         /// Navigate through an index. The cursor can be positioned at the start or
@@ -1192,6 +1217,35 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="actualBookmarkSize">Returns the actual size of the bookmark.</param>
         /// <returns>An error if the call fails.</returns>
         int JetGetBookmark(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize, out int actualBookmarkSize);
+
+        /// <summary>
+        /// Retrieves a special bookmark for the secondary index entry at the
+        /// current position of a cursor. This bookmark can then be used to
+        /// efficiently reposition that cursor back to the same index entry
+        /// using JetGotoSecondaryIndexBookmark. This is most useful when
+        /// repositioning on a secondary index that contains duplicate keys or
+        /// that contains multiple index entries for the same record.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the bookmark from.</param>
+        /// <param name="secondaryKey">Output buffer for the secondary key.</param>
+        /// <param name="secondaryKeySize">Size of the secondary key buffer.</param>
+        /// <param name="actualSecondaryKeySize">Returns the size of the secondary key.</param>
+        /// <param name="primaryKey">Output buffer for the primary key.</param>
+        /// <param name="primaryKeySize">Size of the primary key buffer.</param>
+        /// <param name="actualPrimaryKeySize">Returns the size of the primary key.</param>
+        /// <param name="grbit">Options for the call.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetGetSecondaryIndexBookmark(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            byte[] secondaryKey,
+            int secondaryKeySize,
+            out int actualSecondaryKeySize,
+            byte[] primaryKey,
+            int primaryKeySize,
+            out int actualPrimaryKeySize,
+            GetSecondaryIndexBookmarkGrbit grbit);
 
         /// <summary>
         /// Retrieves the key for the index entry at the current position of a cursor.

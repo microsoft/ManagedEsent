@@ -1047,6 +1047,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that an exception is thrown when JetGotoBookmark gets a null bookmark")]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetGotoBookmarkThrowsExceptionWhenBookmarkIsNull()
         {
@@ -1059,6 +1060,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that an exception is thrown when JetGotoBookmark gets a negative bookmark length")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetGotoBookmarkThrowsExceptionWhenBookmarkLengthIsNegative()
         {
@@ -1072,11 +1074,112 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that an exception is thrown when JetGotoBookmark gets a bookmark length that is too long")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetGotoBookmarkThrowsExceptionWhenBookmarkLengthIsTooLong()
         {
             var bookmark = new byte[1];
             Api.JetGotoBookmark(this.sesid, this.tableid, bookmark, bookmark.Length + 1);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetGotoSecondaryIndexBookmark gets a 
+        /// null secondary key.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetGotoSecondaryIndexBookmark gets a null secondary key")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetGotoSecondaryIndexBookmarkThrowsExceptionWhenSecondaryKeyIsNull()
+        {
+            Api.JetGotoSecondaryIndexBookmark(
+                this.sesid,
+                this.tableid,
+                null,
+                0,
+                new byte[1],
+                1,
+                GotoSecondaryIndexBookmarkGrbit.None); 
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetGotoSecondaryIndexBookmark gets a 
+        /// negative secondary key length.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetGotoSecondaryIndexBookmark gets a negative secondary key length")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetGotoSecondaryIndexBookmarkThrowsExceptionWhenSecondaryKeyLengthIsNegative()
+        {
+            Api.JetGotoSecondaryIndexBookmark(
+                this.sesid,
+                this.tableid,
+                new byte[1], 
+                -1,
+                new byte[1],
+                1,
+                GotoSecondaryIndexBookmarkGrbit.None);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetGotoSecondaryIndexBookmark gets a 
+        /// secondary key length that is too long.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetGotoSecondaryIndexBookmark gets a secondary key length that is too long")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetGotoSecondaryIndexBookmarkThrowsExceptionWhenSecondaryKeyLengthIsTooLong()
+        {
+            Api.JetGotoSecondaryIndexBookmark(
+                this.sesid,
+                this.tableid,
+                new byte[1], 
+                2,
+                new byte[1],
+                1,
+                GotoSecondaryIndexBookmarkGrbit.None);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetGotoSecondaryIndexBookmark gets a 
+        /// negative primary key length.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetGotoSecondaryIndexBookmark gets a negative primary key length")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetGotoSecondaryIndexBookmarkThrowsExceptionWhenPrimaryKeyLengthIsNegative()
+        {
+            Api.JetGotoSecondaryIndexBookmark(
+                this.sesid,
+                this.tableid,
+                new byte[1],
+                1,
+                new byte[1],
+                -1,
+                GotoSecondaryIndexBookmarkGrbit.None);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetGotoSecondaryIndexBookmark gets a 
+        /// primary key length that is too long.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetGotoSecondaryIndexBookmark gets a primary key length that is too long")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetGotoSecondaryIndexBookmarkThrowsExceptionWhenPrimaryKeyLengthIsTooLong()
+        {
+            Api.JetGotoSecondaryIndexBookmark(
+                this.sesid,
+                this.tableid,
+                new byte[1],
+                1,
+                new byte[1],
+                2,
+                GotoSecondaryIndexBookmarkGrbit.None);
         }
 
         /// <summary>
@@ -1213,6 +1316,150 @@ namespace InteropApiTests
             int actualSize;
             var bookmark = new byte[1];
             Api.JetGetBookmark(this.sesid, this.tableid, bookmark, bookmark.Length + 1, out actualSize);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetGetSecondaryIndexBookmark gets a 
+        /// null secondary key buffer and non-zero length.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JetGetSecondaryIndexBookmark throws an exception when the secondary bookmark is null and the length is non-zero")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetGetSecondaryIndexBookmarkThrowsExceptionWhenSecondaryKeyIsNull()
+        {
+            int ignored1;
+            int ignored2;
+            Api.JetGetSecondaryIndexBookmark(
+                this.sesid,
+                this.tableid,
+                null,
+                10,
+                out ignored1,
+                null,
+                0,
+                out ignored2,
+                GetSecondaryIndexBookmarkGrbit.None);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetGetSecondaryIndexBookmark gets a 
+        /// secondary key buffer length that is negative.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JetGetSecondaryIndexBookmark throws an exception when the secondary bookmark length is negative")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetGetSecondaryIndexBookmarkThrowsExceptionWhenSecondaryKeyLengthIsNegative()
+        {
+            int ignored1;
+            int ignored2;
+            Api.JetGetSecondaryIndexBookmark(
+                this.sesid,
+                this.tableid,
+                new byte[1], 
+                -1,
+                out ignored1,
+                null,
+                0,
+                out ignored2,
+                GetSecondaryIndexBookmarkGrbit.None);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetGetSecondaryIndexBookmark gets a 
+        /// secondary key buffer length that is too long.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JetGetSecondaryIndexBookmark throws an exception when the secondary bookmark length is too long")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetGetSecondaryIndexBookmarkThrowsExceptionWhenSecondaryKeyLengthIsTooLong()
+        {
+            int ignored1;
+            int ignored2;
+            Api.JetGetSecondaryIndexBookmark(
+                this.sesid,
+                this.tableid,
+                new byte[2], 
+                3,
+                out ignored1,
+                null,
+                0,
+                out ignored2,
+                GetSecondaryIndexBookmarkGrbit.None);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetGetSecondaryIndexBookmark gets a 
+        /// null primary key buffer and non-zero length.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JetGetSecondaryIndexBookmark throws an exception when the primary bookmark is null and the length is non-zero")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetGetSecondaryIndexBookmarkThrowsExceptionWhenPrimaryKeyIsNull()
+        {
+            int ignored1;
+            int ignored2;
+            Api.JetGetSecondaryIndexBookmark(
+                this.sesid,
+                this.tableid,
+                null,
+                0,
+                out ignored1,
+                null,
+                1,
+                out ignored2,
+                GetSecondaryIndexBookmarkGrbit.None);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetGetSecondaryIndexBookmark gets a 
+        /// primary key buffer length that is negative.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JetGetSecondaryIndexBookmark throws an exception when the primary bookmark length is negative")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetGetSecondaryIndexBookmarkThrowsExceptionWhenPrimaryKeyLengthIsNegative()
+        {
+            int ignored1;
+            int ignored2;
+            Api.JetGetSecondaryIndexBookmark(
+                this.sesid,
+                this.tableid,
+                null,
+                0,
+                out ignored1,
+                new byte[1],
+                -1,
+                out ignored2,
+                GetSecondaryIndexBookmarkGrbit.None);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetGetSecondaryIndexBookmark gets a 
+        /// primary key buffer length that is too long.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JetGetSecondaryIndexBookmark throws an exception when the primary bookmark length is too long")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetGetSecondaryIndexBookmarkThrowsExceptionWhenPrimaryKeyLengthIsTooLong()
+        {
+            int ignored1;
+            int ignored2;
+            Api.JetGetSecondaryIndexBookmark(
+                this.sesid,
+                this.tableid,
+                null,
+                0,
+                out ignored1,
+                new byte[2],
+                3,
+                out ignored2,
+                GetSecondaryIndexBookmarkGrbit.None);
         }
 
         /// <summary>
