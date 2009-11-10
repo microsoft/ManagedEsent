@@ -1906,7 +1906,64 @@ namespace Microsoft.Isam.Esent.Interop
 
         #endregion
 
-        #region Online Maintenance 
+        #region Callbacks
+
+        /// <summary>
+        /// Allows the application to configure the database engine to issue
+        /// notifications to the application for specific events. These
+        /// notifications are associated with a specific table and remain in
+        /// effect only until the instance containing the table is shut down
+        /// using <see cref="JetTerm"/>.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// A cursor opened on the table that the callback should be
+        /// registered on.
+        /// </param>
+        /// <param name="cbtyp">
+        /// The callback reasons for which the application wishes to receive notifications.
+        /// </param>
+        /// <param name="callback">The callback function.</param>
+        /// <param name="context">A context that will be given to the callback.</param>
+        /// <param name="callbackId">
+        /// A handle that can later be used to cancel the registration of the given
+        /// callback function using <see cref="JetUnregisterCallback"/>.
+        /// </param>
+        public static void JetRegisterCallback(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            JET_cbtyp cbtyp,
+            JET_CALLBACK callback,
+            IntPtr context,
+            out JET_HANDLE callbackId)
+        {
+            Api.Check(Impl.JetRegisterCallback(sesid, tableid, cbtyp, callback, context, out callbackId));
+        }
+
+        /// <summary>
+        /// Configures the database engine to stop issuing notifications to the
+        /// application as previously requested through
+        /// <see cref="JetRegisterCallback"/>.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// A cursor opened on the table that the callback should be
+        /// registered on.
+        /// </param>
+        /// <param name="cbtyp">
+        /// The callback reasons for which the application no longer wishes to receive notifications.
+        /// </param>
+        /// <param name="callbackId">
+        /// The handle of the registered callback that was returned by <see cref="JetRegisterCallback"/>.
+        /// </param>
+        public static void JetUnregisterCallback(JET_SESID sesid, JET_TABLEID tableid, JET_cbtyp cbtyp, JET_HANDLE callbackId)
+        {
+            Api.Check(Impl.JetUnregisterCallback(sesid, tableid, cbtyp, callbackId));
+        }
+
+        #endregion
+
+        #region Online Maintenance
 
         /// <summary>
         /// Starts and stops database defragmentation tasks that improves data
@@ -1930,9 +1987,55 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         /// <param name="grbit">Defragmentation options.</param>
         /// <returns>A warning code.</returns>
-        public static JET_wrn JetDefragment(JET_SESID sesid, JET_DBID dbid, string tableName, ref int passes, ref int seconds, DefragGrbit grbit)
+        public static JET_wrn JetDefragment(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            string tableName,
+            ref int passes,
+            ref int seconds,
+            DefragGrbit grbit)
         {
             return Api.Check(Impl.JetDefragment(sesid, dbid, tableName, ref passes, ref seconds, grbit));
+        }
+
+        /// <summary>
+        /// Starts and stops database defragmentation tasks that improves data
+        /// organization within a database.
+        /// </summary>
+        /// <remarks>
+        /// The callback passed to JetDefragment2 can be executed asynchronously.
+        /// The GC doesn't know that the unmanaged code has a reference to the callback
+        /// so it is important to make sure the callback isn't collected.
+        /// </remarks>
+        /// <param name="sesid">The session to use for the call.</param>
+        /// <param name="dbid">The database to be defragmented.</param>
+        /// <param name="tableName">
+        /// Unused parameter. Defragmentation is performed for the entire database described by the given database ID.
+        /// </param>
+        /// <param name="passes">
+        /// When starting an online defragmentation task, this parameter sets the maximum number of defragmentation
+        /// passes. When stopping an online defragmentation task, this parameter is set to the number of passes
+        /// performed.
+        /// </param>
+        /// <param name="seconds">
+        /// When starting an online defragmentation task, this parameter sets
+        /// the maximum time for defragmentation. When stopping an online
+        /// defragmentation task, this output buffer is set to the length of
+        /// time used for defragmentation.
+        /// </param>
+        /// <param name="callback">Callback function that defrag uses to report progress.</param>
+        /// <param name="grbit">Defragmentation options.</param>
+        /// <returns>A warning code.</returns>
+        public static JET_wrn JetDefragment2(
+            JET_SESID sesid, 
+            JET_DBID dbid, 
+            string tableName, 
+            ref int passes, 
+            ref int seconds, 
+            JET_CALLBACK callback, 
+            DefragGrbit grbit)
+        {
+            return Api.Check(Impl.JetDefragment2(sesid, dbid, tableName, ref passes, ref seconds, callback, grbit));
         }
 
         /// <summary>

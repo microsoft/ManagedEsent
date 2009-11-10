@@ -37,6 +37,13 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         private readonly uint versionOverride;
 
         /// <summary>
+        /// Callback wrapper collection. This is used for long-running callbacks
+        /// (callbacks which can be called after the API call returns). Create a
+        /// wrapper here and occasionally clean them up.
+        /// </summary>
+        private readonly CallbackWrappers callbackWrappers = new CallbackWrappers();
+
+        /// <summary>
         /// Initializes static members of the JetApi class.
         /// </summary>
         static JetApi()
@@ -219,6 +226,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetTerm(JET_INSTANCE instance)
         {
             this.TraceFunctionCall("JetTerm");
+            this.callbackWrappers.Collect();
             if (JET_INSTANCE.Nil != instance)
             {
                 return this.Err(NativeMethods.JetTerm(instance.Value));
@@ -237,6 +245,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetTerm2(JET_INSTANCE instance, TermGrbit grbit)
         {
             this.TraceFunctionCall("JetTerm2");
+            this.callbackWrappers.Collect();
             if (JET_INSTANCE.Nil != instance)
             {
                 return this.Err(NativeMethods.JetTerm2(instance.Value, (uint) grbit));
@@ -2725,6 +2734,81 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         #endregion
 
+        #region Callbacks
+
+        /// <summary>
+        /// Allows the application to configure the database engine to issue
+        /// notifications to the application for specific events. These
+        /// notifications are associated with a specific table and remain in
+        /// effect only until the instance containing the table is shut down
+        /// using <see cref="JetTerm"/>.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// A cursor opened on the table that the callback should be
+        /// registered on.
+        /// </param>
+        /// <param name="cbtyp">
+        /// The callback reasons for which the application wishes to receive notifications.
+        /// </param>
+        /// <param name="callback">The callback function.</param>
+        /// <param name="context">A context that will be given to the callback.</param>
+        /// <param name="callbackId">
+        /// A handle that can later be used to cancel the registration of the given
+        /// callback function using <see cref="JetUnregisterCallback"/>.
+        /// </param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetRegisterCallback(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            JET_cbtyp cbtyp,
+            JET_CALLBACK callback,
+            IntPtr context,
+            out JET_HANDLE callbackId)
+        {
+            this.TraceFunctionCall("JetRegisterCallback");
+            this.CheckNotNull(callback, "callback");
+
+            callbackId = JET_HANDLE.Nil;
+            return this.Err(NativeMethods.JetRegisterCallback(
+                sesid.Value,
+                tableid.Value,
+                unchecked((uint)cbtyp), 
+                this.callbackWrappers.Add(callback).Callback,
+                context,
+                out callbackId.Value));
+        }
+
+        /// <summary>
+        /// Configures the database engine to stop issuing notifications to the
+        /// application as previously requested through
+        /// <see cref="JetRegisterCallback"/>.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// A cursor opened on the table that the callback should be
+        /// registered on.
+        /// </param>
+        /// <param name="cbtyp">
+        /// The callback reasons for which the application no longer wishes to receive notifications.
+        /// </param>
+        /// <param name="callbackId">
+        /// The handle of the registered callback that was returned by <see cref="JetRegisterCallback"/>.
+        /// </param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetUnregisterCallback(JET_SESID sesid, JET_TABLEID tableid, JET_cbtyp cbtyp, JET_HANDLE callbackId)
+        {
+            this.TraceFunctionCall("JetUnregisterCallback");
+            this.callbackWrappers.Collect();
+            return this.Err(NativeMethods.JetUnregisterCallback(
+                sesid.Value,
+                tableid.Value,
+                unchecked((uint)cbtyp),
+                callbackId.Value));
+        }
+
+        #endregion
+
         #region Online Maintenance
 
         /// <summary>
@@ -2754,8 +2838,66 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.TraceFunctionCall("JetDefragment");
             uint nativePasses = unchecked((uint)passes);
             uint nativeSeconds = unchecked((uint)seconds);
-            return this.Err(NativeMethods.JetDefragment(
-                sesid.Value, dbid.Value, tableName, ref nativePasses, ref nativeSeconds, (uint)grbit));    
+            int err = this.Err(NativeMethods.JetDefragment(
+                sesid.Value, dbid.Value, tableName, ref nativePasses, ref nativeSeconds, (uint)grbit));
+            passes = unchecked((int)nativePasses);
+            seconds = unchecked((int)nativeSeconds);
+            return err;
+        }
+
+        /// <summary>
+        /// Starts and stops database defragmentation tasks that improves data
+        /// organization within a database.
+        /// </summary>
+        /// <param name="sesid">The session to use for the call.</param>
+        /// <param name="dbid">The database to be defragmented.</param>
+        /// <param name="tableName">
+        /// Unused parameter. Defragmentation is performed for the entire database described by the given database ID.
+        /// </param>
+        /// <param name="passes">
+        /// When starting an online defragmentation task, this parameter sets the maximum number of defragmentation
+        /// passes. When stopping an online defragmentation task, this parameter is set to the number of passes
+        /// performed.
+        /// </param>
+        /// <param name="seconds">
+        /// When starting an online defragmentation task, this parameter sets
+        /// the maximum time for defragmentation. When stopping an online
+        /// defragmentation task, this output buffer is set to the length of
+        /// time used for defragmentation.
+        /// </param>
+        /// <param name="callback">Callback function that defrag uses to report progress.</param>
+        /// <param name="grbit">Defragmentation options.</param>
+        /// <returns>An error code or warning.</returns>
+        public int JetDefragment2(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            string tableName,
+            ref int passes,
+            ref int seconds,
+            JET_CALLBACK callback,
+            DefragGrbit grbit)
+        {
+            this.TraceFunctionCall("JetDefragment2");
+            uint nativePasses = unchecked((uint)passes);
+            uint nativeSeconds = unchecked((uint)seconds);
+
+            IntPtr nativeCallback;
+            if (null == callback)
+            {
+                nativeCallback = IntPtr.Zero;
+            }
+            else
+            {
+                JetCallbackWrapper callbackWrapper = this.callbackWrappers.Add(callback);
+                nativeCallback = Marshal.GetFunctionPointerForDelegate(callbackWrapper.Callback);
+            }
+
+            int err = this.Err(NativeMethods.JetDefragment2(
+                sesid.Value, dbid.Value, tableName, ref nativePasses, ref nativeSeconds, nativeCallback, (uint)grbit));
+            passes = unchecked((int)nativePasses);
+            seconds = unchecked((int)nativeSeconds);
+            this.callbackWrappers.Collect();
+            return err;
         }
 
         /// <summary>

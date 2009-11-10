@@ -68,7 +68,7 @@ namespace InteropApiTests
         /// All DDL should be done in this method.
         /// </summary>
         [TestInitialize]
-        [Description("Setup for BasicTableTests.")]
+        [Description("Setup for BasicTableTests")]
         public void Setup()
         {
             this.directory = SetupHelper.CreateRandomDirectory();
@@ -99,7 +99,7 @@ namespace InteropApiTests
         /// Cleanup after all tests have run.
         /// </summary>
         [TestCleanup]
-        [Description("Cleanup for BasicTableTests.")]
+        [Description("Cleanup for BasicTableTests")]
         public void Teardown()
         {
             Api.JetCloseTable(this.sesid, this.tableid);
@@ -113,7 +113,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Verify that BasicTableTests has setup the test fixture properly.")]
+        [Description("Verify that BasicTableTests has setup the test fixture properly")]
         public void VerifyFixtureSetup()
         {
             Assert.IsNotNull(this.table);
@@ -137,7 +137,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Test moving a transaction between threads.")]
+        [Description("Test moving a transaction between threads")]
         public void VerifyJetSetSessionContextAllowsThreadMigration()
         {
             // Without the calls to JetSetSessionContext/JetResetSessionContext
@@ -167,7 +167,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Verify JetDupCursor returns a different tableid.")]
+        [Description("Verify JetDupCursor returns a different tableid")]
         public void VerifyJetDupCursorReturnsDifferentTableid()
         {
             JET_TABLEID newTableid;
@@ -181,7 +181,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Verify JetDupCursor should returns a tableid on the same table.")]
+        [Description("Verify JetDupCursor should returns a tableid on the same table")]
         public void VerifyJetDupCursorReturnsCursorOnSameTable()
         {
             string expected = Any.String;
@@ -209,7 +209,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Create one column of each type.")]
+        [Description("Create one column of each type")]
         public void CreateOneColumnOfEachType()
         {
             Api.JetBeginTransaction(this.sesid);
@@ -232,7 +232,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Create a column with a default value.")]
+        [Description("Create a column with a default value")]
         public void CreateColumnWithDefaultValue()
         {
             int expected = Any.Int32;
@@ -256,7 +256,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Add a column and retrieve its information using JetGetTableColumnInfo.")]
+        [Description("Add a column and retrieve its information using JetGetTableColumnInfo")]
         public void JetGetTableColumnInfo()
         {
             const string ColumnName = "column1";
@@ -289,7 +289,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Add a column and retrieve its information using JetGetTableColumnInfo.")]
+        [Description("Add a column and retrieve its information using JetGetTableColumnInfo")]
         public void JetGetTableColumnInfoByColumnid()
         {
             const string ColumnName = "column2";
@@ -322,7 +322,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Add a column and retrieve its information using JetGetColumnInfo.")]
+        [Description("Add a column and retrieve its information using JetGetColumnInfo")]
         public void JetGetColumnInfo()
         {
             const string ColumnName = "column3";
@@ -354,7 +354,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Add a column and retrieve its information using GetColumnDictionary.")]
+        [Description("Add a column and retrieve its information using GetColumnDictionary")]
         public void GetColumnDictionary()
         {
             const string ColumnName = "column4";
@@ -380,7 +380,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Check that the dictionary returned by GetColumnDictionary is case-insensitive.")]
+        [Description("Check that the dictionary returned by GetColumnDictionary is case-insensitive")]
         public void VerifyGetColumnDictionaryReturnsCaseInsensitiveDictionary()
         {
             IDictionary<string, JET_COLUMNID> dict = Api.GetColumnDictionary(this.sesid, this.tableid);
@@ -392,7 +392,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Create an index.")]
+        [Description("Create an index")]
         public void JetCreateIndex()
         {
             const string IndexDescription = "+TestColumn\0";
@@ -409,7 +409,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Creates an index with JetCreateIndex2.")]
+        [Description("Creates an index with JetCreateIndex2")]
         public void JetCreateIndex2()
         {
             Api.JetBeginTransaction(this.sesid);
@@ -435,7 +435,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Verify that JetGetCurrentIndex returns the name of the index.")]
+        [Description("Verify that JetGetCurrentIndex returns the name of the index")]
         public void VerifyJetGetCurrentIndexReturnsIndexName()
         {
             const string IndexDescription = "+TestColumn\0";
@@ -455,7 +455,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Delete an index and make sure we can't use it afterwards.")]
+        [Description("Delete an index and make sure we can't use it afterwards")]
         public void JetDeleteIndex()
         {
             const string IndexDescription = "+TestColumn\0";
@@ -483,7 +483,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Delete a column and make sure we can't see it afterwards.")]
+        [Description("Delete a column and make sure we can't see it afterwards")]
         public void TestJetDeleteColumn()
         {
             const string ColumnName = "column_to_delete";
@@ -513,7 +513,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Delete a column with JetDeleteColumn2 and make sure we can't see it afterwards.")]
+        [Description("Delete a column with JetDeleteColumn2 and make sure we can't see it afterwards")]
         public void TestJetDeleteColumn2()
         {
             const string ColumnName = "column_to_delete";
@@ -543,7 +543,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Delete a table and make sure we can't see it afterwards.")]
+        [Description("Delete a table and make sure we can't see it afterwards")]
         public void DeleteTable()
         {
             const string TableName = "table_to_delete";
@@ -576,7 +576,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Insert a record and retrieve it.")]
+        [Description("Insert a record and retrieve it")]
         public void InsertRecord()
         {
             string s = Any.String;
@@ -594,7 +594,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Insert a record and update it.")]
+        [Description("Insert a record and update it")]
         public void ReplaceRecord()
         {
             string before = Any.String;
@@ -620,7 +620,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Inserts a record and update it. This uses the Transaction class.")]
+        [Description("Inserts a record and update it. This uses the Transaction class")]
         public void ReplaceRecordWithTransactionClass()
         {
             string before = Any.String;
@@ -650,7 +650,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Inserts a record, update it and rollback the update.")]
+        [Description("Inserts a record, update it and rollback the update")]
         public void ReplaceAndRollback()
         {
             string before = Any.String;
@@ -676,7 +676,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Using JetBeginTransaction2, insert a record, update it and rollback the update.")]
+        [Description("Using JetBeginTransaction2, insert a record, update it and rollback the update")]
         public void TestJetBeginTransaction2()
         {
             string before = Any.String;
@@ -703,7 +703,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Insert a record, update it and rollback the transaction. This uses the Transaction class.")]
+        [Description("Insert a record, update it and rollback the transaction. This uses the Transaction class")]
         public void ReplaceAndRollbackWithTransactionClass()
         {
             string before = Any.String;
@@ -734,7 +734,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Insert a record and delete it.")]
+        [Description("Insert a record and delete it")]
         public void InsertRecordAndDelete()
         {
             Api.JetBeginTransaction(this.sesid);
@@ -762,7 +762,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Test JetGetLock.")]
+        [Description("Test JetGetLock")]
         public void JetGetLock()
         {
             Api.JetBeginTransaction(this.sesid);
@@ -782,7 +782,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Verify that JetGetLock throws an exception when incompatible locks are requested.")]
+        [Description("Verify that JetGetLock throws an exception when incompatible locks are requested")]
         public void VerifyJetGetLockThrowsExceptionOnWriteConflict()
         {
             var bookmark = new byte[SystemParameters.BookmarkMost];
@@ -830,7 +830,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Call JetComputeStats.")]
+        [Description("Call JetComputeStats")]
         public void JetComputeStats()
         {
             Api.JetBeginTransaction(this.sesid);
@@ -850,7 +850,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Call JetGetThreadStats.")]
+        [Description("Call JetGetThreadStats")]
         public void JetGetThreadStats()
         {
             if (!EsentVersion.SupportsVistaFeatures)
@@ -880,7 +880,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Insert a record and retrieve its bookmark.")]
+        [Description("Insert a record and retrieve its bookmark")]
         public void JetGetBookmark()
         {
             var expectedBookmark = new byte[256];
@@ -908,7 +908,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Insert a record and retrieve its bookmark.")]
+        [Description("Insert a record and retrieve its bookmark")]
         public void GetBookmark()
         {
             var expectedBookmark = new byte[256];
@@ -934,7 +934,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Insert a record and retrieve its key.")]
+        [Description("Insert a record and retrieve its key")]
         public void JetRetrieveKey()
         {
             string expected = Any.String;
@@ -962,7 +962,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Insert a record and retrieve its key.")]
+        [Description("Insert a record and retrieve its key")]
         public void RetrieveKey()
         {
             string expected = Any.String;
@@ -992,13 +992,117 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Start and stop online defragmentation JetDefragment")]
+        [Description("Start and stop online defragmentation with JetDefragment")]
         public void TestStartAndStopJetDefragment()
         {
             int passes = 1;
             int seconds = 1;
             Api.JetDefragment(this.sesid, this.dbid, null, ref passes, ref seconds, DefragGrbit.BatchStart);
             Api.JetDefragment(this.sesid, this.dbid, null, ref passes, ref seconds, DefragGrbit.BatchStop);
+        }
+
+        /// <summary>
+        /// Test starting and stoppping OLD with JetDefragment2.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Start and stop online defragmentation with JetDefragment2")]
+        public void TestStartAndStopJetDefragment2()
+        {
+            int passes = 1;
+            int seconds = 1;
+            Api.JetDefragment2(this.sesid, this.dbid, null, ref passes, ref seconds, null, DefragGrbit.BatchStart);
+            Api.JetDefragment2(this.sesid, this.dbid, null, ref passes, ref seconds, null, DefragGrbit.BatchStop);
+        }
+
+        /// <summary>
+        /// Verify JetDefragment2 calls the callback.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Verify JetDefragment2 calls the callback")]
+        public void TestJetDefragment2Callback()
+        {
+            ManualResetEvent oldFinishedEvent = new ManualResetEvent(false);
+            JET_CALLBACK callback = (sesid, dbid, tableid, cbtyp, arg1, arg2, context, unused) =>
+            {
+                oldFinishedEvent.Set();
+                return JET_err.Success;
+            };
+
+            int passes = 1;
+            int seconds = 1;
+            Api.JetDefragment2(this.sesid, this.dbid, null, ref passes, ref seconds, callback, DefragGrbit.BatchStart);
+            Assert.IsTrue(
+                oldFinishedEvent.WaitOne(TimeSpan.FromSeconds(10)),
+                "Online Defragmentation Callback not called");
+            Api.JetDefragment2(this.sesid, this.dbid, null, ref passes, ref seconds, null, DefragGrbit.BatchStop);
+
+            // Don't let the callback be collected before OLD finishes.
+            GC.KeepAlive(callback);
+        }
+
+        #endregion
+
+        #region Callback Tests
+
+        /// <summary>
+        /// Register a callback and make sure it is called.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Register a callback and make sure it is called")]
+        public void VerifyRegisteredCallbackIsCalled()
+        {
+            bool callbackWasCalled = false;
+            JET_CALLBACK callback = (s, d, t, cbtyp, arg1, arg2, context, unused) =>
+            {
+                callbackWasCalled = true;
+                return JET_err.Success;
+            };
+
+            JET_HANDLE callbackId;
+            Api.JetRegisterCallback(this.sesid, this.tableid, JET_cbtyp.BeforeInsert, callback, IntPtr.Zero, out callbackId);
+
+            using (var transaction = new Transaction(this.sesid))
+            using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            {
+                Api.SetColumn(this.sesid, this.tableid, this.columnidLongText, Any.String, Encoding.Unicode);
+                update.Save();
+                transaction.Commit(CommitTransactionGrbit.None);
+            }
+
+            Assert.IsTrue(callbackWasCalled, "callback was not called");
+        }
+
+        /// <summary>
+        /// Unregister a callback and make sure it is not called.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Unregister a callback and make sure it is not called")]
+        public void VerifyUnregisteredCallbackIsNotCalled()
+        {
+            bool callbackWasCalled = false;
+            JET_CALLBACK callback = (s, d, t, cbtyp, arg1, arg2, context, unused) =>
+            {
+                callbackWasCalled = true;
+                return JET_err.Success;
+            };
+
+            JET_HANDLE callbackId;
+            Api.JetRegisterCallback(this.sesid, this.tableid, JET_cbtyp.BeforeInsert, callback, IntPtr.Zero, out callbackId);
+            Api.JetUnregisterCallback(this.sesid, this.tableid, JET_cbtyp.BeforeInsert, callbackId);
+
+            using (var transaction = new Transaction(this.sesid))
+            using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            {
+                Api.SetColumn(this.sesid, this.tableid, this.columnidLongText, Any.String, Encoding.Unicode);
+                update.Save();
+                transaction.Commit(CommitTransactionGrbit.None);
+            }
+
+            Assert.IsFalse(callbackWasCalled, "callback was called");
         }
 
         #endregion

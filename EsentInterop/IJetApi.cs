@@ -1508,6 +1508,59 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         #endregion
 
+        #region Callbacks
+
+        /// <summary>
+        /// Allows the application to configure the database engine to issue
+        /// notifications to the application for specific events. These
+        /// notifications are associated with a specific table and remain in
+        /// effect only until the instance containing the table is shut down
+        /// using <see cref="JetTerm"/>.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// A cursor opened on the table that the callback should be
+        /// registered on.
+        /// </param>
+        /// <param name="cbtyp">
+        /// The callback reasons for which the application wishes to receive notifications.
+        /// </param>
+        /// <param name="callback">The callback function.</param>
+        /// <param name="context">A context that will be given to the callback.</param>
+        /// <param name="callbackId">
+        /// A handle that can later be used to cancel the registration of the given
+        /// callback function using <see cref="JetUnregisterCallback"/>.
+        /// </param>
+        /// <returns>An error if the call fails.</returns>
+        int JetRegisterCallback(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            JET_cbtyp cbtyp,
+            JET_CALLBACK callback,
+            IntPtr context,
+            out JET_HANDLE callbackId);
+
+        /// <summary>
+        /// Configures the database engine to stop issuing notifications to the
+        /// application as previously requested through
+        /// <see cref="JetRegisterCallback"/>.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// A cursor opened on the table that the callback should be
+        /// registered on.
+        /// </param>
+        /// <param name="cbtyp">
+        /// The callback reasons for which the application no longer wishes to receive notifications.
+        /// </param>
+        /// <param name="callbackId">
+        /// The handle of the registered callback that was returned by <see cref="JetRegisterCallback"/>.
+        /// </param>
+        /// <returns>An error if the call fails.</returns>
+        int JetUnregisterCallback(JET_SESID sesid, JET_TABLEID tableid, JET_cbtyp cbtyp, JET_HANDLE callbackId);
+
+        #endregion
+
         #region Online Maintenance
 
         /// <summary>
@@ -1532,7 +1585,45 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </param>
         /// <param name="grbit">Defragmentation options.</param>
         /// <returns>An error code or warning.</returns>
-        int JetDefragment(JET_SESID sesid, JET_DBID dbid, string tableName, ref int passes, ref int seconds, DefragGrbit grbit);
+        int JetDefragment(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            string tableName,
+            ref int passes,
+            ref int seconds,
+            DefragGrbit grbit);
+
+        /// <summary>
+        /// Starts and stops database defragmentation tasks that improves data
+        /// organization within a database.
+        /// </summary>
+        /// <param name="sesid">The session to use for the call.</param>
+        /// <param name="dbid">The database to be defragmented.</param>
+        /// <param name="tableName">
+        /// Unused parameter. Defragmentation is performed for the entire database described by the given database ID.
+        /// </param>
+        /// <param name="passes">
+        /// When starting an online defragmentation task, this parameter sets the maximum number of defragmentation
+        /// passes. When stopping an online defragmentation task, this parameter is set to the number of passes
+        /// performed.
+        /// </param>
+        /// <param name="seconds">
+        /// When starting an online defragmentation task, this parameter sets
+        /// the maximum time for defragmentation. When stopping an online
+        /// defragmentation task, this output buffer is set to the length of
+        /// time used for defragmentation.
+        /// </param>
+        /// <param name="callback">Callback function that defrag uses to report progress.</param>
+        /// <param name="grbit">Defragmentation options.</param>
+        /// <returns>An error code or warning.</returns>
+        int JetDefragment2(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            string tableName,
+            ref int passes,
+            ref int seconds,
+            JET_CALLBACK callback,
+            DefragGrbit grbit);
 
         /// <summary>
         /// Performs idle cleanup tasks or checks the version store status in ESE.

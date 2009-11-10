@@ -2197,5 +2197,22 @@ namespace InteropApiTests
         }
 
         #endregion
+
+        #region Callbacks
+
+        /// <summary>
+        /// Verify that JetRegisterCallback throws an exception when the callback is null.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that JetRegisterCallback throws an exception when the callback is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyJetRegisterCallbackThrowsExceptionWhenCallbackIsNull()
+        {
+            JET_HANDLE ignored;
+            Api.JetRegisterCallback(this.sesid, this.tableid, JET_cbtyp.BeforeReplace, null, IntPtr.Zero, out ignored);
+        }
+
+        #endregion
     }
 }

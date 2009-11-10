@@ -101,6 +101,16 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Determine if the callback is wrapping the specified JET_CALLBACK.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        /// <returns>True if this wrapper is wrapping the callback.</returns>
+        public bool IsWrapping(JET_CALLBACK callback)
+        {
+            return callback.Equals(this.wrappedCallback.Target);
+        }
+
+        /// <summary>
         /// Callback function for native code.
         /// </summary>
         /// <param name="nativeSesid">The session for which the callback is being made.</param>

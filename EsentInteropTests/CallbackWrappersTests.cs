@@ -49,6 +49,34 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify that IsWrapping returns true for a match with the wrapped callback.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that IsWrapping returns true for a match with the wrapped callback")]
+        public void VerifyIsWrappingReturnsTrueForMatch()
+        {
+            JET_CALLBACK callback = CreateCallback();
+            var wrapper = new JetCallbackWrapper(callback);
+            Assert.IsTrue(wrapper.IsWrapping(callback));
+            GC.KeepAlive(callback);
+        }
+
+        /// <summary>
+        /// Verify that IsWrapping returns false when there is no match with the wrapped callback.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that IsWrapping returns false when there is no match with the wrapped callback")]
+        public void VerifyIsWrappingReturnsFalseForNoMatch()
+        {
+            JET_CALLBACK callback = CreateCallback();
+            var wrapper = new JetCallbackWrapper(callback);
+            Assert.IsFalse(wrapper.IsWrapping(CreateCallback()));
+            GC.KeepAlive(callback);
+        }
+
+        /// <summary>
         /// Verify that the the CallbackWrapper returns the value from the wrapped callback.
         /// </summary>
         [TestMethod]
@@ -140,6 +168,38 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify that adding an callback returns a wrapper.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that adding an callback returns a wrapper")]
+        public void VerifyAddingCallbackReturnsWrapper()
+        {
+            JET_CALLBACK callback = CreateCallback();
+
+            var callbackWrappers = new CallbackWrappers();
+            var wrapper = callbackWrappers.Add(callback);
+
+            Assert.IsNotNull(callbackWrappers.Add(callback));
+        }
+
+        /// <summary>
+        /// Verify that adding an existing callback returns the same wrapper.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that adding an existing callback returns the same wrapper")]
+        public void VerifyAddingSameCallbackReturnsSameWrapper()
+        {
+            JET_CALLBACK callback = CreateCallback();
+
+            var callbackWrappers = new CallbackWrappers();
+            var wrapper = callbackWrappers.Add(callback);
+
+            Assert.AreEqual(wrapper, callbackWrappers.Add(callback));
+        }
+
+        /// <summary>
         /// Make sure the wrapper isn't removed when the callback is alive.
         /// </summary>
         [TestMethod]
@@ -149,12 +209,8 @@ namespace InteropApiTests
         {
             JET_CALLBACK callback = CreateCallback();
 
-            var wrapper = new JetCallbackWrapper(callback);
-            var wrapperRef = new WeakReference(wrapper);
-
             var callbackWrappers = new CallbackWrappers();
-            callbackWrappers.Add(wrapper);
-            wrapper = null;
+            var wrapperRef = new WeakReference(callbackWrappers.Add(callback));
 
             RunFullGarbageCollection();
             callbackWrappers.Collect();
@@ -178,14 +234,10 @@ namespace InteropApiTests
             JET_CALLBACK callback = CreateCallback();
             var callbackRef = new WeakReference(callback);
 
-            var wrapper = new JetCallbackWrapper(callback);
-            var wrapperRef = new WeakReference(wrapper);
-
             var callbackWrappers = new CallbackWrappers();
-            callbackWrappers.Add(wrapper);
+            var wrapperRef = new WeakReference(callbackWrappers.Add(callback));
 
             callback = null;
-            wrapper = null;
 
             RunFullGarbageCollection();
             callbackWrappers.Collect();
@@ -194,7 +246,7 @@ namespace InteropApiTests
             Assert.IsFalse(callbackRef.IsAlive);
             Assert.IsFalse(wrapperRef.IsAlive);
 
-            // Avoid premature collection of this object
+            // Avoid premature collection of this objects
             GC.KeepAlive(callbackWrappers);
         }
 
@@ -250,7 +302,7 @@ namespace InteropApiTests
         /// <param name="callbackWrappers">The CallbackWrappers to add the callback to.</param>
         private static void CreateCallbackWrapper(CallbackWrappers callbackWrappers)
         {
-            callbackWrappers.Add(new JetCallbackWrapper(CreateCallback()));
+            callbackWrappers.Add(CreateCallback());
         }
 
         /// <summary>

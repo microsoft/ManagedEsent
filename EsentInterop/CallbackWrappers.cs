@@ -43,14 +43,23 @@ namespace Microsoft.Isam.Esent.Interop
         private readonly List<JetCallbackWrapper> callbackWrappers = new List<JetCallbackWrapper>();
 
         /// <summary>
-        /// Add a new callback wrapper to the collection.
+        /// Wrap a callback and returns its wrapper. If the callback is
+        /// already wrapped then the existing wrapper is returned.
         /// </summary>
-        /// <param name="callbackWrapper">The callback wrapper to add.</param>
-        public void Add(JetCallbackWrapper callbackWrapper)
+        /// <param name="callback">The callback to add.</param>
+        /// <returns>The callback wrapper for the callback.</returns>
+        public JetCallbackWrapper Add(JET_CALLBACK callback)
         {
             lock (this.lockObject)
             {
-                this.callbackWrappers.Add(callbackWrapper);
+                JetCallbackWrapper wrapper;
+                if (!this.TryFindWrapperFor(callback, out wrapper))
+                {
+                    wrapper = new JetCallbackWrapper(callback);
+                    this.callbackWrappers.Add(wrapper);
+                }
+
+                return wrapper;
             }
         }
 
@@ -63,6 +72,28 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 this.callbackWrappers.RemoveAll(wrapper => !wrapper.IsAlive);
             }
+        }
+
+        /// <summary>
+        /// Look in the list of callback wrappers to see if there is already an entry for 
+        /// this callback.
+        /// </summary>
+        /// <param name="callback">The callback to look for.</param>
+        /// <param name="wrapper">Returns the wrapper, if found.</param>
+        /// <returns>True if a wrapper was found, false otherwise.</returns>
+        private bool TryFindWrapperFor(JET_CALLBACK callback, out JetCallbackWrapper wrapper)
+        {
+            foreach (JetCallbackWrapper w in this.callbackWrappers)
+            {
+                if (w.IsWrapping(callback))
+                {
+                    wrapper = w;
+                    return true;
+                }
+            }
+
+            wrapper = null;
+            return false;
         }
     }
 }

@@ -565,11 +565,26 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         #endregion
 
+        #region Callbacks
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetRegisterCallback(
+            IntPtr sesid, IntPtr tableid, uint cbtyp, NATIVE_CALLBACK callback, IntPtr pvContext, out IntPtr pCallbackId);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetUnregisterCallback(IntPtr sesid, IntPtr tableid, uint cbtyp, IntPtr hCallbackId);
+
+        #endregion
+
         #region Online Maintenance
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetDefragment(
             IntPtr sesid, uint dbid, string szTableName, ref uint pcPasses, ref uint pcSeconds, uint grbit);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetDefragment2(
+            IntPtr sesid, uint dbid, string szTableName, ref uint pcPasses, ref uint pcSeconds, IntPtr callback, uint grbit);
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetIdle(IntPtr sesid, uint grbit);
