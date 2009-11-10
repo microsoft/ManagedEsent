@@ -63,7 +63,7 @@ namespace InteropApiTests
             Api.JetInit(ref this.instance);
             Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
 
-            this.columnidDict = SetupHelper.CreateTempTableWithAllColumns(this.sesid, TempTableGrbit.None, out this.tableid);
+            this.columnidDict = SetupHelper.CreateTempTableWithAllColumns(this.sesid, TempTableGrbit.Indexed, out this.tableid);
         }
 
         /// <summary>
