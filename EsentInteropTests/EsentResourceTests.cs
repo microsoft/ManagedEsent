@@ -21,6 +21,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that disposing the object frees the resource")]
         public void EsentResourceDisposeReleasesResource()
         {
             MockEsesntResource saved = null;
@@ -38,6 +39,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that disposing the object twice works")]
         public void EsentResourceDisposeTwice()
         {
             var r = new MockEsesntResource();
@@ -53,6 +55,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that disposing the object does not free a resource that was never opened")]
         public void EsentResourceDisposeDoesNotFreeUnopenedResource()
         {
             MockEsesntResource saved = null;
@@ -70,6 +73,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that disposing the object does not free a closed resource")]
         public void EsentResourceDisposeDoesNotFreeClosedResource()
         {
             MockEsesntResource saved = null;
@@ -88,6 +92,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that using a disposed object generates an exception")]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void EsentResourceDisposedObjectThrowsException()
         {

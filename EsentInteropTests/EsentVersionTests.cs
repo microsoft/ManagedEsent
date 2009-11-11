@@ -23,10 +23,11 @@ namespace InteropApiTests
     public class EsentVersionTests
     {
         /// <summary>
-        /// Print the current version of Esent (for debugging)
+        /// Print the current version of Esent (for debugging).
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Print the current version of Esent (for debugging)")]
         public void PrintVersion()
         {
             if (EsentVersion.SupportsServer2003Features)
@@ -61,6 +62,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("If Windows 7 is supported then older features must be supported too")]
         public void VerifyWindows7FeaturesIncludesOlderFeatures()
         {
             if (EsentVersion.SupportsWindows7Features)
@@ -78,6 +80,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("If Windows Vista is supported then older features must be supported too")]
         public void VerifyWindowsVistaFeaturesIncludesOlderFeatures()
         {
             if (EsentVersion.SupportsVistaFeatures)
@@ -89,10 +92,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Print a list of all the Jet APIs.
+        /// Prints a list of all the Jet APIs.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Prints a list of all the Jet APIs")]
         public void ListAllApis()
         {            
             Console.WriteLine("Api");

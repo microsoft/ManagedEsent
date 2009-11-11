@@ -20,6 +20,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Start and then stop an EsentStopwatch")]
         public void TestStartAndStopEsentStopwatch()
         {
             var stopwatch = new EsentStopwatch();
@@ -32,6 +33,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("StartNew and then stop an EsentStopwatch")]
         public void TestStartNewAndStopEsentStopwatch()
         {
             var stopwatch = EsentStopwatch.StartNew();
@@ -43,6 +45,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Reset an EsentStopwatch")]
         public void TestResetEsentStopwatch()
         {
             var stopwatch = EsentStopwatch.StartNew();

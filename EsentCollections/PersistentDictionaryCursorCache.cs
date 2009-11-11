@@ -35,7 +35,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// Configuration for the cursors.
         /// </summary>
-        private readonly PersistentDictionaryConfig config;
+        private readonly IPersistentDictionaryConfig config;
 
         /// <summary>
         /// The name of the database to attach.
@@ -64,7 +64,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             Instance instance,
             string database,
             PersistentDictionaryConverters<TKey, TValue> converters,
-            PersistentDictionaryConfig config)
+            IPersistentDictionaryConfig config)
         {
             this.instance = instance;
             this.converters = converters;

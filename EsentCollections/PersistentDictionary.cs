@@ -58,7 +58,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// Meta-data information for the dictionary database.
         /// </summary>
-        private readonly PersistentDictionaryConfig config;
+        private readonly IPersistentDictionaryConfig config;
 
         /// <summary>
         /// Cache of cursors used to access the dictionary.

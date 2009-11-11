@@ -27,6 +27,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that creating an EsentException with a message sets the message")]
         public void VerifyEsentExceptionConstructorSetsMessage()
         {
             var ex = new EsentException("hello");
@@ -39,6 +40,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that creating an EsentException with an innner exception sets the inner exception property")]
         public void VerifyEsentExceptionConstructorSetsInnerException()
         {
             var ex = new EsentException("foo", new OutOfMemoryException("InnerException"));
@@ -51,6 +53,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that the error passed into the constructor is set in the error property")]
         public void VerifyEsentErrorExceptionConstructorSetsError()
         {
             var ex = new EsentErrorException(JET_err.AccessDenied);
@@ -64,6 +67,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that the error passed into the constructor is set in the error property")]
         public void VerifyEsentErrorExceptionHasMessage()
         {
             var ex = new EsentErrorException(JET_err.AccessDenied);
@@ -75,6 +79,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that an EsentErrorException can be serialized and deserialized")]
         public void VerifyEsentErrorExceptionSerializationPreservesError()
         {
             var originalException = new EsentErrorException(JET_err.VersionStoreOutOfMemory);
@@ -95,6 +100,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that an EsentInvalidColumnException can be serialized and deserialized")]
         public void VerifyEsentInvalidColumnExceptionSerializationPreservesMessage()
         {
             var originalException = new EsentInvalidColumnException();
@@ -115,6 +121,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify that the exception gets the correct error description from ESENT")]
         public void VerifyEsentErrorExceptionGetsErrorDescriptionFromSystemParameter()
         {
             var mocks = new MockRepository();
@@ -144,6 +151,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify that the exception has a default error description when the call to retrieve an error description fails")]
         public void VerifyEsentErrorExceptionHasDefaultErrorDescription()
         {
             var mocks = new MockRepository();
@@ -168,10 +176,11 @@ namespace InteropApiTests
 
         /// <summary>
         /// Check that an exception is thrown when an API call fails and
-        /// it contains the right error code.
+        /// that it contains the right error code.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that an exception is thrown when an API call fails and that it contains the right error code")]
         public void EsentExceptionIsThrownOnApiError()
         {
             using (var instance = new Instance("EsentExceptionHasErrorCode"))

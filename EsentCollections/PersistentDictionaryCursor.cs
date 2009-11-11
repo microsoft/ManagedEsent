@@ -41,7 +41,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// Database meta-data configuration.
         /// </summary>
-        private readonly PersistentDictionaryConfig config;
+        private readonly IPersistentDictionaryConfig config;
 
         /// <summary>
         /// The database to use.
@@ -98,7 +98,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             Instance instance,
             string database,
             PersistentDictionaryConverters<TKey, TValue> converters,
-            PersistentDictionaryConfig config)
+            IPersistentDictionaryConfig config)
         {
             this.instance = instance;
             this.converters = converters;

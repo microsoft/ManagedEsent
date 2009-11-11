@@ -64,6 +64,7 @@ namespace InteropApiTests
         /// All DDL should be done in this method.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the EscrowUpdateTests fixture")]
         public void Setup()
         {
             this.directory = SetupHelper.CreateRandomDirectory();
@@ -99,6 +100,7 @@ namespace InteropApiTests
         /// Cleanup after all tests have run.
         /// </summary>
         [TestCleanup]
+        [Description("Cleanup the EscrowUpdateTests fixture")]
         public void Teardown()
         {
             Api.JetCloseTable(this.sesid, this.tableid);
@@ -112,6 +114,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Verify the EscrowUpdateTests fixture was setup correctly")]
         public void VerifyFixtureSetup()
         {
             // Basic setup has been done
@@ -139,6 +142,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Verify that JetEscrowUpdate returns the previous column value")]
         public void VerifyJetEscrowUpdateReturnsOldValue()
         {
             var previousValue = new byte[4];
@@ -153,10 +157,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Verify that JetEscrowUpdate updates the column
+        /// Verify that JetEscrowUpdate updates the column.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Verify that JetEscrowUpdate updates the column")]
         public void VerifyJetEscrowUpdateUpdatesColumn()
         {
             const int Delta = -9;
@@ -174,6 +179,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Verify that EscrowUpdate returns the previous column value")]
         public void VerifyEscrowUpdateReturnsOldValue()
         {
             Api.JetBeginTransaction(this.sesid);
@@ -184,10 +190,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Verify that EscrowUpdate updates the column
+        /// Verify that EscrowUpdate updates the column.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Verify that EscrowUpdate updates the column")]
         public void VerifyEscrowUpdateUpdatesColumn()
         {
             const int Delta = 17;
