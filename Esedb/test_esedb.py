@@ -202,20 +202,31 @@ class EsedbIterationFixture(unittest.TestCase):
         self._db.last()
         self.assertRaises(KeyError, self._db.next)
         
-    def testPreviousReturnsNextRecord(self):
+    def testPreviousReturnsPreviousRecord(self):
         self._db.last()
         self.assertEqual(('c', '3'), self._db.previous())
 
     def testPreviousRaisesKeyErrorOnFirstRecord(self):
         self._db.first()
         self.assertRaises(KeyError, self._db.previous)
+
+    def testIterkeysReturnsKeys(self):
+        self.assertEqual(['a', 'b', 'c', 'd'], list(self._db.iterkeys()))
         
     def testKeysReturnsKeys(self):
         self.assertEqual(['a', 'b', 'c', 'd'], self._db.keys())
 
+    def testItervaluesReturnsValues(self):
+        self.assertEqual(['1', '2', '3', '4'], list(self._db.itervalues()))
+        
     def testValuesReturnsValues(self):
         self.assertEqual(['1', '2', '3', '4'], self._db.values())
 
+    def testIteritemsReturnsItems(self):
+        self.assertEqual(
+            [('a', '1'), ('b', '2'), ('c', '3'), ('d', '4')],
+            list(self._db.iteritems()))
+        
     def testItemsReturnsItems(self):
         self.assertEqual(
             [('a', '1'), ('b', '2'), ('c', '3'), ('d', '4')],
@@ -390,37 +401,46 @@ class EsedbClosedCursorFixture(unittest.TestCase):
         return Path.Combine(self._dataDirectory, filename)
 
     def testGetitemRaisesErrorOnClosedCursor(self):
-        self.assertRaises(EseDBCursorClosedError, self._db.__getitem__, '?')
+        self.assertRaises(EseDBCursorClosedError, self._db.__getitem__, '_')
 
     def testSetitemRaisesErrorOnClosedCursor(self):
-        self.assertRaises(EseDBCursorClosedError, self._db.__setitem__, '?', '?')
+        self.assertRaises(EseDBCursorClosedError, self._db.__setitem__, '_', '_')
 
     def testDelitemRaisesErrorOnClosedCursor(self):
-        self.assertRaises(EseDBCursorClosedError, self._db.__delitem__, '?')
-
-    def testContainsRaisesErrorOnClosedCursor(self):
-        self.assertRaises(EseDBCursorClosedError, self._db.__contains__, '?')
+        self.assertRaises(EseDBCursorClosedError, self._db.__delitem__, '_')
 
     def testLenRaisesErrorOnClosedCursor(self):
         self.assertRaises(EseDBCursorClosedError, len, self._db)
+        
+    def testContainsRaisesErrorOnClosedCursor(self):
+        self.assertRaises(EseDBCursorClosedError, self._db.__contains__, '_')
 
     def testClearRaisesErrorOnClosedCursor(self):
         self.assertRaises(EseDBCursorClosedError, self._db.clear)
+
+    def testIterkeysRaisesErrorOnClosedCursor(self):
+        self.assertRaises(EseDBCursorClosedError, self._db.iterkeys)
         
     def testKeysRaisesErrorOnClosedCursor(self):
         self.assertRaises(EseDBCursorClosedError, self._db.keys)
 
+    def testItervaluesRaisesErrorOnClosedCursor(self):
+        self.assertRaises(EseDBCursorClosedError, self._db.itervalues)
+
     def testValuesRaisesErrorOnClosedCursor(self):
         self.assertRaises(EseDBCursorClosedError, self._db.values)
+
+    def testIteritemsRaisesErrorOnClosedCursor(self):
+        self.assertRaises(EseDBCursorClosedError, self._db.iteritems)
 
     def testItemsRaisesErrorOnClosedCursor(self):
         self.assertRaises(EseDBCursorClosedError, self._db.items)
 
-    def testSetlocationRaisesErrorOnClosedCursor(self):
-        self.assertRaises(EseDBCursorClosedError, self._db.set_location, '?')
-
     def testHaskeyRaisesErrorOnClosedCursor(self):
-        self.assertRaises(EseDBCursorClosedError, self._db.has_key, '?')
+        self.assertRaises(EseDBCursorClosedError, self._db.has_key, '_')
+
+    def testSetlocationRaisesErrorOnClosedCursor(self):
+        self.assertRaises(EseDBCursorClosedError, self._db.set_location, '_')
         
     def testFirstRaisesErrorOnClosedCursor(self):
         self.assertRaises(EseDBCursorClosedError, self._db.first)        
@@ -563,28 +583,24 @@ class EsedbDictionaryComparisonFixture(unittest.TestCase):
         
     def testModifyingValuesDuringIterkeys(self):
         self._insertSomeItems()
-        i = iter(self._db)
         for k in self._db.iterkeys():
             self._insert(k, 'updated' + k)
         self._compareWithExpected()
 
     def testDeletingItemsDuringIterkeys(self):
         self._insertSomeItems()
-        i = iter(self._db)
         for k in self._db.iterkeys():
             self._delete(k)
         self._compareWithExpected()
 
     def testModifyingValuesDuringIteritems(self):
         self._insertSomeItems()
-        i = iter(self._db)
         for k,v in self._db.iteritems():
             self._insert(k, 'updated' + v)
         self._compareWithExpected()
 
     def testDeletingItemsDuringIteritems(self):
         self._insertSomeItems()
-        i = iter(self._db)
         for k,v in self._db.iteritems():
             self._delete(k)
         self._compareWithExpected()        
