@@ -334,7 +334,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             {
                 // We have an explicitly set version
                 Trace.WriteLineIf(
-                    this.traceSwitch.TraceVerbose, String.Format("JetGetVersion overridden with 0x{0:X}", this.versionOverride));
+                    this.traceSwitch.TraceVerbose, String.Format(CultureInfo.InvariantCulture, "JetGetVersion overridden with 0x{0:X}", this.versionOverride));
                 nativeVersion = this.versionOverride;
                 err = 0;
             }

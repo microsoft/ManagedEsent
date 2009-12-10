@@ -367,7 +367,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                return 0 == String.Compare(this.GetStringParameter(JET_param.Recovery), "on", true, CultureInfo.InvariantCulture);
+                return 0 == String.Compare(this.GetStringParameter(JET_param.Recovery), "on", StringComparison.OrdinalIgnoreCase);
             }
 
             set

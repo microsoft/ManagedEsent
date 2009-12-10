@@ -177,7 +177,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// created in the source database. Data that was in damaged portions of
         /// the source database will be skipped.
         /// </summary>
-        [Obsolete]
+        [Obsolete("Use esentutl repair functionality instead.")]
         Repair = 0x40,        
     }
 

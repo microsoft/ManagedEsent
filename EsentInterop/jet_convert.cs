@@ -12,7 +12,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// Conversion options for <see cref="Api.JetCompact"/>. This feature
     /// was discontinued in Windows Server 2003.
     /// </summary>
-    [Obsolete]
+    [Obsolete("Not available in Windows Server 2003 and up.")]
     public class JET_CONVERT
     {
     }

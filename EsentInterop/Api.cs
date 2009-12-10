@@ -521,7 +521,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">Options that specify how the backup ended.</param>
         public static void JetEndExternalBackupInstance2(JET_INSTANCE instance, EndExternalBackupGrbit grbit)
         {
-            Api.Check(Impl.JetEndExternalBackupInstance(instance));
+            Api.Check(Impl.JetEndExternalBackupInstance2(instance, grbit));
         }
 
         /// <summary>

@@ -248,7 +248,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         #region tables
 
-        [DllImport(EsentDll, ExactSpelling = true)]
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetOpenTable(IntPtr sesid, uint dbid, string tablename, IntPtr pvParameters, uint cbParameters, uint grbit, out IntPtr tableid);
 
         [DllImport(EsentDll, ExactSpelling = true)]
@@ -357,7 +357,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetGetTableColumnInfo(IntPtr sesid, IntPtr tableid, string szColumnName, ref NATIVE_COLUMNDEF columndef, uint cbMax, uint InfoLevel);
 
-        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetGetTableColumnInfo(IntPtr sesid, IntPtr tableid, ref uint pcolumnid, ref NATIVE_COLUMNDEF columndef, uint cbMax, uint InfoLevel);
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
@@ -450,7 +450,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             [In] [Out] ref NATIVE_RECORDLIST recordlist,
             uint grbit);
 
-        [DllImport(EsentDll, ExactSpelling = true)]
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetSetCurrentIndex(IntPtr sesid, IntPtr tableid, string szIndexName);
 
         [DllImport(EsentDll, ExactSpelling = true)]

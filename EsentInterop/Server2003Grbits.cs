@@ -39,7 +39,7 @@ namespace Microsoft.Isam.Esent.Interop.Server2003
         /// 2003, or later versions of ESE. It should not be necessary for most
         /// applications.
         /// </summary>
-        [Obsolete]
+        [Obsolete("Only needed for legacy replication applications.")]
         CheckESE97Compatibility = 0x1,
     }
 

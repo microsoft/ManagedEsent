@@ -6,9 +6,12 @@
 
 namespace Microsoft.Isam.Esent.Interop.Windows7
 {
+    using System;
+
     /// <summary>
     /// Options for JetConfigureProcessForCrashDump.
     /// </summary>
+    [Flags]
     public enum CrashDumpGrbit
     {
         /// <summary>
