@@ -103,18 +103,6 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Check that an exception is thrown when JetDetachDatabase gets a 
-        /// null database name.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void JetDetachDatabaseThrowsExceptionWhenDatabaseNameIsNull()
-        {
-            Api.JetDetachDatabase(this.sesid, null);
-        }
-
-        /// <summary>
         /// Check that an exception is thrown when JetGrowDatabase gets
         /// a negative page count.
         /// </summary>

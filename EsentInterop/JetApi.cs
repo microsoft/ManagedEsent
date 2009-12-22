@@ -444,7 +444,6 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetDetachDatabase(JET_SESID sesid, string database)
         {
             this.TraceFunctionCall("JetDetachDatabase");
-            this.CheckNotNull(database, "database");
 
             if (this.Capabilities.SupportsUnicodePaths)
             {
