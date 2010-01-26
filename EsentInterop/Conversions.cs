@@ -116,7 +116,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>An inverted dictionary.</returns>
         private static IDictionary<TKey, TValue> InvertDictionary<TValue, TKey>(IDictionary<TValue, TKey> dict)
         {
-            var invertedDict = new Dictionary<TKey, TValue>();
+            var invertedDict = new Dictionary<TKey, TValue>(dict.Count);
             foreach (KeyValuePair<TValue, TKey> entry in dict)
             {
                 invertedDict.Add(entry.Value, entry.Key);
