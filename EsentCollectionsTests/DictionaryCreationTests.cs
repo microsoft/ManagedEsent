@@ -71,7 +71,7 @@ namespace EsentCollectionsTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        public void VerifyExistsReturnsNullWhenDirectoryDoesNotExists()
+        public void VerifyExistsReturnsFalseWhenDirectoryDoesNotExist()
         {
             const string NonExistentDirectory = "doesnotexist";
             Assert.IsFalse(Directory.Exists(NonExistentDirectory));
@@ -84,7 +84,7 @@ namespace EsentCollectionsTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        public void VerifyExistsReturnsNullWhenDirectoryIsAFile()
+        public void VerifyExistsReturnsFalseWhenDirectoryIsAFile()
         {
             string file = Path.GetTempFileName();
             Assert.IsFalse(PersistentDictionaryFile.Exists(file));
@@ -97,7 +97,7 @@ namespace EsentCollectionsTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        public void VerifyExistsReturnsNullWhenDatabaseFileDoesNotExist()
+        public void VerifyExistsReturnsFalseWhenDatabaseFileDoesNotExist()
         {
             const string TestDirectory = "testdirectory";
             Directory.CreateDirectory(TestDirectory);
