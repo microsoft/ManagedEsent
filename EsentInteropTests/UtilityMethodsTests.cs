@@ -81,7 +81,7 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(0)]
         [Description("Check that Any.String returns a string of ASCII characters")]
-        public void TestAnyStringIsASCIICharacters()
+        public void TestAnyStringIsAsciiCharacters()
         {
             string s = Any.String;
             foreach (char c in s)

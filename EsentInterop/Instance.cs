@@ -9,6 +9,7 @@ namespace Microsoft.Isam.Esent.Interop
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.CompilerServices;
+    using System.Security.Permissions;
     using Microsoft.Win32.SafeHandles;
 
     /// <summary>
@@ -163,6 +164,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Release the handle for this instance.
         /// </summary>
         /// <returns>True if the handle could be released.</returns>
+        [SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
         protected override bool ReleaseHandle()
         {
             // The object is already marked as invalid so don't check

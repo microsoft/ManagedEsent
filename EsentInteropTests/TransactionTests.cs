@@ -7,7 +7,6 @@
 namespace InteropApiTests
 {
     using System;
-    using System.IO;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -40,6 +39,7 @@ namespace InteropApiTests
         /// All DDL should be done in this method.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the TransactionTests fixture")]
         public void Setup()
         {
             this.directory = SetupHelper.CreateRandomDirectory();
@@ -56,6 +56,7 @@ namespace InteropApiTests
         /// Cleanup after all tests have run.
         /// </summary>
         [TestCleanup]
+        [Description("Cleanup the TransactionTests fixture")]
         public void Teardown()
         {
             Api.JetEndSession(this.sesid, EndSessionGrbit.None);
@@ -68,6 +69,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Check the TransactionTests fixture is setup correctly")]
         public void VerifyFixtureSetup()
         {
             Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
@@ -81,6 +83,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Use a Transaction object to start a transaction, commit and restart")]
         public void CreateCommitAndBegin()
         {
             using (var transaction = new Transaction(this.sesid)) 
@@ -98,6 +101,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Use a Transaction object to start a transaction, rollback and restart")]
         public void CreateRollbackAndBegin()
         {
             using (var transaction = new Transaction(this.sesid))
@@ -115,6 +119,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Use a Transaction object to start a transaction twice, expecting an exception")]
         [ExpectedException(typeof(InvalidOperationException))]
         public void TestDoubleTransactionBeginThrowsException()
         {
@@ -129,6 +134,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Use a Transaction object to commit a transaction twice, expecting an exception")]
         [ExpectedException(typeof(InvalidOperationException))]
         public void TestDoubleTransactionCommitThrowsException()
         {
@@ -144,6 +150,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Use a Transaction object to rollback a transaction twice, expecting an exception")]
         [ExpectedException(typeof(InvalidOperationException))]
         public void TestDoubleTransactionRollbackThrowsException()
         {
@@ -160,6 +167,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Dispose the transaction object and then call Begin, expecting an exception")]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void TestBeginThrowsExceptionWhenDisposed()
         {
@@ -174,6 +182,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Dispose the transaction object and then call Commit, expecting an exception")]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void TestCommitThrowsExceptionWhenDisposed()
         {
@@ -188,6 +197,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Dispose the transaction object and then call Rollback, expecting an exception")]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void TestRollbackThrowsExceptionWhenDisposed()
         {
@@ -202,6 +212,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Dispose the transaction object and then call IsInTransaction, expecting an exception")]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void TestPropertyThrowsExceptionWhenDisposed()
         {

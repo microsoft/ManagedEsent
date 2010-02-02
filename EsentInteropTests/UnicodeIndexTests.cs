@@ -31,6 +31,7 @@ namespace InteropApiTests
         /// it to a managed object.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the UnicodeIndexTests fixture")]
         public void Setup()
         {
             this.managed = new JET_UNICODEINDEX()
@@ -46,6 +47,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that converting a JET_UNICODEINDEX to a NATIVE_UNICODEINDEX sets the map flags")]
         public void VerifyConversionToNativeSetsDwMapFlags()
         {
             Assert.AreEqual((uint)0x400, this.native.dwMapFlags);
@@ -56,6 +58,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that converting a JET_UNICODEINDEX to a NATIVE_UNICODEINDEX sets the lcid")]
         public void VerifyConversionToNativeSetsLcid()
         {
             Assert.AreEqual((uint)1033, this.native.lcid);

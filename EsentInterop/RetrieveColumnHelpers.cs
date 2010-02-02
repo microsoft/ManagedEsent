@@ -311,7 +311,7 @@ namespace Microsoft.Isam.Esent.Interop
                 }
             }
 
-            // TODO: for Unicode strings ping the buffer and use the String(char*) constructor.
+            // TODO: for Unicode strings pin the buffer and use the String(char*) constructor.
             string s = encoding.GetString(data, 0, dataSize);
 
             // Now we have extracted the string from the buffer we can free (cache) the buffer.

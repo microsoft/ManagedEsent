@@ -31,6 +31,7 @@ namespace InteropApiTests
         /// Test setup
         /// </summary>
         [TestInitialize]
+        [Description("Setup the UnicodePathsTests fixture")]
         public void Setup()
         {
             this.directory = "字会意";
@@ -41,6 +42,7 @@ namespace InteropApiTests
         /// Delete the test directory, if it was created.
         /// </summary>
         [TestCleanup]
+        [Description("Cleanup the UnicodePathsTests fixture")]
         public void Teardown()
         {
             if (Directory.Exists(this.directory))
@@ -57,6 +59,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that ArgumentException is thrown for unmappable characters")]
         [ExpectedException(typeof(ArgumentException))]
         public void ApiThrowsArgumentExceptionOnUnmappableChar()
         {
@@ -69,6 +72,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Set and get a Unicode system path")]
         public void SetAndGetUnicodeSystemPath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
@@ -88,6 +92,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Set and get a Unicode log path")]
         public void SetAndGetUnicodeLogPath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
@@ -107,6 +112,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Set and get a Unicode temp directory path")]
         public void SetAndGetUnicodeTempDbPath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
@@ -126,6 +132,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Create a database with a Unicode path")]
         public void CreateDatabaseWithUnicodePath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
@@ -152,6 +159,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Detach a database with a Unicode path")]
         public void DetachDatabaseWithUnicodePath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
@@ -179,6 +187,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Attach a database with a Unicode path")]
         public void AttachDatabaseWithUnicodePath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
@@ -208,6 +217,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Open a database with a Unicode path")]
         public void OpenDatabaseWithUnicodePath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
@@ -238,6 +248,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Backup and restore a database with a Unicode path")]
         public void BackupRestoreDatabaseWithUnicodePath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
@@ -254,6 +265,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Perform a streaming backup of a database with a Unicode path")]
         public void StreamingBackupWithUnicodePath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
@@ -266,10 +278,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Tests for streaming backup using unicode paths.
+        /// Tests for snapshot backup using unicode paths.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Perform a snapshot backup of a database with a Unicode path")]
         public void SnapshotBackupWithUnicodePath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
@@ -282,10 +295,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Backup and restore a database using unicode paths.
+        /// Compact a database using unicode paths.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Compact a database with a Unicode path")]
         public void TestJetCompactDatabaseWithUnicodePath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
@@ -298,10 +312,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Tests for JetCompactDatabase with a unicode path.
+        /// Tests for JetSetDatabaseSize with a unicode path.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Test JetSetDatabaseSize on a database with a Unicode path")]
         public void TestJetSetDatabaseSizeDatabaseWithUnicodePath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
@@ -318,6 +333,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Test JetGetInstanceInfo on a database with a Unicode path")]
         public void TestJetGetInstanceInfoWithUnicodePath()
         {
             if (!EsentVersion.SupportsUnicodePaths)
