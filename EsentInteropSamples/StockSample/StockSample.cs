@@ -411,7 +411,9 @@ namespace SampleApp
             int lowPrice,
             int highPrice)
         {
-            // We need one cursor for each index
+            // We need one cursor for each index. Remember to close these cursors
+            // to avoid resource leaks. Here we use JetDupCursor, but JetOpenTable
+            // would work as well.
             JET_TABLEID nameIndex;
             Api.JetDupCursor(sesid, tableid, out nameIndex, DupCursorGrbit.None);
             Api.JetSetCurrentIndex(sesid, nameIndex, "name");
@@ -441,6 +443,9 @@ namespace SampleApp
             }
 
             Console.WriteLine();
+
+            Api.JetCloseTable(sesid, nameIndex);
+            Api.JetCloseTable(sesid, priceIndex);
         }
 
         /// <summary>
@@ -481,7 +486,7 @@ namespace SampleApp
             string name = Api.RetrieveColumnAsString(sesid, tableid, columnidName);
 
             // this column can't be null so we cast to an int
-            var price = (int)Api.RetrieveColumnAsInt32(sesid, tableid, columnidPrice);
+            int price = (int)Api.RetrieveColumnAsInt32(sesid, tableid, columnidPrice);
 
             // this column can be null so we keep the nullable type
             int? shares = Api.RetrieveColumnAsInt32(sesid, tableid, columnidShares);
@@ -575,7 +580,13 @@ namespace SampleApp
                 columndef.grbit = ColumndefGrbit.None;
                 Api.JetAddColumn(sesid, tableid, "shares_owned", columndef, null, 0, out columnid);
 
-                // The primary index is the stock symbol.
+                // Now add indexes. An index consists of several index segments (see
+                // EsentVersion.Capabilities.ColumnsKeyMost to determine the maximum number of
+                // segments). Each segment consists of a sort direction ('+' for ascending,
+                // '-' for descending), a column name and a '\0' separator. The index definition
+                // must end with "\0\0". The count of characters should include all terminators.
+
+                // The primary index is the stock symbol. The primary index is always unique.
                 string indexDef = "+symbol\0\0";
                 Api.JetCreateIndex(sesid, tableid, "primary", CreateIndexGrbit.IndexPrimary, indexDef, indexDef.Length, 100);
 
@@ -584,7 +595,7 @@ namespace SampleApp
                 indexDef = "+name\0+symbol\0\0";
                 Api.JetCreateIndex(sesid, tableid, "name", CreateIndexGrbit.IndexUnique, indexDef, indexDef.Length, 100);
 
-                // An index on the price
+                // An index on the price. This index is not unique.
                 indexDef = "+price\0\0";
                 Api.JetCreateIndex(sesid, tableid, "price", CreateIndexGrbit.None, indexDef, indexDef.Length, 100);
 
