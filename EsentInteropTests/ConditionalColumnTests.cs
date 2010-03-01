@@ -35,10 +35,10 @@ namespace InteropApiTests
         public void Setup()
         {
             this.managed = new JET_CONDITIONALCOLUMN
-                           {
-                               szColumnName = "column",
-                               grbit = ConditionalColumnGrbit.ColumnMustBeNonNull,
-                           };
+            {
+                szColumnName = "column",
+                grbit = ConditionalColumnGrbit.ColumnMustBeNonNull,
+            };
             this.native = this.managed.GetNativeConditionalColumn();
         }
 

@@ -7,7 +7,6 @@
 namespace InteropApiTests
 {
     using System;
-    using System.IO;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -17,11 +16,6 @@ namespace InteropApiTests
     [TestClass]
     public class SessionTests
     {
-        /// <summary>
-        /// The directory being used for the database and its files.
-        /// </summary>
-        private string directory;
-
         /// <summary>
         /// The instance used by the test.
         /// </summary>
@@ -36,10 +30,8 @@ namespace InteropApiTests
         [TestInitialize]
         public void Setup()
         {
-            this.directory = SetupHelper.CreateRandomDirectory();
-            this.instance = SetupHelper.CreateNewInstance(this.directory);
-
-            // turn off logging so initialization is faster
+            // we just need a session so don't do any logging or create a database
+            this.instance = SetupHelper.CreateNewInstance(".");
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
             Api.JetInit(ref this.instance);
@@ -52,14 +44,13 @@ namespace InteropApiTests
         public void Teardown()
         {
             Api.JetTerm(this.instance);
-            Cleanup.DeleteDirectoryWithRetry(this.directory);
         }
 
         /// <summary>
         /// Verify that the test class has setup the test fixture properly.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(0)]
         public void VerifyFixtureSetup()
         {
             Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
@@ -71,7 +62,7 @@ namespace InteropApiTests
         /// Allocate a session and let it be disposed.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(0)]
         public void CreateSession()
         {
            using (var session = new Session(this.instance))
@@ -86,7 +77,7 @@ namespace InteropApiTests
         /// Test that a Session can be converted to a JET_SESID
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(0)]
         public void SessionCanConvertToJetSesid()
         {
             using (var session = new Session(this.instance))
@@ -100,7 +91,7 @@ namespace InteropApiTests
         /// Allocate a session and end it.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(0)]
         public void CreateAndEndSession()
         {
             using (var session = new Session(this.instance))
@@ -113,7 +104,7 @@ namespace InteropApiTests
         /// Check that ending a session zeroes the JetSesid member.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(0)]
         public void CheckThatEndSessionZeroesJetSesid()
         {
             var session = new Session(this.instance);
@@ -126,7 +117,7 @@ namespace InteropApiTests
         /// an exception.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(0)]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void EndThrowsExceptionWhenSessionIsDisposed()
         {
@@ -140,7 +131,7 @@ namespace InteropApiTests
         /// session throws an exception.
         /// </summary>
         [TestMethod]
-        [Priority(1)]
+        [Priority(0)]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void JetSesidThrowsExceptionWhenSessionIsDisposed()
         {

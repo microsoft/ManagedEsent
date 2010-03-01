@@ -8,7 +8,6 @@ namespace InteropApiTests
 {
     using System;
     using System.IO;
-    using System.Linq;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.VisualStudio.TestTools.UnitTesting;

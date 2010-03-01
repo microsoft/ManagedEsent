@@ -27,11 +27,6 @@ namespace InteropApiTests
         private string directory;
 
         /// <summary>
-        /// The path to the database being used by the test.
-        /// </summary>
-        private string database;
-
-        /// <summary>
         /// The name of the table.
         /// </summary>
         private string table;
@@ -67,7 +62,6 @@ namespace InteropApiTests
         public void Setup()
         {
             this.directory = SetupHelper.CreateRandomDirectory();
-            this.database = Path.Combine(this.directory, "database.edb");
             this.table = "table";
             this.instance = SetupHelper.CreateNewInstance(this.directory);
 

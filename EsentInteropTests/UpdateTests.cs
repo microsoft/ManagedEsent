@@ -23,11 +23,6 @@ namespace InteropApiTests
         private string directory;
 
         /// <summary>
-        /// The name of the table.
-        /// </summary>
-        private string tableName;
-
-        /// <summary>
         /// The instance used by the test.
         /// </summary>
         private JET_INSTANCE instance;
@@ -53,7 +48,6 @@ namespace InteropApiTests
         public void Setup()
         {
             this.directory = SetupHelper.CreateRandomDirectory();
-            this.tableName = "table";
             this.instance = SetupHelper.CreateNewInstance(this.directory);
 
             // turn off logging so initialization is faster
@@ -91,7 +85,6 @@ namespace InteropApiTests
         [Description("Verify that the UpdateTests.Setup has setup the test fixture properly.")]
         public void VerifyFixtureSetup()
         {
-            Assert.IsNotNull(this.tableName);
             Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
             Assert.AreNotEqual(JET_SESID.Nil, this.sesid);
         }

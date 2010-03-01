@@ -37,18 +37,18 @@ namespace InteropApiTests
         public void Setup()
         {
             this.managed = new JET_INDEXCREATE()
-                           {
-                               szIndexName = "index",
-                               szKey = "+foo\0-bar\0\0",
-                               cbKey = 8,
-                               grbit = CreateIndexGrbit.IndexSortNullsHigh,
-                               ulDensity = 100,
-                               pidxUnicode = null,
-                               cbVarSegMac = 200,
-                               rgconditionalcolumn = null,
-                               cConditionalColumn = 0,
-                               cbKeyMost = 500,
-                           };
+            {
+                szIndexName = "index",
+                szKey = "+foo\0-bar\0\0",
+                cbKey = 8,
+                grbit = CreateIndexGrbit.IndexSortNullsHigh,
+                ulDensity = 100,
+                pidxUnicode = null,
+                cbVarSegMac = 200,
+                rgconditionalcolumn = null,
+                cConditionalColumn = 0,
+                cbKeyMost = 500,
+            };
             this.native = this.managed.GetNativeIndexcreate2();
         }
 

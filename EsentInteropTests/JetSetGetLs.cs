@@ -131,7 +131,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// A JET_CALLBACK delegate used as the 
+        /// A JET_CALLBACK delegate used as the runtime callback.
         /// </summary>
         /// <param name="callbackSesid">The session.</param>
         /// <param name="callbackDbid">The database.</param>
