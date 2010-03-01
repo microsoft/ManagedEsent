@@ -22,6 +22,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that JET_INSTANCE structures can be compared for equality")]
         public void VerifyJetInstanceEquality()
         {
             var x = JET_INSTANCE.Nil;
@@ -37,6 +38,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that JET_INSTANCE structures can be compared for inequality")]
         public void VerifyJetInstanceInequality()
         {
             var x = JET_INSTANCE.Nil;
@@ -52,6 +54,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that JET_SESID structures can be compared for equality")]
         public void VerifyJetSesidEquality()
         {
             var x = JET_SESID.Nil;
@@ -67,6 +70,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that JET_SESID structures can be compared for inequality")]
         public void VerifyJetSesidInequality()
         {
             var x = JET_SESID.Nil;
@@ -82,6 +86,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that JET_TABLEID structures can be compared for equality")]
         public void VerifyJetTableidEquality()
         {
             var x = JET_TABLEID.Nil;
@@ -97,6 +102,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that JET_TABLEID structures can be compared for inequality")]
         public void VerifyJetTableidInequality()
         {
             var x = JET_TABLEID.Nil;
@@ -112,6 +118,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that JET_DBID structures can be compared for equality")]
         public void VerifyJetDbidEquality()
         {
             var x = JET_DBID.Nil;
@@ -127,6 +134,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that JET_DBID structures can be compared for inequality")]
         public void VerifyJetDbidInequality()
         {
             var x = JET_DBID.Nil;
@@ -142,6 +150,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that JET_COLUMNID structures can be compared for equality")]
         public void VerifyJetColumnidEquality()
         {
             var x = JET_COLUMNID.Nil;
@@ -157,6 +166,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that JET_COLUMNID structures can be compared for inequality")]
         public void VerifyJetColumnidInequality()
         {
             var x = JET_COLUMNID.Nil;
@@ -172,6 +182,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that JET_OSSNAPID structures can be compared for equality")]
         public void VerifyJetOsSnapidEquality()
         {
             var x = JET_OSSNAPID.Nil;
@@ -187,6 +198,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that JET_OSSNAPID structures can be compared for inequality")]
         public void VerifyJetOsSnapidInequality()
         {
             var x = JET_OSSNAPID.Nil;
@@ -202,6 +214,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that JET_HANDLE structures can be compared for equality")]
         public void VerifyJetHandleEquality()
         {
             var x = JET_HANDLE.Nil;
@@ -217,10 +230,43 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that JET_HANDLE structures can be compared for inequality")]
         public void VerifyJetHandleInequality()
         {
             var x = JET_HANDLE.Nil;
             var y = new JET_HANDLE { Value = (IntPtr)0x7 };
+            TestUnequalObjects(x, y);
+            Assert.IsTrue(x != y);
+            Assert.IsFalse(x == y);
+        }
+
+        /// <summary>
+        /// Check that JET_LS structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_LS structures can be compared for equality")]
+        public void VerifyJetLsEquality()
+        {
+            var x = JET_LS.Nil;
+            var y = JET_LS.Nil;
+            TestEqualObjects(x, y);
+            Assert.IsTrue(x == y);
+            Assert.IsFalse(x != y);
+        }
+
+        /// <summary>
+        /// Check that JET_LS structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_LS structures can be compared for inequality")]
+        public void VerifyJetLsInequality()
+        {
+            var x = JET_LS.Nil;
+            var y = new JET_LS { Value = (IntPtr)0x7 };
             TestUnequalObjects(x, y);
             Assert.IsTrue(x != y);
             Assert.IsFalse(x == y);

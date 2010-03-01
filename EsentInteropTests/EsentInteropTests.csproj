@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{85B2B7BB-BF95-42DF-8CBF-348AEF63BD1F}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -83,9 +83,18 @@
     <Compile Include="ApiTestHook.cs" />
     <Compile Include="ApiTestHookTests.cs" />
     <Compile Include="ApiTests.cs" />
+    <Compile Include="BasicDDLTests.cs" />
     <Compile Include="CallbackWrappersTests.cs" />
     <Compile Include="ColumnValueTests.cs" />
+    <Compile Include="JetGetThreadStatsTests.cs" />
+    <Compile Include="JetSetGetLs.cs" />
     <Compile Include="MakeKeyHelpersTests.cs" />
+    <Compile Include="NativeRecsize2ConversionTests.cs" />
+    <Compile Include="NativeRecsizeConversionTests.cs" />
+    <Compile Include="Recsize2ConversionTests.cs" />
+    <Compile Include="RecsizeAdditionTests.cs" />
+    <Compile Include="RecsizeConversionTests.cs" />
+    <Compile Include="RecsizeSubtractionTests.cs" />
     <Compile Include="RetrieveColumnsPerfTest.cs" />
     <Compile Include="TempTableNavigationTests.cs" />
     <Compile Include="HelpersTempTableFixtureTests.cs" />

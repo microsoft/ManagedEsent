@@ -222,6 +222,23 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Sets database configuration options.
+        /// </summary>
+        /// <param name="instance">
+        /// The instance to set the option on or <see cref="JET_INSTANCE.Nil"/>
+        /// to set the option on all instances.
+        /// </param>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="paramid">The parameter to set.</param>
+        /// <param name="paramValue">The value of the parameter to set, if the parameter is an integer type.</param>
+        /// <param name="paramString">The value of the parameter to set, if the parameter is a string type.</param>
+        /// <returns>An ESENT warning code.</returns>
+        public static JET_wrn JetSetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, JET_CALLBACK paramValue, string paramString)
+        {
+            return Api.Check(Impl.JetSetSystemParameter(instance, sesid, paramid, paramValue, paramString));
+        }
+
+        /// <summary>
         /// Gets database configuration options.
         /// </summary>
         /// <param name="instance">The instance to retrieve the options from.</param>
@@ -688,6 +705,41 @@ namespace Microsoft.Isam.Esent.Interop
         public static void JetComputeStats(JET_SESID sesid, JET_TABLEID tableid)
         {
             Api.Check(Impl.JetComputeStats(sesid, tableid));
+        }
+
+        /// <summary>
+        /// Enables the application to associate a context handle known as
+        /// Local Storage with a cursor or the table associated with that
+        /// cursor. This context handle can be used by the application to
+        /// store auxiliary data that is associated with a cursor or table.
+        /// The application is later notified using a runtime callback when
+        /// the context handle must be released. This makes it possible to
+        /// associate dynamically allocated state with a cursor or table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to use.</param>
+        /// <param name="ls">The context handle to be associated with the session or cursor.</param>
+        /// <param name="grbit">Set options.</param>
+        public static void JetSetLS(JET_SESID sesid, JET_TABLEID tableid, JET_LS ls, LsGrbit grbit)
+        {
+            Api.Check(Impl.JetSetLS(sesid, tableid, ls, grbit));
+        }
+
+        /// <summary>
+        /// Enables the application to retrieve the context handle known
+        /// as Local Storage that is associated with a cursor or the table
+        /// associated with that cursor. This context handle must have been
+        /// previously set using <see cref="JetSetLS"/>. JetGetLS can also
+        /// be used to simultaneously fetch the current context handle for
+        /// a cursor or table and reset that context handle.  
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to use.</param>
+        /// <param name="ls">Returns the retrieved context handle.</param>
+        /// <param name="grbit">Retrieve options.</param>
+        public static void JetGetLS(JET_SESID sesid, JET_TABLEID tableid, out JET_LS ls, LsGrbit grbit)
+        {
+            Api.Check(Impl.JetGetLS(sesid, tableid, out ls, grbit));
         }
 
         #endregion
@@ -1679,6 +1731,21 @@ namespace Microsoft.Isam.Esent.Interop
                     allocatorContext,
                     maxDataSize,
                     grbit));
+        }
+
+        /// <summary>
+        /// Retrieves record size information from the desired location.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// The cursor that will be used for the API call. The cursor must be
+        /// positioned on a record, or have an update prepared.
+        /// </param>
+        /// <param name="recsize">Returns the size of the record.</param>
+        /// <param name="grbit">Call options.</param>
+        public static void JetGetRecordSize(JET_SESID sesid, JET_TABLEID tableid, ref JET_RECSIZE recsize, GetRecordSizeGrbit grbit)
+        {
+            Api.Check(Impl.JetGetRecordSize(sesid, tableid, ref recsize, grbit));
         }
 
         #endregion

@@ -99,5 +99,17 @@ namespace InteropApiTests
             var handle = new JET_HANDLE { Value = (IntPtr)0x123ABC };
             Assert.AreEqual("JET_HANDLE(0x123abc)", handle.ToString());
         }
+
+        /// <summary>
+        /// Test JET_LS.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_LS.ToString()")]
+        public void JetLsToString()
+        {
+            var handle = new JET_LS { Value = (IntPtr)0x123ABC };
+            Assert.AreEqual("JET_LS(0x123abc)", handle.ToString());
+        }
     }
 }

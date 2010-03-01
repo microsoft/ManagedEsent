@@ -97,6 +97,7 @@
     <Compile Include="jet_cbtyp.cs" />
     <Compile Include="jet_convert.cs" />
     <Compile Include="jet_instance_info.cs" />
+    <Compile Include="jet_recsize.cs" />
     <Compile Include="Server2003Api.cs" />
     <Compile Include="jet_enumcolumn.cs" />
     <Compile Include="jet_enumcolumnid.cs" />

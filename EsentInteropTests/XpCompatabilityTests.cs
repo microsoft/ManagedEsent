@@ -331,5 +331,73 @@ namespace InteropApiTests
 
             Cleanup.DeleteDirectoryWithRetry(directory);
         }
+
+        /// <summary>
+        /// Use JetGetRecordSize on XP to test the compatability path. This also tests
+        /// the handling of the running total option.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Use JetGetRecordSize on XP to test the compatability path")]
+        public void GetRecordSizeOnXp()
+        {
+            string directory = SetupHelper.CreateRandomDirectory();
+            string database = Path.Combine(directory, "test.db");
+
+            using (var instance = new Instance("XpCompatability"))
+            {
+                instance.Parameters.Recovery = false;
+                instance.Parameters.NoInformationEvent = true;
+                instance.Parameters.MaxTemporaryTables = 0;
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    JET_DBID dbid;
+                    Api.JetCreateDatabase(session, database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    using (var transaction = new Transaction(session))
+                    {
+                        JET_TABLEID tableid;
+                        Api.JetCreateTable(session, dbid, "table", 0, 100, out tableid);
+                        JET_COLUMNID columnid;
+                        Api.JetAddColumn(
+                            session,
+                            tableid,
+                            "column1",
+                            new JET_COLUMNDEF { coltyp = JET_coltyp.LongBinary },
+                            null,
+                            0,
+                            out columnid);
+
+                        var size = new JET_RECSIZE();
+                        byte[] data = Any.Bytes;
+
+                        using (var update = new Update(session, tableid, JET_prep.Insert))
+                        {
+                            Api.SetColumn(session, tableid, columnid, data);
+                            Api.JetGetRecordSize(session, tableid, ref size, GetRecordSizeGrbit.Local | GetRecordSizeGrbit.InCopyBuffer);
+                            update.SaveAndGotoBookmark();
+                        }
+
+                        Api.JetGetRecordSize(session, tableid, ref size, GetRecordSizeGrbit.RunningTotal);
+
+                        Assert.AreEqual(data.Length * 2, size.cbData, "cbData");
+                        Assert.AreEqual(data.Length * 2, size.cbDataCompressed, "cbDataCompressed");
+                        Assert.AreEqual(0, size.cbLongValueData, "cbLongValueData");
+                        Assert.AreEqual(0, size.cbLongValueDataCompressed, "cbLongValueDataCompressed");
+                        Assert.AreEqual(0, size.cbLongValueOverhead, "cbLongValueOverhead");
+                        Assert.AreNotEqual(0, size.cbOverhead, "cbOverhead");
+                        Assert.AreEqual(0, size.cCompressedColumns, "cCompressedColumns");
+                        Assert.AreEqual(0, size.cLongValues, "cLongValues");
+                        Assert.AreEqual(0, size.cMultiValues, "cMultiValues");
+                        Assert.AreEqual(0, size.cNonTaggedColumns, "cTaggedColumns");
+                        Assert.AreEqual(2, size.cTaggedColumns, "cTaggedColumns");
+
+                        transaction.Commit(CommitTransactionGrbit.LazyFlush);
+                    }
+                }
+            }
+
+            Cleanup.DeleteDirectoryWithRetry(directory);
+        }
     }
 }

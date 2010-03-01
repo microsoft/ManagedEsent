@@ -29,6 +29,7 @@ namespace InteropApiTests
         /// Initialize the native and managed objects.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the ThreadstatTests fixture")]
         public void Setup()
         {
             this.native = new NATIVE_THREADSTATS
@@ -50,6 +51,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that JET_THREADSTATS.SetFromNativeThreadstats sets cPageReferenced")]
         public void TestSetFromNativeSetsCpageReferenced()
         {
             Assert.AreEqual(1, this.managed.cPageReferenced);
@@ -60,6 +62,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that JET_THREADSTATS.SetFromNativeThreadstats sets cPageRead")]
         public void TestSetFromNativeSetsCpageRead()
         {
             Assert.AreEqual(2, this.managed.cPageRead);
@@ -70,6 +73,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that JET_THREADSTATS.SetFromNativeThreadstats sets cPagePreread")]
         public void TestSetFromNativeSetsCpagePreread()
         {
             Assert.AreEqual(3, this.managed.cPagePreread);
@@ -80,6 +84,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that JET_THREADSTATS.SetFromNativeThreadstats sets cPageDirtied")]
         public void TestSetFromNativeSetsCpageDirtied()
         {
             Assert.AreEqual(4, this.managed.cPageDirtied);
@@ -90,6 +95,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that JET_THREADSTATS.SetFromNativeThreadstats sets cPageRedirtied")]
         public void TestSetFromNativeSetsCpageRedirtied()
         {
             Assert.AreEqual(5, this.managed.cPageRedirtied);
@@ -100,6 +106,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that JET_THREADSTATS.SetFromNativeThreadstats sets cLogRecord")]
         public void TestSetFromNativeSetsClogrecord()
         {
             Assert.AreEqual(6, this.managed.cLogRecord);
@@ -110,6 +117,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that JET_THREADSTATS.SetFromNativeThreadstats sets cbLogRecord")]
         public void TestSetFromNativeSetsCblogrecord()
         {
             Assert.AreEqual(7, this.managed.cbLogRecord);
@@ -120,6 +128,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test adding two JET_THREADSTATS")]
         public void TestJetThreadstatsAddition()
         {
             var t1 = new JET_THREADSTATS
@@ -154,10 +163,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test adding two JET_THREADSTATS
+        /// Test subtracting two JET_THREADSTATS
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test subtracting two JET_THREADSTATS")]
         public void TestJetThreadstatsSubtraction()
         {
             var t1 = new JET_THREADSTATS
@@ -196,6 +206,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test JET_THREADSTATS.ToString with singular counts")]
         public void TestJetThreadstatsToStringSingular()
         {
             var t = new JET_THREADSTATS
@@ -217,6 +228,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test JET_THREADSTATS.ToString with zero counts")]
         public void TestJetThreadstatsToStringZero()
         {
             var t = new JET_THREADSTATS
@@ -238,6 +250,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test JET_THREADSTATS.ToString with plural counts")]
         public void TestJetThreadstatsToString()
         {
             var t = new JET_THREADSTATS

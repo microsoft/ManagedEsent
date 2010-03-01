@@ -59,7 +59,7 @@ namespace InteropApiTests
             this.database = Path.Combine(this.directory, "database.edb");
             this.instance = SetupHelper.CreateNewInstance(this.directory);
 
-            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.PageTempDBMin, 0, null);
+            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetInit(ref this.instance);
             Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);

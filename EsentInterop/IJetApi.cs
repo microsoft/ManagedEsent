@@ -136,6 +136,21 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         int JetSetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, int paramValue, string paramString);
 
         /// <summary>
+        /// Sets database configuration options. This overload is used when the
+        /// parameter being set is of type JET_CALLBACK.
+        /// </summary>
+        /// <param name="instance">
+        /// The instance to set the option on or <see cref="JET_INSTANCE.Nil"/>
+        /// to set the option on all instances.
+        /// </param>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="paramid">The parameter to set.</param>
+        /// <param name="paramValue">The value of the parameter to set.</param>
+        /// <param name="paramString">The value of the string parameter to set.</param>
+        /// <returns>An error or warning.</returns>
+        int JetSetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, JET_CALLBACK paramValue, string paramString);
+
+        /// <summary>
         /// Gets database configuration options.
         /// </summary>
         /// <param name="instance">The instance to retrieve the options from.</param>
@@ -144,7 +159,6 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="paramValue">Returns the value of the parameter, if the value is an integer.</param>
         /// <param name="paramString">Returns the value of the parameter, if the value is a string.</param>
         /// <param name="maxParam">The maximum size of the parameter string.</param>
-        /// <returns>An ESENT warning code.</returns>
         /// <remarks>
         /// <see cref="JET_param.ErrorToString"/> passes in the error number in the paramValue, which is why it is
         /// a ref parameter and not an out parameter.
@@ -562,6 +576,37 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="tableid">The table that the statistics will be computed on.</param>
         /// <returns>An error if the call fails.</returns>
         int JetComputeStats(JET_SESID sesid, JET_TABLEID tableid);
+
+        /// <summary>
+        /// Enables the application to associate a context handle known as
+        /// Local Storage with a cursor or the table associated with that
+        /// cursor. This context handle can be used by the application to
+        /// store auxiliary data that is associated with a cursor or table.
+        /// The application is later notified using a runtime callback when
+        /// the context handle must be released. This makes it possible to
+        /// associate dynamically allocated state with a cursor or table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to use.</param>
+        /// <param name="ls">The context handle to be associated with the session or cursor.</param>
+        /// <param name="grbit">Set options.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetSetLS(JET_SESID sesid, JET_TABLEID tableid, JET_LS ls, LsGrbit grbit);
+
+        /// <summary>
+        /// Enables the application to retrieve the context handle known
+        /// as Local Storage that is associated with a cursor or the table
+        /// associated with that cursor. This context handle must have been
+        /// previously set using <see cref="JetSetLS"/>. JetGetLS can also
+        /// be used to simultaneously fetch the current context handle for
+        /// a cursor or table and reset that context handle.  
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to use.</param>
+        /// <param name="ls">Returns the retrieved context handle.</param>
+        /// <param name="grbit">Retrieve options.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetGetLS(JET_SESID sesid, JET_TABLEID tableid, out JET_LS ls, LsGrbit grbit);
 
         #endregion
 
@@ -1364,6 +1409,19 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             IntPtr allocatorContext,
             int maxDataSize,
             EnumerateColumnsGrbit grbit);
+
+        /// <summary>
+        /// Retrieves record size information from the desired location.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// The cursor that will be used for the API call. The cursor must be
+        /// positioned on a record, or have an update prepared.
+        /// </param>
+        /// <param name="recsize">Returns the size of the record.</param>
+        /// <param name="grbit">Call options.</param>
+        /// <returns>A warning, error or success.</returns>
+        int JetGetRecordSize(JET_SESID sesid, JET_TABLEID tableid, ref JET_RECSIZE recsize, GetRecordSizeGrbit grbit);
 
         #endregion
 

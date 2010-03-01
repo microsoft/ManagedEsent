@@ -260,6 +260,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetComputeStats(IntPtr sesid, IntPtr tableid);
 
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetSetLS(IntPtr sesid, IntPtr tableid, IntPtr ls, uint grbit);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetGetLS(IntPtr sesid, IntPtr tableid, out IntPtr pls, uint grbit);
+
         #endregion
 
         #region transactions
@@ -520,6 +526,14 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             IntPtr pvReallocContext,
             uint cbDataMost,
             uint grbit);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetGetRecordSize(
+            IntPtr sesid, IntPtr tableid, ref NATIVE_RECSIZE precsize, uint grbit);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetGetRecordSize2(
+            IntPtr sesid, IntPtr tableid, ref NATIVE_RECSIZE2 precsize, uint grbit);
 
         #endregion
 

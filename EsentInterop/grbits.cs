@@ -433,7 +433,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetDupCursor.
+    /// Options for <see cref="Api.JetDupCursor"/>.
     /// </summary>
     public enum DupCursorGrbit
     {
@@ -441,6 +441,35 @@ namespace Microsoft.Isam.Esent.Interop
         /// Default options.
         /// </summary>
         None = 0,
+    }
+
+    /// <summary>
+    /// Options for <see cref="Api.JetSetLS"/> and <see cref="Api.JetGetLS"/>.
+    /// </summary>
+    [Flags]
+    public enum LsGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// The context handle for the chosen object should be reset to JET_LSNil.
+        /// </summary>
+        Reset = 0x1,
+
+        /// <summary>
+        /// Specifies the context handle should be associated with the given cursor.
+        /// </summary>
+        Cursor = 0x2,
+
+        /// <summary>
+        /// Specifies that the context handle should be associated with the
+        /// table associated with the given cursor. It is illegal to use this
+        /// option with <see cref="Cursor"/>.
+        /// </summary>
+        Table = 0x4,
     }
 
     /// <summary>
@@ -659,6 +688,38 @@ namespace Microsoft.Isam.Esent.Interop
         /// This option is not allowed when enumerating a specific array of column IDs.
         /// </summary>
         EnumerateTaggedOnly = 0x00040000, 
+    }
+
+    /// <summary>
+    /// Options for <see cref="Api.JetGetRecordSize"/>.
+    /// </summary>
+    [Flags]
+    public enum GetRecordSizeGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// Retrieve the size of the record that is in the copy buffer prepared
+        /// or update. Otherwise, the tableid must be positioned on a record,
+        /// and that record will be used.
+        /// </summary>
+        InCopyBuffer = 0x1,
+
+        /// <summary>
+        /// The JET_RECSIZE is not zeroed before filling the contents, effectively
+        /// acting as an accumulation of the statistics for multiple records visited
+        /// or updated.
+        /// </summary>
+        RunningTotal = 0x2,
+
+        /// <summary>
+        /// Ignore non-intrinsic Long Values. Only the local record on the page
+        /// will be used.
+        /// </summary>
+        Local = 0x4,
     }
 
     /// <summary>

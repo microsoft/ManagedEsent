@@ -282,6 +282,39 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         }
 
         /// <summary>
+        /// Sets database configuration options. This overload is used when the
+        /// parameter being set is of type JET_CALLBACK.
+        /// </summary>
+        /// <param name="instance">
+        /// The instance to set the option on or <see cref="JET_INSTANCE.Nil"/>
+        /// to set the option on all instances.
+        /// </param>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="paramid">The parameter to set.</param>
+        /// <param name="paramValue">The value of the parameter to set.</param>
+        /// <param name="paramString">The value of the string parameter to set.</param>
+        /// <returns>An error or warning.</returns>
+        public int JetSetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, JET_CALLBACK paramValue, string paramString)
+        {
+            this.TraceFunctionCall("JetSetSystemParameter");
+            JetCallbackWrapper wrapper = this.callbackWrappers.Add(paramValue);
+            this.callbackWrappers.Collect();
+            unsafe
+            {
+                // We are interested in the callback, not the string so we always use the ASCII API.
+                IntPtr* pinstance = (IntPtr.Zero == instance.Value) ? null : &instance.Value;
+                return
+                    this.Err(
+                        NativeMethods.JetSetSystemParameter(
+                            pinstance,
+                            sesid.Value,
+                            (uint)paramid,
+                            Marshal.GetFunctionPointerForDelegate(wrapper.Callback),
+                            paramString));
+            }
+        }
+
+        /// <summary>
         /// Gets database configuration options.
         /// </summary>
         /// <param name="instance">The instance to retrieve the options from.</param>
@@ -1067,6 +1100,48 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetComputeStats");
             return this.Err(NativeMethods.JetComputeStats(sesid.Value, tableid.Value));           
+        }
+
+        /// <summary>
+        /// Enables the application to associate a context handle known as
+        /// Local Storage with a cursor or the table associated with that
+        /// cursor. This context handle can be used by the application to
+        /// store auxiliary data that is associated with a cursor or table.
+        /// The application is later notified using a runtime callback when
+        /// the context handle must be released. This makes it possible to
+        /// associate dynamically allocated state with a cursor or table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to use.</param>
+        /// <param name="ls">The context handle to be associated with the session or cursor.</param>
+        /// <param name="grbit">Set options.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetSetLS(JET_SESID sesid, JET_TABLEID tableid, JET_LS ls, LsGrbit grbit)
+        {
+            this.TraceFunctionCall("JetSetLS");
+            return this.Err(NativeMethods.JetSetLS(sesid.Value, tableid.Value, ls.Value, (uint)grbit));
+        }
+
+        /// <summary>
+        /// Enables the application to retrieve the context handle known
+        /// as Local Storage that is associated with a cursor or the table
+        /// associated with that cursor. This context handle must have been
+        /// previously set using <see cref="JetSetLS"/>. JetGetLS can also
+        /// be used to simultaneously fetch the current context handle for
+        /// a cursor or table and reset that context handle.  
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to use.</param>
+        /// <param name="ls">Returns the retrieved context handle.</param>
+        /// <param name="grbit">Retrieve options.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetLS(JET_SESID sesid, JET_TABLEID tableid, out JET_LS ls, LsGrbit grbit)
+        {
+            this.TraceFunctionCall("JetGetLS");
+            IntPtr native;
+            int err = NativeMethods.JetGetLS(sesid.Value, tableid.Value, out native, (uint)grbit);
+            ls = new JET_LS { Value = native };
+            return this.Err(err);
         }
 
         #endregion
@@ -2488,6 +2563,39 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
                 return this.Err(err);
             }
+        }
+
+        /// <summary>
+        /// Retrieves record size information from the desired location.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">
+        /// The cursor that will be used for the API call. The cursor must be
+        /// positioned on a record, or have an update prepared.
+        /// </param>
+        /// <param name="recsize">Returns the size of the record.</param>
+        /// <param name="grbit">Call options.</param>
+        /// <returns>A warning, error or success.</returns>
+        public int JetGetRecordSize(JET_SESID sesid, JET_TABLEID tableid, ref JET_RECSIZE recsize, GetRecordSizeGrbit grbit)
+        {
+            this.TraceFunctionCall("JetGetRecordSize");
+            int err;
+
+            // Use JetGetRecordSize2 if available, otherwise JetGetRecordSize.
+            if (this.Capabilities.SupportsWindows7Features)
+            {
+                var native = recsize.GetNativeRecsize2();
+                err = NativeMethods.JetGetRecordSize2(sesid.Value, tableid.Value, ref native, (uint)grbit);
+                recsize.SetFromNativeRecsize(native);
+            }
+            else
+            {
+                var native = recsize.GetNativeRecsize();
+                err = NativeMethods.JetGetRecordSize(sesid.Value, tableid.Value, ref native, (uint)grbit);
+                recsize.SetFromNativeRecsize(native);
+            }
+
+            return this.Err(err);
         }
 
         #endregion

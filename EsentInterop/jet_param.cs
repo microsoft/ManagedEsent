@@ -223,6 +223,15 @@ namespace Microsoft.Isam.Esent.Interop
         ErrorToString = 70,
 
         /// <summary>
+        /// Configures the engine with a <see cref="JET_CALLBACK"/> delegate.
+        /// This callback may be called for the following reasons:
+        /// <see cref="JET_cbtyp.FreeCursorLS"/>, <see cref="JET_cbtyp.FreeTableLS"/>
+        /// or <see cref="JET_cbtyp.Null"/>. See <see cref="Api.JetSetLS"/>
+        /// for more information. This parameter cannot currently be retrieved.
+        /// </summary>
+        RuntimeCallback = 73,
+
+        /// <summary>
         /// When this parameter is set to true then any folder that is missing in a file system path in use by
         /// the database engine will be silently created. Otherwise, the operation that uses the missing file system
         /// path will fail with JET_err.InvalidPath.

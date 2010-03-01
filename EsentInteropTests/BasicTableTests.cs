@@ -7,12 +7,10 @@
 namespace InteropApiTests
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Text;
     using System.Threading;
     using Microsoft.Isam.Esent.Interop;
-    using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -76,7 +74,8 @@ namespace InteropApiTests
             this.table = "table";
             this.instance = SetupHelper.CreateNewInstance(this.directory);
 
-            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.PageTempDBMin, SystemParameters.PageTempDBSmallest, null);
+            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
+            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
             Api.JetInit(ref this.instance);
             Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
             Api.JetCreateDatabase(this.sesid, this.database, String.Empty, out this.dbid, CreateDatabaseGrbit.None);
@@ -201,373 +200,6 @@ namespace InteropApiTests
         }
 
         #endregion JetDupCursor
-
-        #region DDL Tests
-
-        /// <summary>
-        /// Create one column of each type.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        [Description("Create one column of each type")]
-        public void CreateOneColumnOfEachType()
-        {
-            Api.JetBeginTransaction(this.sesid);
-            foreach (JET_coltyp coltyp in Enum.GetValues(typeof(JET_coltyp)))
-            {
-                if (JET_coltyp.Nil != coltyp)
-                {
-                    var columndef = new JET_COLUMNDEF { coltyp = coltyp };
-                    JET_COLUMNID columnid;
-                    Api.JetAddColumn(this.sesid, this.tableid, coltyp.ToString(), columndef, null, 0, out columnid);
-                    Assert.AreEqual(columnid, columndef.columnid);
-                }
-            }
-
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-        }
-
-        /// <summary>
-        /// Create a column with a default value.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        [Description("Create a column with a default value")]
-        public void CreateColumnWithDefaultValue()
-        {
-            int expected = Any.Int32;
-
-            Api.JetBeginTransaction(this.sesid);
-            var columndef = new JET_COLUMNDEF { coltyp = JET_coltyp.Long };
-            JET_COLUMNID columnid;
-            Api.JetAddColumn(this.sesid, this.tableid, "column_with_default", columndef, BitConverter.GetBytes(expected), 4, out columnid);
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-
-            Api.JetBeginTransaction(this.sesid);
-            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
-            this.UpdateAndGotoBookmark();
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-
-            Assert.AreEqual(expected, Api.RetrieveColumnAsInt32(this.sesid, this.tableid, columnid));
-        }
-
-        /// <summary>
-        /// Add a column and retrieve its information using JetGetTableColumnInfo.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        [Description("Add a column and retrieve its information using JetGetTableColumnInfo")]
-        public void JetGetTableColumnInfo()
-        {
-            const string ColumnName = "column1";
-            Api.JetBeginTransaction(this.sesid);
-            var columndef = new JET_COLUMNDEF()
-            {
-                cbMax = 4096,
-                cp = JET_CP.Unicode,
-                coltyp = JET_coltyp.LongText,
-                grbit = ColumndefGrbit.None,                
-            };
-            
-            JET_COLUMNID columnid;
-            Api.JetAddColumn(this.sesid, this.tableid, ColumnName, columndef, null, 0, out columnid);
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-
-            JET_COLUMNDEF retrievedColumndef;
-            Api.JetGetTableColumnInfo(this.sesid, this.tableid, ColumnName, out retrievedColumndef);
-
-            Assert.AreEqual(columndef.cbMax, retrievedColumndef.cbMax);
-            Assert.AreEqual(columndef.cp, retrievedColumndef.cp);
-            Assert.AreEqual(columndef.coltyp, retrievedColumndef.coltyp);
-            Assert.AreEqual(columnid, retrievedColumndef.columnid);
-
-            // The grbit isn't asserted as esent will add some options by default
-        }
-
-        /// <summary>
-        /// Add a column and retrieve its information using JetGetTableColumnInfo.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        [Description("Add a column and retrieve its information using JetGetTableColumnInfo")]
-        public void JetGetTableColumnInfoByColumnid()
-        {
-            const string ColumnName = "column2";
-            Api.JetBeginTransaction(this.sesid);
-            var columndef = new JET_COLUMNDEF()
-            {
-                cbMax = 8192,
-                cp = JET_CP.ASCII,
-                coltyp = JET_coltyp.LongText,
-                grbit = ColumndefGrbit.None,
-            };
-
-            JET_COLUMNID columnid;
-            Api.JetAddColumn(this.sesid, this.tableid, ColumnName, columndef, null, 0, out columnid);
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-
-            JET_COLUMNDEF retrievedColumndef;
-            Api.JetGetTableColumnInfo(this.sesid, this.tableid, columnid, out retrievedColumndef);
-
-            Assert.AreEqual(columndef.cbMax, retrievedColumndef.cbMax);
-            Assert.AreEqual(columndef.cp, retrievedColumndef.cp);
-            Assert.AreEqual(columndef.coltyp, retrievedColumndef.coltyp);
-            Assert.AreEqual(columnid, retrievedColumndef.columnid);
-
-            // The grbit isn't asserted as esent will add some options by default
-        }
-
-        /// <summary>
-        /// Add a column and retrieve its information using JetGetColumnInfo.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        [Description("Add a column and retrieve its information using JetGetColumnInfo")]
-        public void JetGetColumnInfo()
-        {
-            const string ColumnName = "column3";
-            Api.JetBeginTransaction(this.sesid);
-            var columndef = new JET_COLUMNDEF()
-            {
-                cbMax = 200,
-                cp = JET_CP.ASCII,
-                coltyp = JET_coltyp.LongText,
-                grbit = ColumndefGrbit.None,
-            };
-
-            JET_COLUMNID columnid;
-            Api.JetAddColumn(this.sesid, this.tableid, ColumnName, columndef, null, 0, out columnid);
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-            JET_COLUMNDEF retrievedColumndef;
-            Api.JetGetColumnInfo(this.sesid, this.dbid, this.table, ColumnName, out retrievedColumndef);
-
-            Assert.AreEqual(columndef.cbMax, retrievedColumndef.cbMax);
-            Assert.AreEqual(columndef.cp, retrievedColumndef.cp);
-            Assert.AreEqual(columndef.coltyp, retrievedColumndef.coltyp);
-            Assert.AreEqual(columnid, retrievedColumndef.columnid);
-
-            // The grbit isn't asserted as esent will add some options by default
-        }
-
-        /// <summary>
-        /// Add a column and retrieve its information using GetColumnDictionary.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        [Description("Add a column and retrieve its information using GetColumnDictionary")]
-        public void GetColumnDictionary()
-        {
-            const string ColumnName = "column4";
-            Api.JetBeginTransaction(this.sesid);
-            var columndef = new JET_COLUMNDEF()
-            {
-                cbMax = 10000,
-                cp = JET_CP.Unicode,
-                coltyp = JET_coltyp.LongText,
-                grbit = ColumndefGrbit.None,
-            };
-
-            JET_COLUMNID columnid;
-            Api.JetAddColumn(this.sesid, this.tableid, ColumnName, columndef, null, 0, out columnid);
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-
-            IDictionary<string, JET_COLUMNID> dict = Api.GetColumnDictionary(this.sesid, this.tableid);
-            Assert.AreEqual(columnid, dict[ColumnName]);
-        }
-
-        /// <summary>
-        /// Check that the dictionary returned by GetColumnDictionary is case-insensitive.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        [Description("Check that the dictionary returned by GetColumnDictionary is case-insensitive")]
-        public void VerifyGetColumnDictionaryReturnsCaseInsensitiveDictionary()
-        {
-            IDictionary<string, JET_COLUMNID> dict = Api.GetColumnDictionary(this.sesid, this.tableid);
-            Assert.AreEqual(this.columnidLongText, dict["tEsTcOLuMn"]);
-        }
-
-        /// <summary>
-        /// Create an index.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        [Description("Create an index")]
-        public void JetCreateIndex()
-        {
-            const string IndexDescription = "+TestColumn\0";
-            const string IndexName = "new_index";
-            Api.JetBeginTransaction(this.sesid);
-            Api.JetCreateIndex(this.sesid, this.tableid, IndexName, CreateIndexGrbit.None, IndexDescription, IndexDescription.Length + 1, 100); 
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-
-            Api.JetSetCurrentIndex(this.sesid, this.tableid, IndexName);
-        }
-
-        /// <summary>
-        /// Creates an index with JetCreateIndex2.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        [Description("Creates an index with JetCreateIndex2")]
-        public void JetCreateIndex2()
-        {
-            Api.JetBeginTransaction(this.sesid);
-
-            const string IndexName = "another_index";
-            const string IndexDescription = "-TestColumn\0\0";
-            var indexcreate = new JET_INDEXCREATE
-            {
-                szIndexName = IndexName,
-                szKey = IndexDescription,
-                cbKey = IndexDescription.Length,
-                grbit = CreateIndexGrbit.IndexIgnoreAnyNull,
-                ulDensity = 100,
-            };
-            Api.JetCreateIndex2(this.sesid, this.tableid, new[] { indexcreate }, 1);
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-
-            Api.JetSetCurrentIndex(this.sesid, this.tableid, IndexName);
-        }
-
-        /// <summary>
-        /// Verify that JetGetCurrentIndex returns the name of the index.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        [Description("Verify that JetGetCurrentIndex returns the name of the index")]
-        public void VerifyJetGetCurrentIndexReturnsIndexName()
-        {
-            const string IndexDescription = "+TestColumn\0";
-            const string IndexName = "myindexname";
-            Api.JetBeginTransaction(this.sesid);
-            Api.JetCreateIndex(this.sesid, this.tableid, IndexName, CreateIndexGrbit.None, IndexDescription, IndexDescription.Length + 1, 100);
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-
-            Api.JetSetCurrentIndex(this.sesid, this.tableid, IndexName);
-            string actual;
-            Api.JetGetCurrentIndex(this.sesid, this.tableid, out actual, SystemParameters.NameMost);
-            Assert.AreEqual(IndexName, actual);
-        }
-
-        /// <summary>
-        /// Delete an index and make sure we can't use it afterwards.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        [Description("Delete an index and make sure we can't use it afterwards")]
-        public void JetDeleteIndex()
-        {
-            const string IndexDescription = "+TestColumn\0";
-            const string IndexName = "index_to_delete";
-            Api.JetBeginTransaction(this.sesid);
-            Api.JetCreateIndex(this.sesid, this.tableid, IndexName, CreateIndexGrbit.None, IndexDescription, IndexDescription.Length + 1, 100);
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-
-            Api.JetBeginTransaction(this.sesid);
-            Api.JetDeleteIndex(this.sesid, this.tableid, IndexName);
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-
-            try
-            {
-                Api.JetSetCurrentIndex(this.sesid, this.tableid, IndexName);
-                Assert.Fail("Index is still visible");
-            }
-            catch (EsentErrorException)
-            {
-            }
-        }
-
-        /// <summary>
-        /// Delete a column and make sure we can't see it afterwards.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        [Description("Delete a column and make sure we can't see it afterwards")]
-        public void TestJetDeleteColumn()
-        {
-            const string ColumnName = "column_to_delete";
-            Api.JetBeginTransaction(this.sesid);
-            var columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Long };
-            JET_COLUMNID columnid;
-            Api.JetAddColumn(this.sesid, this.tableid, ColumnName, columndef, null, 0, out columnid);
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-
-            Api.JetBeginTransaction(this.sesid);
-            Api.JetDeleteColumn(this.sesid, this.tableid, ColumnName);
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-
-            try
-            {
-                // TODO: deal with versions of this API that return info on the deleted column
-                Api.JetGetTableColumnInfo(this.sesid, this.tableid, ColumnName, out columndef);
-                Assert.Fail("Column is still visible");
-            }
-            catch (EsentErrorException)
-            {
-            }
-        }
-
-        /// <summary>
-        /// Delete a column with JetDeleteColumn2 and make sure we can't see it afterwards.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        [Description("Delete a column with JetDeleteColumn2 and make sure we can't see it afterwards")]
-        public void TestJetDeleteColumn2()
-        {
-            const string ColumnName = "column_to_delete";
-            Api.JetBeginTransaction(this.sesid);
-            var columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Long };
-            JET_COLUMNID columnid;
-            Api.JetAddColumn(this.sesid, this.tableid, ColumnName, columndef, null, 0, out columnid);
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-
-            Api.JetBeginTransaction(this.sesid);
-            Api.JetDeleteColumn2(this.sesid, this.tableid, ColumnName, DeleteColumnGrbit.None);
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-
-            try
-            {
-                // TODO: deal with versions of this API that return info on the deleted column
-                Api.JetGetTableColumnInfo(this.sesid, this.tableid, ColumnName, out columndef);
-                Assert.Fail("Column is still visible");
-            }
-            catch (EsentErrorException)
-            {
-            }
-        }
-
-        /// <summary>
-        /// Delete a table and make sure we can't see it afterwards.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        [Description("Delete a table and make sure we can't see it afterwards")]
-        public void DeleteTable()
-        {
-            const string TableName = "table_to_delete";
-            Api.JetBeginTransaction(this.sesid);
-            JET_TABLEID newtable;
-            Api.JetCreateTable(this.sesid, this.dbid, TableName, 16, 100, out newtable);
-            Api.JetCloseTable(this.sesid, newtable);
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-
-            Api.JetBeginTransaction(this.sesid);
-            Api.JetDeleteTable(this.sesid, this.dbid, TableName);
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-
-            try
-            {
-                Api.JetOpenTable(this.sesid, this.dbid, TableName, null, 0, OpenTableGrbit.None, out newtable);
-                Assert.Fail("Column is still visible");
-            }
-            catch (EsentErrorException)
-            {
-            }
-        }
-
-        #endregion DDL Tests
 
         #region DML Tests
 
@@ -846,29 +478,64 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Call JetGetThreadStats.
+        /// Call JetGetRecordSize with intrinsic data.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Call JetGetThreadStats")]
-        public void JetGetThreadStats()
+        [Description("Call JetGetRecordSize with intrinsic data")]
+        public void JetGetRecordSizeIntrinsic()
         {
-            if (!EsentVersion.SupportsVistaFeatures)
-            {
-                return;
-            }
+            var size = new JET_RECSIZE();
 
+            byte[] data = Any.Bytes;
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
-            this.SetColumnFromString(Any.String);
+            Api.JetSetColumn(this.sesid, this.tableid, this.columnidLongText, data, data.Length, SetColumnGrbit.None, null);
             this.UpdateAndGotoBookmark();
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            Api.JetGetRecordSize(this.sesid, this.tableid, ref size, GetRecordSizeGrbit.None);
 
-            JET_THREADSTATS threadstats;
-            VistaApi.JetGetThreadStats(out threadstats);
-            Assert.AreNotEqual(0, threadstats.cPageReferenced);
-            Assert.AreNotEqual(0, threadstats.cLogRecord);
-            Assert.AreNotEqual(0, threadstats.cbLogRecord);
+            Assert.AreEqual(data.Length, size.cbData, "cbData");
+            Assert.AreEqual(data.Length, size.cbDataCompressed, "cbDataCompressed");
+            Assert.AreEqual(0, size.cbLongValueData, "cbLongValueData");
+            Assert.AreEqual(0, size.cbLongValueDataCompressed, "cbLongValueDataCompressed");
+            Assert.AreEqual(0, size.cbLongValueOverhead, "cbLongValueOverhead");
+            Assert.AreNotEqual(0, size.cbOverhead, "cbOverhead");
+            Assert.AreEqual(0, size.cCompressedColumns, "cCompressedColumns");
+            Assert.AreEqual(0, size.cLongValues, "cLongValues");
+            Assert.AreEqual(0, size.cMultiValues, "cMultiValues");
+            Assert.AreEqual(0, size.cNonTaggedColumns, "cTaggedColumns");
+            Assert.AreEqual(1, size.cTaggedColumns, "cTaggedColumns");
+        }
+
+        /// <summary>
+        /// Call JetGetRecordSize with separated data. This also tests the RunningTotal option.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Call JetGetRecordSize with separated data")]
+        public void JetGetRecordSizeSeparated()
+        {
+            var size = new JET_RECSIZE();
+
+            byte[] data = Any.Bytes;
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.JetSetColumn(this.sesid, this.tableid, this.columnidLongText, data, data.Length, SetColumnGrbit.SeparateLV, null);
+            Api.JetGetRecordSize(this.sesid, this.tableid, ref size, GetRecordSizeGrbit.InCopyBuffer);
+            this.UpdateAndGotoBookmark();
+            Api.JetGetRecordSize(this.sesid, this.tableid, ref size, GetRecordSizeGrbit.RunningTotal);
+
+            Assert.AreEqual(0, size.cbData, "cbData");
+            Assert.AreEqual(0, size.cbDataCompressed, "cbDataCompressed");
+            Assert.AreEqual(data.Length * 2, size.cbLongValueData, "cbLongValueData");
+            Assert.AreEqual(data.Length * 2, size.cbLongValueDataCompressed, "cbLongValueDataCompressed");
+            Assert.AreNotEqual(0, size.cbLongValueOverhead, "cbLongValueOverhead");
+            Assert.AreNotEqual(0, size.cbOverhead, "cbOverhead");
+            Assert.AreEqual(0, size.cCompressedColumns, "cCompressedColumns");
+            Assert.AreEqual(2, size.cLongValues, "cLongValues");
+            Assert.AreEqual(0, size.cMultiValues, "cMultiValues");
+            Assert.AreEqual(0, size.cNonTaggedColumns, "cTaggedColumns");
+            Assert.AreEqual(2, size.cTaggedColumns, "cTaggedColumns");
         }
 
         #endregion DML Tests
