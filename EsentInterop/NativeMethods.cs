@@ -109,6 +109,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern int JetAttachDatabaseW(IntPtr sesid, string szFilename, uint grbit);
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetAttachDatabase2(IntPtr sesid, string szFilename, uint cpgDatabaseSizeMax, uint grbit);
+
+        [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
+        public static extern int JetAttachDatabase2W(IntPtr sesid, string szFilename, uint cpgDatabaseSizeMax, uint grbit);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetDetachDatabase(IntPtr sesid, string szFilename);
 
         [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]

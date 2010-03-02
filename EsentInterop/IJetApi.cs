@@ -200,6 +200,20 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         int JetAttachDatabase(JET_SESID sesid, string database, AttachDatabaseGrbit grbit);
 
         /// <summary>
+        /// Attaches a database file for use with a database instance. In order to use the
+        /// database, it will need to be subsequently opened with <see cref="JetOpenDatabase"/>.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="database">The database to attach.</param>
+        /// <param name="maxPages">
+        /// The maximum size, in database pages, of the database. Passing 0 means there is
+        /// no enforced maximum.
+        /// </param>
+        /// <param name="grbit">Attach options.</param>
+        /// <returns>An error or warning.</returns>
+        int JetAttachDatabase2(JET_SESID sesid, string database, int maxPages, AttachDatabaseGrbit grbit);
+
+        /// <summary>
         /// Opens a database previously attached with <see cref="JetAttachDatabase"/>,
         /// for use with a database session. This function can be called multiple times
         /// for the same database.

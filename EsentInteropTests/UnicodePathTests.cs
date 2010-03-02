@@ -213,6 +213,36 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Use JetAttachDatabase2 on a database with a unicode path.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Use JetAttachDatabase2 on a database with a unicode path")]
+        public void AttachDatabaseWithUnicodePath2()
+        {
+            if (!EsentVersion.SupportsUnicodePaths)
+            {
+                return;
+            }
+
+            using (var instance = new Instance("unicode"))
+            {
+                SetupHelper.SetLightweightConfiguration(instance);
+                instance.Parameters.CreatePathIfNotExist = true;
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    JET_DBID dbid;
+                    Api.JetCreateDatabase(session, this.database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCloseDatabase(session, dbid, CloseDatabaseGrbit.None);
+                    Api.JetDetachDatabase(session, this.database);
+
+                    Api.JetAttachDatabase2(session, this.database, 512, AttachDatabaseGrbit.None);
+                }
+            }
+        }
+
+        /// <summary>
         /// Open a database with a unicode path.
         /// </summary>
         [TestMethod]

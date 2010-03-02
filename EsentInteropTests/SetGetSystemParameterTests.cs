@@ -24,6 +24,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the system path")]
         public void SystemPathParameter()
         {
             PathParameterTest(JET_param.SystemPath, @"foo\system\");
@@ -34,6 +35,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the log path")]
         public void LogPathParameter()
         {
             PathParameterTest(JET_param.LogFilePath, @"foo\log\");
@@ -44,6 +46,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the temp path")]
         public void TempPathParameter()
         {
             string dir = @"foo\temp\";
@@ -76,6 +79,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the base name")]
         public void BaseNameParameter()
         {
             StringParameterTest(JET_param.BaseName, "foo");
@@ -86,6 +90,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the event source")]
         public void EventSourceParameter()
         {
             StringParameterTest(JET_param.EventSource, "My source");
@@ -96,6 +101,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the max sessions setting")]
         public void MaxSessionsParameter()
         {
             IntegerParameterTest(JET_param.MaxSessions, 4);
@@ -106,6 +112,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the max open tables setting")]
         public void MaxOpenTablesParameter()
         {
             IntegerParameterTest(JET_param.MaxOpenTables, 100);
@@ -116,6 +123,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the max cursors setting")]
         public void MaxCursorsParameter()
         {
             IntegerParameterTest(JET_param.MaxCursors, 2500);
@@ -126,6 +134,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the max ver pages setting")]
         public void MaxVerPagesParameter()
         {
             IntegerParameterTest(JET_param.MaxVerPages, 100);
@@ -136,6 +145,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the max temporary tables setting")]
         public void MaxTemporaryTablesParameter()
         {
             IntegerParameterTest(JET_param.MaxTemporaryTables, 0);
@@ -146,6 +156,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the logfile size setting")]
         public void LogFileSizeParameter()
         {
             IntegerParameterTest(JET_param.LogFileSize, 2048);
@@ -156,6 +167,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the log buffers setting")]
         public void LogBuffersParameter()
         {
             IntegerParameterTest(JET_param.LogBuffers, 128);
@@ -166,17 +178,19 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the circular logging setting")]
         public void CircularLogParameter()
         {
             IntegerParameterTest(JET_param.CircularLog, 1);
         }
 
         /// <summary>
-        /// Test setting and retrieving the circular logging setting.
+        /// Test setting and retrieving the temp db min setting.
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        public void PageTempDBMinParameter()
+        [Description("Test setting and retrieving the temp db min setting")]
+        public void PageTempDbMinParameter()
         {
             IntegerParameterTest(JET_param.PageTempDBMin, 50);
         }
@@ -186,6 +200,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the checkpoint depth setting")]
         public void CheckpointDepthMaxParameter()
         {
             IntegerParameterTest(JET_param.CheckpointDepthMax, 20000);
@@ -196,6 +211,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the recovery parameter")]
         public void RecoveryParameter()
         {
             StringParameterTest(JET_param.Recovery, "off");
@@ -206,6 +222,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the index checking setting")]
         public void EnableIndexCheckingParameter()
         {
             BooleanParameterTest(JET_param.EnableIndexChecking, Any.Boolean);
@@ -216,6 +233,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the event source key setting")]
         public void EventSourceKeyParameter()
         {
             StringParameterTest(JET_param.EventSourceKey, Any.String);
@@ -226,6 +244,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the no information event setting")]
         public void NoInformationEventParameter()
         {
             BooleanParameterTest(JET_param.NoInformationEvent, Any.Boolean);
@@ -236,9 +255,50 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the create path setting")]
         public void CreatePathIfNotExistParameter()
         {
             BooleanParameterTest(JET_param.CreatePathIfNotExist, Any.Boolean);
+        }
+
+        /// <summary>
+        /// Test setting the runtime callback to null.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting the runtime callback to null")]
+        public void SetRuntimeCallbackToNull()
+        {
+            JET_INSTANCE instance;
+            Api.JetCreateInstance(out instance, "RuntimeCallbackTest");
+            try
+            {
+                Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.RuntimeCallback, null, null);
+            }
+            finally
+            {
+                Api.JetTerm(instance);
+            }            
+        }
+
+        /// <summary>
+        /// Test setting the global runtime callback to null.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting the global runtime callback to null")]
+        public void SetGlobalRuntimeCallbackToNull()
+        {
+            JET_INSTANCE instance;
+            Api.JetCreateInstance(out instance, "RuntimeCallbackTest");
+            try
+            {
+                Api.JetSetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.RuntimeCallback, null, null);
+            }
+            finally
+            {
+                Api.JetTerm(instance);
+            }
         }
 
         /// <summary>
@@ -246,6 +306,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the Configuration parameter (if esent supports it)")]
         public void ConfigurationVistaParameter()
         {
             if (EsentVersion.SupportsVistaFeatures)
@@ -259,6 +320,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the EnableAdvanced parameter (if esent supports it)")]
         public void EnableAdvancedVistaParameter()
         {
             if (EsentVersion.SupportsVistaFeatures)
@@ -272,6 +334,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the CachedClosedTables parameter (if esent supports it)")]
         public void CachedClosedTablesVistaParameter()
         {
             if (EsentVersion.SupportsVistaFeatures)
@@ -285,6 +348,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test retrieving the KeyMost parameter (if esent supports it)")]
         public void KeyMostVistaParameter()
         {
             if (EsentVersion.SupportsVistaFeatures)
@@ -311,6 +375,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting and retrieving the WaypointLatency parameter (if esent supports it)")]
         public void WaypointLatencyWin7Parameter()
         {
             if (EsentVersion.SupportsWindows7Features)
@@ -324,7 +389,8 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        public void RetrieveLVChunkSizeMostWin7Parameter()
+        [Description("Test retrieving the LVChunkSizeMost parameter (if esent supports it)")]
+        public void RetrieveLvChunkSizeMostWin7Parameter()
         {
             if (EsentVersion.SupportsWindows7Features)
             {
@@ -347,6 +413,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that the BookmarkMost system parameter is at least the legacy minimum")]
         public void VerifyBookmarkMostIsAtLeast255()
         {
             Assert.IsTrue(SystemParameters.BookmarkMost >= 255);
@@ -357,6 +424,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test that SystemParameters.CacheSize can be set")]
         public void VerifyGetAndSetCacheSize()
         {
             int cacheSizeOld = SystemParameters.CacheSize;
@@ -372,6 +440,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test that SystemParameters.CacheSizeMax can be set and retrieved")]
         public void VerifyGetAndSetCacheSizeMax()
         {
             int cacheSizeMaxOld = SystemParameters.CacheSizeMax;
@@ -385,6 +454,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test that SystemParameters.CacheSizeMin can be set and retrieved")]
         public void VerifyGetAndSetCacheSizeMin()
         {
             int cacheSizeMinOld = SystemParameters.CacheSizeMin;
@@ -399,6 +469,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that the ColumnsKeyMost system parameter is at least the legacy minimum")]
         public void VerifyColumnsKeyMostIsAtLeast12()
         {
             Assert.IsTrue(SystemParameters.ColumnsKeyMost >= 12);
@@ -409,6 +480,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test that SystemParameters.DatabasePageSize can be set and retrieved")]
         public void VerifyGetAndSetDatabasePageSize()
         {
             int databasePageSizeOld = SystemParameters.DatabasePageSize;
@@ -423,6 +495,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that the KeyMost system parameter is at least the legacy minimum")]
         public void VerifyKeyMostIsAtLeast255()
         {
             Assert.IsTrue(SystemParameters.KeyMost >= 255);
@@ -434,6 +507,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that the LVChunkSizeMost system parameter is at least a sensible minimum")]
         public void VerifyLvChunkSizeMostIsNonZero()
         {
             // 1966 is the chunk size of 2Kb pages.
@@ -445,6 +519,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test that SystemParameters.MaxInstances can be set and retrieved")]
         public void VerifyGetAndSetMaxInstances()
         {
             int maxInstancesOld = SystemParameters.MaxInstances;
@@ -459,6 +534,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test that SystemParameters.Configuration can be set and retrieved")]
         public void VerifyGetAndSetConfiguration()
         {
             if (!EsentVersion.SupportsVistaFeatures)
@@ -485,6 +561,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test that SystemParameters.EnableAdvanced can be set and retrieved")]
         public void VerifyGetAndSetEnableAdvanced()
         {
             if (!EsentVersion.SupportsVistaFeatures)

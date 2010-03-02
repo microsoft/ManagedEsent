@@ -49,6 +49,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Diagnostics;
     using System.Runtime.InteropServices;
     using Microsoft.Isam.Esent.Interop.Implementation;
     using Microsoft.Isam.Esent.Interop.Vista;
@@ -295,6 +296,23 @@ namespace Microsoft.Isam.Esent.Interop
         public static JET_wrn JetAttachDatabase(JET_SESID sesid, string database, AttachDatabaseGrbit grbit)
         {
             return Api.Check(Impl.JetAttachDatabase(sesid, database, grbit));
+        }
+
+        /// <summary>
+        /// Attaches a database file for use with a database instance. In order to use the
+        /// database, it will need to be subsequently opened with <see cref="JetOpenDatabase"/>.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="database">The database to attach.</param>
+        /// <param name="maxPages">
+        /// The maximum size, in database pages, of the database. Passing 0 means there is
+        /// no enforced maximum.
+        /// </param>
+        /// <param name="grbit">Attach options.</param>
+        /// <returns>An ESENT warning code.</returns>
+        public static JET_wrn JetAttachDatabase2(JET_SESID sesid, string database, int maxPages, AttachDatabaseGrbit grbit)
+        {
+            return Api.Check(Impl.JetAttachDatabase2(sesid, database, maxPages, grbit));
         }
 
         /// <summary>
@@ -2191,20 +2209,31 @@ namespace Microsoft.Isam.Esent.Interop
         {
             if (err < 0)
             {
-                var error = unchecked((JET_err)err);
-
-                var handler = Api.HandleError;
-                if (handler != null)
-                {
-                    handler(error);
-                }
-
-                // We didn't throw an exception from the handler, so
-                // generate the default exception.
-                throw new EsentErrorException(error);
+                Fail(err);
             }
 
             return unchecked((JET_wrn)err);
+        }
+
+        /// <summary>
+        /// Called to throw an exception with a failing error code.
+        /// </summary>
+        /// <param name="err">The error to throw.</param>
+        private static void Fail(int err)
+        {
+            Debug.Assert(err < 0, "expected a negative error code");
+
+            JET_err error = unchecked((JET_err)err);
+
+            var handler = Api.HandleError;
+            if (handler != null)
+            {
+                handler(error);
+            }
+
+            // We didn't throw an exception from the handler, so
+            // generate the default exception.
+            throw new EsentErrorException(error);
         }
 
         #endregion Error Handling

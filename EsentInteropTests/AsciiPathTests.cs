@@ -37,7 +37,7 @@ namespace InteropApiTests
         /// Test setup
         /// </summary>
         [TestInitialize]
-        [Description("Initialization for AsciiPathTests.")]
+        [Description("Initialization for AsciiPathTests")]
         public void Setup()
         {
             this.directory = "ascii_directory";
@@ -51,7 +51,7 @@ namespace InteropApiTests
         /// directory, if it was created.
         /// </summary>
         [TestCleanup]
-        [Description("Cleanup for AsciiPathTests.")]
+        [Description("Cleanup for AsciiPathTests")]
         public void Teardown()
         {
             Api.Impl = this.savedImpl;
@@ -66,7 +66,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Set and retrieve an ASCII system path.")]
+        [Description("Set and retrieve an ASCII system path")]
         public void SetAndGetAsciiSystemPath()
         {
             using (var instance = new Instance("ascii"))
@@ -81,7 +81,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Set and retrieve an ASCII log path.")]
+        [Description("Set and retrieve an ASCII log path")]
         public void SetAndGetAsciiLogPath()
         {
             using (var instance = new Instance("ascii"))
@@ -96,7 +96,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Set and retrieve an ASCII temporary directory.")]
+        [Description("Set and retrieve an ASCII temporary directory")]
         public void SetAndGetAsciiTempDbPath()
         {
             using (var instance = new Instance("ascii"))
@@ -111,7 +111,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Create a database with an ASCII path.")]
+        [Description("Create a database with an ASCII path")]
         public void CreateDatabaseWithAsciiPath()
         {
             using (var instance = new Instance("ascii"))
@@ -133,7 +133,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Detach a database with an ASCII path.")]
+        [Description("Detach a database with an ASCII path")]
         public void DetachDatabaseWithAsciiPath()
         {
             using (var instance = new Instance("ascii"))
@@ -156,7 +156,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Attach a database with an ASCII path.")]
+        [Description("Attach a database with an ASCII path")]
         public void AttachDatabaseWithAsciiPath()
         {
             using (var instance = new Instance("ascii"))
@@ -177,11 +177,36 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Use JetAttachDatabase2 on a database with an ASCII path.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Use JetAttachDatabase2 on a database with an ASCII path")]
+        public void AttachDatabaseWithAsciiPath2()
+        {
+            using (var instance = new Instance("ascii"))
+            {
+                SetupHelper.SetLightweightConfiguration(instance);
+                instance.Parameters.CreatePathIfNotExist = true;
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    JET_DBID dbid;
+                    Api.JetCreateDatabase(session, this.database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCloseDatabase(session, dbid, CloseDatabaseGrbit.None);
+                    Api.JetDetachDatabase(session, this.database);
+
+                    Api.JetAttachDatabase2(session, this.database, 512, AttachDatabaseGrbit.None);
+                }
+            }
+        }
+
+        /// <summary>
         /// Open a database with an ASCII path.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Open a database with an ASCII path.")]
+        [Description("Open a database with an ASCII path")]
         public void OpenDatabaseWithAsciiPath()
         {
             using (var instance = new Instance("ascii"))
@@ -207,7 +232,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Test JetBackupInstance and JetRestoreInstance with an ASCII path.")]
+        [Description("Test JetBackupInstance and JetRestoreInstance with an ASCII path")]
         public void BackupRestoreDatabaseWithAsciiPath()
         {
             var test = new DatabaseFileTestHelper("database", "backup", false);
@@ -219,7 +244,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Test snapshot backups with an ASCII path.")]
+        [Description("Test snapshot backups with an ASCII path")]
         public void SnapshotBackupWithAsciiPath()
         {
             var test = new DatabaseFileTestHelper("database");
@@ -231,7 +256,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Test streaming backups with an ASCII path.")]
+        [Description("Test streaming backups with an ASCII path")]
         public void StreamingBackupWithAsciiPath()
         {
             var test = new DatabaseFileTestHelper("database", "backup", false);
@@ -243,7 +268,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Test JetCompactDatabase with an ASCII path.")]
+        [Description("Test JetCompactDatabase with an ASCII path")]
         public void TestJetCompactDatabaseWithAsciiPath()
         {
             var test = new DatabaseFileTestHelper("database");
@@ -255,7 +280,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Test JetSetDatabaseSize with an ASCII path.")]
+        [Description("Test JetSetDatabaseSize with an ASCII path")]
         public void TestJetSetDatabaseSizeDatabaseWithAsciiPath()
         {
             var test = new DatabaseFileTestHelper("database");
@@ -267,7 +292,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Test JetGetInstanceInfo with ASCII paths.")]
+        [Description("Test JetGetInstanceInfo with ASCII paths")]
         public void TestJetGetInstanceInfoWithAsciiPaths()
         {
             const string InstanceName = "MyInstance";

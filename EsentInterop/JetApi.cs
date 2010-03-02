@@ -297,20 +297,37 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetSetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, JET_CALLBACK paramValue, string paramString)
         {
             this.TraceFunctionCall("JetSetSystemParameter");
-            JetCallbackWrapper wrapper = this.callbackWrappers.Add(paramValue);
-            this.callbackWrappers.Collect();
+
             unsafe
             {
                 // We are interested in the callback, not the string so we always use the ASCII API.
                 IntPtr* pinstance = (IntPtr.Zero == instance.Value) ? null : &instance.Value;
-                return
-                    this.Err(
-                        NativeMethods.JetSetSystemParameter(
-                            pinstance,
-                            sesid.Value,
-                            (uint)paramid,
-                            Marshal.GetFunctionPointerForDelegate(wrapper.Callback),
-                            paramString));
+
+                if (null == paramValue)
+                {
+                    return
+                        this.Err(
+                            NativeMethods.JetSetSystemParameter(
+                                pinstance,
+                                sesid.Value,
+                                (uint) paramid,
+                                IntPtr.Zero,
+                                paramString));
+                }
+
+                JetCallbackWrapper wrapper = this.callbackWrappers.Add(paramValue);
+                this.callbackWrappers.Collect();
+                unsafe
+                {
+                    return
+                        this.Err(
+                            NativeMethods.JetSetSystemParameter(
+                                pinstance,
+                                sesid.Value,
+                                (uint) paramid,
+                                Marshal.GetFunctionPointerForDelegate(wrapper.Callback),
+                                paramString));
+                }
             }
         }
 
@@ -427,6 +444,32 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
 
             return this.Err(NativeMethods.JetAttachDatabase(sesid.Value, database, (uint)grbit));
+        }
+
+        /// <summary>
+        /// Attaches a database file for use with a database instance. In order to use the
+        /// database, it will need to be subsequently opened with <see cref="JetOpenDatabase"/>.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="database">The database to attach.</param>
+        /// <param name="maxPages">
+        /// The maximum size, in database pages, of the database. Passing 0 means there is
+        /// no enforced maximum.
+        /// </param>
+        /// <param name="grbit">Attach options.</param>
+        /// <returns>An error or warning.</returns>
+        public int JetAttachDatabase2(JET_SESID sesid, string database, int maxPages, AttachDatabaseGrbit grbit)
+        {
+            this.TraceFunctionCall("JetAttachDatabase2");
+            this.CheckNotNull(database, "database");
+            this.CheckNotNegative(maxPages, "maxPages");
+
+            if (this.Capabilities.SupportsUnicodePaths)
+            {
+                return this.Err(NativeMethods.JetAttachDatabase2W(sesid.Value, database, checked((uint)maxPages), (uint)grbit));
+            }
+
+            return this.Err(NativeMethods.JetAttachDatabase2(sesid.Value, database, checked((uint)maxPages), (uint)grbit));            
         }
 
         /// <summary>

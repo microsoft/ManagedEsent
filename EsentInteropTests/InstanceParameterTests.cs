@@ -31,6 +31,7 @@ namespace InteropApiTests
         /// Initialization method. Called once when the tests are started.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the InstanceParametersTests fixture")]
         public void Setup()
         {
             Api.JetCreateInstance(out this.instance, "InstanceParametersTest");
@@ -41,6 +42,7 @@ namespace InteropApiTests
         /// Cleanup after all tests have run.
         /// </summary>
         [TestCleanup]
+        [Description("Cleanup the InstanceParametersTests fixture")]
         public void Teardown()
         {
             Api.JetTerm(this.instance);
@@ -51,6 +53,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that the test class has setup the test fixture properly")]
         public void VerifyInstanceParametersFixtureSetup()
         {
             Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
@@ -62,6 +65,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that the helper method to return a string system parameter works")]
         public void VerifyGetStringParameterHelperGetsParameter()
         {
             string expected = Any.String;
@@ -75,6 +79,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that the helper method to return an integer system parameter works")]
         public void VerifyGetIntegerParameterHelperGetsParameter()
         {
             const int Expected = 100;
@@ -88,6 +93,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test the BaseName property")]
         public void SetAndRetrieveInstanceParametersBaseName()
         {
             string expected = "abc";
@@ -100,6 +106,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting the BaseName property sets the parameter on the instance")]
         public void VerifySetInstanceParametersBaseName()
         {
             string expected = "xyz";
@@ -112,6 +119,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test the event source property")]
         public void SetAndRetrieveInstanceParametersEventSource()
         {
             string expected = Any.String;
@@ -124,6 +132,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test the event source key property")]
         public void SetAndRetrieveInstanceParametersEventSourceKey()
         {
             string expected = Any.String;
@@ -136,6 +145,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test setting the EventSource property sets the parameter on the instance")]
         public void VerifySetInstanceParametersEventSource()
         {
             string expected = Any.String;
@@ -148,6 +158,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test the MaxSessions property")]
         public void SetAndRetrieveInstanceParametersMaxSessions()
         {
             int expected = 11;
@@ -161,6 +172,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Setting the MaxSessions property should set the parameter on the instance")]
         public void VerifySetInstanceParametersMaxSessions()
         {
             int expected = 40;
@@ -173,6 +185,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test the MaxOpenTables property")]
         public void SetAndRetrieveInstanceParametersMaxOpenTables()
         {
             int expected = 400;
@@ -186,6 +199,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Setting the MaxOpenTables property should set the parameter on the instance")]
         public void VerifySetInstanceParametersMaxOpenTables()
         {
             int expected = 100;
@@ -198,6 +212,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test the MaxCursors property")]
         public void SetAndRetrieveInstanceParametersMaxCursors()
         {
             int expected = 4000;
@@ -211,6 +226,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Setting the MaxCursors property should set the parameter on the instance")]
         public void VerifySetInstanceParametersMaxCursors()
         {
             int expected = 64;
@@ -223,6 +239,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test the MaxVerPages property")]
         public void SetAndRetrieveInstanceParametersMaxVerPages()
         {
             int expected = 128;
@@ -236,6 +253,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Setting the MaxVerPages property should set the parameter on the instance")]
         public void VerifySetInstanceParametersMaxVerPages()
         {
             int expected = 128;
@@ -248,6 +266,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test the MaxTemporaryTables property")]
         public void SetAndRetrieveInstanceParametersMaxTemporaryTables()
         {
             int expected = 7;
@@ -261,6 +280,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Setting the MaxTemporaryTables property should set the parameter on the instance")]
         public void VerifySetInstanceParametersMaxTemporaryTables()
         {
             int expected = 99;
@@ -273,6 +293,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test the LogFileSize property")]
         public void SetAndRetrieveInstanceParametersLogFileSize()
         {
             int expected = 4096;
@@ -286,6 +307,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Setting the LogFileSize property should set the parameter on the instance")]
         public void VerifySetInstanceParametersLogFileSize()
         {
             int expected = 2048;
@@ -298,6 +320,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test the LogBuffers property")]
         public void SetAndRetrieveInstanceParametersLogBuffers()
         {
             int expected = 128;
@@ -311,6 +334,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Setting the LogBuffers property should set the parameter on the instance")]
         public void VerifySetInstanceParametersLogBuffers()
         {
             int expected = 256;
@@ -323,6 +347,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test the CircularLog property")]
         public void SetAndRetrieveInstanceParametersCircularLog()
         {
             bool expected = Any.Boolean;
@@ -331,11 +356,26 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Setting the CircularLog property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Setting the CircularLog property should set the parameter on the instance")]
+        public void VerifySetInstanceParametersCircularLog()
+        {
+            bool expected = Any.Boolean;
+            this.instanceParameters.CircularLog = expected;
+            Assert.AreEqual(expected, this.GetBooleanParameter(JET_param.CircularLog));
+        }
+
+        /// <summary>
         /// Test the PageTempDBMin property.
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        public void SetAndRetrieveInstanceParametersPageTempDBMin()
+        [Description("Test the PageTempDBMin property")]
+        public void SetAndRetrieveInstanceParametersPageTempDbMin()
         {
             int expected = 100;
             this.instanceParameters.PageTempDBMin = expected;
@@ -347,7 +387,8 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        public void SetAndRetrieveInstanceParametersPageTempDBMinSmallest()
+        [Description("Test the PageTempDBMin property with the smallest possible value")]
+        public void SetAndRetrieveInstanceParametersPageTempDbMinSmallest()
         {
             int expected = SystemParameters.PageTempDBSmallest;
             this.instanceParameters.PageTempDBMin = expected;
@@ -355,10 +396,25 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Setting the PageTempDBMin property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Setting the PageTempDBMin property should set the parameter on the instance")]
+        public void VerifySetInstanceParametersPageTempDbMin()
+        {
+            int expected = 128;
+            this.instanceParameters.PageTempDBMin = expected;
+            Assert.AreEqual(expected, this.GetIntegerParameter(JET_param.PageTempDBMin));
+        }
+
+        /// <summary>
         /// Test the CheckpointDepthMax property.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test the CheckpointDepthMax property")]
         public void SetAndRetrieveInstanceParametersCheckpointDepthMax()
         {
             int expected = 30000;
@@ -372,6 +428,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Setting the CheckpointDepthMax property should set the parameter on the instance")]
         public void VerifySetInstanceParametersCheckpointDepthMax()
         {
             int expected = 10000000;
@@ -384,6 +441,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test the CachedClosedTables property")]
         public void SetAndRetrieveInstanceParametersCachedClosedTables()
         {
             if (EsentVersion.SupportsVistaFeatures)
@@ -404,6 +462,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Setting the CachedClosedTables property should set the parameter on the instance")]
         public void VerifySetInstanceParametersCachedClosedTables()
         {
             if (EsentVersion.SupportsVistaFeatures)
@@ -419,6 +478,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test the WaypointLatency property")]
         public void SetAndRetrieveInstanceParametersWaypointLatency()
         {
             if (EsentVersion.SupportsWindows7Features)
@@ -439,6 +499,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Setting the WaypointLatency property should set the parameter on the instance")]
         public void VerifySetInstanceParametersWaypointLatency()
         {
             if (EsentVersion.SupportsWindows7Features)
@@ -454,6 +515,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Turn on logging with the recovery property")]
         public void SetAndRetrieveInstanceParametersRecoveryOn()
         {
             const bool Expected = true;
@@ -466,6 +528,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Turn off logging with the recovery property")]
         public void SetAndRetrieveInstanceParametersRecoveryOff()
         {
             const bool Expected = false;
@@ -478,6 +541,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test the EnableIndexChecking property")]
         public void SetAndRetrieveInstanceParametersEnableIndexChecking()
         {
             bool expected = Any.Boolean;
@@ -486,15 +550,55 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test the no information event property.
+        /// Setting the EnableIndexChecking property should set the parameter
+        /// on the instance.
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        public void SetAndRetrieveInstanceParametersNoInformationEvent()
+        [Description("Setting the EnableIndexChecking property should set the parameter on the instance")]
+        public void VerifySetInstanceParametersEnableIndexChecking()
+        {
+            bool expected = Any.Boolean;
+            this.instanceParameters.EnableIndexChecking = expected;
+            Assert.AreEqual(expected, this.GetBooleanParameter(JET_param.EnableIndexChecking));
+        }
+
+        /// <summary>
+        /// Test setting the no information event property to true.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting the no information event property to true")]
+        public void SetAndRetrieveInstanceParametersNoInformationEventOn()
+        {
+            this.instanceParameters.NoInformationEvent = true;
+            Assert.IsTrue(this.instanceParameters.NoInformationEvent);
+        }
+
+        /// <summary>
+        /// Test setting the no information event property to false.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting the no information event property to false")]
+        public void SetAndRetrieveInstanceParametersNoInformationEventOff()
+        {
+            this.instanceParameters.NoInformationEvent = false;
+            Assert.IsFalse(this.instanceParameters.NoInformationEvent);
+        }
+
+        /// <summary>
+        /// Setting the NoInformationEvent property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Setting the NoInformationEvent property should set the parameter on the instance")]
+        public void VerifySetInstanceParametersNoInformationEvent()
         {
             bool expected = Any.Boolean;
             this.instanceParameters.NoInformationEvent = expected;
-            Assert.AreEqual(expected, this.instanceParameters.NoInformationEvent);
+            Assert.AreEqual(expected, this.GetBooleanParameter(JET_param.NoInformationEvent));
         }
 
         /// <summary>
@@ -502,6 +606,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test the create path if not exist property")]
         public void SetAndRetrieveInstanceParametersCreatePathIfNotExist()
         {
             bool expected = Any.Boolean;
@@ -510,10 +615,25 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Setting the CreatePathIfNotExist property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Setting the CreatePathIfNotExist property should set the parameter on the instance")]
+        public void VerifySetInstanceParametersCreatePathIfNotExist()
+        {
+            bool expected = Any.Boolean;
+            this.instanceParameters.CreatePathIfNotExist = expected;
+            Assert.AreEqual(expected, this.GetBooleanParameter(JET_param.CreatePathIfNotExist));
+        }
+
+        /// <summary>
         /// Test the temporary directory property.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test the temporary directory property")]
         public void SetAndRetrieveInstanceParametersTempDirectory()
         {
             string dir = @"c:\foo\";
@@ -522,11 +642,26 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Setting the TempDirectory property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Setting the TempDirectory property should set the parameter on the instance")]
+        public void VerifySetInstanceParametersTempDirectory()
+        {
+            string dir = @"g:\mydir\";
+            this.instanceParameters.TempDirectory = dir;
+            StringAssert.StartsWith(this.GetStringParameter(JET_param.TempPath), dir);
+        }
+
+        /// <summary>
         /// Test the temporary directory property without a trailing slash.
         /// Make sure the slash is added when retrieving it.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test the temporary directory property without a trailing slash")]
         public void SetAndRetrieveInstanceParametersTempDirectoryAddsSeparatorChar()
         {
             this.instanceParameters.TempDirectory = @"c:\bar\baz";
@@ -538,6 +673,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test the log directory property")]
         public void SetAndRetrieveInstanceParametersLogFileDirectory()
         {
             string dir = @"d:\logs";
@@ -546,10 +682,25 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Setting the LogFileDirectory property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Setting the LogFileDirectory property should set the parameter on the instance")]
+        public void VerifySetInstanceParametersLogFileDirectory()
+        {
+            string dir = @"g:\mydir\";
+            this.instanceParameters.LogFileDirectory = dir;
+            StringAssert.StartsWith(this.GetStringParameter(JET_param.LogFilePath), dir);
+        }
+
+        /// <summary>
         /// Test the system directory property.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test the system directory property")]
         public void SetAndRetrieveInstanceParametersSystemDirectory()
         {
             string dir = @"d:\a\b\c\system\";
@@ -558,10 +709,25 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Setting the SystemDirectory property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Setting the SystemDirectory property should set the parameter on the instance")]
+        public void VerifySetInstanceParametersSystemDirectory()
+        {
+            string dir = @"g:\mydir\";
+            this.instanceParameters.SystemDirectory = dir;
+            StringAssert.StartsWith(this.GetStringParameter(JET_param.SystemPath), dir);
+        }
+        
+        /// <summary>
         /// Test the alternate database recovery directory.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test the alternate database recovery directory")]
         public void SetAndRetrieveInstanceParametersAlternateDatabaseRecoveryDirectory()
         {
             if (EsentVersion.SupportsServer2003Features)
@@ -600,6 +766,20 @@ namespace InteropApiTests
 
             Api.JetGetSystemParameter(this.instance, JET_SESID.Nil, param, ref value, out ignored, 0);
             return value;
+        }
+
+        /// <summary>
+        /// Retrieve a boolean parameter.
+        /// </summary>
+        /// <param name="param">The parameter to retrieve.</param>
+        /// <returns>The parameter value.</returns>
+        private bool GetBooleanParameter(JET_param param)
+        {
+            int value = 0;
+            string ignored;
+
+            Api.JetGetSystemParameter(this.instance, JET_SESID.Nil, param, ref value, out ignored, 0);
+            return 0 != value;
         }
 
         #endregion Helper Methods
