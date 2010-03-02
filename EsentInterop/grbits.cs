@@ -972,6 +972,32 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Options for <see cref="Api.JetSetCurrentIndex2"/> and 
+    /// <see cref="Api.JetSetCurrentIndex3"/>.
+    /// </summary>
+    public enum SetCurrentIndexGrbit
+    {
+        /// <summary>
+        /// Default options. This is the same as <see cref="MoveFirst"/>.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// Indicates that the cursor should be positioned on the first entry of
+        /// the specified index. If the current index is being selected then this
+        /// option is ignored.
+        /// </summary>
+        MoveFirst = 0,
+
+        /// <summary>
+        /// Indicates that the cursor should be positioned on the index entry
+        /// of the new index that corresponds to the record associated with the
+        /// index entry at the current position of the cursor on the old index.
+        /// </summary>
+        NoMove = 0x2,
+    }
+
+    /// <summary>
     /// Options for JetSetTableSequential.
     /// </summary>
     public enum SetTableSequentialGrbit

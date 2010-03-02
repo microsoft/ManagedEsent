@@ -459,6 +459,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetSetCurrentIndex(IntPtr sesid, IntPtr tableid, string szIndexName);
 
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetSetCurrentIndex2(IntPtr sesid, IntPtr tableid, string szIndexName, uint grbit);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetSetCurrentIndex3(IntPtr sesid, IntPtr tableid, string szIndexName, uint grbit, uint itagSequence);
+
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetIndexRecordCount(IntPtr sesid, IntPtr tableid, out uint crec, uint crecMax);
 

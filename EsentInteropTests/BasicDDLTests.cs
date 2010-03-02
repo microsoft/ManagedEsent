@@ -9,8 +9,6 @@ namespace InteropApiTests
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Text;
-    using System.Threading;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 

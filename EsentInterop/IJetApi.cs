@@ -1186,6 +1186,43 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         int JetSetCurrentIndex(JET_SESID sesid, JET_TABLEID tableid, string index);
 
         /// <summary>
+        /// Set the current index of a cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to set the index on.</param>
+        /// <param name="index">
+        /// The name of the index to be selected. If this is null or empty the primary
+        /// index will be selected.
+        /// </param>
+        /// <param name="grbit">
+        /// Set index options.
+        /// </param>
+        /// <returns>An error if the call fails.</returns>
+        int JetSetCurrentIndex2(JET_SESID sesid, JET_TABLEID tableid, string index, SetCurrentIndexGrbit grbit);
+
+        /// <summary>
+        /// Set the current index of a cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to set the index on.</param>
+        /// <param name="index">
+        /// The name of the index to be selected. If this is null or empty the primary
+        /// index will be selected.
+        /// </param>
+        /// <param name="grbit">
+        /// Set index options.
+        /// </param>
+        /// <param name="itagSequence">
+        /// Sequence number of the multi-valued column value which will be used
+        /// to position the cursor on the new index. This parameter is only used
+        /// in conjunction with <see cref="SetCurrentIndexGrbit.NoMove"/>. When
+        /// this parameter is not present or is set to zero, its value is presumed
+        /// to be 1.
+        /// </param>
+        /// <returns>An error if the call fails.</returns>
+        int JetSetCurrentIndex3(JET_SESID sesid, JET_TABLEID tableid, string index, SetCurrentIndexGrbit grbit, int itagSequence);
+
+        /// <summary>
         /// Counts the number of entries in the current index from the current position forward.
         /// The current position is included in the count. The count can be greater than the
         /// total number of records in the table if the current index is over a multi-valued
