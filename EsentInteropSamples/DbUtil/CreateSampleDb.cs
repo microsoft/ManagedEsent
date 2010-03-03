@@ -91,8 +91,8 @@ namespace Microsoft.Isam.Esent.Utilities
                         null,
                         0,
                         out columnidAutoinc);
-                    string indexdef1 = "+key\0\0";
-                    Api.JetCreateIndex(session, tableid, "primary", CreateIndexGrbit.IndexPrimary, indexdef1, indexdef1.Length, 100);
+                    const string Indexdef1 = "+key\0\0";
+                    Api.JetCreateIndex(session, tableid, "primary", CreateIndexGrbit.IndexPrimary, Indexdef1, Indexdef1.Length, 100);
                     Api.JetCloseTable(session, tableid);
 
                     using (var table = new Table(session, dbid, "table", OpenTableGrbit.None))
@@ -109,20 +109,19 @@ namespace Microsoft.Isam.Esent.Utilities
                         this.AddColumn(session, table, "ascii", JET_coltyp.LongText, JET_CP.ASCII);
                         this.AddColumn(session, table, "unicode", JET_coltyp.LongText, JET_CP.Unicode);
 
-                        string indexdef2 = "+double\0-ascii\0\0";
-                        Api.JetCreateIndex(session, table, "secondary", CreateIndexGrbit.None, indexdef2, indexdef2.Length, 100);
+                        const string Indexdef2 = "+double\0-ascii\0\0";
+                        Api.JetCreateIndex(session, table, "secondary", CreateIndexGrbit.None, Indexdef2, Indexdef2.Length, 100);
 
-                        string indexdef3 = "-unicode\0+binary\0+key\0\0";
-                        Api.JetCreateIndex(session, table, "unique_secondary", CreateIndexGrbit.IndexUnique, indexdef3, indexdef3.Length, 100);
+                        const string Indexdef3 = "-unicode\0+binary\0+key\0\0";
+                        Api.JetCreateIndex(session, table, "unique_secondary", CreateIndexGrbit.IndexUnique, Indexdef3, Indexdef3.Length, 100);
 
                         using (var transaction = new Transaction(session))
                         {
                             IDictionary<string, JET_COLUMNID> columnids = Api.GetColumnDictionary(session, table);
 
                             // Null record
-                            int ignored;
                             Api.JetPrepareUpdate(session, table, JET_prep.Insert);
-                            Api.JetUpdate(session, table, null, 0, out ignored);
+                            Api.JetUpdate(session, table);
 
                             // Record that requires CSV quoting
                             using (var update = new Update(session, table, JET_prep.Insert))
@@ -146,7 +145,7 @@ namespace Microsoft.Isam.Esent.Utilities
                                 using (var update = new Update(session, table, JET_prep.Insert))
                                 {
                                     Api.SetColumn(session, table, columnids["unicode"], String.Format("Record {0}", i), Encoding.Unicode);
-                                    Api.SetColumn(session, table, columnids["double"], (double)i * 1.1);
+                                    Api.SetColumn(session, table, columnids["double"], i * 1.1);
                                     Api.SetColumn(session, table, columnids["long"], i);
 
                                     update.Save();

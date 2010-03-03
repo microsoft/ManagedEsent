@@ -101,6 +101,11 @@ namespace SampleApp
                     Api.JetOpenDatabase(session, DatabaseName, null, out dbid, OpenDatabaseGrbit.None);
 
                     // Create a disposable wrapper around the JET_TABLEID.
+                    // A JET_TABLEID acts as a database cursor, it can be used to:
+                    //  - Seek to a record
+                    //  - Retrieve columns from a record
+                    //  - Insert/Update/Delete a record
+                    //  - Move to the next/previous record
                     using (var table = new Table(session, dbid, TableName, OpenTableGrbit.None))
                     {
                         // Load the columnids from the table. This should be done each time the database is attached
@@ -234,8 +239,8 @@ namespace SampleApp
             int price,
             int sharesOwned)
         {
-            // Prepare an update, set some columns and the save the update
-            // First, create a disposable wrapper around JetPrepareUpdate and JetUpdate
+            // Prepare an update, set some columns and then save the update.
+            // First, create a disposable wrapper around JetPrepareUpdate and JetUpdate.
             using (var update = new Update(sesid, tableid, JET_prep.Insert))
             {
                 Api.SetColumn(sesid, tableid, columnidSymbol, symbol, Encoding.Unicode);
@@ -252,6 +257,14 @@ namespace SampleApp
                 // If update.Save isn't called then the update will 
                 // be cancelled when disposed (and the record won't
                 // be inserted).
+                //
+                // Inserting a record does not change the location of
+                // the cursor (JET_TABLEID), it will have the same
+                // location that it did before the insert. In order
+                // to insert a record and then position the cursor
+                // on the record use Update.SaveAndGotoBookmark. That
+                // call uses the bookmark returned from JetUpdate to
+                // position the tableid on the new record.
                 update.Save();
             }
         }
@@ -354,9 +367,9 @@ namespace SampleApp
                 Api.MakeKey(sesid, tableid, namePrefix, Encoding.Unicode, MakeKeyGrbit.NewKey | MakeKeyGrbit.SubStrLimit);
                 Api.JetSetIndexRange(sesid, tableid, SetIndexRangeGrbit.RangeUpperLimit | SetIndexRangeGrbit.RangeInclusive);
                 
-                // there are records in the range. we can now iterate through the range.
-                // when the end of the range is hit we will get a 'no more records' error and
-                // the range will be removed (so subsequent moves will go to the end of the table)
+                // There are records in the range. We can now iterate through the range.
+                // When the end of the range is hit we will get a 'no more records' error and
+                // the range will be removed (so subsequent moves will go to the end of the table).
                 PrintRecordsToEnd(sesid, tableid);
             }
 
@@ -375,7 +388,7 @@ namespace SampleApp
             // Set up an index range on the name index.
             Api.JetSetCurrentIndex(sesid, tableid, "price");
 
-            // First, seek to the beginning of the range
+            // First, seek to the beginning of the range.
             Api.MakeKey(sesid, tableid, low, MakeKeyGrbit.NewKey);
             if (Api.TrySeek(sesid, tableid, SeekGrbit.SeekGE))
             {
@@ -383,9 +396,9 @@ namespace SampleApp
                 Api.MakeKey(sesid, tableid, high, MakeKeyGrbit.NewKey);
                 Api.JetSetIndexRange(sesid, tableid, SetIndexRangeGrbit.RangeUpperLimit);
 
-                // there are records in the range. we can now iterate through the range.
-                // when the end of the range is hit we will get a 'no more records' error and
-                // the range will be removed (so subsequent moves will go to the end of the table)
+                // There are records in the range. We can now iterate through the range.
+                // When the end of the range is hit we will get a 'no more records' error and
+                // the range will be removed (so subsequent moves will go to the end of the table).
                 PrintRecordsToEnd(sesid, tableid);
             }
 
