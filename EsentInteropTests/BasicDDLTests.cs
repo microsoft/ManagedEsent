@@ -356,6 +356,63 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Creates two indexes using JetCreateIndex2.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Creates two indexes using JetCreateIndex2")]
+        public void CreateTwoIndexes()
+        {
+            JET_TABLEID tableToIndex;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetCreateTable(this.sesid, this.dbid, "tabletoindex", 1, 100, out tableToIndex);
+
+            var columndef = new JET_COLUMNDEF()
+            {
+                cp = JET_CP.Unicode,
+                coltyp = JET_coltyp.LongText,
+            };
+            Api.JetAddColumn(this.sesid, tableToIndex, "column", columndef, null, 0, out this.testColumnid);
+
+            Api.JetCloseTable(this.sesid, tableToIndex);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Api.JetOpenTable(this.sesid, this.dbid, "tabletoindex", null, 0, OpenTableGrbit.DenyRead, out tableToIndex);
+            const string Index1Name = "firstIndex";
+            const string Index1Description = "-column\0\0";
+
+            const string Index2Name = "secondIndex";
+            const string Index2Description = "+column\0\0";
+
+            var indexcreates = new[]
+            {
+                new JET_INDEXCREATE
+                {
+                    szIndexName = Index1Name,
+                    szKey = Index1Description,
+                    cbKey = Index1Description.Length,
+                    grbit = CreateIndexGrbit.None,
+                    ulDensity = 100,
+                },
+                new JET_INDEXCREATE
+                {
+                    szIndexName = Index2Name,
+                    szKey = Index2Description,
+                    cbKey = Index2Description.Length,
+                    grbit = CreateIndexGrbit.None,
+                    ulDensity = 100,
+                },
+            };
+            Api.JetCreateIndex2(this.sesid, tableToIndex, indexcreates, indexcreates.Length);
+
+            Api.JetSetCurrentIndex(this.sesid, tableToIndex, Index1Name);
+            Api.JetSetCurrentIndex(this.sesid, tableToIndex, Index2Name);
+            Api.JetSetCurrentIndex(this.sesid, tableToIndex, null);
+            Api.JetCloseTable(this.sesid, tableToIndex);
+        }
+
+        /// <summary>
         /// Verify that JetGetCurrentIndex returns the name of the index.
         /// </summary>
         [TestMethod]

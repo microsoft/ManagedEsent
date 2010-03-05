@@ -375,7 +375,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Default options.
         /// </summary>
-        None,
+        None = 0,
     }
 
     /// <summary>
@@ -390,46 +390,46 @@ namespace Microsoft.Isam.Esent.Interop
         None = 0,
 
         /// <summary>
-        /// This table cannot be opened for read access by another session.
-        /// </summary>
-        DenyRead,
-
-        /// <summary>
         /// This table cannot be opened for write access by another session.
         /// </summary>
-        DenyWrite,
+        DenyWrite = 0x1,
 
         /// <summary>
-        /// Do not cache pages for this table.
+        /// This table cannot be opened for read access by another session.
         /// </summary>
-        NoCache,
+        DenyRead = 0x2,
+
+        /// <summary>
+        /// Request read-only access to the table.
+        /// </summary>
+        ReadOnly = 0x4,
+
+        /// <summary>
+        /// Request write access to the table.
+        /// </summary>
+        Updatable = 0x8,
 
         /// <summary>
         /// Allow DDL modifications to a table flagged as FixedDDL. This option
         /// must be used with DenyRead.
         /// </summary>
-        PermitDDL,
+        PermitDDL = 0x10,
+
+        /// <summary>
+        /// Do not cache pages for this table.
+        /// </summary>
+        NoCache = 0x20,
 
         /// <summary>
         /// Provides a hint that the table is probably not in the buffer cache, and
         /// that pre-reading may be beneficial to performance.
         /// </summary>
-        Preread,
-
-        /// <summary>
-        /// Request read-only access to the table.
-        /// </summary>
-        ReadOnly,
+        Preread = 0x40,
 
         /// <summary>
         /// Assume a sequential access pattern and prefetch database pages.
         /// </summary>
-        Sequential,
-
-        /// <summary>
-        /// Request write access to the table.
-        /// </summary>
-        Updatable,
+        Sequential = 0x8000
     }
 
     /// <summary>
@@ -781,7 +781,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Default options.
         /// </summary>
-        None,
+        None = 0,
 
         /// <summary>
         /// A new search key should be constructed. Any previously existing search

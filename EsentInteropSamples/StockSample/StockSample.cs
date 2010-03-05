@@ -56,9 +56,10 @@ namespace SampleApp
 
             // First create the database. A real application would probably
             // check for the database first and only create it if needed.
-            // Checking for the database can be done by calling JetAttachDatabase
-            // and seeing if a JET_ERR.DatabaseNotFound error is thrown.
-            // (Check the Error property of the EsentErrorException).
+            // Checking for the database can be done with File.Exists or
+            // by calling JetAttachDatabase and seeing if a JET_ERR.DatabaseNotFound
+            // error is thrown. (Check the Error property of the
+            // EsentErrorException).
             CreateDatabase(DatabaseName);
 
             // Now the database has been created we can attach to it
