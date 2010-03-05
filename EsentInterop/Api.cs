@@ -923,6 +923,15 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Creates indexes over data in an ESE database.
         /// </summary>
+        /// <remarks>
+        /// When creating multiple indexes (i.e. with numIndexCreates
+        /// greater than 1) this method MUST be called
+        /// outside of any transactions and with exclusive access to the
+        /// table. The JET_TABLEID returned by <see cref="JetCreateTable"/>
+        /// will have exlusive access or the table can be opened for
+        /// exclusive access by passing <see cref="OpenTableGrbit.DenyRead"/>
+        /// to <see cref="JetOpenTable"/>.
+        /// </remarks>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The table to create the index on.</param>
         /// <param name="indexcreates">Array of objects describing the indexes to be created.</param>
