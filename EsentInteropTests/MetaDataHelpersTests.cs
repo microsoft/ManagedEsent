@@ -60,6 +60,7 @@ namespace InteropApiTests
         /// All DDL should be done in this method.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the MetaDataHelpersTests test fixture")]
         public void Setup()
         {
             this.directory = SetupHelper.CreateRandomDirectory();
@@ -149,6 +150,7 @@ namespace InteropApiTests
         /// Cleanup after all tests have run.
         /// </summary>
         [TestCleanup]
+        [Description("Cleanup the MetaDataHelpersTests test fixture")]
         public void Teardown()
         {
             Api.JetCloseTable(this.sesid, this.tableid);
@@ -165,6 +167,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(3)]
+        [Description("Repeatedly retrieve table meta-data with helper methods")]
         public void RepeatedlyRetrieveMetaData()
         {
             var testDuration = TimeSpan.FromSeconds(19);
@@ -186,7 +189,7 @@ namespace InteropApiTests
                 iteration++;
             }
 
-            Console.WriteLine("{0} iterations", iteration);
+            Console.WriteLine("{0:N0} iterations", iteration);
         }
     }
 }

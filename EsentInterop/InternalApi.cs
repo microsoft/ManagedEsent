@@ -44,7 +44,7 @@ namespace Microsoft.Isam.Esent.Interop
                     "must be inside the data buffer");                    
             }
 
-            if (null != data && dataSize > (data.Length - dataOffset) && (SetColumnGrbit.SizeLV != (grbit & SetColumnGrbit.SizeLV)))
+            if (null != data && dataSize > checked(data.Length - dataOffset) && (SetColumnGrbit.SizeLV != (grbit & SetColumnGrbit.SizeLV)))
             {
                 throw new ArgumentOutOfRangeException(
                     "dataSize",

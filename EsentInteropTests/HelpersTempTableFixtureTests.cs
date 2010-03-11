@@ -900,6 +900,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Retrieve a string that is too large for the cached retrieval buffer")]
         public void RetrieveLargeString()
         {
             JET_COLUMNID columnid = this.columnidDict["Unicode"];
@@ -917,7 +918,7 @@ namespace InteropApiTests
         public void RetrieveExtremelyLargeString()
         {
             JET_COLUMNID columnid = this.columnidDict["Unicode"];
-            var value = Any.StringOfLength(1024 * 1024);
+            var value = new string('X', 1024 * 1024);
             this.InsertRecord(columnid, Encoding.Unicode.GetBytes(value));
             Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid));
         }

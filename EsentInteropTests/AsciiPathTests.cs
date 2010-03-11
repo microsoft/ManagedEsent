@@ -69,7 +69,7 @@ namespace InteropApiTests
         [Description("Set and retrieve an ASCII system path")]
         public void SetAndGetAsciiSystemPath()
         {
-            using (var instance = new Instance("ascii"))
+            using (var instance = new Instance("asciisystempath"))
             {
                 instance.Parameters.SystemDirectory = this.directory;
                 StringAssert.Contains(instance.Parameters.SystemDirectory, this.directory);
@@ -84,7 +84,7 @@ namespace InteropApiTests
         [Description("Set and retrieve an ASCII log path")]
         public void SetAndGetAsciiLogPath()
         {
-            using (var instance = new Instance("ascii"))
+            using (var instance = new Instance("asciilogpath"))
             {
                 instance.Parameters.LogFileDirectory = this.directory;
                 StringAssert.Contains(instance.Parameters.LogFileDirectory, this.directory);
@@ -99,7 +99,7 @@ namespace InteropApiTests
         [Description("Set and retrieve an ASCII temporary directory")]
         public void SetAndGetAsciiTempDbPath()
         {
-            using (var instance = new Instance("ascii"))
+            using (var instance = new Instance("asciitempdir"))
             {
                 instance.Parameters.TempDirectory = this.directory;
                 StringAssert.Contains(instance.Parameters.TempDirectory, this.directory);
@@ -114,7 +114,7 @@ namespace InteropApiTests
         [Description("Create a database with an ASCII path")]
         public void CreateDatabaseWithAsciiPath()
         {
-            using (var instance = new Instance("ascii"))
+            using (var instance = new Instance("asciidbcreate"))
             {
                 SetupHelper.SetLightweightConfiguration(instance);
                 instance.Parameters.CreatePathIfNotExist = true;
@@ -136,7 +136,7 @@ namespace InteropApiTests
         [Description("Detach a database with an ASCII path")]
         public void DetachDatabaseWithAsciiPath()
         {
-            using (var instance = new Instance("ascii"))
+            using (var instance = new Instance("asciidbdetach"))
             {
                 SetupHelper.SetLightweightConfiguration(instance);
                 instance.Parameters.CreatePathIfNotExist = true;
@@ -159,7 +159,7 @@ namespace InteropApiTests
         [Description("Attach a database with an ASCII path")]
         public void AttachDatabaseWithAsciiPath()
         {
-            using (var instance = new Instance("ascii"))
+            using (var instance = new Instance("asciidbattach"))
             {
                 SetupHelper.SetLightweightConfiguration(instance);
                 instance.Parameters.CreatePathIfNotExist = true;
@@ -184,7 +184,7 @@ namespace InteropApiTests
         [Description("Use JetAttachDatabase2 on a database with an ASCII path")]
         public void AttachDatabaseWithAsciiPath2()
         {
-            using (var instance = new Instance("ascii"))
+            using (var instance = new Instance("asciidbattach2"))
             {
                 SetupHelper.SetLightweightConfiguration(instance);
                 instance.Parameters.CreatePathIfNotExist = true;
@@ -209,7 +209,7 @@ namespace InteropApiTests
         [Description("Open a database with an ASCII path")]
         public void OpenDatabaseWithAsciiPath()
         {
-            using (var instance = new Instance("ascii"))
+            using (var instance = new Instance("asciidbopen"))
             {
                 SetupHelper.SetLightweightConfiguration(instance);
                 instance.Parameters.CreatePathIfNotExist = true;
@@ -295,13 +295,14 @@ namespace InteropApiTests
         [Description("Test JetGetInstanceInfo with ASCII paths")]
         public void TestJetGetInstanceInfoWithAsciiPaths()
         {
-            const string InstanceName = "MyInstance";
+            const string InstanceName = "AsciiGetInstanceInfo";
             string database1 = Path.GetFullPath(Path.Combine(this.directory, "instanceinfo1.edb"));
             string database2 = Path.GetFullPath(Path.Combine(this.directory, "instanceinfo2.edb"));
             using (var instance = new Instance(InstanceName))
             {
                 // Don't turn off logging -- JetGetInstanceInfo only returns information for
                 // databases that have logging on.
+                instance.Parameters.LogFileSize = 256; // 256Kb
                 instance.Parameters.NoInformationEvent = true;
                 instance.Parameters.MaxTemporaryTables = 0;
                 instance.Parameters.CreatePathIfNotExist = true;

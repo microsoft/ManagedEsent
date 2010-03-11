@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="RecordlistTests.cs" company="Microsoft Corporation">
+// <copyright file="RecordlistConversionTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
 //-----------------------------------------------------------------------
@@ -11,7 +11,7 @@ namespace InteropApiTests
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
-    /// Tests for the JET_RECORDLIST class
+    /// Tests for the JET_RECORDLIST creation from NATIVE_RECORDLIST.
     /// </summary>
     [TestClass]
     public class RecordlistConversionsTests
@@ -31,6 +31,7 @@ namespace InteropApiTests
         /// it to a managed object.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the RecordlistConversionsTests test fixture")]
         public void Setup()
         {
             this.native = new NATIVE_RECORDLIST
@@ -49,6 +50,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that conversion from NATIVE_RECORDLIST to JET_RECORDLIST sets tableid")]
         public void VerifyConvertRecordlistFromNativeSetsTableid()
         {
             Assert.AreEqual(new JET_TABLEID { Value = this.native.tableid }, this.converted.tableid);
@@ -59,6 +61,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that conversion from NATIVE_RECORDLIST to JET_RECORDLIST sets cRecord")]
         public void VerifyConvertRecordlistFromNativeSetsCrecords()
         {
             Assert.AreEqual((int)this.native.cRecords, this.converted.cRecords);
@@ -69,6 +72,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that conversion from NATIVE_RECORDLIST to JET_RECORDLIST sets columnidBookmark")]
         public void VerifyConvertIndexlistFromNativeSetsColumnidBookmark()
         {
             Assert.AreEqual(new JET_COLUMNID { Value = this.native.columnidBookmark }, this.converted.columnidBookmark);

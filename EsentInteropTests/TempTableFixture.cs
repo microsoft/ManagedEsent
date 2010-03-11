@@ -49,7 +49,7 @@ namespace InteropApiTests
         [Description("Setup the TempTableFixture fixture")]
         public void Setup()
         {
-            this.instance = new Instance("TempTableFixture");
+            this.instance = new Instance(Guid.NewGuid().ToString(), "TempTableFixture");
             this.instance.Parameters.Recovery = false;
             this.instance.Parameters.PageTempDBMin = SystemParameters.PageTempDBSmallest;
             this.instance.Parameters.NoInformationEvent = true;

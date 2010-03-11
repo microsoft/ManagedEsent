@@ -32,6 +32,7 @@ namespace InteropApiTests
         /// it to a managed object.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the IndexRangeFromTableidTests fixture")]
         public void Setup()
         {
             this.tableid = new JET_TABLEID { Value = new IntPtr(0x55) };
@@ -43,6 +44,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that conversion from a JET_TABLEID to a NATIVE_INDEXRANGE sets the cbStruct")]
         public void VerifyMakeIndexRangeFromTableidSetsCbstruct()
         {
             Assert.AreEqual((uint)Marshal.SizeOf(this.native), this.native.cbStruct);
@@ -53,6 +55,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that conversion from a JET_TABLEID to a NATIVE_INDEXRANGE sets the tableid")]
         public void VerifyMakeIndexRangeFromTableidSetsTableid()
         {
             Assert.AreEqual(this.tableid.Value, this.native.tableid);
@@ -63,6 +66,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check that conversion from a JET_TABLEID to a NATIVE_INDEXRANGE sets the grbit")]
         public void VerifyMakeIndexRangeFromTableidSetsGrbit()
         {
             Assert.AreEqual((uint) IndexRangeGrbit.RecordInIndex, this.native.grbit);

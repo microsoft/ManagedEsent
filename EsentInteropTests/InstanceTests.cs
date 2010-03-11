@@ -25,10 +25,11 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Create an Instance without initializing it")]
         public void CreateInstanceNoInit()
         {
             string dir = SetupHelper.CreateRandomDirectory();
-            using (var instance = new Instance("theinstance"))
+            using (var instance = new Instance("createnoinit"))
             {
                 Assert.AreNotEqual(JET_INSTANCE.Nil, instance.JetInstance);
                 Assert.IsNotNull(instance.Parameters);
@@ -46,9 +47,10 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test implicit conversation of an Instance to a JET_INSTANCE")]
         public void InstanceCanConvertToJetInstance()
         {
-            using (var instance = new Instance("theinstance"))
+            using (var instance = new Instance("converttoinstance"))
             {
                 JET_INSTANCE jetinstance = instance;
                 Assert.AreEqual(jetinstance, instance.JetInstance);
@@ -61,6 +63,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test cleanup when JetCreateInstance2 fails")]
         public void VerifyInstanceDoesNotCallJetTermWhenCreateInstanceFails()
         {
             var mocks = new MockRepository();
@@ -78,7 +81,7 @@ namespace InteropApiTests
 
                 try
                 {
-                    using (var instance = new Instance("test"))
+                    using (var instance = new Instance("testfail"))
                     {
                         Assert.Fail("Expected an EsentErrorException");
                     }
@@ -93,11 +96,12 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// When JetCreateInstance2 fails the instance isn't initialized
-        /// so it shouldn't be freed.
+        /// When JetInit fails the instance isn't initialized
+        /// so it shouldn't be terminated.
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify JetTerm is not called when JetInit2 fails")]
         public void VerifyInstanceDoesNotCallJetTermWhenJetInitFails()
         {
             var mocks = new MockRepository();
@@ -122,7 +126,7 @@ namespace InteropApiTests
 
                 try
                 {
-                    using (var instance = new Instance("test"))
+                    using (var instance = new Instance("testfail2"))
                     {
                         instance.Init();
                         Assert.Fail("Expected an EsentErrorException");
@@ -142,14 +146,16 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Create and initialize an instance")]
         public void CreateInstanceInit()
         {
             string dir = SetupHelper.CreateRandomDirectory();
-            using (var instance = new Instance("theinstance"))
+            using (var instance = new Instance("createinit"))
             {
                 instance.Parameters.LogFileDirectory = dir;
                 instance.Parameters.SystemDirectory = dir;
                 instance.Parameters.TempDirectory = dir;
+                instance.Parameters.LogFileSize = 512; // 512Kb
                 instance.Parameters.NoInformationEvent = true;
                 instance.Init();
             }
@@ -162,6 +168,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Create and initialize an instance with a display name")]
         public void CreateInstanceWithDisplayName()
         {
             using (var instance = new Instance(Guid.NewGuid().ToString(), "Friendly Display Name"))
@@ -177,14 +184,16 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Create, intialize and terminate an instance")]
         public void CreateInstanceInitTerm()
         {
             string dir = SetupHelper.CreateRandomDirectory();
-            using (var instance = new Instance("theinstance"))
+            using (var instance = new Instance("initterm"))
             {
                 instance.Parameters.LogFileDirectory = dir;
                 instance.Parameters.SystemDirectory = dir;
                 instance.Parameters.TempDirectory = dir;
+                instance.Parameters.LogFileSize = 256; // 256Kb
                 instance.Parameters.NoInformationEvent = true;
                 instance.Init();
                 instance.Term();
@@ -197,6 +206,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify that garbage collection terminates instances")]
         public void VerifyInstanceCanBeFinalized()
         {
             for (int i = 0; i < 3; ++i)
@@ -216,10 +226,11 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that using the JET_INSTANCE of a terminated Instance throws an exception")]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void JetInstanceThrowsExceptionWhenInstanceIsClosed()
         {
-            var instance = new Instance("theinstance");
+            var instance = new Instance("closed");
             SetupHelper.SetLightweightConfiguration(instance);
             instance.Init();
             instance.Term();
@@ -232,10 +243,11 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that using the JET_INSTANCE of a disposed Instance throws an exception")]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void JetInstanceThrowsExceptionWhenInstanceIsDisposed()
         {
-            var instance = new Instance("theinstance");
+            var instance = new Instance("disposed");
             instance.Dispose();
             JET_INSTANCE x = instance.JetInstance;
         }
@@ -246,10 +258,11 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that using the parameters of a disposed Instance throws an exception")]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void ParametersThrowsExceptionWhenInstanceIsDisposed()
         {
-            var instance = new Instance("theinstance");
+            var instance = new Instance("disposed2");
             instance.Dispose();
             InstanceParameters x = instance.Parameters;
         }
@@ -260,10 +273,11 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that calling Init on a disposed Instance throws an exception")]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void InitThrowsExceptionWhenInstanceIsDisposed()
         {
-            var instance = new Instance("theinstance");
+            var instance = new Instance("disposed3");
             instance.Dispose();
             instance.Init();
         }
@@ -274,20 +288,21 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that calling Term on a disposed Instance throws an exception")]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void TermThrowsExceptionWhenInstanceIsDisposed()
         {
-            var instance = new Instance("theinstance");
+            var instance = new Instance("disposed4");
             instance.Dispose();
             instance.Term();
         }
 
         /// <summary>
-        /// Make sure that calling Term on a disposed object throws an
-        /// exception.
+        /// Test thread aborts during init and term.
         /// </summary>
         [TestMethod]
         [Priority(3)]
+        [Description("Test thread aborts during Instance Init/Term")]
         public void TestThreadAbortDuringInstanceInitTerm()
         {
             var rand = new Random();

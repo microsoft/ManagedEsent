@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="OpenTemporaryTableTests.cs" company="Microsoft Corporation">
+// <copyright file="OpenTemporaryTableConversionTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
 //-----------------------------------------------------------------------
@@ -15,7 +15,7 @@ namespace InteropApiTests
     /// Test conversion to NATIVE_OPENTEMPORARYTABLE
     /// </summary>
     [TestClass]
-    public class OpenTemporaryTableTests
+    public class OpenTemporaryTableConversionTests
     {
         /// <summary>
         /// Managed object being tested.
@@ -33,6 +33,7 @@ namespace InteropApiTests
         /// it to a managed object.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the OpenTemporaryTableConversionTests test fixture")]
         public void Setup()
         {
             this.managed = new JET_OPENTEMPORARYTABLE()
@@ -48,50 +49,55 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Check the conversion to a NATIVE_OPENTEMPORARYTABLE sets the structure size
+        /// Check the conversion to a NATIVE_OPENTEMPORARYTABLE sets the structure size.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check the conversion to a NATIVE_OPENTEMPORARYTABLE sets the structure size")]
         public void VerifyConversionToNativeSetsCbStruct()
         {
             Assert.AreEqual((uint)Marshal.SizeOf(this.native), this.native.cbStruct);
         }
 
         /// <summary>
-        /// Check the conversion to a NATIVE_OPENTEMPORARYTABLE sets ccolumn
+        /// Check the conversion to a NATIVE_OPENTEMPORARYTABLE sets ccolumn.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check the conversion to a NATIVE_OPENTEMPORARYTABLE sets ccolumn")]
         public void VerifyConversionToNativeSetsCcolumn()
         {
             Assert.AreEqual((uint) 2, this.native.ccolumn);
         }
 
         /// <summary>
-        /// Check the conversion to a NATIVE_OPENTEMPORARYTABLE sets grbit
+        /// Check the conversion to a NATIVE_OPENTEMPORARYTABLE sets grbit.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check the conversion to a NATIVE_OPENTEMPORARYTABLE sets grbit")]
         public void VerifyConversionToNativeSetsGrbit()
         {
             Assert.AreEqual((uint) TempTableGrbit.SortNullsHigh, this.native.grbit);
         }
 
         /// <summary>
-        /// Check the conversion to a NATIVE_OPENTEMPORARYTABLE sets cbKeyMost
+        /// Check the conversion to a NATIVE_OPENTEMPORARYTABLE sets cbKeyMost.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check the conversion to a NATIVE_OPENTEMPORARYTABLE sets cbKeyMost")]
         public void VerifyConversionToNativeSetsCbKeyMost()
         {
             Assert.AreEqual((uint) 3, this.native.cbKeyMost);
         }
 
         /// <summary>
-        /// Check the conversion to a NATIVE_OPENTEMPORARYTABLE sets cbVarSegMac
+        /// Check the conversion to a NATIVE_OPENTEMPORARYTABLE sets cbVarSegMac.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check the conversion to a NATIVE_OPENTEMPORARYTABLE sets cbVarSegMac")]
         public void VerifyConversionToNativeSetsCbVarSegMac()
         {
             Assert.AreEqual((uint) 4, this.native.cbVarSegMac);

@@ -103,7 +103,7 @@ namespace InteropApiTests
                 JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.CacheSizeMin, ref this.cacheSizeMinSaved, out ignored, 0);
             Api.JetSetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.CacheSizeMin, 16384, null);
 
-            this.instance = new Instance("SimplePerfTest");
+            this.instance = new Instance(Guid.NewGuid().ToString(), "SimplePerfTest");
             this.instance.Parameters.LogFileDirectory = this.directory;
             this.instance.Parameters.SystemDirectory = this.directory;
             this.instance.Parameters.MaxVerPages = 1024;

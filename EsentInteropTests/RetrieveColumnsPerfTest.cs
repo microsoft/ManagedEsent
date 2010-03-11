@@ -79,7 +79,7 @@ namespace InteropApiTests
         [Description("Fixture setup for RetrieveColumnsPerfTest")]
         public void Setup()
         {
-            this.instance = new Instance("RetrieveColumnsPerfTest");
+            this.instance = new Instance(Guid.NewGuid().ToString(), "RetrieveColumnsPerfTest");
             this.instance.Parameters.NoInformationEvent = true;
             this.instance.Parameters.Recovery = false;
             this.instance.Init();

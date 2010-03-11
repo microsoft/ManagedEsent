@@ -21,6 +21,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test conversion of a single value in a NATIVE_ENUMCOLUMN")]
         public void TestSingleValueConversion()
         {
             var native = new NATIVE_ENUMCOLUMN
@@ -45,6 +46,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test conversion of a multi value in JET_ENUMCOLUMN")]
         public void TestMultiValueConversion()
         {
             var managed = new JET_ENUMCOLUMN();

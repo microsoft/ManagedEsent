@@ -17,11 +17,6 @@ namespace InteropApiTests
     public class JetIdleTests
     {
         /// <summary>
-        /// The directory being used for the database and its files.
-        /// </summary>
-        private string directory;
-
-        /// <summary>
         /// The instance used by the test.
         /// </summary>
         private JET_INSTANCE instance;
@@ -38,10 +33,10 @@ namespace InteropApiTests
         /// All DDL should be done in this method.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the JetIdleTests fixture")]
         public void Setup()
         {
-            this.directory = SetupHelper.CreateRandomDirectory();
-            this.instance = SetupHelper.CreateNewInstance(this.directory);
+            this.instance = SetupHelper.CreateNewInstance(".");
 
             // turn off logging so initialization is faster
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
@@ -54,22 +49,11 @@ namespace InteropApiTests
         /// Cleanup after all tests have run.
         /// </summary>
         [TestCleanup]
+        [Description("Cleanup the JetIdleTests fixture")]
         public void Teardown()
         {
             Api.JetEndSession(this.sesid, EndSessionGrbit.None);
             Api.JetTerm(this.instance);
-            Cleanup.DeleteDirectoryWithRetry(this.directory);
-        }
-
-        /// <summary>
-        /// Verify that the test class has setup the test fixture properly.
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void VerifyFixtureSetup()
-        {
-            Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
-            Assert.AreNotEqual(JET_SESID.Nil, this.sesid);
         }
 
         #endregion Setup/Teardown
@@ -79,6 +63,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test JetIdle with the default grbit")]
         public void TestDefault()
         {
             Assert.AreEqual(JET_wrn.NoIdleActivity, Api.JetIdle(this.sesid, IdleGrbit.None));
@@ -89,6 +74,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test JetIdle with the compact grbit")]
         public void TestCompact()
         {
             Assert.AreEqual(JET_wrn.NoIdleActivity, Api.JetIdle(this.sesid, IdleGrbit.Compact));
@@ -99,6 +85,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test JetIdle with the status grbit")]
         public void TestGetStatus()
         {
             Assert.AreEqual(JET_wrn.Success, Api.JetIdle(this.sesid, IdleGrbit.GetStatus));

@@ -27,6 +27,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify StatusCallbackWrapper converts its arguments")]
         public void VerifyStatusCallbackWrapperConvertsArguments()
         {
             var wrapper = new StatusCallbackWrapper(
@@ -68,6 +69,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify StatusCallbackWrapper catches exceptions")]
         public void VerifyStatusCallbackWrapperCatchesExceptions()
         {
             var wrapper = new StatusCallbackWrapper(
@@ -94,6 +96,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify StatusCallbackWrapper catches thread abort")]
         public void VerifyStatusCallbackWrapperCatchesThreadAbort()
         {
             var wrapper = new StatusCallbackWrapper(

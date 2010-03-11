@@ -31,6 +31,7 @@ namespace InteropApiTests
         /// will invalidate various members.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the IndexcreateCheckTests fixture")]
         public void Setup()
         {
             this.indexcreate = new JET_INDEXCREATE
@@ -48,7 +49,8 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        public void VerifyFixtureSetup()
+        [Description("Test JET_INDEXCREATE.CheckMembersAreValid with valid members")]
+        public void TestMembersAreValidWithValidMembers()
         {
             this.indexcreate.CheckMembersAreValid();
         }
@@ -58,6 +60,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test JET_INDEXCREATE.CheckMembersAreValid with a null index name")]
         [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyCheckThrowsExceptionWhenNameIsNull()
         {
@@ -70,6 +73,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test JET_INDEXCREATE.CheckMembersAreValid with a null key")]
         [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyCheckThrowsExceptionWhenKeyIsNull()
         {
@@ -82,6 +86,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test JET_INDEXCREATE.CheckMembersAreValid with a negative cbKey")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyCheckThrowsExceptionWhenCbKeyIsNegative()
         {
@@ -94,6 +99,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test JET_INDEXCREATE.CheckMembersAreValid with a too-long cbKey")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyCheckThrowsExceptionWhenCbKeyIsTooLong()
         {
@@ -106,6 +112,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test JET_INDEXCREATE.CheckMembersAreValid with a negative density")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyCheckThrowsExceptionWhenDensityIsNegative()
         {
@@ -118,6 +125,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test JET_INDEXCREATE.CheckMembersAreValid with a negative cbKeyMost")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyCheckThrowsExceptionWhenCbKeyMostIsNegative()
         {
@@ -130,6 +138,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test JET_INDEXCREATE.CheckMembersAreValid with a negative cbVarSegMac")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyCheckThrowsExceptionWhenCbVarSegMacIsNegative()
         {
@@ -142,6 +151,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test JET_INDEXCREATE.CheckMembersAreValid with invalid conditional column count")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyCheckThrowsExceptionWhenConditionalColumnsAreNullAndCountIsNonZero()
         {
@@ -154,6 +164,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test JET_INDEXCREATE.CheckMembersAreValid with a negative conditional column count")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyCheckThrowsExceptionWhenConditionalColumnCountIsNegative()
         {
@@ -167,6 +178,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test JET_INDEXCREATE.CheckMembersAreValid with a too-long conditional column count")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyCheckThrowsExceptionWhenConditionalColumnCountIsTooLong()
         {

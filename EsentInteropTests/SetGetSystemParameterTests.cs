@@ -270,7 +270,7 @@ namespace InteropApiTests
         public void SetRuntimeCallbackToNull()
         {
             JET_INSTANCE instance;
-            Api.JetCreateInstance(out instance, "RuntimeCallbackTest");
+            Api.JetCreateInstance(out instance, "ResetRuntimeCallbackTest");
             try
             {
                 Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.RuntimeCallback, null, null);
@@ -354,7 +354,7 @@ namespace InteropApiTests
             if (EsentVersion.SupportsVistaFeatures)
             {
                 JET_INSTANCE instance;
-                Api.JetCreateInstance(out instance, "IntParameterTest");
+                Api.JetCreateInstance(out instance, "KeyMostParameterTest");
                 try
                 {
                     int keyMost = 0;

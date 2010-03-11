@@ -25,7 +25,7 @@ namespace InteropApiTests
         [ExpectedException(typeof(ArgumentNullException))]
         public void TestJetRestoreInstanceThrowsExceptionWhenSourceIsNull()
         {
-            using (var instance = new Instance("BackupRestoreTests"))
+            using (var instance = new Instance("RestoreNullSource"))
             {
                 Api.JetRestoreInstance(instance, null, "somewhere", null);
             }

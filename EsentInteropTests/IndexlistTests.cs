@@ -31,6 +31,7 @@ namespace InteropApiTests
         /// it to a managed object.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the IndexlistConversionsTests fixture")]
         public void Setup()
         {
             this.native = new NATIVE_INDEXLIST()
@@ -64,6 +65,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify converting a NATIVE_INDEXLIST to a JET_INDEXLIST sets the tableid")]
         public void VerifyConvertIndexlistFromNativeSetsTableid()
         {
             Assert.AreEqual(new JET_TABLEID { Value = this.native.tableid }, this.converted.tableid);
@@ -74,6 +76,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify converting a NATIVE_INDEXLIST to a JET_INDEXLIST sets cRecord")]
         public void VerifyConvertIndexlistFromNativeSetsCrecord()
         {
             Assert.AreEqual((int)this.native.cRecord, this.converted.cRecord);
@@ -84,6 +87,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify converting a NATIVE_INDEXLIST to a JET_INDEXLIST sets columnidindexname")]
         public void VerifyConvertIndexlistFromNativeSetsColumnidindexname()
         {
             Assert.AreEqual(new JET_COLUMNID { Value = this.native.columnidindexname }, this.converted.columnidindexname);
@@ -94,6 +98,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify converting a NATIVE_INDEXLIST to a JET_INDEXLIST sets columnidgrbitIndex")]
         public void VerifyConvertIndexlistFromNativeSetsColumnidgrbitIndex()
         {
             Assert.AreEqual(new JET_COLUMNID { Value = this.native.columnidgrbitIndex }, this.converted.columnidgrbitIndex);
@@ -104,16 +109,18 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify converting a NATIVE_INDEXLIST to a JET_INDEXLIST sets columnidcColumn")]
         public void VerifyConvertIndexlistFromNativeSetsColumnidcColumn()
         {
             Assert.AreEqual(new JET_COLUMNID { Value = this.native.columnidcColumn }, this.converted.columnidcColumn);
         }
 
         /// <summary>
-        /// Check the conversion of columnidcColumn.
+        /// Check the conversion of columnidiColumn.
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify converting a NATIVE_INDEXLIST to a JET_INDEXLIST sets columnidiColumn")]
         public void VerifyConvertIndexlistFromNativeSetsColumnidiColumn()
         {
             Assert.AreEqual(new JET_COLUMNID { Value = this.native.columnidiColumn }, this.converted.columnidiColumn);
@@ -124,6 +131,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify converting a NATIVE_INDEXLIST to a JET_INDEXLIST sets columnidcolumnid")]
         public void VerifyConvertIndexlistFromNativeSetsColumnidcolumnid()
         {
             Assert.AreEqual(new JET_COLUMNID { Value = this.native.columnidcolumnid }, this.converted.columnidcolumnid);
@@ -134,6 +142,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify converting a NATIVE_INDEXLIST to a JET_INDEXLIST sets columnidcoltyp")]
         public void VerifyConvertIndexlistFromNativeSetsColumnidcoltyp()
         {
             Assert.AreEqual(new JET_COLUMNID { Value = this.native.columnidcoltyp }, this.converted.columnidcoltyp);
@@ -144,6 +153,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify converting a NATIVE_INDEXLIST to a JET_INDEXLIST sets columnidLangid")]
         public void VerifyConvertIndexlistFromNativeSetsColumnidLangid()
         {
             Assert.AreEqual(new JET_COLUMNID { Value = this.native.columnidLangid }, this.converted.columnidLangid);
@@ -154,6 +164,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify converting a NATIVE_INDEXLIST to a JET_INDEXLIST sets columnidCp")]
         public void VerifyConvertIndexlistFromNativeSetsColumnidCp()
         {
             Assert.AreEqual(new JET_COLUMNID { Value = this.native.columnidCp }, this.converted.columnidCp);
@@ -164,6 +175,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify converting a NATIVE_INDEXLIST to a JET_INDEXLIST sets columnidgrbitColumn")]
         public void VerifyConvertIndexlistFromNativeSetsColumnidgrbitColumn()
         {
             Assert.AreEqual(new JET_COLUMNID { Value = this.native.columnidgrbitColumn }, this.converted.columnidgrbitColumn);
@@ -174,6 +186,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify converting a NATIVE_INDEXLIST to a JET_INDEXLIST sets columnidcolumnname")]
         public void VerifyConvertIndexlistFromNativeSetsColumnidcolumnname()
         {
             Assert.AreEqual(new JET_COLUMNID { Value = this.native.columnidcolumnname }, this.converted.columnidcolumnname);
@@ -184,7 +197,8 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        public void VerifyConvertIndexlistFromNativeSetsColumnidLCMapFlags()
+        [Description("Verify converting a NATIVE_INDEXLIST to a JET_INDEXLIST sets columnidLCMapFlags")]
+        public void VerifyConvertIndexlistFromNativeSetsColumnidLcMapFlags()
         {
             Assert.AreEqual(new JET_COLUMNID { Value = this.native.columnidLCMapFlags }, this.converted.columnidLCMapFlags);
         }

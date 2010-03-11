@@ -32,6 +32,7 @@ namespace InteropApiTests
         /// it to a managed object.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the ConditionalColumnTests fixture")]
         public void Setup()
         {
             this.managed = new JET_CONDITIONALCOLUMN
@@ -47,6 +48,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check the conversion to a NATIVE_CONDITIONALCOLUMN sets the structure size")]
         public void VerifyConversionToNativeSetsCbStruct()
         {
             Assert.AreEqual((uint)Marshal.SizeOf(this.native), this.native.cbStruct);
@@ -57,6 +59,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check the conversion to a NATIVE_CONDITIONALCOLUMN sets the column name")]
         public void VerifyConversionToNativeSetsColumnName()
         {
             Assert.AreEqual("column", this.native.szColumnName);
@@ -67,6 +70,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check the conversion to a NATIVE_CONDITIONALCOLUMN sets the grbit")]
         public void VerifyConversionToNativeSetsGrbit()
         {
             Assert.AreEqual((uint)ConditionalColumnGrbit.ColumnMustBeNonNull, this.native.grbit);

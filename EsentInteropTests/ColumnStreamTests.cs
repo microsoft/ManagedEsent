@@ -711,6 +711,56 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify seeking throws an exception on arithmetic overflow.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify seek from current throws an exception on overflow")]
+        public void VerifySeekFromCurrentThrowsExceptionOnOverflow()
+        {
+            using (var t = new Transaction(this.sesid))
+            using (var u = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                stream.Seek(10, SeekOrigin.Begin);
+                try
+                {
+                    stream.Seek(Int64.MaxValue, SeekOrigin.Current);
+                    Assert.Fail("Expected OverflowException");
+                }
+                catch (OverflowException)
+                {
+                    // expected
+                } 
+            }
+        }
+
+        /// <summary>
+        /// Verify seeking throws an exception on arithmetic overflow.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify seek from end throws an exception on overflow")]
+        public void VerifySeekFromEndThrowsExceptionOnOverflow()
+        {
+            using (var t = new Transaction(this.sesid))
+            using (var u = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                stream.Write(new byte[10], 0, 10);
+                try
+                {
+                    stream.Seek(Int64.MaxValue, SeekOrigin.End);
+                    Assert.Fail("Expected OverflowException");
+                }
+                catch (OverflowException)
+                {
+                    // expected
+                }
+            }
+        }
+
+        /// <summary>
         /// Setting the size past the maximum LV size generates an exception.
         /// </summary>
         [TestMethod]
@@ -959,6 +1009,33 @@ namespace InteropApiTests
             {
                 var buffer = new byte[10];
                 stream.Write(buffer, 1, buffer.Length);
+            }
+        }
+
+        /// <summary>
+        /// Write with a length that will take the long-value past its maximum size.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify writing to a ColumnStream with a length that will go past the maximum size throws an exception")]
+        public void WritePastMaxSizeThrowsException()
+        {
+            var data = new byte[256];
+
+            using (var transaction = new Transaction(this.sesid))
+            using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
+            {
+                stream.Seek(Int32.MaxValue - 10, SeekOrigin.Begin);
+                try
+                {
+                    stream.Write(data, 0, data.Length);
+                    Assert.Fail("Expected OverflowException");
+                }
+                catch (OverflowException)
+                {
+                    // expected
+                }
             }
         }
 

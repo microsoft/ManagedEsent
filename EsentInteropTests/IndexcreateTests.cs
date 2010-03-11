@@ -33,6 +33,7 @@ namespace InteropApiTests
         /// it to a managed object.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the IndexcreateTests fixture")]
         public void Setup()
         {
             this.managed = new JET_INDEXCREATE()
@@ -55,6 +56,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check the conversion from JET_INDEXCREATE to a NATIVE_INDEXCREATE sets the structure size")]
         public void VerifyConversionToNativeSetsCbStruct()
         {
             Assert.AreEqual((uint)Marshal.SizeOf(this.native), this.native.cbStruct);
@@ -65,6 +67,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check the conversion from JET_INDEXCREATE to a NATIVE_INDEXCREATE sets the index name")]
         public void VerifyConversionToNativeSetsName()
         {
             Assert.AreEqual("index", this.native.szIndexName);
@@ -75,6 +78,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check the conversion from JET_INDEXCREATE to a NATIVE_INDEXCREATE sets the index key")]
         public void VerifyConversionToNativeSetsKey()
         {
             Assert.AreEqual("+foo\0-bar\0\0", this.native.szKey);
@@ -85,6 +89,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check the conversion from JET_INDEXCREATE to a NATIVE_INDEXCREATE sets the key length")]
         public void VerifyConversionToNativeSetsKeyLength()
         {
             Assert.AreEqual((uint) 8, this.native.cbKey);
@@ -95,6 +100,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check the conversion from JET_INDEXCREATE to a NATIVE_INDEXCREATE sets the grbit")]
         public void VerifyConversionToNativeSetsGrbit()
         {
             Assert.AreEqual((uint) CreateIndexGrbit.IndexSortNullsHigh, this.native.grbit);
@@ -105,6 +111,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check the conversion from JET_INDEXCREATE to a NATIVE_INDEXCREATE sets the density")]
         public void VerifyConversionToNativeSetsDensity()
         {
             Assert.AreEqual((uint) 100, this.native.ulDensity);
@@ -115,6 +122,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check the conversion from JET_INDEXCREATE to a NATIVE_INDEXCREATE sets the unicode index")]
         public unsafe void VerifyConversionToNativeSetsUnicodeIndexToNull()
         {
             Assert.IsTrue(null == this.native.pidxUnicode);
@@ -125,6 +133,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check the conversion from JET_INDEXCREATE to a NATIVE_INDEXCREATE sets the cbVarSegMac")]
         public void VerifyConversionToNativeSetsCbVarSegMac()
         {
             Assert.AreEqual(new IntPtr(200), this.native.cbVarSegMac);
@@ -135,16 +144,18 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check the conversion from JET_INDEXCREATE to a NATIVE_INDEXCREATE sets the conditional columns")]
         public void VerifyConversionToNativeSetsConditionalColumnsToNull()
         {
             Assert.AreEqual(IntPtr.Zero, this.native.rgconditionalcolumn);
         }
 
         /// <summary>
-        /// Check the conversion to a NATIVE_INDEXCREATE sets the cbVarSegMac
+        /// Check the conversion to a NATIVE_INDEXCREATE sets the cConditionalColumn
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Check the conversion from JET_INDEXCREATE to a NATIVE_INDEXCREATE sets the cConditionalColumn")]
         public void VerifyConversionToNativeSetsCConditionalColumn()
         {
             Assert.AreEqual((uint) 0, this.native.cConditionalColumn);

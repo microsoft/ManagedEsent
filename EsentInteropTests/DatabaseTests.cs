@@ -75,6 +75,7 @@ namespace InteropApiTests
             string dir = SetupHelper.CreateRandomDirectory();
             JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
             Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetInit(ref instance);
             try
             {
@@ -110,6 +111,7 @@ namespace InteropApiTests
             string dir = SetupHelper.CreateRandomDirectory();
             JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
             Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetInit(ref instance);
             try
             {
@@ -145,6 +147,7 @@ namespace InteropApiTests
             string dir = SetupHelper.CreateRandomDirectory();
             JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
             Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetInit(ref instance);
             try
             {

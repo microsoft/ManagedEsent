@@ -21,6 +21,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test conversion from NATIVE_ENUMCOLUMNVALUE to JET_ENUMCOLUMNVALUE")]
         public void TestConversion()
         {
             var native = new NATIVE_ENUMCOLUMNVALUE

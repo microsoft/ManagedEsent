@@ -179,18 +179,6 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Create an Update with JET_prep.Cancel, expecting an exception.
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        [Description("Create an Update with JET_prep.Cancel, expecting an exception.")]
-        [ExpectedException(typeof(ArgumentException))]
-        public void TestPrepCancelThrowsException()
-        {
-            var update = new Update(this.sesid, this.tableid, JET_prep.Cancel);
-        }
-
-        /// <summary>
         /// Call Cancel on a disposed object, expecting an exception.
         /// </summary>
         [TestMethod]

@@ -31,6 +31,7 @@ namespace InteropApiTests
         /// it to a managed object.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the RetrieveColumnConversionTests test fixture")]
         public void Setup()
         {
             this.managed = new JET_RETRIEVECOLUMN
@@ -49,6 +50,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that conversion from JET_RETRIEVECOLUMN to NATIVE_RETRIEVECOLUMN sets cbData")]
         public void VerifyConversionToNativeSetsCbData()
         {
             Assert.AreEqual((uint)1, this.native.cbData);
@@ -59,6 +61,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that conversion from JET_RETRIEVECOLUMN to NATIVE_RETRIEVECOLUMN sets columnid")]
         public void VerifyConversionToNativeSetsColumnid()
         {
             Assert.AreEqual((uint)2, this.native.columnid);
@@ -69,6 +72,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that conversion from JET_RETRIEVECOLUMN to NATIVE_RETRIEVECOLUMN sets grbit")]
         public void VerifyConversionToNativeSetsGrbit()
         {
             Assert.AreEqual((uint)RetrieveColumnGrbit.RetrieveCopy, this.native.grbit);
@@ -79,6 +83,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that conversion from JET_RETRIEVECOLUMN to NATIVE_RETRIEVECOLUMN sets ibLongValue")]
         public void VerifyConversionToNativeSetsIbLongValue()
         {
             Assert.AreEqual((uint)3, this.native.ibLongValue);
@@ -89,6 +94,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that conversion from JET_RETRIEVECOLUMN to NATIVE_RETRIEVECOLUMN sets itagSequence")]
         public void VerifyConversionToNativeSetsItagSequence()
         {
             Assert.AreEqual((uint)4, this.native.itagSequence);
@@ -99,6 +105,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that conversion from JET_RETRIEVECOLUMN to NATIVE_RETRIEVECOLUMN sets pvData")]
         public void VerifyConversionToNativeDoesNotSetPvData()
         {
             Assert.AreEqual(IntPtr.Zero, this.native.pvData);

@@ -31,15 +31,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         ~EsentResource()
         {
-            if (this.hasResource)
-            {
-                // We should not get to this point. The problem is that if
-                // we use finalizers to free esent resources they may end
-                // up being freed in the wrong order (e.g. JetEndSession is
-                // called before JetCloseTable). Freeing esent resources
-                // in the wrong order will generate EsentExceptions.
-                Trace.TraceWarning("Non-finalized ESENT resource {0}", this);
-            }
+            this.Dispose(false);
         }
 
         /// <summary>
@@ -60,14 +52,40 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public void Dispose()
         {
-            if (this.hasResource)
-            {
-                this.ReleaseResource();
-                Debug.Assert(!this.hasResource, "Resource was not freed");
-            }
-
-            this.isDisposed = true;
+            this.Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Called by Dispose and the finalizer.
+        /// </summary>
+        /// <param name="isDisposing">
+        /// True if called from Dispose.
+        /// </param>
+        protected virtual void Dispose(bool isDisposing)
+        {
+            if (isDisposing)
+            {
+                if (this.hasResource)
+                {
+                    this.ReleaseResource();
+                    Debug.Assert(!this.hasResource, "Resource was not freed");
+                }
+
+                this.isDisposed = true;                
+            }
+            else
+            {
+                if (this.hasResource)
+                {
+                    // We should not get to this point. The problem is that if
+                    // we use finalizers to free esent resources they may end
+                    // up being freed in the wrong order (e.g. JetEndSession is
+                    // called before JetCloseTable). Freeing esent resources
+                    // in the wrong order will generate EsentExceptions.
+                    Trace.TraceWarning("Non-finalized ESENT resource {0}", this);
+                }                
+            }
         }
 
         /// <summary>

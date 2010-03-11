@@ -37,7 +37,7 @@ namespace InteropApiTests
         [TestInitialize]
         public void Setup()
         {
-            this.instance = new Instance("TemporaryTableTests");
+            this.instance = new Instance(Guid.NewGuid().ToString(), "TemporaryTableTests");
             this.instance.Parameters.Recovery = false;
             this.instance.Parameters.NoInformationEvent = true;
             this.instance.Parameters.PageTempDBMin = SystemParameters.PageTempDBSmallest;

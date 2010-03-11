@@ -351,16 +351,18 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.TraceFunctionCall("JetGetSystemParameter");
             this.CheckNotNegative(maxParam, "maxParam");
 
+            uint cbMax = checked((uint)(this.Capabilities.SupportsUnicodePaths ? maxParam * sizeof(char) : maxParam));
+
             var intValue = new IntPtr(paramValue);
             var sb = new StringBuilder(maxParam);
             int err;
             if (this.Capabilities.SupportsUnicodePaths)
             {
-                err = this.Err(NativeMethods.JetGetSystemParameterW(instance.Value, sesid.Value, (uint)paramid, ref intValue, sb, checked((uint)maxParam * sizeof(char))));
+                err = this.Err(NativeMethods.JetGetSystemParameterW(instance.Value, sesid.Value, (uint)paramid, ref intValue, sb, cbMax));
             }
             else
             {
-                err = this.Err(NativeMethods.JetGetSystemParameter(instance.Value, sesid.Value, (uint)paramid, ref intValue, sb, checked((uint)maxParam)));      
+                err = this.Err(NativeMethods.JetGetSystemParameter(instance.Value, sesid.Value, (uint)paramid, ref intValue, sb, cbMax));      
             }
 
             paramString = sb.ToString();
@@ -3159,7 +3161,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             for (int i = 0; i < numColumnids; ++i)
             {
                 nativecolumnids[i] = columnids[i].GetNativeEnumColumnid();
-                totalNumTags += columnids[i].ctagSequence;
+                checked
+                {
+                    totalNumTags += columnids[i].ctagSequence;                    
+                }
             }
 
             return totalNumTags;
@@ -3392,6 +3397,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 }                
             }
         }
+
+        #endregion
+
+        #region Capability Checking
 
         /// <summary>
         /// Check that ESENT supports Server 2003 features. Throws an exception if Server 2003 features

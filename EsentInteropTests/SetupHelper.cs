@@ -9,6 +9,7 @@ namespace InteropApiTests
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Threading;
     using Microsoft.Isam.Esent.Interop;
 
     /// <summary>
@@ -40,11 +41,6 @@ namespace InteropApiTests
         };
 
         /// <summary>
-        /// Static object used for locking.
-        /// </summary>
-        private static readonly object lockObject = new object();
-
-        /// <summary>
         /// Number of instances that have been created. Used to create unique names.
         /// </summary>
         private static int instanceNum;
@@ -71,9 +67,14 @@ namespace InteropApiTests
         {
             JET_INSTANCE instance;
             Api.JetCreateInstance(out instance, InstanceName());
+
+            // Set paths
             Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.LogFilePath, 0, myDir);
             Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.SystemPath, 0, myDir);
             Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.TempPath, 0, myDir);
+
+            // Small logfiles, no events and small temp db
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.LogFileSize, 256, null); // 256Kb
             Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.PageTempDBMin, SystemParameters.PageTempDBSmallest, null);
             Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.NoInformationEvent, 1, null);
             return instance;
@@ -136,11 +137,7 @@ namespace InteropApiTests
         /// <returns>An index name.</returns>
         private static string InstanceName()
         {
-            lock (lockObject)
-            {
-                instanceNum++;
-                return String.Format("Instance_{0}", instanceNum);
-            }
+            return String.Format("Instance_{0}", Interlocked.Increment(ref instanceNum));
         }
     }
 }

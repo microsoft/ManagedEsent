@@ -6,6 +6,7 @@
 
 namespace InteropApiTests
 {
+    using System;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Isam.Esent.Interop.Windows7;
@@ -34,7 +35,7 @@ namespace InteropApiTests
         [Description("Setup the InstanceParametersTests fixture")]
         public void Setup()
         {
-            Api.JetCreateInstance(out this.instance, "InstanceParametersTest");
+            Api.JetCreateInstance(out this.instance, Guid.NewGuid().ToString());
             this.instanceParameters = new InstanceParameters(this.instance);
         }
 

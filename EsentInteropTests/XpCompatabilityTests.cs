@@ -204,7 +204,7 @@ namespace InteropApiTests
         [Description("Verify getting the cached closed tables system parameter on XP returns 0")]
         public void VerifyXpReturns0ForCachedClosedTables()
         {
-            using (var instance = new Instance("XP"))
+            using (var instance = new Instance("XPcacheclosedtables"))
             {
                 instance.Parameters.CachedClosedTables = 10;
                 Assert.AreEqual(0, instance.Parameters.CachedClosedTables);
@@ -219,7 +219,7 @@ namespace InteropApiTests
         [Description("Verify getting the waypoint system parameter on XP returns 0")]
         public void VerifyXpReturns0ForWaypoint()
         {
-            using (var instance = new Instance("XP"))
+            using (var instance = new Instance("XPwaypointlatency"))
             {
                 instance.Parameters.WaypointLatency = 10;
                 Assert.AreEqual(0, instance.Parameters.WaypointLatency);
@@ -234,7 +234,7 @@ namespace InteropApiTests
         [Description("Verify getting the waypoint system parameter on XP returns 0")]
         public void VerifyXpReturnsNullForAlternateRecoveryDirectory()
         {
-            using (var instance = new Instance("XP"))
+            using (var instance = new Instance("XPalternaterecovery"))
             {
                 instance.Parameters.AlternateDatabaseRecoveryDirectory = @"c:\foo";
                 Assert.IsNull(instance.Parameters.AlternateDatabaseRecoveryDirectory);
@@ -287,11 +287,11 @@ namespace InteropApiTests
             string directory = SetupHelper.CreateRandomDirectory();
             string database = Path.Combine(directory, "test.db");
 
-            using (var instance = new Instance("XpCompatability"))
+            using (var instance = new Instance("XPcreateindexes"))
             {
                 instance.Parameters.Recovery = false;
                 instance.Parameters.NoInformationEvent = true;
-                instance.Parameters.PageTempDBMin = SystemParameters.PageTempDBSmallest;
+                instance.Parameters.MaxTemporaryTables = 0;
                 instance.Parameters.TempDirectory = directory;
                 instance.Init();
                 using (var session = new Session(instance))
@@ -344,7 +344,7 @@ namespace InteropApiTests
             string directory = SetupHelper.CreateRandomDirectory();
             string database = Path.Combine(directory, "test.db");
 
-            using (var instance = new Instance("XpCompatability"))
+            using (var instance = new Instance("XPgetrecordsize"))
             {
                 instance.Parameters.Recovery = false;
                 instance.Parameters.NoInformationEvent = true;

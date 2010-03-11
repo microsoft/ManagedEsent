@@ -80,7 +80,7 @@ namespace InteropApiTests
                 return;
             }
 
-            using (var instance = new Instance("unicode"))
+            using (var instance = new Instance("unicodesystempath"))
             {
                 instance.Parameters.SystemDirectory = this.directory;
                 StringAssert.Contains(instance.Parameters.SystemDirectory, this.directory);
@@ -100,7 +100,7 @@ namespace InteropApiTests
                 return;
             }
 
-            using (var instance = new Instance("unicode"))
+            using (var instance = new Instance("unicodelogpath"))
             {
                 instance.Parameters.LogFileDirectory = this.directory;
                 StringAssert.Contains(instance.Parameters.LogFileDirectory, this.directory);
@@ -120,7 +120,7 @@ namespace InteropApiTests
                 return;
             }
 
-            using (var instance = new Instance("unicode"))
+            using (var instance = new Instance("unicodetempdir"))
             {
                 instance.Parameters.TempDirectory = this.directory;
                 StringAssert.Contains(instance.Parameters.TempDirectory, this.directory);
@@ -140,7 +140,7 @@ namespace InteropApiTests
                 return;
             }
 
-            using (var instance = new Instance("unicode"))
+            using (var instance = new Instance("unicodedbcreate"))
             {
                 SetupHelper.SetLightweightConfiguration(instance);
                 instance.Parameters.CreatePathIfNotExist = true;
@@ -167,7 +167,7 @@ namespace InteropApiTests
                 return;
             }
 
-            using (var instance = new Instance("unicode"))
+            using (var instance = new Instance("unicodedbdetach"))
             {
                 SetupHelper.SetLightweightConfiguration(instance);
                 instance.Parameters.CreatePathIfNotExist = true;
@@ -195,7 +195,7 @@ namespace InteropApiTests
                 return;
             }
 
-            using (var instance = new Instance("unicode"))
+            using (var instance = new Instance("unicodedbattach"))
             {
                 SetupHelper.SetLightweightConfiguration(instance);
                 instance.Parameters.CreatePathIfNotExist = true;
@@ -225,7 +225,7 @@ namespace InteropApiTests
                 return;
             }
 
-            using (var instance = new Instance("unicode"))
+            using (var instance = new Instance("unicodedbattach2"))
             {
                 SetupHelper.SetLightweightConfiguration(instance);
                 instance.Parameters.CreatePathIfNotExist = true;
@@ -255,7 +255,7 @@ namespace InteropApiTests
                 return;
             }
 
-            using (var instance = new Instance("unicode"))
+            using (var instance = new Instance("unicodedbopen"))
             {
                 SetupHelper.SetLightweightConfiguration(instance);
                 instance.Parameters.CreatePathIfNotExist = true;
@@ -371,7 +371,7 @@ namespace InteropApiTests
                 return;
             }
 
-            const string InstanceName = "MyInstance";
+            const string InstanceName = "unicodegetinstanceinfo";
             using (var instance = new Instance(InstanceName))
             {
                 instance.Parameters.NoInformationEvent = true;

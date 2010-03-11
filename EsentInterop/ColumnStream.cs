@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
 
     /// <summary>
@@ -49,6 +50,10 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="columnid">The columnid of the column to set/retrieve data from.</param>
         public ColumnStream(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
+            // In some cases we rely on Int32 arithmetic overflow checking to catch
+            // errors, which assumes that a long-value can store Int32.MaxValue bytes.
+            Debug.Assert(MaxLongValueSize == Int32.MaxValue, "Expected maximum long value size to be Int32.MaxValue");
+
             this.sesid = sesid;
             this.tableid = tableid;
             this.columnid = columnid;
@@ -155,6 +160,8 @@ namespace Microsoft.Isam.Esent.Interop
             int length = checked((int) this.Length);
             JET_SETINFO setinfo;
 
+            int newIbLongValue = checked(this.ibLongValue + count);
+
             // If our current position is beyond the end of the LV extend
             // the LV to the write point
             if (this.ibLongValue > length)
@@ -164,7 +171,6 @@ namespace Microsoft.Isam.Esent.Interop
                 length = this.ibLongValue;
             }
 
-            int newIbLongValue = checked(this.ibLongValue + count);
             SetColumnGrbit grbit;
             if (this.ibLongValue == length)
             {
@@ -280,10 +286,10 @@ namespace Microsoft.Isam.Esent.Interop
                     newOffset = offset;
                     break;
                 case SeekOrigin.End:
-                    newOffset = this.Length + offset;
+                    newOffset = checked(this.Length + offset);
                     break;
                 case SeekOrigin.Current:
-                    newOffset = this.ibLongValue + offset;
+                    newOffset = checked(this.ibLongValue + offset);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("origin", origin, "Unknown origin");
@@ -294,7 +300,7 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentOutOfRangeException("offset", offset, "invalid offset/origin combination");
             }
 
-            this.ibLongValue = checked((int) newOffset);
+            this.ibLongValue = checked((int)newOffset);
             return this.ibLongValue;
         }
 
@@ -321,7 +327,7 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentOutOfRangeException("count", count, "cannot be negative");
             }
 
-            if (buffer.Length - offset < count)
+            if (checked(buffer.Length - offset) < count)
             {
                 throw new ArgumentOutOfRangeException("count", count, "cannot be larger than the size of the buffer");
             }

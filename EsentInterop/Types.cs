@@ -639,7 +639,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// The null handle.
         /// </summary>
-        public static JET_LS Nil = new JET_LS { Value = new IntPtr(~0) };
+        public static readonly JET_LS Nil = new JET_LS { Value = new IntPtr(~0) };
 
         /// <summary>
         /// Gets or sets the value of the handle.

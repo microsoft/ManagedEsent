@@ -72,7 +72,7 @@ namespace EsentCollectionsTests
 
             stopwatch.Stop();
             Console.WriteLine(
-                "Sequentially inserted {0} records in {1} ({2} records/second)",
+                "Sequentially inserted {0:N0} records in {1} ({2:N0} records/second)",
                 NumInserts,
                 stopwatch.Elapsed,
                 NumInserts * 1000 / stopwatch.ElapsedMilliseconds);
@@ -99,7 +99,7 @@ namespace EsentCollectionsTests
 
             stopwatch.Stop();
             Console.WriteLine(
-                "Looked up {0} records in {1} ({2} records/second)",
+                "Looked up {0:N0} records in {1} ({2:N0} records/second)",
                 NumInserts,
                 stopwatch.Elapsed,
                 NumInserts * 1000 / stopwatch.ElapsedMilliseconds);
@@ -115,7 +115,7 @@ namespace EsentCollectionsTests
 
             stopwatch.Stop();
             Console.WriteLine(
-                "Updated {0} records in {1} ({2} records/second)",
+                "Updated {0:N0} records in {1} ({2:N0} records/second)",
                 NumInserts,
                 stopwatch.Elapsed,
                 NumInserts * 1000 / stopwatch.ElapsedMilliseconds);
@@ -141,7 +141,7 @@ namespace EsentCollectionsTests
 
             stopwatch.Stop();
             Console.WriteLine(
-                "Randomly inserted {0} records in {1} ({2} records/second)",
+                "Randomly inserted {0:N0} records in {1} ({2:N0} records/second)",
                 NumInserts,
                 stopwatch.Elapsed,
                 NumInserts * 1000 / stopwatch.ElapsedMilliseconds);

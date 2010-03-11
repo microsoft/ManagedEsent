@@ -61,6 +61,28 @@ namespace InteropApiTests
             Api.JetGetSystemParameter(this.instance, this.sesid, JET_param.SystemPath, ref ignored, out value, -1);
         }
 
+        /// <summary>
+        /// Check that an exception is thrown when JetGetSystemParameter gets a 
+        /// too large max param value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(OverflowException))]
+        [Description("Check that an exception is thrown when JetGetSystemParameter gets a too large max param value")]
+        public void JetGetSystemParameterThrowsExceptionWhenMaxParamIsTooBig()
+        {
+            // This test only fails with the Unicode API (the overflow happens when we try
+            // to multiply maxParam by sizeof(char))
+            if (!EsentVersion.SupportsUnicodePaths)
+            {
+                return;
+            }
+
+            int ignored = 0;
+            string value;
+            Api.JetGetSystemParameter(this.instance, this.sesid, JET_param.SystemPath, ref ignored, out value, Int32.MaxValue);
+        }
+
         #endregion
 
         #region Database API
@@ -172,6 +194,47 @@ namespace InteropApiTests
         {
             int ignored;
             Api.JetSetDatabaseSize(this.sesid, "foo.edb", -1, out ignored);
+        }
+
+        /// <summary>
+        /// JetCompact should throw an exception when
+        /// the source database is null.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("JetCompact should throw an exception when the source database is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void TestJetCompactThrowsExceptionWhenSourceIsNull()
+        {
+            Api.JetCompact(this.sesid, null, "destination", null, null, CompactGrbit.None);
+        }
+
+        /// <summary>
+        /// JetCompact should throw an exception when
+        /// the source database is null.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("JetCompact should throw an exception when the source database is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void TestJetCompactThrowsExceptionWhenDestinationIsNull()
+        {
+            Api.JetCompact(this.sesid, "source", null, null, null, CompactGrbit.None);
+        }
+
+        /// <summary>
+        /// JetCompact should throw an exception when
+        /// the ignored parameter is non-null.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("JetCompact should throw an exception when the ignored parameter is non-null")]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestJetCompactThrowsExceptionWhenIgnoredIsNonNull()
+        {
+#pragma warning disable 618,612 // JET_CONVERT is obsolete
+            Api.JetCompact(this.sesid, "source", "destination", null, new JET_CONVERT(), CompactGrbit.None);
+#pragma warning restore 618,612
         }
 
         #endregion Database API
@@ -2296,6 +2359,18 @@ namespace InteropApiTests
             var delta = new byte[4];
             var previous = new byte[4];
             Api.JetEscrowUpdate(this.sesid, this.tableid, this.columnid, delta, delta.Length, previous, previous.Length + 1, out actualSize, EscrowUpdateGrbit.None);
+        }
+
+        /// <summary>
+        /// Create an Update with JET_prep.Cancel, expecting an exception.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Create an Update with JET_prep.Cancel, expecting an exception.")]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestCreatingUpdatePrepCancelThrowsException()
+        {
+            var update = new Update(this.sesid, this.tableid, JET_prep.Cancel);
         }
 
         #endregion

@@ -155,6 +155,5 @@ namespace InteropApiTests
             this.runtimeCallbackWasCalled = true;
             return JET_err.Success;    
         }
-
     }
 }

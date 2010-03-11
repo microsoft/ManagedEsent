@@ -65,6 +65,7 @@ namespace InteropApiTests
         /// Setup the mock object repository.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the HelperMethodErrorHandlingTests fixture")]
         public void Setup()
         {
             this.savedImpl = Api.Impl;
@@ -77,6 +78,7 @@ namespace InteropApiTests
         /// Cleanup after the test.
         /// </summary>
         [TestCleanup]
+        [Description("Cleanup the HelperMethodErrorHandlingTests fixture")]
         public void Teardown()
         {
             Api.Impl = this.savedImpl;
@@ -87,6 +89,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify an exception is thrown when TryMoveFirst gets an unexpected error")]
         public void VerifyTryMoveFirstThrowsException()
         {
             this.SetupJetMoveToReturnError();
@@ -105,6 +108,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify an exception is thrown when TryMoveLast gets an unexpected error")]
         public void VerifyTryMoveLastThrowsException()
         {
             this.SetupJetMoveToReturnError();
@@ -123,6 +127,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify an exception is thrown when TryMoveNext gets an unexpected error")]
         public void VerifyTryMoveNextThrowsException()
         {
             this.SetupJetMoveToReturnError();
@@ -141,6 +146,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify an exception is thrown when TryMovePrevious gets an unexpected error")]
         public void VerifyTryMovePreviousThrowsException()
         {
             this.SetupJetMoveToReturnError();
@@ -159,6 +165,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify an exception is thrown when TrySeek gets an unexpected error")]
         public void VerifyTrySeekThrowsException()
         {
             SetupResult.For(
@@ -182,6 +189,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify an exception is thrown when TrySetIndexRange gets an unexpected error")]
         public void VerifyTrySetIndexRangeThrowsException()
         {
             this.SetupJetSetIndexRangeToReturnError();
@@ -200,6 +208,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify an exception is thrown when ResetIndexRange gets an unexpected error")]
         public void VerifyResetIndexRangeThrowsException()
         {
             this.SetupJetSetIndexRangeToReturnError();
@@ -218,6 +227,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify an exception is thrown when GetBookmark gets an unexpected error")]
         public void VerifyGetBookmarkThrowsException()
         {
             int ignored;
@@ -243,6 +253,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify an exception is thrown when RetrieveColumn gets a column that grows when it tries to retrieve it")]
         public void VerifyRetrieveColumnThrowsExceptionWhenColumnSizeGrows()
         {
             this.SetupBadRetrieveColumn();
@@ -262,6 +273,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify an exception is thrown when RetrieveColumnAsString gets a column that grows when it tries to retrieve it")]
         public void VerifyRetrieveColumnAsStringThrowsExceptionWhenColumnSizeGrows()
         {
             this.SetupBadRetrieveColumn();

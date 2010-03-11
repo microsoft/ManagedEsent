@@ -113,7 +113,7 @@ namespace Microsoft.Isam.Esent.Interop
                     if (numVariableLengthColumns > 0)
                     {
                         int bufferUsed = checked((int)(currentBuffer - pinnedBuffer));
-                        int bufferRemaining = buffer.Length - bufferUsed;
+                        int bufferRemaining = checked(buffer.Length - bufferUsed);
                         int bufferPerColumn = bufferRemaining / numVariableLengthColumns;
                         Debug.Assert(bufferPerColumn > 0, "Not enough buffer left to retrieve variable length columns");
 
@@ -126,8 +126,7 @@ namespace Microsoft.Isam.Esent.Interop
                                 nativeRetrievecolumns[i].pvData = new IntPtr(currentBuffer);
                                 nativeRetrievecolumns[i].cbData = checked((uint) bufferPerColumn);
                                 currentBuffer += nativeRetrievecolumns[i].cbData;
-                                Debug.Assert(
-                                    currentBuffer <= pinnedBuffer + buffer.Length, "Moved past end of pinned buffer");
+                                Debug.Assert(currentBuffer <= pinnedBuffer + buffer.Length, "Moved past end of pinned buffer");
                             }
                         }
                     }

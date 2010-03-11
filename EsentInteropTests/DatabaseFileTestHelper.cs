@@ -537,7 +537,7 @@ namespace InteropApiTests
         /// <returns>A new instance.</returns>
         private Instance CreateInstance()
         {
-            var instance = new Instance("DatabaseFileTestHelper");
+            var instance = new Instance(Guid.NewGuid().ToString());
             instance.Parameters.LogFileSize = 256;
             instance.Parameters.LogFileDirectory = this.databaseDirectory;
             instance.Parameters.TempDirectory = this.databaseDirectory;

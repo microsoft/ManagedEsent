@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="SetColumnTests.cs" company="Microsoft Corporation">
+// <copyright file="SetColumnConversionTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
 //-----------------------------------------------------------------------
@@ -14,7 +14,7 @@ namespace InteropApiTests
     /// Test conversion to NATIVE_SETCOLUMN
     /// </summary>
     [TestClass]
-    public class SetColumnTests
+    public class SetColumnConversionTests
     {
         /// <summary>
         /// The managed version of the struct.
@@ -31,6 +31,7 @@ namespace InteropApiTests
         /// it to a managed object.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the SetColumnConversionTests test fixture")]
         public void Setup()
         {
             this.managed = new JET_SETCOLUMN
@@ -45,57 +46,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// CheckDataSize should detect a negative data length.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void VerifyCheckThrowsExceptionWhenCbDataIsNegative()
-        {
-            var setcolumn = new JET_SETCOLUMN
-            {
-                cbData = -1,
-                pvData = new byte[1],
-            };
-            setcolumn.CheckDataSize();
-        }
-
-        /// <summary>
-        /// CheckDataSize should detect null pvData and non-zero cbData.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void VerifyCheckThrowsExceptionWhenPvDataIsNull()
-        {
-            var setcolumn = new JET_SETCOLUMN
-            {
-                cbData = 1,
-            };
-            setcolumn.CheckDataSize();
-        }
-
-        /// <summary>
-        /// CheckDataSize should detect cbData that is too long.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void VerifyCheckThrowsExceptionWhenCbDataIsTooLong()
-        {
-            var setcolumn = new JET_SETCOLUMN
-            {
-                cbData = 100,
-                pvData = new byte[9],
-            };
-            setcolumn.CheckDataSize();
-        }
-
-        /// <summary>
         /// Check the conversion to a native structure sets the cbData
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that conversation from JET_SETCOLUMN to NATIVE_SETCOLUMN sets cbData")]
         public void VerifyConversionToNativeSetsCbData()
         {
             Assert.AreEqual((uint)1, this.native.cbData);
@@ -106,6 +61,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that conversation from JET_SETCOLUMN to NATIVE_SETCOLUMN sets columnid")]
         public void VerifyConversionToNativeSetsColumnid()
         {
             Assert.AreEqual((uint)2, this.native.columnid);
@@ -116,6 +72,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that conversation from JET_SETCOLUMN to NATIVE_SETCOLUMN sets grbit")]
         public void VerifyConversionToNativeSetsGrbit()
         {
             Assert.AreEqual((uint)SetColumnGrbit.AppendLV, this.native.grbit);
@@ -126,6 +83,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that conversation from JET_SETCOLUMN to NATIVE_SETCOLUMN sets ibLongValue")]
         public void VerifyConversionToNativeSetsIbLongValue()
         {
             Assert.AreEqual((uint)3, this.native.ibLongValue);
@@ -136,6 +94,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that conversation from JET_SETCOLUMN to NATIVE_SETCOLUMN sets itagSequence")]
         public void VerifyConversionToNativeSetsItagSequence()
         {
             Assert.AreEqual((uint)4, this.native.itagSequence);
@@ -146,6 +105,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify that conversation from JET_SETCOLUMN to NATIVE_SETCOLUMN sets pvData")]
         public void VerifyConversionToNativeDoesNotSetPvData()
         {
             Assert.AreEqual(IntPtr.Zero, this.native.pvData);

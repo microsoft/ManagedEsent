@@ -1950,7 +1950,7 @@ namespace Microsoft.Isam.Esent.Interop
 
                     for (int i = 0; i < numColumns; ++i)
                     {
-                        setcolumns[i].CheckDataSize();
+                        setcolumns[i].Validate();
                         nativeSetColumns[i] = setcolumns[i].GetNativeSetcolumn();
                         if (null == setcolumns[i].pvData)
                         {

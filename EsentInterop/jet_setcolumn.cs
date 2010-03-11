@@ -86,7 +86,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Check to see if cbData is negative or greater than cbData.
         /// </summary>
-        internal void CheckDataSize()
+        internal void Validate()
         {
             if (this.cbData < 0)
             {
@@ -99,7 +99,17 @@ namespace Microsoft.Isam.Esent.Interop
                     "cbData",
                     this.cbData,
                     "cannot be greater than the length of the pvData");
-            }            
+            }    
+        
+            if (this.itagSequence < 0)
+            {
+                throw new ArgumentOutOfRangeException("itagSequence", this.itagSequence, "cannot be negative");
+            }
+
+            if (this.ibLongValue < 0)
+            {
+                throw new ArgumentOutOfRangeException("ibLongValue", this.ibLongValue, "cannot be negative");
+            }
         }
 
         /// <summary>

@@ -65,6 +65,7 @@ namespace InteropApiTests
         /// All DDL should be done in this method.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the IntersectIndexesTests fixture")]
         public void Setup()
         {
             JET_TABLEID tableid;
@@ -109,25 +110,12 @@ namespace InteropApiTests
         /// Cleanup after all tests have run.
         /// </summary>
         [TestCleanup]
+        [Description("Cleanup the IntersectIndexesTests fixture")]
         public void Teardown()
         {
             Api.JetEndSession(this.sesid, EndSessionGrbit.None);
             Api.JetTerm(this.instance);
             Cleanup.DeleteDirectoryWithRetry(this.directory);
-        }
-
-        /// <summary>
-        /// Verify that the test class has setup the test fixture properly.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        public void VerifyFixtureSetup()
-        {
-            Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
-            Assert.AreNotEqual(JET_SESID.Nil, this.sesid);
-            Assert.AreNotEqual(JET_COLUMNID.Nil, this.columnid1);
-            Assert.AreNotEqual(JET_COLUMNID.Nil, this.columnid2);
-            Assert.AreNotEqual(this.columnid1, this.columnid2);
         }
 
         #endregion Setup/Teardown
@@ -137,6 +125,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Verify that JetIntersectIndexes returns the correct number of records")]
         public void VerifyJetIntersectIndexesReturnsCorrectNumberOfRecords()
         {
             JET_TABLEID tableid1 = this.OpenTable();
@@ -160,10 +149,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Verify that index intersection returns records with the correct criteria.
+        /// Verify that index intersection returns the correct number of records.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Verify that IntersectIndexes returns the correct number of records")]
         public void VerifyIndexIntersectionReturnsCorrectNumberOfRecords()
         {
             JET_TABLEID tableid1 = this.OpenTable();
@@ -186,6 +176,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Verify that IndexsectIndexes returns records with the correct criteria")]
         public void VerifyIndexIntersectionReturnsCorrectRecords()
         {
             JET_TABLEID tableid1 = this.OpenTable();
@@ -211,10 +202,12 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Verify that index intersection returns a 'live' result
+        /// Verify that index intersection returns a 'live' result.
+        /// The enumeration isn't evaluated until used.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+        [Description("Verify that IndexsectIndexes returns a 'live' result")]
         public void VerifyIndexIntersectionReturnsLiveResult()
         {
             JET_TABLEID tableid1 = this.OpenTable();
