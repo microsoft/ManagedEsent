@@ -12,8 +12,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     using System;
     using System.Collections.Generic;
     using System.Linq.Expressions;
-    using System.Runtime.Serialization;
-    using System.Runtime.Serialization.Formatters.Binary;
     using Microsoft.Isam.Esent.Interop;
 
     /// <content>
@@ -122,7 +120,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>
         /// An enumerator matching only the records matched by the predicate.
         /// </returns>
-        private IEnumerable<KeyValuePair<TKey, TValue>> Where(
+        public IEnumerable<KeyValuePair<TKey, TValue>> Where(
             Expression<Predicate<KeyValuePair<TKey, TValue>>> expression)
         {
             if (null == expression)
