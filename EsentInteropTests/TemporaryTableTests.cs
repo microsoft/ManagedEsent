@@ -35,6 +35,7 @@ namespace InteropApiTests
         /// Create the instance. Recovery is turned off for speed.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the TemporaryTableTests test fixture")]
         public void Setup()
         {
             this.instance = new Instance(Guid.NewGuid().ToString(), "TemporaryTableTests");
@@ -49,6 +50,7 @@ namespace InteropApiTests
         /// Cleanup our test instance
         /// </summary>
         [TestCleanup]
+        [Description("Cleanup the TemporaryTableTests test fixture")]
         public void Teardown()
         {
             this.instance.Term();
@@ -61,6 +63,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Sort data with JetOpenTempTable")]
         public void SortDataWithJetOpenTempTable()
         {
             JET_TABLEID tableid;
@@ -93,6 +96,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Sort data with JetOpenTempTable2")]
         public void SortDataWithJetOpenTempTable2()
         {
             JET_TABLEID tableid;
@@ -125,6 +129,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Sort data with JetOpenTempTable3")]
         public void SortDataWithJetOpenTempTable3()
         {
             JET_TABLEID tableid;
@@ -157,6 +162,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Sort case-sensitive with JetOpenTempTable")]
         public void SortDataCaseSensitiveWithJetOpenTempTable3()
         {
             JET_TABLEID tableid;
@@ -193,6 +199,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Sort long-value data with JetOpenTempTable")]
         public void SortLongValueDataWithJetOpenTempTable3()
         {
             JET_TABLEID tableid;
@@ -244,6 +251,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Sort case-sensitive with JetOpenTemporaryTable")]
         public void SortDataCaseSensitiveWithJetOpenTemporaryTable()
         {
             if (!EsentVersion.SupportsVistaFeatures)

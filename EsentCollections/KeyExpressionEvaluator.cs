@@ -162,7 +162,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
-        /// Determine if the expression is accessing the key of the expression
+        /// Determine if the expression is accessing the key of the paramter of the expression.
         /// parameter.
         /// </summary>
         /// <param name="expression">The expression to evaluate.</param>
@@ -172,7 +172,10 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             if (expression.NodeType == ExpressionType.MemberAccess)
             {
                 var member = (MemberExpression) expression;
-                if (member.Member.Name == "Key")
+                if (
+                    null != member.Expression
+                    && member.Expression.NodeType == ExpressionType.Parameter
+                    && member.Member.Name == "Key")
                 {
                     return true;
                 }

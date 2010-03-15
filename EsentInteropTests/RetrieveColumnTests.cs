@@ -21,6 +21,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify JET_RETRIEVECOLUMN.CheckDataSize throws an exception when cbData is negative")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyCheckThrowsExceptionWhenCbDataIsNegative()
         {
@@ -37,6 +38,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify JET_RETRIEVECOLUMN.CheckDataSize throws an exception when cbData is invalid")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyCheckThrowsExceptionWhenPvDataIsNull()
         {
@@ -52,6 +54,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify JET_RETRIEVECOLUMN.CheckDataSize throws an exception when cbData is too long")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyCheckThrowsExceptionWhenCbDataIsTooLong()
         {
@@ -69,6 +72,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify JET_RETRIEVECOLUMN.UpdateFromNAtiveRetrievecolumns sets cbActual")]
         public void VerifyUpdateFromNativeRetrievecolumnSetsCbactual()
         {
             var setcolumn = new JET_RETRIEVECOLUMN();
@@ -83,6 +87,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify JET_RETRIEVECOLUMN.UpdateFromNAtiveRetrievecolumns sets columnidNextTagged")]
         public void VerifyUpdateFromNativeRetrievecolumnSetsColumnidNextTagged()
         {
             var setcolumn = new JET_RETRIEVECOLUMN();
@@ -98,6 +103,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify JET_RETRIEVECOLUMN.UpdateFromNAtiveRetrievecolumns sets err")]
         public void VerifyUpdateFromNativeRetrievecolumnSetsErr()
         {
             var setcolumn = new JET_RETRIEVECOLUMN();

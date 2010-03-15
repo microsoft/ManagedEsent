@@ -10,6 +10,8 @@
 namespace EsentCollectionsTests
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq.Expressions;
     using Microsoft.Isam.Esent.Collections.Generic;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -385,18 +387,253 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
-        /// Verify constant folding.
+        /// Verify no constant folding with functions.
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Verify constant folding")]
-        public void VerifyConstantFolding()
+        [Description("Verify no constant folding with functions")]
+        public void VerifyNoConstantFoldingWithFunctions()
         {
-            this.member = 18;
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, long>.GetKeyRange(x => x.Key <= this.member + 10);
+            var rnd = new Random();
+            KeyRange<int> keyRange = KeyExpressionEvaluator<int, long>.GetKeyRange(x => x.Key <= rnd.Next());
             Assert.IsNull(keyRange.Min);
-            Assert.AreEqual(28, keyRange.Max.Value);
+            Assert.IsNull(keyRange.Max);
+        }
+
+        /// <summary>
+        /// Verify constant folding with add.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding (add)")]
+        public void VerifyConstantFoldingAdd()
+        {
+            short i = 22;
+            ConstantFoldingHelper(x => x.Key <= i + 10);
+        }
+
+        /// <summary>
+        /// Verify constant folding with checked add.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding (checked add)")]
+        public void VerifyConstantFoldingCheckedAdd()
+        {
+            short i = 22;
+            ConstantFoldingHelper(x => x.Key <= checked(i + 10));
+        }
+
+        /// <summary>
+        /// Verify constant folding with minus.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding (minus)")]
+        public void VerifyConstantFoldingMinus()
+        {
+            int i = 42;
+            ConstantFoldingHelper(x => x.Key <= i - 10);
+        }
+
+        /// <summary>
+        /// Verify constant folding with checked minus.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding (checked minus)")]
+        public void VerifyConstantFoldingCheckedMinus()
+        {
+            int i = 42;
+            ConstantFoldingHelper(x => x.Key <= checked(i - 10));
+        }
+
+        /// <summary>
+        /// Verify constant folding with multiply.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding (multiply)")]
+        public void VerifyConstantFoldingMultiply()
+        {
+            int i = 16;
+            ConstantFoldingHelper(x => x.Key <= i * 2);
+        }
+
+        /// <summary>
+        /// Verify constant folding with checked multiply.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding (checked multiply)")]
+        public void VerifyConstantFoldingCheckedMultiply()
+        {
+            int i = 16;
+            ConstantFoldingHelper(x => x.Key <= checked(i * 2));
+        }
+
+        /// <summary>
+        /// Verify constant folding with divide.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding (divide)")]
+        public void VerifyConstantFoldingDivide()
+        {
+            int i = 320;
+            ConstantFoldingHelper(x => x.Key <= i / 10);
+        }
+
+        /// <summary>
+        /// Verify constant folding with checked divide.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding (checked divide)")]
+        public void VerifyConstantFoldingCheckedDivide()
+        {
+            int i = 320;
+            ConstantFoldingHelper(x => x.Key <= checked(i / 10));
+        }
+
+        /// <summary>
+        /// Verify constant folding with negate.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding (negate)")]
+        public void VerifyConstantFoldingNegate()
+        {
+            int i = -32;
+            ConstantFoldingHelper(x => x.Key <= -i);
+        }
+
+        /// <summary>
+        /// Verify constant folding with checked negate.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding (checked negate)")]
+        public void VerifyConstantFoldingCheckedNegate()
+        {
+            int i = -32;
+            ConstantFoldingHelper(x => x.Key <= checked(-i));
+        }
+
+        /// <summary>
+        /// Verify constant folding with mod.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding (mod)")]
+        public void VerifyConstantFoldingMod()
+        {
+            int i = 128;
+            ConstantFoldingHelper(x => x.Key <= 32 % i);
+        }
+
+        /// <summary>
+        /// Verify constant folding with right shift.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding (right shift)")]
+        public void VerifyConstantFoldingRightShift()
+        {
+            int i = 128;
+            int j = 2;
+            ConstantFoldingHelper(x => x.Key <= i >> j);
+        }
+
+        /// <summary>
+        /// Verify constant folding with left shift.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding (left shift)")]
+        public void VerifyConstantFoldingLeftShift()
+        {
+            int i = 16;
+            const int One = 1;
+            ConstantFoldingHelper(x => x.Key <= i << One);
+        }
+
+        /// <summary>
+        /// Verify constant folding with and.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding (and)")]
+        public void VerifyConstantFoldingAnd()
+        {
+            int i = 33;
+            ConstantFoldingHelper(x => x.Key <= (i & 32));
+        }
+
+        /// <summary>
+        /// Verify constant folding with or.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding (or)")]
+        public void VerifyConstantFoldingOr()
+        {
+            int i = 0;
+            ConstantFoldingHelper(x => x.Key <= (i | 32));
+        }
+
+        /// <summary>
+        /// Verify constant folding with xor.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding (xor)")]
+        public void VerifyConstantFoldingXor()
+        {
+            int i = 33;
+            int j = 1;
+            ConstantFoldingHelper(x => x.Key <= (i ^ j));
+        }
+
+        /// <summary>
+        /// Verify constant folding with not.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding (not)")]
+        public void VerifyConstantFoldingNot()
+        {
+            int i = ~32;
+            ConstantFoldingHelper(x => x.Key <= ~i);
+        }
+
+        /// <summary>
+        /// Verify that key access only works for the parameter.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify key access only works for the parameter")]
+        public void VerifyKeyAccessIsForParameterOnly()
+        {
+            var k = new KeyValuePair<int, int>(1, 2);
+            KeyRange<int> keyRange = KeyExpressionEvaluator<int, int>.GetKeyRange(x => k.Key == x.Key);
+            Assert.AreEqual(1, keyRange.Min.Value);
+            Assert.IsTrue(keyRange.Min.IsInclusive);
+            Assert.AreEqual(1, keyRange.Max.Value);
             Assert.IsTrue(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test key access against the key.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test key access against the key")]
+        public void TestKeyAccessAgainstSelf()
+        {
+            KeyRange<int> keyRange = KeyExpressionEvaluator<int, int>.GetKeyRange(x => x.Key == x.Key);
+            Assert.IsNull(keyRange.Min);
+            Assert.IsNull(keyRange.Max);
         }
 
         /// <summary>
@@ -479,6 +716,20 @@ namespace EsentCollectionsTests
             Assert.AreEqual(date, keyRange.Min.Value);
             Assert.IsTrue(keyRange.Min.IsInclusive);
             Assert.AreEqual(date + timespan, keyRange.Max.Value);
+            Assert.IsTrue(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Common test for constant folding tests.
+        /// </summary>
+        /// <param name="expression">
+        /// An expression which should come out to x.Key LE 32
+        /// </param>
+        private static void ConstantFoldingHelper(Expression<Predicate<KeyValuePair<int, long>>> expression)
+        {
+            KeyRange<int> keyRange = KeyExpressionEvaluator<int, long>.GetKeyRange(expression);
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual(32, keyRange.Max.Value);
             Assert.IsTrue(keyRange.Max.IsInclusive);
         }
     }

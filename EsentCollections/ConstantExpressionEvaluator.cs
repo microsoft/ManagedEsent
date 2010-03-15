@@ -40,45 +40,12 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 return false;
             }
 
-            switch (expression.NodeType)
+            if (IsConstantExpression(expression))
             {
-                case ExpressionType.Constant:
-                    var constant = (ConstantExpression) expression;
-                    value = (T)constant.Value;
-                    return true;
-
-                case ExpressionType.MemberAccess:
-                    var member = (MemberExpression) expression;
-                    value = Expression.Lambda<Func<T>>(member).Compile()();
-                    return true;
-
-                case ExpressionType.Add:
-                case ExpressionType.AddChecked:
-                case ExpressionType.And:
-                case ExpressionType.Divide:
-                case ExpressionType.LeftShift:
-                case ExpressionType.Modulo:
-                case ExpressionType.Multiply:
-                case ExpressionType.MultiplyChecked:
-                case ExpressionType.Negate:
-                case ExpressionType.NegateChecked:
-                case ExpressionType.Or:
-                case ExpressionType.RightShift:
-                case ExpressionType.Subtract:
-                case ExpressionType.SubtractChecked:
-                case ExpressionType.UnaryPlus:
-                case ExpressionType.ExclusiveOr:
-                    var binary = (BinaryExpression) expression;
-                    if (IsConstantExpression(binary.Left) && 
-                        IsConstantExpression(binary.Right))
-                    {
-                        // Instead of performing the operation we will just compile
-                        // the expression.
-                        value = Expression.Lambda<Func<T>>(binary).Compile()();
-                        return true;
-                    }
-
-                    break;
+                // Instead of performing the operation we will just compile
+                // the expression.
+                value = Expression.Lambda<Func<T>>(expression).Compile()();
+                return true;                
             }
 
             value = default(T);
@@ -100,7 +67,22 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             switch (expression.NodeType)
             {
                 case ExpressionType.Constant:
+                    return true;
+
+                // Member access is only constant for non-parameter types
                 case ExpressionType.MemberAccess:
+                    var member = (MemberExpression)expression;
+                    return null == member.Expression || member.Expression.NodeType != ExpressionType.Parameter;
+
+                case ExpressionType.Convert:
+                case ExpressionType.ConvertChecked:
+                case ExpressionType.Negate:
+                case ExpressionType.NegateChecked:
+                case ExpressionType.Not:
+                case ExpressionType.UnaryPlus:
+                    var unary = (UnaryExpression)expression;
+                    return IsConstantExpression(unary.Operand);
+
                 case ExpressionType.Add:
                 case ExpressionType.AddChecked:
                 case ExpressionType.And:
@@ -109,15 +91,13 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 case ExpressionType.Modulo:
                 case ExpressionType.Multiply:
                 case ExpressionType.MultiplyChecked:
-                case ExpressionType.Negate:
-                case ExpressionType.NegateChecked:
                 case ExpressionType.Or:
                 case ExpressionType.RightShift:
                 case ExpressionType.Subtract:
                 case ExpressionType.SubtractChecked:
-                case ExpressionType.UnaryPlus:
                 case ExpressionType.ExclusiveOr:
-                    return true;
+                    var binary = (BinaryExpression)expression;
+                    return IsConstantExpression(binary.Left) && IsConstantExpression(binary.Right);
             }
 
             return false;

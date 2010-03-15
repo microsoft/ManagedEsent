@@ -38,6 +38,7 @@ namespace InteropApiTests
         /// Initialization method. Setup the mock API.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the SystemParameterTests test fixture")]
         public void Setup()
         {
             this.savedApi = Api.Impl;
@@ -60,6 +61,7 @@ namespace InteropApiTests
         /// Cleanup after a test. This restores the saved API.
         /// </summary>
         [TestCleanup]
+        [Description("Cleanup the SystemParameterTests test fixture")]
         public void Teardown()
         {
             Api.Impl = this.savedApi;
@@ -70,6 +72,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify SystemParameters.CacheSizeMax sets JET_param.CacheSizeMax")]
         public void VerifySettingCacheSizeMax()
         {
             Expect.Call(

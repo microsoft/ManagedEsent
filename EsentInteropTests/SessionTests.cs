@@ -28,6 +28,7 @@ namespace InteropApiTests
         /// All DDL should be done in this method.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the SessionTests test fixture")]
         public void Setup()
         {
             // we just need a session so don't do any logging or create a database
@@ -41,19 +42,10 @@ namespace InteropApiTests
         /// Cleanup after all tests have run.
         /// </summary>
         [TestCleanup]
+        [Description("Cleanup the SessionTests test fixture")]
         public void Teardown()
         {
             Api.JetTerm(this.instance);
-        }
-
-        /// <summary>
-        /// Verify that the test class has setup the test fixture properly.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        public void VerifyFixtureSetup()
-        {
-            Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
         }
 
         #endregion Setup/Teardown
@@ -63,6 +55,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Create a Session in a using block")]
         public void CreateSession()
         {
            using (var session = new Session(this.instance))
@@ -78,6 +71,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify conversion of Session to JET_SESID")]
         public void SessionCanConvertToJetSesid()
         {
             using (var session = new Session(this.instance))
@@ -92,6 +86,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Test Session.End")]
         public void CreateAndEndSession()
         {
             using (var session = new Session(this.instance))
@@ -105,6 +100,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify Session.End zeroes the JET_SESID")]
         public void CheckThatEndSessionZeroesJetSesid()
         {
             var session = new Session(this.instance);
@@ -118,6 +114,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify calling Session.End on a disposed session throws an exception")]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void EndThrowsExceptionWhenSessionIsDisposed()
         {
@@ -132,6 +129,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
+        [Description("Verify accessing the JetSesid property on a disposed session throws an exception")]
         [ExpectedException(typeof(ObjectDisposedException))]
         public void JetSesidThrowsExceptionWhenSessionIsDisposed()
         {
