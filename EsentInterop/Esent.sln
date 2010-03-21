@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EsentCollectionsTests", "..
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbUtilTests", "..\EsentInteropSamples\DbUtilTests\DbUtilTests.csproj", "{C9B82A4F-8306-41A9-91DA-1BA5080F1DB0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptedTests", "..\ScriptedTests\ScriptedTests.csproj", "{2A60EAC2-6EBC-4E9D-AAF4-FAF2B403E483}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Esent.vsmdi
@@ -216,6 +218,24 @@ Global
 		{C9B82A4F-8306-41A9-91DA-1BA5080F1DB0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C9B82A4F-8306-41A9-91DA-1BA5080F1DB0}.Release|Win32.ActiveCfg = Release|Any CPU
 		{C9B82A4F-8306-41A9-91DA-1BA5080F1DB0}.Release|x64.ActiveCfg = Release|Any CPU
+		{2A60EAC2-6EBC-4E9D-AAF4-FAF2B403E483}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A60EAC2-6EBC-4E9D-AAF4-FAF2B403E483}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A60EAC2-6EBC-4E9D-AAF4-FAF2B403E483}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2A60EAC2-6EBC-4E9D-AAF4-FAF2B403E483}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2A60EAC2-6EBC-4E9D-AAF4-FAF2B403E483}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{2A60EAC2-6EBC-4E9D-AAF4-FAF2B403E483}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2A60EAC2-6EBC-4E9D-AAF4-FAF2B403E483}.Full|Any CPU.ActiveCfg = Release|Any CPU
+		{2A60EAC2-6EBC-4E9D-AAF4-FAF2B403E483}.Full|Any CPU.Build.0 = Release|Any CPU
+		{2A60EAC2-6EBC-4E9D-AAF4-FAF2B403E483}.Full|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2A60EAC2-6EBC-4E9D-AAF4-FAF2B403E483}.Full|Mixed Platforms.Build.0 = Release|Any CPU
+		{2A60EAC2-6EBC-4E9D-AAF4-FAF2B403E483}.Full|Win32.ActiveCfg = Release|Any CPU
+		{2A60EAC2-6EBC-4E9D-AAF4-FAF2B403E483}.Full|x64.ActiveCfg = Release|Any CPU
+		{2A60EAC2-6EBC-4E9D-AAF4-FAF2B403E483}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A60EAC2-6EBC-4E9D-AAF4-FAF2B403E483}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A60EAC2-6EBC-4E9D-AAF4-FAF2B403E483}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2A60EAC2-6EBC-4E9D-AAF4-FAF2B403E483}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2A60EAC2-6EBC-4E9D-AAF4-FAF2B403E483}.Release|Win32.ActiveCfg = Release|Any CPU
+		{2A60EAC2-6EBC-4E9D-AAF4-FAF2B403E483}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

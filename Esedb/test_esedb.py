@@ -242,7 +242,7 @@ class EsedbIterationFixture(unittest.TestCase):
                 items.append(self._db.next())
             except KeyError:
                 break
-        self.assertEquals(items, self._db.items())        
+        self.assertEqual(items, self._db.items())        
 
     def testIterateLastToStart(self):
         items = [self._db.last()]
@@ -252,7 +252,7 @@ class EsedbIterationFixture(unittest.TestCase):
             except KeyError:
                 break
         items.reverse()
-        self.assertEquals(items, self._db.items())        
+        self.assertEqual(items, self._db.items())        
         
 class EsedbFixture(unittest.TestCase):
     """Tests for esedb."""
@@ -700,9 +700,9 @@ class EsedbMultiThreadingFixture(unittest.TestCase):
     def _retrieveAllRecords(self, n):
         """Check that k=v for all records and there are n records"""
         db = esedb.open(self._database, lazyupdate=True)
-        self.assertEquals(n, len(db))
+        self.assertEqual(n, len(db))
         for k,v in db.iteritems():
-            self.assertEquals(k, v)
+            self.assertEqual(k, v)
         db.close()
 
     def _randomOperations(self):
