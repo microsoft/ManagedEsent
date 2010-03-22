@@ -27,9 +27,23 @@ namespace EsentCollectionsTests
         private const string DictionaryLocation = "DictionaryLinqFixture";
 
         /// <summary>
-        /// The dictionary we are testing.
+        /// Test dictionary.
         /// </summary>
-        private PersistentDictionary<int, long> dictionary;
+        private readonly IDictionary<int, string> testDictionary1 = new SortedDictionary<int, string>
+        {
+            { 0, "alpha" },
+            { 1, "foo" },
+            { 2, "bar" },
+            { 3, "baz" },
+            { 4, "qux" },
+            { 5, "xyzzy" },
+            { 6, "omega" },
+        };
+
+        /// <summary>
+        /// Test dictionary.
+        /// </summary>
+        private IDictionary<DateTime, Guid> testDictionary2;
 
         /// <summary>
         /// Test initialization.
@@ -37,10 +51,14 @@ namespace EsentCollectionsTests
         [TestInitialize]
         public void Setup()
         {
-            this.dictionary = new PersistentDictionary<int, long>(DictionaryLocation);
-            for (int i = 0; i < 100; ++i)
+            this.testDictionary2 = new SortedDictionary<DateTime, Guid>();
+            var entries = from x in Enumerable.Range(0, 100)
+                          select
+                              new KeyValuePair<DateTime, Guid>(
+                              DateTime.UtcNow + TimeSpan.FromSeconds(x), Guid.NewGuid());
+            foreach (KeyValuePair<DateTime, Guid> entry in entries)
             {
-                this.dictionary[i] = i * 100;
+                this.testDictionary2.Add(entry);
             }
         }
 
@@ -50,7 +68,6 @@ namespace EsentCollectionsTests
         [TestCleanup]
         public void Teardown()
         {
-            this.dictionary.Dispose();
             Cleanup.DeleteDirectoryWithRetry(DictionaryLocation);
         }
 
@@ -62,9 +79,12 @@ namespace EsentCollectionsTests
         [Priority(2)]
         public void LinqTest1()
         {
-            long[] expected = new long[] { 1100, 1200 };
-            IEnumerable<long> results = from x in this.dictionary where x.Key > 10 && x.Key < 13 select x.Value;
-            Assert.IsTrue(results.SequenceEqual(expected));
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = from x in this.testDictionary1 where x.Key > 3 select x.Value;
+                var actual = from x in persistentDictionary where x.Key > 3 select x.Value;
+                Assert.IsTrue(expected.SequenceEqual(actual));
+            }
         }
 
         /// <summary>
@@ -75,11 +95,57 @@ namespace EsentCollectionsTests
         [Priority(2)]
         public void LinqTest2()
         {
-            int first = 50;
-            int count = 20;
-            IEnumerable<long> expected = from x in Enumerable.Range(50, count) select (long)(x * 100);
-            IEnumerable<long> results = from x in this.dictionary where x.Key >= first && x.Key < first + count select x.Value;
-            Assert.IsTrue(results.SequenceEqual(expected));
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = from x in this.testDictionary1 where x.Key >= 1 && x.Key <= 5 && x.Value.StartsWith("b") select x.Value;
+                var actual = from x in persistentDictionary where x.Key >= 1 && x.Key <= 5 && x.Value.StartsWith("b") select x.Value;
+                Assert.IsTrue(expected.SequenceEqual(actual));
+            }
+        }
+
+        /// <summary>
+        /// Linq test 3.
+        /// </summary>
+        [TestMethod]
+        [Description("Linq test 3")]
+        [Priority(2)]
+        public void LinqTest3()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = from x in this.testDictionary1 where x.Value.Length == 3 select x.Value;
+                var actual = from x in persistentDictionary where x.Value.Length == 3 select x.Value;
+                Assert.IsTrue(expected.SequenceEqual(actual));
+            }
+        }
+
+        /// <summary>
+        /// Linq test 4.
+        /// </summary>
+        [TestMethod]
+        [Description("Linq test 4")]
+        [Priority(2)]
+        public void LinqTest4()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary2))
+            {
+                DateTime time = DateTime.UtcNow + TimeSpan.FromSeconds(2);
+                var expected = from x in this.testDictionary2 where x.Key > time select x;
+                var actual = from x in persistentDictionary where x.Key > time select x;
+                Assert.IsTrue(expected.SequenceEqual(actual));
+            }
+        }
+
+        /// <summary>
+        /// Create a PersistentDictionary that is a copy of another dictionary.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the dictionary key.</typeparam>
+        /// <typeparam name="TValue">The type of the dictionary value.</typeparam>
+        /// <param name="source">The dictionary to clone.</param>
+        /// <returns>A persistent dictionary cloned from the input.</returns>
+        private static PersistentDictionary<TKey, TValue> CloneDictionary<TKey, TValue>(IEnumerable<KeyValuePair<TKey, TValue>> source) where TKey : IComparable<TKey>
+        {
+            return new PersistentDictionary<TKey, TValue>(source, DictionaryLocation);
         }
     }
 }

@@ -155,7 +155,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="directory">
         /// The directory to create the database in.
         /// </param>
-        public PersistentDictionary(IDictionary<TKey, TValue> dictionary, string directory) : this(directory)
+        public PersistentDictionary(IEnumerable<KeyValuePair<TKey, TValue>> dictionary, string directory) : this(directory)
         {
             try
             {

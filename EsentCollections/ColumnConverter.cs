@@ -25,7 +25,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// A mapping of types to SetColumn functions.
         /// </summary>
-        private static readonly Dictionary<Type, SetColumnDelegate> SetColumnDelegates = new Dictionary<Type, SetColumnDelegate>
+        private static readonly IDictionary<Type, SetColumnDelegate> SetColumnDelegates = new Dictionary<Type, SetColumnDelegate>
         {
             { typeof(bool), (s, t, c, o) => Api.SetColumn(s, t, c, (bool) o) },
             { typeof(byte), (s, t, c, o) => Api.SetColumn(s, t, c, (byte) o) },
@@ -39,14 +39,14 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             { typeof(double), (s, t, c, o) => Api.SetColumn(s, t, c, (double) o) },
             { typeof(DateTime), (s, t, c, o) => Api.SetColumn(s, t, c, ((DateTime) o).Ticks) },
             { typeof(TimeSpan), (s, t, c, o) => Api.SetColumn(s, t, c, ((TimeSpan) o).Ticks) },
-            { typeof(Guid), (s, t, c, o) => Api.SetColumn(s, t, c, ((Guid) o).ToByteArray()) },
+            { typeof(Guid), (s, t, c, o) => Api.SetColumn(s, t, c, (Guid) o) },
             { typeof(string), (s, t, c, o) => Api.SetColumn(s, t, c, (string) o, Encoding.Unicode) },
         };
 
         /// <summary>
         /// A mapping of types to RetrieveColumn functions.
         /// </summary>
-        private static readonly Dictionary<Type, RetrieveColumnDelegate> RetrieveColumnDelegates = new Dictionary<Type, RetrieveColumnDelegate>
+        private static readonly IDictionary<Type, RetrieveColumnDelegate> RetrieveColumnDelegates = new Dictionary<Type, RetrieveColumnDelegate>
         {
             { typeof(bool), (s, t, c) => Api.RetrieveColumnAsBoolean(s, t, c) },
             { typeof(byte), (s, t, c) => Api.RetrieveColumnAsByte(s, t, c) },
@@ -67,7 +67,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// A mapping of types to ESENT column types.
         /// </summary>
-        private static readonly Dictionary<Type, JET_coltyp> Coltyps = new Dictionary<Type, JET_coltyp>
+        private static readonly IDictionary<Type, JET_coltyp> Coltyps = new Dictionary<Type, JET_coltyp>
         {
             { typeof(bool), JET_coltyp.Bit },
             { typeof(byte), JET_coltyp.UnsignedByte },

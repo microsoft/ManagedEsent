@@ -357,6 +357,88 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// Verify a NOT of an EQ removes limits.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify a NOT of == removes limits")]
+        public void VerifyNotOfEqRemovesLimits()
+        {
+            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key == 3));
+            Assert.IsNull(keyRange.Min);
+            Assert.IsNull(keyRange.Max);
+        }
+
+        /// <summary>
+        /// Verify a NOT of an NE doesn't work.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify a NOT of != doesn't work (provides no limits)")]
+        public void VerifyNotOfNeDoesntWork()
+        {
+            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key != 3));
+            Assert.IsNull(keyRange.Min);
+            Assert.IsNull(keyRange.Max);
+        }
+
+        /// <summary>
+        /// Verify a NOT of an LT gives GE.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify a NOT of < gives >=")]
+        public void VerifyNotOfLtGivesGe()
+        {
+            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key < 4));
+            Assert.AreEqual(4, keyRange.Min.Value);
+            Assert.IsTrue(keyRange.Min.IsInclusive);
+            Assert.IsNull(keyRange.Max);
+        }
+
+        /// <summary>
+        /// Verify a NOT of an LE gives GT.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify a NOT of <= gives >")]
+        public void VerifyNotOfLeGivesGt()
+        {
+            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key <= 4));
+            Assert.AreEqual(4, keyRange.Min.Value);
+            Assert.IsFalse(keyRange.Min.IsInclusive);
+            Assert.IsNull(keyRange.Max);
+        }
+
+        /// <summary>
+        /// Verify a NOT of an GT gives LE.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify a NOT of > gives <=")]
+        public void VerifyNotOfGtGivesLe()
+        {
+            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key > 4));
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual(4, keyRange.Max.Value);
+            Assert.IsTrue(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Verify a NOT of an GE gives LT.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify a NOT of >= gives <")]
+        public void VerifyNotOfGeGivesLt()
+        {
+            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key >= 4));
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual(4, keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
         /// Verify local variable evaluation.
         /// </summary>
         [TestMethod]
@@ -717,6 +799,20 @@ namespace EsentCollectionsTests
             Assert.IsTrue(keyRange.Min.IsInclusive);
             Assert.AreEqual(date + timespan, keyRange.Max.Value);
             Assert.IsTrue(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test expression 6.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test expression 6")]
+        public void TestSample6()
+        {
+            KeyRange<double> keyRange = KeyExpressionEvaluator<double, string>.GetKeyRange(d => d.Key >= 5.0 && !(d.Key <= 10.0));
+            Assert.AreEqual(10.0, keyRange.Min.Value);
+            Assert.IsFalse(keyRange.Min.IsInclusive);
+            Assert.IsNull(keyRange.Max);
         }
 
         /// <summary>

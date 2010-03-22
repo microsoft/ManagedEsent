@@ -18,7 +18,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     /// exclusive.
     /// </summary>
     /// <typeparam name="T">The type of the key.</typeparam>
-    internal sealed class KeyRange<T> where T : IComparable<T>
+    internal sealed class KeyRange<T> : IEquatable<KeyRange<T>> where T : IComparable<T>
     {
         /// <summary>
         /// Initializes a new instance of the KeyRange class.
@@ -51,7 +51,49 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>The intersection of the two ranges.</returns>
         public static KeyRange<T> operator &(KeyRange<T> a, KeyRange<T> b)
         {
-            return new KeyRange<T>(LowerBound(a.Min, b.Min), GetUpperBound(a.Max, b.Max));
+            return new KeyRange<T>(LowerBound(a.Min, b.Min), UpperBound(a.Max, b.Max));
+        }
+
+        /// <summary>
+        /// Invert the key range, if possible. If only one of the lower
+        /// or upper bounds is set then swap them and invert the inclusive
+        /// setting, otherwise return an open range.
+        /// </summary>
+        /// <returns>
+        /// An inversion of the key range.
+        /// </returns>
+        public KeyRange<T> Invert()
+        {
+            if (null != this.Min && null == this.Max)
+            {
+                return new KeyRange<T>(null, new Key<T>(this.Min.Value, !this.Min.IsInclusive));
+            }
+            else if (null == this.Min && null != this.Max)
+            {
+                return new KeyRange<T>(new Key<T>(this.Max.Value, !this.Max.IsInclusive), null);
+            }
+
+            // Can't invert. Return an open range.
+            return new KeyRange<T>(null, null);
+        }
+
+        /// <summary>
+        /// Compare two key ranges to see if they are equal.
+        /// </summary>
+        /// <param name="other">The key range to compare against.</param>
+        /// <returns>True if they are equal, false otherwise.</returns>
+        public bool Equals(KeyRange<T> other)
+        {
+            if (null == other)
+            {
+                return false;
+            }
+
+            bool minIsEqual = (null == this.Min && null == other.Min)
+                              || (null != this.Min && this.Min.Equals(other.Min));
+            bool maxIsEqual = (null == this.Max && null == other.Max)
+                              || (null != this.Max && this.Max.Equals(other.Max));
+            return minIsEqual && maxIsEqual;
         }
 
         /// <summary>
@@ -129,7 +171,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="a">The first key.</param>
         /// <param name="b">The second key.</param>
         /// <returns>The smaller of the two keys.</returns>
-        private static Key<T> GetUpperBound(Key<T> a, Key<T> b)
+        private static Key<T> UpperBound(Key<T> a, Key<T> b)
         {
             Key<T> max;
             if (null == a && null != b)

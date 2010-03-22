@@ -60,6 +60,13 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                     return GetKeyRangeOfSubtree(binaryExpression.Left) & GetKeyRangeOfSubtree(binaryExpression.Right);
                 }
 
+                case ExpressionType.Not:
+                {
+                    var unaryExpression = (UnaryExpression) expression;
+                    KeyRange<TKey> negatedRange = GetKeyRangeOfSubtree(unaryExpression.Operand);
+                    return negatedRange.Invert();
+                }
+
                 case ExpressionType.Equal:
                 case ExpressionType.LessThan:
                 case ExpressionType.LessThanOrEqual:

@@ -1349,7 +1349,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetDeleteColumn2");
             this.CheckNotNull(column, "column");
-            return this.Err(NativeMethods.JetDeleteColumn(sesid.Value, tableid.Value, column));
+            return this.Err(NativeMethods.JetDeleteColumn2(sesid.Value, tableid.Value, column, (uint)grbit));
         }
 
         /// <summary>

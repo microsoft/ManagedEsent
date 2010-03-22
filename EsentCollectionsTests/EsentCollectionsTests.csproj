@@ -44,6 +44,8 @@
     <Compile Include="DictionaryLinqTests.cs" />
     <Compile Include="DictionaryPerformanceTests.cs" />
     <Compile Include="KeyExpressionEvaluatorTests.cs" />
+    <Compile Include="KeyRangeTests.cs" />
+    <Compile Include="KeyTests.cs" />
     <Compile Include="SortedDictionaryComparisonTests.cs" />
     <Compile Include="DictionaryCreationTests.cs" />
     <Compile Include="DictionaryTests.cs" />

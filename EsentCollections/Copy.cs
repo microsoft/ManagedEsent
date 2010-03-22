@@ -18,7 +18,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     internal static class Copy
     {
         /// <summary>
-        /// Compare two objects to determine if they are equal.
+        /// Copy one collection to an array.
         /// </summary>
         /// <typeparam name="T">The type to compare.</typeparam>
         /// <param name="items">The items to copy.</param>

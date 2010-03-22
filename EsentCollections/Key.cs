@@ -9,11 +9,13 @@
 
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
+    using System;
+
     /// <summary>
     /// Represents a generic key value.
     /// </summary>
     /// <typeparam name="T">The datatype of the key.</typeparam>
-    internal sealed class Key<T>
+    internal sealed class Key<T> : IEquatable<Key<T>> where T : IComparable<T>
     {
         /// <summary>
         /// Initializes a new instance of the Key class.
@@ -35,5 +37,21 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// Gets the value of the key.
         /// </summary>
         public T Value { get; private set; }
+
+        /// <summary>
+        /// Determine if this Key matches another Key.
+        /// </summary>
+        /// <param name="other">The Key to compare with.</param>
+        /// <returns>True if the keys are equal, false otherwise.</returns>
+        public bool Equals(Key<T> other)
+        {
+            if (null == other)
+            {
+                return false;
+            }
+
+            return 0 == this.Value.CompareTo(other.Value)
+                && this.IsInclusive == other.IsInclusive;
+        }
     }
 }

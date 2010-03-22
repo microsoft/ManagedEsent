@@ -22,7 +22,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// A mapping of types to MakeKey functions.
         /// </summary>
-        private static readonly Dictionary<Type, MakeKeyDelegate> MakeKeyDelegates = new Dictionary<Type, MakeKeyDelegate>
+        private static readonly IDictionary<Type, MakeKeyDelegate> MakeKeyDelegates = new Dictionary<Type, MakeKeyDelegate>
         {
             { typeof(bool), (s, t, o, g) => Api.MakeKey(s, t, (bool) o, g) },
             { typeof(byte), (s, t, o, g) => Api.MakeKey(s, t, (byte) o, g) },

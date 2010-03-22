@@ -101,6 +101,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             }
 
             return false;
-        }        
+        }  
     }
 }
