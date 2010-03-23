@@ -744,6 +744,9 @@ namespace EsentCollectionsTests
         {
             KeyRange<short> keyRange = KeyExpressionEvaluator<short, string>.GetKeyRange(
                 x => 18 <= x.Key && x.Key < 99 && x.Key > 7 && x.Key <= 99 && (0 == x.Key % 2));
+
+            // This fails because the Key is promoted to an int and the KeyExpressionEvaluator
+            // can't handle that.
             Assert.AreEqual<short>(18, keyRange.Min.Value);
             Assert.IsTrue(keyRange.Min.IsInclusive);
             Assert.AreEqual<short>(99, keyRange.Max.Value);

@@ -18,6 +18,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     using System.Text;
     using System.Threading;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Windows7;
 
     /// <summary>
     /// Represents a collection of persistent keys and values.
@@ -121,7 +122,10 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             this.instance.Parameters.LogBuffers = 1024;     // buffers = 1/2 of logfile
             this.instance.Parameters.PageTempDBMin = 0;
             this.instance.Parameters.MaxVerPages = 1024;
-            this.instance.Init();
+            InitGrbit grbit = EsentVersion.SupportsWindows7Features
+                                  ? Windows7Grbits.ReplayIgnoreLostLogs
+                                  : InitGrbit.None;
+            this.instance.Init(grbit);
 
             try
             {
