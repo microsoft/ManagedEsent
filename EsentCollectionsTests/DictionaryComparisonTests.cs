@@ -81,6 +81,31 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// Test special case strings.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void TestSpecialStrings()
+        {
+            this.expected[String.Empty] = this.actual[String.Empty] = "0";
+
+            // Numbers
+            this.expected["1"] = this.actual["1"] = "1";
+            this.expected["11"] = this.actual["11"] = "2";
+            this.expected["2"] = this.actual["2"] = "3";
+
+            // Punctuation
+            this.expected["`"] = this.actual["`"] = "4";
+            this.expected["!"] = this.actual["!"] = "5";
+            this.expected[" "] = this.actual[" "] = "6";
+
+            // Unicode
+            this.expected["字会意"] = this.actual["字会意"] = "7";
+            this.expected["한글"] = this.actual["한글"] = "8";
+            DictionaryAssert.AreEqual(this.expected, this.actual);
+        }
+
+        /// <summary>
         /// Replace an item.
         /// </summary>
         [TestMethod]

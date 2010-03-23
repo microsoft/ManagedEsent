@@ -8,6 +8,7 @@ from System.IO import Directory
 from System.IO import Path
 from System.Collections.Generic import Dictionary
 from System.Collections.Generic import SortedDictionary
+from System.Collections.Generic import SortedList
 
 import clr
 clr.AddReferenceByPartialName('Esent.Collections')
@@ -371,7 +372,7 @@ class GenericDictionaryFixtureBase(unittest.TestCase):
         self.assertEqual(False, dict.Remove(k))
 
     def _checkDuplicateKeyError(self, dict, k, v):
-        self.assertRaises(System.ArgumentException,dict.Add, k, v)
+        self.assertRaises(System.ArgumentException, dict.Add, k, v)
 
     def _compareDictionaries(self, expected, actual):
         self.assertEqual(expected.Count, actual.Count)
@@ -475,6 +476,23 @@ class SortedGenericDictionaryFixture(GenericDictionaryFixtureBase):
         finally:
             dict.Dispose()
 
+class SortedGenericListFixture(SortedGenericDictionaryFixture):
+    def setUp(self):
+        self._dataDirectory = 'SortedGenericListFixture'
+        self._deleteDataDirectory()
+        self._dict = None
+
+    def tearDown(self):
+        self._deleteDataDirectory()
+        
+    def createDictAndTest(self, tkey, tvalue):
+        dict = PersistentDictionary[tkey,tvalue](self._dataDirectory)
+        try:
+            expected = SortedList[tkey,tvalue]()
+            self._doTest(expected, dict, data[tkey], data[tvalue])
+        finally:
+            dict.Dispose()
+            
 keytypes = [
     System.Boolean,
     System.Byte,
@@ -654,6 +672,7 @@ for tkey in keytypes:
         name = 'test%s%s' % (tkey, tvalue)
         setattr(GenericDictionaryFixture, name, makef(tkey, tvalue))
         setattr(SortedGenericDictionaryFixture, name, makef(tkey, tvalue))
+        setattr(SortedGenericListFixture, name, makef(tkey, tvalue))
 
 if __name__ == '__main__':
     unittest.main()
