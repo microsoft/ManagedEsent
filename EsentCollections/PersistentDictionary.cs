@@ -870,12 +870,16 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             JET_COLUMNID keyColumnid;
             JET_COLUMNID valueColumnid;
 
+            ColumndefGrbit columndefGrbit = EsentVersion.SupportsWindows7Features
+                                       ? ColumndefGrbit.None
+                                       : Windows7Grbits.ColumnCompressed;
+
             Api.JetCreateTable(session, dbid, this.config.DataTableName, 1, 100, out tableid);
             Api.JetAddColumn(
                 session,
                 tableid,
                 this.config.KeyColumnName,
-                new JET_COLUMNDEF { coltyp = this.converters.KeyColtyp, cp = JET_CP.Unicode },
+                new JET_COLUMNDEF { coltyp = this.converters.KeyColtyp, cp = JET_CP.Unicode, grbit = columndefGrbit },
                 null,
                 0,
                 out keyColumnid);
@@ -884,7 +888,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 session,
                 tableid,
                 this.config.ValueColumnName,
-                new JET_COLUMNDEF { coltyp = this.converters.ValueColtyp, cp = JET_CP.Unicode },
+                new JET_COLUMNDEF { coltyp = this.converters.ValueColtyp, cp = JET_CP.Unicode, grbit = columndefGrbit },
                 null,
                 0,
                 out valueColumnid);
