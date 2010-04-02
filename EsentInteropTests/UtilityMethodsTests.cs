@@ -104,6 +104,20 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify that Cleanup.DeleteDirectoryWithRetry can be called on
+        /// a directory that doesn't exist.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that DeleteDirectoryWithRetry can be called on a directory that doesn't exist")]
+        public void TestDeleteDirectoryWithRetryWhenDirectoryDoesNotExist()
+        {
+            string directory = Path.GetRandomFileName();
+            Assert.IsFalse(Directory.Exists(directory));
+            Cleanup.DeleteDirectoryWithRetry(directory);
+        }
+
+        /// <summary>
         /// Verify that Cleanup.DeleteDirectoryWithRetry removes a directory.
         /// </summary>
         [TestMethod]
@@ -125,6 +139,20 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify that Cleanup.DeleteFileWithRetry can be called with
+        /// a filename that doesn't exist.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that DeleteFileWithRetry removes a file")]
+        public void TestDeleteFileWithRetryWhenFileDoesNotExist()
+        {
+            string file = Path.GetRandomFileName();
+            Assert.IsFalse(File.Exists(file));
+            Cleanup.DeleteFileWithRetry(file);
+        }
+
+        /// <summary>
         /// Verify that Cleanup.DeleteFileWithRetry removes a file.
         /// </summary>
         [TestMethod]
@@ -137,10 +165,10 @@ namespace InteropApiTests
             File.WriteAllText(file, "hello");
             Assert.IsTrue(File.Exists(file));
 
-            // Delete the directory
+            // Delete the file
             Cleanup.DeleteFileWithRetry(file);
 
-            // The directory should no longer exist
+            // The file should no longer exist
             Assert.IsFalse(File.Exists(file));
         }
     }

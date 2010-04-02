@@ -141,9 +141,15 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             }
 
             Predicate<KeyValuePair<TKey, TValue>> predicate = expression.Compile();
-            KeyRange<TKey> range = KeyExpressionEvaluator<TKey, TValue>.GetKeyRange(expression);
 
+            // Consider: we could get the enumeration of key ranges, sort them and union overlapping ranges.
+            // Enumerating the data as several different ranges would be more efficient when the expression
+            // specifies an OR and the ranges are highly disjoint.
+            KeyRange<TKey> range = KeyValueExpressionEvaluator<TKey, TValue>.GetKeyRange(expression);
+
+#if DEBUG
             Console.WriteLine("WHERE: {0}", range);
+#endif
             IEnumerable<KeyValuePair<TKey, TValue>> enumerator = new PersistentDictionaryEnumerator<TKey, TValue>(this, range);
             foreach (KeyValuePair<TKey, TValue> element in enumerator)
             {

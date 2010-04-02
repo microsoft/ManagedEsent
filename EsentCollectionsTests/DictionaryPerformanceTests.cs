@@ -61,7 +61,7 @@ namespace EsentCollectionsTests
         [Priority(4)]
         public void TestSequentialInsertAndLookupSpeed()
         {
-            const int N = 500000;
+            const int N = 1000000;
             long[] keys = (from x in Enumerable.Range(0, N) select (long)x).ToArray();
             const string Data = "01234567890ABCDEF01234567890ABCDEF";
 
@@ -152,7 +152,7 @@ namespace EsentCollectionsTests
         [Priority(4)]
         public void TestRandomInsertSpeed()
         {
-            const int NumInserts = 100000;
+            const int NumInserts = 1000000;
             var keys = Enumerable.Range(0, NumInserts).ToArray();
             keys.Shuffle();
 

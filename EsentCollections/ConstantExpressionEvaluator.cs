@@ -11,6 +11,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 {
     using System;
     using System.Diagnostics;
+    using System.Linq;
     using System.Linq.Expressions;
 
     /// <summary>
@@ -40,12 +41,12 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 return false;
             }
 
-            if (IsConstantExpression(expression))
+            if (HasNoParameterAccess(expression))
             {
-                // Instead of performing the operation we will just compile
-                // the expression.
+                // We will treat this expression as constant so we can just
+                // compile the expression to get its value.
                 value = Expression.Lambda<Func<T>>(expression).Compile()();
-                return true;                
+                return true;
             }
 
             value = default(T);
@@ -53,15 +54,21 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
-        /// Determine if the given expression is a constant expression.
+        /// Determine if there are any parameter access calls in the expression.
         /// </summary>
-        /// <param name="expression">The expression to evaluate.</param>
-        /// <returns>True if the expression was a constant, false otherwise.</returns>
-        private static bool IsConstantExpression(Expression expression)
+        /// <param name="expression">The expression.</param>
+        /// <returns>
+        /// True if there are no parameter accesses in the expression.
+        /// </returns>
+        /// <remarks>
+        /// This method is conservative. We only return true if we end up with
+        /// null, a constant or parameter access. Unknown expressions return false.
+        /// </remarks>
+        private static bool HasNoParameterAccess(Expression expression)
         {
             if (null == expression)
             {
-                throw new ArgumentNullException("expression");
+                return true;
             }
 
             switch (expression.NodeType)
@@ -69,38 +76,49 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 case ExpressionType.Constant:
                     return true;
 
-                // Member access is only constant for non-parameter types
-                case ExpressionType.MemberAccess:
-                    var member = (MemberExpression)expression;
-                    return null == member.Expression || member.Expression.NodeType != ExpressionType.Parameter;
+                case ExpressionType.Parameter:
+                    return false;
+            }
 
-                case ExpressionType.Convert:
-                case ExpressionType.ConvertChecked:
-                case ExpressionType.Negate:
-                case ExpressionType.NegateChecked:
-                case ExpressionType.Not:
-                case ExpressionType.UnaryPlus:
-                    var unary = (UnaryExpression)expression;
-                    return IsConstantExpression(unary.Operand);
-
-                case ExpressionType.Add:
-                case ExpressionType.AddChecked:
-                case ExpressionType.And:
-                case ExpressionType.Divide:
-                case ExpressionType.LeftShift:
-                case ExpressionType.Modulo:
-                case ExpressionType.Multiply:
-                case ExpressionType.MultiplyChecked:
-                case ExpressionType.Or:
-                case ExpressionType.RightShift:
-                case ExpressionType.Subtract:
-                case ExpressionType.SubtractChecked:
-                case ExpressionType.ExclusiveOr:
-                    var binary = (BinaryExpression)expression;
-                    return IsConstantExpression(binary.Left) && IsConstantExpression(binary.Right);
+            if (expression is UnaryExpression)
+            {
+                UnaryExpression unaryExpression = (UnaryExpression)expression;
+                return HasNoParameterAccess(unaryExpression.Operand);
+            }
+            else if (expression is BinaryExpression)
+            {
+                BinaryExpression binaryExpression = (BinaryExpression)expression;
+                return HasNoParameterAccess(binaryExpression.Left) && HasNoParameterAccess(binaryExpression.Right);
+            }
+            else if (expression is ConditionalExpression)
+            {
+                ConditionalExpression conditionalExpression = (ConditionalExpression)expression;
+                return HasNoParameterAccess(conditionalExpression.Test)
+                       && HasNoParameterAccess(conditionalExpression.IfFalse)
+                       && HasNoParameterAccess(conditionalExpression.IfTrue);
+            }
+            else if (expression is MethodCallExpression)
+            {
+                MethodCallExpression callExpression = (MethodCallExpression)expression;
+                return callExpression.Arguments.All(HasNoParameterAccess);
+            }
+            else if (expression is InvocationExpression)
+            {
+                InvocationExpression invocationExpression = (InvocationExpression)expression;
+                return invocationExpression.Arguments.All(HasNoParameterAccess);
+            }
+            else if (expression is MemberExpression)
+            {
+                MemberExpression memberExpression = (MemberExpression)expression;
+                return HasNoParameterAccess(memberExpression.Expression);
+            }
+            else if (expression is NewArrayExpression)
+            {
+                NewArrayExpression newArrayExpression = (NewArrayExpression)expression;
+                return newArrayExpression.Expressions.All(HasNoParameterAccess);
             }
 
             return false;
-        }  
+        }
     }
 }

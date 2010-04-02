@@ -54,10 +54,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         private static void DoInit()
         {
-            SystemParameters.DatabasePageSize = 8192;
-            SystemParameters.Configuration = 0;
+            SystemParameters.Configuration = 1;
             SystemParameters.EnableAdvanced = true;
-            SystemParameters.CacheSizeMin = 128; // 1MB
+            SystemParameters.MaxInstances = 1024;
+            SystemParameters.DatabasePageSize = 8192;
+            SystemParameters.CacheSizeMin = 8192; // 64MB
             SystemParameters.CacheSizeMax = Int32.MaxValue;
         }
     }

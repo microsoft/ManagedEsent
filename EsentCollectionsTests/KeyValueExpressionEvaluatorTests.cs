@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="KeyExpressionEvaluatorTests.cs" company="Microsoft Corporation">
+// <copyright file="KeyValueExpressionEvaluatorTests.cs" company="Microsoft Corporation">
 //   Copyright (c) Microsoft Corporation.
 // </copyright>
 // <summary>
@@ -19,7 +19,7 @@ namespace EsentCollectionsTests
     /// Compare a PersistentDictionary against a generic dictionary.
     /// </summary>
     [TestClass]
-    public class KeyExpressionEvaluatorTests
+    public class KeyValueExpressionEvaluatorTests
     {
         /// <summary>
         /// Const member used for tests.
@@ -45,7 +45,7 @@ namespace EsentCollectionsTests
         [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyGetKeyRangeThrowsExceptionWhenArgumentIsNull()
         {
-            KeyRange<short> keyRange = KeyExpressionEvaluator<short, decimal>.GetKeyRange(null);
+            KeyRange<short> keyRange = KeyValueExpressionEvaluator<short, decimal>.GetKeyRange(null);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace EsentCollectionsTests
         [Description("Verify that a true expression gives an open range")]
         public void VerifyTrueExpressionGivesOpenRange()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => true);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => true);
             Assert.IsNull(keyRange.Min);
             Assert.IsNull(keyRange.Max);
         }
@@ -69,7 +69,7 @@ namespace EsentCollectionsTests
         [Description("Verify that an expression without ranges gives an open range")]
         public void VerifyExpressionWithoutRangeGivesOpenRange()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => (0 == (x.Key % 2)));
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => (0 == (x.Key % 2)));
             Assert.IsNull(keyRange.Min);
             Assert.IsNull(keyRange.Max);
         }
@@ -82,7 +82,7 @@ namespace EsentCollectionsTests
         [Description("Verify that an expression without ranges gives an open range")]
         public void VerifyValueExpressionGivesNoLimits()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, int>.GetKeyRange(x => x.Value < 100);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, int>.GetKeyRange(x => x.Value < 100);
             Assert.IsNull(keyRange.Min);
             Assert.IsNull(keyRange.Max);
         }
@@ -95,7 +95,7 @@ namespace EsentCollectionsTests
         [Description("Verify that a < comparison gives a max limit")]
         public void VerifyLtComparisonGivesMaxLimit()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => x.Key < 10);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => x.Key < 10);
             Assert.IsNull(keyRange.Min);
             Assert.AreEqual(10, keyRange.Max.Value);
             Assert.IsFalse(keyRange.Max.IsInclusive);
@@ -109,7 +109,7 @@ namespace EsentCollectionsTests
         [Description("Verify that a <= comparison gives a max limit")]
         public void VerifyLeComparisonGivesMaxLimit()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => x.Key <= 11);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => x.Key <= 11);
             Assert.IsNull(keyRange.Min);
             Assert.AreEqual(11, keyRange.Max.Value);
             Assert.IsTrue(keyRange.Max.IsInclusive);
@@ -123,7 +123,7 @@ namespace EsentCollectionsTests
         [Description("Verify that a reversed < comparison gives a max limit")]
         public void VerifyLtComparisonReversedGivesMaxLimit()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => 10 > x.Key);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => 10 > x.Key);
             Assert.IsNull(keyRange.Min);
             Assert.AreEqual(10, keyRange.Max.Value);
             Assert.IsFalse(keyRange.Max.IsInclusive);
@@ -137,7 +137,7 @@ namespace EsentCollectionsTests
         [Description("Verify that a reversed <= comparison gives a max limit")]
         public void VerifyLeComparisonReversedGivesMaxLimit()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => 11 >= x.Key);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => 11 >= x.Key);
             Assert.IsNull(keyRange.Min);
             Assert.AreEqual(11, keyRange.Max.Value);
             Assert.IsTrue(keyRange.Max.IsInclusive);
@@ -151,7 +151,7 @@ namespace EsentCollectionsTests
         [Description("Verify that multiple < comparisons give a max limit")]
         public void VerifyLtCollapse()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => x.Key < 3 && x.Key < 2 && x.Key < 5);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => x.Key < 3 && x.Key < 2 && x.Key < 5);
             Assert.IsNull(keyRange.Min);
             Assert.AreEqual(2, keyRange.Max.Value);
             Assert.IsFalse(keyRange.Max.IsInclusive);
@@ -165,7 +165,7 @@ namespace EsentCollectionsTests
         [Description("Verify that multiple <= comparisons give a max limit")]
         public void VerifyLeCollapse()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => x.Key <= 1 && 2 >= x.Key && x.Key <= 3);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => x.Key <= 1 && 2 >= x.Key && x.Key <= 3);
             Assert.IsNull(keyRange.Min);
             Assert.AreEqual(1, keyRange.Max.Value);
             Assert.IsTrue(keyRange.Max.IsInclusive);
@@ -179,7 +179,7 @@ namespace EsentCollectionsTests
         [Description("Verify that < and <= comparisons give a max limit")]
         public void VerifyLtAndLeCollapse()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => x.Key <= 11 && x.Key < 11);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => x.Key <= 11 && x.Key < 11);
             Assert.IsNull(keyRange.Min);
             Assert.AreEqual(11, keyRange.Max.Value);
             Assert.IsFalse(keyRange.Max.IsInclusive);
@@ -193,7 +193,7 @@ namespace EsentCollectionsTests
         [Description("Verify that a > comparison gives a min limit")]
         public void VerifyGtComparisonGivesMinLimit()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => x.Key > 10);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => x.Key > 10);
             Assert.AreEqual(10, keyRange.Min.Value);
             Assert.IsFalse(keyRange.Min.IsInclusive);
             Assert.IsNull(keyRange.Max);
@@ -207,7 +207,7 @@ namespace EsentCollectionsTests
         [Description("Verify that a >= comparison gives a min limit")]
         public void VerifyGeComparisonGivesMinLimit()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => x.Key >= 11);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => x.Key >= 11);
             Assert.AreEqual(11, keyRange.Min.Value);
             Assert.IsTrue(keyRange.Min.IsInclusive);
             Assert.IsNull(keyRange.Max);
@@ -221,7 +221,7 @@ namespace EsentCollectionsTests
         [Description("Verify that a reversed > comparison gives a min limit")]
         public void VerifyGtComparisonReversedGivesMinLimit()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => 10 < x.Key);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => 10 < x.Key);
             Assert.AreEqual(10, keyRange.Min.Value);
             Assert.IsFalse(keyRange.Min.IsInclusive);
             Assert.IsNull(keyRange.Max);
@@ -235,7 +235,7 @@ namespace EsentCollectionsTests
         [Description("Verify that a reversed >= comparison gives a min limit")]
         public void VerifyGeComparisonReversedGivesMinLimit()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => 11 <= x.Key);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => 11 <= x.Key);
             Assert.AreEqual(11, keyRange.Min.Value);
             Assert.IsTrue(keyRange.Min.IsInclusive);
             Assert.IsNull(keyRange.Max);
@@ -249,7 +249,7 @@ namespace EsentCollectionsTests
         [Description("Verify that multiple > comparisons give a min limit")]
         public void VerifyGtCollapse()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => x.Key > 3 && x.Key > 2 && x.Key > 5);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => x.Key > 3 && x.Key > 2 && x.Key > 5);
             Assert.AreEqual(5, keyRange.Min.Value);
             Assert.IsFalse(keyRange.Min.IsInclusive);
             Assert.IsNull(keyRange.Max);
@@ -263,7 +263,7 @@ namespace EsentCollectionsTests
         [Description("Verify that multiple >= comparisons give a min limit")]
         public void VerifyGeCollapse()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => x.Key >= 1 && 2 <= x.Key && x.Key >= 3);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => x.Key >= 1 && 2 <= x.Key && x.Key >= 3);
             Assert.AreEqual(3, keyRange.Min.Value);
             Assert.IsTrue(keyRange.Min.IsInclusive);
             Assert.IsNull(keyRange.Max);
@@ -277,7 +277,7 @@ namespace EsentCollectionsTests
         [Description("Verify that > and >= comparisons give a min limit")]
         public void VerifyGtAndGeCollapse()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => x.Key >= 11 && x.Key > 11);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => x.Key >= 11 && x.Key > 11);
             Assert.AreEqual(11, keyRange.Min.Value);
             Assert.IsFalse(keyRange.Min.IsInclusive);
             Assert.IsNull(keyRange.Max);
@@ -291,7 +291,7 @@ namespace EsentCollectionsTests
         [Description("Verify that an == comparison gives upper and lower limits")]
         public void VerifyEqGivesMinAndMaxLimits()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => x.Key == 7);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => x.Key == 7);
             Assert.AreEqual(7, keyRange.Min.Value);
             Assert.IsTrue(keyRange.Min.IsInclusive);
             Assert.AreEqual(7, keyRange.Max.Value);
@@ -306,7 +306,7 @@ namespace EsentCollectionsTests
         [Description("Verify that a reversed == comparison gives upper and lower limits")]
         public void VerifyEqReversedGivesMinAndMaxLimits()
         {
-            KeyRange<long> keyRange = KeyExpressionEvaluator<long, string>.GetKeyRange(x => 8 == x.Key);
+            KeyRange<long> keyRange = KeyValueExpressionEvaluator<long, string>.GetKeyRange(x => 8 == x.Key);
             Assert.AreEqual(8L, keyRange.Min.Value);
             Assert.IsTrue(keyRange.Min.IsInclusive);
             Assert.AreEqual(8L, keyRange.Max.Value);
@@ -321,7 +321,7 @@ namespace EsentCollectionsTests
         [Description("Verify < and > comparisons give min and max limits")]
         public void VerifyLtAndGtComparisonsGiveMinAndMaxLimits()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => 19 < x.Key && x.Key < 101);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => 19 < x.Key && x.Key < 101);
             Assert.AreEqual(19, keyRange.Min.Value);
             Assert.IsFalse(keyRange.Min.IsInclusive);
             Assert.AreEqual(101, keyRange.Max.Value);
@@ -336,11 +336,40 @@ namespace EsentCollectionsTests
         [Description("Verify an AND clause still produces limits")]
         public void VerifyAndStillGivesLimits()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => 19 <= x.Key && x.Key <= 101 && x.Value.StartsWith("foo"));
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => 19 <= x.Key && x.Key <= 101 && x.Value.StartsWith("foo"));
             Assert.AreEqual(19, keyRange.Min.Value);
             Assert.IsTrue(keyRange.Min.IsInclusive);
             Assert.AreEqual(101, keyRange.Max.Value);
             Assert.IsTrue(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Verify an AND clause intersects limits.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify an AND clause intersects limits")]
+        public void VerifyAndIntersectsLimits()
+        {
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => 19 <= x.Key && x.Key <= 101 && 21 < x.Key && x.Key < 99);
+            Assert.AreEqual(21, keyRange.Min.Value);
+            Assert.IsFalse(keyRange.Min.IsInclusive);
+            Assert.AreEqual(99, keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Verify an OR clause unions limits.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify an OR clause unions limits")]
+        public void VerifyOrUnionsLimits()
+        {
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => (19 <= x.Key && x.Key <= 101) || x.Key > 200);
+            Assert.AreEqual(19, keyRange.Min.Value);
+            Assert.IsTrue(keyRange.Min.IsInclusive);
+            Assert.IsNull(keyRange.Max);
         }
 
         /// <summary>
@@ -351,7 +380,7 @@ namespace EsentCollectionsTests
         [Description("Verify an OR clause removes limits")]
         public void VerifyOrRemovesLimits()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => (19 <= x.Key && x.Key <= 101) || x.Value.StartsWith("foo"));
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => (19 <= x.Key && x.Key <= 101) || x.Value.StartsWith("foo"));
             Assert.IsNull(keyRange.Min);
             Assert.IsNull(keyRange.Max);
         }
@@ -364,7 +393,7 @@ namespace EsentCollectionsTests
         [Description("Verify a NOT of == removes limits")]
         public void VerifyNotOfEqRemovesLimits()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key == 3));
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key == 3));
             Assert.IsNull(keyRange.Min);
             Assert.IsNull(keyRange.Max);
         }
@@ -377,7 +406,7 @@ namespace EsentCollectionsTests
         [Description("Verify a NOT of != doesn't work (provides no limits)")]
         public void VerifyNotOfNeDoesntWork()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key != 3));
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key != 3));
             Assert.IsNull(keyRange.Min);
             Assert.IsNull(keyRange.Max);
         }
@@ -390,7 +419,7 @@ namespace EsentCollectionsTests
         [Description("Verify a NOT of < gives >=")]
         public void VerifyNotOfLtGivesGe()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key < 4));
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key < 4));
             Assert.AreEqual(4, keyRange.Min.Value);
             Assert.IsTrue(keyRange.Min.IsInclusive);
             Assert.IsNull(keyRange.Max);
@@ -404,7 +433,7 @@ namespace EsentCollectionsTests
         [Description("Verify a NOT of <= gives >")]
         public void VerifyNotOfLeGivesGt()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key <= 4));
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key <= 4));
             Assert.AreEqual(4, keyRange.Min.Value);
             Assert.IsFalse(keyRange.Min.IsInclusive);
             Assert.IsNull(keyRange.Max);
@@ -418,7 +447,7 @@ namespace EsentCollectionsTests
         [Description("Verify a NOT of > gives <=")]
         public void VerifyNotOfGtGivesLe()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key > 4));
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key > 4));
             Assert.IsNull(keyRange.Min);
             Assert.AreEqual(4, keyRange.Max.Value);
             Assert.IsTrue(keyRange.Max.IsInclusive);
@@ -432,9 +461,25 @@ namespace EsentCollectionsTests
         [Description("Verify a NOT of >= gives <")]
         public void VerifyNotOfGeGivesLt()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key >= 4));
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key >= 4));
             Assert.IsNull(keyRange.Min);
             Assert.AreEqual(4, keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Verify DeMorgans law works.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify DeMorgans law works")]
+        public void VerifyDeMorgans()
+        {
+            // This should be the same as (x.Key >= 11 && x.Key < 22)
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key < 11 || x.Key >= 22));
+            Assert.AreEqual(11, keyRange.Min.Value);
+            Assert.IsTrue(keyRange.Min.IsInclusive);
+            Assert.AreEqual(22, keyRange.Max.Value);
             Assert.IsFalse(keyRange.Max.IsInclusive);
         }
 
@@ -447,7 +492,7 @@ namespace EsentCollectionsTests
         public void VerifyLocalVariableEvaluation()
         {
             int i = 29;
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, long>.GetKeyRange(x => x.Key <= i);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, long>.GetKeyRange(x => x.Key <= i);
             Assert.IsNull(keyRange.Min);
             Assert.AreEqual(i, keyRange.Max.Value);
             Assert.IsTrue(keyRange.Max.IsInclusive);
@@ -462,24 +507,25 @@ namespace EsentCollectionsTests
         public void VerifyMemberVariableEvaluation()
         {
             this.member = 18;
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, long>.GetKeyRange(x => x.Key <= this.member);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, long>.GetKeyRange(x => x.Key <= this.member);
             Assert.IsNull(keyRange.Min);
             Assert.AreEqual(this.member, keyRange.Max.Value);
             Assert.IsTrue(keyRange.Max.IsInclusive);
         }
 
         /// <summary>
-        /// Verify no constant folding with functions.
+        /// Verify constant folding with functions.
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Verify no constant folding with functions")]
-        public void VerifyNoConstantFoldingWithFunctions()
+        [Description("Verify constant folding with functions")]
+        public void VerifyConstantFoldingWithFunctions()
         {
             var rnd = new Random();
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, long>.GetKeyRange(x => x.Key <= rnd.Next());
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, long>.GetKeyRange(x => x.Key <= rnd.Next());
             Assert.IsNull(keyRange.Min);
-            Assert.IsNull(keyRange.Max);
+            Assert.IsNotNull(keyRange.Max);
+            Assert.IsTrue(keyRange.Max.IsInclusive);
         }
 
         /// <summary>
@@ -698,7 +744,7 @@ namespace EsentCollectionsTests
         public void VerifyKeyAccessIsForParameterOnly()
         {
             var k = new KeyValuePair<int, int>(1, 2);
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, int>.GetKeyRange(x => k.Key == x.Key);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, int>.GetKeyRange(x => k.Key == x.Key);
             Assert.AreEqual(1, keyRange.Min.Value);
             Assert.IsTrue(keyRange.Min.IsInclusive);
             Assert.AreEqual(1, keyRange.Max.Value);
@@ -713,7 +759,154 @@ namespace EsentCollectionsTests
         [Description("Test key access against the key")]
         public void TestKeyAccessAgainstSelf()
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, int>.GetKeyRange(x => x.Key == x.Key);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, int>.GetKeyRange(x => x.Key == x.Key);
+            Assert.IsNull(keyRange.Min);
+            Assert.IsNull(keyRange.Max);
+        }
+
+        /// <summary>
+        /// Verify conditional access is optimized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify conditional access is optimized")]
+        public void VerifyConditionalParameterAccessIsOptimized()
+        {
+            KeyValuePair<int, string> kvp1 = new KeyValuePair<int, string>(0, "hello");
+            KeyValuePair<int, string> kvp2 = new KeyValuePair<int, string>(1, "hello");
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
+                    x => x.Key < (0 == DateTime.Now.Ticks ? kvp1 : kvp2).Key);
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual(1, keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Verify conditional parameter access is recognized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify conditional parameter access is recognized")]
+        public void VerifyConditionalParameterAccessIsRecognized()
+        {
+            KeyValuePair<int, string> kvp = new KeyValuePair<int, string>(0, "hello");
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
+                    x => x.Key < (0 == DateTime.Now.Ticks ? x : kvp).Key);
+            Assert.IsNull(keyRange.Min);
+            Assert.IsNull(keyRange.Max);
+        }
+
+        /// <summary>
+        /// Verify array access is optimized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify array access is optimized")]
+        public void VerifyArrayAccessIsOptimized()
+        {
+            KeyValuePair<int, string> kvp = new KeyValuePair<int, string>(1, "hello");
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
+                    x => x.Key < (new[] { kvp })[0].Key);
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual(1, keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Verify array parameter access is recognized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify array parameter access is recognized")]
+        public void VerifyArrayParameterAccessIsRecognized()
+        {
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
+                    x => x.Key < (new[] { x })[0].Key);
+            Assert.IsNull(keyRange.Min);
+            Assert.IsNull(keyRange.Max);
+        }
+
+        /// <summary>
+        /// Verify delegate access is optimized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify delegate access is optimized")]
+        public void VerifyDelegateAccessIsOptimized()
+        {
+            Func<int, int> f = x => x * 2;
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
+                    x => x.Key <= f(1));
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual(2, keyRange.Max.Value);
+            Assert.IsTrue(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Verify delegate parameter access is recognized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify delegate parameter access is recognized")]
+        public void VerifyDelegateParameterAccessIsRecognized()
+        {
+            Func<KeyValuePair<int, string>, int> f = x => x.Key;
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
+                    x => x.Key < f(x));
+            Assert.IsNull(keyRange.Min);
+            Assert.IsNull(keyRange.Max);
+        }
+
+        /// <summary>
+        /// Verify method call parameter access is optimized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify method call access is optimized")]
+        public void VerifyMethodCallAccessIsOptimized()
+        {
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
+                    x => x.Key < (String.IsNullOrEmpty("foo") ? 0 : 1));
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual(1, keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Verify method call parameter access is recognized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify method call parameter access is recognized")]
+        public void VerifyMethodCallParameterAccessIsRecognized()
+        {
+            Func<KeyValuePair<int, string>, int> f = x => x.Key;
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
+                    x => x.Key < (String.IsNullOrEmpty(x.Value) ? 0 : 1));
+            Assert.IsNull(keyRange.Min);
+            Assert.IsNull(keyRange.Max);
+        }
+
+        /// <summary>
+        /// Verify method call parameter access is recognized (2).
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify method call parameter access is recognized (2)")]
+        public void VerifyMethodCallParameterAccessIsRecognized2()
+        {
+            Func<KeyValuePair<int, string>, int> f = x => x.Key;
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
+                    x => x.Key < Math.Max(0, "foo".StartsWith("f") ? 10 : x.Key));
             Assert.IsNull(keyRange.Min);
             Assert.IsNull(keyRange.Max);
         }
@@ -726,7 +919,7 @@ namespace EsentCollectionsTests
         [Description("Test expression 1")]
         public void TestSample1()
         {
-            KeyRange<double> keyRange = KeyExpressionEvaluator<double, string>.GetKeyRange(
+            KeyRange<double> keyRange = KeyValueExpressionEvaluator<double, string>.GetKeyRange(
                 x => 18 <= x.Key && x.Key < 99 && x.Key > 7 && x.Key <= 99 && (0 == x.Key % 2));
             Assert.AreEqual(18.0, keyRange.Min.Value);
             Assert.IsTrue(keyRange.Min.IsInclusive);
@@ -742,11 +935,12 @@ namespace EsentCollectionsTests
         [Description("Test expression 2")]
         public void TestSample2()
         {
-            KeyRange<short> keyRange = KeyExpressionEvaluator<short, string>.GetKeyRange(
+            KeyRange<short> keyRange = KeyValueExpressionEvaluator<short, string>.GetKeyRange(
                 x => 18 <= x.Key && x.Key < 99 && x.Key > 7 && x.Key <= 99 && (0 == x.Key % 2));
 
-            // This fails because the Key is promoted to an int and the KeyExpressionEvaluator
+            // This fails because the Key is promoted to an int and the KeyValueExpressionEvaluator
             // can't handle that.
+            Assert.Inconclusive("Type promotion not handled");
             Assert.AreEqual<short>(18, keyRange.Min.Value);
             Assert.IsTrue(keyRange.Min.IsInclusive);
             Assert.AreEqual<short>(99, keyRange.Max.Value);
@@ -761,7 +955,7 @@ namespace EsentCollectionsTests
         [Description("Test expression 3")]
         public void TestSample3()
         {
-            KeyRange<uint> keyRange = KeyExpressionEvaluator<uint, string>.GetKeyRange(
+            KeyRange<uint> keyRange = KeyValueExpressionEvaluator<uint, string>.GetKeyRange(
                 x => ConstMember <= x.Key && x.Key < 99 && x.Key > 7 && x.Key <= 99 && x.Value.Length == 2);
             Assert.AreEqual(18U, keyRange.Min.Value);
             Assert.IsTrue(keyRange.Min.IsInclusive);
@@ -778,7 +972,7 @@ namespace EsentCollectionsTests
         public void TestSample4()
         {
             staticMember = 18;
-            KeyRange<ulong> keyRange = KeyExpressionEvaluator<ulong, string>.GetKeyRange(
+            KeyRange<ulong> keyRange = KeyValueExpressionEvaluator<ulong, string>.GetKeyRange(
                 x => staticMember <= x.Key && x.Key < 99 && x.Key > 7 && x.Key <= 99 && x.Value == "bar");
             Assert.AreEqual(18UL, keyRange.Min.Value);
             Assert.IsTrue(keyRange.Min.IsInclusive);
@@ -797,7 +991,7 @@ namespace EsentCollectionsTests
             DateTime date = DateTime.UtcNow;
             TimeSpan timespan = TimeSpan.FromDays(90);
 
-            KeyRange<DateTime> keyRange = KeyExpressionEvaluator<DateTime, string>.GetKeyRange(d => d.Key >= date && d.Key <= date + timespan);
+            KeyRange<DateTime> keyRange = KeyValueExpressionEvaluator<DateTime, string>.GetKeyRange(d => d.Key >= date && d.Key <= date + timespan);
             Assert.AreEqual(date, keyRange.Min.Value);
             Assert.IsTrue(keyRange.Min.IsInclusive);
             Assert.AreEqual(date + timespan, keyRange.Max.Value);
@@ -812,10 +1006,42 @@ namespace EsentCollectionsTests
         [Description("Test expression 6")]
         public void TestSample6()
         {
-            KeyRange<double> keyRange = KeyExpressionEvaluator<double, string>.GetKeyRange(d => d.Key >= 5.0 && !(d.Key <= 10.0));
+            KeyRange<double> keyRange = KeyValueExpressionEvaluator<double, string>.GetKeyRange(d => d.Key >= 5.0 && !(d.Key <= 10.0));
             Assert.AreEqual(10.0, keyRange.Min.Value);
             Assert.IsFalse(keyRange.Min.IsInclusive);
             Assert.IsNull(keyRange.Max);
+        }
+
+        /// <summary>
+        /// Test expression 7.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test expression 7")]
+        public void TestSample7()
+        {
+            KeyRange<float> keyRange = KeyValueExpressionEvaluator<float, string>.GetKeyRange(d => d.Key >= 5.0F && d.Key <= 10.0F);
+            Assert.AreEqual(5.0F, keyRange.Min.Value);
+            Assert.IsTrue(keyRange.Min.IsInclusive);
+            Assert.AreEqual(10.0F, keyRange.Max.Value);
+            Assert.IsTrue(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test expression 8.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test expression 8")]
+        public void TestSample8()
+        {
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, int>.GetKeyRange(
+                    i => i.Key < 100 && i.Key > -50 && i.Key < i.Value && i.Key < Math.Min(50, 100));
+            Assert.AreEqual(-50, keyRange.Min.Value);
+            Assert.IsFalse(keyRange.Min.IsInclusive);
+            Assert.AreEqual(50, keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
         }
 
         /// <summary>
@@ -826,7 +1052,7 @@ namespace EsentCollectionsTests
         /// </param>
         private static void ConstantFoldingHelper(Expression<Predicate<KeyValuePair<int, long>>> expression)
         {
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int, long>.GetKeyRange(expression);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, long>.GetKeyRange(expression);
             Assert.IsNull(keyRange.Min);
             Assert.AreEqual(32, keyRange.Max.Value);
             Assert.IsTrue(keyRange.Max.IsInclusive);

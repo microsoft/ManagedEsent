@@ -41,6 +41,7 @@ namespace InteropApiTests
         public void Setup()
         {
             this.directory = "ascii_directory";
+            Cleanup.DeleteDirectoryWithRetry(this.directory);
             this.database = Path.Combine(this.directory, "ascii.edb");
             this.savedImpl = Api.Impl;
             Api.Impl = new JetApi(Constants.XpVersion);
@@ -55,10 +56,7 @@ namespace InteropApiTests
         public void Teardown()
         {
             Api.Impl = this.savedImpl;
-            if (Directory.Exists(this.directory))
-            {
-                Cleanup.DeleteDirectoryWithRetry(this.directory);
-            }
+            Cleanup.DeleteDirectoryWithRetry(this.directory);
         }
 
         /// <summary>

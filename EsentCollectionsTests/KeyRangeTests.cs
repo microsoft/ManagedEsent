@@ -40,7 +40,7 @@ namespace EsentCollectionsTests
         [Description("Call KeyRange.ToString with an empty range")]
         public void TestNullKeyRangeToString()
         {
-            var keyrange = new KeyRange<int>(null, null);
+            var keyrange = KeyRange<int>.OpenRange;
             string s = keyrange.ToString();
             Assert.IsNotNull(s);
             Assert.AreNotEqual(s, String.Empty);
@@ -177,7 +177,7 @@ namespace EsentCollectionsTests
         [Description("KeyRange.Invert test 1 (empty range)")]
         public void TestKeyRangeInvert1()
         {
-            var keyrange = new KeyRange<int>(null, null);
+            var keyrange = KeyRange<int>.OpenRange;
             Assert.IsTrue(keyrange.Equals(keyrange.Invert()));
         }
 
@@ -190,7 +190,7 @@ namespace EsentCollectionsTests
         public void TestKeyRangeInvert2()
         {
             var keyrange = new KeyRange<int>(new Key<int>(1, false), new Key<int>(2, true));
-            Assert.IsTrue(keyrange.Invert().Equals(new KeyRange<int>(null, null)));
+            Assert.IsTrue(keyrange.Invert().Equals(KeyRange<int>.OpenRange));
         }
 
         /// <summary>
@@ -225,7 +225,7 @@ namespace EsentCollectionsTests
         [Description("KeyRange.Intersect test 1 (empty ranges)")]
         public void TestKeyRangeIntersect1()
         {
-            var nullRange = new KeyRange<int>(null, null);
+            var nullRange = KeyRange<int>.OpenRange;
             KeyRangeIntersectionHelper(nullRange, nullRange, nullRange);
         }
 
@@ -237,7 +237,7 @@ namespace EsentCollectionsTests
         [Description("KeyRange.Intersect test 2 (range with min and empty range)")]
         public void TestKeyRangeIntersect2()
         {
-            var range1 = new KeyRange<int>(null, null);
+            var range1 = KeyRange<int>.OpenRange;
             var range2 = new KeyRange<int>(new Key<int>(1, false), null);
             KeyRangeIntersectionHelper(range1, range2, range2);
         }
@@ -250,7 +250,7 @@ namespace EsentCollectionsTests
         [Description("KeyRange.Intersect test 3 (range with max and empty range)")]
         public void TestKeyRangeIntersect3()
         {
-            var range1 = new KeyRange<int>(null, null);
+            var range1 = KeyRange<int>.OpenRange;
             var range2 = new KeyRange<int>(null, new Key<int>(7, true));
             KeyRangeIntersectionHelper(range1, range2, range2);
         }
@@ -263,7 +263,7 @@ namespace EsentCollectionsTests
         [Description("KeyRange.Intersect test 4 (range with min+max and empty range)")]
         public void TestKeyRangeIntersect4()
         {
-            var range1 = new KeyRange<int>(null, null);
+            var range1 = KeyRange<int>.OpenRange;
             var range2 = new KeyRange<int>(new Key<int>(3, false), new Key<int>(7, true));
             KeyRangeIntersectionHelper(range1, range2, range2);
         }
@@ -323,6 +323,106 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// KeyRange union test 1
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Union test 1 (empty ranges)")]
+        public void TestKeyRangeUnion1()
+        {
+            KeyRangeUnionHelper(KeyRange<int>.OpenRange, KeyRange<int>.OpenRange, KeyRange<int>.OpenRange);
+        }
+
+        /// <summary>
+        /// KeyRange union test 2
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Union test 2 (range with min and empty range)")]
+        public void TestKeyRangeUnion2()
+        {
+            var range2 = new KeyRange<int>(new Key<int>(1, false), null);
+            KeyRangeUnionHelper(KeyRange<int>.OpenRange, range2, KeyRange<int>.OpenRange);
+        }
+
+        /// <summary>
+        /// KeyRange union test 3
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Union test 3 (range with max and empty range)")]
+        public void TestKeyRangeUnion3()
+        {
+            var range2 = new KeyRange<int>(null, new Key<int>(7, true));
+            KeyRangeUnionHelper(KeyRange<int>.OpenRange, range2, KeyRange<int>.OpenRange);
+        }
+
+        /// <summary>
+        /// KeyRange union test 4
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Union test 4 (range with min+max and empty range)")]
+        public void TestKeyRangeUnion4()
+        {
+            var range2 = new KeyRange<int>(new Key<int>(3, false), new Key<int>(7, true));
+            KeyRangeUnionHelper(KeyRange<int>.OpenRange, range2, KeyRange<int>.OpenRange);
+        }
+
+        /// <summary>
+        /// KeyRange union test 5
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Union test 5 (range with min and range with max)")]
+        public void TestKeyRangeUnion5()
+        {
+            var range1 = new KeyRange<int>(null, new Key<int>(7, true));
+            var range2 = new KeyRange<int>(new Key<int>(3, false), null);
+            KeyRangeUnionHelper(range1, range2, KeyRange<int>.OpenRange);
+        }
+
+        /// <summary>
+        /// KeyRange union test 6
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Union test 6 (equal ranges)")]
+        public void TestKeyRangeUnion6()
+        {
+            var range = new KeyRange<int>(new Key<int>(6, true), new Key<int>(7, true));
+            KeyRangeUnionHelper(range, range, range);
+        }
+
+        /// <summary>
+        /// KeyRange union test 7
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Union test 7 (ranges with same values)")]
+        public void TestKeyRangeUnion7()
+        {
+            var range1 = new KeyRange<int>(new Key<int>(3, true), new Key<int>(7, false));
+            var range2 = new KeyRange<int>(new Key<int>(3, false), new Key<int>(7, true));
+            var expected = new KeyRange<int>(new Key<int>(3, true), new Key<int>(7, true));
+            KeyRangeUnionHelper(range1, range2, expected);
+        }
+
+        /// <summary>
+        /// KeyRange union test 8
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Union test 8 (different ranges)")]
+        public void TestKeyRangeUnion8()
+        {
+            var range1 = new KeyRange<int>(new Key<int>(2, true), new Key<int>(7, true));
+            var range2 = new KeyRange<int>(new Key<int>(3, true), new Key<int>(8, true));
+            var expected = new KeyRange<int>(new Key<int>(2, true), new Key<int>(8, true));
+            KeyRangeUnionHelper(range1, range2, expected);
+        }
+
+        /// <summary>
         /// Helper function to check KeyRange equality.
         /// </summary>
         /// <typeparam name="T">The type of the KeyRange</typeparam>
@@ -346,6 +446,19 @@ namespace EsentCollectionsTests
         {
             Assert.IsTrue(expected.Equals(range1 & range2));
             Assert.IsTrue(expected.Equals(range2 & range1));
+        }
+
+        /// <summary>
+        /// Helper function to check KeyRange union.
+        /// </summary>
+        /// <typeparam name="T">The type of the KeyRange</typeparam>
+        /// <param name="range1">The first range.</param>
+        /// <param name="range2">The second range.</param>
+        /// <param name="expected">The result of the union.</param>
+        private static void KeyRangeUnionHelper<T>(KeyRange<T> range1, KeyRange<T> range2, KeyRange<T> expected) where T : IComparable<T>
+        {
+            Assert.IsTrue(expected.Equals(range1 | range2));
+            Assert.IsTrue(expected.Equals(range2 | range1));
         }
     }
 }

@@ -927,7 +927,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                                        ? ColumndefGrbit.None
                                        : Windows7Grbits.ColumnCompressed;
 
-            Api.JetCreateTable(session, dbid, this.config.DataTableName, 1, 100, out tableid);
+            Api.JetCreateTable(session, dbid, this.config.DataTableName, 128, 100, out tableid);
             Api.JetAddColumn(
                 session,
                 tableid,

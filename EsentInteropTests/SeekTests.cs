@@ -52,6 +52,7 @@ namespace InteropApiTests
         /// All DDL should be done in this method.
         /// </summary>
         [TestInitialize]
+        [Description("Setup the SeekTests fixture")]
         public void Setup()
         {
             this.directory = SetupHelper.CreateRandomDirectory();
@@ -82,24 +83,13 @@ namespace InteropApiTests
         /// Cleanup after all tests have run.
         /// </summary>
         [TestCleanup]
+        [Description("Cleanup the SeekTests fixture")]
         public void Teardown()
         {
             Api.JetCloseTable(this.sesid, this.tableid);
             Api.JetEndSession(this.sesid, EndSessionGrbit.None);
             Api.JetTerm(this.instance);
             Cleanup.DeleteDirectoryWithRetry(this.directory);
-        }
-
-        /// <summary>
-        /// Verify that the test class has setup the test fixture properly.
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        public void VerifyFixtureSetup()
-        {
-            Assert.AreNotEqual(JET_INSTANCE.Nil, this.instance);
-            Assert.AreNotEqual(JET_SESID.Nil, this.sesid);
-            Assert.AreNotEqual(JET_COLUMNID.Nil, this.columnid);
         }
 
         #endregion Setup/Teardown
@@ -111,6 +101,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test JetSeek(SeekGrbit.SeekLT) when the record isn't found")]
         public void TestJetSeekLTNotFound()
         {
             this.MakeKeyForRecord(10);
@@ -130,6 +121,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test TrySeek(SeekGrbit.SeekLT) when the record isn't found")]
         public void TestTrySeekLTNotFound()
         {
             this.MakeKeyForRecord(10);
@@ -141,6 +133,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test JetSeek(SeekGrbit.SeekLT) when the record is found")]
         public void TestJetSeekLT()
         {
             this.MakeKeyForRecord(11);
@@ -153,6 +146,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test TrySeek(SeekGrbit.SeekLT) when the record is found")]
         public void TestTrySeekLT()
         {
             this.MakeKeyForRecord(11);
@@ -165,6 +159,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test JetSeek(SeekGrbit.SeekLE) when the record isn't found")]
         public void TestJetSeekLENotFound()
         {
             this.MakeKeyForRecord(9);
@@ -184,6 +179,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test TrySeek(SeekGrbit.SeekLE) when the record isn't found")]
         public void TestTrySeekLENotFound()
         {
             this.MakeKeyForRecord(9);
@@ -195,6 +191,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test JetSeek(SeekGrbit.SeekLE) when the record is found")]
         public void TestJetSeekLE()
         {
             this.MakeKeyForRecord(10);
@@ -207,6 +204,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test TrySeek(SeekGrbit.SeekLE) when the record is found")]
         public void TestTrySeekLE()
         {
             this.MakeKeyForRecord(10);
@@ -219,6 +217,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test JetSeek(SeekGrbit.SeekLE) when the record found is less than the key")]
         public void TestJetSeekLEFoundLess()
         {
             this.MakeKeyForRecord(11);
@@ -231,6 +230,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test TrySeek(SeekGrbit.SeekLE) when the record found is less than the key")]
         public void TestTrySeekLEFoundLess()
         {
             this.MakeKeyForRecord(11);
@@ -243,6 +243,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test JetSeek(SeekGrbit.SeekEQ) when the record isn't found")]
         public void TestJetSeekEQNotFound()
         {
             this.MakeKeyForRecord(19);
@@ -262,6 +263,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test TrySeek(SeekGrbit.SeekEQ) when the record isn't found")]
         public void TestTrySeekEQNotFound()
         {
             this.MakeKeyForRecord(19);
@@ -273,6 +275,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test JetSeek(SeekGrbit.SeekEQ) when the record is found")]
         public void TestJetSeekEQ()
         {
             this.MakeKeyForRecord(20);
@@ -285,6 +288,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test TrySeek(SeekGrbit.SeekEQ) when the record is found")]
         public void TestTrySeekEQ()
         {
             this.MakeKeyForRecord(20);
@@ -297,6 +301,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test JetSeek(SeekGrbit.SeekGE) when the record isn't found")]
         public void TestJetSeekGENotFound()
         {
             this.MakeKeyForRecord(31);
@@ -316,6 +321,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test TrySeek(SeekGrbit.SeekGE) when the record isn't found")]
         public void TestTrySeekGENotFound()
         {
             this.MakeKeyForRecord(31);
@@ -327,6 +333,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test JetSeek(SeekGrbit.SeekGE) when the record is found")]
         public void TestJetSeekGE()
         {
             this.MakeKeyForRecord(30);
@@ -339,6 +346,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test TrySeek(SeekGrbit.SeekGE) when the record is found")]
         public void TestTrySeekGE()
         {
             this.MakeKeyForRecord(30);
@@ -351,6 +359,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test JetSeek(SeekGrbit.SeekGE) when the record found is greaer than the key")]
         public void TestJetSeekGEFoundGreater()
         {
             this.MakeKeyForRecord(29);
@@ -363,6 +372,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test TrySeek(SeekGrbit.SeekGE) when the record found is greater than the key")]
         public void TestTrySeekGEFoundGreater()
         {
             this.MakeKeyForRecord(29);
@@ -375,6 +385,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test JetSeek(SeekGrbit.SeekGT) when the record isn't found")]
         public void TestJetSeekGTNotFound()
         {
             this.MakeKeyForRecord(30);
@@ -394,6 +405,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test TrySeek(SeekGrbit.SeekGT) when the record isn't found")]
         public void TestTrySeekGTNotFound()
         {
             this.MakeKeyForRecord(30);
@@ -405,6 +417,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test JetSeek(SeekGrbit.SeekGT) when the record is found")]
         public void TestJetSeekGT()
         {
             this.MakeKeyForRecord(29);
@@ -417,6 +430,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Test TrySeek(SeekGrbit.SeekGT) when the record is found")]
         public void TestTrySeekGT()
         {
             this.MakeKeyForRecord(29);
@@ -433,6 +447,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Create an empty descending index range with JetSetIndexRange")]
         public void JetSetIndexRangeDescendingEmpty()
         {
             this.MakeKeyForRecord(10);
@@ -455,6 +470,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Create an empty ascending index range with TrySetIndexRange")]
         public void TrySetIndexRangeAscendingEmpty()
         {
             this.MakeKeyForRecord(30);

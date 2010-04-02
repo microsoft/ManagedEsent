@@ -35,6 +35,7 @@ namespace InteropApiTests
         public void Setup()
         {
             this.directory = "字会意";
+            Cleanup.DeleteDirectoryWithRetry(this.directory);
             this.database = Path.Combine(this.directory, "한글.edb");
         }
 
@@ -45,10 +46,7 @@ namespace InteropApiTests
         [Description("Cleanup the UnicodePathsTests fixture")]
         public void Teardown()
         {
-            if (Directory.Exists(this.directory))
-            {
-                Cleanup.DeleteDirectoryWithRetry(this.directory);
-            }
+            Cleanup.DeleteDirectoryWithRetry(this.directory);
         }
 
         /// <summary>

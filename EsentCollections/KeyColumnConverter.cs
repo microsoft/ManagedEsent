@@ -41,6 +41,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         };
 
         /// <summary>
+        /// The MakeKey delegate for this object.
+        /// </summary>
+        private readonly MakeKeyDelegate makeKey;
+
+        /// <summary>
         /// Initializes a new instance of the KeyColumnConverter class.
         /// </summary>
         /// <param name="type">The type to convert to/from.</param>
@@ -50,6 +55,8 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             {
                 throw new ArgumentOutOfRangeException("type", type, "Not supported for MakeKey");
             }
+
+            this.makeKey = MakeKeyDelegates[type];
         }
 
         /// <summary>
@@ -69,7 +76,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             get
             {
-                return MakeKeyDelegates[this.Type];
+                return this.makeKey;
             }
         }
     }

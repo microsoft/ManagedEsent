@@ -21,6 +21,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     internal sealed class KeyRange<T> : IEquatable<KeyRange<T>> where T : IComparable<T>
     {
         /// <summary>
+        /// A singleton instance of the open range (a range with no limits).
+        /// </summary>
+        private static readonly KeyRange<T> openRange = new KeyRange<T>(null, null);
+
+        /// <summary>
         /// Initializes a new instance of the KeyRange class.
         /// </summary>
         /// <param name="min">The minimum key. This can be null.</param>
@@ -29,6 +34,17 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             this.Min = min;
             this.Max = max;
+        }
+
+        /// <summary>
+        /// Gets a singleton instance of the open range (a range with no limits).
+        /// </summary>
+        public static KeyRange<T> OpenRange
+        {
+            get
+            {
+                return openRange;
+            }
         }
 
         /// <summary>
@@ -51,7 +67,18 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>The intersection of the two ranges.</returns>
         public static KeyRange<T> operator &(KeyRange<T> a, KeyRange<T> b)
         {
-            return new KeyRange<T>(LowerBound(a.Min, b.Min), UpperBound(a.Max, b.Max));
+            return new KeyRange<T>(LowerIntersection(a.Min, b.Min), UpperIntersection(a.Max, b.Max));
+        }
+
+        /// <summary>
+        /// Return the union of two ranges.
+        /// </summary>
+        /// <param name="a">The first range.</param>
+        /// <param name="b">The second range.</param>
+        /// <returns>The intersection of the two ranges.</returns>
+        public static KeyRange<T> operator |(KeyRange<T> a, KeyRange<T> b)
+        {
+            return new KeyRange<T>(LowerUnion(a.Min, b.Min), UpperUnion(a.Max, b.Max));
         }
 
         /// <summary>
@@ -74,7 +101,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             }
 
             // Can't invert. Return an open range.
-            return new KeyRange<T>(null, null);
+            return OpenRange;
         }
 
         /// <summary>
@@ -126,52 +153,14 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
-        /// Returns the lower bound of two keys. This is the maximum of the
-        /// keys, where null represents the minimum value.
+        /// Returns the lower bound of two keys for range intersection.
+        /// This is the maximum of the keys, where null represents the
+        /// minimum value and exclusive ranges are preferred.
         /// </summary>
         /// <param name="a">The first key.</param>
         /// <param name="b">The second key.</param>
-        /// <returns>The larger of the two keys.</returns>
-        private static Key<T> LowerBound(Key<T> a, Key<T> b)
-        {
-            Key<T> min;
-            if (null == a && null != b)
-            {
-                min = b;
-            }
-            else if (null != a && null == b)
-            {
-                min = a;
-            }
-            else if (null != a && null != b)
-            {
-                int compare = a.Value.CompareTo(b.Value);
-                if (0 == compare)
-                {
-                    // Prefer the exclusive range
-                    min = a.IsInclusive ? b : a;
-                }
-                else
-                {
-                    min = compare > 0 ? a : b;
-                }
-            }
-            else
-            {
-                min = null;
-            }
-
-            return min;
-        }
-
-        /// <summary>
-        /// Returns the upper bound of two keys. This is the minimum of the
-        /// keys, where null represents the maximum value.
-        /// </summary>
-        /// <param name="a">The first key.</param>
-        /// <param name="b">The second key.</param>
-        /// <returns>The smaller of the two keys.</returns>
-        private static Key<T> UpperBound(Key<T> a, Key<T> b)
+        /// <returns>The upper bound of the two keys.</returns>
+        private static Key<T> LowerIntersection(Key<T> a, Key<T> b)
         {
             Key<T> max;
             if (null == a && null != b)
@@ -192,12 +181,116 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 }
                 else
                 {
-                    max = compare < 0 ? a : b;
+                    max = compare > 0 ? a : b;
                 }
             }
             else
             {
                 max = null;
+            }
+
+            return max;
+        }
+
+        /// <summary>
+        /// Returns the upper bound of two keys for range union.
+        /// This is the minimum of the keys, where null represents the
+        /// maximum value and exclusive ranges are preferred.
+        /// </summary>
+        /// <param name="a">The first key.</param>
+        /// <param name="b">The second key.</param>
+        /// <returns>The lower bound of the two keys.</returns>
+        private static Key<T> UpperIntersection(Key<T> a, Key<T> b)
+        {
+            Key<T> min;
+            if (null == a && null != b)
+            {
+                min = b;
+            }
+            else if (null != a && null == b)
+            {
+                min = a;
+            }
+            else if (null != a && null != b)
+            {
+                int compare = a.Value.CompareTo(b.Value);
+                if (0 == compare)
+                {
+                    // Prefer the exclusive range
+                    min = a.IsInclusive ? b : a;
+                }
+                else
+                {
+                    min = compare < 0 ? a : b;
+                }
+            }
+            else
+            {
+                min = null;
+            }
+
+            return min;
+        }
+
+        /// <summary>
+        /// Returns the lower bound of two keys for range union.
+        /// This is the minimum of the keys, where null represents the
+        /// minimum value and inclusive ranges are preferred.
+        /// </summary>
+        /// <param name="a">The first key.</param>
+        /// <param name="b">The second key.</param>
+        /// <returns>The upper bound of the two keys.</returns>
+        private static Key<T> LowerUnion(Key<T> a, Key<T> b)
+        {
+            Key<T> min;
+            if (null == a || null == b)
+            {
+                min = null;
+            }
+            else
+            {
+                int compare = a.Value.CompareTo(b.Value);
+                if (0 == compare)
+                {
+                    // Prefer the inclusive range
+                    min = a.IsInclusive ? a : b;
+                }
+                else
+                {
+                    min = compare > 0 ? b : a;
+                }
+            }
+
+            return min;
+        }
+
+        /// <summary>
+        /// Returns the upper bound of two keys for range union.
+        /// This is the maximum of the keys, where null represents the
+        /// maximum value and inclusive ranges are preferred.
+        /// </summary>
+        /// <param name="a">The first key.</param>
+        /// <param name="b">The second key.</param>
+        /// <returns>The lower bound of the two keys.</returns>
+        private static Key<T> UpperUnion(Key<T> a, Key<T> b)
+        {
+            Key<T> max;
+            if (null == a || null == b)
+            {
+                max = null;
+            }
+            else
+            {
+                int compare = a.Value.CompareTo(b.Value);
+                if (0 == compare)
+                {
+                    // Prefer the inclusive range
+                    max = a.IsInclusive ? a : b;
+                }
+                else
+                {
+                    max = compare > 0 ? a : b;
+                }
             }
 
             return max;

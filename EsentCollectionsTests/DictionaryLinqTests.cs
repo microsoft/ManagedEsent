@@ -137,6 +137,65 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// Linq test 5.
+        /// </summary>
+        [TestMethod]
+        [Description("Linq test 5")]
+        [Priority(2)]
+        public void LinqTest5()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = from x in this.testDictionary1 where !(x.Key < 1 || x.Key > 5) && (0 == x.Key % 2) select x.Value;
+                var actual = from x in persistentDictionary where !(x.Key < 1 || x.Key > 5) && (0 == x.Key % 2) select x.Value;
+                Assert.IsTrue(expected.SequenceEqual(actual));
+            }
+        }
+
+        /// <summary>
+        /// Linq test 6.
+        /// </summary>
+        [TestMethod]
+        [Description("Linq test 6")]
+        [Priority(2)]
+        public void LinqTest6()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = from x in this.testDictionary1
+                               where !(x.Key < 1 || x.Key > 5) && (x.Key > 3 || x.Key > 2)
+                               select x.Value;
+                var actual = from x in persistentDictionary
+                             where !(x.Key < 1 || x.Key > 5) && (x.Key > 3 || x.Key > 2)
+                             select x.Value;
+                Assert.IsTrue(expected.SequenceEqual(actual));
+            }
+        }
+
+        /// <summary>
+        /// Linq test 7.
+        /// </summary>
+        [TestMethod]
+        [Description("Linq test 7")]
+        [Priority(2)]
+        public void LinqTest7()
+        {
+            var rand = new Random();
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                for (int i = 0; i < 128; ++i)
+                {
+                    int min = rand.Next(-1, 8);
+                    int max = rand.Next(-1, 8);
+
+                    var expected = from x in this.testDictionary1 where x.Key >= min && x.Key <= max select x.Value;
+                    var actual = from x in persistentDictionary where x.Key >= min && x.Key <= max select x.Value;
+                    Assert.IsTrue(expected.SequenceEqual(actual));
+                }
+            }
+        }
+
+        /// <summary>
         /// Create a PersistentDictionary that is a copy of another dictionary.
         /// </summary>
         /// <typeparam name="TKey">The type of the dictionary key.</typeparam>

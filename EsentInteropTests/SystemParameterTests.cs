@@ -88,6 +88,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify that setting SystemParameters.CacheSize sets JET_param.CacheSize")]
         public void VerifySettingCacheSize()
         {
             Expect.Call(
@@ -103,6 +104,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify that setting SystemParameters.CacheSizeMin sets JET_param.CacheSizeMin")]
         public void VerifySettingCacheSizeMin()
         {
             Expect.Call(
@@ -118,6 +120,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify that setting SystemParameters.DatabasePageSize sets JET_param.DatabasePageSize")]
         public void VerifySettingDatabasePageSize()
         {
             Expect.Call(
@@ -133,6 +136,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify that setting SystemParameters.MaxInstances sets JET_param.MaxInstances")]
         public void VerifySettingMaxInstances()
         {
             Expect.Call(
@@ -148,6 +152,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify that setting SystemParameters.Configuration sets VistaParam.Configuration")]
         public void VerifySettingConfiguration()
         {
             Expect.Call(
@@ -163,6 +168,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify that setting SystemParameters.EnableAdvanced to true sets VistaParam.EnableAdvanced")]
         public void VerifySettingEnableAdvancedToTrue()
         {
             Expect.Call(
@@ -178,6 +184,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify that setting SystemParameters.Configuration to false sets VistaParam.Configuration")]
         public void VerifySettingEnableAdvancedToFalse()
         {
             Expect.Call(

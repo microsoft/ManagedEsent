@@ -65,14 +65,14 @@ namespace InteropApiTests
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    if (attempt == MaxAttempts)
+                    if (MaxAttempts == attempt)
                     {
                         throw;
                     }
                 }
                 catch (IOException)
                 {
-                    if (attempt == MaxAttempts)
+                    if (MaxAttempts == attempt)
                     {
                         throw;
                     }
