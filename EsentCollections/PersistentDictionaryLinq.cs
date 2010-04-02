@@ -28,22 +28,25 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </exception>
         public KeyValuePair<TKey, TValue> First()
         {
-            return this.UsingCursor(
-                cursor =>
+            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+            try
+            {
+                using (var transaction = cursor.BeginReadOnlyTransaction())
                 {
-                    using (var transaction = cursor.BeginTransaction())
+                    cursor.MoveBeforeFirst();
+                    if (!cursor.TryMoveNext())
                     {
-                        cursor.MoveBeforeFirst();
-                        if (!cursor.TryMoveNext())
-                        {
-                            throw new InvalidOperationException("Sequence contains no elements");
-                        }
-
-                        var first = cursor.RetrieveCurrent();
-                        transaction.Commit(CommitTransactionGrbit.LazyFlush);
-                        return first;
+                        throw new InvalidOperationException("Sequence contains no elements");
                     }
-                });
+
+                    var first = cursor.RetrieveCurrent();
+                    return first;
+                }
+            }
+            finally
+            {
+                this.cursors.FreeCursor(cursor);
+            }
         }
 
         /// <summary>
@@ -52,17 +55,20 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>The first element.</returns>
         public KeyValuePair<TKey, TValue> FirstOrDefault()
         {
-            return this.UsingCursor(
-                cursor =>
+            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+            try
+            {
+                using (var transaction = cursor.BeginReadOnlyTransaction())
                 {
-                    using (var transaction = cursor.BeginTransaction())
-                    {
-                        cursor.MoveBeforeFirst();
-                        var first = cursor.TryMoveNext() ? cursor.RetrieveCurrent() : new KeyValuePair<TKey, TValue>(default(TKey), default(TValue));
-                        transaction.Commit(CommitTransactionGrbit.LazyFlush);
-                        return first;
-                    }
-                });
+                    cursor.MoveBeforeFirst();
+                    var first = cursor.TryMoveNext() ? cursor.RetrieveCurrent() : new KeyValuePair<TKey, TValue>(default(TKey), default(TValue));
+                    return first;
+                }
+            }
+            finally
+            {
+                this.cursors.FreeCursor(cursor);
+            }
         }
 
         /// <summary>
@@ -74,22 +80,25 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </exception>
         public KeyValuePair<TKey, TValue> Last()
         {
-            return this.UsingCursor(
-                cursor =>
+            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+            try
+            {
+                using (var transaction = cursor.BeginReadOnlyTransaction())
                 {
-                    using (var transaction = cursor.BeginTransaction())
+                    cursor.MoveAfterLast();
+                    if (!cursor.TryMovePrevious())
                     {
-                        cursor.MoveAfterLast();
-                        if (!cursor.TryMovePrevious())
-                        {
-                            throw new InvalidOperationException("Sequence contains no elements");
-                        }
-
-                        var last = cursor.RetrieveCurrent();
-                        transaction.Commit(CommitTransactionGrbit.LazyFlush);
-                        return last;
+                        throw new InvalidOperationException("Sequence contains no elements");
                     }
-                });
+
+                    var last = cursor.RetrieveCurrent();
+                    return last;
+                }
+            }
+            finally
+            {
+                this.cursors.FreeCursor(cursor);
+            }
         }
 
         /// <summary>
@@ -98,17 +107,20 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>The last element.</returns>
         public KeyValuePair<TKey, TValue> LastOrDefault()
         {
-            return this.UsingCursor(
-                cursor =>
+            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+            try
+            {
+                using (var transaction = cursor.BeginReadOnlyTransaction())
                 {
-                    using (var transaction = cursor.BeginTransaction())
-                    {
-                        cursor.MoveAfterLast();
-                        var last = cursor.TryMovePrevious() ? cursor.RetrieveCurrent() : new KeyValuePair<TKey, TValue>(default(TKey), default(TValue));
-                        transaction.Commit(CommitTransactionGrbit.LazyFlush);
-                        return last;
-                    }
-                });
+                    cursor.MoveAfterLast();
+                    var last = cursor.TryMovePrevious() ? cursor.RetrieveCurrent() : new KeyValuePair<TKey, TValue>(default(TKey), default(TValue));
+                    return last;
+                }
+            }
+            finally
+            {
+                this.cursors.FreeCursor(cursor);
+            }
         }
 
         /// <summary>

@@ -117,11 +117,14 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             this.instance.Parameters.BaseName = this.config.BaseName;
             this.instance.Parameters.EnableIndexChecking = false;       // TODO: fix unicode indexes
             this.instance.Parameters.CircularLog = true;
-            this.instance.Parameters.CheckpointDepthMax = 64 * 1024 * 1025;
+            this.instance.Parameters.CheckpointDepthMax = 64 * 1024 * 1024;
             this.instance.Parameters.LogFileSize = 1024;    // 1MB logs
             this.instance.Parameters.LogBuffers = 1024;     // buffers = 1/2 of logfile
-            this.instance.Parameters.PageTempDBMin = 0;
+            this.instance.Parameters.MaxTemporaryTables = 0;
             this.instance.Parameters.MaxVerPages = 1024;
+            this.instance.Parameters.NoInformationEvent = true;
+            this.instance.Parameters.WaypointLatency = 1;
+
             InitGrbit grbit = EsentVersion.SupportsWindows7Features
                                   ? Windows7Grbits.ReplayIgnoreLostLogs
                                   : InitGrbit.None;
@@ -191,7 +194,15 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             get
             {
-                return this.UsingCursor(cursor => cursor.RetrieveCount());
+                PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+                try
+                {
+                    return cursor.RetrieveCount();
+                }
+                finally
+                {
+                    this.cursors.FreeCursor(cursor);
+                }
             }
         }
 
@@ -294,40 +305,47 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             get
             {
-                return this.UsingCursor(
-                    cursor =>
+                PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+                try
+                {
+                    using (var transaction = cursor.BeginReadOnlyTransaction())
                     {
-                        using (var transaction = cursor.BeginTransaction())
-                        {
-                            cursor.SeekWithKeyNotFoundException(key);
-                            var value = cursor.RetrieveCurrentValue();
-                            transaction.Commit(CommitTransactionGrbit.LazyFlush);
-                            return value;
-                        }
-                    });
+                        cursor.SeekWithKeyNotFoundException(key);
+                        var value = cursor.RetrieveCurrentValue();
+                        return value;
+                    }
+                }
+                finally
+                {
+                    this.cursors.FreeCursor(cursor);
+                }
             }
 
             set
             {
                 lock (this.LockObject(key))
                 {
-                    this.UsingCursor(
-                        cursor =>
+                    PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+                    try
+                    {
+                        using (var transaction = cursor.BeginLazyTransaction())
                         {
-                            using (var transaction = cursor.BeginTransaction())
+                            if (cursor.TrySeek(key))
                             {
-                                if (cursor.TrySeek(key))
-                                {
-                                    cursor.ReplaceCurrentValue(value);
-                                }
-                                else
-                                {
-                                    cursor.Insert(new KeyValuePair<TKey, TValue>(key, value));
-                                }
-
-                                transaction.Commit(CommitTransactionGrbit.LazyFlush);
+                                cursor.ReplaceCurrentValue(value);
                             }
-                        });
+                            else
+                            {
+                                cursor.Insert(new KeyValuePair<TKey, TValue>(key, value));
+                            }
+
+                            transaction.Commit();
+                        }
+                    }
+                    finally
+                    {
+                        this.cursors.FreeCursor(cursor);
+                    }
                 }
             }
         }
@@ -368,25 +386,28 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
             lock (this.LockObject(item.Key))
-            {
-                return this.UsingCursor(
-                    cursor =>
+            {            
+                PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+                try
+                {
+                    // Having the update lock means the record can't be
+                    // deleted after we seek to it.
+                    if (cursor.TrySeek(item.Key) && cursor.RetrieveCurrentValue().Equals(item.Value))
                     {
-                        // Having the update lock means the record can't be
-                        // deleted after we seek to it.
-                        if (cursor.TrySeek(item.Key)
-                            && cursor.RetrieveCurrentValue().Equals(item.Value))
+                        using (var transaction = cursor.BeginLazyTransaction())
                         {
-                            using (var transaction = cursor.BeginTransaction())
-                            {
-                                cursor.DeleteCurrent();
-                                transaction.Commit(CommitTransactionGrbit.LazyFlush);
-                                return true;
-                            }
+                            cursor.DeleteCurrent();
+                            transaction.Commit();
+                            return true;
                         }
+                    }
 
-                        return false;
-                    });
+                    return false;
+                }
+                finally
+                {
+                    this.cursors.FreeCursor(cursor);
+                }
             }
         }
 
@@ -398,20 +419,24 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             lock (this.LockObject(item.Key))
             {
-                this.UsingCursor(
-                    cursor =>
+                PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+                try
+                {
+                    using (var transaction = cursor.BeginLazyTransaction())
                     {
-                        using (var transaction = cursor.BeginTransaction())
+                        if (cursor.TrySeek(item.Key))
                         {
-                            if (cursor.TrySeek(item.Key))
-                            {
-                                throw new ArgumentException("An item with this key already exists", "key");
-                            }
-
-                            cursor.Insert(item);
-                            transaction.Commit(CommitTransactionGrbit.LazyFlush);
+                            throw new ArgumentException("An item with this key already exists", "key");
                         }
-                    });
+
+                        cursor.Insert(item);
+                        transaction.Commit();
+                    }
+                }
+                finally
+                {
+                    this.cursors.FreeCursor(cursor);
+                }    
             }
         }
 
@@ -428,19 +453,22 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </param>
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
-            return this.UsingCursor(
-                cursor =>
+            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+            try
+            {
+                // Start a transaction here to avoid the case where the record
+                // is deleted after we seek to it.
+                using (var transaction = cursor.BeginReadOnlyTransaction())
                 {
-                    // Start a transaction here to avoid the case where the record
-                    // is deleted after we seek to it.
-                    using (var transaction = cursor.BeginTransaction())
-                    {
-                        bool isPresent = cursor.TrySeek(item.Key)
-                                         && Compare.AreEqual(item.Value, cursor.RetrieveCurrentValue());
-                        transaction.Commit(CommitTransactionGrbit.LazyFlush);
-                        return isPresent;
-                    }
-                });
+                    bool isPresent = cursor.TrySeek(item.Key)
+                                     && Compare.AreEqual(item.Value, cursor.RetrieveCurrentValue());
+                    return isPresent;
+                }
+            }
+            finally
+            {
+                this.cursors.FreeCursor(cursor);
+            }
         }
 
         /// <summary>
@@ -478,19 +506,23 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 
             try
             {
-                this.UsingCursor(
-                    cursor =>
+                PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+                try
+                {
+                    cursor.MoveBeforeFirst();
+                    while (cursor.TryMoveNext())
                     {
-                        cursor.MoveBeforeFirst();
-                        while (cursor.TryMoveNext())
+                        using (var transaction = cursor.BeginLazyTransaction())
                         {
-                            using (var transaction = cursor.BeginTransaction())
-                            {
-                                cursor.DeleteCurrent();
-                                transaction.Commit(CommitTransactionGrbit.LazyFlush);
-                            }
+                            cursor.DeleteCurrent();
+                            transaction.Commit();
                         }
-                    });
+                    }
+                }
+                finally
+                {
+                    this.cursors.FreeCursor(cursor);
+                }
             }
             finally
             {
@@ -511,7 +543,15 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="key">The key to locate in the <see cref="PersistentDictionary{TKey,TValue}"/>.</param>
         public bool ContainsKey(TKey key)
         {
-            return this.UsingCursor(cursor => cursor.TrySeek(key));
+            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+            try
+            {
+                return cursor.TrySeek(key);
+            }
+            finally
+            {
+                this.cursors.FreeCursor(cursor);
+            }
         }
 
         /// <summary>
@@ -537,21 +577,25 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             lock (this.LockObject(key))
             {
-                return this.UsingCursor(
-                    cursor =>
+                PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+                try
+                {
+                    if (cursor.TrySeek(key))
                     {
-                        if (cursor.TrySeek(key))
+                        using (var transaction = cursor.BeginLazyTransaction())
                         {
-                            using (var transaction = cursor.BeginTransaction())
-                            {
-                                cursor.DeleteCurrent();
-                                transaction.Commit(CommitTransactionGrbit.LazyFlush);
-                                return true;
-                            }
+                            cursor.DeleteCurrent();
+                            transaction.Commit();
+                            return true;
                         }
+                    }
 
-                        return false;
-                    });
+                    return false;
+                }
+                finally
+                {
+                    this.cursors.FreeCursor(cursor);
+                }
             }
         }
 
@@ -572,27 +616,28 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         public bool TryGetValue(TKey key, out TValue value)
         {
             TValue retrievedValue = default(TValue);
-            bool found = this.UsingCursor(
-                cursor =>
+            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+            try
+            {
+                // Start a transaction so the record can't be deleted after
+                // we seek to it.
+                bool isPresent = false;
+                using (var transaction = cursor.BeginReadOnlyTransaction())
                 {
-                    // Start a transaction so the record can't be deleted after
-                    // we seek to it.
-                    bool isPresent = false;
-                    using (var transaction = cursor.BeginTransaction())
+                    if (cursor.TrySeek(key))
                     {
-                        if (cursor.TrySeek(key))
-                        {
-                            retrievedValue = cursor.RetrieveCurrentValue();
-                            isPresent = true;
-                        }
-
-                        transaction.Commit(CommitTransactionGrbit.LazyFlush);
+                        retrievedValue = cursor.RetrieveCurrentValue();
+                        isPresent = true;
                     }
+                }
 
-                    return isPresent;
-                });
-            value = retrievedValue;
-            return found;
+                value = retrievedValue;
+                return isPresent;
+            }
+            finally
+            {
+                this.cursors.FreeCursor(cursor);
+            }
         }
 
         /// <summary>
@@ -626,7 +671,15 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         public void Flush()
         {
-            this.UsingCursor(c => c.Flush());
+            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+            try
+            {
+                cursor.Flush();
+            }
+            finally
+            {
+                this.cursors.FreeCursor(cursor);
+            }
         }
 
         /// <summary>
@@ -662,7 +715,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </returns>
         internal IEnumerator<T> GetGenericEnumerator<T>(Func<PersistentDictionaryCursor<TKey, TValue>, T> getter, KeyRange<TKey> range)
         {
-            // This is a long-running operation so we create a new cursor
             var iterator = this.cursors.GetCursor();
             try
             {
@@ -675,6 +727,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                     // Use a transaction to move to the next record and retrieve its data.
                     // Even if the record has been deleted we will be able to move to the 
                     // next record.
+                    // Note: the struct-based transaction objects don't work here.
                     using (var transaction = iterator.BeginTransaction())
                     {
                         if (firstIteration)
@@ -913,43 +966,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             Api.JetCreateIndex2(session, tableid, indexcreates, indexcreates.Length);
 
             Api.JetCloseTable(session, tableid);
-        }
-
-        /// <summary>
-        /// Get a cursor, perform the specified action and release the cursor.
-        /// </summary>
-        /// <param name="action">The action to perform.</param>
-        private void UsingCursor(Action<PersistentDictionaryCursor<TKey, TValue>> action)
-        {
-            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
-            try
-            {
-                action(cursor);
-            }
-            finally
-            {
-                this.cursors.FreeCursor(cursor);
-            }    
-        }
-
-        /// <summary>
-        /// Get a cursor, execute the specified function, release the cursor and
-        /// return the function's result.
-        /// </summary>
-        /// <typeparam name="T">The return type of the function.</typeparam>
-        /// <param name="func">The function to execute.</param>
-        /// <returns>The return value of the function.</returns>
-        private T UsingCursor<T>(Func<PersistentDictionaryCursor<TKey, TValue>, T> func)
-        {
-            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
-            try
-            {
-                return func(cursor);
-            }
-            finally
-            {
-                this.cursors.FreeCursor(cursor);
-            }
         }
 
         /// <summary>

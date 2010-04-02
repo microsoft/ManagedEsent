@@ -57,7 +57,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             SystemParameters.DatabasePageSize = 8192;
             SystemParameters.Configuration = 0;
             SystemParameters.EnableAdvanced = true;
-            SystemParameters.CacheSizeMin = 64;
+            SystemParameters.CacheSizeMin = 128; // 1MB
             SystemParameters.CacheSizeMax = Int32.MaxValue;
         }
     }

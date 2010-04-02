@@ -31,7 +31,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// The ESENT session the cursor is using.
         /// </summary>
-        private readonly Session session;
+        private readonly JET_SESID sesid;
 
         /// <summary>
         /// Converters used to interact with ESENT.
@@ -104,7 +104,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             this.converters = converters;
             this.config = config;
             this.database = database;
-            this.session = new Session(this.instance);
+            Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
             this.AttachDatabase();
         }
 
@@ -114,7 +114,28 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>The new transaction.</returns>
         public Transaction BeginTransaction()
         {
-            return new Transaction(this.session);
+            return new Transaction(this.sesid);
+        }
+
+        /// <summary>
+        /// Begin a new lazy transaction for this cursor. This is cheaper than
+        /// <see cref="BeginTransaction"/> because it returns a struct.
+        /// </summary>
+        /// <returns>The new transaction.</returns>
+        public LazyTransaction BeginLazyTransaction()
+        {
+            return new LazyTransaction(this.sesid);
+        }
+
+        /// <summary>
+        /// Begin a new transaction for this cursor. This is the cheapest
+        /// transaction type because it returns a struct and no separate
+        /// commit call has to be made.
+        /// </summary>
+        /// <returns>The new transaction.</returns>
+        public ReadOnlyTransaction BeginReadOnlyTransaction()
+        {
+            return new ReadOnlyTransaction(this.sesid);
         }
 
         /// <summary>
@@ -127,7 +148,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         public bool TrySeek(TKey key)
         {
             this.MakeKey(key);
-            return Api.TrySeek(this.session, this.dataTable, SeekGrbit.SeekEQ);
+            return Api.TrySeek(this.sesid, this.dataTable, SeekGrbit.SeekEQ);
         }
 
         /// <summary>
@@ -154,7 +175,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         public void MoveBeforeFirst()
         {
-            Api.MoveBeforeFirst(this.session, this.dataTable);
+            Api.MoveBeforeFirst(this.sesid, this.dataTable);
         }
 
         /// <summary>
@@ -165,7 +186,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </returns>
         public bool TryMoveNext()
         {
-            return Api.TryMoveNext(this.session, this.dataTable);
+            return Api.TryMoveNext(this.sesid, this.dataTable);
         }
 
         /// <summary>
@@ -175,7 +196,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         public void MoveAfterLast()
         {
-            Api.MoveAfterLast(this.session, this.dataTable);
+            Api.MoveAfterLast(this.sesid, this.dataTable);
         }
 
         /// <summary>
@@ -186,7 +207,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </returns>
         public bool TryMovePrevious()
         {
-            return Api.TryMovePrevious(this.session, this.dataTable);
+            return Api.TryMovePrevious(this.sesid, this.dataTable);
         }
 
         /// <summary>
@@ -194,8 +215,8 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         public void MoveLastWithKeyNotFoundException()
         {
-            Api.MoveAfterLast(this.session, this.dataTable);
-            if (!Api.TryMovePrevious(this.session, this.dataTable))
+            Api.MoveAfterLast(this.sesid, this.dataTable);
+            if (!Api.TryMovePrevious(this.sesid, this.dataTable))
             {
                 throw new KeyNotFoundException("dictionary is empty");
             }
@@ -219,15 +240,15 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             {
                 this.MakeKey(range.Min.Value);
                 SeekGrbit grbit = range.Min.IsInclusive ? SeekGrbit.SeekGE : SeekGrbit.SeekGT;
-                if (!Api.TrySeek(this.session, this.dataTable, grbit))
+                if (!Api.TrySeek(this.sesid, this.dataTable, grbit))
                 {
                     return false;
                 }
             }
             else
             {
-                Api.MoveBeforeFirst(this.session, this.dataTable);
-                if (!Api.TryMoveNext(this.session, this.dataTable))
+                Api.MoveBeforeFirst(this.sesid, this.dataTable);
+                if (!Api.TryMoveNext(this.sesid, this.dataTable))
                 {
                     return false;
                 }
@@ -239,7 +260,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 SetIndexRangeGrbit grbit = SetIndexRangeGrbit.RangeUpperLimit | (range.Max.IsInclusive
                                                                                      ? SetIndexRangeGrbit.RangeInclusive
                                                                                      : SetIndexRangeGrbit.None);
-                return Api.TrySetIndexRange(this.session, this.dataTable, grbit);
+                return Api.TrySetIndexRange(this.sesid, this.dataTable, grbit);
             }
 
             return true;
@@ -251,7 +272,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>The key of the record.</returns>
         public TKey RetrieveCurrentKey()
         {
-            return (TKey) this.converters.RetrieveKeyColumn(this.session, this.dataTable, this.keyColumn);
+            return (TKey) this.converters.RetrieveKeyColumn(this.sesid, this.dataTable, this.keyColumn);
         }
 
         /// <summary>
@@ -260,7 +281,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>The value of the record.</returns>
         public TValue RetrieveCurrentValue()
         {
-            return (TValue)this.converters.RetrieveValueColumn(this.session, this.dataTable, this.valueColumn);
+            return (TValue)this.converters.RetrieveValueColumn(this.sesid, this.dataTable, this.valueColumn);
         }
 
         /// <summary>
@@ -280,7 +301,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>The number of items in the database.</returns>
         public int RetrieveCount()
         {
-            return (int)Api.RetrieveColumnAsInt32(this.session, this.globalsTable, this.countColumn);
+            return (int)Api.RetrieveColumnAsInt32(this.sesid, this.globalsTable, this.countColumn);
         }
 
         /// <summary>
@@ -290,11 +311,17 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="data">The data to add.</param>
         public void Insert(KeyValuePair<TKey, TValue> data)
         {
-            using (var update = new Update(this.session, this.dataTable, JET_prep.Insert))
+            Api.JetPrepareUpdate(this.sesid, this.dataTable, JET_prep.Insert);
+            try
             {
                 this.SetKeyColumn(data.Key);
                 this.SetValue(data.Value);
-                update.Save();
+                Api.JetUpdate(this.sesid, this.dataTable);
+            }
+            catch (Exception)
+            {
+                Api.JetPrepareUpdate(this.sesid, this.dataTable, JET_prep.Cancel);
+                throw;
             }
 
             this.UpdateCount(1);
@@ -305,7 +332,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         public void DeleteCurrent()
         {
-            Api.JetDelete(this.session, this.dataTable);
+            Api.JetDelete(this.sesid, this.dataTable);
             this.UpdateCount(-1);
         }
 
@@ -315,10 +342,16 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="value">The new value.</param>
         public void ReplaceCurrentValue(TValue value)
         {
-            using (var update = new Update(this.session, this.dataTable, JET_prep.Replace))
+            Api.JetPrepareUpdate(this.sesid, this.dataTable, JET_prep.Replace);
+            try
             {
                 this.SetValue(value);
-                update.Save();
+                Api.JetUpdate(this.sesid, this.dataTable);
+            }
+            catch (Exception)
+            {
+                Api.JetPrepareUpdate(this.sesid, this.dataTable, JET_prep.Cancel);
+                throw;
             }
         }
 
@@ -329,7 +362,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             using (var transaction = this.BeginTransaction())
             {
-                Api.EscrowUpdate(this.session, this.globalsTable, this.flushColumn, 1);
+                Api.EscrowUpdate(this.sesid, this.globalsTable, this.flushColumn, 1);
                 transaction.Commit(CommitTransactionGrbit.None);
             }
         }
@@ -339,7 +372,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         public void Dispose()
         {
-            this.session.Dispose();
+            Api.JetEndSession(this.sesid, EndSessionGrbit.None);
             GC.SuppressFinalize(this);
         }
 
@@ -350,7 +383,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         private void MakeKey(TKey key)
         {
             // Casts TKey to object
-            this.converters.MakeKey(this.session, this.dataTable, key, MakeKeyGrbit.NewKey);
+            this.converters.MakeKey(this.sesid, this.dataTable, key, MakeKeyGrbit.NewKey);
         }
 
         /// <summary>
@@ -360,7 +393,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         private void SetKeyColumn(TKey key)
         {
             // Casts TKey to object
-            this.converters.SetKeyColumn(this.session, this.dataTable, this.keyColumn, key);
+            this.converters.SetKeyColumn(this.sesid, this.dataTable, this.keyColumn, key);
         }
 
         /// <summary>
@@ -370,7 +403,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         private void SetValue(TValue value)
         {
             // Casts TValue to object
-            this.converters.SetValueColumn(this.session, this.dataTable, this.valueColumn, value);
+            this.converters.SetValueColumn(this.sesid, this.dataTable, this.valueColumn, value);
         }
 
         /// <summary>
@@ -380,7 +413,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="delta">The delta to apply to the count.</param>
         private void UpdateCount(int delta)
         {
-            Api.EscrowUpdate(this.session, this.globalsTable, this.countColumn, delta);
+            Api.EscrowUpdate(this.sesid, this.globalsTable, this.countColumn, delta);
         }
 
         /// <summary>
@@ -388,17 +421,17 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         private void AttachDatabase()
         {
-            Api.JetAttachDatabase(this.session, this.database, AttachDatabaseGrbit.None);
-            Api.JetOpenDatabase(this.session, this.database, String.Empty, out this.dbid, OpenDatabaseGrbit.None);
+            Api.JetAttachDatabase(this.sesid, this.database, AttachDatabaseGrbit.None);
+            Api.JetOpenDatabase(this.sesid, this.database, String.Empty, out this.dbid, OpenDatabaseGrbit.None);
             Api.JetOpenTable(
-                this.session, this.dbid, this.config.GlobalsTableName, null, 0, OpenTableGrbit.None, out this.globalsTable);
-            this.countColumn = Api.GetTableColumnid(this.session, this.globalsTable, this.config.CountColumnName);
-            this.flushColumn = Api.GetTableColumnid(this.session, this.globalsTable, this.config.FlushColumnName);
+                this.sesid, this.dbid, this.config.GlobalsTableName, null, 0, OpenTableGrbit.None, out this.globalsTable);
+            this.countColumn = Api.GetTableColumnid(this.sesid, this.globalsTable, this.config.CountColumnName);
+            this.flushColumn = Api.GetTableColumnid(this.sesid, this.globalsTable, this.config.FlushColumnName);
 
             Api.JetOpenTable(
-                this.session, this.dbid, this.config.DataTableName, null, 0, OpenTableGrbit.None, out this.dataTable);
-            this.keyColumn = Api.GetTableColumnid(this.session, this.dataTable, this.config.KeyColumnName);
-            this.valueColumn = Api.GetTableColumnid(this.session, this.dataTable, this.config.ValueColumnName);
+                this.sesid, this.dbid, this.config.DataTableName, null, 0, OpenTableGrbit.None, out this.dataTable);
+            this.keyColumn = Api.GetTableColumnid(this.sesid, this.dataTable, this.config.KeyColumnName);
+            this.valueColumn = Api.GetTableColumnid(this.sesid, this.dataTable, this.config.ValueColumnName);
         }
     }
 }

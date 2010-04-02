@@ -61,9 +61,10 @@ namespace EsentCollectionsTests
         [Priority(4)]
         public void TestSequentialInsertAndLookupSpeed()
         {
-            const int NumInserts = 500000;
-            var keys = Enumerable.Range(0, NumInserts).ToArray();
+            const int N = 500000;
+            long[] keys = (from x in Enumerable.Range(0, N) select (long)x).ToArray();
             const string Data = "01234567890ABCDEF01234567890ABCDEF";
+
             var stopwatch = Stopwatch.StartNew();
             foreach (int key in keys)
             {
@@ -73,24 +74,47 @@ namespace EsentCollectionsTests
             stopwatch.Stop();
             Console.WriteLine(
                 "Sequentially inserted {0:N0} records in {1} ({2:N0} records/second)",
-                NumInserts,
+                N,
                 stopwatch.Elapsed,
-                NumInserts * 1000 / stopwatch.ElapsedMilliseconds);
+                N * 1000 / stopwatch.ElapsedMilliseconds);
+
+            // Repeatedly read one record
+            string s  = this.dictionary[N / 2];
+            Assert.AreEqual(Data, s);
+            stopwatch = Stopwatch.StartNew();
+            for (int j = 0; j < N; ++j)
+            {
+                s = this.dictionary[N / 2];
+            }
+
+            stopwatch.Stop();
+            Console.WriteLine(
+                "Read one record {0:N0} times {1} ({2:N0} reads/second)",
+                N,
+                stopwatch.Elapsed,
+                N * 1000 / stopwatch.ElapsedMilliseconds);
 
             // Enumerate all records to bring data into memory
             int i = 0;
+            stopwatch = Stopwatch.StartNew();
             foreach (var item in this.dictionary)
             {
                 Assert.AreEqual(i, item.Key);
                 i++;
             }
 
+            stopwatch.Stop();
+            Console.WriteLine(
+                "Scanned {0:N0} records in {1} ({2:N0} records/second)",
+                i,
+                stopwatch.Elapsed,
+                i * 1000 / stopwatch.ElapsedMilliseconds);
+
             // Now lookup entries
             keys.Shuffle();
             stopwatch = Stopwatch.StartNew();
             foreach (int key in keys)
             {
-                string s;
                 if (!this.dictionary.TryGetValue(key, out s))
                 {
                     Assert.Fail("Key wasn't found");
@@ -100,9 +124,9 @@ namespace EsentCollectionsTests
             stopwatch.Stop();
             Console.WriteLine(
                 "Looked up {0:N0} records in {1} ({2:N0} records/second)",
-                NumInserts,
+                N,
                 stopwatch.Elapsed,
-                NumInserts * 1000 / stopwatch.ElapsedMilliseconds);
+                N * 1000 / stopwatch.ElapsedMilliseconds);
 
             // Now update the entries
             keys.Shuffle();
@@ -116,9 +140,9 @@ namespace EsentCollectionsTests
             stopwatch.Stop();
             Console.WriteLine(
                 "Updated {0:N0} records in {1} ({2:N0} records/second)",
-                NumInserts,
+                N,
                 stopwatch.Elapsed,
-                NumInserts * 1000 / stopwatch.ElapsedMilliseconds);
+                N * 1000 / stopwatch.ElapsedMilliseconds);
         }
 
         /// <summary>
@@ -128,7 +152,7 @@ namespace EsentCollectionsTests
         [Priority(4)]
         public void TestRandomInsertSpeed()
         {
-            const int NumInserts = 50000;
+            const int NumInserts = 100000;
             var keys = Enumerable.Range(0, NumInserts).ToArray();
             keys.Shuffle();
 

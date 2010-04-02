@@ -57,6 +57,7 @@
     <Compile Include="Key.cs" />
     <Compile Include="KeyExpressionEvaluator.cs" />
     <Compile Include="KeyRange.cs" />
+    <Compile Include="LazyTransaction.cs" />
     <Compile Include="PersistentDictionary.cs" />
     <Compile Include="PersistentDictionaryCollection.cs" />
     <Compile Include="PersistentDictionaryConfig.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="PersistentDictionaryLinq.cs" />
     <Compile Include="PersistentDictionaryValueCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadOnlyTransaction.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ManagedEsent\EsentInterop\EsentInterop.csproj">

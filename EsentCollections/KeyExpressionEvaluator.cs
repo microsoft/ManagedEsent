@@ -165,6 +165,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                     expressionType = originalExpressionType;
                     break;
             }
+
             return expressionType;
         }
 
