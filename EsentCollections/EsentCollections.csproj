@@ -94,6 +94,7 @@
     <Compile Include="PersistentDictionaryValueCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadOnlyTransaction.cs" />
+    <Compile Include="StringExpressionEvaluatorHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ManagedEsent\EsentInterop\EsentInterop.csproj">

@@ -912,6 +912,21 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// Verify method call object access is recognized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify method call object access is recognized")]
+        public void VerifyMethodCallObjectAccessIsRecognized()
+        {
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
+                    x => x.Key < x.Key.GetHashCode());
+            Assert.IsNull(keyRange.Min);
+            Assert.IsNull(keyRange.Max);
+        }
+
+        /// <summary>
         /// Test Boolean expression.
         /// </summary>
         [TestMethod]
@@ -1091,6 +1106,186 @@ namespace EsentCollectionsTests
             Assert.IsNull(keyRange.Min);
             Assert.AreEqual(dateTime, keyRange.Max.Value);
             Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test Guid expression
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test Guid expression")]
+        public void TestGuidExpression()
+        {
+            Guid guid = Guid.NewGuid();
+            KeyRange<Guid> keyRange = KeyValueExpressionEvaluator<Guid, string>.GetKeyRange(x => x.Key == guid);
+            Assert.AreEqual(guid, keyRange.Min.Value);
+            Assert.IsTrue(keyRange.Max.IsInclusive);
+            Assert.AreEqual(guid, keyRange.Max.Value);
+            Assert.IsTrue(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test String equals expression
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String == expression")]
+        public void TestStringEquals()
+        {
+            string s = "foo";
+            KeyRange<string> keyRange = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => s == x.Key);
+            Assert.AreEqual(s, keyRange.Min.Value);
+            Assert.IsTrue(keyRange.Max.IsInclusive);
+            Assert.AreEqual(s, keyRange.Max.Value);
+            Assert.IsTrue(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test String.CompareTo
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.CompareTo")]
+        public void TestStringCompareTo()
+        {
+            KeyRange<string> keyRange = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => x.Key.CompareTo("foo") < 0);
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual("foo", keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test String.CompareTo reversed
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.CompareTo reversed")]
+        public void TestStringCompareToReversed()
+        {
+            KeyRange<string> keyRange = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => 0 <= x.Key.CompareTo("bar"));
+            Assert.AreEqual("bar", keyRange.Min.Value);
+            Assert.IsTrue(keyRange.Min.IsInclusive);
+            Assert.IsNull(keyRange.Max);
+        }
+
+        /// <summary>
+        /// Test String.CompareTo argument folding
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.CompareTo argument folding")]
+        public void TestStringCompareToArgumentFolding()
+        {
+            KeyRange<string> keyRange = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => 0 <= x.Key.CompareTo("foo" + "bar"));
+            Assert.AreEqual("foobar", keyRange.Min.Value);
+            Assert.IsTrue(keyRange.Min.IsInclusive);
+            Assert.IsNull(keyRange.Max);
+        }
+
+        /// <summary>
+        /// Test CompareTo with non-string
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test CompareTo with non-string")]
+        public void TestCompareToNonString()
+        {
+            KeyRange<long> keyRange =
+                KeyValueExpressionEvaluator<long, string>.GetKeyRange(
+                    x => x.Key.CompareTo(7) < 0 && x.Key.CompareTo(-8) >= 0);
+            Assert.AreEqual(-8, keyRange.Min.Value);
+            Assert.IsTrue(keyRange.Min.IsInclusive);
+            Assert.AreEqual(7, keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test CompareTo with non-zero comparand
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test CompareTo with non-zero comparand")]
+        public void TestCompareToNonZeroComparand()
+        {
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => x.Key.CompareTo(7) < 1);
+            Assert.IsNull(keyRange.Min);
+            Assert.IsNull(keyRange.Max);
+        }
+
+        /// <summary>
+        /// Test CompareTo with the wrong type
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test CompareTo the wrong type")]
+        public void TestCompareToWrongType()
+        {
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => x.Key.CompareTo(Guid.NewGuid()) < 0);
+            Assert.IsNull(keyRange.Min);
+            Assert.IsNull(keyRange.Max);
+        }
+
+        /// <summary>
+        /// Test String.Compare
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Compare")]
+        public void TestStringCompare()
+        {
+            KeyRange<string> keyRange =
+                KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => String.Compare(x.Key, "foo") > 0);
+            Assert.AreEqual("foo", keyRange.Min.Value);
+            Assert.IsFalse(keyRange.Min.IsInclusive);
+            Assert.IsNull(keyRange.Max);
+        }
+
+        /// <summary>
+        /// Test String.Compare 2
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Compare 2")]
+        public void TestStringCompare2()
+        {
+            KeyRange<string> keyRange =
+                KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => String.Compare("foo", x.Key) <= 0);
+            Assert.AreEqual("foo", keyRange.Min.Value);
+            Assert.IsTrue(keyRange.Min.IsInclusive);
+            Assert.IsNull(keyRange.Max);
+        }
+
+        /// <summary>
+        /// Test String.Compare 3
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Compare 3")]
+        public void TestStringCompare3()
+        {
+            KeyRange<string> keyRange =
+                KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => 0 == String.Compare(x.Key, "b" + "ar"));
+            Assert.AreEqual("bar", keyRange.Min.Value);
+            Assert.IsTrue(keyRange.Min.IsInclusive);
+            Assert.AreEqual("bar", keyRange.Max.Value);
+            Assert.IsTrue(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test String.Compare 4
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Compare 4")]
+        public void TestStringCompare4()
+        {
+            KeyRange<string> keyRange =
+                KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => 0 > String.Compare(5.ToString(), x.Key));
+            Assert.AreEqual("5", keyRange.Min.Value);
+            Assert.IsFalse(keyRange.Min.IsInclusive);
+            Assert.IsNull(keyRange.Max);
         }
 
         /// <summary>

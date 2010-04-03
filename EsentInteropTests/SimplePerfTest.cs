@@ -330,7 +330,6 @@ namespace InteropApiTests
         /// </summary>
         internal class PerfTestWorker : IDisposable
         {
-
             /// <summary>
             /// The instance to use.
             /// </summary>

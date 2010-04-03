@@ -36,7 +36,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 
             if (expression.Type != typeof(T))
             {
-                Debug.Assert(false, "expected to be called with expressions of the correct type");
                 value = default(T);
                 return false;
             }
@@ -100,7 +99,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             else if (expression is MethodCallExpression)
             {
                 MethodCallExpression callExpression = (MethodCallExpression)expression;
-                return callExpression.Arguments.All(HasNoParameterAccess);
+                return callExpression.Arguments.All(HasNoParameterAccess) && HasNoParameterAccess(callExpression.Object);
             }
             else if (expression is InvocationExpression)
             {

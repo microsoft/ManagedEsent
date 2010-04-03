@@ -517,7 +517,7 @@ namespace InteropApiTests
         {
             var size = new JET_RECSIZE();
 
-            byte[] data = Any.Bytes;
+            byte[] data = Any.BytesOfLength(64);
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
             Api.JetSetColumn(this.sesid, this.tableid, this.columnidLongText, data, data.Length, SetColumnGrbit.SeparateLV, null);

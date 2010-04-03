@@ -12,6 +12,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Linq.Expressions;
 
@@ -163,6 +164,44 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </returns>
         private static bool IsConstantComparison(BinaryExpression expression, string keyMemberName, out TKey value, out ExpressionType expressionType)
         {
+            // Look for expression of the form x.Key [comparison] value
+            //   e.g. x.Key < 0 or x.Key > (3 + 7)
+            if (IsSimpleComparisonExpression(expression, keyMemberName, out value, out expressionType))
+            {
+                return true;
+            }
+
+            // Look for expressions of the form x.Key.CompareTo(value) [comparison] 0
+            //   e.g. x.Key.CompareTo("foo") <= 0 or 0 > x.Key.CompareTo(5.67)
+            // TKey implements IComparable<TKey> so we should expect this on all key types.
+            if (IsCompareToExpression(expression, keyMemberName, out value, out expressionType))
+            {
+                return true;
+            }
+
+            // For string keys look for expressions of the form String.Compare(Key, value) [comparison] 0
+            //   e.g. String.Compare(Key, "foo") < 0 or 0 > String.Compare("bar", Key)
+            if (typeof(string) == typeof(TKey)
+                && IsStringComparisonExpression(expression, keyMemberName, out value, out expressionType))
+            {
+                return true;
+            }
+
+            value = default(TKey);
+            expressionType = default(ExpressionType);
+            return false;
+        }
+
+        /// <summary>
+        /// Determine if the binary expression is comparing the key value against a constant.
+        /// </summary>
+        /// <param name="expression">The expression.</param>
+        /// <param name="keyMemberName">The name of the parameter key.</param>
+        /// <param name="value">Returns the constant being compared against.</param>
+        /// <param name="expressionType">Returns the type of the comparison.</param>
+        /// <returns>True if this expression is comparing the key value against a constant.</returns>
+        private static bool IsSimpleComparisonExpression(BinaryExpression expression, string keyMemberName, out TKey value, out ExpressionType expressionType)
+        {
             if (IsKeyAccess(expression.Left, keyMemberName)
                 && ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(expression.Right, out value))
             {
@@ -178,8 +217,118 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 return true;
             }
 
+            expressionType = ExpressionType.Equal;
             value = default(TKey);
-            expressionType = default(ExpressionType);
+            return false;
+        }
+
+        /// <summary>
+        /// Determine if the binary expression is comparing the key value against a constant
+        /// using CompareTo.
+        /// </summary>
+        /// <param name="expression">The expression.</param>
+        /// <param name="keyMemberName">The name of the parameter key.</param>
+        /// <param name="value">Returns the constant being compared against.</param>
+        /// <param name="expressionType">Returns the type of the comparison.</param>
+        /// <returns>True if this expression is comparing the key value against a constant.</returns>
+        private static bool IsCompareToExpression(BinaryExpression expression, string keyMemberName, out TKey value, out ExpressionType expressionType)
+        {
+            // CompareTo is only guaranteed to return <0, 0 or >0 so allowing for
+            // comparisons with values other than 0 is complicated/subtle.
+            // One way this could be expanded is by recognizing "< 1", and "> -1" as well.
+            if (IsCompareTo(expression.Left, keyMemberName, out value))
+            {
+                int comparison;
+                if (ConstantExpressionEvaluator<int>.TryGetConstantExpression(expression.Right, out comparison)
+                    && 0 == comparison)
+                {
+                    expressionType = expression.NodeType;
+
+                    return true;
+                }
+            }
+
+            if (IsCompareTo(expression.Right, keyMemberName, out value))
+            {
+                int comparison;
+                if (ConstantExpressionEvaluator<int>.TryGetConstantExpression(expression.Left, out comparison)
+                    && 0 == comparison)
+                {
+                    expressionType = GetReverseExpressionType(expression.NodeType);
+
+                    return true;
+                }
+            }
+
+            expressionType = ExpressionType.Equal;
+            value = default(TKey);
+            return false;
+        }
+
+        /// <summary>
+        /// Determine if the binary expression is comparing the key value against a string
+        /// using the simplest (two-argument) form of String.Compare.
+        /// </summary>
+        /// <param name="expression">The expression.</param>
+        /// <param name="keyMemberName">The name of the parameter key.</param>
+        /// <param name="value">Returns the constant being compared against.</param>
+        /// <param name="expressionType">Returns the type of the comparison.</param>
+        /// <returns>True if this expression is comparing the key value against a constant string.</returns>
+        private static bool IsStringComparisonExpression(BinaryExpression expression, string keyMemberName, out TKey value, out ExpressionType expressionType)
+        {
+            Debug.Assert(typeof(string) == typeof(TKey), "This method should only be called for string keys");
+
+            // CompareTo is only guaranteed to return <0, 0 or >0 so allowing for
+            // comparisons with values other than 0 is complicated/subtle.
+            // One way this could be expanded is by recognizing "< 1", and "> -1" as well.
+            //
+            // This code is tricky because there are 4 possibilities and we want
+            // to turn them into a canonical form. In the first two cases we do
+            // not reverse the sense of the comparison:
+            //   1. String.Compare(Key, "m") < 0
+            //   2. 0 < String.Compare("m", Key)
+            // In the second two cases we do reverse the sense of the comparison:
+            //   3. String.Compare("m", Key) > 0
+            //   4. 0 > String.Compare(Key, "m")
+            if (IsStringCompare(expression.Left, keyMemberName, out value))
+            {
+                int comparison;
+                if (ConstantExpressionEvaluator<int>.TryGetConstantExpression(expression.Right, out comparison) && 0 == comparison)
+                {
+                    expressionType = expression.NodeType;
+                    return true;
+                }                
+            }
+            else if (IsStringCompareReversed(expression.Right, keyMemberName, out value))
+            {
+                int comparison;
+                if (ConstantExpressionEvaluator<int>.TryGetConstantExpression(expression.Left, out comparison) && 0 == comparison)
+                {
+                    expressionType = expression.NodeType;
+                    return true;
+                }
+            }
+            else if (IsStringCompareReversed(expression.Left, keyMemberName, out value))
+            {
+                int comparison;
+                if (ConstantExpressionEvaluator<int>.TryGetConstantExpression(expression.Right, out comparison) && 0 == comparison)
+                {
+                    expressionType = GetReverseExpressionType(expression.NodeType);
+                    return true;
+                }
+            }
+            else if (IsStringCompare(expression.Right, keyMemberName, out value))
+            {
+                int comparison;
+                if (ConstantExpressionEvaluator<int>.TryGetConstantExpression(expression.Left, out comparison) && 0 == comparison)
+                {
+                    expressionType = GetReverseExpressionType(expression.NodeType);
+                    return true;
+                }
+            }
+
+            expressionType = ExpressionType.Equal;
+            value = default(TKey);
             return false;
         }
 
@@ -235,6 +384,85 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 }
             }
 
+            return false;
+        }
+
+        /// <summary>
+        /// Determine if the expression is a call to [param].[member].CompareTo(value).
+        /// </summary>
+        /// <param name="expression">The expression to examine.</param>
+        /// <param name="keyMemberName">The name of the key member.</param>
+        /// <param name="value">Returns the string value being compared against.</param>
+        /// <returns>
+        /// True if the expression is a call to parameter.keyMember.CompareTo(value).
+        /// </returns>
+        private static bool IsCompareTo(Expression expression, string keyMemberName, out TKey value)
+        {
+            if (expression is MethodCallExpression)
+            {
+                MethodCallExpression methodCall = (MethodCallExpression)expression;
+                if (null != methodCall.Object
+                    && IsKeyAccess(methodCall.Object, keyMemberName)
+                    && methodCall.Method.Name == "CompareTo"
+                    && 1 == methodCall.Arguments.Count)
+                {
+                    return ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(methodCall.Arguments[0], out value);
+                }
+            }
+
+            value = default(TKey);
+            return false;
+        }
+
+        /// <summary>
+        /// Determine if the expression is a call to String.Compare(key, value).
+        /// </summary>
+        /// <param name="expression">The expression to examine.</param>
+        /// <param name="keyMemberName">The name of the key member.</param>
+        /// <param name="value">Returns the string value being compared against.</param>
+        /// <returns>
+        /// True if the expression is a call to String.Compare(key, value).
+        /// </returns>
+        private static bool IsStringCompare(Expression expression, string keyMemberName, out TKey value)
+        {
+            if (expression is MethodCallExpression)
+            {
+                MethodCallExpression methodCall = (MethodCallExpression)expression;
+                if (methodCall.Method == StringExpressionEvaluatorHelper.StringCompareMethod
+                    && 2 == methodCall.Arguments.Count
+                    && IsKeyAccess(methodCall.Arguments[0], keyMemberName))
+                {
+                    return ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(methodCall.Arguments[1], out value);
+                }
+            }
+
+            value = default(TKey);
+            return false;
+        }
+
+        /// <summary>
+        /// Determine if the expression is a call to String.Compare(value, key).
+        /// </summary>
+        /// <param name="expression">The expression to examine.</param>
+        /// <param name="keyMemberName">The name of the key member.</param>
+        /// <param name="value">Returns the string value being compared against.</param>
+        /// <returns>
+        /// True if the expression is a call to String.Compare(value, key).
+        /// </returns>
+        private static bool IsStringCompareReversed(Expression expression, string keyMemberName, out TKey value)
+        {
+            if (expression is MethodCallExpression)
+            {
+                MethodCallExpression methodCall = (MethodCallExpression)expression;
+                if (methodCall.Method == StringExpressionEvaluatorHelper.StringCompareMethod
+                    && 2 == methodCall.Arguments.Count
+                    && IsKeyAccess(methodCall.Arguments[1], keyMemberName))
+                {
+                    return ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(methodCall.Arguments[0], out value);
+                }
+            }
+
+            value = default(TKey);
             return false;
         }
     }
