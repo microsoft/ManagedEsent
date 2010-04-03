@@ -83,8 +83,6 @@ namespace InteropApiTests
         [Description("Setup the SimplePerfTest fixture")]
         public void Setup()
         {
-            Thread.CurrentThread.Priority = ThreadPriority.Highest;
-
             this.directory = SetupHelper.CreateRandomDirectory();
 
             this.random = new Random();
@@ -134,6 +132,9 @@ namespace InteropApiTests
                 Api.JetCloseTable(this.session, tableid);
                 trx.Commit(CommitTransactionGrbit.None);
             }
+
+            // Reset the key for the worker thread
+            PerfTestWorker.NextKey = 0;
         }
 
         /// <summary>
@@ -147,7 +148,6 @@ namespace InteropApiTests
             this.instance.Term();
             Api.JetSetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.CacheSizeMin, this.cacheSizeMinSaved, null);
             Cleanup.DeleteDirectoryWithRetry(this.directory);
-            Thread.CurrentThread.Priority = ThreadPriority.Normal;
         }
 
         /// <summary>
@@ -330,6 +330,7 @@ namespace InteropApiTests
         /// </summary>
         internal class PerfTestWorker : IDisposable
         {
+
             /// <summary>
             /// The instance to use.
             /// </summary>
@@ -414,6 +415,14 @@ namespace InteropApiTests
             ~PerfTestWorker()
             {
                 this.Dispose(false);
+            }
+
+            /// <summary>
+            /// Sets the next key value to be inserted. Used to insert records.
+            /// </summary>
+            public static long NextKey
+            {
+                set { nextKey = value; }
             }
 
             /// <summary>

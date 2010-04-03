@@ -18,32 +18,39 @@ namespace InteropApiTests
     internal static class SetupHelper
     {
         /// <summary>
-        /// A dictionary mapping column types to column definitions.
-        /// </summary>
-        public static readonly Dictionary<string, JET_COLUMNDEF> ColumndefDictionary = new Dictionary<string, JET_COLUMNDEF>(StringComparer.OrdinalIgnoreCase)
-        {
-            // BUG: Older version of ESENT don't support all column types for temp tables so we'll just use binary columns for the new types.
-            { "Boolean", new JET_COLUMNDEF() { coltyp = JET_coltyp.Bit } },
-            { "Byte", new JET_COLUMNDEF() { coltyp = JET_coltyp.UnsignedByte } },
-            { "Int16", new JET_COLUMNDEF() { coltyp = JET_coltyp.Short } },
-            { "UInt16", new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 2 } },
-            { "Int32", new JET_COLUMNDEF() { coltyp = JET_coltyp.Long } },
-            { "UInt32", new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 4 } },            
-            { "Int64", new JET_COLUMNDEF() { coltyp = JET_coltyp.Currency } },
-            { "UInt64", new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 8 } },            
-            { "Guid", new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 16 } },            
-            { "ASCII", new JET_COLUMNDEF() { coltyp = JET_coltyp.LongText, cp = JET_CP.ASCII } },            
-            { "Unicode", new JET_COLUMNDEF() { coltyp = JET_coltyp.LongText, cp = JET_CP.Unicode } },            
-            { "Float", new JET_COLUMNDEF() { coltyp = JET_coltyp.IEEESingle } },
-            { "Double", new JET_COLUMNDEF() { coltyp = JET_coltyp.IEEEDouble } },
-            { "DateTime", new JET_COLUMNDEF() { coltyp = JET_coltyp.DateTime } },
-            { "Binary", new JET_COLUMNDEF() { coltyp = JET_coltyp.LongBinary } },
-        };
-
-        /// <summary>
         /// Number of instances that have been created. Used to create unique names.
         /// </summary>
         private static int instanceNum;
+
+        /// <summary>
+        /// Gets a dictionary mapping column types to column definitions.
+        /// </summary>
+        public static Dictionary<string, JET_COLUMNDEF> ColumndefDictionary
+        {
+            get
+            {
+                // Some callers modify the dictionary so we return a new one each time.
+                return new Dictionary<string, JET_COLUMNDEF>(StringComparer.OrdinalIgnoreCase)
+                {
+                    // BUG: Older version of ESENT don't support all column types for temp tables so we'll just use binary columns for the new types.
+                    { "Boolean", new JET_COLUMNDEF() { coltyp = JET_coltyp.Bit } },
+                    { "Byte", new JET_COLUMNDEF() { coltyp = JET_coltyp.UnsignedByte } },
+                    { "Int16", new JET_COLUMNDEF() { coltyp = JET_coltyp.Short } },
+                    { "UInt16", new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 2 } },
+                    { "Int32", new JET_COLUMNDEF() { coltyp = JET_coltyp.Long } },
+                    { "UInt32", new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 4 } },
+                    { "Int64", new JET_COLUMNDEF() { coltyp = JET_coltyp.Currency } },
+                    { "UInt64", new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 8 } },
+                    { "Guid", new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 16 } },
+                    { "ASCII", new JET_COLUMNDEF() { coltyp = JET_coltyp.LongText, cp = JET_CP.ASCII } },
+                    { "Unicode", new JET_COLUMNDEF() { coltyp = JET_coltyp.LongText, cp = JET_CP.Unicode } },
+                    { "Float", new JET_COLUMNDEF() { coltyp = JET_coltyp.IEEESingle } },
+                    { "Double", new JET_COLUMNDEF() { coltyp = JET_coltyp.IEEEDouble } },
+                    { "DateTime", new JET_COLUMNDEF() { coltyp = JET_coltyp.DateTime } },
+                    { "Binary", new JET_COLUMNDEF() { coltyp = JET_coltyp.LongBinary } },
+                };
+            }
+        }
 
         /// <summary>
         /// Creates a new random directory in the current working directory. This

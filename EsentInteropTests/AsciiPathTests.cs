@@ -304,6 +304,8 @@ namespace InteropApiTests
                 instance.Parameters.NoInformationEvent = true;
                 instance.Parameters.MaxTemporaryTables = 0;
                 instance.Parameters.CreatePathIfNotExist = true;
+                instance.Parameters.LogFileDirectory = this.directory;
+                instance.Parameters.SystemDirectory = this.directory;
                 instance.Init();
                 using (var session = new Session(instance))
                 {

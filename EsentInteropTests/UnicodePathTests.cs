@@ -372,9 +372,14 @@ namespace InteropApiTests
             const string InstanceName = "unicodegetinstanceinfo";
             using (var instance = new Instance(InstanceName))
             {
+                // Don't turn off logging -- JetGetInstanceInfo only returns information for
+                // databases that have logging on.
+                instance.Parameters.LogFileSize = 384; // 384Kb
                 instance.Parameters.NoInformationEvent = true;
                 instance.Parameters.MaxTemporaryTables = 0;
                 instance.Parameters.CreatePathIfNotExist = true;
+                instance.Parameters.LogFileDirectory = this.directory;
+                instance.Parameters.SystemDirectory = this.directory;
                 instance.Init();
                 using (var session = new Session(instance))
                 {

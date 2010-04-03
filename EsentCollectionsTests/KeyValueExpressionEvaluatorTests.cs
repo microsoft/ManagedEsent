@@ -912,6 +912,188 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// Test Boolean expression.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test Bool expression")]
+        public void TestBoolExpression()
+        {
+            KeyRange<bool> keyRange = KeyValueExpressionEvaluator<bool, string>.GetKeyRange(x => x.Key == true);
+            Assert.AreEqual(true, keyRange.Min.Value);
+            Assert.IsTrue(keyRange.Min.IsInclusive);
+            Assert.AreEqual(true, keyRange.Min.Value);
+            Assert.IsTrue(keyRange.Min.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test Byte expression
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test Byte expression")]
+        public void TestByteExpression()
+        {
+            KeyRange<byte> keyRange = KeyValueExpressionEvaluator<byte, string>.GetKeyRange(x => x.Key < 2);
+            Assert.IsNull(keyRange.Min);
+
+            // This fails because the Key is promoted and the KeyValueExpressionEvaluator doesn't handle that.
+            // Arguably this isn't currently critical because we can only have 2^8 records with this type of key.
+            Assert.IsNotNull(keyRange.Max, "Byte promotion not handled");
+            Assert.AreEqual<byte>(2, keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test Int16 expression
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test Int16 expression")]
+        public void TestInt16Expression()
+        {
+            KeyRange<short> keyRange = KeyValueExpressionEvaluator<short, string>.GetKeyRange(x => x.Key < 2);
+            Assert.IsNull(keyRange.Min);
+
+            // This fails because the Key is promoted and the KeyValueExpressionEvaluator doesn't handle that.
+            // Arguably this isn't currently critical because we can only have 2^16 records with this type of key.
+            Assert.IsNotNull(keyRange.Max, "Int16 promotion not handled");
+            Assert.AreEqual<short>(2, keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test UInt16 expression
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test UInt16 expression")]
+        public void TestUInt16Expression()
+        {
+            KeyRange<ushort> keyRange = KeyValueExpressionEvaluator<ushort, string>.GetKeyRange(x => x.Key < 2);
+            Assert.IsNull(keyRange.Min);
+
+            // This fails because the Key is promoted and the KeyValueExpressionEvaluator doesn't handle that.
+            // Arguably this isn't currently critical because we can only have 2^16 records with this type of key.
+            Assert.IsNotNull(keyRange.Max, "UInt16 promotion not handled");
+            Assert.AreEqual<ushort>(2, keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test Int32 expression
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test Int32 expression")]
+        public void TestInt32Expression()
+        {
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => x.Key < 2);
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual(2, keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test UInt32 expression
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test UInt32 expression")]
+        public void TestUInt32Expression()
+        {
+            KeyRange<uint> keyRange = KeyValueExpressionEvaluator<uint, string>.GetKeyRange(x => x.Key < 2);
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual(2U, keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test Int64 expression
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test Int64 expression")]
+        public void TestInt64Expression()
+        {
+            KeyRange<long> keyRange = KeyValueExpressionEvaluator<long, string>.GetKeyRange(x => x.Key < 2);
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual(2L, keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test UInt64 expression
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test UInt64 expression")]
+        public void TestUInt64Expression()
+        {
+            KeyRange<ulong> keyRange = KeyValueExpressionEvaluator<ulong, string>.GetKeyRange(x => x.Key < 2);
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual(2UL, keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test float expression
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test float expression")]
+        public void TestFloatExpression()
+        {
+            KeyRange<float> keyRange = KeyValueExpressionEvaluator<float, string>.GetKeyRange(x => x.Key < 2.0f);
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual(2.0f, keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test double expression
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test double expression")]
+        public void TestDoubleExpression()
+        {
+            KeyRange<double> keyRange = KeyValueExpressionEvaluator<double, string>.GetKeyRange(x => x.Key < 2.0);
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual(2.0, keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test TimeSpan expression
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test TimeSpan expression")]
+        public void TestTimeSpanExpression()
+        {
+            KeyRange<TimeSpan> keyRange = KeyValueExpressionEvaluator<TimeSpan, string>.GetKeyRange(x => x.Key < TimeSpan.FromSeconds(2));
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual(TimeSpan.FromSeconds(2), keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test DateTime expression
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test DateTime expression")]
+        public void TestDateTimeExpression()
+        {
+            DateTime dateTime = DateTime.UtcNow;
+            KeyRange<DateTime> keyRange = KeyValueExpressionEvaluator<DateTime, string>.GetKeyRange(x => x.Key < dateTime);
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual(dateTime, keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
         /// Test expression 1.
         /// </summary>
         [TestMethod]
@@ -935,15 +1117,11 @@ namespace EsentCollectionsTests
         [Description("Test expression 2")]
         public void TestSample2()
         {
-            KeyRange<short> keyRange = KeyValueExpressionEvaluator<short, string>.GetKeyRange(
-                x => 18 <= x.Key && x.Key < 99 && x.Key > 7 && x.Key <= 99 && (0 == x.Key % 2));
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => x.Key < 1 && x.Key < 2 && x.Key < 3);
 
-            // This fails because the Key is promoted to an int and the KeyValueExpressionEvaluator
-            // can't handle that.
-            Assert.Inconclusive("Type promotion not handled");
-            Assert.AreEqual<short>(18, keyRange.Min.Value);
-            Assert.IsTrue(keyRange.Min.IsInclusive);
-            Assert.AreEqual<short>(99, keyRange.Max.Value);
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual(1, keyRange.Max.Value);
             Assert.IsFalse(keyRange.Max.IsInclusive);
         }
 
