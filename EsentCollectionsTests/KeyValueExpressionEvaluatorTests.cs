@@ -57,8 +57,7 @@ namespace EsentCollectionsTests
         public void VerifyTrueExpressionGivesOpenRange()
         {
             KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => true);
-            Assert.IsNull(keyRange.Min);
-            Assert.IsNull(keyRange.Max);
+            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
         }
 
         /// <summary>
@@ -70,8 +69,7 @@ namespace EsentCollectionsTests
         public void VerifyExpressionWithoutRangeGivesOpenRange()
         {
             KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => (0 == (x.Key % 2)));
-            Assert.IsNull(keyRange.Min);
-            Assert.IsNull(keyRange.Max);
+            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
         }
 
         /// <summary>
@@ -83,8 +81,7 @@ namespace EsentCollectionsTests
         public void VerifyValueExpressionGivesNoLimits()
         {
             KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, int>.GetKeyRange(x => x.Value < 100);
-            Assert.IsNull(keyRange.Min);
-            Assert.IsNull(keyRange.Max);
+            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
         }
 
         /// <summary>
@@ -381,8 +378,7 @@ namespace EsentCollectionsTests
         public void VerifyOrRemovesLimits()
         {
             KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => (19 <= x.Key && x.Key <= 101) || x.Value.StartsWith("foo"));
-            Assert.IsNull(keyRange.Min);
-            Assert.IsNull(keyRange.Max);
+            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
         }
 
         /// <summary>
@@ -394,8 +390,7 @@ namespace EsentCollectionsTests
         public void VerifyNotOfEqRemovesLimits()
         {
             KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key == 3));
-            Assert.IsNull(keyRange.Min);
-            Assert.IsNull(keyRange.Max);
+            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
         }
 
         /// <summary>
@@ -407,8 +402,7 @@ namespace EsentCollectionsTests
         public void VerifyNotOfNeDoesntWork()
         {
             KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key != 3));
-            Assert.IsNull(keyRange.Min);
-            Assert.IsNull(keyRange.Max);
+            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
         }
 
         /// <summary>
@@ -760,8 +754,7 @@ namespace EsentCollectionsTests
         public void TestKeyAccessAgainstSelf()
         {
             KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, int>.GetKeyRange(x => x.Key == x.Key);
-            Assert.IsNull(keyRange.Min);
-            Assert.IsNull(keyRange.Max);
+            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
         }
 
         /// <summary>
@@ -794,8 +787,7 @@ namespace EsentCollectionsTests
             KeyRange<int> keyRange =
                 KeyValueExpressionEvaluator<int, string>.GetKeyRange(
                     x => x.Key < (0 == DateTime.Now.Ticks ? x : kvp).Key);
-            Assert.IsNull(keyRange.Min);
-            Assert.IsNull(keyRange.Max);
+            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
         }
 
         /// <summary>
@@ -826,8 +818,7 @@ namespace EsentCollectionsTests
             KeyRange<int> keyRange =
                 KeyValueExpressionEvaluator<int, string>.GetKeyRange(
                     x => x.Key < (new[] { x })[0].Key);
-            Assert.IsNull(keyRange.Min);
-            Assert.IsNull(keyRange.Max);
+            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
         }
 
         /// <summary>
@@ -859,8 +850,7 @@ namespace EsentCollectionsTests
             KeyRange<int> keyRange =
                 KeyValueExpressionEvaluator<int, string>.GetKeyRange(
                     x => x.Key < f(x));
-            Assert.IsNull(keyRange.Min);
-            Assert.IsNull(keyRange.Max);
+            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
         }
 
         /// <summary>
@@ -891,8 +881,7 @@ namespace EsentCollectionsTests
             KeyRange<int> keyRange =
                 KeyValueExpressionEvaluator<int, string>.GetKeyRange(
                     x => x.Key < (String.IsNullOrEmpty(x.Value) ? 0 : 1));
-            Assert.IsNull(keyRange.Min);
-            Assert.IsNull(keyRange.Max);
+            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
         }
 
         /// <summary>
@@ -907,8 +896,7 @@ namespace EsentCollectionsTests
             KeyRange<int> keyRange =
                 KeyValueExpressionEvaluator<int, string>.GetKeyRange(
                     x => x.Key < Math.Max(0, "foo".StartsWith("f") ? 10 : x.Key));
-            Assert.IsNull(keyRange.Min);
-            Assert.IsNull(keyRange.Max);
+            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
         }
 
         /// <summary>
@@ -922,22 +910,36 @@ namespace EsentCollectionsTests
             KeyRange<int> keyRange =
                 KeyValueExpressionEvaluator<int, string>.GetKeyRange(
                     x => x.Key < x.Key.GetHashCode());
-            Assert.IsNull(keyRange.Min);
-            Assert.IsNull(keyRange.Max);
+            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
         }
 
         /// <summary>
-        /// Test Boolean expression.
+        /// Test Boolean expression (true).
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Test Bool expression")]
-        public void TestBoolExpression()
+        [Description("Test Bool expression (true)")]
+        public void TestTrueBoolExpression()
         {
             KeyRange<bool> keyRange = KeyValueExpressionEvaluator<bool, string>.GetKeyRange(x => x.Key == true);
             Assert.AreEqual(true, keyRange.Min.Value);
             Assert.IsTrue(keyRange.Min.IsInclusive);
             Assert.AreEqual(true, keyRange.Min.Value);
+            Assert.IsTrue(keyRange.Min.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test Boolean expression (false).
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test Bool expression (false)")]
+        public void TestFalseBoolExpression()
+        {
+            KeyRange<bool> keyRange = KeyValueExpressionEvaluator<bool, string>.GetKeyRange(x => x.Key == false);
+            Assert.AreEqual(false, keyRange.Min.Value);
+            Assert.IsTrue(keyRange.Min.IsInclusive);
+            Assert.AreEqual(false, keyRange.Min.Value);
             Assert.IsTrue(keyRange.Min.IsInclusive);
         }
 
@@ -950,13 +952,13 @@ namespace EsentCollectionsTests
         public void TestByteExpression()
         {
             KeyRange<byte> keyRange = KeyValueExpressionEvaluator<byte, string>.GetKeyRange(x => x.Key < 2);
-            Assert.IsNull(keyRange.Min);
 
             // This fails because the Key is promoted and the KeyValueExpressionEvaluator doesn't handle that.
             // Arguably this isn't currently critical because we can only have 2^8 records with this type of key.
-            Assert.IsNotNull(keyRange.Max, "Byte promotion not handled");
-            Assert.AreEqual<byte>(2, keyRange.Max.Value);
-            Assert.IsFalse(keyRange.Max.IsInclusive);
+            Assert.AreEqual(
+                new KeyRange<byte>(null, Key<byte>.CreateKey(2, false)),
+                keyRange,
+                "Byte promotion not handled");
         }
 
         /// <summary>
@@ -968,13 +970,13 @@ namespace EsentCollectionsTests
         public void TestInt16Expression()
         {
             KeyRange<short> keyRange = KeyValueExpressionEvaluator<short, string>.GetKeyRange(x => x.Key < 2);
-            Assert.IsNull(keyRange.Min);
 
             // This fails because the Key is promoted and the KeyValueExpressionEvaluator doesn't handle that.
             // Arguably this isn't currently critical because we can only have 2^16 records with this type of key.
-            Assert.IsNotNull(keyRange.Max, "Int16 promotion not handled");
-            Assert.AreEqual<short>(2, keyRange.Max.Value);
-            Assert.IsFalse(keyRange.Max.IsInclusive);
+            Assert.AreEqual(
+                new KeyRange<short>(null, Key<short>.CreateKey(2, false)),
+                keyRange,
+                "Int16 promotion not handled");
         }
 
         /// <summary>
@@ -986,13 +988,13 @@ namespace EsentCollectionsTests
         public void TestUInt16Expression()
         {
             KeyRange<ushort> keyRange = KeyValueExpressionEvaluator<ushort, string>.GetKeyRange(x => x.Key < 2);
-            Assert.IsNull(keyRange.Min);
 
             // This fails because the Key is promoted and the KeyValueExpressionEvaluator doesn't handle that.
             // Arguably this isn't currently critical because we can only have 2^16 records with this type of key.
-            Assert.IsNotNull(keyRange.Max, "UInt16 promotion not handled");
-            Assert.AreEqual<ushort>(2, keyRange.Max.Value);
-            Assert.IsFalse(keyRange.Max.IsInclusive);
+            Assert.AreEqual(
+                new KeyRange<ushort>(null, Key<ushort>.CreateKey(2, false)),
+                keyRange,
+                "UInt16 promotion not handled");
         }
 
         /// <summary>
@@ -1167,6 +1169,35 @@ namespace EsentCollectionsTests
             string s = "baz";
             KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => x.Key.StartsWith(s));
             var expected = new KeyRange<string>(Key<string>.CreateKey("baz", true), Key<string>.CreatePrefixKey("baz"));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test String.StartsWith intersection
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.StartWith intersection")]
+        public void TestStringStartsWithIntersection()
+        {
+            string s = "baz";
+            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => x.Key.StartsWith(s) && x.Key.CompareTo("z") < 0);
+            var expected = new KeyRange<string>(Key<string>.CreateKey(s, true), Key<string>.CreatePrefixKey(s));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test String.StartsWith union
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.StartWith union")]
+        public void TestStringStartsWithUnion()
+        {
+            KeyRange<string> actual =
+                KeyValueExpressionEvaluator<string, string>.GetKeyRange(
+                    x => x.Key.StartsWith("b") || (x.Key.CompareTo("a") > 0 && x.Key.CompareTo("b") <= 0));
+            var expected = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("b"));
             Assert.AreEqual(expected, actual);
         }
 
@@ -1481,10 +1512,9 @@ namespace EsentCollectionsTests
         /// </param>
         private static void ConstantFoldingHelper(Expression<Predicate<KeyValuePair<int, long>>> expression)
         {
-            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, long>.GetKeyRange(expression);
-            Assert.IsNull(keyRange.Min);
-            Assert.AreEqual(32, keyRange.Max.Value);
-            Assert.IsTrue(keyRange.Max.IsInclusive);
+            KeyRange<int> actual = KeyValueExpressionEvaluator<int, long>.GetKeyRange(expression);
+            KeyRange<int> expected = new KeyRange<int>(null, Key<int>.CreateKey(32, true));
+            Assert.AreEqual(expected, actual);
         }
     }
 }

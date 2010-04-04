@@ -457,6 +457,34 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// KeyRange intersect test 9
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Intersect test 9 (prefix vs inclusive)")]
+        public void TestKeyRangeIntersect9()
+        {
+            var range1 = new KeyRange<string>(Key<string>.CreateKey("a", true), Key<string>.CreateKey("b", true));
+            var range2 = new KeyRange<string>(Key<string>.CreateKey("a", true), Key<string>.CreatePrefixKey("b"));
+            var expected = new KeyRange<string>(Key<string>.CreateKey("a", true), Key<string>.CreateKey("b", true));
+            KeyRangeIntersectionHelper(range1, range2, expected);
+        }
+
+        /// <summary>
+        /// KeyRange intersect test 10
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Intersect test 10 (prefix vs exclusive)")]
+        public void TestKeyRangeIntersect10()
+        {
+            var range1 = new KeyRange<string>(Key<string>.CreateKey("a", true), Key<string>.CreateKey("b", false));
+            var range2 = new KeyRange<string>(Key<string>.CreateKey("a", true), Key<string>.CreatePrefixKey("b"));
+            var expected = new KeyRange<string>(Key<string>.CreateKey("a", true), Key<string>.CreateKey("b", false));
+            KeyRangeIntersectionHelper(range1, range2, expected);
+        }
+
+        /// <summary>
         /// KeyRange union test 1
         /// </summary>
         [TestMethod]
@@ -553,6 +581,34 @@ namespace EsentCollectionsTests
             var range1 = new KeyRange<int>(Key<int>.CreateKey(2, true), Key<int>.CreateKey(7, true));
             var range2 = new KeyRange<int>(Key<int>.CreateKey(3, true), Key<int>.CreateKey(8, true));
             var expected = new KeyRange<int>(Key<int>.CreateKey(2, true), Key<int>.CreateKey(8, true));
+            KeyRangeUnionHelper(range1, range2, expected);
+        }
+
+        /// <summary>
+        /// KeyRange union test 9
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Union test 9 (prefix vs inclusive)")]
+        public void TestKeyRangeUnion9()
+        {
+            var range1 = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreateKey("b", true));
+            var range2 = new KeyRange<string>(Key<string>.CreateKey("a", true), Key<string>.CreatePrefixKey("b"));
+            var expected = new KeyRange<string>(Key<string>.CreateKey("a", true), Key<string>.CreatePrefixKey("b"));
+            KeyRangeUnionHelper(range1, range2, expected);
+        }
+
+        /// <summary>
+        /// KeyRange union test 10
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Union test 10 (prefix vs exclusive)")]
+        public void TestKeyRangeUnion10()
+        {
+            var range1 = new KeyRange<string>(Key<string>.CreateKey("b", false), Key<string>.CreateKey("c", false));
+            var range2 = new KeyRange<string>(Key<string>.CreateKey("a", true), Key<string>.CreatePrefixKey("c"));
+            var expected = new KeyRange<string>(Key<string>.CreateKey("a", true), Key<string>.CreatePrefixKey("c"));
             KeyRangeUnionHelper(range1, range2, expected);
         }
 

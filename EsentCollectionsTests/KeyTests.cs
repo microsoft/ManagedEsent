@@ -94,7 +94,6 @@ namespace EsentCollectionsTests
             EqualityAsserts.TestEqualsAndHashCode(key1, key2, false);
         }
 
-
         /// <summary>
         /// Verify a key does not equal a key with different value.
         /// </summary>

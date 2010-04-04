@@ -247,8 +247,15 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 int compare = a.Value.CompareTo(b.Value);
                 if (0 == compare)
                 {
-                    // Prefer the exclusive range
-                    min = a.IsInclusive ? b : a;
+                    // Prefer the non-prefix/exclusive range
+                    if (a.IsPrefix || b.IsPrefix)
+                    {
+                        min = a.IsPrefix ? b : a;
+                    }
+                    else
+                    {
+                        min = a.IsInclusive ? b : a;
+                    }
                 }
                 else
                 {
@@ -298,7 +305,10 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// Returns the upper bound of two keys for range union.
         /// This is the maximum of the keys, where null represents the
-        /// maximum value and inclusive ranges are preferred.
+        /// maximum value. When two keys are equal the order of preference is:
+        ///  1. prefix 
+        ///  2. inclusive
+        ///  3. exclusive.
         /// </summary>
         /// <param name="a">The first key.</param>
         /// <param name="b">The second key.</param>
@@ -315,8 +325,15 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 int compare = a.Value.CompareTo(b.Value);
                 if (0 == compare)
                 {
-                    // Prefer the inclusive range
-                    max = a.IsInclusive ? a : b;
+                    // Prefer the prefix/inclusive range
+                    if (a.IsPrefix || b.IsPrefix)
+                    {
+                        max = a.IsPrefix ? a : b;                        
+                    }
+                    else
+                    {
+                        max = a.IsInclusive ? a : b;                        
+                    }
                 }
                 else
                 {

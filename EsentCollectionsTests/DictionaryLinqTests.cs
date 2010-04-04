@@ -253,6 +253,22 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// Linq test 10.
+        /// </summary>
+        [TestMethod]
+        [Description("Linq test 10")]
+        [Priority(2)]
+        public void LinqTest10()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary3))
+            {
+                var expected = from x in this.testDictionary3 where (x.Key.CompareTo("a") > 0 && x.Key.CompareTo("c") <= 0) || x.Key.StartsWith("c") select x.Value;
+                var actual = from x in persistentDictionary where (x.Key.CompareTo("a") > 0 && x.Key.CompareTo("c") <= 0) || x.Key.StartsWith("c") select x.Value;
+                Assert.IsTrue(expected.SequenceEqual(actual));
+            }
+        }
+
+        /// <summary>
         /// Create a PersistentDictionary that is a copy of another dictionary.
         /// </summary>
         /// <typeparam name="TKey">The type of the dictionary key.</typeparam>
