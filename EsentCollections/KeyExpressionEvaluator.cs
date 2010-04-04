@@ -15,6 +15,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     using System.Diagnostics;
     using System.Linq;
     using System.Linq.Expressions;
+    using System.Reflection;
 
     /// <summary>
     /// Contains methods to evaluate a predicate Expression and determine
@@ -23,6 +24,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     /// <typeparam name="TKey">The key type.</typeparam>
     internal static class KeyExpressionEvaluator<TKey> where TKey : IComparable<TKey>
     {
+        /// <summary>
+        /// A MethodInfo describes TKey.CompareTo(TKey).
+        /// </summary>
+        private static readonly MethodInfo compareToMethod = typeof(TKey).GetMethod("CompareTo", new[] { typeof(TKey) });
+
         /// <summary>
         /// Evaluate a predicate Expression and determine a key range which
         /// contains all items matched by the predicate.
@@ -401,10 +407,9 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             if (expression is MethodCallExpression)
             {
                 MethodCallExpression methodCall = (MethodCallExpression)expression;
-                if (null != methodCall.Object
-                    && IsKeyAccess(methodCall.Object, keyMemberName)
-                    && methodCall.Method.Name == "CompareTo"
-                    && 1 == methodCall.Arguments.Count)
+                if (methodCall.Method == compareToMethod
+                    && null != methodCall.Object
+                    && IsKeyAccess(methodCall.Object, keyMemberName))
                 {
                     return ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(methodCall.Arguments[0], out value);
                 }
@@ -429,7 +434,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             {
                 MethodCallExpression methodCall = (MethodCallExpression)expression;
                 if (methodCall.Method == StringExpressionEvaluatorHelper.StringCompareMethod
-                    && 2 == methodCall.Arguments.Count
                     && IsKeyAccess(methodCall.Arguments[0], keyMemberName))
                 {
                     return ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(methodCall.Arguments[1], out value);
@@ -455,7 +459,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             {
                 MethodCallExpression methodCall = (MethodCallExpression)expression;
                 if (methodCall.Method == StringExpressionEvaluatorHelper.StringCompareMethod
-                    && 2 == methodCall.Arguments.Count
                     && IsKeyAccess(methodCall.Arguments[1], keyMemberName))
                 {
                     return ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(methodCall.Arguments[0], out value);

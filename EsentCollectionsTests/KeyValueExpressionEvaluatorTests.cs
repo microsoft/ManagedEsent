@@ -1228,6 +1228,19 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// Test CompareTo without parameter access
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test CompareTo with no parameter access")]
+        public void TestCompareToNoParameter()
+        {
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => 0 < 5.CompareTo(4));
+            Assert.IsTrue(keyRange.Equals(KeyRange<int>.OpenRange));
+        }
+
+        /// <summary>
         /// Test String.Compare
         /// </summary>
         [TestMethod]
@@ -1286,6 +1299,19 @@ namespace EsentCollectionsTests
             Assert.AreEqual("5", keyRange.Min.Value);
             Assert.IsFalse(keyRange.Min.IsInclusive);
             Assert.IsNull(keyRange.Max);
+        }
+
+        /// <summary>
+        /// Test String.Compare without parameter access
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Compare without parameter access")]
+        public void TestStringCompareWithoutParameterAccess()
+        {
+            KeyRange<string> keyRange =
+                KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => 0 > String.Compare("a", "b"));
+            Assert.IsTrue(keyRange.Equals(KeyRange<string>.OpenRange));
         }
 
         /// <summary>
