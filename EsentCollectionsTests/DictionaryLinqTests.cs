@@ -246,8 +246,8 @@ namespace EsentCollectionsTests
         {
             using (var persistentDictionary = CloneDictionary(this.testDictionary3))
             {
-                var expected = from x in this.testDictionary3 where x.Key.StartsWith("bi") || x.Key.StartsWith("de") select x.Value;
-                var actual = from x in persistentDictionary where x.Key.StartsWith("bi") || x.Key.StartsWith("de") select x.Value;
+                var expected = from x in this.testDictionary3 where x.Key.StartsWith("de") || x.Key.StartsWith("bi") select x.Value;
+                var actual = from x in persistentDictionary where x.Key.StartsWith("de") || x.Key.StartsWith("bi") select x.Value;
                 Assert.IsTrue(expected.SequenceEqual(actual));
             }
         }
