@@ -10,6 +10,7 @@
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
     using System;
+    using System.Diagnostics;
 
     /// <summary>
     /// Represents a generic key value.
@@ -22,10 +23,13 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         /// <param name="value">The value of the key.</param>
         /// <param name="isInclusive">True if this key is inclusive.</param>
-        public Key(T value, bool isInclusive)
+        /// <param name="isPrefix">True if this key is a prefix.</param>
+        private Key(T value, bool isInclusive, bool isPrefix)
         {
             this.Value = value;
             this.IsInclusive = isInclusive;
+            this.IsPrefix = isPrefix;
+            Debug.Assert(!this.IsPrefix || this.IsInclusive, "Cannot have exclusive prefix");
         }
 
         /// <summary>
@@ -34,9 +38,74 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         public bool IsInclusive { get; private set; }
 
         /// <summary>
+        /// Gets a value indicating whether the key is a prefix.
+        /// This only makes sense for string types.
+        /// </summary>
+        public bool IsPrefix { get; private set; }
+
+        /// <summary>
         /// Gets the value of the key.
         /// </summary>
         public T Value { get; private set; }
+
+        /// <summary>
+        /// Create a new Key.
+        /// </summary>
+        /// <param name="value">The value of the key.</param>
+        /// <param name="isInclusive">True if the key is to be inclusive.</param>
+        /// <returns>The new key.</returns>
+        public static Key<T> CreateKey(T value, bool isInclusive)
+        {
+            return new Key<T>(value, isInclusive, false);
+        }
+
+        /// <summary>
+        /// Create a new prefix Key.
+        /// </summary>
+        /// <param name="value">The value of the key.</param>
+        /// <returns>The new key.</returns>
+        public static Key<T> CreatePrefixKey(T value)
+        {
+            return new Key<T>(value, true, true);
+        }
+
+        /// <summary>
+        /// Gets a string representation of the key.
+        /// </summary>
+        /// <returns>A string representation of the key.</returns>
+        public override string ToString()
+        {
+            return String.Format(
+                "{0} ({1})", this.Value, this.IsPrefix ? "prefix" : (this.IsInclusive ? "inclusive" : "exclusive"));
+        }
+
+        /// <summary>
+        /// Compare an object to this one, to see if they are equal.
+        /// </summary>
+        /// <param name="obj">The object to compare against.</param>
+        /// <returns>True if this range equals the other object.</returns>
+        public override bool Equals(object obj)
+        {
+            if (null == obj || this.GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            return this.Equals((Key<T>)obj);
+        }
+
+        /// <summary>
+        /// Gets a hash code for this object.
+        /// </summary>
+        /// <returns>
+        /// A hash code for this object.
+        /// </returns>
+        public override int GetHashCode()
+        {
+            return this.Value.GetHashCode()
+                   + (this.IsInclusive ? 1 : 2)
+                   + (this.IsPrefix ? 3 : 4);
+        }
 
         /// <summary>
         /// Determine if this Key matches another Key.
@@ -51,7 +120,8 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             }
 
             return 0 == this.Value.CompareTo(other.Value)
-                && this.IsInclusive == other.IsInclusive;
+                   && this.IsInclusive == other.IsInclusive
+                   && this.IsPrefix == other.IsPrefix;
         }
     }
 }

@@ -1130,7 +1130,7 @@ namespace EsentCollectionsTests
         [TestMethod]
         [Priority(0)]
         [Description("Test String == expression")]
-        public void TestStringEquals()
+        public void TestStringEquality()
         {
             string s = "foo";
             KeyRange<string> keyRange = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => s == x.Key);
@@ -1138,6 +1138,36 @@ namespace EsentCollectionsTests
             Assert.IsTrue(keyRange.Max.IsInclusive);
             Assert.AreEqual(s, keyRange.Max.Value);
             Assert.IsTrue(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test String.Equals expression
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Equals")]
+        public void TestStringEquals()
+        {
+            string s = "baz";
+            KeyRange<string> keyRange = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => x.Key.Equals(s));
+            Assert.AreEqual(s, keyRange.Min.Value);
+            Assert.IsTrue(keyRange.Max.IsInclusive);
+            Assert.AreEqual(s, keyRange.Max.Value);
+            Assert.IsTrue(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test String.StartsWith expression
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.StartWith")]
+        public void TestStringStartsWith()
+        {
+            string s = "baz";
+            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => x.Key.StartsWith(s));
+            var expected = new KeyRange<string>(Key<string>.CreateKey("baz", true), Key<string>.CreatePrefixKey("baz"));
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -1237,7 +1267,7 @@ namespace EsentCollectionsTests
         {
             KeyRange<int> keyRange =
                 KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => 0 < 5.CompareTo(4));
-            Assert.IsTrue(keyRange.Equals(KeyRange<int>.OpenRange));
+            Assert.AreEqual(keyRange, KeyRange<int>.OpenRange);
         }
 
         /// <summary>
@@ -1311,7 +1341,7 @@ namespace EsentCollectionsTests
         {
             KeyRange<string> keyRange =
                 KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => 0 > String.Compare("a", "b"));
-            Assert.IsTrue(keyRange.Equals(KeyRange<string>.OpenRange));
+            Assert.AreEqual(keyRange, KeyRange<string>.OpenRange);
         }
 
         /// <summary>

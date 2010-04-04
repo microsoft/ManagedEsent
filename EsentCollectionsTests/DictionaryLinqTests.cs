@@ -43,6 +43,31 @@ namespace EsentCollectionsTests
         /// <summary>
         /// Test dictionary.
         /// </summary>
+        private readonly IDictionary<string, int> testDictionary3 = new SortedDictionary<string, int>
+        {
+            { "a", 1 },
+            { "alpha", 2 },
+            { "apple", 3 },
+            { "b", 4 },
+            { "bing", 6 },
+            { "biing", 7 },
+            { "biiing", 8 },
+            { "bravo", 9 },
+            { "c", 10 },
+            { "c#", 11 },
+            { "c++", 12 },
+            { "d", 13 },
+            { "delta", 14 },
+            { "decimal", 15 },
+            { "e", 16 },
+            { "echo", 17 },
+            { "f", 18 },
+            { "g", 19 },
+        };
+
+        /// <summary>
+        /// Test dictionary.
+        /// </summary>
         private IDictionary<DateTime, Guid> testDictionary2;
 
         /// <summary>
@@ -192,6 +217,38 @@ namespace EsentCollectionsTests
                     var actual = from x in persistentDictionary where x.Key >= min && x.Key <= max select x.Value;
                     Assert.IsTrue(expected.SequenceEqual(actual));
                 }
+            }
+        }
+
+        /// <summary>
+        /// Linq test 8.
+        /// </summary>
+        [TestMethod]
+        [Description("Linq test 8")]
+        [Priority(2)]
+        public void LinqTest8()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary3))
+            {
+                var expected = from x in this.testDictionary3 where x.Key.StartsWith("b") select x.Value;
+                var actual = from x in persistentDictionary where x.Key.StartsWith("b") select x.Value;
+                Assert.IsTrue(expected.SequenceEqual(actual));
+            }
+        }
+
+        /// <summary>
+        /// Linq test 9.
+        /// </summary>
+        [TestMethod]
+        [Description("Linq test 9")]
+        [Priority(2)]
+        public void LinqTest9()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary3))
+            {
+                var expected = from x in this.testDictionary3 where x.Key.StartsWith("bi") || x.Key.StartsWith("de") select x.Value;
+                var actual = from x in persistentDictionary where x.Key.StartsWith("bi") || x.Key.StartsWith("de") select x.Value;
+                Assert.IsTrue(expected.SequenceEqual(actual));
             }
         }
 

@@ -21,7 +21,17 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// A MethodInfo describes String.Compare(string, string).
         /// </summary>
-        private static readonly MethodInfo stringCompareMethod = typeof(string).GetMethod("Compare", new Type[] { typeof(string), typeof(string) }); 
+        private static readonly MethodInfo stringCompareMethod = typeof(string).GetMethod("Compare", new[] { typeof(string), typeof(string) });
+
+        /// <summary>
+        /// A MethodInfo describes String.Equals(string).
+        /// </summary>
+        private static readonly MethodInfo stringEqualsMethod = typeof(string).GetMethod("Equals", new[] { typeof(string) });
+
+        /// <summary>
+        /// A MethodInfo describes String.Equals(string).
+        /// </summary>
+        private static readonly MethodInfo stringStartsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) }); 
        
         /// <summary>
         /// Gets a MethodInfo describing String.Compare(string, string).
@@ -31,6 +41,28 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             get
             {
                 return stringCompareMethod;
+            }
+        }
+
+        /// <summary>
+        /// Gets a MethodInfo describing String.Equals(string).
+        /// </summary>
+        public static MethodInfo StringEqualsMethod
+        {
+            get
+            {
+                return stringEqualsMethod;
+            }
+        }
+
+        /// <summary>
+        /// Gets a MethodInfo describing String.StartsWith(string, string).
+        /// </summary>
+        public static MethodInfo StringStartWithMethod
+        {
+            get
+            {
+                return stringStartsWithMethod;
             }
         }
     }

@@ -97,6 +97,36 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                     return new KeyRange<TKey>[] { IntersectRanges(invertedRanges) };
                 }
 
+                case ExpressionType.Call:
+                {
+                    if (typeof(TKey) == typeof(string))
+                    {
+                        MethodCallExpression methodCall = (MethodCallExpression)expression;
+                        if (null != methodCall.Object
+                            && IsKeyAccess(methodCall.Object, keyMemberName))
+                        {
+                            TKey value;
+
+                            // String.Equals
+                            if (StringExpressionEvaluatorHelper.StringEqualsMethod == methodCall.Method
+                                && ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(methodCall.Arguments[0], out value))
+                            {
+                                return new KeyRange<TKey>[] { new KeyRange<TKey>(Key<TKey>.CreateKey(value, true), Key<TKey>.CreateKey(value, true)) };
+                            }
+
+                            // String.StartsWith
+                            if (StringExpressionEvaluatorHelper.StringStartWithMethod == methodCall.Method
+                                && ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(methodCall.Arguments[0], out value))
+                            {
+                                // Lower range is just the string, upper range is the prefix
+                                return new KeyRange<TKey>[] { new KeyRange<TKey>(Key<TKey>.CreateKey(value, true), Key<TKey>.CreatePrefixKey(value)) };
+                            }
+                        }
+                    }
+
+                    break;
+                }
+
                 case ExpressionType.Equal:
                 case ExpressionType.LessThan:
                 case ExpressionType.LessThanOrEqual:
@@ -112,16 +142,16 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                         switch (expressionType)
                         {
                             case ExpressionType.Equal:
-                                var key = new Key<TKey>(value, true);
+                                var key = Key<TKey>.CreateKey(value, true);
                                 return new KeyRange<TKey>[] { new KeyRange<TKey>(key, key) };
                             case ExpressionType.LessThan:
-                                return new KeyRange<TKey>[] { new KeyRange<TKey>(null, new Key<TKey>(value, false)) };
+                                return new KeyRange<TKey>[] { new KeyRange<TKey>(null, Key<TKey>.CreateKey(value, false)) };
                             case ExpressionType.LessThanOrEqual:
-                                return new KeyRange<TKey>[] { new KeyRange<TKey>(null, new Key<TKey>(value, true)) };
+                                return new KeyRange<TKey>[] { new KeyRange<TKey>(null, Key<TKey>.CreateKey(value, true)) };
                             case ExpressionType.GreaterThan:
-                                return new KeyRange<TKey>[] { new KeyRange<TKey>(new Key<TKey>(value, false), null) };
+                                return new KeyRange<TKey>[] { new KeyRange<TKey>(Key<TKey>.CreateKey(value, false), null) };
                             case ExpressionType.GreaterThanOrEqual:
-                                return new KeyRange<TKey>[] { new KeyRange<TKey>(new Key<TKey>(value, true), null) };
+                                return new KeyRange<TKey>[] { new KeyRange<TKey>(Key<TKey>.CreateKey(value, true), null) };
                             default:
                                 throw new InvalidOperationException(expressionType.ToString());
                         }

@@ -93,15 +93,46 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             if (null != this.Min && null == this.Max)
             {
-                return new KeyRange<T>(null, new Key<T>(this.Min.Value, !this.Min.IsInclusive));
+                return new KeyRange<T>(null, Key<T>.CreateKey(this.Min.Value, !this.Min.IsInclusive));
             }
             else if (null == this.Min && null != this.Max)
             {
-                return new KeyRange<T>(new Key<T>(this.Max.Value, !this.Max.IsInclusive), null);
+                return new KeyRange<T>(Key<T>.CreateKey(this.Max.Value, !this.Max.IsInclusive), null);
             }
 
             // Can't invert. Return an open range.
             return OpenRange;
+        }
+
+        /// <summary>
+        /// Compare an object to this one, to see if they are equal.
+        /// </summary>
+        /// <param name="obj">The object to compare against.</param>
+        /// <returns>True if this range equals the other object.</returns>
+        public override bool Equals(object obj)
+        {
+            if (null == obj || this.GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            return this.Equals((KeyRange<T>)obj);
+        }
+
+        /// <summary>
+        /// Gets a hash code for this object.
+        /// </summary>
+        /// <returns>
+        /// A hash code for this object.
+        /// </returns>
+        public override int GetHashCode()
+        {
+            // Make sure that entries with their keys reversed 
+            // don't get the same hash code.
+            int hash1 = null == this.Min ? 0 : this.Min.GetHashCode();
+            int hash2 = null == this.Max ? 0 : this.Max.GetHashCode();
+            int hash = hash1 ^ hash2 ^ unchecked((hash2 - hash1) * 10);
+            return hash;
         }
 
         /// <summary>
@@ -133,7 +164,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             sb.Append("KeyRange: ");
             if (null != this.Min)
             {
-                sb.AppendFormat("min = {0} ({1}), ", this.Min.Value, this.Min.IsInclusive ? "inclusive" : "exclusive");
+                sb.AppendFormat("min = {0}, ", this.Min);
             }
             else
             {
@@ -142,7 +173,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 
             if (null != this.Max)
             {
-                sb.AppendFormat("max = {0} ({1})", this.Max.Value, this.Max.IsInclusive ? "inclusive" : "exclusive");
+                sb.AppendFormat("max = {0}, ", this.Max);
             }
             else
             {

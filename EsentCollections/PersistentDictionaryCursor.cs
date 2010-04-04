@@ -256,7 +256,15 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 
             if (null != range.Max)
             {
-                this.MakeKey(range.Max.Value);
+                if (range.Max.IsPrefix)
+                {
+                    this.MakePrefixKey(range.Max.Value);
+                }
+                else
+                {
+                    this.MakeKey(range.Max.Value);                    
+                }
+
                 SetIndexRangeGrbit grbit = SetIndexRangeGrbit.RangeUpperLimit | (range.Max.IsInclusive
                                                                                      ? SetIndexRangeGrbit.RangeInclusive
                                                                                      : SetIndexRangeGrbit.None);
@@ -374,6 +382,16 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             Api.JetEndSession(this.sesid, EndSessionGrbit.None);
             GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Calls JetMakeKey for a prefix.
+        /// </summary>
+        /// <param name="key">The value of the key column.</param>
+        private void MakePrefixKey(TKey key)
+        {
+            // Casts TKey to object
+            this.converters.MakeKey(this.sesid, this.dataTable, key, MakeKeyGrbit.NewKey | MakeKeyGrbit.PartialColumnEndLimit);
         }
 
         /// <summary>

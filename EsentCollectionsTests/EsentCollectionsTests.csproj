@@ -43,6 +43,7 @@
     <Compile Include="DictionaryAssert.cs" />
     <Compile Include="DictionaryLinqTests.cs" />
     <Compile Include="DictionaryPerformanceTests.cs" />
+    <Compile Include="EqualityAsserts.cs" />
     <Compile Include="KeyValueExpressionEvaluatorTests.cs" />
     <Compile Include="KeyRangeTests.cs" />
     <Compile Include="KeyTests.cs" />
