@@ -26,6 +26,12 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         private static readonly KeyRange<T> openRange = new KeyRange<T>(null, null);
 
         /// <summary>
+        /// A singleton instance of the empty range (a range with no records).
+        /// </summary>
+        private static readonly KeyRange<T> emptyRange = new KeyRange<T>(
+            Key<T>.CreateKey(default(T), false), Key<T>.CreateKey(default(T), false));
+
+        /// <summary>
         /// Initializes a new instance of the KeyRange class.
         /// </summary>
         /// <param name="min">The minimum key. This can be null.</param>
@@ -48,6 +54,17 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
+        /// Gets a singleton instance of the empty range (a range with no records).
+        /// </summary>
+        public static KeyRange<T> EmptyRange
+        {
+            get
+            {
+                return emptyRange;
+            }
+        }
+
+        /// <summary>
         /// Gets the minimum key value. This is null if there is
         /// no minumum.
         /// </summary>
@@ -60,6 +77,30 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         public Key<T> Max { get; private set; }
 
         /// <summary>
+        /// Gets a value indicating whether the range is empty.
+        /// </summary>
+        /// <value>
+        /// A value indicating whether the range is empty.
+        /// </value>
+        public bool IsEmpty
+        {
+            get
+            {
+                if (null != this.Min && null != this.Max)
+                {
+                    int cmp = this.Min.Value.CompareTo(this.Max.Value);
+
+                    // If Min and Max are equal then the only way this range
+                    // can contain any records is if both min and max are
+                    // inclusive.
+                    return (cmp > 0) || (0 == cmp && (!this.Max.IsInclusive || !this.Min.IsInclusive));
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Return the intersection of two ranges.
         /// </summary>
         /// <param name="a">The first range.</param>
@@ -67,7 +108,13 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>The intersection of the two ranges.</returns>
         public static KeyRange<T> operator &(KeyRange<T> a, KeyRange<T> b)
         {
-            return new KeyRange<T>(LowerIntersection(a.Min, b.Min), UpperIntersection(a.Max, b.Max));
+            var intersected = new KeyRange<T>(LowerIntersection(a.Min, b.Min), UpperIntersection(a.Max, b.Max));
+            if (intersected.IsEmpty)
+            {
+                intersected = EmptyRange;
+            }
+
+            return intersected;
         }
 
         /// <summary>
@@ -91,11 +138,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </returns>
         public KeyRange<T> Invert()
         {
-            if (null != this.Min && null == this.Max)
+            if (null != this.Min && null == this.Max && !this.Min.IsPrefix)
             {
                 return new KeyRange<T>(null, Key<T>.CreateKey(this.Min.Value, !this.Min.IsInclusive));
             }
-            else if (null == this.Min && null != this.Max)
+            else if (null == this.Min && null != this.Max && !this.Max.IsPrefix)
             {
                 return new KeyRange<T>(Key<T>.CreateKey(this.Max.Value, !this.Max.IsInclusive), null);
             }

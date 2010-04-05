@@ -40,6 +40,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             }
 
             return KeyExpressionEvaluator<TKey>.GetKeyRange(expression.Body, "Key");
-        }        
+        }
     }
 }

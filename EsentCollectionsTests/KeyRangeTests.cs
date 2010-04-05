@@ -98,6 +98,148 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// KeyRange.Empty test 1
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Empty test 1 (open range)")]
+        public void VerifyKeyRangeEmpty1()
+        {
+            Assert.IsFalse(KeyRange<Guid>.OpenRange.IsEmpty);
+        }
+
+        /// <summary>
+        /// KeyRange.Empty test 2
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Empty test 2 (empty range)")]
+        public void VerifyKeyRangeEmpty2()
+        {
+            Assert.IsTrue(KeyRange<Guid>.EmptyRange.IsEmpty);
+        }
+
+        /// <summary>
+        /// KeyRange.Empty test 3
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Empty test 3 (null min)")]
+        public void VerifyKeyRangeEmpty3()
+        {
+            var keyRange = new KeyRange<long>(null, Key<long>.CreateKey(1, false));
+            Assert.IsFalse(keyRange.IsEmpty);                
+        }
+
+        /// <summary>
+        /// KeyRange.Empty test 4
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Empty test 4 (null max)")]
+        public void VerifyKeyRangeEmpty4()
+        {
+            var keyRange = new KeyRange<long>(Key<long>.CreateKey(1, false), null);
+            Assert.IsFalse(keyRange.IsEmpty);
+        }
+
+        /// <summary>
+        /// KeyRange.Empty test 5
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Empty test 5 (min and max)")]
+        public void VerifyKeyRangeEmpty5()
+        {
+            var keyRange = new KeyRange<long>(Key<long>.CreateKey(1, false), Key<long>.CreateKey(2, false));
+            Assert.IsFalse(keyRange.IsEmpty);
+        }
+
+        /// <summary>
+        /// KeyRange.Empty test 6
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Empty test 6 (min > max)")]
+        public void VerifyKeyRangeEmpty6()
+        {
+            var keyRange = new KeyRange<long>(Key<long>.CreateKey(2, false), Key<long>.CreateKey(1, false));
+            Assert.IsTrue(keyRange.IsEmpty);
+        }
+
+        /// <summary>
+        /// KeyRange.Empty test 7
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Empty test 7 (min == max, min is exclusive)")]
+        public void VerifyKeyRangeEmpty7()
+        {
+            var keyRange = new KeyRange<long>(Key<long>.CreateKey(2, false), Key<long>.CreateKey(2, true));
+            Assert.IsTrue(keyRange.IsEmpty);
+        }
+
+        /// <summary>
+        /// KeyRange.Empty test 8
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Empty test 8 (min == max, max is exclusive)")]
+        public void VerifyKeyRangeEmpty8()
+        {
+            var keyRange = new KeyRange<long>(Key<long>.CreateKey(2, true), Key<long>.CreateKey(2, false));
+            Assert.IsTrue(keyRange.IsEmpty);
+        }
+
+        /// <summary>
+        /// KeyRange.Empty test 9
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Empty test 9 (min == max, both are exclusive)")]
+        public void VerifyKeyRangeEmpty9()
+        {
+            var keyRange = new KeyRange<long>(Key<long>.CreateKey(2, false), Key<long>.CreateKey(2, false));
+            Assert.IsTrue(keyRange.IsEmpty);
+        }
+
+        /// <summary>
+        /// KeyRange.Empty test 10
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Empty test 10 (min == max, both are inclusive)")]
+        public void VerifyKeyRangeEmpty10()
+        {
+            var keyRange = new KeyRange<long>(Key<long>.CreateKey(2, true), Key<long>.CreateKey(2, true));
+            Assert.IsFalse(keyRange.IsEmpty);
+        }
+
+        /// <summary>
+        /// KeyRange.Empty test 11
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Empty test 11 (min == max, max is prefix)")]
+        public void VerifyKeyRangeEmpty11()
+        {
+            var keyRange = new KeyRange<string>(Key<string>.CreateKey("b", true), Key<string>.CreatePrefixKey("b"));
+            Assert.IsFalse(keyRange.IsEmpty);
+        }
+
+        /// <summary>
+        /// KeyRange.Empty test 12
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Empty test 12 (min == max, max is prefix, min is exclusive)")]
+        public void VerifyKeyRangeEmpty12()
+        {
+            var keyRange = new KeyRange<string>(Key<string>.CreateKey("b", false), Key<string>.CreatePrefixKey("b"));
+            Assert.IsTrue(keyRange.IsEmpty);
+        }
+
+        /// <summary>
         /// Verify the KeyRange.Equals returns false for null.
         /// </summary>
         [TestMethod]
@@ -352,6 +494,30 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// KeyRange.Invert test 5
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Invert test 5 (range with prefix)")]
+        public void TestKeyRangeInvert5()
+        {
+            var keyrange = new KeyRange<string>(null, Key<string>.CreatePrefixKey("z"));
+            Assert.AreEqual(KeyRange<string>.OpenRange, keyrange.Invert());
+        }
+
+        /// <summary>
+        /// KeyRange.Invert test 6
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Invert test 6 (range with prefix)")]
+        public void TestKeyRangeInvert6()
+        {
+            var keyrange = new KeyRange<string>(Key<string>.CreatePrefixKey("a"), null);
+            Assert.AreEqual(KeyRange<string>.OpenRange, keyrange.Invert());
+        }
+
+        /// <summary>
         /// KeyRange intersect test 1
         /// </summary>
         [TestMethod]
@@ -481,6 +647,62 @@ namespace EsentCollectionsTests
             var range1 = new KeyRange<string>(Key<string>.CreateKey("a", true), Key<string>.CreateKey("b", false));
             var range2 = new KeyRange<string>(Key<string>.CreateKey("a", true), Key<string>.CreatePrefixKey("b"));
             var expected = new KeyRange<string>(Key<string>.CreateKey("a", true), Key<string>.CreateKey("b", false));
+            KeyRangeIntersectionHelper(range1, range2, expected);
+        }
+
+        /// <summary>
+        /// KeyRange intersect test 11
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Intersect test 11 (separate ranges)")]
+        public void TestKeyRangeIntersect11()
+        {
+            var range1 = new KeyRange<int>(Key<int>.CreateKey(8, true), Key<int>.CreateKey(10, true));
+            var range2 = new KeyRange<int>(Key<int>.CreateKey(12, true), Key<int>.CreateKey(14, true));
+            KeyRangeIntersectionHelper(range1, range2, KeyRange<int>.EmptyRange);
+        }
+
+        /// <summary>
+        /// KeyRange intersect test 12
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Intersect test 12 (separate ranges with inclusive/exclusive)")]
+        public void TestKeyRangeIntersect12()
+        {
+            var range1 = new KeyRange<int>(Key<int>.CreateKey(8, true), Key<int>.CreateKey(10, true));
+            var range2 = new KeyRange<int>(Key<int>.CreateKey(10, false), Key<int>.CreateKey(14, true));
+            KeyRangeIntersectionHelper(range1, range2, KeyRange<int>.EmptyRange);
+        }
+
+        /// <summary>
+        /// KeyRange intersect test 13
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Intersect test 13 (overlapping ranges with inclusive/exclusive)")]
+        public void TestKeyRangeIntersect13()
+        {
+            var range1 = new KeyRange<int>(Key<int>.CreateKey(8, true), Key<int>.CreateKey(10, true));
+            var range2 = new KeyRange<int>(Key<int>.CreateKey(10, true), Key<int>.CreateKey(14, true));
+            var expected = new KeyRange<int>(Key<int>.CreateKey(10, true), Key<int>.CreateKey(10, true));
+            Assert.IsFalse(expected.IsEmpty);
+            KeyRangeIntersectionHelper(range1, range2, expected);
+        }
+
+        /// <summary>
+        /// KeyRange intersect test 14
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Intersect test 14 (overlapping ranges with prefix)")]
+        public void TestKeyRangeIntersect14()
+        {
+            var range1 = new KeyRange<string>(Key<string>.CreateKey("a", true), Key<string>.CreatePrefixKey("x"));
+            var range2 = new KeyRange<string>(Key<string>.CreateKey("x", true), null);
+            var expected = new KeyRange<string>(Key<string>.CreateKey("x", true), Key<string>.CreatePrefixKey("x"));
+            Assert.IsFalse(expected.IsEmpty);
             KeyRangeIntersectionHelper(range1, range2, expected);
         }
 

@@ -47,6 +47,7 @@
     <Compile Include="KeyValueExpressionEvaluatorTests.cs" />
     <Compile Include="KeyRangeTests.cs" />
     <Compile Include="KeyTests.cs" />
+    <Compile Include="RandomInt32RangeExpressionTests.cs" />
     <Compile Include="SortedDictionaryComparisonTests.cs" />
     <Compile Include="DictionaryCreationTests.cs" />
     <Compile Include="DictionaryTests.cs" />

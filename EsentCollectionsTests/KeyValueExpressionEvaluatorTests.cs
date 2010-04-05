@@ -2,9 +2,6 @@
 // <copyright file="KeyValueExpressionEvaluatorTests.cs" company="Microsoft Corporation">
 //   Copyright (c) Microsoft Corporation.
 // </copyright>
-// <summary>
-//   Compare a PersistentDictionary against a generic dictionary.
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace EsentCollectionsTests
@@ -16,7 +13,7 @@ namespace EsentCollectionsTests
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
-    /// Compare a PersistentDictionary against a generic dictionary.
+    /// Test evaluation of KeyValue expressions.
     /// </summary>
     [TestClass]
     public class KeyValueExpressionEvaluatorTests
@@ -401,8 +398,9 @@ namespace EsentCollectionsTests
         [Description("Verify a NOT of != doesn't work (provides no limits)")]
         public void VerifyNotOfNeDoesntWork()
         {
-            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key != 3));
-            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
+            KeyRange<int> actual = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key != 3));
+            KeyRange<int> expected = new KeyRange<int>(Key<int>.CreateKey(3, true), Key<int>.CreateKey(3, true));
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -455,26 +453,36 @@ namespace EsentCollectionsTests
         [Description("Verify a NOT of >= gives <")]
         public void VerifyNotOfGeGivesLt()
         {
-            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key >= 4));
-            Assert.IsNull(keyRange.Min);
-            Assert.AreEqual(4, keyRange.Max.Value);
-            Assert.IsFalse(keyRange.Max.IsInclusive);
+            KeyRange<int> actual = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key >= 4));
+            KeyRange<int> expected = new KeyRange<int>(null, Key<int>.CreateKey(4, false));
         }
 
         /// <summary>
-        /// Verify DeMorgans law works.
+        /// Verify DeMorgans law works for OR.
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Verify DeMorgans law works")]
-        public void VerifyDeMorgans()
+        [Description("Verify DeMorgans law works for ||")]
+        public void VerifyDeMorgansForOr()
         {
             // This should be the same as (x.Key >= 11 && x.Key < 22)
-            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key < 11 || x.Key >= 22));
-            Assert.AreEqual(11, keyRange.Min.Value);
-            Assert.IsTrue(keyRange.Min.IsInclusive);
-            Assert.AreEqual(22, keyRange.Max.Value);
-            Assert.IsFalse(keyRange.Max.IsInclusive);
+            KeyRange<int> actual = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key < 11 || x.Key >= 22));
+            KeyRange<int> expected = new KeyRange<int>(Key<int>.CreateKey(11, true), Key<int>.CreateKey(22, false));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Verify DeMorgans law works for AND.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify DeMorgans law works for &&")]
+        public void VerifyDeMorgansForAnd()
+        {
+            // This should be the same as (x.Key > 11 || x.Key > 22)
+            KeyRange<int> actual = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key <= 11 && x.Key <= 22));
+            KeyRange<int> expected = new KeyRange<int>(Key<int>.CreateKey(11, false), null);
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -1502,6 +1510,24 @@ namespace EsentCollectionsTests
             Assert.IsFalse(keyRange.Min.IsInclusive);
             Assert.AreEqual(50, keyRange.Max.Value);
             Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test expression 9.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test expression 9")]
+        public void TestSample9()
+        {
+            // Regression test for:
+            // KeyRange is too small.
+            // Expression:
+            //  x => Not(((2137 >= x.Key) && Not((-3611 = x.Key))))
+            KeyRange<int> actual =
+                KeyValueExpressionEvaluator<int, int>.GetKeyRange(
+                    x => !((2137 >= x.Key) && !(-3611 == x.Key)));
+            KeyRange<int> expected = new KeyRange<int>(Key<int>.CreateKey(-3611, true), null);
         }
 
         /// <summary>

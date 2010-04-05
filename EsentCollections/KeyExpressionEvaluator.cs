@@ -51,50 +51,43 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 throw new ArgumentNullException("keyMemberName");
             }
 
-            return UnionRanges(GetKeyRangesOfSubtree(expression, keyMemberName));
+            return GetKeyRangeOfSubtree(expression, keyMemberName);
         }
 
         /// <summary>
-        /// Evaluate a predicate Expression and determine key ranges which
-        /// contain all items matched by the predicate.
+        /// Evaluate a predicate Expression and determine key range which
+        /// contains all items matched by the predicate.
         /// </summary>
         /// <param name="expression">The expression to evaluate.</param>
         /// <param name="keyMemberName">The name of the parameter member that is the key.</param>
         /// <returns>
-        /// A list of KeyRanges containing all items matched by the predicate. If no
+        /// A KeyRange containing all items matched by the predicate. If no
         /// range can be determined the ranges will include all items.
         /// </returns>
-        private static IEnumerable<KeyRange<TKey>> GetKeyRangesOfSubtree(Expression expression, string keyMemberName)
+        private static KeyRange<TKey> GetKeyRangeOfSubtree(Expression expression, string keyMemberName)
         {
             switch (expression.NodeType)
             {
                 case ExpressionType.AndAlso:
                 {
-                    // Intersect the union of the left and right parts
+                    // Intersect the left and right parts
                     var binaryExpression = (BinaryExpression) expression;
-                    KeyRange<TKey> left = UnionRanges(GetKeyRangesOfSubtree(binaryExpression.Left, keyMemberName));
-                    KeyRange<TKey> right = UnionRanges(GetKeyRangesOfSubtree(binaryExpression.Right, keyMemberName));
-                    return new KeyRange<TKey>[] { left & right };
+                    return GetKeyRangeOfSubtree(binaryExpression.Left, keyMemberName)
+                           & GetKeyRangeOfSubtree(binaryExpression.Right, keyMemberName);
                 }
 
                 case ExpressionType.OrElse:
                 {
-                    // Return a list of the left and right parts
+                    // Union the left and right parts
                     var binaryExpression = (BinaryExpression) expression;
-                    return
-                        GetKeyRangesOfSubtree(binaryExpression.Left, keyMemberName).Concat(
-                            GetKeyRangesOfSubtree(binaryExpression.Right, keyMemberName));
+                    return GetKeyRangeOfSubtree(binaryExpression.Left, keyMemberName)
+                           | GetKeyRangeOfSubtree(binaryExpression.Right, keyMemberName);
                 }
 
                 case ExpressionType.Not:
                 {
-                    // Here we apply DeMorgan's Law: a NOT of a set of ranges becomes
-                    // the intersection of their negations.
-                    var unaryExpression = (UnaryExpression) expression;
-                    IEnumerable<KeyRange<TKey>> invertedRanges =
-                        from r in GetKeyRangesOfSubtree(unaryExpression.Operand, keyMemberName)
-                        select r.Invert();
-                    return new KeyRange<TKey>[] { IntersectRanges(invertedRanges) };
+                    var unaryExpression = (UnaryExpression)expression;
+                    return GetNegationOf(unaryExpression.Operand, keyMemberName);
                 }
 
                 case ExpressionType.Call:
@@ -111,7 +104,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                             if (StringExpressionEvaluatorHelper.StringEqualsMethod == methodCall.Method
                                 && ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(methodCall.Arguments[0], out value))
                             {
-                                return new KeyRange<TKey>[] { new KeyRange<TKey>(Key<TKey>.CreateKey(value, true), Key<TKey>.CreateKey(value, true)) };
+                                return new KeyRange<TKey>(Key<TKey>.CreateKey(value, true), Key<TKey>.CreateKey(value, true));
                             }
 
                             // String.StartsWith
@@ -119,7 +112,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                                 && ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(methodCall.Arguments[0], out value))
                             {
                                 // Lower range is just the string, upper range is the prefix
-                                return new KeyRange<TKey>[] { new KeyRange<TKey>(Key<TKey>.CreateKey(value, true), Key<TKey>.CreatePrefixKey(value)) };
+                                return new KeyRange<TKey>(Key<TKey>.CreateKey(value, true), Key<TKey>.CreatePrefixKey(value));
                             }
                         }
                     }
@@ -143,15 +136,15 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                         {
                             case ExpressionType.Equal:
                                 var key = Key<TKey>.CreateKey(value, true);
-                                return new KeyRange<TKey>[] { new KeyRange<TKey>(key, key) };
+                                return new KeyRange<TKey>(key, key);
                             case ExpressionType.LessThan:
-                                return new KeyRange<TKey>[] { new KeyRange<TKey>(null, Key<TKey>.CreateKey(value, false)) };
+                                return new KeyRange<TKey>(null, Key<TKey>.CreateKey(value, false));
                             case ExpressionType.LessThanOrEqual:
-                                return new KeyRange<TKey>[] { new KeyRange<TKey>(null, Key<TKey>.CreateKey(value, true)) };
+                                return new KeyRange<TKey>(null, Key<TKey>.CreateKey(value, true));
                             case ExpressionType.GreaterThan:
-                                return new KeyRange<TKey>[] { new KeyRange<TKey>(Key<TKey>.CreateKey(value, false), null) };
+                                return new KeyRange<TKey>(Key<TKey>.CreateKey(value, false), null);
                             case ExpressionType.GreaterThanOrEqual:
-                                return new KeyRange<TKey>[] { new KeyRange<TKey>(Key<TKey>.CreateKey(value, true), null) };
+                                return new KeyRange<TKey>(Key<TKey>.CreateKey(value, true), null);
                             default:
                                 throw new InvalidOperationException(expressionType.ToString());
                         }
@@ -164,7 +157,62 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                     break;
             }
 
-            return new List<KeyRange<TKey>> { KeyRange<TKey>.OpenRange };
+            return KeyRange<TKey>.OpenRange;
+        }
+
+        /// <summary>
+        /// Get the negation of the given expression.
+        /// </summary>
+        /// <param name="expression">The expression.</param>
+        /// <param name="keyMemberName">The name of the parameter member that is the key.</param>
+        /// <returns>The negation of the given range.</returns>
+        private static KeyRange<TKey> GetNegationOf(Expression expression, string keyMemberName)
+        {
+            switch (expression.NodeType)
+            {
+                case ExpressionType.Not:
+                {
+                    // Negation of a not simply means evaluating the condition
+                    UnaryExpression unaryExpression = (UnaryExpression)expression;
+                    return GetKeyRangeOfSubtree(unaryExpression.Operand, keyMemberName);
+                }
+
+                case ExpressionType.AndAlso:
+                {
+                    // DeMorgan's Law: !(A && B) -> !A || !B
+                    BinaryExpression binaryExpression = (BinaryExpression)expression;
+                    return GetNegationOf(binaryExpression.Left, keyMemberName) | GetNegationOf(binaryExpression.Right, keyMemberName);
+                }
+
+                case ExpressionType.OrElse:
+                {
+                    // DeMorgan's Law: !(A || B) -> !A && !B
+                    BinaryExpression binaryExpression = (BinaryExpression)expression;
+                    return GetNegationOf(binaryExpression.Left, keyMemberName) & GetNegationOf(binaryExpression.Right, keyMemberName);
+                }
+
+                case ExpressionType.Equal:
+                {
+                    return KeyRange<TKey>.OpenRange;
+                }
+
+                case ExpressionType.NotEqual:
+                {
+                    BinaryExpression binaryExpression = (BinaryExpression)expression;
+                    return GetKeyRangeOfSubtree(
+                        Expression.Equal(binaryExpression.Left, binaryExpression.Right), keyMemberName);
+                }
+
+                case ExpressionType.LessThan:
+                case ExpressionType.LessThanOrEqual:
+                case ExpressionType.GreaterThan:
+                case ExpressionType.GreaterThanOrEqual:
+                    return GetKeyRangeOfSubtree(expression, keyMemberName).Invert();
+                default:
+                    break;
+            }
+
+            return KeyRange<TKey>.OpenRange;
         }
 
         /// <summary>

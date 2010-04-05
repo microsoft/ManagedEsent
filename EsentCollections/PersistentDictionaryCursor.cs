@@ -229,9 +229,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>False if the range is empty.</returns>
         public bool SetIndexRange(KeyRange<TKey> range)
         {
-            if (null != range.Min
-                && null != range.Max
-                && range.Min.Value.CompareTo(range.Max.Value) > 0)
+            if (range.IsEmpty)
             {
                 return false;
             }

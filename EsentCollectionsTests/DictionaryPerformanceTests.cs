@@ -152,7 +152,7 @@ namespace EsentCollectionsTests
         [Priority(4)]
         public void TestRandomInsertSpeed()
         {
-            const int NumInserts = 1000000;
+            const int NumInserts = 100000;
             var keys = Enumerable.Range(0, NumInserts).ToArray();
             keys.Shuffle();
 
