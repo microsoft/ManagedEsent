@@ -14,17 +14,18 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     using System.Collections.Generic;
 
     /// <summary>
-    /// An object which can enumerate the specified key range in a PersistentDictionary.
+    /// A PersistentDictionary enumerator that takes a key range and a filter.
     /// </summary>
-    /// <typeparam name="TKey">The type of the key in the dictionary.</typeparam>
-    /// <typeparam name="TValue">Thne type of the value in the dictionary.</typeparam>
-    internal sealed class PersistentDictionaryEnumerator<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>
+    /// <typeparam name="TKey">The type of the dictionary .key.</typeparam>
+    /// <typeparam name="TValue">The type of the dictionary value.</typeparam>
+    /// <typeparam name="TReturn">The return value of the enumerator.</typeparam>
+    internal sealed class PersistentDictionaryEnumerator<TKey, TValue, TReturn> : IEnumerator<TReturn>
         where TKey : IComparable<TKey>
     {
         /// <summary>
         /// The dictionary being iterated.
         /// </summary>
-        private readonly PersistentDictionary<TKey, TValue> dict;
+        private readonly PersistentDictionary<TKey, TValue> dictionary;
 
         /// <summary>
         /// The key range being iterated.
@@ -32,36 +33,151 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         private readonly KeyRange<TKey> range;
 
         /// <summary>
-        /// Initializes a new instance of the PersistentDictionaryEnumerator class.
+        /// A function that gets the value from a cursor.
         /// </summary>
-        /// <param name="dict">The dictionary to enumerate.</param>
-        /// <param name="range">The key range being enumerated.</param>
-        public PersistentDictionaryEnumerator(PersistentDictionary<TKey, TValue> dict, KeyRange<TKey> range)
+        private readonly Func<PersistentDictionaryCursor<TKey, TValue>, TReturn> getter;
+
+        /// <summary>
+        /// A compiled predicated expression to apply to the entries. Only values that
+        /// match the predicate are returned.
+        /// </summary>
+        private readonly Predicate<TReturn> predicate;
+
+        /// <summary>
+        /// Cursor being used to iterate the dictionary.
+        /// </summary>
+        private PersistentDictionaryCursor<TKey, TValue> cursor;
+
+        /// <summary>
+        /// Set to true once we reach the end.
+        /// </summary>
+        private bool isAtEnd;
+
+        /// <summary>
+        /// Initializes a new instance of the
+        /// <see cref="PersistentDictionaryEnumerator{TKey,TValue,TReturn}"/> class.
+        /// </summary>
+        /// <param name="dictionary">The dictionary to enumerate.</param>
+        /// <param name="range">The range to enumerate.</param>
+        /// <param name="getter">A function that gets the value from a cursor.</param>
+        /// <param name="predicate">The predicate to filter items with.</param>
+        public PersistentDictionaryEnumerator(
+            PersistentDictionary<TKey, TValue> dictionary,
+            KeyRange<TKey> range,
+            Func<PersistentDictionaryCursor<TKey, TValue>, TReturn> getter,
+            Predicate<TReturn> predicate)
         {
-            this.dict = dict;
+            this.dictionary = dictionary;
             this.range = range;
+            this.getter = getter;
+            this.predicate = predicate;
         }
 
         /// <summary>
-        /// Returns an enumerator that iterates through the collection.
+        /// Gets the current entry.
         /// </summary>
-        /// <returns>
-        /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
-        /// </returns>
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
+        public TReturn Current { get; private set; }
+
+        /// <summary>
+        /// Gets the current entry.
+        /// </summary>
+        object IEnumerator.Current
         {
-            return this.dict.GetGenericEnumerator(c => c.RetrieveCurrent(), this.range);
+            get { return this.Current; }
         }
 
         /// <summary>
-        /// Returns an enumerator that iterates through a collection.
+        /// Resets the enumerator. The next call to MoveNext will move
+        /// to the first entry.
+        /// </summary>
+        public void Reset()
+        {
+            this.CloseCursor();
+            this.isAtEnd = false;
+        }
+
+        /// <summary>
+        /// Disposes of any resources the enumerator is using.
+        /// </summary>
+        public void Dispose()
+        {
+            this.CloseCursor();
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Move to the next entry.
         /// </summary>
         /// <returns>
-        /// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+        /// True if an entry was found, false otherwise.
         /// </returns>
-        IEnumerator IEnumerable.GetEnumerator()
+        public bool MoveNext()
         {
-            return this.GetEnumerator();
+            // Moving to the end is sticky (until Reset is called)
+            if (this.isAtEnd)
+            {
+                return false;
+            }
+
+            if (null == this.cursor)
+            {
+                this.cursor = this.dictionary.GetCursor();
+                using (this.cursor.BeginReadOnlyTransaction())
+                {
+                    if (this.cursor.SetIndexRange(this.range) && this.MoveToMatch())
+                    {
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                using (this.cursor.BeginReadOnlyTransaction())
+                {
+                    if (this.cursor.TryMoveNext() && this.MoveToMatch())
+                    {
+                        return true;
+                    }
+                }                
+            }
+
+            this.isAtEnd = true;
+            return false;
+        }
+
+        /// <summary>
+        /// Move to an entry that matches the predicate. This will only move off
+        /// the current entry if it doesn't match the predicate.
+        /// </summary>
+        /// <returns>True if a matching entry was found.</returns>
+        private bool MoveToMatch()
+        {
+            TReturn candidate = this.getter(this.cursor);
+
+            while (!this.predicate(candidate))
+            {
+                if (!this.cursor.TryMoveNext())
+                {
+                    return false;
+                }
+
+                candidate = this.getter(this.cursor);
+            }
+
+            this.Current = candidate;
+            return true;
+        }
+
+        /// <summary>
+        /// Close the cursor if it is open.
+        /// </summary>
+        private void CloseCursor()
+        {
+            if (null != this.cursor)
+            {
+                this.cursor.Dispose();
+                this.cursor = null;
+            }
         }
     }
 }

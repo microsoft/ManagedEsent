@@ -41,7 +41,7 @@ namespace EsentCollectionsTests
         /// <summary>
         /// MemberInfo that describes the Key member of the KeyValuePair.
         /// </summary>
-        private static readonly MemberInfo keyMemberInfo = typeof(KeyValuePair<int, int>).GetMember("Key")[0];
+        private static readonly MemberInfo keyMemberInfo = typeof(KeyValuePair<int, int>).GetProperty("Key", typeof(int));
 
         /// <summary>
         /// Random number generator.
@@ -183,7 +183,7 @@ namespace EsentCollectionsTests
 
             if (count > 0)
             {
-                KeyRange<int> keyRange = KeyExpressionEvaluator<int>.GetKeyRange(expression.Body, "Key");
+                KeyRange<int> keyRange = KeyExpressionEvaluator<int>.GetKeyRange(expression.Body, keyMemberInfo);
                 Assert.IsTrue(
                     KeyRangeIsSufficient(keyRange, min, max),
                     "KeyRange is too small. Expression: {0}, Min = {1}, Max = {2}, Got {3}",

@@ -87,10 +87,13 @@
     <Compile Include="PersistentDictionaryConverters.cs" />
     <Compile Include="PersistentDictionaryCursor.cs" />
     <Compile Include="PersistentDictionaryCursorCache.cs" />
+    <Compile Include="PersistentDictionaryEnumerable.cs" />
     <Compile Include="PersistentDictionaryEnumerator.cs" />
     <Compile Include="PersistentDictionaryFile.cs" />
     <Compile Include="PersistentDictionaryKeyCollection.cs" />
     <Compile Include="PersistentDictionaryLinq.cs" />
+    <Compile Include="PersistentDictionaryLinqEnumerable.cs" />
+    <Compile Include="PersistentDictionaryTracing.cs" />
     <Compile Include="PersistentDictionaryValueCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadOnlyTransaction.cs" />

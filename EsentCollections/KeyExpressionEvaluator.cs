@@ -34,24 +34,24 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// contains all items matched by the predicate.
         /// </summary>
         /// <param name="expression">The expression to evaluate.</param>
-        /// <param name="keyMemberName">The name of the parameter member that is the key.</param>
+        /// <param name="keyMemberInfo">The name of the parameter member that is the key.</param>
         /// <returns>
         /// A KeyRange that contains all items matched by the predicate. If no
         /// range can be determined the range will include all items.
         /// </returns>
-        public static KeyRange<TKey> GetKeyRange(Expression expression, string keyMemberName)
+        public static KeyRange<TKey> GetKeyRange(Expression expression, MemberInfo keyMemberInfo)
         {
             if (null == expression)
             {
                 throw new ArgumentNullException("expression");    
             }
 
-            if (null == keyMemberName)
+            if (null == keyMemberInfo)
             {
-                throw new ArgumentNullException("keyMemberName");
+                throw new ArgumentNullException("keyMemberInfo");
             }
 
-            return GetKeyRangeOfSubtree(expression, keyMemberName);
+            return GetKeyRangeOfSubtree(expression, keyMemberInfo);
         }
 
         /// <summary>
@@ -59,12 +59,12 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// contains all items matched by the predicate.
         /// </summary>
         /// <param name="expression">The expression to evaluate.</param>
-        /// <param name="keyMemberName">The name of the parameter member that is the key.</param>
+        /// <param name="keyMemberInfo">The name of the parameter member that is the key.</param>
         /// <returns>
         /// A KeyRange containing all items matched by the predicate. If no
         /// range can be determined the ranges will include all items.
         /// </returns>
-        private static KeyRange<TKey> GetKeyRangeOfSubtree(Expression expression, string keyMemberName)
+        private static KeyRange<TKey> GetKeyRangeOfSubtree(Expression expression, MemberInfo keyMemberInfo)
         {
             switch (expression.NodeType)
             {
@@ -72,22 +72,22 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 {
                     // Intersect the left and right parts
                     var binaryExpression = (BinaryExpression) expression;
-                    return GetKeyRangeOfSubtree(binaryExpression.Left, keyMemberName)
-                           & GetKeyRangeOfSubtree(binaryExpression.Right, keyMemberName);
+                    return GetKeyRangeOfSubtree(binaryExpression.Left, keyMemberInfo)
+                           & GetKeyRangeOfSubtree(binaryExpression.Right, keyMemberInfo);
                 }
 
                 case ExpressionType.OrElse:
                 {
                     // Union the left and right parts
                     var binaryExpression = (BinaryExpression) expression;
-                    return GetKeyRangeOfSubtree(binaryExpression.Left, keyMemberName)
-                           | GetKeyRangeOfSubtree(binaryExpression.Right, keyMemberName);
+                    return GetKeyRangeOfSubtree(binaryExpression.Left, keyMemberInfo)
+                           | GetKeyRangeOfSubtree(binaryExpression.Right, keyMemberInfo);
                 }
 
                 case ExpressionType.Not:
                 {
                     var unaryExpression = (UnaryExpression)expression;
-                    return GetNegationOf(unaryExpression.Operand, keyMemberName);
+                    return GetNegationOf(unaryExpression.Operand, keyMemberInfo);
                 }
 
                 case ExpressionType.Call:
@@ -96,7 +96,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                     {
                         MethodCallExpression methodCall = (MethodCallExpression)expression;
                         if (null != methodCall.Object
-                            && IsKeyAccess(methodCall.Object, keyMemberName))
+                            && IsKeyAccess(methodCall.Object, keyMemberInfo))
                         {
                             TKey value;
 
@@ -130,7 +130,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                     var binaryExpression = (BinaryExpression) expression;
                     TKey value;
                     ExpressionType expressionType;
-                    if (IsConstantComparison(binaryExpression, keyMemberName, out value, out expressionType))
+                    if (IsConstantComparison(binaryExpression, keyMemberInfo, out value, out expressionType))
                     {
                         switch (expressionType)
                         {
@@ -164,9 +164,9 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// Get the negation of the given expression.
         /// </summary>
         /// <param name="expression">The expression.</param>
-        /// <param name="keyMemberName">The name of the parameter member that is the key.</param>
+        /// <param name="keyMemberInfo">The name of the parameter member that is the key.</param>
         /// <returns>The negation of the given range.</returns>
-        private static KeyRange<TKey> GetNegationOf(Expression expression, string keyMemberName)
+        private static KeyRange<TKey> GetNegationOf(Expression expression, MemberInfo keyMemberInfo)
         {
             switch (expression.NodeType)
             {
@@ -174,21 +174,21 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 {
                     // Negation of a not simply means evaluating the condition
                     UnaryExpression unaryExpression = (UnaryExpression)expression;
-                    return GetKeyRangeOfSubtree(unaryExpression.Operand, keyMemberName);
+                    return GetKeyRangeOfSubtree(unaryExpression.Operand, keyMemberInfo);
                 }
 
                 case ExpressionType.AndAlso:
                 {
                     // DeMorgan's Law: !(A && B) -> !A || !B
                     BinaryExpression binaryExpression = (BinaryExpression)expression;
-                    return GetNegationOf(binaryExpression.Left, keyMemberName) | GetNegationOf(binaryExpression.Right, keyMemberName);
+                    return GetNegationOf(binaryExpression.Left, keyMemberInfo) | GetNegationOf(binaryExpression.Right, keyMemberInfo);
                 }
 
                 case ExpressionType.OrElse:
                 {
                     // DeMorgan's Law: !(A || B) -> !A && !B
                     BinaryExpression binaryExpression = (BinaryExpression)expression;
-                    return GetNegationOf(binaryExpression.Left, keyMemberName) & GetNegationOf(binaryExpression.Right, keyMemberName);
+                    return GetNegationOf(binaryExpression.Left, keyMemberInfo) & GetNegationOf(binaryExpression.Right, keyMemberInfo);
                 }
 
                 case ExpressionType.Equal:
@@ -200,14 +200,14 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 {
                     BinaryExpression binaryExpression = (BinaryExpression)expression;
                     return GetKeyRangeOfSubtree(
-                        Expression.Equal(binaryExpression.Left, binaryExpression.Right), keyMemberName);
+                        Expression.Equal(binaryExpression.Left, binaryExpression.Right), keyMemberInfo);
                 }
 
                 case ExpressionType.LessThan:
                 case ExpressionType.LessThanOrEqual:
                 case ExpressionType.GreaterThan:
                 case ExpressionType.GreaterThanOrEqual:
-                    return GetKeyRangeOfSubtree(expression, keyMemberName).Invert();
+                    return GetKeyRangeOfSubtree(expression, keyMemberInfo).Invert();
                 default:
                     break;
             }
@@ -216,41 +216,21 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
-        /// Calculate the union of a set of key ranges.
-        /// </summary>
-        /// <param name="ranges">The key ranges to union.</param>
-        /// <returns>A union of all the ranges.</returns>
-        private static KeyRange<TKey> UnionRanges(IEnumerable<KeyRange<TKey>> ranges)
-        {
-            return ranges.Aggregate(ranges.First(), (a, b) => a | b);
-        }
-
-        /// <summary>
-        /// Calculate the intersection of a set of key ranges.
-        /// </summary>
-        /// <param name="ranges">The key ranges to union.</param>
-        /// <returns>A union of all the ranges.</returns>
-        private static KeyRange<TKey> IntersectRanges(IEnumerable<KeyRange<TKey>> ranges)
-        {
-            return ranges.Aggregate(ranges.First(), (a, b) => a & b);
-        }
-
-        /// <summary>
         /// Determine if the current binary expression involves the Key of the parameter
         /// and a constant value.
         /// </summary>
         /// <param name="expression">The expression to evaluate.</param>
-        /// <param name="keyMemberName">The name of the parameter member that is the key.</param>
+        /// <param name="keyMemberInfo">The name of the parameter member that is the key.</param>
         /// <param name="value">Returns the value being compared to the key.</param>
         /// <param name="expressionType">Returns the type of the expression.</param>
         /// <returns>
         /// True if the expression involves the key of the parameter and a constant value.
         /// </returns>
-        private static bool IsConstantComparison(BinaryExpression expression, string keyMemberName, out TKey value, out ExpressionType expressionType)
+        private static bool IsConstantComparison(BinaryExpression expression, MemberInfo keyMemberInfo, out TKey value, out ExpressionType expressionType)
         {
             // Look for expression of the form x.Key [comparison] value
             //   e.g. x.Key < 0 or x.Key > (3 + 7)
-            if (IsSimpleComparisonExpression(expression, keyMemberName, out value, out expressionType))
+            if (IsSimpleComparisonExpression(expression, keyMemberInfo, out value, out expressionType))
             {
                 return true;
             }
@@ -258,7 +238,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             // Look for expressions of the form x.Key.CompareTo(value) [comparison] 0
             //   e.g. x.Key.CompareTo("foo") <= 0 or 0 > x.Key.CompareTo(5.67)
             // TKey implements IComparable<TKey> so we should expect this on all key types.
-            if (IsCompareToExpression(expression, keyMemberName, out value, out expressionType))
+            if (IsCompareToExpression(expression, keyMemberInfo, out value, out expressionType))
             {
                 return true;
             }
@@ -266,7 +246,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             // For string keys look for expressions of the form String.Compare(Key, value) [comparison] 0
             //   e.g. String.Compare(Key, "foo") < 0 or 0 > String.Compare("bar", Key)
             if (typeof(string) == typeof(TKey)
-                && IsStringComparisonExpression(expression, keyMemberName, out value, out expressionType))
+                && IsStringComparisonExpression(expression, keyMemberInfo, out value, out expressionType))
             {
                 return true;
             }
@@ -280,20 +260,20 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// Determine if the binary expression is comparing the key value against a constant.
         /// </summary>
         /// <param name="expression">The expression.</param>
-        /// <param name="keyMemberName">The name of the parameter key.</param>
+        /// <param name="keyMemberInfo">The name of the parameter key.</param>
         /// <param name="value">Returns the constant being compared against.</param>
         /// <param name="expressionType">Returns the type of the comparison.</param>
         /// <returns>True if this expression is comparing the key value against a constant.</returns>
-        private static bool IsSimpleComparisonExpression(BinaryExpression expression, string keyMemberName, out TKey value, out ExpressionType expressionType)
+        private static bool IsSimpleComparisonExpression(BinaryExpression expression, MemberInfo keyMemberInfo, out TKey value, out ExpressionType expressionType)
         {
-            if (IsKeyAccess(expression.Left, keyMemberName)
+            if (IsKeyAccess(expression.Left, keyMemberInfo)
                 && ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(expression.Right, out value))
             {
                 expressionType = expression.NodeType;
                 return true;
             }
 
-            if (IsKeyAccess(expression.Right, keyMemberName)
+            if (IsKeyAccess(expression.Right, keyMemberInfo)
                 && ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(expression.Left, out value))
             {
                 // The access is on the right so we have to switch the comparison type
@@ -311,16 +291,16 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// using CompareTo.
         /// </summary>
         /// <param name="expression">The expression.</param>
-        /// <param name="keyMemberName">The name of the parameter key.</param>
+        /// <param name="keyMemberInfo">The name of the parameter key.</param>
         /// <param name="value">Returns the constant being compared against.</param>
         /// <param name="expressionType">Returns the type of the comparison.</param>
         /// <returns>True if this expression is comparing the key value against a constant.</returns>
-        private static bool IsCompareToExpression(BinaryExpression expression, string keyMemberName, out TKey value, out ExpressionType expressionType)
+        private static bool IsCompareToExpression(BinaryExpression expression, MemberInfo keyMemberInfo, out TKey value, out ExpressionType expressionType)
         {
             // CompareTo is only guaranteed to return <0, 0 or >0 so allowing for
             // comparisons with values other than 0 is complicated/subtle.
             // One way this could be expanded is by recognizing "< 1", and "> -1" as well.
-            if (IsCompareTo(expression.Left, keyMemberName, out value))
+            if (IsCompareTo(expression.Left, keyMemberInfo, out value))
             {
                 int comparison;
                 if (ConstantExpressionEvaluator<int>.TryGetConstantExpression(expression.Right, out comparison)
@@ -332,7 +312,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 }
             }
 
-            if (IsCompareTo(expression.Right, keyMemberName, out value))
+            if (IsCompareTo(expression.Right, keyMemberInfo, out value))
             {
                 int comparison;
                 if (ConstantExpressionEvaluator<int>.TryGetConstantExpression(expression.Left, out comparison)
@@ -354,11 +334,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// using the simplest (two-argument) form of String.Compare.
         /// </summary>
         /// <param name="expression">The expression.</param>
-        /// <param name="keyMemberName">The name of the parameter key.</param>
+        /// <param name="keyMemberInfo">The name of the parameter key.</param>
         /// <param name="value">Returns the constant being compared against.</param>
         /// <param name="expressionType">Returns the type of the comparison.</param>
         /// <returns>True if this expression is comparing the key value against a constant string.</returns>
-        private static bool IsStringComparisonExpression(BinaryExpression expression, string keyMemberName, out TKey value, out ExpressionType expressionType)
+        private static bool IsStringComparisonExpression(BinaryExpression expression, MemberInfo keyMemberInfo, out TKey value, out ExpressionType expressionType)
         {
             Debug.Assert(typeof(string) == typeof(TKey), "This method should only be called for string keys");
 
@@ -374,7 +354,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             // In the second two cases we do reverse the sense of the comparison:
             //   3. String.Compare("m", Key) > 0
             //   4. 0 > String.Compare(Key, "m")
-            if (IsStringCompare(expression.Left, keyMemberName, out value))
+            if (IsStringCompare(expression.Left, keyMemberInfo, out value))
             {
                 int comparison;
                 if (ConstantExpressionEvaluator<int>.TryGetConstantExpression(expression.Right, out comparison) && 0 == comparison)
@@ -383,7 +363,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                     return true;
                 }                
             }
-            else if (IsStringCompareReversed(expression.Right, keyMemberName, out value))
+            else if (IsStringCompareReversed(expression.Right, keyMemberInfo, out value))
             {
                 int comparison;
                 if (ConstantExpressionEvaluator<int>.TryGetConstantExpression(expression.Left, out comparison) && 0 == comparison)
@@ -392,7 +372,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                     return true;
                 }
             }
-            else if (IsStringCompareReversed(expression.Left, keyMemberName, out value))
+            else if (IsStringCompareReversed(expression.Left, keyMemberInfo, out value))
             {
                 int comparison;
                 if (ConstantExpressionEvaluator<int>.TryGetConstantExpression(expression.Right, out comparison) && 0 == comparison)
@@ -401,7 +381,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                     return true;
                 }
             }
-            else if (IsStringCompare(expression.Right, keyMemberName, out value))
+            else if (IsStringCompare(expression.Right, keyMemberInfo, out value))
             {
                 int comparison;
                 if (ConstantExpressionEvaluator<int>.TryGetConstantExpression(expression.Left, out comparison) && 0 == comparison)
@@ -452,17 +432,24 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// parameter.
         /// </summary>
         /// <param name="expression">The expression to evaluate.</param>
-        /// <param name="keyMemberName">The name of the parameter member that is the key.</param>
+        /// <param name="keyMemberInfo">The name of the parameter member that is the key.</param>
         /// <returns>True if the expression is accessing the key of the parameter.</returns>
-        private static bool IsKeyAccess(Expression expression, string keyMemberName)
+        private static bool IsKeyAccess(Expression expression, MemberInfo keyMemberInfo)
         {
-            if (expression.NodeType == ExpressionType.MemberAccess)
+            // If keyMemberInfo is null then we are using the parameter directly
+            if (null == keyMemberInfo && ExpressionType.Parameter == expression.NodeType)
+            {
+                return true;
+            }
+
+            // If keyMemberInfo is non-null then we are accessing this part of the parameter
+            if (null != keyMemberInfo && ExpressionType.MemberAccess == expression.NodeType)
             {
                 var member = (MemberExpression) expression;
                 if (
                     null != member.Expression
                     && member.Expression.NodeType == ExpressionType.Parameter
-                    && member.Member.Name == keyMemberName)
+                    && member.Member == keyMemberInfo)
                 {
                     return true;
                 }
@@ -475,19 +462,19 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// Determine if the expression is a call to [param].[member].CompareTo(value).
         /// </summary>
         /// <param name="expression">The expression to examine.</param>
-        /// <param name="keyMemberName">The name of the key member.</param>
+        /// <param name="keyMemberInfo">The name of the key member.</param>
         /// <param name="value">Returns the string value being compared against.</param>
         /// <returns>
         /// True if the expression is a call to parameter.keyMember.CompareTo(value).
         /// </returns>
-        private static bool IsCompareTo(Expression expression, string keyMemberName, out TKey value)
+        private static bool IsCompareTo(Expression expression, MemberInfo keyMemberInfo, out TKey value)
         {
             if (expression is MethodCallExpression)
             {
                 MethodCallExpression methodCall = (MethodCallExpression)expression;
                 if (methodCall.Method == compareToMethod
                     && null != methodCall.Object
-                    && IsKeyAccess(methodCall.Object, keyMemberName))
+                    && IsKeyAccess(methodCall.Object, keyMemberInfo))
                 {
                     return ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(methodCall.Arguments[0], out value);
                 }
@@ -501,18 +488,18 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// Determine if the expression is a call to String.Compare(key, value).
         /// </summary>
         /// <param name="expression">The expression to examine.</param>
-        /// <param name="keyMemberName">The name of the key member.</param>
+        /// <param name="keyMemberInfo">The name of the key member.</param>
         /// <param name="value">Returns the string value being compared against.</param>
         /// <returns>
         /// True if the expression is a call to String.Compare(key, value).
         /// </returns>
-        private static bool IsStringCompare(Expression expression, string keyMemberName, out TKey value)
+        private static bool IsStringCompare(Expression expression, MemberInfo keyMemberInfo, out TKey value)
         {
             if (expression is MethodCallExpression)
             {
                 MethodCallExpression methodCall = (MethodCallExpression)expression;
                 if (methodCall.Method == StringExpressionEvaluatorHelper.StringCompareMethod
-                    && IsKeyAccess(methodCall.Arguments[0], keyMemberName))
+                    && IsKeyAccess(methodCall.Arguments[0], keyMemberInfo))
                 {
                     return ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(methodCall.Arguments[1], out value);
                 }
@@ -526,18 +513,18 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// Determine if the expression is a call to String.Compare(value, key).
         /// </summary>
         /// <param name="expression">The expression to examine.</param>
-        /// <param name="keyMemberName">The name of the key member.</param>
+        /// <param name="keyMemberInfo">The name of the key member.</param>
         /// <param name="value">Returns the string value being compared against.</param>
         /// <returns>
         /// True if the expression is a call to String.Compare(value, key).
         /// </returns>
-        private static bool IsStringCompareReversed(Expression expression, string keyMemberName, out TKey value)
+        private static bool IsStringCompareReversed(Expression expression, MemberInfo keyMemberInfo, out TKey value)
         {
             if (expression is MethodCallExpression)
             {
                 MethodCallExpression methodCall = (MethodCallExpression)expression;
                 if (methodCall.Method == StringExpressionEvaluatorHelper.StringCompareMethod
-                    && IsKeyAccess(methodCall.Arguments[1], keyMemberName))
+                    && IsKeyAccess(methodCall.Arguments[1], keyMemberInfo))
                 {
                     return ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(methodCall.Arguments[0], out value);
                 }

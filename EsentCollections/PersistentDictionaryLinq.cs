@@ -12,7 +12,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     using System;
     using System.Collections.Generic;
     using System.Linq.Expressions;
-    using Microsoft.Isam.Esent.Interop;
 
     /// <content>
     /// Represents a collection of persistent keys and values.
@@ -140,24 +139,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 throw new ArgumentNullException("expression");
             }
 
-            Predicate<KeyValuePair<TKey, TValue>> predicate = expression.Compile();
-
-            // Consider: we could get the enumeration of key ranges, sort them and union overlapping ranges.
-            // Enumerating the data as several different ranges would be more efficient when the expression
-            // specifies an OR and the ranges are highly disjoint.
-            KeyRange<TKey> range = KeyValueExpressionEvaluator<TKey, TValue>.GetKeyRange(expression);
-
-#if DEBUG
-            Console.WriteLine("WHERE: {0}", range);
-#endif
-            IEnumerable<KeyValuePair<TKey, TValue>> enumerator = new PersistentDictionaryEnumerator<TKey, TValue>(this, range);
-            foreach (KeyValuePair<TKey, TValue> element in enumerator)
-            {
-                if (predicate(element))
-                {
-                    yield return element;
-                }
-            }
+            return new PersistentDictionaryLinqEnumerable<TKey, TValue>(this, expression);
         }
     }
 }

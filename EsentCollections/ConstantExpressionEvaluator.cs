@@ -13,6 +13,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     using System.Diagnostics;
     using System.Linq;
     using System.Linq.Expressions;
+    using System.Reflection;
 
     /// <summary>
     /// Methods to evaluate an expression which returns a T.
@@ -42,14 +43,63 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 
             if (HasNoParameterAccess(expression))
             {
-                // We will treat this expression as constant so we can just
-                // compile the expression to get its value.
-                value = Expression.Lambda<Func<T>>(expression).Compile()();
+                value = (T)GetExpressionValue(expression);
                 return true;
             }
 
             value = default(T);
             return false;
+        }
+
+        /// <summary>
+        /// Get the value of the expression.
+        /// </summary>
+        /// <param name="expression">The expression to get the value of.</param>
+        /// <returns>The value of the expression.</returns>
+        private static object GetExpressionValue(Expression expression)
+        {
+            switch (expression.NodeType)
+            {
+                case ExpressionType.Convert:
+                {
+                    UnaryExpression unaryExpression = (UnaryExpression)expression;
+                    return Convert.ChangeType(GetExpressionValue(unaryExpression.Operand), unaryExpression.Type);
+                }
+
+                case ExpressionType.Constant:
+                {
+                    ConstantExpression constantExpression = (ConstantExpression)expression;
+                    return constantExpression.Value;
+                }
+
+                case ExpressionType.MemberAccess:
+                {
+                    MemberExpression memberExpression = (MemberExpression)expression;
+                    object obj;
+                    if (null == memberExpression.Expression)
+                    {
+                        obj = null;
+                    }
+                    else if (ExpressionType.Constant == memberExpression.Expression.NodeType)
+                    {
+                        ConstantExpression constantExpression = (ConstantExpression)memberExpression.Expression;
+                        obj = constantExpression.Value;                        
+                    }
+                    else
+                    {
+                        break;
+                    }
+
+                    if (memberExpression.Member is FieldInfo)
+                    {
+                        return ((FieldInfo)memberExpression.Member).GetValue(obj);
+                    }
+
+                    break;
+                }
+            }
+
+            return Expression.Lambda<Func<T>>(expression).Compile()();
         }
 
         /// <summary>

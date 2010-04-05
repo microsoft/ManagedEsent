@@ -359,7 +359,8 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </returns>
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
-            return this.GetGenericEnumerator(c => c.RetrieveCurrent(), new KeyRange<TKey>(null, null));
+            return new PersistentDictionaryEnumerator<TKey, TValue, KeyValuePair<TKey, TValue>>(
+                this, KeyRange<TKey>.OpenRange, c => c.RetrieveCurrent(), x => true);
         }
 
         /// <summary>
@@ -683,6 +684,17 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
+        /// Opens a cursor on the PersistentDictionary. Used by enumerators.
+        /// </summary>
+        /// <returns>
+        /// A new cursor that can be used to enumerate the PersistentDictionary.
+        /// </returns>
+        internal PersistentDictionaryCursor<TKey, TValue> GetCursor()
+        {
+            return this.cursors.GetCursor();
+        }
+
+        /// <summary>
         /// Returns an enumerator that iterates through the keys.
         /// </summary>
         /// <returns>
@@ -690,7 +702,8 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </returns>
         internal IEnumerator<TKey> GetKeyEnumerator()
         {
-            return this.GetGenericEnumerator(c => c.RetrieveCurrentKey(), new KeyRange<TKey>(null, null));
+            return new PersistentDictionaryEnumerator<TKey, TValue, TKey>(
+                this, KeyRange<TKey>.OpenRange, c => c.RetrieveCurrentKey(), x => true);
         }
 
         /// <summary>
@@ -701,61 +714,8 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </returns>
         internal IEnumerator<TValue> GetValueEnumerator()
         {
-            return this.GetGenericEnumerator(c => c.RetrieveCurrentValue(), new KeyRange<TKey>(null, null));
-        }
-
-        /// <summary>
-        /// Returns an enumerator that iterates through the collection.
-        /// </summary>
-        /// <typeparam name="T">The type returned by the iterator.</typeparam>
-        /// <param name="getter">A function that generates a value from a cursor.</param>
-        /// <param name="range">The range of keys to iterate.</param>
-        /// <returns>
-        /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
-        /// </returns>
-        internal IEnumerator<T> GetGenericEnumerator<T>(Func<PersistentDictionaryCursor<TKey, TValue>, T> getter, KeyRange<TKey> range)
-        {
-            var iterator = this.cursors.GetCursor();
-            try
-            {
-                // On the first iteration we want to set up an index range and on subsequent
-                // iterations we will move through the index range. We use this variable to
-                // keep track of which action is needed.
-                bool firstIteration = true;
-                while (true)
-                {
-                    // Use a transaction to move to the next record and retrieve its data.
-                    // Even if the record has been deleted we will be able to move to the 
-                    // next record.
-                    // Note: the struct-based transaction objects don't work here.
-                    using (var transaction = iterator.BeginTransaction())
-                    {
-                        if (firstIteration)
-                        {
-                            if (!iterator.SetIndexRange(range))
-                            {
-                                yield break;
-                            }
-                        }
-                        else if (!iterator.TryMoveNext())
-                        {
-                            yield break;
-                        }
-
-                        firstIteration = false;
-
-                        T item = getter(iterator);
-
-                        // Commit the transaction before returning (so the external user doesn't keep it alive) 
-                        transaction.Commit(CommitTransactionGrbit.LazyFlush);
-                        yield return item;
-                    }
-                }
-            }
-            finally
-            {
-                this.cursors.FreeCursor(iterator);
-            }
+            return new PersistentDictionaryEnumerator<TKey, TValue, TValue>(
+                this, KeyRange<TKey>.OpenRange, c => c.RetrieveCurrentValue(), x => true);
         }
 
         /// <summary>
