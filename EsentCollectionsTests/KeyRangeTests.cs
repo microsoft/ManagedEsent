@@ -88,13 +88,27 @@ namespace EsentCollectionsTests
         [Description("Call KeyRange.ToString with a prefix range")]
         public void TestKeyRangeToStringPrefix()
         {
-            var keyrange = new KeyRange<int>(Key<int>.CreateKey(3, true), Key<int>.CreatePrefixKey(4));
+            var keyrange = new KeyRange<string>(Key<string>.CreateKey("3", true), Key<string>.CreatePrefixKey("4"));
             string s = keyrange.ToString();
             Assert.IsNotNull(s);
             Assert.AreNotEqual(s, String.Empty);
             StringAssert.Contains(s, "3");
             StringAssert.Contains(s, "4");
             StringAssert.Contains(s, "prefix");
+        }
+
+        /// <summary>
+        /// Call KeyRange.ToString() with an empty range.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Call KeyRange.ToString with an empty range")]
+        public void TestKeyRangeToStringEmpt()
+        {
+            string s = KeyRange<Guid>.EmptyRange.ToString();
+            Assert.IsNotNull(s);
+            Assert.AreNotEqual(s, String.Empty);
+            StringAssert.Contains(s, "empty");
         }
 
         /// <summary>
@@ -235,8 +249,34 @@ namespace EsentCollectionsTests
         [Description("KeyRange.Empty test 12 (min == max, max is prefix, min is exclusive)")]
         public void VerifyKeyRangeEmpty12()
         {
+            // The record "ba" would match this
             var keyRange = new KeyRange<string>(Key<string>.CreateKey("b", false), Key<string>.CreatePrefixKey("b"));
-            Assert.IsTrue(keyRange.IsEmpty);
+            Assert.IsFalse(keyRange.IsEmpty);
+        }
+
+        /// <summary>
+        /// KeyRange.Empty test 13
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Empty test 13 (empty string range)")]
+        public void VerifyKeyRangeEmpty13()
+        {
+            Assert.IsTrue(KeyRange<string>.EmptyRange.IsEmpty);
+        }
+
+        /// <summary>
+        /// KeyRange.Empty test 14
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Empty test 14 (longer prefix)")]
+        public void VerifyKeyRangeEmpty14()
+        {
+            KeyRange<string> range = new KeyRange<string>(
+                Key<string>.CreateKey("ggi", true),
+                Key<string>.CreatePrefixKey("g"));
+            Assert.IsFalse(range.IsEmpty);
         }
 
         /// <summary>
@@ -264,17 +304,41 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
-        /// Verify empty key ranges are equal.
+        /// Verify open key ranges are equal.
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Verify Empty key ranges are equal")]
-        public void VerifyEmptyKeyRangesAreEqual()
+        [Description("Verify open key ranges are equal")]
+        public void VerifyOpenKeyRangesAreEqual()
         {
             var keyrange1 = new KeyRange<int>(null, null);
             var keyrange2 = new KeyRange<int>(null, null);
             EqualityAsserts.TestEqualsAndHashCode(keyrange1, keyrange2, true);
         }
+
+        /// <summary>
+        /// Verify empty string key ranges are equal.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify Empty key ranges are equal")]
+        public void VerifyEmptyStringKeyRangesAreEqual()
+        {
+            EqualityAsserts.TestEqualsAndHashCode(KeyRange<string>.EmptyRange, KeyRange<string>.EmptyRange, true);
+        }
+
+        /// <summary>
+        /// Verify different empty string key ranges are equal.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify different empty key ranges are equal")]
+        public void VerifyDifferentEmptyStringKeyRangesAreEqual()
+        {
+            var keyRange = new KeyRange<long>(Key<long>.CreateKey(5, false), Key<long>.CreateKey(5, false));
+            EqualityAsserts.TestEqualsAndHashCode(KeyRange<long>.EmptyRange, keyRange, true);
+        }
+
 
         /// <summary>
         /// Verify a KeyRange equals a range with the same min values.
@@ -707,11 +771,65 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// KeyRange intersect test 15
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Intersect test 15 (string range with min+max and empty range)")]
+        public void TestKeyRangeIntersect15()
+        {
+            var range1 = KeyRange<string>.OpenRange;
+            var range2 = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("z"));
+            KeyRangeIntersectionHelper(range1, range2, range2);
+        }
+
+        /// <summary>
+        /// KeyRange intersect test 16
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Intersect test 16 (string range with prefix/non-prefix)")]
+        public void TestKeyRangeIntersect16()
+        {
+            // The longer prefix is more restrictive, so we want it
+            var range1 = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("z"));
+            var range2 = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("zz"));
+            KeyRangeIntersectionHelper(range1, range2, range2);
+        }
+
+        /// <summary>
+        /// KeyRange intersect test 17
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Intersect test 17 (string range with prefix/non-prefix)")]
+        public void TestKeyRangeIntersect17()
+        {
+            var range1 = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("z"));
+            var range2 = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreateKey("z", true));
+            KeyRangeIntersectionHelper(range1, range2, range2);
+        }
+
+        /// <summary>
+        /// KeyRange intersect test 18
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Intersect test 18 (string range with prefix/non-prefix)")]
+        public void TestKeyRangeIntersect18()
+        {
+            // The longer prefix is more restrictive, so we want it
+            var range1 = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("ba"));
+            var range2 = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("bb"));
+            KeyRangeIntersectionHelper(range1, range2, range1);
+        }
+
+        /// <summary>
         /// KeyRange union test 1
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("KeyRange.Union test 1 (empty ranges)")]
+        [Description("KeyRange.Union test 1 (open ranges)")]
         public void TestKeyRangeUnion1()
         {
             KeyRangeUnionHelper(KeyRange<int>.OpenRange, KeyRange<int>.OpenRange, KeyRange<int>.OpenRange);
@@ -722,7 +840,7 @@ namespace EsentCollectionsTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("KeyRange.Union test 2 (range with min and empty range)")]
+        [Description("KeyRange.Union test 2 (range with min and open range)")]
         public void TestKeyRangeUnion2()
         {
             var range2 = new KeyRange<int>(Key<int>.CreateKey(1, false), null);
@@ -734,7 +852,7 @@ namespace EsentCollectionsTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("KeyRange.Union test 3 (range with max and empty range)")]
+        [Description("KeyRange.Union test 3 (range with max and open range)")]
         public void TestKeyRangeUnion3()
         {
             var range2 = new KeyRange<int>(null, Key<int>.CreateKey(7, true));
@@ -831,6 +949,62 @@ namespace EsentCollectionsTests
             var range1 = new KeyRange<string>(Key<string>.CreateKey("b", false), Key<string>.CreateKey("c", false));
             var range2 = new KeyRange<string>(Key<string>.CreateKey("a", true), Key<string>.CreatePrefixKey("c"));
             var expected = new KeyRange<string>(Key<string>.CreateKey("a", true), Key<string>.CreatePrefixKey("c"));
+            KeyRangeUnionHelper(range1, range2, expected);
+        }
+
+        /// <summary>
+        /// KeyRange union test 11
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Union test 11 (string range with min+max and empty range)")]
+        public void TestKeyRangeUnion11()
+        {
+            var range = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreateKey("b", true));
+            KeyRangeUnionHelper(KeyRange<string>.EmptyRange, range, range);
+        }
+
+        /// <summary>
+        /// KeyRange union test 12
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Union test 12 (two prefixes)")]
+        public void TestKeyRangeUnion12()
+        {
+            // The shorter prefix matches more records so we want to use it
+            var range1 = new KeyRange<string>(Key<string>.CreateKey("b", false), Key<string>.CreatePrefixKey("c"));
+            var range2 = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("cc"));
+            var expected = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("c"));
+            KeyRangeUnionHelper(range1, range2, expected);
+        }
+
+        /// <summary>
+        /// KeyRange union test 13
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Union test 13 (prefix/non-prefix)")]
+        public void TestKeyRangeUnion13()
+        {
+            var range1 = new KeyRange<string>(Key<string>.CreateKey("b", false), Key<string>.CreateKey("c", true));
+            var range2 = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("cc"));
+            var expected = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("cc"));
+            KeyRangeUnionHelper(range1, range2, expected);
+        }
+
+        /// <summary>
+        /// KeyRange union test 14
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Union test 14 (non-prefix/prefix)")]
+        public void TestKeyRangeUnion14()
+        {
+            // The prefix matches more records so we want to use it
+            var range1 = new KeyRange<string>(Key<string>.CreateKey("b", false), Key<string>.CreateKey("cc", true));
+            var range2 = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("c"));
+            var expected = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("c"));
             KeyRangeUnionHelper(range1, range2, expected);
         }
 

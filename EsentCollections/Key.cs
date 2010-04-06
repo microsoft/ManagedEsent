@@ -114,14 +114,34 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>True if the keys are equal, false otherwise.</returns>
         public bool Equals(Key<T> other)
         {
+            return this.ValueEquals(other)
+                   && this.IsInclusive == other.IsInclusive
+                   && this.IsPrefix == other.IsPrefix;
+        }
+
+        /// <summary>
+        /// Compare the value of this Key to another key.
+        /// </summary>
+        /// <param name="other">The Key to compare with.</param>
+        /// <returns>True if the values are equal, false otherwise.</returns>
+        private bool ValueEquals(Key<T> other)
+        {
             if (null == other)
             {
                 return false;
             }
 
-            return 0 == this.Value.CompareTo(other.Value)
-                   && this.IsInclusive == other.IsInclusive
-                   && this.IsPrefix == other.IsPrefix;
+            if (Object.Equals(this.Value, other.Value))
+            {
+                return true;
+            }
+            
+            if (null == this.Value || null == other.Value)
+            {
+                return false;
+            }
+
+            return 0 == this.Value.CompareTo(other.Value);
         }
     }
 }

@@ -19,17 +19,17 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     internal static class StringExpressionEvaluatorHelper
     {
         /// <summary>
-        /// A MethodInfo describes String.Compare(string, string).
+        /// A MethodInfo describing String.Compare(string, string).
         /// </summary>
         private static readonly MethodInfo stringCompareMethod = typeof(string).GetMethod("Compare", new[] { typeof(string), typeof(string) });
 
         /// <summary>
-        /// A MethodInfo describes String.Equals(string).
+        /// A MethodInfo describing String.Equals(string).
         /// </summary>
         private static readonly MethodInfo stringEqualsMethod = typeof(string).GetMethod("Equals", new[] { typeof(string) });
 
         /// <summary>
-        /// A MethodInfo describes String.Equals(string).
+        /// A MethodInfo describing String.StartsWith(string).
         /// </summary>
         private static readonly MethodInfo stringStartsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) }); 
        

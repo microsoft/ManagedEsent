@@ -11,6 +11,7 @@
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
     using System;
+    using System.Diagnostics;
     using System.Text;
 
     /// <summary>
@@ -88,15 +89,21 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             {
                 if (null != this.Min && null != this.Max)
                 {
-                    int cmp;
-                    if (Object.Equals(this.Min.Value, this.Max.Value))
+                    if (this.Max.IsPrefix)
                     {
-                        cmp = 0;
+                        // Check for the special case where min is greater than
+                        // max, but max is a prefix of min
+                        // e.g.: ["ggg", "g*"]
+                        Debug.Assert(typeof(string) == typeof(T), "Expected string type");
+                        string prefix = this.Max.Value.ToString();
+                        string min = this.Min.Value.ToString();
+                        if (min.StartsWith(prefix))
+                        {
+                            return false;
+                        }
                     }
-                    else
-                    {
-                        cmp = this.Min.Value.CompareTo(this.Max.Value);                        
-                    }
+
+                    int cmp = CompareKeys(this.Min, this.Max);
 
                     // If Min and Max are equal then the only way this range
                     // can contain any records is if both min and max are
@@ -116,14 +123,10 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>The intersection of the two ranges.</returns>
         public static KeyRange<T> operator &(KeyRange<T> a, KeyRange<T> b)
         {
-            if (a.IsEmpty)
+            // Intersecting anything with an empty range returns the empty range.
+            if (a.IsEmpty || b.IsEmpty)
             {
-                return b;
-            }
-
-            if (b.IsEmpty)
-            {
-                return a;
+                return EmptyRange;
             }
 
             var intersected = new KeyRange<T>(LowerIntersection(a.Min, b.Min), UpperIntersection(a.Max, b.Max));
@@ -140,9 +143,10 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         /// <param name="a">The first range.</param>
         /// <param name="b">The second range.</param>
-        /// <returns>The intersection of the two ranges.</returns>
+        /// <returns>The union of the two ranges.</returns>
         public static KeyRange<T> operator |(KeyRange<T> a, KeyRange<T> b)
         {
+            // The union of anything with an empty range gives itself
             if (a.IsEmpty)
             {
                 return b;
@@ -168,15 +172,17 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             if (this.IsEmpty)
             {
-                return EmptyRange;    
+                return EmptyRange;
             }
 
             if (null != this.Min && null == this.Max && !this.Min.IsPrefix)
             {
+                Debug.Assert(!this.Min.IsPrefix, "Inverting prefixes not supported");
                 return new KeyRange<T>(null, Key<T>.CreateKey(this.Min.Value, !this.Min.IsInclusive));
             }
             else if (null == this.Min && null != this.Max && !this.Max.IsPrefix)
             {
+                Debug.Assert(!this.Max.IsPrefix, "Inverting prefixes not supported");
                 return new KeyRange<T>(Key<T>.CreateKey(this.Max.Value, !this.Max.IsInclusive), null);
             }
 
@@ -207,7 +213,13 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </returns>
         public override int GetHashCode()
         {
-            // Make sure that entries with their keys reversed 
+            // All empty ranges are identical
+            if (this.IsEmpty)
+            {
+                return int.MinValue;
+            }
+
+            // Make sure that entries with their keys reversed
             // don't get the same hash code.
             int hash1 = null == this.Min ? 0 : this.Min.GetHashCode();
             int hash2 = null == this.Max ? 0 : this.Max.GetHashCode();
@@ -225,6 +237,12 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             if (null == other)
             {
                 return false;
+            }
+
+            // All empty ranges are equal
+            if (this.IsEmpty && other.IsEmpty)
+            {
+                return true;
             }
 
             bool minIsEqual = (null == this.Min && null == other.Min)
@@ -260,6 +278,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 sb.Append("max = null");
             }
 
+            if (this.IsEmpty)
+            {
+                sb.Append("(empty)");
+            }
+
             return sb.ToString();
         }
 
@@ -284,7 +307,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             }
             else if (null != a && null != b)
             {
-                int compare = a.Value.CompareTo(b.Value);
+                int compare = CompareKeys(a, b);
                 if (0 == compare)
                 {
                     // Prefer the exclusive range
@@ -324,7 +347,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             }
             else if (null != a && null != b)
             {
-                int compare = a.Value.CompareTo(b.Value);
+                int compare = CompareKeys(a, b);
                 if (0 == compare)
                 {
                     // Prefer the non-prefix/exclusive range
@@ -334,12 +357,27 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                     }
                     else
                     {
-                        min = a.IsInclusive ? b : a;
+                        min = !a.IsInclusive ? a : b;
                     }
                 }
                 else
                 {
-                    min = compare < 0 ? a : b;
+                    if (a.IsPrefix && b.IsPrefix)
+                    {
+                        min = ComparePrefixes(a, b) < 0 ? a : b;
+                    }
+                    else if (a.IsPrefix)
+                    {
+                        min = CompareNonPrefixAndPrefix(b, a) < 0 ? b : a;
+                    }
+                    else if (b.IsPrefix)
+                    {
+                        min = CompareNonPrefixAndPrefix(a, b) < 0 ? a : b;
+                    }
+                    else
+                    {
+                        min = compare < 0 ? a : b;
+                    }
                 }
             }
             else
@@ -367,7 +405,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             }
             else
             {
-                int compare = a.Value.CompareTo(b.Value);
+                int compare = CompareKeys(a, b);
                 if (0 == compare)
                 {
                     // Prefer the inclusive range
@@ -386,7 +424,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// Returns the upper bound of two keys for range union.
         /// This is the maximum of the keys, where null represents the
         /// maximum value. When two keys are equal the order of preference is:
-        ///  1. prefix 
+        ///  1. prefix
         ///  2. inclusive
         ///  3. exclusive.
         /// </summary>
@@ -402,26 +440,144 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             }
             else
             {
-                int compare = a.Value.CompareTo(b.Value);
+                int compare = CompareKeys(a, b);
                 if (0 == compare)
                 {
                     // Prefer the prefix/inclusive range
                     if (a.IsPrefix || b.IsPrefix)
                     {
-                        max = a.IsPrefix ? a : b;                        
+                        max = a.IsPrefix ? a : b;
                     }
                     else
                     {
-                        max = a.IsInclusive ? a : b;                        
+                        max = a.IsInclusive ? a : b;
                     }
                 }
                 else
                 {
-                    max = compare > 0 ? a : b;
+                    if (a.IsPrefix && b.IsPrefix)
+                    {
+                        max = ComparePrefixes(a, b) > 0 ? a : b;
+                    }
+                    else if (a.IsPrefix)
+                    {
+                        max = CompareNonPrefixAndPrefix(b, a) > 0 ? b : a;
+                    }
+                    else if (b.IsPrefix)
+                    {
+                        max = CompareNonPrefixAndPrefix(a, b) > 0 ? a : b;
+                    }
+                    else
+                    {
+                        max = compare > 0 ? a : b;
+                    }
                 }
             }
 
             return max;
+        }
+
+        /// <summary>
+        /// Compare a prefix and non-prefix key.
+        /// </summary>
+        /// <param name="nonPrefix">The non prefix key.</param>
+        /// <param name="prefix">The prefix key.</param>
+        /// <returns>If the first key is less than the second then -1. 0 or 1 otherwise.</returns>
+        private static int CompareNonPrefixAndPrefix(Key<T> nonPrefix, Key<T> prefix)
+        {
+            Debug.Assert(!nonPrefix.IsPrefix, "Expected a non-prefix key");
+            Debug.Assert(prefix.IsPrefix, "Expected a prefix key");
+            Debug.Assert(typeof(string) == typeof(T), "Expected a string");
+
+            string nonPrefixValue = nonPrefix.Value.ToString();
+            string prefixValue = prefix.Value.ToString();
+
+            // The two cases we want are:
+            //   nonPrefix = "LE", prefix = "LEAD"
+            //   nonPrefix = "LEAD", prefix = "LE"
+            // In both cases the non-prefix is more restrictive
+            if (String.Compare(nonPrefixValue, prefixValue) <= 0
+                || nonPrefixValue.StartsWith(prefixValue))
+            {
+                return -1;
+            }
+
+            return 1;
+        }
+
+        /// <summary>
+        /// Compare two prefix keys.
+        /// </summary>
+        /// <param name="a">The first prefix key.</param>
+        /// <param name="b">The second prefix key.</param>
+        /// <returns>If the first key is less than the second then -1. 0 or 1 otherwise.</returns>
+        private static int ComparePrefixes(Key<T> a, Key<T> b)
+        {
+            Debug.Assert(a.IsPrefix, "Expected a prefix key");
+            Debug.Assert(b.IsPrefix, "Expected a prefix key");
+            Debug.Assert(typeof(string) == typeof(T), "Expected a string");
+
+            string valueA = a.Value.ToString();
+            string valueB = b.Value.ToString();
+
+            if (valueA.Length == valueB.Length)
+            {
+                // Same length: return the lower string
+                // e.g.: a = "AB", b = "CD"
+                return String.Compare(valueA, valueB);
+            }
+
+            if (valueA.StartsWith(valueB))
+            {
+                // b is a substring of a. a is more restrictive
+                // e.g.: b = "A", a = "AA"
+                return -1;
+            }
+
+            if (valueB.StartsWith(valueA))
+            {
+                // a is a substring of b. b is more restrictive
+                // e.g.: a = "CA", a = "CAT"
+                return 1;
+            }
+
+            // Take the lower string
+            // e.g.: a = "ABC", b = "XYZ"
+            return String.Compare(valueA, valueB);
+        }
+
+        /// <summary>
+        /// Compare two keys. The keys cannot be null but their values can be.
+        /// Null is treated as less than any other value.
+        /// </summary>
+        /// <param name="a">The first key.</param>
+        /// <param name="b">The second key.</param>
+        /// <returns>
+        /// The result of the comparison.
+        /// </returns>
+        /// <remarks>
+        /// Null keys have different semantics depending on whether we are
+        /// comparing min or max keys. Null values can be treated uniformly
+        /// though.
+        /// </remarks>
+        private static int CompareKeys(Key<T> a, Key<T> b)
+        {
+            if (Object.Equals(a.Value, b.Value))
+            {
+                return 0;
+            }
+
+            if (null == a.Value)
+            {
+                return -1;
+            }
+
+            if (null == b.Value)
+            {
+                return 1;
+            }
+
+            return a.Value.CompareTo(b.Value);
         }
     }
 }

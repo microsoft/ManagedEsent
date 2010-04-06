@@ -1521,13 +1521,56 @@ namespace EsentCollectionsTests
         public void TestSample9()
         {
             // Regression test for:
-            // KeyRange is too small.
-            // Expression:
-            //  x => Not(((2137 >= x.Key) && Not((-3611 = x.Key))))
+            //   KeyRange is too small.
+            //   Expression:
+            //     x => Not(((2137 >= x.Key) && Not((-3611 = x.Key))))
             KeyRange<int> actual =
                 KeyValueExpressionEvaluator<int, int>.GetKeyRange(
                     x => !((2137 >= x.Key) && !(-3611 == x.Key)));
             KeyRange<int> expected = new KeyRange<int>(Key<int>.CreateKey(-3611, true), null);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test expression 10.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test expression 10")]
+        public void TestSample10()
+        {
+            // Regression test for:
+            //   Assert.IsTrue failed.
+            //   Error at entry 21. Not enough entries in actual.
+            //   First missing entry is [ibh, ibh]
+            //    expression = x => (x.Key.StartsWith("i") || (x.Key.Equals("ibg") || ("f" = x.Key)))
+            KeyRange<string> actual =
+                KeyValueExpressionEvaluator<string, string>.GetKeyRange(
+                    x => (x.Key.StartsWith("i") || (x.Key.Equals("ibg") || ("f" == x.Key))));
+            KeyRange<string> expected = new KeyRange<string>(Key<string>.CreateKey("f", true), Key<string>.CreatePrefixKey("i"));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test expression 11.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test expression 11")]
+        public void TestSample11()
+        {
+            // Regression test for:
+            //   Assert.IsTrue failed.
+            //   Error at entry 0. Not enough entries in actual.
+            //   First missing entry is [ggi, ggi] 
+            //    expression = x => ((Compare("ggi", x.Key) <= 0) && (x.Key.Equals("fag") || x.Key.StartsWith("g")))
+            KeyRange<string> actual =
+                KeyValueExpressionEvaluator<string, string>.GetKeyRange(
+                    x => ((String.Compare("ggi", x.Key) <= 0) && (x.Key.Equals("fag") || x.Key.StartsWith("g"))));
+            KeyRange<string> expected = new KeyRange<string>(
+                Key<string>.CreateKey("ggi", true),
+                Key<string>.CreatePrefixKey("g"));
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>

@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RandomStringRangeExpressionTests.cs" company="Microsoft Corporation">
+// <copyright file="StringDictionaryLinqTests.cs" company="Microsoft Corporation">
 //   Copyright (c) Microsoft Corporation.
 // </copyright>
 // <summary>
@@ -22,27 +22,27 @@ namespace EsentCollectionsTests
     /// Generate string expressions that can be optimized.
     /// </summary>
     [TestClass]
-    public class RandomStringRangeExpressionTests
+    public class StringDictionaryLinqTests
     {
-        /// <summary>
-        /// The first string.
-        /// </summary>
-        private const string MinValue = "a";
-
-        /// <summary>
-        /// The last string.
-        /// </summary>
-        private const string MaxValue = "zzz";
-
         /// <summary>
         /// The location of the dictionary.
         /// </summary>
         private const string DictionaryLocation = "RandomStringDictionary";
 
         /// <summary>
-        /// A MethodInfo describes String.Compare(string, string).
+        /// A MethodInfo describing String.Compare(string, string).
         /// </summary>
         private static readonly MethodInfo stringCompareMethod = typeof(string).GetMethod("Compare", new[] { typeof(string), typeof(string) });
+
+        /// <summary>
+        /// A MethodInfo describing String.Equals(string).
+        /// </summary>
+        private static readonly MethodInfo stringEqualsMethod = typeof(string).GetMethod("Equals", new[] { typeof(string) });
+
+        /// <summary>
+        /// A MethodInfo describing String.StartsWith(string).
+        /// </summary>
+        private static readonly MethodInfo stringStartsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) }); 
 
         /// <summary>
         /// The parameter expression used to build out expression trees. This 
@@ -96,53 +96,11 @@ namespace EsentCollectionsTests
         /// </summary>
         [TestMethod]
         [Priority(3)]
-        [Description("Test the KeyExpressionEvaluator with random ranges")]
+        [Description("Test the string dictionary with random expressions")]
         public void TestRandomStringKeyRangeExpressions()
         {
-            DateTime endTime = DateTime.UtcNow + TimeSpan.FromSeconds(19.5);
-            int trials = 0;
-            while (DateTime.UtcNow < endTime)
-            {
-                this.DoOneTest();
-                ++trials;
-            }
-
-            Console.WriteLine("{0:N0} trials", trials);
-        }
-
-        /// <summary>
-        /// Assert that two enumerable sequences are identical.
-        /// </summary>
-        /// <typeparam name="T">The type of object being enumerated.</typeparam>
-        /// <param name="expected">The expected sequence.</param>
-        /// <param name="actual">The actual sequence.</param>
-        private static void AssertEnumerableEqual<T>(IEnumerable<T> expected, IEnumerable<T> actual)
-        {
-            using (IEnumerator<T> expectedEnumerator = expected.GetEnumerator())
-            using (IEnumerator<T> actualEnumerator = actual.GetEnumerator())
-            {
-                int i = 0;
-                while (expectedEnumerator.MoveNext())
-                {
-                    Assert.IsTrue(
-                        actualEnumerator.MoveNext(),
-                        "Error at entry {0}. Not enough entries in actual. First missing entry is {1}",
-                        i,
-                        expectedEnumerator.Current);
-                    Assert.AreEqual(
-                        expectedEnumerator.Current,
-                        actualEnumerator.Current,
-                        "Error at entry {0}. Enumerators differ",
-                        i);
-                    i++;
-                }
-
-                Assert.IsFalse(
-                    actualEnumerator.MoveNext(),
-                    "Error. Expected enumerator has {0} entries. Actual enumerator has more. First extra entry is {1}",
-                    i,
-                    actualEnumerator.Current);
-            }
+            const double TimeLimit = 19;
+            this.RunTest(TimeLimit);
         }
 
         /// <summary>
@@ -151,9 +109,9 @@ namespace EsentCollectionsTests
         private static void CreateTestData()
         {
             const int MinChar = 97;
-            const int MaxChar = 123;
+            const int MaxChar = 107; // 123;
 
-            List<KeyValuePair<string, string>> tempData = new List<KeyValuePair<string, string>>(26 * 26 * 26);
+            List<KeyValuePair<string, string>> tempData = new List<KeyValuePair<string, string>>();
             for (int i = MinChar; i < MaxChar; ++i)
             {
                 var sb1 = new StringBuilder(1);
@@ -183,13 +141,40 @@ namespace EsentCollectionsTests
         /// Create a new parameter expression.
         /// </summary>
         /// <returns>
-        /// A constant expression with a value between
-        /// <see cref="MinValue"/> (inclusive) and <see cref="MaxValue"/>
-        /// (exclusive).
+        /// A constant expression with a value taken from the data array.
         /// </returns>
         private static ParameterExpression CreateParameterExpression()
         {
             return parameterExpression;
+        }
+
+        /// <summary>
+        /// Create an expression that accesses the key of the parameter.
+        /// </summary>
+        /// <returns>
+        /// An expression that accesses the key of the parameter.
+        /// </returns>
+        private static Expression CreateKeyAccess()
+        {
+            Expression parameter = CreateParameterExpression();
+            return Expression.MakeMemberAccess(parameter, keyMemberInfo);
+        }
+
+        /// <summary>
+        /// Run a test for a specified period of time.
+        /// </summary>
+        /// <param name="timeLimit">The time to run for.</param>
+        private void RunTest(double timeLimit)
+        {
+            DateTime endTime = DateTime.UtcNow + TimeSpan.FromSeconds(timeLimit);
+            int trials = 0;
+            while (DateTime.UtcNow < endTime)
+            {
+                this.DoOneTest();
+                ++trials;
+            }
+
+            Console.WriteLine("{0:N0} trials ({1:N1} trials/second)", trials, trials / timeLimit);
         }
 
         /// <summary>
@@ -203,9 +188,9 @@ namespace EsentCollectionsTests
             Expression<Predicate<KeyValuePair<string, string>>> expression = this.CreateExpression();
             Predicate<KeyValuePair<string, string>> func = expression.Compile();
 
-            var expected = data.Where(x => func(x));
             var actual = this.dictionary.Where(expression);
-            AssertEnumerableEqual(expected, actual);
+            var expected = data.Where(x => func(x)).ToList();
+            EnumerableAssert.AreEqual(expected, actual, "expression = {0}", expression);
         }
 
         /// <summary>
@@ -247,27 +232,54 @@ namespace EsentCollectionsTests
         /// Create a key comparison expression.
         /// </summary>
         /// <returns>A key comparison expression.</returns>
-        private BinaryExpression CreateKeyComparisonExpression()
+        private Expression CreateKeyComparisonExpression()
         {
-            switch (this.rand.Next(2))
+            switch (this.rand.Next(4))
             {
                 case 0:
                     return this.CreateKeyEqualityComparisonExpression();
+                case 1:
+                    return this.CreateStartsWithExpression();
+                case 2:
+                    return this.CreateEqualsExpression();
                 default:
                     return this.CreateStringCompareExpression();
             }
         }
 
         /// <summary>
-        /// Create a key comparison expression.
+        /// Create an expression for String.StartsWith.
+        /// </summary>
+        /// <returns>A String.StartsWith expression.</returns>
+        private Expression CreateStartsWithExpression()
+        {
+            Expression parameter = CreateKeyAccess();
+            Expression value = this.CreateConstantExpression();
+            return Expression.Call(parameter, stringStartsWithMethod, value);
+        }
+
+        /// <summary>
+        /// Create an expression for String.Equals.
+        /// </summary>
+        /// <returns>A String.Equals expression.</returns>
+        private Expression CreateEqualsExpression()
+        {
+            Expression parameter = CreateKeyAccess();
+            Expression value = this.CreateConstantExpression();
+            return Expression.Call(parameter, stringEqualsMethod, value);
+        }
+
+        /// <summary>
+        /// Create an expression like 'String.Compare(x.Key, "foo") == 0'.
         /// </summary>
         /// <returns>A key comparison expression.</returns>
         private BinaryExpression CreateStringCompareExpression()
         {
-            Expression parameter = CreateParameterExpression();
-            Expression key = Expression.MakeMemberAccess(parameter, keyMemberInfo);
+            Expression key = CreateKeyAccess();
             Expression value = this.CreateConstantExpression();
-            Expression stringCompare = Expression.Call(null, stringCompareMethod, key, value);
+            Expression stringCompare = (0 == this.rand.Next(2))
+                                           ? Expression.Call(null, stringCompareMethod, key, value)
+                                           : Expression.Call(null, stringCompareMethod, value, key);
 
             Expression zero = Expression.Constant(0);
 
@@ -291,13 +303,13 @@ namespace EsentCollectionsTests
                 case 1:
                     return Expression.LessThanOrEqual(left, right);
                 case 2:
-                    return Expression.Equal(left, right);
+                    return Expression.GreaterThanOrEqual(left, right);
                 case 3:
                     return Expression.GreaterThan(left, right);
                 case 4:
                     return Expression.NotEqual(left, right);
                 default:
-                    return Expression.GreaterThanOrEqual(left, right);
+                    return Expression.Equal(left, right);
             }
         }
 

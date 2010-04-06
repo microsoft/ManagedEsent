@@ -147,7 +147,7 @@ namespace EsentCollectionsTests
             {
                 var expected = from x in this.testDictionary1 where x.Key > 3 select x.Value;
                 var actual = from x in persistentDictionary where x.Key > 3 select x.Value;
-                AssertEnumerableEqual(expected, actual);
+                EnumerableAssert.AreEqual(expected, actual, null);
             }
         }
 
@@ -163,7 +163,7 @@ namespace EsentCollectionsTests
             {
                 var expected = from x in this.testDictionary1 where x.Key >= 1 && x.Key <= 5 && x.Value.StartsWith("b") select x.Value;
                 var actual = from x in persistentDictionary where x.Key >= 1 && x.Key <= 5 && x.Value.StartsWith("b") select x.Value;
-                AssertEnumerableEqual(expected, actual);
+                EnumerableAssert.AreEqual(expected, actual, null);
             }
         }
 
@@ -179,7 +179,7 @@ namespace EsentCollectionsTests
             {
                 var expected = from x in this.testDictionary1 where x.Value.Length == 3 select x.Value;
                 var actual = from x in persistentDictionary where x.Value.Length == 3 select x.Value;
-                AssertEnumerableEqual(expected, actual);
+                EnumerableAssert.AreEqual(expected, actual, null);
             }
         }
 
@@ -196,7 +196,7 @@ namespace EsentCollectionsTests
                 DateTime time = DateTime.UtcNow + TimeSpan.FromSeconds(2);
                 var expected = from x in this.testDictionary2 where x.Key > time select x;
                 var actual = from x in persistentDictionary where x.Key > time select x;
-                AssertEnumerableEqual(expected, actual);
+                EnumerableAssert.AreEqual(expected, actual, null);
             }
         }
 
@@ -212,7 +212,7 @@ namespace EsentCollectionsTests
             {
                 var expected = from x in this.testDictionary1 where !(x.Key < 1 || x.Key > 5) && (0 == x.Key % 2) select x.Value;
                 var actual = from x in persistentDictionary where !(x.Key < 1 || x.Key > 5) && (0 == x.Key % 2) select x.Value;
-                AssertEnumerableEqual(expected, actual);
+                EnumerableAssert.AreEqual(expected, actual, null);
             }
         }
 
@@ -232,7 +232,7 @@ namespace EsentCollectionsTests
                 var actual = from x in persistentDictionary
                              where !(x.Key < 1 || x.Key > 5) && (x.Key > 3 || x.Key > 2)
                              select x.Value;
-                AssertEnumerableEqual(expected, actual);
+                EnumerableAssert.AreEqual(expected, actual, null);
             }
         }
 
@@ -254,7 +254,7 @@ namespace EsentCollectionsTests
 
                     var expected = from x in this.testDictionary1 where x.Key >= min && x.Key <= max select x.Value;
                     var actual = from x in persistentDictionary where x.Key >= min && x.Key <= max select x.Value;
-                    AssertEnumerableEqual(expected, actual);
+                    EnumerableAssert.AreEqual(expected, actual, null);
                 }
             }
         }
@@ -271,7 +271,7 @@ namespace EsentCollectionsTests
             {
                 var expected = from x in this.testDictionary3 where x.Key.StartsWith("b") select x.Value;
                 var actual = from x in persistentDictionary where x.Key.StartsWith("b") select x.Value;
-                AssertEnumerableEqual(expected, actual);
+                EnumerableAssert.AreEqual(expected, actual, null);
             }
         }
 
@@ -287,7 +287,7 @@ namespace EsentCollectionsTests
             {
                 var expected = from x in this.testDictionary3 where x.Key.StartsWith("de") || x.Key.StartsWith("bi") select x.Value;
                 var actual = from x in persistentDictionary where x.Key.StartsWith("de") || x.Key.StartsWith("bi") select x.Value;
-                AssertEnumerableEqual(expected, actual);
+                EnumerableAssert.AreEqual(expected, actual, null);
             }
         }
 
@@ -303,7 +303,7 @@ namespace EsentCollectionsTests
             {
                 var expected = from x in this.testDictionary3 where (x.Key.CompareTo("a") > 0 && x.Key.CompareTo("c") <= 0) || x.Key.StartsWith("c") select x.Value;
                 var actual = from x in persistentDictionary where (x.Key.CompareTo("a") > 0 && x.Key.CompareTo("c") <= 0) || x.Key.StartsWith("c") select x.Value;
-                AssertEnumerableEqual(expected, actual);
+                EnumerableAssert.AreEqual(expected, actual, null);
             }
         }
 
@@ -322,47 +322,16 @@ namespace EsentCollectionsTests
 
                 var expected = from x in this.testDictionary1 where x.Key >= min && x.Key <= max select x.Key;
                 var actual = from x in persistentDictionary where x.Key >= min && x.Key <= max select x.Key;
-                AssertEnumerableEqual(expected, actual);
+                EnumerableAssert.AreEqual(expected, actual, null);
 
                 min = 1;
                 max = 7;
-                AssertEnumerableEqual(expected, actual);
+                EnumerableAssert.AreEqual(expected, actual, null);
 
                 min = 4;
                 max = 5;
-                AssertEnumerableEqual(expected, actual);
+                EnumerableAssert.AreEqual(expected, actual, null);
             }
-        }
-
-        /// <summary>
-        /// Assert that two enumerable sequences are identical.
-        /// </summary>
-        /// <typeparam name="T">The type of object being enumerated.</typeparam>
-        /// <param name="expected">The expected sequence.</param>
-        /// <param name="actual">The actual sequence.</param>
-        private static void AssertEnumerableEqual<T>(IEnumerable<T> expected, IEnumerable<T> actual)
-        {
-            IEnumerator<T> expectedEnumerator = expected.GetEnumerator();            
-            IEnumerator<T> actualEnumerator = actual.GetEnumerator();
-
-            int i = 0;
-            while (expectedEnumerator.MoveNext())
-            {
-                Assert.IsTrue(
-                    actualEnumerator.MoveNext(),
-                    "Error at entry {0}. Not enough entries in actual. First missing entry is {1}",
-                    i,
-                    expectedEnumerator.Current);
-                Assert.AreEqual(
-                    expectedEnumerator.Current, actualEnumerator.Current, "Error at entry {0}. Enumerators differ", i);
-                i++;
-            }
-
-            Assert.IsFalse(
-                actualEnumerator.MoveNext(),
-                "Error. Expected enumerator has {0} entries. Actual enumerator has more. First extra entry is {1}",
-                i,
-                actualEnumerator.Current);
         }
 
         /// <summary>

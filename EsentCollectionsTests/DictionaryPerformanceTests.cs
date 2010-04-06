@@ -160,16 +160,16 @@ namespace EsentCollectionsTests
 
             // Create the Enumerable outside of the loop. This means the expression
             // tree only has to be compiled once.
-            int min = 0;
-            int max = 0;
-            var query = from x in this.dictionary where min <= x.Key && x.Key < max select x.Value;
+            int key = 0;
+            var query = from x in this.dictionary where x.Key == key select x.Value;
 
             for (int i = 0; i < numQueries; ++i)
             {
-                // Retrieve up to 10 records
-                min = rand.Next(0, n - 1);
-                max = rand.Next(min + 1, Math.Min(min + 11, n));
-                Assert.AreEqual(max - min, query.Count());
+                key = rand.Next(0, n);
+                foreach (var x in query)
+                {
+                    // enumerate the records
+                }
             }
 
             stopwatch.Stop();
