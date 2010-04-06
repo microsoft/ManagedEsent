@@ -107,6 +107,35 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// Test the LINQ Any operator when records are found.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ Any operator when records are found")]
+        [Priority(2)]
+        public void TestLinqAnyTrue()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                Assert.IsTrue(persistentDictionary.Any(x => x.Key < 5));
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ Any operator when records are found.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ Any operator when records are not found")]
+        [Priority(2)]
+        public void TestLinqAnyNotFound()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                Assert.IsFalse(persistentDictionary.Any(x => x.Key < 0));
+                Assert.IsFalse(persistentDictionary.Any(x => x.Key > 6));
+            }
+        }
+
+        /// <summary>
         /// Linq test 1.
         /// </summary>
         [TestMethod]

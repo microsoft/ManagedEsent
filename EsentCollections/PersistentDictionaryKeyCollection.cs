@@ -116,7 +116,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </exception>
         public TKey Max()
         {
-            // The dictionary is sorted so the Last element is the maximi
+            // The dictionary is sorted so the Last element is the maximum
             return this.Dictionary.Last().Key;
         }
     }

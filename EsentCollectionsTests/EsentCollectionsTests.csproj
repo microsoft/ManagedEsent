@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="ArrayShuffle.cs" />
     <Compile Include="Cleanup.cs" />
+    <Compile Include="RandomStringRangeExpressionTests.cs" />
     <Compile Include="DictionaryAssert.cs" />
     <Compile Include="DictionaryLinqTests.cs" />
     <Compile Include="DictionaryPerformanceTests.cs" />

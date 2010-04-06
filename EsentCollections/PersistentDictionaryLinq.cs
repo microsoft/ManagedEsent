@@ -141,5 +141,23 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 
             return new PersistentDictionaryLinqEnumerable<TKey, TValue>(this, expression);
         }
+
+        /// <summary>
+        /// Determine whether any element of the dictionary satisfies a condition.
+        /// </summary>
+        /// <param name="expression">
+        /// A function to test each element for a condition.
+        /// </param>
+        /// <returns>
+        /// True if any elements match the predicate, false otherwise.
+        /// </returns>
+        public bool Any(Expression<Predicate<KeyValuePair<TKey, TValue>>> expression)
+        {
+            var enumerable = this.Where(expression);
+            using (IEnumerator<KeyValuePair<TKey, TValue>> enumerator = enumerable.GetEnumerator())
+            {
+                return enumerator.MoveNext();
+            }
+        }
     }
 }

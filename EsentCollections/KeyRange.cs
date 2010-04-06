@@ -88,7 +88,15 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             {
                 if (null != this.Min && null != this.Max)
                 {
-                    int cmp = this.Min.Value.CompareTo(this.Max.Value);
+                    int cmp;
+                    if (Object.Equals(this.Min.Value, this.Max.Value))
+                    {
+                        cmp = 0;
+                    }
+                    else
+                    {
+                        cmp = this.Min.Value.CompareTo(this.Max.Value);                        
+                    }
 
                     // If Min and Max are equal then the only way this range
                     // can contain any records is if both min and max are
@@ -108,6 +116,16 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>The intersection of the two ranges.</returns>
         public static KeyRange<T> operator &(KeyRange<T> a, KeyRange<T> b)
         {
+            if (a.IsEmpty)
+            {
+                return b;
+            }
+
+            if (b.IsEmpty)
+            {
+                return a;
+            }
+
             var intersected = new KeyRange<T>(LowerIntersection(a.Min, b.Min), UpperIntersection(a.Max, b.Max));
             if (intersected.IsEmpty)
             {
@@ -125,6 +143,16 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>The intersection of the two ranges.</returns>
         public static KeyRange<T> operator |(KeyRange<T> a, KeyRange<T> b)
         {
+            if (a.IsEmpty)
+            {
+                return b;
+            }
+
+            if (b.IsEmpty)
+            {
+                return a;
+            }
+
             return new KeyRange<T>(LowerUnion(a.Min, b.Min), UpperUnion(a.Max, b.Max));
         }
 
@@ -138,6 +166,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </returns>
         public KeyRange<T> Invert()
         {
+            if (this.IsEmpty)
+            {
+                return EmptyRange;    
+            }
+
             if (null != this.Min && null == this.Max && !this.Min.IsPrefix)
             {
                 return new KeyRange<T>(null, Key<T>.CreateKey(this.Min.Value, !this.Min.IsInclusive));

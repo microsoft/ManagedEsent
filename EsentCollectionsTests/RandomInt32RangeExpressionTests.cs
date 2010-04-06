@@ -58,23 +58,25 @@ namespace EsentCollectionsTests
         {
             DateTime endTime = DateTime.UtcNow + TimeSpan.FromSeconds(19.5);
             int trials = 0;
+            int emptyRanges = 0;
             int exactMatches = 0;
             while (DateTime.UtcNow < endTime)
             {
                 bool rangeWasEmpty;
                 bool rangeWasExact;
                 this.DoOneTest(out rangeWasEmpty, out rangeWasExact);
-                if (!rangeWasEmpty)
+                ++trials;
+                if (rangeWasEmpty)
                 {
-                    ++trials;
-                    if (rangeWasExact)
-                    {
-                        ++exactMatches;
-                    }
+                    ++emptyRanges;
+                }
+                if (rangeWasExact)
+                {
+                    ++exactMatches;
                 }
             }
 
-            Console.WriteLine("{0:N0} trials. {1:N0} exact matches", trials, exactMatches);
+            Console.WriteLine("{0:N0} trials. {1:N0} empty ranges. {2:N0} exact matches", trials, emptyRanges, exactMatches);
         }
 
         /// <summary>
@@ -181,9 +183,9 @@ namespace EsentCollectionsTests
                 }
             }
 
+            KeyRange<int> keyRange = KeyExpressionEvaluator<int>.GetKeyRange(expression.Body, keyMemberInfo);
             if (count > 0)
             {
-                KeyRange<int> keyRange = KeyExpressionEvaluator<int>.GetKeyRange(expression.Body, keyMemberInfo);
                 Assert.IsTrue(
                     KeyRangeIsSufficient(keyRange, min, max),
                     "KeyRange is too small. Expression: {0}, Min = {1}, Max = {2}, Got {3}",
@@ -197,7 +199,7 @@ namespace EsentCollectionsTests
             }
             else
             {
-                rangeWasExact = false;
+                rangeWasExact = keyRange.IsEmpty;
                 rangeWasEmpty = true;
             }
         }
