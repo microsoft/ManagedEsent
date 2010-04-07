@@ -11,6 +11,7 @@
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
     using System;
+    using System.Diagnostics;
     using Microsoft.Isam.Esent.Interop;
 
     /// <summary>
@@ -22,6 +23,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     internal sealed class PersistentDictionaryCursorCache<TKey, TValue> : IDisposable
         where TKey : IComparable<TKey>
     {
+        /// <summary>
+        /// The maximum number of cursors that can be cached.
+        /// </summary>
+        private const int MaxCachedCursors = 64;
+
         /// <summary>
         /// The underlying ESENT instance.
         /// </summary>
@@ -70,7 +76,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             this.converters = converters;
             this.config = config;
             this.database = database;
-            this.cursors = new PersistentDictionaryCursor<TKey, TValue>[64];
+            this.cursors = new PersistentDictionaryCursor<TKey, TValue>[MaxCachedCursors];
             this.lockObject = new object();
         }
 
@@ -122,10 +128,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="cursor">The cursor to free.</param>
         public void FreeCursor(PersistentDictionaryCursor<TKey, TValue> cursor)
         {
-            if (null == cursor)
-            {
-                throw new ArgumentNullException("cursor");
-            }
+            Debug.Assert(null != cursor, "Freeing a null cursor");
 
             lock (this.lockObject)
             {

@@ -107,6 +107,36 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// Verify that PersistentDictionary.Where throws an exception when the expression is null.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Verify that PersistentDictionary.Where throws an exception when the expression is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyWhereThrowsExceptionWhenExpressionIsNull()
+        {
+            using (var persistentDictionary = new PersistentDictionary<Guid, Guid>(DictionaryLocation))
+            {
+                persistentDictionary.Where(null);
+            }            
+        }
+
+        /// <summary>
+        /// Verify that PersistentDictionary.Any throws an exception when the expression is null.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Verify that PersistentDictionary.Any throws an exception when the expression is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyAnyThrowsExceptionWhenExpressionIsNull()
+        {
+            using (var persistentDictionary = new PersistentDictionary<Guid, Guid>(DictionaryLocation))
+            {
+                persistentDictionary.Any(null);
+            }
+        }
+
+        /// <summary>
         /// Test the LINQ Any operator when records are found.
         /// </summary>
         [TestMethod]

@@ -349,9 +349,7 @@ namespace EsentCollectionsTests
         /// Create a new (random) constant expression.
         /// </summary>
         /// <returns>
-        /// A constant expression with a value between
-        /// <see cref="MinValue"/> (inclusive) and <see cref="MaxValue"/>
-        /// (exclusive).
+        /// A constant expression with a value taken from the sample data.
         /// </returns>
         private ConstantExpression CreateConstantExpression()
         {

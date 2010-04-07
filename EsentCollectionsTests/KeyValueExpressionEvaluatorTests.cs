@@ -379,6 +379,237 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// Verify local variable evaluation.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify local variable evaluation")]
+        public void VerifyLocalVariableEvaluation()
+        {
+            int i = 29;
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, long>.GetKeyRange(x => x.Key <= i);
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual(i, keyRange.Max.Value);
+            Assert.IsTrue(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Verify member variable evaluation.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify member variable evaluation")]
+        public void VerifyMemberVariableEvaluation()
+        {
+            this.member = 18;
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, long>.GetKeyRange(x => x.Key <= this.member);
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual(this.member, keyRange.Max.Value);
+            Assert.IsTrue(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Verify that key access only works for the parameter.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify key access only works for the parameter")]
+        public void VerifyKeyAccessIsForParameterOnly()
+        {
+            var k = new KeyValuePair<int, int>(1, 2);
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, int>.GetKeyRange(x => k.Key == x.Key);
+            Assert.AreEqual(1, keyRange.Min.Value);
+            Assert.IsTrue(keyRange.Min.IsInclusive);
+            Assert.AreEqual(1, keyRange.Max.Value);
+            Assert.IsTrue(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test key access against the key.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test key access against the key")]
+        public void TestKeyAccessAgainstSelf()
+        {
+            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, int>.GetKeyRange(x => x.Key == x.Key);
+            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
+        }
+
+        /// <summary>
+        /// Verify conditional access is optimized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify conditional access is optimized")]
+        public void VerifyConditionalParameterAccessIsOptimized()
+        {
+            KeyValuePair<int, string> kvp1 = new KeyValuePair<int, string>(0, "hello");
+            KeyValuePair<int, string> kvp2 = new KeyValuePair<int, string>(1, "hello");
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
+                    x => x.Key < (0 == DateTime.Now.Ticks ? kvp1 : kvp2).Key);
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual(1, keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Verify conditional parameter access is recognized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify conditional parameter access is recognized")]
+        public void VerifyConditionalParameterAccessIsRecognized()
+        {
+            KeyValuePair<int, string> kvp = new KeyValuePair<int, string>(0, "hello");
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
+                    x => x.Key < (0 == DateTime.Now.Ticks ? x : kvp).Key);
+            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
+        }
+
+        /// <summary>
+        /// Verify array access is optimized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify array access is optimized")]
+        public void VerifyArrayAccessIsOptimized()
+        {
+            KeyValuePair<int, string> kvp = new KeyValuePair<int, string>(1, "hello");
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
+                    x => x.Key < (new[] { kvp })[0].Key);
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual(1, keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Verify array parameter access is recognized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify array parameter access is recognized")]
+        public void VerifyArrayParameterAccessIsRecognized()
+        {
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
+                    x => x.Key < (new[] { x })[0].Key);
+            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
+        }
+
+        /// <summary>
+        /// Verify delegate access is optimized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify delegate access is optimized")]
+        public void VerifyDelegateAccessIsOptimized()
+        {
+            Func<int, int> f = x => x * 2;
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
+                    x => x.Key <= f(1));
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual(2, keyRange.Max.Value);
+            Assert.IsTrue(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Verify delegate parameter access is recognized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify delegate parameter access is recognized")]
+        public void VerifyDelegateParameterAccessIsRecognized()
+        {
+            Func<KeyValuePair<int, string>, int> f = x => x.Key;
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
+                    x => x.Key < f(x));
+            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
+        }
+
+        /// <summary>
+        /// Verify method call parameter access is optimized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify method call access is optimized")]
+        public void VerifyMethodCallAccessIsOptimized()
+        {
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
+                    x => x.Key < (String.IsNullOrEmpty("foo") ? 0 : 1));
+            Assert.IsNull(keyRange.Min);
+            Assert.AreEqual(1, keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Verify static method call parameter access is optimized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify static method call access is optimized")]
+        public void VerifyStaticMethodCallAccessIsOptimized()
+        {
+            var expected = new KeyRange<int>(null, Key<int>.CreateKey(8, false));
+            var actual =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
+                    x => x.Key < Math.Min(8, 9));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Verify method call parameter access is recognized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify method call parameter access is recognized")]
+        public void VerifyMethodCallParameterAccessIsRecognized()
+        {
+            Func<KeyValuePair<int, string>, int> f = x => x.Key;
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
+                    x => x.Key < (String.IsNullOrEmpty(x.Value) ? 0 : 1));
+            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
+        }
+
+        /// <summary>
+        /// Verify method call parameter access is recognized (2).
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify method call parameter access is recognized (2)")]
+        public void VerifyMethodCallParameterAccessIsRecognized2()
+        {
+            Func<KeyValuePair<int, string>, int> f = x => x.Key;
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
+                    x => x.Key < Math.Max(0, "foo".StartsWith("f") ? 10 : x.Key));
+            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
+        }
+
+        /// <summary>
+        /// Verify method call object access is recognized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify method call object access is recognized")]
+        public void VerifyMethodCallObjectAccessIsRecognized()
+        {
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
+                    x => x.Key < x.Key.GetHashCode());
+            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
+        }
+
+        #region NOT handling
+
+        /// <summary>
         /// Verify a NOT of an EQ removes limits.
         /// </summary>
         [TestMethod]
@@ -395,8 +626,8 @@ namespace EsentCollectionsTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Verify a NOT of != doesn't work (provides no limits)")]
-        public void VerifyNotOfNeDoesntWork()
+        [Description("Verify a NOT of != works")]
+        public void VerifyNotOfNe()
         {
             KeyRange<int> actual = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => !(x.Key != 3));
             KeyRange<int> expected = new KeyRange<int>(Key<int>.CreateKey(3, true), Key<int>.CreateKey(3, true));
@@ -485,35 +716,9 @@ namespace EsentCollectionsTests
             Assert.AreEqual(expected, actual);
         }
 
-        /// <summary>
-        /// Verify local variable evaluation.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Verify local variable evaluation")]
-        public void VerifyLocalVariableEvaluation()
-        {
-            int i = 29;
-            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, long>.GetKeyRange(x => x.Key <= i);
-            Assert.IsNull(keyRange.Min);
-            Assert.AreEqual(i, keyRange.Max.Value);
-            Assert.IsTrue(keyRange.Max.IsInclusive);
-        }
+        #endregion
 
-        /// <summary>
-        /// Verify member variable evaluation.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Verify member variable evaluation")]
-        public void VerifyMemberVariableEvaluation()
-        {
-            this.member = 18;
-            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, long>.GetKeyRange(x => x.Key <= this.member);
-            Assert.IsNull(keyRange.Min);
-            Assert.AreEqual(this.member, keyRange.Max.Value);
-            Assert.IsTrue(keyRange.Max.IsInclusive);
-        }
+        #region Constant Folding
 
         /// <summary>
         /// Verify constant folding with functions.
@@ -737,189 +942,9 @@ namespace EsentCollectionsTests
             ConstantFoldingHelper(x => x.Key <= ~i);
         }
 
-        /// <summary>
-        /// Verify that key access only works for the parameter.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Verify key access only works for the parameter")]
-        public void VerifyKeyAccessIsForParameterOnly()
-        {
-            var k = new KeyValuePair<int, int>(1, 2);
-            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, int>.GetKeyRange(x => k.Key == x.Key);
-            Assert.AreEqual(1, keyRange.Min.Value);
-            Assert.IsTrue(keyRange.Min.IsInclusive);
-            Assert.AreEqual(1, keyRange.Max.Value);
-            Assert.IsTrue(keyRange.Max.IsInclusive);
-        }
+        #endregion
 
-        /// <summary>
-        /// Test key access against the key.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Test key access against the key")]
-        public void TestKeyAccessAgainstSelf()
-        {
-            KeyRange<int> keyRange = KeyValueExpressionEvaluator<int, int>.GetKeyRange(x => x.Key == x.Key);
-            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
-        }
-
-        /// <summary>
-        /// Verify conditional access is optimized.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Verify conditional access is optimized")]
-        public void VerifyConditionalParameterAccessIsOptimized()
-        {
-            KeyValuePair<int, string> kvp1 = new KeyValuePair<int, string>(0, "hello");
-            KeyValuePair<int, string> kvp2 = new KeyValuePair<int, string>(1, "hello");
-            KeyRange<int> keyRange =
-                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
-                    x => x.Key < (0 == DateTime.Now.Ticks ? kvp1 : kvp2).Key);
-            Assert.IsNull(keyRange.Min);
-            Assert.AreEqual(1, keyRange.Max.Value);
-            Assert.IsFalse(keyRange.Max.IsInclusive);
-        }
-
-        /// <summary>
-        /// Verify conditional parameter access is recognized.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Verify conditional parameter access is recognized")]
-        public void VerifyConditionalParameterAccessIsRecognized()
-        {
-            KeyValuePair<int, string> kvp = new KeyValuePair<int, string>(0, "hello");
-            KeyRange<int> keyRange =
-                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
-                    x => x.Key < (0 == DateTime.Now.Ticks ? x : kvp).Key);
-            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
-        }
-
-        /// <summary>
-        /// Verify array access is optimized.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Verify array access is optimized")]
-        public void VerifyArrayAccessIsOptimized()
-        {
-            KeyValuePair<int, string> kvp = new KeyValuePair<int, string>(1, "hello");
-            KeyRange<int> keyRange =
-                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
-                    x => x.Key < (new[] { kvp })[0].Key);
-            Assert.IsNull(keyRange.Min);
-            Assert.AreEqual(1, keyRange.Max.Value);
-            Assert.IsFalse(keyRange.Max.IsInclusive);
-        }
-
-        /// <summary>
-        /// Verify array parameter access is recognized.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Verify array parameter access is recognized")]
-        public void VerifyArrayParameterAccessIsRecognized()
-        {
-            KeyRange<int> keyRange =
-                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
-                    x => x.Key < (new[] { x })[0].Key);
-            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
-        }
-
-        /// <summary>
-        /// Verify delegate access is optimized.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Verify delegate access is optimized")]
-        public void VerifyDelegateAccessIsOptimized()
-        {
-            Func<int, int> f = x => x * 2;
-            KeyRange<int> keyRange =
-                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
-                    x => x.Key <= f(1));
-            Assert.IsNull(keyRange.Min);
-            Assert.AreEqual(2, keyRange.Max.Value);
-            Assert.IsTrue(keyRange.Max.IsInclusive);
-        }
-
-        /// <summary>
-        /// Verify delegate parameter access is recognized.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Verify delegate parameter access is recognized")]
-        public void VerifyDelegateParameterAccessIsRecognized()
-        {
-            Func<KeyValuePair<int, string>, int> f = x => x.Key;
-            KeyRange<int> keyRange =
-                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
-                    x => x.Key < f(x));
-            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
-        }
-
-        /// <summary>
-        /// Verify method call parameter access is optimized.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Verify method call access is optimized")]
-        public void VerifyMethodCallAccessIsOptimized()
-        {
-            KeyRange<int> keyRange =
-                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
-                    x => x.Key < (String.IsNullOrEmpty("foo") ? 0 : 1));
-            Assert.IsNull(keyRange.Min);
-            Assert.AreEqual(1, keyRange.Max.Value);
-            Assert.IsFalse(keyRange.Max.IsInclusive);
-        }
-
-        /// <summary>
-        /// Verify method call parameter access is recognized.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Verify method call parameter access is recognized")]
-        public void VerifyMethodCallParameterAccessIsRecognized()
-        {
-            Func<KeyValuePair<int, string>, int> f = x => x.Key;
-            KeyRange<int> keyRange =
-                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
-                    x => x.Key < (String.IsNullOrEmpty(x.Value) ? 0 : 1));
-            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
-        }
-
-        /// <summary>
-        /// Verify method call parameter access is recognized (2).
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Verify method call parameter access is recognized (2)")]
-        public void VerifyMethodCallParameterAccessIsRecognized2()
-        {
-            Func<KeyValuePair<int, string>, int> f = x => x.Key;
-            KeyRange<int> keyRange =
-                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
-                    x => x.Key < Math.Max(0, "foo".StartsWith("f") ? 10 : x.Key));
-            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
-        }
-
-        /// <summary>
-        /// Verify method call object access is recognized.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Verify method call object access is recognized")]
-        public void VerifyMethodCallObjectAccessIsRecognized()
-        {
-            KeyRange<int> keyRange =
-                KeyValueExpressionEvaluator<int, string>.GetKeyRange(
-                    x => x.Key < x.Key.GetHashCode());
-            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
-        }
+        #region Testing Different Types
 
         /// <summary>
         /// Test Boolean expression (true).
@@ -1134,6 +1159,10 @@ namespace EsentCollectionsTests
             Assert.IsTrue(keyRange.Max.IsInclusive);
         }
 
+        #endregion
+
+        #region String-specific tests
+
         /// <summary>
         /// Test String equals expression
         /// </summary>
@@ -1148,6 +1177,19 @@ namespace EsentCollectionsTests
             Assert.IsTrue(keyRange.Max.IsInclusive);
             Assert.AreEqual(s, keyRange.Max.Value);
             Assert.IsTrue(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test String null is ignored
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String null is ignored")]
+        public void TestStringNullIsIgnored()
+        {
+            var expected = KeyRange<string>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => x.Key.CompareTo(null) > 0);
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -1167,6 +1209,60 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// Test a NOT of a String.Equals expression
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test !String.Equals")]
+        public void TestNotStringEquals()
+        {
+            var expected = KeyRange<string>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => !x.Key.Equals("e"));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test String.Equals expression with the parameter as the argument
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Equals with the parameter as the argument")]
+        public void TestStringEqualsParametersAsArgument()
+        {
+            // This isn't currently recognized
+            var expected = KeyRange<string>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => "?".Equals(x.Key));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test String.Equals expression with the parameter as the argument
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Equals with no parameter access")]
+        public void TestStringEqualsWithoutParameterAccess()
+        {
+            var expected = KeyRange<string>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => "?".Equals("?"));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test String.Contains
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Contains")]
+        public void TestStringMatch()
+        {
+            // This can't be optimized
+            var expected = KeyRange<string>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => x.Key.Contains("*"));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
         /// Test String.StartsWith expression
         /// </summary>
         [TestMethod]
@@ -1177,6 +1273,45 @@ namespace EsentCollectionsTests
             string s = "baz";
             KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => x.Key.StartsWith(s));
             var expected = new KeyRange<string>(Key<string>.CreateKey("baz", true), Key<string>.CreatePrefixKey("baz"));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test String.StartsWith expression reversed
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.StartWith reversed")]
+        public void TestStringStartsWithReversed()
+        {
+            var expected = KeyRange<string>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => "foo".StartsWith(x.Key));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test String.StartsWith expression without parameter access
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.StartWith without parameter access")]
+        public void TestStringStartsWithoutParameterAccess()
+        {
+            var expected = KeyRange<string>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => "foo".StartsWith("bar"));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test String.StartsWith with value access
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.StartWith value access")]
+        public void TestStringStartsValueAccess()
+        {
+            var expected = KeyRange<string>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => x.Value.StartsWith("foo"));
             Assert.AreEqual(expected, actual);
         }
 
@@ -1252,64 +1387,6 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
-        /// Test CompareTo with non-string
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Test CompareTo with non-string")]
-        public void TestCompareToNonString()
-        {
-            KeyRange<long> keyRange =
-                KeyValueExpressionEvaluator<long, string>.GetKeyRange(
-                    x => x.Key.CompareTo(7) < 0 && x.Key.CompareTo(-8) >= 0);
-            Assert.AreEqual(-8, keyRange.Min.Value);
-            Assert.IsTrue(keyRange.Min.IsInclusive);
-            Assert.AreEqual(7, keyRange.Max.Value);
-            Assert.IsFalse(keyRange.Max.IsInclusive);
-        }
-
-        /// <summary>
-        /// Test CompareTo with non-zero comparand
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Test CompareTo with non-zero comparand")]
-        public void TestCompareToNonZeroComparand()
-        {
-            KeyRange<int> keyRange =
-                KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => x.Key.CompareTo(7) < 1);
-            Assert.IsNull(keyRange.Min);
-            Assert.IsNull(keyRange.Max);
-        }
-
-        /// <summary>
-        /// Test CompareTo with the wrong type
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Test CompareTo the wrong type")]
-        public void TestCompareToWrongType()
-        {
-            KeyRange<int> keyRange =
-                KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => x.Key.CompareTo(Guid.NewGuid()) < 0);
-            Assert.IsNull(keyRange.Min);
-            Assert.IsNull(keyRange.Max);
-        }
-
-        /// <summary>
-        /// Test CompareTo without parameter access
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Test CompareTo with no parameter access")]
-        public void TestCompareToNoParameter()
-        {
-            KeyRange<int> keyRange =
-                KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => 0 < 5.CompareTo(4));
-            Assert.AreEqual(keyRange, KeyRange<int>.OpenRange);
-        }
-
-        /// <summary>
         /// Test String.Compare
         /// </summary>
         [TestMethod]
@@ -1382,6 +1459,270 @@ namespace EsentCollectionsTests
                 KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => 0 > String.Compare("a", "b"));
             Assert.AreEqual(keyRange, KeyRange<string>.OpenRange);
         }
+
+        /// <summary>
+        /// Test String.Compare with non zero comparand 1
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Compare with non-zero comparand 1")]
+        public void TestStringCompareNonZeroComparand1()
+        {
+            var expected = KeyRange<string>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => String.Compare(x.Key, "foo") > 1);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test String.Compare with non zero comparand 2
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Compare with non-zero comparand 2")]
+        public void TestStringCompareNonZeroComparand2()
+        {
+            var expected = KeyRange<string>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => String.Compare("foo", x.Key) < 1);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test String.Compare with non zero comparand 3
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Compare with non-zero comparand 3")]
+        public void TestStringCompareNonZeroComparand3()
+        {
+            var expected = KeyRange<string>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => 1 >= String.Compare(x.Key, "foo"));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test String.Compare with non zero comparand 4
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Compare with non-zero comparand 4")]
+        public void TestStringCompareNonZeroComparand4()
+        {
+            var expected = KeyRange<string>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => 2 == String.Compare("foo", x.Key));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test String.Compare with non-constant comparand 1
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Compare with non-zero comparand 1")]
+        public void TestStringCompareNonConstantComparand1()
+        {
+            var expected = KeyRange<string>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<string, int>.GetKeyRange(x => String.Compare(x.Key, "foo") > x.Value);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test String.Compare with non-constant comparand 2
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Compare with non-zero comparand 2")]
+        public void TestStringCompareNonConstantComparand2()
+        {
+            var expected = KeyRange<string>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<string, int>.GetKeyRange(x => String.Compare("foo", x.Key) < x.Value);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test String.Compare with non-constant comparand 3
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Compare with non-zero comparand 3")]
+        public void TestStringCompareNonConstantComparand3()
+        {
+            var expected = KeyRange<string>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<string, int>.GetKeyRange(x => x.Value >= String.Compare(x.Key, "foo"));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test String.Compare with non-constant comparand 4
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Compare with non-zero comparand 4")]
+        public void TestStringCompareNonConstantComparand4()
+        {
+            var expected = KeyRange<string>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<string, int>.GetKeyRange(x => x.Value == String.Compare("foo", x.Key));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test String.Compare case-insensitive
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Compare case-insensitive")]
+        public void TestStringCompareCaseInsensitive()
+        {
+            // Not handled (the index is case sensitive)
+            var expected = KeyRange<string>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<string, int>.GetKeyRange(x => x.Value == String.Compare(x.Key, "foo", true));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test String.Equals
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Equals")]
+        public void TestStaticStringEquals()
+        {
+            // TODO: Handle this
+            var expected = KeyRange<string>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<string, int>.GetKeyRange(x => String.Equals(x.Key, "a"));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test String.Equals reversed
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Equals reversed")]
+        public void TestStaticStringEqualsReversed()
+        {
+            // TODO: Handle this
+            var expected = KeyRange<string>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<string, int>.GetKeyRange(x => String.Equals("a", x.Key));
+            Assert.AreEqual(expected, actual);
+        }
+
+        #endregion
+
+        #region CompareTo tests
+
+        /// <summary>
+        /// Test CompareTo
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test CompareTo")]
+        public void TestCompareTo()
+        {
+            KeyRange<long> keyRange =
+                KeyValueExpressionEvaluator<long, string>.GetKeyRange(
+                    x => x.Key.CompareTo(7) < 0 && x.Key.CompareTo(-8) >= 0);
+            Assert.AreEqual(-8, keyRange.Min.Value);
+            Assert.IsTrue(keyRange.Min.IsInclusive);
+            Assert.AreEqual(7, keyRange.Max.Value);
+            Assert.IsFalse(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test CompareTo with non-zero comparand
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test CompareTo with non-zero comparand")]
+        public void TestCompareToNonZeroComparand()
+        {
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => x.Key.CompareTo(7) < 1);
+            Assert.IsNull(keyRange.Min);
+            Assert.IsNull(keyRange.Max);
+        }
+
+        /// <summary>
+        /// Test CompareTo reversed with non-zero comparand
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test CompareTo reversed with non-zero comparand")]
+        public void TestCompareToNonZeroComparandReversed()
+        {
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => 2 > x.Key.CompareTo(8));
+            Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
+        }
+
+        /// <summary>
+        /// Test CompareTo with the wrong type
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test CompareTo the wrong type")]
+        public void TestCompareToWrongType()
+        {
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => x.Key.CompareTo(Guid.NewGuid()) < 0);
+            Assert.IsNull(keyRange.Min);
+            Assert.IsNull(keyRange.Max);
+        }
+
+        /// <summary>
+        /// Test CompareTo without parameter access
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test CompareTo with no parameter access")]
+        public void TestCompareToNoParameter()
+        {
+            KeyRange<int> keyRange =
+                KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => 0 < 5.CompareTo(4));
+            Assert.AreEqual(keyRange, KeyRange<int>.OpenRange);
+        }
+
+        /// <summary>
+        /// Test CompareTo the parameter
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test CompareTo the parameter")]
+        public void TestCompareToParameter()
+        {
+            var expected = KeyRange<int>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<int, int>.GetKeyRange(x => 0 < x.Key.CompareTo(x.Value));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test CompareTo with a non-constant comparand 1
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test CompareTo non-constant comparand 1")]
+        public void TestCompareToNonConstant1()
+        {
+            var expected = KeyRange<int>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<int, int>.GetKeyRange(x => x.Value < x.Key.CompareTo(5));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test CompareTo with a non-constant comparand 2
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test CompareTo non-constant comparand 2")]
+        public void TestCompareToNonConstant2()
+        {
+            var expected = KeyRange<int>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<int, int>.GetKeyRange(x => x.Key.CompareTo(5) == x.Value);
+            Assert.AreEqual(expected, actual);
+        }
+
+        #endregion
+
+        #region Functional and Regression Tests
 
         /// <summary>
         /// Test expression 1.
@@ -1571,7 +1912,10 @@ namespace EsentCollectionsTests
                 Key<string>.CreateKey("ggi", true),
                 Key<string>.CreatePrefixKey("g"));
             Assert.AreEqual(expected, actual);
+            Assert.IsFalse(actual.IsEmpty);
         }
+
+        #endregion
 
         /// <summary>
         /// Common test for constant folding tests.

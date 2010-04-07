@@ -201,17 +201,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         public delegate object RetrieveColumnDelegate(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid);
 
         /// <summary>
-        /// Gets the type of object that this converter takes and returns.
-        /// </summary>
-        public Type Type
-        {
-            get
-            {
-                return this.type;
-            }
-        }
-
-        /// <summary>
         /// Gets the type of database column the value should be stored in.
         /// </summary>
         public JET_coltyp Coltyp
@@ -255,11 +244,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </returns>
         private static bool IsSerializable(Type type)
         {
-            if (null == type)
-            {
-                throw new ArgumentNullException("type");
-            }
-
             // Strings are fine (they are immutable)
             if (typeof(string) == type)
             {

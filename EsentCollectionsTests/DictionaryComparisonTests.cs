@@ -81,13 +81,49 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// Insert null key and values. The ordinary dictionary
+        /// doesn't support this so we can't compare. We also make
+        /// sure that String.Empty and null are handled differently.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test handling of null and String.Empty")]
+        public void TestInsertNull()
+        {
+            // Insert
+            this.actual[null] = null;
+            this.actual[String.Empty] = String.Empty;
+
+            // Overwrite
+            this.actual[String.Empty] = null;
+            this.actual[null] = String.Empty;
+
+            // Retrieve
+            Assert.IsNull(this.actual[String.Empty]);
+            Assert.AreEqual(String.Empty, this.actual[null]);
+
+            // Contains
+            Assert.IsTrue(this.actual.Contains(new KeyValuePair<string, string>(String.Empty, null)));
+            Assert.IsTrue(this.actual.Contains(new KeyValuePair<string, string>(null, String.Empty)));
+            Assert.IsFalse(this.actual.Contains(new KeyValuePair<string, string>(String.Empty, String.Empty)));
+            Assert.IsFalse(this.actual.Contains(new KeyValuePair<string, string>(null, null)));
+
+            // ContainsValue / Value.Contains
+            Assert.IsTrue(this.actual.ContainsValue(null));
+            Assert.IsTrue(this.actual.ContainsValue(String.Empty));
+            Assert.IsTrue(this.actual.Values.Contains(null));
+            Assert.IsTrue(this.actual.Values.Contains(String.Empty));
+        }
+
+        /// <summary>
         /// Test special case strings.
         /// </summary>
         [TestMethod]
         [Priority(2)]
         public void TestSpecialStrings()
         {
-            this.expected[String.Empty] = this.actual[String.Empty] = "0";
+            // Empty
+            this.expected[String.Empty] = this.actual[String.Empty] = String.Empty;
 
             // Numbers
             this.expected["1"] = this.actual["1"] = "1";
@@ -100,8 +136,9 @@ namespace EsentCollectionsTests
             this.expected[" "] = this.actual[" "] = "6";
 
             // Unicode
-            this.expected["字会意"] = this.actual["字会意"] = "7";
-            this.expected["한글"] = this.actual["한글"] = "8";
+            this.expected["字会意"] = this.actual["字会意"] = "字会意";
+            this.expected["한글"] = this.actual["한글"] = "한글";
+            this.expected["?字3한会X"] = this.actual["?字3한会X"] = "xyzzy";
             DictionaryAssert.AreEqual(this.expected, this.actual);
         }
 

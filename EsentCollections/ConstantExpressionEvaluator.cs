@@ -30,11 +30,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>True if the expression was a constant, false otherwise.</returns>
         public static bool TryGetConstantExpression(Expression expression, out T value)
         {
-            if (null == expression)
-            {
-                throw new ArgumentNullException("expression");
-            }
-
             if (expression.Type != typeof(T))
             {
                 value = default(T);
@@ -44,7 +39,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             if (HasNoParameterAccess(expression))
             {
                 value = (T)GetExpressionValue(expression);
-                return true;
+                return (null != value);
             }
 
             value = default(T);

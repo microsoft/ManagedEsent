@@ -292,6 +292,30 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// Verify the KeyRange.Equals returns false for null object.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify the KeyRange.Equals returns false for null object")]
+        public void VerifyKeyRangeEqualsNullOnjectIsFalse()
+        {
+            object obj = null;
+            Assert.IsFalse(KeyRange<double>.OpenRange.Equals(obj));
+        }
+
+        /// <summary>
+        /// Verify the KeyRange.Equals returns false for an object of a different type
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify the KeyRange.Equals returns false for object of a different type")]
+        public void VerifyKeyRangeEqualsDifferentTypeIsFalse()
+        {
+            object obj = new object();
+            Assert.IsFalse(KeyRange<double>.OpenRange.Equals(obj));
+        }
+
+        /// <summary>
         /// Verify a KeyRange equals itself.
         /// </summary>
         [TestMethod]
@@ -579,6 +603,17 @@ namespace EsentCollectionsTests
         {
             var keyrange = new KeyRange<string>(Key<string>.CreatePrefixKey("a"), null);
             Assert.AreEqual(KeyRange<string>.OpenRange, keyrange.Invert());
+        }
+
+        /// <summary>
+        /// KeyRange.Invert test 7
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Invert test 7 (empty range)")]
+        public void TestKeyRangeInvert7()
+        {
+            Assert.AreEqual(KeyRange<string>.EmptyRange, KeyRange<string>.EmptyRange.Invert());
         }
 
         /// <summary>

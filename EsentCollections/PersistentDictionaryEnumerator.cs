@@ -175,7 +175,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             if (null != this.cursor)
             {
-                this.cursor.Dispose();
+                this.dictionary.FreeCursor(this.cursor);
                 this.cursor = null;
             }
         }

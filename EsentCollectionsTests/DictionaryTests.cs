@@ -10,7 +10,9 @@
 namespace EsentCollectionsTests
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
     using Microsoft.Isam.Esent.Collections.Generic;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -405,6 +407,117 @@ namespace EsentCollectionsTests
         {
             var ignored = this.dictionary.Keys.Last();
         }
+
+        /// <summary>
+        /// Create a lot of enumerators.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Create lots of enumerators, using up cursors and sessions")]
+        public void CreateLotsOfEnumerators()
+        {
+            this.dictionary[DateTime.Now] = Guid.NewGuid();
+            var enumerators = new IEnumerator[200];
+            
+            for (int i = 0; i < enumerators.Length; ++i)
+            {
+                IEnumerable enumerable = this.dictionary;
+                enumerators[i] = enumerable.GetEnumerator();
+                Assert.IsTrue(enumerators[i].MoveNext());
+            }
+
+            foreach (IEnumerator enumerator in enumerators)
+            {
+                ((IDisposable)enumerator).Dispose();                
+            }
+        }
+
+        #region CopyTo Tests
+
+        /// <summary>
+        /// Copy into a null array. An exception should be thrown.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Copy into a null array. An exception should be thrown")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyCopyToThrowsExceptionWhenArryIsEmpty()
+        {
+            this.dictionary.CopyTo(null, 0);
+        }
+
+        /// <summary>
+        /// Copy into a negative array index. An exception should be thrown.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Copy into a negative array index. An exception should be thrown")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyCopyToThrowsExceptionWhenArryIndexIsNegative()
+        {
+            var data = new KeyValuePair<DateTime, Guid?>[10];
+            this.dictionary.CopyTo(data, -1);
+        }
+
+        /// <summary>
+        /// Copy into a too-big array index. An exception should be thrown.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Copy into a too-big array index. An exception should be thrown")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyCopyToThrowsExceptionWhenArryIndexIsTooBig()
+        {
+            var data = new KeyValuePair<DateTime, Guid?>[10];
+            this.dictionary.CopyTo(data, data.Length);
+        }
+
+        /// <summary>
+        /// Copy into an array that is too small. An exception should be thrown.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Copy into an array that is too small. An exception should be thrown")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyCopyToThrowsExceptionWhenArryIsTooSmall()
+        {
+            var data = new KeyValuePair<DateTime, Guid?>[1];
+            this.dictionary[DateTime.Now] = Guid.NewGuid();
+            this.dictionary[DateTime.UtcNow] = Guid.NewGuid();
+            this.dictionary.CopyTo(data, 0);
+        }
+
+        /// <summary>
+        /// Copy into an array.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Copy into an array")]
+        public void VerifyCopyCopiesElements()
+        {
+            var data = new KeyValuePair<DateTime, Guid?>[2];
+            this.dictionary[DateTime.Now] = Guid.NewGuid();
+            this.dictionary[DateTime.UtcNow] = Guid.NewGuid();
+            this.dictionary.CopyTo(data, 0);
+            CollectionAssert.AreEquivalent(data, this.dictionary.ToArray());
+        }
+
+        /// <summary>
+        /// Copy into an array.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Copy keys into an array")]
+        public void VerifyCopyKeysCopiesElements()
+        {
+            var data = new DateTime[2];
+            this.dictionary[DateTime.Now] = Guid.NewGuid();
+            this.dictionary[DateTime.UtcNow] = Guid.NewGuid();
+            this.dictionary.Keys.CopyTo(data, 0);
+            CollectionAssert.AreEquivalent(data, this.dictionary.Keys.ToArray());
+        }
+
+        #endregion
 
         /// <summary>
         /// Make sure the given collection is read-only.

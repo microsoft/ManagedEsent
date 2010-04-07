@@ -211,18 +211,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
-        /// Move to the last record, throwing an exception if there are no record.
-        /// </summary>
-        public void MoveLastWithKeyNotFoundException()
-        {
-            Api.MoveAfterLast(this.sesid, this.dataTable);
-            if (!Api.TryMovePrevious(this.sesid, this.dataTable))
-            {
-                throw new KeyNotFoundException("dictionary is empty");
-            }
-        }
-
-        /// <summary>
         /// Create an index range on the cursor, controlling which records will be enumerated.
         /// </summary>
         /// <param name="range">The range to set.</param>

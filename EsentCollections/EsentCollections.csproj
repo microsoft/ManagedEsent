@@ -87,7 +87,6 @@
     <Compile Include="PersistentDictionaryConverters.cs" />
     <Compile Include="PersistentDictionaryCursor.cs" />
     <Compile Include="PersistentDictionaryCursorCache.cs" />
-    <Compile Include="PersistentDictionaryEnumerable.cs" />
     <Compile Include="PersistentDictionaryEnumerator.cs" />
     <Compile Include="PersistentDictionaryFile.cs" />
     <Compile Include="PersistentDictionaryKeyCollection.cs" />

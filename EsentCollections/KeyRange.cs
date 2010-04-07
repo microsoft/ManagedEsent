@@ -566,17 +566,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             {
                 return 0;
             }
-
-            if (null == a.Value)
-            {
-                return -1;
-            }
-
-            if (null == b.Value)
-            {
-                return 1;
-            }
-
             return a.Value.CompareTo(b.Value);
         }
     }

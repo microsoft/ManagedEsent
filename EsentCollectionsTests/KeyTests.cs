@@ -106,5 +106,29 @@ namespace EsentCollectionsTests
             var key2 = Key<int>.CreateKey(4, false);
             EqualityAsserts.TestEqualsAndHashCode(key1, key2, false);
         }
+
+        /// <summary>
+        /// Verify the Key.Equals returns false for null object.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify the Key.Equals returns false for null object")]
+        public void VerifyKeyEqualsNullOnjectIsFalse()
+        {
+            object obj = null;
+            Assert.IsFalse(Key<double>.CreateKey(0, false).Equals(obj));
+        }
+
+        /// <summary>
+        /// Verify the Key.Equals returns false for an object of a different type
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify the Key.Equals returns false for object of a different type")]
+        public void VerifyKeyEqualsDifferentTypeIsFalse()
+        {
+            object obj = new object();
+            Assert.IsFalse(Key<double>.CreateKey(0, false).Equals(obj));
+        }
     }
 }

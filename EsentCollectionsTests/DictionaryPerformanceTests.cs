@@ -62,7 +62,7 @@ namespace EsentCollectionsTests
         [Priority(4)]
         public void TestSequentialInsertAndLookupSpeed()
         {
-            const int N = 100000;
+            const int N = 1000000;
             const string Data = "01234567890ABCDEF01234567890ABCDEF";
             const string Newdata = "something completely different";
 
@@ -88,7 +88,7 @@ namespace EsentCollectionsTests
             this.LinqQueries(5000);
 
             // Repeatedly run a parameterized LINQ query
-            this.FastLinqQueries(5000);
+            this.FastLinqQueries(100000);
 
             // Now update the entries
             keys.Shuffle();
@@ -161,14 +161,14 @@ namespace EsentCollectionsTests
             // Create the Enumerable outside of the loop. This means the expression
             // tree only has to be compiled once.
             int key = 0;
-            var query = from x in this.dictionary where x.Key == key select x.Value;
+            var query = from x in this.dictionary where x.Key == key select x;
 
             for (int i = 0; i < numQueries; ++i)
             {
                 key = rand.Next(0, n);
                 foreach (var x in query)
                 {
-                    // enumerate the records
+                    Assert.AreEqual(key, x.Key);
                 }
             }
 

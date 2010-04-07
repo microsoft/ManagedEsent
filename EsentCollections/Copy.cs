@@ -26,11 +26,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="arrayIndex">The location in the index to start copying into.</param>
         public static void CopyTo<T>(ICollection<T> items, T[] array, int arrayIndex)
         {
-            if (null == items)
-            {
-                throw new ArgumentNullException("items");
-            }
-
             if (null == array)
             {
                 throw new ArgumentNullException("array");
@@ -41,7 +36,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 throw new ArgumentOutOfRangeException("arrayIndex", arrayIndex, "not inside array");
             }
 
-            if (checked(array.Length - arrayIndex) > items.Count)
+            if (checked(array.Length - arrayIndex) < items.Count)
             {
                 throw new ArgumentOutOfRangeException("array", array.Length, "array is not long enough");
             }                

@@ -39,16 +39,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </returns>
         public static KeyRange<TKey> GetKeyRange(Expression expression, MemberInfo keyMemberInfo)
         {
-            if (null == expression)
-            {
-                throw new ArgumentNullException("expression");    
-            }
-
-            if (null == keyMemberInfo)
-            {
-                throw new ArgumentNullException("keyMemberInfo");
-            }
-
             return GetKeyRangeOfSubtree(expression, keyMemberInfo);
         }
 

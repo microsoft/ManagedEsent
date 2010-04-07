@@ -124,6 +124,8 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             this.instance.Parameters.MaxVerPages = 1024;
             this.instance.Parameters.NoInformationEvent = true;
             this.instance.Parameters.WaypointLatency = 1;
+            this.instance.Parameters.MaxSessions = 256;
+            this.instance.Parameters.MaxOpenTables = 256;
 
             InitGrbit grbit = EsentVersion.SupportsWindows7Features
                                   ? Windows7Grbits.ReplayIgnoreLostLogs
@@ -692,6 +694,17 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         internal PersistentDictionaryCursor<TKey, TValue> GetCursor()
         {
             return this.cursors.GetCursor();
+        }
+
+        /// <summary>
+        /// Opens a cursor on the PersistentDictionary. Used by enumerators.
+        /// </summary>
+        /// <param name="cursor">
+        /// The cursor being freed.
+        /// </param>
+        internal void FreeCursor(PersistentDictionaryCursor<TKey, TValue> cursor)
+        {
+            this.cursors.FreeCursor(cursor);
         }
 
         /// <summary>
