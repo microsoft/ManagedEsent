@@ -72,6 +72,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="lcmapFlags">LCMapString flags.</param>
         /// <returns>CompareOptions describing the (known) flags.</returns>
+        [CLSCompliant(false)]
         public static CompareOptions CompareOptionsFromLCMapFlags(uint lcmapFlags)
         {
             // This should be a template, but there isn't an elegant way to express than with C# generics
@@ -92,6 +93,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="compareOptions">The options to convert.</param>
         /// <returns>The LCMapString flags that match the compare options. Unsupported options are ignored.</returns>
+        [CLSCompliant(false)]
         public static uint LCMapFlagsFromCompareOptions(CompareOptions compareOptions)
         {
             // This should be a template, but there isn't an elegant way to express than with C# generics
@@ -128,7 +130,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// This class contains the unmanaged constants used in the conversion.
         /// </summary>
-        public static class NativeMethods
+        internal static class NativeMethods
         {
             #region Win32 Constants
 

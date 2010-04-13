@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CollectionsSystemParameters.cs" />
+    <Compile Include="ConstantExpressionCompiler.cs" />
     <Compile Include="IPersistentDictionaryConfig.cs" />
     <Compile Include="KeyColumnConverter.cs" />
     <Compile Include="Compare.cs" />
@@ -92,6 +93,8 @@
     <Compile Include="PersistentDictionaryKeyCollection.cs" />
     <Compile Include="PersistentDictionaryLinq.cs" />
     <Compile Include="PersistentDictionaryLinqEnumerable.cs" />
+    <Compile Include="PersistentDictionaryLinqExtensions.cs" />
+    <Compile Include="PersistentDictionaryReverseEnumerator.cs" />
     <Compile Include="PersistentDictionaryTracing.cs" />
     <Compile Include="PersistentDictionaryValueCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

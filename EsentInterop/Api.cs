@@ -263,6 +263,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="version">Returns the version number of the database engine.</param>
+        [CLSCompliant(false)]
         public static void JetGetVersion(JET_SESID sesid, out uint version)
         {
             Api.Check(Impl.JetGetVersion(sesid, out version));
@@ -1775,6 +1776,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         /// <param name="grbit">Retrieve options.</param>
         /// <returns>A warning or success.</returns>
+        [CLSCompliant(false)]
         public static JET_wrn JetEnumerateColumns(
             JET_SESID sesid,
             JET_TABLEID tableid,

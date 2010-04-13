@@ -292,6 +292,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor to update. An update should be prepared.</param>
         /// <param name="columnid">The columnid to set.</param>
         /// <param name="data">The data to set.</param>
+        [CLSCompliant(false)]
         public static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, ushort data)
         {
             unsafe
@@ -310,6 +311,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor to update. An update should be prepared.</param>
         /// <param name="columnid">The columnid to set.</param>
         /// <param name="data">The data to set.</param>
+        [CLSCompliant(false)]
         public static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, uint data)
         {
             unsafe
@@ -328,6 +330,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor to update. An update should be prepared.</param>
         /// <param name="columnid">The columnid to set.</param>
         /// <param name="data">The data to set.</param>
+        [CLSCompliant(false)]
         public static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, ulong data)
         {
             unsafe

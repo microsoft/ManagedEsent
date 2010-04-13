@@ -28,6 +28,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         private static readonly MethodInfo compareToMethod = typeof(TKey).GetMethod("CompareTo", new[] { typeof(TKey) });
 
         /// <summary>
+        /// A MethodInfo describing TKey.Equals(TKey).
+        /// </summary>
+        private static readonly MethodInfo equalsMethod = typeof(TKey).GetMethod("Equals", new[] { typeof(TKey) });
+
+        /// <summary>
         /// Evaluate a predicate Expression and determine a key range which
         /// contains all items matched by the predicate.
         /// </summary>
@@ -40,6 +45,45 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         public static KeyRange<TKey> GetKeyRange(Expression expression, MemberInfo keyMemberInfo)
         {
             return GetKeyRangeOfSubtree(expression, keyMemberInfo);
+        }
+
+        /// <summary>
+        /// Evaluate a predicate Expression and determine whether a key range can
+        /// be found that completely satisfies the expression. If this method returns
+        /// true then the key range returned by <see cref="GetKeyRange"/> will return
+        /// only records which match the expression.
+        /// </summary>
+        /// <param name="expression">The expression to evaluate.</param>
+        /// <param name="keyMemberInfo">The name of the parameter member that is the key.</param>
+        /// <returns>
+        /// True if the key range returned by <see cref="GetKeyRange"/> will perfectly
+        /// match all records found by the expression.
+        /// </returns>
+        public static bool KeyRangeIsExact(Expression expression, MemberInfo keyMemberInfo)
+        {
+            // A KeyRange is exact if the expression is an AND of key comparisons
+            switch (expression.NodeType)
+            {
+                case ExpressionType.AndAlso:
+                    var andExpression = (BinaryExpression)expression;
+                    return KeyRangeIsExact(andExpression.Left, keyMemberInfo) &&
+                           KeyRangeIsExact(andExpression.Right, keyMemberInfo);
+
+                case ExpressionType.Call:
+                    KeyRange<TKey> ignored;
+                    return IsComparisonMethod((MethodCallExpression)expression, keyMemberInfo, out ignored);
+
+                case ExpressionType.Equal:
+                case ExpressionType.LessThan:
+                case ExpressionType.LessThanOrEqual:
+                case ExpressionType.GreaterThan:
+                case ExpressionType.GreaterThanOrEqual:
+                    TKey value;
+                    ExpressionType expressionType;
+                    return IsConstantComparison((BinaryExpression)expression, keyMemberInfo, out value, out expressionType);
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -79,34 +123,15 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 }
 
                 case ExpressionType.Call:
-                {
-                    if (typeof(TKey) == typeof(string))
                     {
-                        MethodCallExpression methodCall = (MethodCallExpression)expression;
-                        if (null != methodCall.Object
-                            && IsKeyAccess(methodCall.Object, keyMemberInfo))
+                        KeyRange<TKey> keyRange;
+                        if (IsComparisonMethod((MethodCallExpression)expression, keyMemberInfo, out keyRange))
                         {
-                            TKey value;
-
-                            // String.Equals
-                            if (StringExpressionEvaluatorHelper.StringEqualsMethod == methodCall.Method
-                                && ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(methodCall.Arguments[0], out value))
-                            {
-                                return new KeyRange<TKey>(Key<TKey>.CreateKey(value, true), Key<TKey>.CreateKey(value, true));
-                            }
-
-                            // String.StartsWith
-                            if (StringExpressionEvaluatorHelper.StringStartWithMethod == methodCall.Method
-                                && ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(methodCall.Arguments[0], out value))
-                            {
-                                // Lower range is just the string, upper range is the prefix
-                                return new KeyRange<TKey>(Key<TKey>.CreateKey(value, true), Key<TKey>.CreatePrefixKey(value));
-                            }
+                            return keyRange;
                         }
-                    }
 
-                    break;
-                }
+                        break;
+                    }
 
                 case ExpressionType.Equal:
                 case ExpressionType.LessThan:
@@ -146,6 +171,67 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             }
 
             return KeyRange<TKey>.OpenRange;
+        }
+
+        /// <summary>
+        /// Determine if the MethodCallExpression is a key comparison method, and
+        /// return the index range if it is.
+        /// </summary>
+        /// <param name="methodCall">The method call expression.</param>
+        /// <param name="keyMemberInfo">The name of the parameter member that is the key.</param>
+        /// <param name="keyRange">Returns the key range if this is a key comparison method.</param>
+        /// <returns>True if the method is a key comparison method.</returns>
+        private static bool IsComparisonMethod(MethodCallExpression methodCall, MemberInfo keyMemberInfo, out KeyRange<TKey> keyRange)
+        {
+            if (null != methodCall.Object && IsKeyAccess(methodCall.Object, keyMemberInfo))
+            {
+                TKey value;
+
+                // TKey.Equals
+                if ((equalsMethod == methodCall.Method)
+                    && ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(methodCall.Arguments[0], out value))
+                {
+                    keyRange = new KeyRange<TKey>(Key<TKey>.CreateKey(value, true), Key<TKey>.CreateKey(value, true));
+                    return true;
+                }
+            }
+
+            if (typeof(TKey) == typeof(string))
+            {
+                if (null != methodCall.Object
+                    && IsKeyAccess(methodCall.Object, keyMemberInfo))
+                {
+                    TKey value;
+
+                    // String.StartsWith
+                    if (StringExpressionEvaluatorHelper.StringStartWithMethod == methodCall.Method
+                        && ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(methodCall.Arguments[0], out value))
+                    {
+                        // Lower range is just the string, upper range is the prefix
+                        keyRange = new KeyRange<TKey>(Key<TKey>.CreateKey(value, true), Key<TKey>.CreatePrefixKey(value));
+                        return true;
+                    }
+                }
+                else if (null == methodCall.Object)
+                {
+                    // Static String.Equals
+                    if (StringExpressionEvaluatorHelper.StringStaticEqualsMethod == methodCall.Method)
+                    {
+                        TKey value;
+                        if ((IsKeyAccess(methodCall.Arguments[0], keyMemberInfo)
+                            && ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(methodCall.Arguments[1], out value))
+                            || (IsKeyAccess(methodCall.Arguments[1], keyMemberInfo)
+                            && ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(methodCall.Arguments[0], out value)))
+                        {
+                            keyRange = new KeyRange<TKey>(Key<TKey>.CreateKey(value, true), Key<TKey>.CreateKey(value, true));
+                            return true;
+                        }
+                    }                    
+                }
+            }
+
+            keyRange = null;
+            return false;
         }
 
         /// <summary>
@@ -424,6 +510,12 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>True if the expression is accessing the key of the parameter.</returns>
         private static bool IsKeyAccess(Expression expression, MemberInfo keyMemberInfo)
         {
+            if (ExpressionType.Convert == expression.NodeType || ExpressionType.ConvertChecked == expression.NodeType)
+            {
+                UnaryExpression convertExpression = (UnaryExpression)expression;
+                return IsKeyAccess(convertExpression.Operand, keyMemberInfo);
+            }
+
             // If keyMemberInfo is null then we are using the parameter directly
             if (null == keyMemberInfo && ExpressionType.Parameter == expression.NodeType)
             {
@@ -486,7 +578,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             if (expression is MethodCallExpression)
             {
                 MethodCallExpression methodCall = (MethodCallExpression)expression;
-                if (methodCall.Method == StringExpressionEvaluatorHelper.StringCompareMethod
+                if (methodCall.Method == StringExpressionEvaluatorHelper.StringStaticCompareMethod
                     && IsKeyAccess(methodCall.Arguments[0], keyMemberInfo))
                 {
                     return ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(methodCall.Arguments[1], out value);
@@ -511,7 +603,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             if (expression is MethodCallExpression)
             {
                 MethodCallExpression methodCall = (MethodCallExpression)expression;
-                if (methodCall.Method == StringExpressionEvaluatorHelper.StringCompareMethod
+                if (methodCall.Method == StringExpressionEvaluatorHelper.StringStaticCompareMethod
                     && IsKeyAccess(methodCall.Arguments[1], keyMemberInfo))
                 {
                     return ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(methodCall.Arguments[0], out value);

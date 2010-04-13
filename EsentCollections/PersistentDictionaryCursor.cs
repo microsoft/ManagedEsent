@@ -261,6 +261,60 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
+        /// Create an index range on the cursor, controlling which records will be enumerated.
+        /// After this call the cursor will be positioned on range.Max and can be enumerated
+        /// backwards to range.Min with TryMovePrevious.
+        /// </summary>
+        /// <param name="range">The range to set.</param>
+        /// <returns>False if the range is empty.</returns>
+        public bool SetReverseIndexRange(KeyRange<TKey> range)
+        {
+            if (range.IsEmpty)
+            {
+                return false;
+            }
+
+            if (null != range.Max)
+            {
+                // The possibilities we have here are:
+                //   1. Key = 'k', exclusive: seek for < 'k'
+                //   2. Key = 'k', inclusive: seek for <= 'k'
+                //   3. Key = 'k', prefix: make a prefix key and seek LE
+                if (range.Max.IsPrefix)
+                {
+                    this.MakePrefixKey(range.Max.Value);
+                }
+                else
+                {
+                    this.MakeKey(range.Max.Value);
+                }
+
+                SeekGrbit grbit = range.Max.IsInclusive ? SeekGrbit.SeekLE : SeekGrbit.SeekLT;
+                if (!Api.TrySeek(this.sesid, this.dataTable, grbit))
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                Api.MoveAfterLast(this.sesid, this.dataTable);
+                if (!Api.TryMovePrevious(this.sesid, this.dataTable))
+                {
+                    return false;
+                }
+            }
+
+            if (null != range.Min)
+            {
+                this.MakeKey(range.Min.Value);
+                SetIndexRangeGrbit grbit = range.Min.IsInclusive ? SetIndexRangeGrbit.RangeInclusive : SetIndexRangeGrbit.None;
+                return Api.TrySetIndexRange(this.sesid, this.dataTable, grbit);
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Retrieve the key column of the record the cursor is currently positioned on.
         /// </summary>
         /// <returns>The key of the record.</returns>

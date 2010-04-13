@@ -191,6 +191,8 @@ namespace EsentCollectionsTests
             var actual = this.dictionary.Where(expression);
             var expected = data.Where(x => func(x)).ToList();
             EnumerableAssert.AreEqual(expected, actual, "expression = {0}", expression);
+            expected.Reverse();
+            EnumerableAssert.AreEqual(expected, actual.Reverse(), "expression = {0}", expression);
         }
 
         /// <summary>

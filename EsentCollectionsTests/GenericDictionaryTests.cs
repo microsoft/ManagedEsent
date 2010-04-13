@@ -247,7 +247,7 @@ namespace EsentCollectionsTests
         {
             using (var dictionary = new PersistentDictionary<string, Uri>(DictionaryPath))
             {
-                RunDictionaryTests(dictionary, "https", new Uri("http://localhost"));
+                RunDictionaryTests(dictionary, "http", new Uri("http://localhost"));
             }
         }
 
@@ -262,13 +262,49 @@ namespace EsentCollectionsTests
         private static void RunDictionaryTests<TKey, TValue>(PersistentDictionary<TKey, TValue> dictionary, TKey key, TValue value)
             where TKey : IComparable<TKey>
         {
-            var kvp = new KeyValuePair<TKey, TValue>(key, value);
-
             Assert.IsFalse(dictionary.IsReadOnly, "Dictionary is read-only");
             Assert.AreEqual(DictionaryPath, dictionary.Database);
 
+            TestBasicOperations(dictionary, key, value);
+
+            // Add the value
+            var kvp = new KeyValuePair<TKey, TValue>(key, value);
+            dictionary.Add(kvp);
+
+            dictionary.Flush();
+
+            TestDictionaryLinq(dictionary, key, value);
+            TestDictionaryKeysLinq(dictionary, key);
+            TestDictionaryEnumeration(dictionary, key, value);
+            TestDictionaryCopyTo(dictionary, key, value);
+        }
+
+        /// <summary>
+        /// Test dictionary insert/replace/delete.
+        /// </summary>
+        /// <typeparam name="TKey">Key type of the dictionary.</typeparam>
+        /// <typeparam name="TValue">Value type of the dictionary.</typeparam>
+        /// <param name="dictionary">The dictionary to test.</param>
+        /// <param name="key">Key that is present in the dictionary.</param>
+        /// <param name="value">Value associated with the key in the dictionary.</param>
+        private static void TestBasicOperations<TKey, TValue>(PersistentDictionary<TKey, TValue> dictionary, TKey key, TValue value)
+            where TKey : IComparable<TKey>
+        {
+            var kvp = new KeyValuePair<TKey, TValue>(key, value);
+
             // Add a record
             dictionary.Add(key, value);
+
+            // Test PersistentDictionary.Add error handling
+            try
+            {
+                dictionary.Add(key, value);
+                Assert.Fail("Expected ArgumentException from Add");
+            }
+            catch (ArgumentException)
+            {
+                // Expected
+            }
 
             // Overwrite a value
             dictionary[key] = value;
@@ -306,14 +342,20 @@ namespace EsentCollectionsTests
             Assert.IsFalse(dictionary.ContainsKey(key), "Dictionary should have contained key {0}", key);
             Assert.IsFalse(dictionary.ContainsValue(value), "Dictionary should have contained value {0}", value);
             Assert.IsFalse(dictionary.Contains(kvp), "Dictionary should have contained <{0},{1}>", key, value);
+        }
 
-            // Add the value
-            dictionary.Add(kvp);
-
-            // Flush the dictionary
-            dictionary.Flush();
-
-            // Test LINQ
+        /// <summary>
+        /// Test LINQ queries on the dictionary.
+        /// </summary>
+        /// <typeparam name="TKey">Key type of the dictionary.</typeparam>
+        /// <typeparam name="TValue">Value type of the dictionary.</typeparam>
+        /// <param name="dictionary">The dictionary to test.</param>
+        /// <param name="key">Key that is present in the dictionary.</param>
+        /// <param name="value">Value associated with the key in the dictionary.</param>
+        private static void TestDictionaryLinq<TKey, TValue>(PersistentDictionary<TKey, TValue> dictionary, TKey key, TValue value)
+            where TKey : IComparable<TKey>
+        {
+            var kvp = new KeyValuePair<TKey, TValue>(key, value);
             Assert.IsTrue(dictionary.Any(x => 0 == x.Key.CompareTo(key)), "Any == should have found {0}", key);
             Assert.IsTrue(dictionary.Any(x => 0 <= x.Key.CompareTo(key)), "Any <= should have found {0}", key);
             Assert.IsTrue(dictionary.Any(x => 0 >= x.Key.CompareTo(key)), "Any >= should have found {0}", key);
@@ -327,26 +369,78 @@ namespace EsentCollectionsTests
             Assert.AreEqual(value, query.Single(), "Where >= failed");
             query = from x in dictionary where !(x.Key.CompareTo(key) != 0) select x.Value;
             Assert.AreEqual(value, query.Single(), "Where !(!=) failed");
+            Assert.AreEqual(kvp, dictionary.Where(x => x.Key.CompareTo(key) >= 0).Reverse().Last(), "Where.Reverse.Last failed");
 
             Assert.AreEqual(kvp, dictionary.First(), "First");
+            Assert.AreEqual(kvp, dictionary.First(x => x.Key.CompareTo(key) == 0), "First");
             Assert.AreEqual(kvp, dictionary.FirstOrDefault(), "FirstOrDefault");
+            Assert.AreEqual(kvp, dictionary.FirstOrDefault(x => x.Key.CompareTo(key) == 0), "FirstOrDefault");
             Assert.AreEqual(kvp, dictionary.Last(), "Last");
+            Assert.AreEqual(kvp, dictionary.Last(x => x.Key.CompareTo(key) == 0), "Last");
             Assert.AreEqual(kvp, dictionary.LastOrDefault(), "LastOrDefault");
-            Assert.AreEqual(kvp, dictionary.Min(), "Min");
-            Assert.AreEqual(kvp, dictionary.Max(), "Max");
+            Assert.AreEqual(kvp, dictionary.LastOrDefault(x => x.Key.CompareTo(key) == 0), "LastOrDefault");
+
+            Assert.AreEqual(1, dictionary.Count(x => x.Key.CompareTo(key) <= 0), "Count failed");
+        }
+
+        /// <summary>
+        /// Test LINQ queries on the dictionary's keys.
+        /// </summary>
+        /// <typeparam name="TKey">Key type of the dictionary.</typeparam>
+        /// <typeparam name="TValue">Value type of the dictionary.</typeparam>
+        /// <param name="dictionary">The dictionary to test.</param>
+        /// <param name="key">Key that is present in the dictionary.</param>
+        private static void TestDictionaryKeysLinq<TKey, TValue>(PersistentDictionary<TKey, TValue> dictionary, TKey key)
+            where TKey : IComparable<TKey>
+        {
+            Assert.IsTrue(dictionary.Keys.Any(x => 0 == x.CompareTo(key)), "Any == should have found {0}", key);
+            Assert.IsTrue(dictionary.Keys.Any(x => 0 <= x.CompareTo(key)), "Any <= should have found {0}", key);
+            Assert.IsTrue(dictionary.Keys.Any(x => 0 >= x.CompareTo(key)), "Any >= should have found {0}", key);
+            Assert.IsTrue(dictionary.Keys.Any(x => !(0 != x.CompareTo(key))), "Any !(!=) should have found {0}", key);
+
+            var query = from x in dictionary.Keys where x.CompareTo(key) == 0 select x;
+            Assert.AreEqual(key, query.Single(), "Where == failed");
+            query = from x in dictionary.Keys where x.CompareTo(key) <= 0 select x;
+            Assert.AreEqual(key, query.Single(), "Where <= failed");
+            query = from x in dictionary.Keys where x.CompareTo(key) >= 0 select x;
+            Assert.AreEqual(key, query.Single(), "Where >= failed");
+            query = from x in dictionary.Keys where !(x.CompareTo(key) != 0) select x;
+            Assert.AreEqual(key, query.Single(), "Where !(!=) failed");
+            Assert.AreEqual(key, dictionary.Keys.Where(x => x.CompareTo(key) >= 0).Reverse().Last(), "Where.Reverse.Last failed");
 
             Assert.AreEqual(key, dictionary.Keys.First(), "First");
+            Assert.AreEqual(key, dictionary.Keys.First(x => x.CompareTo(key) == 0), "First");
             Assert.AreEqual(key, dictionary.Keys.FirstOrDefault(), "FirstOrDefault");
+            Assert.AreEqual(key, dictionary.Keys.FirstOrDefault(x => x.CompareTo(key) == 0), "FirstOrDefault");
             Assert.AreEqual(key, dictionary.Keys.Last(), "Last");
+            Assert.AreEqual(key, dictionary.Keys.Last(x => x.CompareTo(key) == 0), "Last");
             Assert.AreEqual(key, dictionary.Keys.LastOrDefault(), "LastOrDefault");
+            Assert.AreEqual(key, dictionary.Keys.LastOrDefault(x => x.CompareTo(key) == 0), "LastOrDefault");
             Assert.AreEqual(key, dictionary.Keys.Min(), "Min");
             Assert.AreEqual(key, dictionary.Keys.Max(), "Max");
 
-            // Enumerate the elements
+            Assert.AreEqual(key, dictionary.Keys.Min(), "Min");
+            Assert.AreEqual(key, dictionary.Keys.Max(), "Max");
+
+            Assert.AreEqual(1, dictionary.Keys.Count(x => x.CompareTo(key) <= 0), "Count failed");
+        }
+
+        /// <summary>
+        /// Test dictionary enumeration.
+        /// </summary>
+        /// <typeparam name="TKey">Key type of the dictionary.</typeparam>
+        /// <typeparam name="TValue">Value type of the dictionary.</typeparam>
+        /// <param name="dictionary">The dictionary to test.</param>
+        /// <param name="key">Key that is present in the dictionary.</param>
+        /// <param name="value">Value associated with the key in the dictionary.</param>
+        private static void TestDictionaryEnumeration<TKey, TValue>(PersistentDictionary<TKey, TValue> dictionary, TKey key, TValue value)
+            where TKey : IComparable<TKey>
+        {
+            var kvp = new KeyValuePair<TKey, TValue>(key, value);
             IEnumerable enumerator = dictionary.Where(x => true);
             foreach (object o in enumerator)
             {
-                Assert.AreEqual(o, kvp, "Dictionary enumeration");
+                Assert.AreEqual(o, kvp, "Dictionary query enumeration");
             }
 
             foreach (object o in (IEnumerable)dictionary)
@@ -354,14 +448,24 @@ namespace EsentCollectionsTests
                 Assert.AreEqual(o, kvp, "Dictionary enumeration");
             }
 
+            foreach (KeyValuePair<TKey, TValue> a in dictionary.Reverse())
+            {
+                Assert.AreEqual(a, kvp, "Reverse dictionary enumeration");
+            }
+
             foreach (object o in (IEnumerable)dictionary.Keys)
             {
                 Assert.AreEqual(o, key, "Key enumeration");
             }
 
-            foreach (object o in (IEnumerable)dictionary.Values)
+            foreach (TKey k in dictionary.Keys.Reverse())
             {
-                Assert.AreEqual(o, value, "Value enumeration");
+                Assert.AreEqual(k, key, "Reverse key enumeration");
+            }
+
+            foreach (TValue v in dictionary.Values.Reverse())
+            {
+                Assert.AreEqual(v, value, "Value enumeration");
             }
 
             foreach (TKey k in ((IDictionary<TKey, TValue>)dictionary).Keys)
@@ -373,8 +477,20 @@ namespace EsentCollectionsTests
             {
                 Assert.AreEqual(v, value, "Value enumeration");
             }
+        }
 
-            // CopyTo
+        /// <summary>
+        /// Test CopyTo.
+        /// </summary>
+        /// <typeparam name="TKey">Key type of the dictionary.</typeparam>
+        /// <typeparam name="TValue">Value type of the dictionary.</typeparam>
+        /// <param name="dictionary">The dictionary to test.</param>
+        /// <param name="key">Key that is present in the dictionary.</param>
+        /// <param name="value">Value associated with the key in the dictionary.</param>
+        private static void TestDictionaryCopyTo<TKey, TValue>(PersistentDictionary<TKey, TValue> dictionary, TKey key, TValue value)
+            where TKey : IComparable<TKey>
+        {
+            var kvp = new KeyValuePair<TKey, TValue>(key, value);
             var elements = new KeyValuePair<TKey, TValue>[1];
             dictionary.CopyTo(elements, 0);
             Assert.AreEqual(kvp, elements[0], "CopyTo failed");
@@ -386,17 +502,6 @@ namespace EsentCollectionsTests
             var values = new TValue[1];
             dictionary.Values.CopyTo(values, 0);
             Assert.AreEqual(value, values[0], "values.CopyTo failed");
-
-            // Test PersistentDictionary.Add error handling
-            try
-            {
-                dictionary.Add(key, value);
-                Assert.Fail("Expected ArgumentException from Add");
-            }
-            catch (ArgumentException)
-            {
-                // Expected
-            }
         }
 
         /// <summary>
@@ -413,6 +518,12 @@ namespace EsentCollectionsTests
                 RunDictionaryTests(dictionary, key, value);
             }
 
+            // Reopen the database
+            using (var dictionary = new PersistentDictionary<TKey, TValue>(DictionaryPath))
+            {
+            }
+
+            // Delete the database
             Assert.IsTrue(PersistentDictionaryFile.Exists(DictionaryPath), "Dictionary should exist");
             PersistentDictionaryFile.DeleteFiles(DictionaryPath);
             Assert.IsFalse(PersistentDictionaryFile.Exists(DictionaryPath), "Dictionary should have been deleted");

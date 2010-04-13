@@ -21,7 +21,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Cached retrieve buffers.
         /// </summary>
-        private static readonly MemoryCache memoryCache = new MemoryCache(64 * 1024, 16);
+        private static readonly MemoryCache memoryCache = new MemoryCache(128 * 1024, 16);
 
         #region Nested type: ConversionFunc
 
@@ -656,6 +656,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor to retrieve the column from.</param>
         /// <param name="columnid">The columnid to retrieve.</param>
         /// <returns>The data retrieved from the column as an UInt16. Null if the column is null.</returns>
+        [CLSCompliant(false)]
         public static ushort? RetrieveColumnAsUInt16(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
             return RetrieveColumnAsUInt16(sesid, tableid, columnid, RetrieveColumnGrbit.None);
@@ -670,6 +671,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="columnid">The columnid to retrieve.</param>
         /// <param name="grbit">Retrieval options.</param>
         /// <returns>The data retrieved from the column as an UInt16. Null if the column is null.</returns>
+        [CLSCompliant(false)]
         public static ushort? RetrieveColumnAsUInt16(
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {
@@ -693,6 +695,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor to retrieve the column from.</param>
         /// <param name="columnid">The columnid to retrieve.</param>
         /// <returns>The data retrieved from the column as an UInt32. Null if the column is null.</returns>
+        [CLSCompliant(false)]
         public static uint? RetrieveColumnAsUInt32(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
             return RetrieveColumnAsUInt32(sesid, tableid, columnid, RetrieveColumnGrbit.None);
@@ -707,6 +710,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="columnid">The columnid to retrieve.</param>
         /// <param name="grbit">Retrieval options.</param>
         /// <returns>The data retrieved from the column as an UInt32. Null if the column is null.</returns>
+        [CLSCompliant(false)]
         public static uint? RetrieveColumnAsUInt32(
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {
@@ -730,6 +734,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor to retrieve the column from.</param>
         /// <param name="columnid">The columnid to retrieve.</param>
         /// <returns>The data retrieved from the column as an UInt64. Null if the column is null.</returns>
+        [CLSCompliant(false)]
         public static ulong? RetrieveColumnAsUInt64(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
             return RetrieveColumnAsUInt64(sesid, tableid, columnid, RetrieveColumnGrbit.None);
@@ -744,6 +749,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="columnid">The columnid to retrieve.</param>
         /// <param name="grbit">Retrieval options.</param>
         /// <returns>The data retrieved from the column as an UInt64. Null if the column is null.</returns>
+        [CLSCompliant(false)]
         public static ulong? RetrieveColumnAsUInt64(
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {

@@ -11,6 +11,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// A <see cref="ushort"/> column value.
     /// </summary>
+    [CLSCompliant(false)]
     public class UInt16ColumnValue : ColumnValueOfStruct<ushort>
     {
         /// <summary>

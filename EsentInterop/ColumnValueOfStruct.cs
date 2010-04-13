@@ -6,6 +6,8 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+
     /// <summary>
     /// Set a column of a struct type (e.g. Int32/Guid).
     /// </summary>

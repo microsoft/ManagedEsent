@@ -19,14 +19,14 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     internal static class StringExpressionEvaluatorHelper
     {
         /// <summary>
-        /// A MethodInfo describing String.Compare(string, string).
+        /// A MethodInfo describing the static String.Compare(string, string).
         /// </summary>
-        private static readonly MethodInfo stringCompareMethod = typeof(string).GetMethod("Compare", new[] { typeof(string), typeof(string) });
+        private static readonly MethodInfo stringStaticCompareMethod = typeof(string).GetMethod("Compare", new[] { typeof(string), typeof(string) });
 
         /// <summary>
-        /// A MethodInfo describing String.Equals(string).
+        /// A MethodInfo describing the static String.Equals(string, string).
         /// </summary>
-        private static readonly MethodInfo stringEqualsMethod = typeof(string).GetMethod("Equals", new[] { typeof(string) });
+        private static readonly MethodInfo stringStaticEqualsMethod = typeof(string).GetMethod("Equals", new[] { typeof(string), typeof(string) });
 
         /// <summary>
         /// A MethodInfo describing String.StartsWith(string).
@@ -34,24 +34,24 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         private static readonly MethodInfo stringStartsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) }); 
        
         /// <summary>
-        /// Gets a MethodInfo describing String.Compare(string, string).
+        /// Gets a MethodInfo describing the static String.Compare(string, string).
         /// </summary>
-        public static MethodInfo StringCompareMethod
+        public static MethodInfo StringStaticCompareMethod
         {
             get
             {
-                return stringCompareMethod;
+                return stringStaticCompareMethod;
             }
         }
 
         /// <summary>
-        /// Gets a MethodInfo describing String.Equals(string).
+        /// Gets a MethodInfo describing the static String.Equals(string, string).
         /// </summary>
-        public static MethodInfo StringEqualsMethod
+        public static MethodInfo StringStaticEqualsMethod
         {
             get
             {
-                return stringEqualsMethod;
+                return stringStaticEqualsMethod;
             }
         }
 

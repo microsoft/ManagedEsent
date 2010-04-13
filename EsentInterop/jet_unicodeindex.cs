@@ -6,6 +6,7 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
 
@@ -47,6 +48,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets or sets the flags to be used with LCMapString when normalizing unicode data.
         /// </summary>
+        [CLSCompliant(false)]
         public uint dwMapFlags { get; set; }
 
         /// <summary>

@@ -48,5 +48,26 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 
             return KeyExpressionEvaluator<TKey>.GetKeyRange(expression.Body, KeyMemberInfo);
         }
+
+        /// <summary>
+        /// Evaluate a predicate Expression and determine whether a key range can
+        /// be found that completely satisfies the expression. If this method returns
+        /// true then the key range returned by <see cref="GetKeyRange"/> will return
+        /// only records which match the expression.
+        /// </summary>
+        /// <param name="expression">The expression to evaluate.</param>
+        /// <returns>
+        /// True if the key range returned by <see cref="GetKeyRange"/> will perfectly
+        /// match all records found by the expression.
+        /// </returns>
+        public static bool KeyRangeIsExact(Expression<Predicate<KeyValuePair<TKey, TValue>>> expression)
+        {
+            if (null == expression)
+            {
+                throw new ArgumentNullException("expression");
+            }
+
+            return KeyExpressionEvaluator<TKey>.KeyRangeIsExact(expression.Body, KeyMemberInfo);
+        }
     }
 }

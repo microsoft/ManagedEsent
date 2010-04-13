@@ -363,7 +363,6 @@ namespace EsentCollectionsTests
             EqualityAsserts.TestEqualsAndHashCode(KeyRange<long>.EmptyRange, keyRange, true);
         }
 
-
         /// <summary>
         /// Verify a KeyRange equals a range with the same min values.
         /// </summary>

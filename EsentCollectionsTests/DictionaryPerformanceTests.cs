@@ -85,7 +85,10 @@ namespace EsentCollectionsTests
             this.LookupEntries(keys);
 
             // Use LINQ to find records
-            this.LinqQueries(5000);
+            this.SlowLinqQueries(5000);
+
+            // Use LINQ to find records
+            this.LinqQueries(20000);
 
             // Repeatedly run a parameterized LINQ query
             this.FastLinqQueries(100000);
@@ -122,6 +125,38 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// Measure the speed of slow LINQ queries against the dictionary.
+        /// These queries are slow because they create the query inside of
+        /// the loop and the query has to be compiled each time.
+        /// </summary>
+        /// <param name="numQueries">Number of queries to perform.</param>
+        private void SlowLinqQueries(int numQueries)
+        {
+            var rand = new Random();
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            int n = this.dictionary.Count;
+            int total = 0;
+            for (int i = 0; i < numQueries; ++i)
+            {
+                // Retrieve up to 10 records (average of 5)
+                int min = rand.Next(0, n - 1);
+                int max = rand.Next(min + 1, Math.Min(min + 11, n));
+
+                var query = from x in this.dictionary where min <= x.Key && x.Key < max && x.Value.Length > 0 select x.Value;
+                Assert.AreEqual(max - min, query.Count());
+                total += max - min;
+            }
+
+            stopwatch.Stop();
+            Console.WriteLine(
+                "Did {0:N0} LINQ queries in {1} ({2:N0} queries/second, {3:N0} records/second)",
+                numQueries,
+                stopwatch.Elapsed,
+                numQueries * 1000 / stopwatch.ElapsedMilliseconds,
+                total * 1000 / stopwatch.ElapsedMilliseconds);
+        }
+
+        /// <summary>
         /// Measure the speed of LINQ queries against the dictionary.
         /// </summary>
         /// <param name="numQueries">Number of queries to perform.</param>
@@ -130,22 +165,25 @@ namespace EsentCollectionsTests
             var rand = new Random();
             Stopwatch stopwatch = Stopwatch.StartNew();
             int n = this.dictionary.Count;
+            int total = 0;
             for (int i = 0; i < numQueries; ++i)
             {
-                // Retrieve up to 10 records
+                // Retrieve up to 10 records (average of 5)
                 int min = rand.Next(0, n - 1);
                 int max = rand.Next(min + 1, Math.Min(min + 11, n));
 
                 var query = from x in this.dictionary where min <= x.Key && x.Key < max select x.Value;
                 Assert.AreEqual(max - min, query.Count());
+                total += max - min;
             }
 
             stopwatch.Stop();
             Console.WriteLine(
-                "Did {0:N0} LINQ queries in {1} ({2:N0} queries/second)",
+                "Did {0:N0} LINQ queries in {1} ({2:N0} queries/second, {3:N0} records/second)",
                 numQueries,
                 stopwatch.Elapsed,
-                numQueries * 1000 / stopwatch.ElapsedMilliseconds);
+                numQueries * 1000 / stopwatch.ElapsedMilliseconds,
+                total * 1000 / stopwatch.ElapsedMilliseconds);
         }
 
         /// <summary>
@@ -163,21 +201,25 @@ namespace EsentCollectionsTests
             int key = 0;
             var query = from x in this.dictionary where x.Key == key select x;
 
+            int total = 0;
             for (int i = 0; i < numQueries; ++i)
             {
                 key = rand.Next(0, n);
                 foreach (var x in query)
                 {
                     Assert.AreEqual(key, x.Key);
+                    total++;
                 }
             }
 
             stopwatch.Stop();
+            stopwatch.Stop();
             Console.WriteLine(
-                "Executed a LINQ query {0:N0} times in {1} ({2:N0} queries/second)",
+                "Did {0:N0} LINQ queries in {1} ({2:N0} queries/second, {3:N0} records/second)",
                 numQueries,
                 stopwatch.Elapsed,
-                numQueries * 1000 / stopwatch.ElapsedMilliseconds);
+                numQueries * 1000 / stopwatch.ElapsedMilliseconds,
+                total * 1000 / stopwatch.ElapsedMilliseconds);
         }
 
         /// <summary>

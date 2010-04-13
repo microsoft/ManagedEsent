@@ -33,6 +33,122 @@ namespace EsentCollectionsTests
         /// </summary>
         private int member;
 
+        #region KeyRangeIsExact
+
+        /// <summary>
+        /// Verify that KeyRangeIsExact throws an exception when its argument is null.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that KeyRangeIsExact throws an exception when its argument is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyKeyRangeIsExactThrowsExceptionWhenArgumentIsNull()
+        {
+            bool ignored = KeyValueExpressionEvaluator<short, decimal>.KeyRangeIsExact(null);
+        }
+
+        /// <summary>
+        /// Verify that a key comparison is exact.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that a key comparison gives an exact range")]
+        public void VerifyKeyComparisonIsExact()
+        {
+            Assert.IsTrue(KeyValueExpressionEvaluator<int, string>.KeyRangeIsExact(x => x.Key > 0));
+        }
+
+        /// <summary>
+        /// Verify that a value comparison is not exact.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that a value comparison does not give an exact range")]
+        public void VerifyValueComparisonIsNotExact()
+        {
+            Assert.IsFalse(KeyValueExpressionEvaluator<string, int>.KeyRangeIsExact(x => x.Value > 0));
+        }
+
+        /// <summary>
+        /// Verify that a call to Equals is exact.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that a call to Equals is exact")]
+        public void VerifyEqualsWithIsExact()
+        {
+            Assert.IsTrue(KeyValueExpressionEvaluator<short, string>.KeyRangeIsExact(x => x.Key.Equals(7)));
+        }
+
+        /// <summary>
+        /// Verify that a call to String.StartsWith is exact.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that a call to String.StartsWith is exact")]
+        public void VerifyStringStartsWithIsExact()
+        {
+            Assert.IsTrue(KeyValueExpressionEvaluator<string, int>.KeyRangeIsExact(x => x.Key.StartsWith("foo")));
+        }
+
+        /// <summary>
+        /// Verify that a call to the static String.Equals is exact.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that a call to the static String.Equals is exact")]
+        public void VerifyStringEqualsWithIsExact()
+        {
+            Assert.IsTrue(KeyValueExpressionEvaluator<string, int>.KeyRangeIsExact(x => String.Equals(x.Key, "foo")));
+        }
+
+        /// <summary>
+        /// Verify that a call to String.Contains is not exact.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that a call to String.Contains is not exact")]
+        public void VerifyStringContainsIsNotExact()
+        {
+            Assert.IsFalse(KeyValueExpressionEvaluator<string, int>.KeyRangeIsExact(x => x.Key.Contains("foo")));
+        }
+
+        /// <summary>
+        /// Verify that the AND of two exact index ranges is exact.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that the AND of two exact index ranges is exact")]
+        public void VerifyAndOfRangesIsExact()
+        {
+            Assert.IsTrue(KeyValueExpressionEvaluator<int, int>.KeyRangeIsExact(x => x.Key > 3 && x.Key < 4));
+        }
+
+        /// <summary>
+        /// Verify that the OR of two exact index ranges is not exact.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that the OR of two exact index ranges is not exact")]
+        public void VerifyAndOfRangesIsNotExact()
+        {
+            Assert.IsFalse(KeyValueExpressionEvaluator<int, int>.KeyRangeIsExact(x => x.Key > 3 || x.Key < 4));
+        }
+
+        /// <summary>
+        /// Verify that the AND of and exact range and a non-exact range is not exact.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that the AND of and exact range and a non-exact range is not exact")]
+        public void VerifyAndOfExactAndNonExactRangesIsNotExact()
+        {
+            Assert.IsFalse(KeyValueExpressionEvaluator<int, int>.KeyRangeIsExact(x => x.Key > 3 && x.Value < 4));
+            Assert.IsFalse(KeyValueExpressionEvaluator<int, int>.KeyRangeIsExact(x => x.Value > 3 && x.Key < 4));
+        }
+
+        #endregion
+
         /// <summary>
         /// Verify that GetKeyRange throws an exception when its argument is null.
         /// </summary>
@@ -607,6 +723,55 @@ namespace EsentCollectionsTests
             Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
         }
 
+        #region Nullable Types
+
+        /// <summary>
+        /// Verify comparing the key with a nullable type is recognized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify comparing the key with a nullable type is recognized")]
+        public void VerifyComparisonWithNullableTypeIsRecognized()
+        {
+            int? min = -99;
+            int? max = 99;
+            KeyRange<int> actual = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => min < x.Key && x.Key < max);
+            KeyRange<int> expected = new KeyRange<int>(Key<int>.CreateKey(-99, false), Key<int>.CreateKey(99, false));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Verify comparing the key with a null nullable type works.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify comparing the key with a null nullable type works")]
+        public void VerifyComparisonWithNullWorks()
+        {
+            int? min = -99;
+            int? max = null;
+            KeyRange<int> actual = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => min < x.Key && x.Key < max);
+            KeyRange<int> expected = new KeyRange<int>(Key<int>.CreateKey(-99, false), null);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Verify comparing the key with a complex nullable constant works.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify comparing the key with a complex nullable constant works")]
+        public void VerifyComparisonWithComplexNullable()
+        {
+            int? min = -99;
+            int? max = 1;
+            KeyRange<int> actual = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => min < x.Key && x.Key < max + 8);
+            KeyRange<int> expected = new KeyRange<int>(Key<int>.CreateKey(-99, false), Key<int>.CreateKey(9, false));
+            Assert.AreEqual(expected, actual);
+        }
+
+        #endregion
+
         #region NOT handling
 
         /// <summary>
@@ -1003,9 +1168,6 @@ namespace EsentCollectionsTests
         public void TestInt16Expression()
         {
             KeyRange<short> keyRange = KeyValueExpressionEvaluator<short, string>.GetKeyRange(x => x.Key < 2);
-
-            // This fails because the Key is promoted and the KeyValueExpressionEvaluator doesn't handle that.
-            // Arguably this isn't currently critical because we can only have 2^16 records with this type of key.
             Assert.AreEqual(
                 new KeyRange<short>(null, Key<short>.CreateKey(2, false)),
                 keyRange,
@@ -1021,9 +1183,6 @@ namespace EsentCollectionsTests
         public void TestUInt16Expression()
         {
             KeyRange<ushort> keyRange = KeyValueExpressionEvaluator<ushort, string>.GetKeyRange(x => x.Key < 2);
-
-            // This fails because the Key is promoted and the KeyValueExpressionEvaluator doesn't handle that.
-            // Arguably this isn't currently critical because we can only have 2^16 records with this type of key.
             Assert.AreEqual(
                 new KeyRange<ushort>(null, Key<ushort>.CreateKey(2, false)),
                 keyRange,
@@ -1157,6 +1316,287 @@ namespace EsentCollectionsTests
             Assert.IsTrue(keyRange.Max.IsInclusive);
             Assert.AreEqual(guid, keyRange.Max.Value);
             Assert.IsTrue(keyRange.Max.IsInclusive);
+        }
+
+        /// <summary>
+        /// Test nullable bool.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test nullable bool expression")]
+        public void TestNullableBoolExpression()
+        {
+            Func<bool?> f = () => false;
+            var expected = new KeyRange<bool>(Key<bool>.CreateKey(false, true), Key<bool>.CreateKey(false, true));
+            var actual = KeyValueExpressionEvaluator<bool, string>.GetKeyRange(x => x.Key == f());
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test nullable byte.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test nullable byte expression")]
+        public void TestNullableByteExpression()
+        {
+            byte? min = 1;
+            Func<byte?> fmax = () => 8;
+            var expected = new KeyRange<byte>(Key<byte>.CreateKey(1, true), Key<byte>.CreateKey(8, false));
+            var actual = KeyValueExpressionEvaluator<byte, string>.GetKeyRange(x => min <= x.Key && x.Key < fmax());
+            Assert.AreEqual(expected, actual, "byte to int? promotion not supported");
+        }
+
+        /// <summary>
+        /// Test nullable short.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test nullable short expression")]
+        public void TestNullableShortExpression()
+        {
+            short? min = 1;
+            Func<short?> fmax = () => 8;
+            var expected = new KeyRange<short>(Key<short>.CreateKey(1, true), Key<short>.CreateKey(8, false));
+            var actual = KeyValueExpressionEvaluator<short, string>.GetKeyRange(x => min <= x.Key && x.Key < fmax());
+            Assert.AreEqual(expected, actual, "short to int? promotion not supported");
+        }
+
+        /// <summary>
+        /// Test nullable ushort.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test nullable ushort expression")]
+        public void TestNullableUShortExpression()
+        {
+            ushort? min = 1;
+            Func<ushort?> fmax = () => 8;
+            var expected = new KeyRange<ushort>(Key<ushort>.CreateKey(1, true), Key<ushort>.CreateKey(8, false));
+            var actual = KeyValueExpressionEvaluator<ushort, string>.GetKeyRange(x => min <= x.Key && x.Key < fmax());
+            Assert.AreEqual(expected, actual, "ushort to int? promotion not supported");
+        }
+
+        /// <summary>
+        /// Test an expression that compares an ushort key with a ulong? value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test an expression that compares an ushort key with a ulong? value")]
+        public void TestUShortNullableULongExpression()
+        {
+            ulong? min = 1;
+            Func<ulong?> fmax = () => 8;
+            var expected = new KeyRange<ushort>(Key<ushort>.CreateKey(1, true), Key<ushort>.CreateKey(8, false));
+            var actual = KeyValueExpressionEvaluator<ushort, string>.GetKeyRange(x => min <= x.Key && x.Key < fmax());
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test nullable int.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test nullable int expression")]
+        public void TestNullableIntExpression()
+        {
+            int? min = 1;
+            Func<int?> fmax = () => 8;
+            var expected = new KeyRange<int>(Key<int>.CreateKey(1, true), Key<int>.CreateKey(8, false));
+            var actual = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => min <= x.Key && x.Key < fmax());
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test nullable int with a null value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test nullable int expression with a null value")]
+        public void TestNullIntExpression()
+        {
+            int? min = 1;
+            Func<int?> fmax = () => null;
+            var expected = new KeyRange<int>(Key<int>.CreateKey(1, true), null);
+            var actual = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => min <= x.Key && x.Key < fmax());
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test an expression that compares an int key with a long? value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test an expression that compares an int key with a long? value")]
+        public void TestIntNullableLongExpression()
+        {
+            long? min = 1;
+            Func<long?> fmax = () => 8;
+            var expected = new KeyRange<int>(Key<int>.CreateKey(1, true), Key<int>.CreateKey(8, false));
+            var actual = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => min <= x.Key && x.Key < fmax());
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test an expression that compares an int key with a long? value that is too big.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test an expression that compares an int key with a long? value that is too big")]
+        [ExpectedException(typeof(OverflowException))]
+        public void TestIntNullableLongExpressionOverflow()
+        {
+            long? min = 1;
+            Func<long?> fmax = () => Int64.MaxValue - 3;
+            var actual = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => min <= x.Key && x.Key < fmax());
+        }
+
+        /// <summary>
+        /// Test an expression that compares an int key with a long? value that is too small.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test an expression that compares an int key with a long? value that is too small")]
+        [ExpectedException(typeof(OverflowException))]
+        public void TestIntNullableLongExpressionUnderflow()
+        {
+            long? min = Int64.MinValue + 2;
+            Func<long?> fmax = () => 1;
+            var actual = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => min <= x.Key && x.Key < fmax());
+        }
+
+        /// <summary>
+        /// Test nullable uint.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test nullable uint expression")]
+        public void TestNullableUIntExpression()
+        {
+            uint? min = 1;
+            Func<uint?> fmax = () => 8;
+            var expected = new KeyRange<uint>(Key<uint>.CreateKey(1, true), Key<uint>.CreateKey(8, false));
+            var actual = KeyValueExpressionEvaluator<uint, string>.GetKeyRange(x => min <= x.Key && x.Key < fmax());
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test nullable long.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test nullable long expression")]
+        public void TestNullableLongExpression()
+        {
+            long? min = 1;
+            Func<long?> fmax = () => 8;
+            var expected = new KeyRange<long>(Key<long>.CreateKey(1, true), Key<long>.CreateKey(8, false));
+            var actual = KeyValueExpressionEvaluator<long, string>.GetKeyRange(x => min <= x.Key && x.Key < fmax());
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test nullable ulong.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test nullable ulong expression")]
+        public void TestNullableULongExpression()
+        {
+            ulong? min = 1;
+            Func<ulong?> fmax = () => 8;
+            var expected = new KeyRange<ulong>(Key<ulong>.CreateKey(1, true), Key<ulong>.CreateKey(8, false));
+            var actual = KeyValueExpressionEvaluator<ulong, string>.GetKeyRange(x => min <= x.Key && x.Key < fmax());
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test nullable float.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test nullable float expression")]
+        public void TestNullableFloatExpression()
+        {
+            float? min = 1;
+            Func<float?> fmax = () => 8;
+            var expected = new KeyRange<float>(Key<float>.CreateKey(1, true), Key<float>.CreateKey(8, false));
+            var actual = KeyValueExpressionEvaluator<float, string>.GetKeyRange(x => min <= x.Key && x.Key < fmax());
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test nullable double.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test nullable double expression")]
+        public void TestNullableDoubleExpression()
+        {
+            double? min = 1;
+            Func<double?> fmax = () => 8;
+            var expected = new KeyRange<double>(Key<double>.CreateKey(1, true), Key<double>.CreateKey(8, false));
+            var actual = KeyValueExpressionEvaluator<double, string>.GetKeyRange(x => min <= x.Key && x.Key < fmax());
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test nullable DateTime.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test nullable DateTime expression")]
+        public void TestNullableDateTimeExpression()
+        {
+            DateTime? min = DateTime.MinValue;
+            Func<DateTime?> fmax = () => DateTime.MaxValue;
+            var expected = new KeyRange<DateTime>(Key<DateTime>.CreateKey(DateTime.MinValue, true), Key<DateTime>.CreateKey(DateTime.MaxValue, false));
+            var actual = KeyValueExpressionEvaluator<DateTime, string>.GetKeyRange(x => min <= x.Key && x.Key < fmax());
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test nullable DateTime with a null value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test nullable DateTime expression with a null value")]
+        public void TestNullDateTimeExpression()
+        {
+            DateTime? min = null;
+            Func<DateTime?> fmax = () => DateTime.MaxValue;
+            var expected = new KeyRange<DateTime>(null, Key<DateTime>.CreateKey(DateTime.MaxValue, false));
+            var actual = KeyValueExpressionEvaluator<DateTime, string>.GetKeyRange(x => min <= x.Key && x.Key < fmax());
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test nullable TimeSpan.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test nullable TimeSpan expression")]
+        public void TestNullableTimeSpanExpression()
+        {
+            TimeSpan? min = TimeSpan.MinValue;
+            Func<TimeSpan?> fmax = () => TimeSpan.MaxValue;
+            var expected = new KeyRange<TimeSpan>(Key<TimeSpan>.CreateKey(TimeSpan.MinValue, true), Key<TimeSpan>.CreateKey(TimeSpan.MaxValue, false));
+            var actual = KeyValueExpressionEvaluator<TimeSpan, string>.GetKeyRange(x => min <= x.Key && x.Key < fmax());
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test nullable Guid.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test nullable Guid expression")]
+        public void TestNullableGuidExpression()
+        {
+            Func<Guid?> f = () => Guid.Empty;
+            var expected = new KeyRange<Guid>(Key<Guid>.CreateKey(Guid.Empty, true), Key<Guid>.CreateKey(Guid.Empty, true));
+            var actual = KeyValueExpressionEvaluator<Guid, string>.GetKeyRange(x => x.Key == f());
+            Assert.AreEqual(expected, actual);
         }
 
         #endregion
@@ -1579,30 +2019,118 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
-        /// Test String.Equals
+        /// Test the static String.Equals expression
         /// </summary>
         [TestMethod]
         [Priority(0)]
         [Description("Test String.Equals")]
-        public void TestStaticStringEquals()
+        public void TestStringStaticEquals()
         {
-            // TODO: Handle this
-            var expected = KeyRange<string>.OpenRange;
-            var actual = KeyValueExpressionEvaluator<string, int>.GetKeyRange(x => String.Equals(x.Key, "a"));
+            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => String.Equals(x.Key, "baz"));
+            var expected = new KeyRange<string>(Key<string>.CreateKey("baz", true), Key<string>.CreateKey("baz", true));
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
-        /// Test String.Equals reversed
+        /// Test the static String.Equals expression reversed
         /// </summary>
         [TestMethod]
         [Priority(0)]
         [Description("Test String.Equals reversed")]
-        public void TestStaticStringEqualsReversed()
+        public void TestStringStaticEqualsReversed()
         {
-            // TODO: Handle this
-            var expected = KeyRange<string>.OpenRange;
-            var actual = KeyValueExpressionEvaluator<string, int>.GetKeyRange(x => String.Equals("a", x.Key));
+            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => String.Equals("baz", x.Key));
+            var expected = new KeyRange<string>(Key<string>.CreateKey("baz", true), Key<string>.CreateKey("baz", true));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test the static String.Equals expression without key access
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Equals without key access")]
+        public void TestStringStaticEqualsNoKeyAcess()
+        {
+            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => String.Equals("baz", x.Value));
+            Assert.AreEqual(KeyRange<string>.OpenRange, actual);
+        }
+
+        /// <summary>
+        /// Test the static String.Equals expression without parameter access
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Equals without parameter access")]
+        public void TestStringStaticEqualsNoParameterAccess()
+        {
+            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => String.Equals("baz", "foo"));
+            Assert.AreEqual(KeyRange<string>.OpenRange, actual);
+        }
+
+        /// <summary>
+        /// Test the static String.Equals expression with non constant
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Equals with non constant")]
+        public void TestStringStaticEqualsNonConstant()
+        {
+            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => String.Equals(x.Key, x.Value));
+            Assert.AreEqual(KeyRange<string>.OpenRange, actual);
+        }
+
+        /// <summary>
+        /// Test the static String.Equals expression with non constant (reversed)
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Equals with non constant (reversed)")]
+        public void TestStringStaticEqualsNonConstantReversed()
+        {
+            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => String.Equals(x.Value, x.Key));
+            Assert.AreEqual(KeyRange<string>.OpenRange, actual);
+        }
+
+        /// <summary>
+        /// Test the static String.Equals expression with case flag
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test String.Equals with non constant with case flag")]
+        public void TestStringStaticEqualsWithCaseFlag()
+        {
+            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => String.Equals("X", x.Key, StringComparison.OrdinalIgnoreCase));
+            Assert.AreEqual(KeyRange<string>.OpenRange, actual);
+        }
+
+        #endregion
+
+        #region Equals tests
+
+        /// <summary>
+        /// Test Equals
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test Equals")]
+        public void TestEquals()
+        {
+            var expected = new KeyRange<long>(Key<long>.CreateKey(10, true), Key<long>.CreateKey(10, true));
+            var actual = KeyValueExpressionEvaluator<long, string>.GetKeyRange(x => x.Key.Equals(10));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test Equals
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test !Equals")]
+        public void TestNotEquals()
+        {
+            var expected = KeyRange<long>.OpenRange;
+            var actual = KeyValueExpressionEvaluator<long, string>.GetKeyRange(x => !x.Key.Equals(10));
             Assert.AreEqual(expected, actual);
         }
 
@@ -1797,14 +2325,12 @@ namespace EsentCollectionsTests
         [Description("Test expression 5")]
         public void TestSample5()
         {
-            DateTime date = DateTime.UtcNow;
-            TimeSpan timespan = TimeSpan.FromDays(90);
+            DateTime? date = DateTime.UtcNow;
+            TimeSpan? timespan = TimeSpan.FromDays(90);
 
-            KeyRange<DateTime> keyRange = KeyValueExpressionEvaluator<DateTime, string>.GetKeyRange(d => d.Key >= date && d.Key <= date + timespan);
-            Assert.AreEqual(date, keyRange.Min.Value);
-            Assert.IsTrue(keyRange.Min.IsInclusive);
-            Assert.AreEqual(date + timespan, keyRange.Max.Value);
-            Assert.IsTrue(keyRange.Max.IsInclusive);
+            KeyRange<DateTime> actual = KeyValueExpressionEvaluator<DateTime, string>.GetKeyRange(d => d.Key >= date && d.Key <= date + timespan);
+            KeyRange<DateTime> expected = new KeyRange<DateTime>(Key<DateTime>.CreateKey(date.Value, true), Key<DateTime>.CreateKey(date.Value + timespan.Value, true));
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -1913,6 +2439,35 @@ namespace EsentCollectionsTests
                 Key<string>.CreatePrefixKey("g"));
             Assert.AreEqual(expected, actual);
             Assert.IsFalse(actual.IsEmpty);
+        }
+
+        /// <summary>
+        /// Test expression 12.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test expression 12")]
+        public void TestSample12()
+        {
+            Expression<Predicate<int>> expression = x => x >= -1 && x < 101;
+            KeyRange<int> actual = KeyExpressionEvaluator<int>.GetKeyRange(expression.Body, null);
+            KeyRange<int> expected = new KeyRange<int>(Key<int>.CreateKey(-1, true), Key<int>.CreateKey(101, false));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test expression 13.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test expression 13")]
+        public void TestSample13()
+        {
+            string s = "foo";
+            Expression<Predicate<int>> expression = x => x > -1 && s.Length < 101;
+            KeyRange<int> actual = KeyExpressionEvaluator<int>.GetKeyRange(expression.Body, null);
+            KeyRange<int> expected = new KeyRange<int>(Key<int>.CreateKey(-1, false), null);
+            Assert.AreEqual(expected, actual);
         }
 
         #endregion

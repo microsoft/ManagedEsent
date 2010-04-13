@@ -11,6 +11,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// A <see cref="uint"/> column value.
     /// </summary>
+    [CLSCompliant(false)]
     public class UInt32ColumnValue : ColumnValueOfStruct<uint>
     {
         /// <summary>

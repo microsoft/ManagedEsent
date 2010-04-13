@@ -11,117 +11,16 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Linq.Expressions;
 
     /// <content>
     /// Represents a collection of persistent keys and values.
+    /// These are the methods that optimize LINQ extension methods
+    /// on a dictionary.
     /// </content>
     public partial class PersistentDictionary<TKey, TValue>
     {
-        /// <summary>
-        /// Returns the first element of the dictionary.
-        /// </summary>
-        /// <returns>The first element.</returns>
-        /// <exception cref="InvalidOperationException">
-        /// Thrown if the dictionary is empty.
-        /// </exception>
-        public KeyValuePair<TKey, TValue> First()
-        {
-            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
-            try
-            {
-                using (var transaction = cursor.BeginReadOnlyTransaction())
-                {
-                    cursor.MoveBeforeFirst();
-                    if (!cursor.TryMoveNext())
-                    {
-                        throw new InvalidOperationException("Sequence contains no elements");
-                    }
-
-                    var first = cursor.RetrieveCurrent();
-                    return first;
-                }
-            }
-            finally
-            {
-                this.cursors.FreeCursor(cursor);
-            }
-        }
-
-        /// <summary>
-        /// Returns the first element of the dictionary or a default value.
-        /// </summary>
-        /// <returns>The first element.</returns>
-        public KeyValuePair<TKey, TValue> FirstOrDefault()
-        {
-            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
-            try
-            {
-                using (var transaction = cursor.BeginReadOnlyTransaction())
-                {
-                    cursor.MoveBeforeFirst();
-                    var first = cursor.TryMoveNext() ? cursor.RetrieveCurrent() : new KeyValuePair<TKey, TValue>(default(TKey), default(TValue));
-                    return first;
-                }
-            }
-            finally
-            {
-                this.cursors.FreeCursor(cursor);
-            }
-        }
-
-        /// <summary>
-        /// Returns the last element of the dictionary.
-        /// </summary>
-        /// <returns>The last element.</returns>
-        /// <exception cref="InvalidOperationException">
-        /// Thrown if the dictionary is empty.
-        /// </exception>
-        public KeyValuePair<TKey, TValue> Last()
-        {
-            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
-            try
-            {
-                using (var transaction = cursor.BeginReadOnlyTransaction())
-                {
-                    cursor.MoveAfterLast();
-                    if (!cursor.TryMovePrevious())
-                    {
-                        throw new InvalidOperationException("Sequence contains no elements");
-                    }
-
-                    var last = cursor.RetrieveCurrent();
-                    return last;
-                }
-            }
-            finally
-            {
-                this.cursors.FreeCursor(cursor);
-            }
-        }
-
-        /// <summary>
-        /// Returns the last element of the dictionary or a default value.
-        /// </summary>
-        /// <returns>The last element.</returns>
-        public KeyValuePair<TKey, TValue> LastOrDefault()
-        {
-            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
-            try
-            {
-                using (var transaction = cursor.BeginReadOnlyTransaction())
-                {
-                    cursor.MoveAfterLast();
-                    var last = cursor.TryMovePrevious() ? cursor.RetrieveCurrent() : new KeyValuePair<TKey, TValue>(default(TKey), default(TValue));
-                    return last;
-                }
-            }
-            finally
-            {
-                this.cursors.FreeCursor(cursor);
-            }
-        }
-
         /// <summary>
         /// Optimize a where statement which uses this dictionary.
         /// </summary>
@@ -131,7 +30,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>
         /// An enumerator matching only the records matched by the predicate.
         /// </returns>
-        public IEnumerable<KeyValuePair<TKey, TValue>> Where(
+        public PersistentDictionaryLinqEnumerable<TKey, TValue> Where(
             Expression<Predicate<KeyValuePair<TKey, TValue>>> expression)
         {
             if (null == expression)
@@ -139,7 +38,24 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 throw new ArgumentNullException("expression");
             }
 
-            return new PersistentDictionaryLinqEnumerable<TKey, TValue>(this, expression);
+            Predicate<KeyValuePair<TKey, TValue>> predicate =
+                KeyValueExpressionEvaluator<TKey, TValue>.KeyRangeIsExact(expression) ? x => true : expression.Compile();
+            return new PersistentDictionaryLinqEnumerable<TKey, TValue>(
+                this,
+                expression,
+                predicate,
+                false);
+        }
+
+        /// <summary>
+        /// Inverts the order of the elements in the dictionary.
+        /// </summary>
+        /// <returns>
+        /// A sequence whose elements correspond to those of the dictionary in reverse order.
+        /// </returns>
+        public PersistentDictionaryLinqEnumerable<TKey, TValue> Reverse()
+        {
+            return this.Where(x => true).Reverse();
         }
 
         /// <summary>
@@ -153,11 +69,117 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </returns>
         public bool Any(Expression<Predicate<KeyValuePair<TKey, TValue>>> expression)
         {
-            var enumerable = this.Where(expression);
-            using (IEnumerator<KeyValuePair<TKey, TValue>> enumerator = enumerable.GetEnumerator())
-            {
-                return enumerator.MoveNext();
-            }
+            return this.Where(expression).Any();
+        }
+
+        /// <summary>
+        /// Returns the first element in the dictionary that satisfies a specified condition.
+        /// </summary>
+        /// <param name="expression">
+        /// A function to test each element for a condition.
+        /// </param>
+        /// <returns>
+        /// The first element in the dictionary that satisfies a specified condition.
+        /// </returns>
+        public KeyValuePair<TKey, TValue> First(Expression<Predicate<KeyValuePair<TKey, TValue>>> expression)
+        {
+            return this.Where(expression).First();
+        }
+
+        /// <summary>
+        /// Returns the first element in the dictionary that satisfies a specified condition or a default
+        /// value if no element exists.
+        /// </summary>
+        /// <param name="expression">
+        /// A function to test each element for a condition.
+        /// </param>
+        /// <returns>
+        /// The first element in the dictionary that satisfies a specified condition or a default value.
+        /// </returns>
+        public KeyValuePair<TKey, TValue> FirstOrDefault(Expression<Predicate<KeyValuePair<TKey, TValue>>> expression)
+        {
+            return this.Where(expression).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Returns the last element in the dictionary that satisfies a specified condition.
+        /// </summary>
+        /// <param name="expression">
+        /// A function to test each element for a condition.
+        /// </param>
+        /// <returns>
+        /// The last element in the dictionary that satisfies a specified condition.
+        /// </returns>
+        public KeyValuePair<TKey, TValue> Last(Expression<Predicate<KeyValuePair<TKey, TValue>>> expression)
+        {
+            return this.Where(expression).Last();
+        }
+
+        /// <summary>
+        /// Returns the last element in the dictionary that satisfies a specified condition or a default
+        /// value if no element exists.
+        /// </summary>
+        /// <param name="expression">
+        /// A function to test each element for a condition.
+        /// </param>
+        /// <returns>
+        /// The last element in the dictionary that satisfies a specified condition or a default value.
+        /// </returns>
+        public KeyValuePair<TKey, TValue> LastOrDefault(Expression<Predicate<KeyValuePair<TKey, TValue>>> expression)
+        {
+            return this.Where(expression).LastOrDefault();
+        }
+
+        /// <summary>
+        /// Returns the only element in the dictionary that satisfies a specified condition and throws
+        /// an exception if there is more than one element.
+        /// </summary>
+        /// <param name="expression">
+        /// A function to test each element for a condition.
+        /// </param>
+        /// <returns>
+        /// The last element in the dictionary that satisfies a specified condition.
+        /// </returns>
+        public KeyValuePair<TKey, TValue> Single(Expression<Predicate<KeyValuePair<TKey, TValue>>> expression)
+        {
+            return this.Where(expression).Single();
+        }
+
+        /// <summary>
+        /// Returns the only element of the dictionary that satisfies a specified condition or a default
+        /// value if no such element exists; this method throws an exception if more than one element
+        /// satisfies the condition.
+        /// </summary>
+        /// <param name="expression">
+        /// A function to test each element for a condition.
+        /// </param>
+        /// <returns>
+        /// The last element in the dictionary that satisfies a specified condition or a default value.
+        /// </returns>
+        public KeyValuePair<TKey, TValue> SingleOrDefault(Expression<Predicate<KeyValuePair<TKey, TValue>>> expression)
+        {
+            return this.Where(expression).SingleOrDefault();
+        }
+
+        /// <summary>
+        /// Returns the last element of the dictionary.
+        /// </summary>
+        /// <returns>The last element.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown if the dictionary is empty.
+        /// </exception>
+        public KeyValuePair<TKey, TValue> Last()
+        {
+            return this.Reverse().Last();
+        }
+
+        /// <summary>
+        /// Returns the last element of the dictionary or a default value.
+        /// </summary>
+        /// <returns>The last element.</returns>
+        public KeyValuePair<TKey, TValue> LastOrDefault()
+        {
+            return this.Reverse().LastOrDefault();
         }
     }
 }

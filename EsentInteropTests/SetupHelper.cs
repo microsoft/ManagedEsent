@@ -11,6 +11,8 @@ namespace InteropApiTests
     using System.IO;
     using System.Threading;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Windows7;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
     /// Create a directory and an instance pointed at the directory.

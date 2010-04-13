@@ -12,6 +12,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Linq.Expressions;
 
     /// <summary>
@@ -19,7 +20,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     /// </summary>
     /// <typeparam name="TKey">The type of the key in the dictionary.</typeparam>
     /// <typeparam name="TValue">The type of the value in the dictionary.</typeparam>
-    internal sealed class PersistentDictionaryLinqEnumerable<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>
+    public sealed class PersistentDictionaryLinqEnumerable<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>
         where TKey : IComparable<TKey>
     {
         /// <summary>
@@ -39,19 +40,30 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         private readonly Predicate<KeyValuePair<TKey, TValue>> predicate;
 
         /// <summary>
+        /// A value that controls whether enumerators produced by this enumerable 
+        /// should be reversed.
+        /// </summary>
+        private readonly bool isReversed;
+
+        /// <summary>
         /// Initializes a new instance of the PersistentDictionaryLinqEnumerable class.
         /// </summary>
         /// <param name="dict">The dictionary to enumerate.</param>
         /// <param name="expression">The expression describing the range of keys to return.</param>
+        /// <param name="predicate">Predicate to apply to the return values.</param>
+        /// <param name="isReversed">
+        /// A value that controls whether enumerators produced by this enumerable should be reversed.
+        /// </param>
         public PersistentDictionaryLinqEnumerable(
             PersistentDictionary<TKey, TValue> dict,
-            Expression<Predicate<KeyValuePair<TKey, TValue>>> expression)
+            Expression<Predicate<KeyValuePair<TKey, TValue>>> expression,
+            Predicate<KeyValuePair<TKey, TValue>> predicate,
+            bool isReversed)
         {
             this.dictionary = dict;
             this.expression = expression;
-
-            // Consider: compilation is slow. Use another thread if we have to compile?
-            this.predicate = expression.Compile();
+            this.predicate = predicate;
+            this.isReversed = isReversed;
         }
 
         /// <summary>
@@ -66,7 +78,13 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             // Enumerating the data as several different ranges would be more efficient when the expression
             // specifies an OR and the ranges are highly disjoint.
             KeyRange<TKey> range = KeyValueExpressionEvaluator<TKey, TValue>.GetKeyRange(this.expression);
-            this.dictionary.TraceWhere(range);
+            this.dictionary.TraceWhere(range, this.isReversed);
+            if (this.isReversed)
+            {
+                return new PersistentDictionaryReverseEnumerator<TKey, TValue, KeyValuePair<TKey, TValue>>(
+                    this.dictionary, range, c => c.RetrieveCurrent(), this.predicate);                
+            }
+
             return new PersistentDictionaryEnumerator<TKey, TValue, KeyValuePair<TKey, TValue>>(
                 this.dictionary, range, c => c.RetrieveCurrent(), this.predicate);
         }
@@ -80,6 +98,41 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
+        }
+
+        /// <summary>
+        /// Inverts the order of the elements in a sequence.
+        /// </summary>
+        /// <returns>
+        /// A sequence whose elements correspond to those of the input sequence in reverse order.
+        /// </returns>
+        public PersistentDictionaryLinqEnumerable<TKey, TValue> Reverse()
+        {
+            return new PersistentDictionaryLinqEnumerable<TKey, TValue>(
+                this.dictionary, this.expression, this.predicate, !this.isReversed);
+        }
+
+        /// <summary>
+        /// Returns the last element in a sequence.
+        /// </summary>
+        /// <returns>
+        /// The last element in a sequence.
+        /// </returns>
+        public KeyValuePair<TKey, TValue> Last()
+        {
+            return this.Reverse().First();
+        }
+
+        /// <summary>
+        /// Returns the last element in a sequence that satisfies a specified condition or a default
+        /// value if no element exists.
+        /// </summary>
+        /// <returns>
+        /// The last element in a sequence that satisfies a specified condition or a default value.
+        /// </returns>
+        public KeyValuePair<TKey, TValue> LastOrDefault()
+        {
+            return this.Reverse().FirstOrDefault();
         }
     }
 }

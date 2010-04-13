@@ -10,7 +10,6 @@
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
     using System;
-    using System.Diagnostics;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
@@ -30,16 +29,21 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>True if the expression was a constant, false otherwise.</returns>
         public static bool TryGetConstantExpression(Expression expression, out T value)
         {
-            if (expression.Type != typeof(T))
-            {
-                value = default(T);
-                return false;
-            }
-
             if (HasNoParameterAccess(expression))
             {
-                value = (T)GetExpressionValue(expression);
-                return (null != value);
+                object obj = GetExpressionValue(expression);
+                if (null != obj)
+                {
+                    try
+                    {
+                        value = (T)Convert.ChangeType(obj, typeof(T));
+                        return true;
+                    }
+                    catch (InvalidCastException)
+                    {
+                        // Expected
+                    }
+                }
             }
 
             value = default(T);
@@ -58,7 +62,22 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 case ExpressionType.Convert:
                 {
                     UnaryExpression unaryExpression = (UnaryExpression)expression;
-                    return Convert.ChangeType(GetExpressionValue(unaryExpression.Operand), unaryExpression.Type);
+                    object value = GetExpressionValue(unaryExpression.Operand);
+                    if (null == value)
+                    {
+                        return null;
+                    }
+
+                    try
+                    {
+                        return Convert.ChangeType(value, unaryExpression.Type);
+                    }
+                    catch (InvalidCastException)
+                    {
+                        // If conversion fails here then pass the buck by returning
+                        // the unconverted value.
+                        return value;
+                    }
                 }
 
                 case ExpressionType.Constant:
@@ -92,6 +111,13 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 
                     break;
                 }
+            }
+
+            if (typeof(T) != expression.Type)
+            {
+                // Jump through some hoops to create a lambda expression
+                // of the correct type.
+                return ConstantExpressionCompiler.Compile(expression);
             }
 
             return Expression.Lambda<Func<T>>(expression).Compile()();
@@ -149,7 +175,8 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             else if (expression is InvocationExpression)
             {
                 InvocationExpression invocationExpression = (InvocationExpression)expression;
-                return invocationExpression.Arguments.All(HasNoParameterAccess);
+                return invocationExpression.Arguments.All(HasNoParameterAccess) &&
+                       HasNoParameterAccess(invocationExpression.Expression);
             }
             else if (expression is MemberExpression)
             {

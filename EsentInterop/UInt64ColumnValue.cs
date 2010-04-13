@@ -11,6 +11,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// A <see cref="ulong"/> column value.
     /// </summary>
+    [CLSCompliant(false)]
     public class UInt64ColumnValue : ColumnValueOfStruct<ulong>
     {
         /// <summary>

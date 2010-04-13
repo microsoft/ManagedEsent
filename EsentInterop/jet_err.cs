@@ -939,6 +939,11 @@ namespace Microsoft.Isam.Esent.Interop
         InvalidInstance = -1115,
 
         /// <summary>
+        ///  The instance was shutdown successfully but all the attached databases were left in a dirty state by request via JET_bitTermDirty
+        /// </summary>
+        DirtyShutdown = -1116,
+
+        /// <summary>
         /// Database already exists
         /// </summary>
         DatabaseDuplicate = -1201,

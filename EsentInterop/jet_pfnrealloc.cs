@@ -23,5 +23,6 @@ namespace Microsoft.Isam.Esent.Interop
     /// A pointer to newly allocated memory. If memory could not be allocated then
     /// <see cref="IntPtr.Zero"/> should be returned.
     /// </returns>
+    [CLSCompliant(false)]
     public delegate IntPtr JET_PFNREALLOC(IntPtr context, IntPtr memory, uint requestedSize);
 }

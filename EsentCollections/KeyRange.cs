@@ -566,6 +566,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             {
                 return 0;
             }
+
             return a.Value.CompareTo(b.Value);
         }
     }

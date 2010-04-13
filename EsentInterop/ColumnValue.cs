@@ -17,7 +17,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Cached retrieve buffers.
         /// </summary>
-        private static readonly MemoryCache memoryCache = new MemoryCache(64 * 1024, 16);
+        private static readonly MemoryCache memoryCache = new MemoryCache(128 * 1024, 16);
 
         /// <summary>
         /// Initializes a new instance of the ColumnValue class.

@@ -70,6 +70,7 @@ namespace EsentCollectionsTests
                 {
                     ++emptyRanges;
                 }
+
                 if (rangeWasExact)
                 {
                     ++exactMatches;

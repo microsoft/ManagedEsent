@@ -11,6 +11,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Collection of the keys in a PersistentDictionary.

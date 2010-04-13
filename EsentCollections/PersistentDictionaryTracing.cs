@@ -34,10 +34,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// Trace the results of examining a Where expression.
         /// </summary>
         /// <param name="range">The calculated range.</param>
+        /// <param name="isReversed">True if the range is to be enumerated in reverse order.</param>
         [Conditional("TRACE")]
-        internal void TraceWhere(KeyRange<TKey> range)
+        internal void TraceWhere(KeyRange<TKey> range, bool isReversed)
         {
-            Trace.WriteLineIf(this.traceSwitch.TraceVerbose, String.Format("WHERE: {0}", range));
+            Trace.WriteLineIf(this.traceSwitch.TraceVerbose, String.Format("WHERE: {0} {1}", range, isReversed ? "(reversed)" : String.Empty));
         }
     }
 }
