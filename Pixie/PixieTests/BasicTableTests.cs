@@ -178,7 +178,7 @@ namespace PixieTests
 
                 using (Table table = connection.OpenTable("table"))
                 {
-                    Record record = table.FirstRecord();
+                    Record record = table.First();
                     Assert.AreEqual(true, record["column"]);
                 }
             }

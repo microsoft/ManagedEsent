@@ -266,7 +266,7 @@ namespace PixieTests
 
             using (var trx = this.connection.BeginTransaction())
             {
-                Record record = this.table.FirstRecord();
+                Record record = this.table.First();
 
                 // Read the column once to force the record to be cached
                 var ignored = record[column];

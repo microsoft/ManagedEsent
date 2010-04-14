@@ -61,7 +61,7 @@ namespace PixieTests
             using (Connection connection = Esent.OpenDatabase(this.database, DatabaseOpenMode.ReadOnly))
             {
                 Table table = connection.OpenTable("mytable");
-                Record record = table.FirstRecord();
+                Record record = table.First();
 
                 Assert.AreEqual(1, record["autoinc"]);
                 Assert.AreEqual(5, record["myint"]);
@@ -95,7 +95,7 @@ namespace PixieTests
             using (Connection connection = Esent.OpenDatabase(this.database, DatabaseOpenMode.ReadOnly))
             {
                 Table table = connection.OpenTable("mytable");
-                Record record = table.FirstRecord();
+                Record record = table.First();
 
                 Assert.AreEqual(1, record["autoinc"]);
                 Assert.AreEqual(5, record["myint"]);
@@ -129,7 +129,7 @@ namespace PixieTests
             using (Connection connection = Esent.OpenDatabase(this.database, DatabaseOpenMode.ReadOnly))
             {
                 Table table = connection.OpenTable("mytable");
-                Record record = table.FirstRecord();
+                Record record = table.First();
 
                 Assert.AreEqual(1, record["autoinc"]);
                 Assert.AreEqual(5, record["myint"]);
@@ -150,11 +150,9 @@ namespace PixieTests
             connection.UsingLazyTransaction(() =>
                 {
                     table = connection.CreateTable("mytable")
-                        .CreateColumn(
-                        DefinedAs.Int32Column("autoinc").AsAutoincrement())
+                        .CreateColumn(DefinedAs.Int32Column("autoinc").AsAutoincrement())
                         .CreateColumn(DefinedAs.Int32Column("myint"))
-                        .CreateColumn(
-                        DefinedAs.TextColumn("mystring").WithMaxSize(200));
+                        .CreateColumn(DefinedAs.TextColumn("mystring").WithMaxSize(200));
                 });
 
                 connection.UsingLazyTransaction(() =>
@@ -167,7 +165,7 @@ namespace PixieTests
                 {
                     connection.UsingLazyTransaction(() =>
                     {
-                        table.FirstRecord()
+                        table.First()
                             .SetColumn("myint", 100)
                             .SetColumn("mystring", "somethingelse")
                             .Save();
@@ -183,7 +181,7 @@ namespace PixieTests
             using (Connection connection = Esent.OpenDatabase(this.database, DatabaseOpenMode.ReadOnly))
             {
                 Table table = connection.OpenTable("mytable");
-                Record record = table.FirstRecord();
+                Record record = table.First();
 
                 Assert.AreEqual(1, record["autoinc"]);
                 Assert.AreEqual(5, record["myint"]);

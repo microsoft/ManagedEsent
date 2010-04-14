@@ -48,14 +48,14 @@ namespace Microsoft.Isam.Esent
         /// is empty.
         /// </summary>
         /// <returns>The first record in the table.</returns>
-        Record FirstRecord();
+        Record First();
 
         /// <summary>
         /// Returns the last Record in the table. This throws an exception if the table
         /// is empty.
         /// </summary>
         /// <returns>The last record in the table.</returns>
-        Record LastRecord();
+        Record Last();
 
         /// <summary>
         /// Add a new column to the table.

@@ -91,7 +91,7 @@ namespace EsentCollectionsTests
             this.LinqQueries(20000);
 
             // Repeatedly run a parameterized LINQ query
-            this.FastLinqQueries(100000);
+            this.FastLinqQueries(N);
 
             // Now update the entries
             keys.Shuffle();
@@ -103,25 +103,37 @@ namespace EsentCollectionsTests
         /// </summary>
         [TestMethod]
         [Priority(4)]
-        public void TestRandomInsertSpeed()
+        public void TestRandomInsertAndLookupSpeed()
         {
-            const int NumInserts = 100000;
-            var keys = Enumerable.Range(0, NumInserts).ToArray();
+            const int N = 100000;
+            long[] keys = (from x in Enumerable.Range(0, N) select (long)x).ToArray();
             keys.Shuffle();
 
             const string Data = "01234567890ABCDEF01234567890ABCDEF";
-            var stopwatch = Stopwatch.StartNew();
-            foreach (int key in keys)
-            {
-                this.dictionary.Add(key, Data);
-            }
+            const string Newdata = "something completely different";
 
-            stopwatch.Stop();
-            Console.WriteLine(
-                "Randomly inserted {0:N0} records in {1} ({2:N0} records/second)",
-                NumInserts,
-                stopwatch.Elapsed,
-                NumInserts * 1000 / stopwatch.ElapsedMilliseconds);
+            // Insert the records
+            this.Insert(keys, Data);
+
+            // Scan all entries to make sure they are in the cache
+            this.ScanEntries();
+
+            // Now lookup entries
+            keys.Shuffle();
+            this.LookupEntries(keys);
+
+            // Use LINQ to find records
+            this.SlowLinqQueries(5000);
+
+            // Use LINQ to find records
+            this.LinqQueries(20000);
+
+            // Repeatedly run a parameterized LINQ query
+            this.FastLinqQueries(N);
+
+            // Now update the entries
+            keys.Shuffle();
+            this.UpdateAllEntries(keys, Newdata);
         }
 
         /// <summary>
@@ -140,10 +152,10 @@ namespace EsentCollectionsTests
             {
                 // Retrieve up to 10 records (average of 5)
                 int min = rand.Next(0, n - 1);
-                int max = rand.Next(min + 1, Math.Min(min + 11, n));
+                int max = rand.Next(min, Math.Min(min + 10, n)); // we'll add 1 to this below
 
-                var query = from x in this.dictionary where min <= x.Key && x.Key < max && x.Value.Length > 0 select x.Value;
-                Assert.AreEqual(max - min, query.Count());
+                var query = from x in this.dictionary where min <= x.Key && x.Key < max + 1 && x.Value.Length > 0 select x.Value;
+                Assert.AreEqual((max + 1) - min, query.Count());
                 total += max - min;
             }
 

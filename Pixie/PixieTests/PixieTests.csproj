@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{7B70729C-8E3E-4D2C-8927-7ADB07D218F8}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -78,6 +78,10 @@
     <ProjectReference Include="..\..\EsentInterop\EsentInterop.csproj">
       <Project>{E929E163-52A0-4AAC-917B-6D7FAF70C45E}</Project>
       <Name>EsentInterop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pixie.csproj">
+      <Project>{C04E3673-CBA3-4B15-8D92-98AC0C676ADB}</Project>
+      <Name>Pixie</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

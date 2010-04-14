@@ -173,7 +173,7 @@ namespace PixieTests
             {
                 Table table = connection.CreateTable("foo").CreateColumn(DefinedAs.AsciiTextColumn("text"));
                 table.NewRecord().SetColumn("text", Any.String).Save();
-                Record record = table.FirstRecord();
+                Record record = table.First();
                 Assert.IsInstanceOfType(record, typeof(ReadWriteRecord));
             }
         }
@@ -245,7 +245,7 @@ namespace PixieTests
             using (Table readOnlyTable = readOnlyConnection.OpenTable("foo"))
             {
                 connection.UsingTransaction(() => table.NewRecord().SetColumn("text", Any.String).Save());
-                Record record = readOnlyTable.FirstRecord();
+                Record record = readOnlyTable.First();
                 action(record);
             }
         }

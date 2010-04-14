@@ -172,7 +172,7 @@ namespace Microsoft.Isam.Esent
         /// is empty.
         /// </summary>
         /// <returns>The first record in the table.</returns>
-        public Record FirstRecord()
+        public Record First()
         {
             this.CheckNotClosed();
             this.TableCursor.MoveFirst();
@@ -184,7 +184,7 @@ namespace Microsoft.Isam.Esent
         /// is empty.
         /// </summary>
         /// <returns>The last record in the table.</returns>
-        public Record LastRecord()
+        public Record Last()
         {
             this.CheckNotClosed();
             this.TableCursor.MoveLast();

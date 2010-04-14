@@ -147,7 +147,7 @@ namespace PixieTests
 
         private void RepeatedlyRetrieveOneRecord(int numRetrieves)
         {
-            Record record = this.table.FirstRecord();
+            Record record = this.table.First();
             for (int i = 0; i < numRetrieves; ++i)
             {
                 this.connection.UsingTransaction(() => RetrieveRecordColumns(record));

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{EB19183E-5224-4801-B073-A15A9AE32C13}</ProjectGuid>
     <OutputType>Exe</OutputType>
@@ -47,6 +47,12 @@
   <ItemGroup>
     <Compile Include="PixieSample.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Pixie\Pixie.csproj">
+      <Project>{C04E3673-CBA3-4B15-8D92-98AC0C676ADB}</Project>
+      <Name>Pixie</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
