@@ -6,9 +6,27 @@
 
 # TODO
 #
-# pop
-# popitem (remove the last one)
-# setdefault
+# Extra dictionary methods:
+#   pop()
+#   popitem()
+#   setdefault()
+#   update()
+#
+# Shelve support:
+#   sync()
+#   Create Shelve subclass (EseDbShelf):
+#     first()
+#     next()
+#     previous()
+#     last()
+#     set_location()  
+#   Tests
+#
+# GDBM compatability:
+#   Support 'f' and 's' for fast and synchronized access when added to flags
+#   firstkey()
+#   nextkey()
+#
 # use 'with' for locks
 # private names: one underscore or two?
 # use str() or repr()?
@@ -90,6 +108,8 @@ from Microsoft.Isam.Esent.Interop.Vista import VistaParam
 
 from Microsoft.Isam.Esent.Interop.Windows7 import Windows7Param
 from Microsoft.Isam.Esent.Interop.Windows7 import Windows7Grbits
+
+_unspecified = object()
 
 #-----------------------------------------------------------------------
 class _EseTransaction(object):
@@ -632,7 +652,7 @@ class EseDBCursor(object):
     a JET_TABLEID along with a reference to the underlying EseDB.
     
     """
-    
+        
     # Decorator that checks self (args[0]) isn't closed
     def cursorMustBeOpen(func):
         def checked_func(*args, **kwargs):
@@ -641,7 +661,7 @@ class EseDBCursor(object):
         # Promote the documentation so doctest will work
         checked_func.__doc__ = func.__doc__
         return checked_func
-
+        
     def __init__(self, database, sesid, tableid, lazyupdate, keycolumnid, valuecolumnid):
         """Initialize a new EseDBCursor on the specified database."""
         self._database = database
@@ -813,9 +833,8 @@ class EseDBCursor(object):
         False
         >>> x.close()
         
-        """
-    
-        # clear() can be optimized by just deleting and
+        """   
+        # clear() could be optimized by just deleting and
         # recreating the table
         self._database.getWriteLock()
         try:
@@ -1096,7 +1115,115 @@ class EseDBCursor(object):
             if not Api.TryMovePrevious(self._sesid, self._tableid):
                 raise KeyError('end of database')        
             return self._retrieveCurrentRecord()        
+       
+    @cursorMustBeOpen
+    def pop(self, key, default=_unspecified):
+        """If key is in the dictionary, remove it and return its value, else
+        return default. 
+        
+        >>> x = open('wdbtest.db', mode='n')
+        >>> x['a'] = 64
+        >>> x.pop('a', 'X')
+        '64'
+        >>> x.pop('b', 'X')
+        'X'
+        >>> x.close()              
+        
+        If default is not given and key is not in the dictionary, a
+        KeyError is raised.
 
+        >>> x = open('wdbtest.db', mode='n')
+        >>> x['a'] = 64
+        >>> x.pop('b')
+        Traceback (most recent call last):
+        ...
+        KeyError: no key matching 'b' was found
+        >>> x.close()
+        
+        """
+        self._database.getWriteLock(hash=key.GetHashCode())
+        try:
+            with _EseTransaction(self._sesid) as trx:
+                self._makeKey(key)
+                if Api.TrySeek(self._sesid, self._tableid, SeekGrbit.SeekEQ):
+                    value = self._retrieveCurrentRecordValue()
+                    self._deleteCurrentRecord()
+                    trx.commit(self._lazyupdate)
+                    return value                    
+                elif default is _unspecified:
+                    raise KeyError('no key matching \'%s\' was found' % key)
+                else:
+                    return default            
+        finally:
+            self._database.unlock(hash=key.GetHashCode())        
+
+    @cursorMustBeOpen
+    def popitem(self):
+        """Remove and return an arbitrary (key, value) pair from the dictionary.
+        popitem() is useful to destructively iterate over a dictionary, as often
+        used in set algorithms.
+
+        >>> x = open('wdbtest.db', mode='n')
+        >>> x['a'] = 64
+        >>> x.popitem()
+        ('a', '64')
+
+        If the dictionary is empty, calling popitem() raises a KeyError.
+
+        >>> x.popitem()
+        Traceback (most recent call last):
+        ...
+        KeyError: database is empty
+        >>> x.close()            
+        
+        """
+        self._database.getWriteLock()
+        try:
+            with _EseTransaction(self._sesid) as trx:
+                if not Api.TryMoveLast(self._sesid, self._tableid):
+                    raise KeyError('database is empty')        
+                value = self._retrieveCurrentRecord()            
+                self._deleteCurrentRecord()
+                trx.commit(self._lazyupdate)
+                return value
+        finally:
+            self._database.unlock()
+            
+    @cursorMustBeOpen
+    def setdefault(self, key, default=None):
+        """If key is in the dictionary, return its value. If not, insert key with
+        a value of default and return default. Default defaults to None.
+
+        >>> x = open('wdbtest.db', mode='n')
+        >>> x['a'] = 64
+        >>> x.setdefault('a')
+        '64'
+        >>> x.setdefault('b', 'X')
+        'X'
+        >>> x.setdefault('c')
+        >>> x.items()
+        [('a', '64'), ('b', 'X'), ('c', None)]
+        >>> x.close()            
+
+        """
+        self._database.getWriteLock(hash=key.GetHashCode())
+        try:
+            with _EseTransaction(self._sesid) as trx:
+                self._makeKey(key)
+                if Api.TrySeek(self._sesid, self._tableid, SeekGrbit.SeekEQ):
+                    return self._retrieveCurrentRecordValue()
+                else:
+                    self._insertItem(key, default)
+                    trx.commit(self._lazyupdate)
+                    return default
+        finally:
+            self._database.unlock(hash=key.GetHashCode())        
+        
+# update([other])
+    # Update the dictionary with the key/value pairs from other, overwriting existing keys. Return None.
+    # update() accepts either another dictionary object or an iterable of key/value pairs (as a tuple or other iterable of length two). If keyword arguments are specified, the dictionary is then updated with those key/value pairs: d.update(red=1, blue=2).
+    # Changed in version 2.4: Allowed the argument to be an iterable of key/value pairs and allowed keyword arguments.
+            
     def _checkNotClosed(self):
         if not self._isopen:
             raise EseDBCursorClosedError()

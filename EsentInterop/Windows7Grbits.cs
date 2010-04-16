@@ -101,5 +101,12 @@ namespace Microsoft.Isam.Esent.Interop.Windows7
         /// the record. This means that BLOB columns will not always be retrieved.
         /// </summary>
         public const EnumerateColumnsGrbit EnumerateInRecordOnly = (EnumerateColumnsGrbit) 0x00200000;
+
+        /// <summary>
+        /// Force a new logfile to be created. This option may be used even if
+        /// the session is not currently in a transaction. This option cannot
+        /// be used in combination with any other option.
+        /// </summary>
+        public const CommitTransactionGrbit ForceNewLog = (CommitTransactionGrbit)0x10;
     }
 }

@@ -72,5 +72,15 @@ namespace Microsoft.Isam.Esent.Interop.Server2003
         /// operating systems.
         /// </remarks>
         public const EnumerateColumnsGrbit EnumerateIgnoreUserDefinedDefault = (EnumerateColumnsGrbit) 0x00100000;
+
+        /// <summary>
+        /// All transactions previously committed by any session that have not
+        /// yet been flushed to the transaction log file will be flushed immediately.
+        /// This API will wait until the transactions have been flushed before
+        /// returning to the caller. This option may be used even if the session
+        /// is not currently in a transaction. This option cannot be used in
+        /// combination with any other option.
+        /// </summary>
+        public const CommitTransactionGrbit WaitAllLevel0Commit = (CommitTransactionGrbit)0x8;
     }
 }
