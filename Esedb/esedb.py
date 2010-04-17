@@ -7,25 +7,10 @@
 # TODO
 #
 # Extra dictionary methods:
-#   pop()
-#   popitem()
-#   setdefault()
 #   update()
 #
 # Shelve support:
-#   sync()
-#   Create Shelve subclass (EseDbShelf):
-#     first()
-#     next()
-#     previous()
-#     last()
-#     set_location()  
 #   Tests
-#
-# GDBM compatability:
-#   Support 'f' and 's' for fast and synchronized access when added to flags
-#   firstkey()
-#   nextkey()
 #
 # use 'with' for locks
 # private names: one underscore or two?
@@ -34,12 +19,12 @@
 #    - read-only tests
 # Set read-only flag in cursor
 #    - use decorator to check
-# Overwriting a database (mode='n') should fail if it is already open
+# Overwriting a database (flag='n') should fail if it is already open
 
 """Provides a simple dictionary interface to an esent database. This requires
 the ManagedEsent interop dll.
 
->>> x = open('wdbtest.db', mode='n')
+>>> x = open('wdbtest.db', flag='nf')
 >>> x['a'] = 'somedata'
 >>> x['a']
 'somedata'
@@ -53,6 +38,40 @@ False
 >>> x.values()
 ['somedata', 'somemoredata']
 >>> x.close()
+
+>>> db = open('wdbtest.db', 'n')
+>>> for i in range(10): db['%d'%i] = '%d'% (i*i)
+...
+>>> db['3']
+'9'
+>>> db.keys()
+['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+>>> db.first()
+('0', '0')
+>>> db.next()
+('1', '1')
+>>> db.last()
+('9', '81')
+>>> db.set_location('2')
+('2', '4')
+>>> db.previous()
+('1', '1')
+>>> for k, v in db.iteritems():
+...     print k, v
+0 0
+1 1
+2 4
+3 9
+4 16
+5 25
+6 36
+7 49
+8 64
+9 81
+>>> '8' in db
+True
+>>> db.sync()
+>>> db.close()
 
 """
 
@@ -402,7 +421,7 @@ class _EseDB(object):
         self._basename = 'wdb'
         self.cachedRecordCount = Counter()
         
-    def openCursor(self, mode, lazyupdate):
+    def openCursor(self, flag, lazyflush):
         """Creates a new cursor on the database. This function will
         initialize esent and create the database if necessary.
         
@@ -413,11 +432,11 @@ class _EseDB(object):
         _registry.assertLocked()
         readonly = False
         create = False
-        if mode == 'r':
+        if flag == 'r':
             readonly = True
-        if mode == 'c' and not File.Exists(self._filename):
+        if flag == 'c' and not File.Exists(self._filename):
             create = True
-        if mode == 'n':
+        if flag == 'n':
             self._deleteDatabaseAndLogfiles()
             create = True            
                     
@@ -437,7 +456,7 @@ class _EseDB(object):
                 self._deleteDatabaseAndLogfiles()
                 raise
                 
-        cursor = self._createCursor(readonly, lazyupdate)
+        cursor = self._createCursor(readonly, lazyflush)
         return cursor
         
     def closeCursor(self, esedbCursor):
@@ -581,7 +600,7 @@ class _EseDB(object):
             None,
             0)
             
-    def _createCursor(self, readonly, lazyupdate):
+    def _createCursor(self, readonly, lazyflush):
         """Creates a new EseDBCursor."""
         sesid = Api.JetBeginSession(self._instance, '', '')
         if readonly:
@@ -603,7 +622,7 @@ class _EseDB(object):
             OpenTableGrbit.None)
         keycolumnid = self._getColumnid(sesid, tableid, self._keycolumn)
         valuecolumnid = self._getColumnid(sesid, tableid, self._valuecolumn)
-        cursor = EseDBCursor(self, sesid, tableid, lazyupdate, keycolumnid, valuecolumnid)
+        cursor = EseDBCursor(self, sesid, tableid, lazyflush, keycolumnid, valuecolumnid)
         self._numCursors += 1
         return cursor
 
@@ -618,10 +637,10 @@ class _EseDB(object):
         return columndef.Value.columnid
         
     def _filename(self):
-        """Returns the full path of the database"""
+        """Returns the path of the database"""
         return self._filename
         
-    filename = property(_filename, doc='full path of the database')
+    filename = property(_filename, doc='path of the database')
 
 
 #-----------------------------------------------------------------------
@@ -664,12 +683,12 @@ class EseDBCursor(object):
         checked_func.__doc__ = func.__doc__
         return checked_func
         
-    def __init__(self, database, sesid, tableid, lazyupdate, keycolumnid, valuecolumnid):
+    def __init__(self, database, sesid, tableid, lazyflush, keycolumnid, valuecolumnid):
         """Initialize a new EseDBCursor on the specified database."""
         self._database = database
         self._sesid = sesid
         self._tableid = tableid
-        self._lazyupdate = lazyupdate
+        self._lazyflush = lazyflush
         self._keycolumnid = keycolumnid
         self._valuecolumnid = valuecolumnid
         self._isopen = True
@@ -682,7 +701,7 @@ class EseDBCursor(object):
     def __getitem__(self, key): 
         """Returns the value of the record with the specified key.
 
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['a'] = 'somedata'
         >>> x['a']
         'somedata'
@@ -691,7 +710,7 @@ class EseDBCursor(object):
         If the key isn't present in the database then a KeyError
         is raised.
 
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['a']
         Traceback (most recent call last):
         ...
@@ -707,7 +726,7 @@ class EseDBCursor(object):
     def __setitem__(self, key, value): 
         """Sets the value of the record with the specified key.
         
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['key'] = 'value'
         >>> x.close()                
         
@@ -720,7 +739,7 @@ class EseDBCursor(object):
                     self._updateItem(key, value)
                 else:
                     self._insertItem(key, value)
-                trx.commit(self._lazyupdate)
+                trx.commit(self._lazyflush)
         finally:
             self._database.unlock(hash=key.GetHashCode())
             
@@ -728,7 +747,7 @@ class EseDBCursor(object):
     def __delitem__(self, key): 
         """Deletes the record with the specified key.
 
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['key'] = 'value'
         >>> del x['key']
         >>> x.close()
@@ -736,7 +755,7 @@ class EseDBCursor(object):
         If the key isn't present in the database then a KeyError
         is raised.
         
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> del x['a']
         Traceback (most recent call last):
         ...
@@ -750,7 +769,7 @@ class EseDBCursor(object):
             with _EseTransaction(self._sesid) as trx:
                 self._seekForKey(key)
                 self._deleteCurrentRecord()
-                trx.commit(self._lazyupdate)
+                trx.commit(self._lazyflush)
         finally:
             self._database.unlock(hash=key.GetHashCode())
 
@@ -758,7 +777,7 @@ class EseDBCursor(object):
     def __len__(self):
         """Returns the number of records in the database.
         
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> len(x)
         0
         >>> x['foo'] = 'bar'
@@ -786,7 +805,7 @@ class EseDBCursor(object):
         """Returns True if the database contains the specified key,
         otherwise returns False.
 
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['foo'] = 'bar'
         >>> 'foo' in x
         True
@@ -803,7 +822,7 @@ class EseDBCursor(object):
         """Close the database. After being closed this object can no
         longer be used
 
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x.close()                
         >>> x.has_key('a')
         Traceback (most recent call last):
@@ -825,7 +844,7 @@ class EseDBCursor(object):
     def clear(self):
         """Removes all records from the database.
 
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['key'] = 'value'
         >>> x['anotherkey'] = 'anothervalue'
         >>> x.clear()
@@ -858,7 +877,7 @@ class EseDBCursor(object):
         """Returns each key contained in the database. These
         are returned in sorted order.
 
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['c'] = 64
         >>> x['b'] = 128
         >>> x['a'] = 256
@@ -878,7 +897,7 @@ class EseDBCursor(object):
         """Returns a list of all keys in the database. The
         list is in sorted order.
 
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['c'] = 64
         >>> x['b'] = 128
         >>> x['a'] = 256
@@ -894,7 +913,7 @@ class EseDBCursor(object):
         """Returns each value contained in the database. These
         are returned in key order.
 
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['c'] = 64
         >>> x['b'] = 128
         >>> x['a'] = 256
@@ -914,7 +933,7 @@ class EseDBCursor(object):
         """Returns a list of all values in the database. The
         values are returned in key order.
 
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['c'] = 64
         >>> x['b'] = 128
         >>> x['a'] = 256
@@ -930,7 +949,7 @@ class EseDBCursor(object):
         """Return each key/value pair contained in the database. These
         are returned in key order.
         
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['c'] = 64
         >>> x['b'] = 128
         >>> x['a'] = 256
@@ -952,7 +971,7 @@ class EseDBCursor(object):
         """Returns a list of all items in the database as a list of
         (key, value) tuples. The items are returned in key order.
 
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['c'] = 64
         >>> x['b'] = 128
         >>> x['a'] = 256
@@ -968,7 +987,7 @@ class EseDBCursor(object):
         """Returns True if the database contains the specified key,
         otherwise returns False.
 
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['key'] = 'value'
         >>> x.has_key('key')
         True
@@ -986,7 +1005,7 @@ class EseDBCursor(object):
         """Sets the cursor to the record specified by the key and returns
         a pair (key, value) for the record.
         
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['key'] = 'value'
         >>> x.set_location('key')
         ('key', 'value')
@@ -995,7 +1014,7 @@ class EseDBCursor(object):
         If the key doesn't exist in the database then the location is set
         to the next highest key and that record is returned.
         
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['b'] = 'value'
         >>> x.set_location('a')
         ('b', 'value')
@@ -1003,7 +1022,7 @@ class EseDBCursor(object):
         
         If no matching key is found then KeyError is raised.
 
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['a'] = 'value'
         >>> x.set_location('b')
         Traceback (most recent call last):
@@ -1023,7 +1042,7 @@ class EseDBCursor(object):
         """Sets the cursor to the first record in the database and returns
         a (key, value) for the record.
         
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['b'] = 128
         >>> x['a'] = 256
         >>> x.first()
@@ -1032,7 +1051,7 @@ class EseDBCursor(object):
         
         If the database is empty a KeyError is raised.
 
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x.first()
         Traceback (most recent call last):
         ...
@@ -1050,7 +1069,7 @@ class EseDBCursor(object):
         """Sets the cursor to the last record in the database and returns
         a (key, value) for the record.
 
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['c'] = 64
         >>> x['b'] = 128
         >>> x.last()
@@ -1059,7 +1078,7 @@ class EseDBCursor(object):
 
         If the database is empty a KeyError is raised.
 
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x.last()
         Traceback (most recent call last):
         ...
@@ -1077,7 +1096,7 @@ class EseDBCursor(object):
         """Sets the cursor to the next record in the database and returns
         a (key, value) for the record.
 
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['b'] = 128
         >>> x['a'] = 256
         >>> x.first()
@@ -1088,6 +1107,13 @@ class EseDBCursor(object):
 
         A KeyError is raised when the end of the table is reached or if 
         the table is empty.
+        
+        >>> x = open('wdbtest.db', flag='nf')
+        >>> x.next()
+        Traceback (most recent call last):
+        ...
+        KeyError: end of database
+        >>> x.close()                    
     
         """
         with _EseTransaction(self._sesid):        
@@ -1100,7 +1126,7 @@ class EseDBCursor(object):
         """Sets the cursor to the previous item in the database and returns
         a (key, value) for the record.
         
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['c'] = 64
         >>> x['b'] = 128
         >>> x.last()
@@ -1112,18 +1138,97 @@ class EseDBCursor(object):
         A KeyError is raised when the end of the table is reached or if 
         the table is empty.
         
+        >>> x = open('wdbtest.db', flag='nf')
+        >>> x.previous()
+        Traceback (most recent call last):
+        ...
+        KeyError: end of database
+        >>> x.close()                    
+        
         """
         with _EseTransaction(self._sesid):        
             if not Api.TryMovePrevious(self._sesid, self._tableid):
                 raise KeyError('end of database')        
             return self._retrieveCurrentRecord()        
-       
+
+    @cursorMustBeOpen
+    def firstkey(self):
+        """Sets the cursor to the first record in the database and returns
+        the key of the record.
+        
+        >>> x = open('wdbtest.db', flag='nf')
+        >>> x['b'] = 128
+        >>> x['a'] = 256
+        >>> x.firstkey()
+        'a'
+        >>> x.close()            
+        
+        If the database is empty None is returned.
+
+        >>> x = open('wdbtest.db', flag='nf')
+        >>> x.firstkey()
+        >>> x.close()            
+        
+        """
+        with _EseTransaction(self._sesid):        
+            if not Api.TryMoveFirst(self._sesid, self._tableid):
+                return None    
+            return self._retrieveCurrentRecordKey()
+        
+    @cursorMustBeOpen
+    def nextkey(self, key):
+        """Returns the key that follows key in the traversal.
+
+        >>> x = open('wdbtest.db', flag='nf')
+        >>> x['b'] = 128
+        >>> x['a'] = 256
+        >>> x.nextkey('a')
+        'b'
+        >>> x.close()            
+
+        If there are no matching records None is returned.
+
+        >>> x = open('wdbtest.db', flag='nf')
+        >>> x.nextkey('x')
+        >>> x.close()            
+        
+        The following code prints every key in the database, without having
+        to create a list in memory that contains them all:
+
+        >>> db = open('wdbtest.db', 'n')
+        >>> for i in range(10): db['%d'%i] = '%d'% (i*i)
+        ...
+        >>> k = db.firstkey()
+        >>> while k != None:
+        ...     print k
+        ...     k = db.nextkey(k)
+        0
+        1
+        2
+        3
+        4
+        5
+        6
+        7
+        8
+        9
+        >>> db.close()
+    
+        """    
+        with _EseTransaction(self._sesid): 
+            self._makeKey(key)
+            if not Api.TrySeek(self._sesid, self._tableid, SeekGrbit.SeekEQ):
+                return None
+            if not Api.TryMoveNext(self._sesid, self._tableid):
+                return None
+            return self._retrieveCurrentRecordKey()
+            
     @cursorMustBeOpen
     def pop(self, key, default=_unspecified):
         """If key is in the dictionary, remove it and return its value, else
         return default. 
         
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['a'] = 64
         >>> x.pop('a', 'X')
         '64'
@@ -1134,7 +1239,7 @@ class EseDBCursor(object):
         If default is not given and key is not in the dictionary, a
         KeyError is raised.
 
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['a'] = 64
         >>> x.pop('b')
         Traceback (most recent call last):
@@ -1150,7 +1255,7 @@ class EseDBCursor(object):
                 if Api.TrySeek(self._sesid, self._tableid, SeekGrbit.SeekEQ):
                     value = self._retrieveCurrentRecordValue()
                     self._deleteCurrentRecord()
-                    trx.commit(self._lazyupdate)
+                    trx.commit(self._lazyflush)
                     return value                    
                 elif default is _unspecified:
                     raise KeyError('no key matching \'%s\' was found' % key)
@@ -1165,7 +1270,7 @@ class EseDBCursor(object):
         popitem() is useful to destructively iterate over a dictionary, as often
         used in set algorithms.
 
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['a'] = 64
         >>> x.popitem()
         ('a', '64')
@@ -1186,7 +1291,7 @@ class EseDBCursor(object):
                     raise KeyError('database is empty')        
                 value = self._retrieveCurrentRecord()            
                 self._deleteCurrentRecord()
-                trx.commit(self._lazyupdate)
+                trx.commit(self._lazyflush)
                 return value
         finally:
             self._database.unlock()
@@ -1196,7 +1301,7 @@ class EseDBCursor(object):
         """If key is in the dictionary, return its value. If not, insert key with
         a value of default and return default. Default defaults to None.
 
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['a'] = 64
         >>> x.setdefault('a')
         '64'
@@ -1216,7 +1321,7 @@ class EseDBCursor(object):
                     return self._retrieveCurrentRecordValue()
                 else:
                     self._insertItem(key, default)
-                    trx.commit(self._lazyupdate)
+                    trx.commit(self._lazyflush)
                     return default
         finally:
             self._database.unlock(hash=key.GetHashCode())        
@@ -1231,7 +1336,7 @@ class EseDBCursor(object):
         """Forces any unwritten data to be written to disk. This method
         has no effect when running on Windows XP.
 
-        >>> x = open('wdbtest.db', mode='n')
+        >>> x = open('wdbtest.db', flag='nf')
         >>> x['a'] = 64
         >>> x.sync()
         >>> x.close()
@@ -1328,23 +1433,32 @@ class EseDBCursor(object):
         self._makeKey(key)
         if not Api.TrySeek(self._sesid, self._tableid, SeekGrbit.SeekEQ):
             raise KeyError('key \'%s\' was not found' % key)
-    
+
     
 #-----------------------------------------------------------------------
-def open(filename, mode='c', lazyupdate=False):
+def open(filename, flag='cf', mode=0):
 #-----------------------------------------------------------------------
     """Open an esent database and return an EseDBCursor object. Filename is
-    the path to the database, including the extension. Mode specifies
-    the mode to use. 'r' opens the database read-only. 'w' opens the
-    databases read-write. 'c' opens the database read-write, creating it
-    if necessary, and 'n' always creates a new, empty database.
+    the path to the database, including the extension. Flag specifies
+    the how to open the file: 'r' opens the database read-only,
+    'w' opens the database read-write, 'c' opens the database read-write,
+    creating it if necessary, and 'n' always creates a new, empty database.
+    
+    Either 'f' or 's' may be appended to the flag to control how updates are
+    written to the database: 'f' will open the database in fast flag, writes
+    will not be synchronized; 's' will open the database in synchronized flag,
+    changes to the database will immediately be flushed to disk.
+    
+    The default flag is 'cf'
+    
+    The mode argument is ignored.
     
     As well as the database file, this will create transaction logs and
     a checkpoint file in the same directory as the database (if read/write
     access is requested). The logs and checkpoint will start with a prefix
     of 'wdb'.
     
-    If lazyupdate is true, then the transaction logs will be written in
+    If lazyflush is true, then the transaction logs will be written in
     a lazy fashion. This will preserve database consistency, but some data
     will be lost if there is an unexpected shutdown (crash).
 
@@ -1384,8 +1498,17 @@ def open(filename, mode='c', lazyupdate=False):
     """
     filename = Path.GetFullPath(filename)
     
-    if not mode in 'rwcn':
-        raise EseDBError('invalid mode')
+    lazyflush = True
+    if 1 == len(flag) or 2 == len(flag):
+        if not flag[0] in 'rwcn':
+            raise EseDBError('invalid flag')
+        mode = flag[0]
+        if 2 == len(flag):
+            if not flag[1] in 'sf':
+                raise EseDBError('invalid flag')            
+            lazyflush = flag[1] == 'f'
+    else:
+        raise EseDBError('invalid flag')
     
     _registry.lock()
     try:
@@ -1394,48 +1517,22 @@ def open(filename, mode='c', lazyupdate=False):
             newDB = _EseDB(instancename, filename)
             _registry.registerDB(newDB)
         db = _registry.getDB(filename)
-        return db.openCursor(mode, lazyupdate)                
+        return db.openCursor(mode, lazyflush)                
     finally:
         _registry.unlock()            
 
     
 # Set global esent options
-SystemParameters.DatabasePageSize = 8192
-SystemParameters.Configuration = 0
+SystemParameters.Configuration = 1
 SystemParameters.EnableAdvanced = True
-SystemParameters.CacheSizeMin = 64
+SystemParameters.DatabasePageSize = 8192
+SystemParameters.CacheSizeMin = 8192
 SystemParameters.CacheSizeMax = 2**30
 
 # A global object to perform filename => EseDB mappings
 _registry = _EseDBRegistry()
 
 if __name__ == '__main__':
-    # Doctest tests. This is a list of methods that have doctest
-    # tests. Doctest isn't finding them by default.
-    __test__ = dict()
-    __test__['set'] = Counter.set    
-    __test__['get'] = Counter.get    
-    __test__['increment'] = Counter.increment    
-    __test__['decrement'] = Counter.decrement    
-    __test__['__getitem__'] = EseDBCursor.__getitem__
-    __test__['__setitem__'] = EseDBCursor.__setitem__
-    __test__['__delitem__'] = EseDBCursor.__delitem__
-    __test__['__contains__'] = EseDBCursor.__contains__
-    __test__['__len__'] = EseDBCursor.__len__
-    __test__['close'] = EseDBCursor.close
-    __test__['iterkeys'] = EseDBCursor.iterkeys
-    __test__['keys'] = EseDBCursor.keys
-    __test__['itervalues'] = EseDBCursor.itervalues
-    __test__['values'] = EseDBCursor.values
-    __test__['iteritems'] = EseDBCursor.iteritems
-    __test__['items'] = EseDBCursor.items
-    __test__['has_key'] = EseDBCursor.has_key
-    __test__['set_location'] = EseDBCursor.set_location
-    __test__['first'] = EseDBCursor.first
-    __test__['last'] = EseDBCursor.last
-    __test__['next'] = EseDBCursor.next
-    __test__['previous'] = EseDBCursor.previous
-    __test__['open'] = open
     import doctest
     doctest.testmod()
     

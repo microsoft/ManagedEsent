@@ -11,6 +11,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 {
     using System;
     using System.Diagnostics;
+    using System.Globalization;
 
     /// <content>
     /// PersistentDictionary tracing.
@@ -38,7 +39,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         [Conditional("TRACE")]
         internal void TraceWhere(KeyRange<TKey> range, bool isReversed)
         {
-            Trace.WriteLineIf(this.traceSwitch.TraceVerbose, String.Format("WHERE: {0} {1}", range, isReversed ? "(reversed)" : String.Empty));
+            Trace.WriteLineIf(this.traceSwitch.TraceVerbose, String.Format(CultureInfo.InvariantCulture, "WHERE: {0} {1}", range, isReversed ? "(reversed)" : String.Empty));
         }
     }
 }

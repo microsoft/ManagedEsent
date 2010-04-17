@@ -10,6 +10,7 @@
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
     using System;
+    using System.Globalization;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
@@ -36,7 +37,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 {
                     try
                     {
-                        value = (T)Convert.ChangeType(obj, typeof(T));
+                        value = (T)Convert.ChangeType(obj, typeof(T), CultureInfo.InvariantCulture);
                         return true;
                     }
                     catch (InvalidCastException)
@@ -70,7 +71,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 
                     try
                     {
-                        return Convert.ChangeType(value, unaryExpression.Type);
+                        return Convert.ChangeType(value, unaryExpression.Type, CultureInfo.InvariantCulture);
                     }
                     catch (InvalidCastException)
                     {

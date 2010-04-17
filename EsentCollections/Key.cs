@@ -11,6 +11,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 {
     using System;
     using System.Diagnostics;
+    using System.Globalization;
 
     /// <summary>
     /// Represents a generic key value.
@@ -76,7 +77,10 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         public override string ToString()
         {
             return String.Format(
-                "{0} ({1})", this.Value, this.IsPrefix ? "prefix" : (this.IsInclusive ? "inclusive" : "exclusive"));
+                CultureInfo.InvariantCulture,
+                "{0} ({1})",
+                this.Value,
+                this.IsPrefix ? "prefix" : (this.IsInclusive ? "inclusive" : "exclusive"));
         }
 
         /// <summary>

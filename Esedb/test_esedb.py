@@ -31,7 +31,7 @@ class EsedbSingleDBFixture(unittest.TestCase):
     def setUp(self):
         self._dataDirectory = 'unittest_data'
         self._deleteDataDirectory()
-        self._db = esedb.open(self._makeDatabasePath('test.edb'), lazyupdate=True)
+        self._db = esedb.open(self._makeDatabasePath('test.edb'))
 
     def tearDown(self):
         self._db.close()
@@ -42,7 +42,7 @@ class EsedbSingleDBFixture(unittest.TestCase):
 
     def _makeDatabasePath(self, filename):
         return Path.Combine(self._dataDirectory, filename)
-
+        
     def testInsertAndRetrieveRecord(self):
         self._db['key'] = 'value'
         self.assertEqual(self._db['key'], 'value')
@@ -129,6 +129,12 @@ class EsedbSingleDBFixture(unittest.TestCase):
     def testPreviousRaisesKeyErrorIfEmpty(self):
         self.assertRaises(KeyError, self._db.previous)
 
+    def testFirstKeyReturnsNoneIfEmpty(self):
+        self.assertEqual(None, self._db.firstkey())
+
+    def testNextKeyReturnsNoneIfEmpty(self):
+        self.assertEqual(None, self._db.nextkey('x'))
+        
     def testKeysReturnsEmptyListIfEmpty(self):
         self.assertEqual([], self._db.keys())
 
@@ -217,7 +223,7 @@ class EsedbIterationFixture(unittest.TestCase):
     def setUp(self):
         self._dataDirectory = 'unittest_data'
         self._deleteDataDirectory()
-        self._db = esedb.open(self._makeDatabasePath('test.edb'), lazyupdate=True)
+        self._db = esedb.open(self._makeDatabasePath('test.edb'))
         self._db['d'] = '4'
         self._db['a'] = '1'
         self._db['c'] = '3'
@@ -255,6 +261,18 @@ class EsedbIterationFixture(unittest.TestCase):
         self._db.first()
         self.assertRaises(KeyError, self._db.previous)
 
+    def testFirstKeyReturnsFirstKey(self):
+        self.assertEqual('a', self._db.firstkey())
+
+    def testNextKeyReturnsNextKey(self):
+        self.assertEqual('b', self._db.nextkey('a'))
+
+    def testNextKeyReturnsNoneOnLastKey(self):
+        self.assertEqual(None, self._db.nextkey('d'))
+
+    def testNextKeyReturnsNoneOnNonMatchingKey(self):
+        self.assertEqual(None, self._db.nextkey('e'))
+        
     def testIterkeysReturnsKeys(self):
         self.assertEqual(['a', 'b', 'c', 'd'], list(self._db.iterkeys()))
 
@@ -309,6 +327,14 @@ class EsedbIterationFixture(unittest.TestCase):
                 break
         items.reverse()
         self.assertEqual(items, expected)
+
+    def testIterateAllKeys(self):
+        keys = []
+        k = self._db.firstkey()
+        while None != k:
+            keys.append(k)
+            k = self._db.nextkey(k)
+        self.assertEqual(keys, self._db.keys())
         
 class EsedbFixture(unittest.TestCase):
     """Tests for esedb."""
@@ -326,9 +352,18 @@ class EsedbFixture(unittest.TestCase):
     def _makeDatabasePath(self, filename):
         return Path.Combine(self._dataDirectory, filename)
 
-    def testInvalidModeRaisesException(self):
+    def testInvalidFlagRaisesException(self):
         self.assertRaises(EseDBError, esedb.open, 'foo.edb', 'x')
 
+    def testTooShortFlagRaisesException(self):
+        self.assertRaises(EseDBError, esedb.open, 'foo.edb', flag='')
+        
+    def testTooLongFlagRaisesException(self):
+        self.assertRaises(EseDBError, esedb.open, 'foo.edb', 'wfx')
+
+    def testInvalidFlushFlagRaisesException(self):
+        self.assertRaises(EseDBError, esedb.open, 'foo.edb', 'wx')
+        
     def testCloseTwice(self):
         db = esedb.open(self._makeDatabasePath('test.edb'))
         db.close()
@@ -336,8 +371,8 @@ class EsedbFixture(unittest.TestCase):
 
     def testMultipleCursorsInsertAndDelete(self):
         db1 = esedb.open(self._makeDatabasePath('test.edb'), 'n')
-        db2 = esedb.open(self._makeDatabasePath('test.edb'), 'c')
-        db3 = esedb.open(self._makeDatabasePath('test.edb'), 'w')
+        db2 = esedb.open(self._makeDatabasePath('test.edb'), 'cs')
+        db3 = esedb.open(self._makeDatabasePath('test.edb'), 'wf')
         db_ro = esedb.open(self._makeDatabasePath('test.edb'), 'r')
 
         db1['hello'] = 'world'
@@ -360,8 +395,8 @@ class EsedbFixture(unittest.TestCase):
         db_ro.close()
 
     def testMultipleCursors(self):
-        db1 = esedb.open(self._makeDatabasePath('test.edb'), 'n')
-        db2 = esedb.open(self._makeDatabasePath('test.edb'), 'c')
+        db1 = esedb.open(self._makeDatabasePath('test.edb'), 'ns')
+        db2 = esedb.open(self._makeDatabasePath('test.edb'), 'cf')
         db3 = esedb.open(self._makeDatabasePath('test.edb'), 'w')
         db_ro = esedb.open(self._makeDatabasePath('test.edb'), 'r')
 
@@ -446,7 +481,7 @@ class EsedbClosedCursorFixture(unittest.TestCase):
     def setUp(self):
         self._dataDirectory = 'unittest_data'
         self._deleteDataDirectory()
-        self._db = esedb.open(self._makeDatabasePath('test.edb'), lazyupdate=True)
+        self._db = esedb.open(self._makeDatabasePath('test.edb'))
         self._db.close()
         self._deleteDataDirectory()
 
@@ -506,10 +541,16 @@ class EsedbClosedCursorFixture(unittest.TestCase):
 
     def testNextRaisesErrorOnClosedCursor(self):
         self.assertRaises(EseDBCursorClosedError, self._db.next)
-
+        
     def testPreviousRaisesErrorOnClosedCursor(self):
         self.assertRaises(EseDBCursorClosedError, self._db.previous)
 
+    def testFirstKeyRaisesErrorOnClosedCursor(self):
+        self.assertRaises(EseDBCursorClosedError, self._db.firstkey)
+
+    def testNextKeyRaisesErrorOnClosedCursor(self):
+        self.assertRaises(EseDBCursorClosedError, self._db.nextkey)
+        
     def testPopRaisesErrorOnClosedCursor(self):
         self.assertRaises(EseDBCursorClosedError, self._db.pop, 'a')
 
@@ -534,7 +575,7 @@ class EsedbDictionaryComparisonFixture(unittest.TestCase):
         self._deleteDataDirectory()
 
     def _openDatabase(self):
-        self._db = esedb.open(self._makeDatabasePath('test.edb'), lazyupdate=True)
+        self._db = esedb.open(self._makeDatabasePath('test.edb'))
 
     def _closeDatabase(self):
         self._db.close()
@@ -562,12 +603,12 @@ class EsedbDictionaryComparisonFixture(unittest.TestCase):
     def _pop(self, k):
         a = self._expected.pop(k)
         b = self._db.pop(k)
-        self.assertEquals(a, b)
+        self.assertEqual(a, b)
 
     def _setdefault(self, k, v):
         a = self._expected.setdefault(k,v)
         b = self._db.setdefault(k,v)
-        self.assertEquals(a, b)
+        self.assertEqual(a, b)
 
     def _clear(self):
         self._expected.clear()
@@ -759,7 +800,7 @@ class EsedbMultiThreadingFixture(unittest.TestCase):
         self._dataDirectory = 'unittest_data'
         self._deleteDataDirectory()
         self._database = self._makeDatabasePath('test.edb')
-        self._db = esedb.open(self._database, lazyupdate=True)
+        self._db = esedb.open(self._database)
 
     def tearDown(self):
         self._db.close()
@@ -772,31 +813,31 @@ class EsedbMultiThreadingFixture(unittest.TestCase):
         deleteDirectory(self._dataDirectory)
 
     def _insertRange(self, low, high):
-        db = esedb.open(self._database, lazyupdate=True)
+        db = esedb.open(self._database)
         for i in xrange(low, high):
             db[i] = i
         db.close()
 
     def _setdefaultRange(self, low, high):
-        db = esedb.open(self._database, lazyupdate=True)
+        db = esedb.open(self._database)
         for i in xrange(low, high):
             db.setdefault(i, i)
         db.close()
         
     def _deleteRange(self, low, high):
-        db = esedb.open(self._database, lazyupdate=True)
+        db = esedb.open(self._database)
         for i in xrange(low, high):
             del db[i]
         db.close()
 
     def _popRange(self, low, high):
-        db = esedb.open(self._database, lazyupdate=True)
+        db = esedb.open(self._database)
         for i in xrange(low, high):
             db.pop(i)
         db.close()
 
     def _popAllItems(self):
-        db = esedb.open(self._database, lazyupdate=True)
+        db = esedb.open(self._database)
         try:
             while True:
                 db.popitem()
@@ -806,7 +847,7 @@ class EsedbMultiThreadingFixture(unittest.TestCase):
         
     def _retrieveAllRecords(self, n):
         """Check that k=v for all records and there are n records"""
-        db = esedb.open(self._database, lazyupdate=True)
+        db = esedb.open(self._database)
         self.assertEqual(n, len(db))
         for k,v in db.iteritems():
             self.assertEqual(k, v)
@@ -814,12 +855,13 @@ class EsedbMultiThreadingFixture(unittest.TestCase):
 
     def _randomOperations(self):
         keys = 'abcdefghijklmompqrstuvwzyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-+'
-        db = esedb.open(self._database, lazyupdate=True)
+        db = esedb.open(self._database)
         for i in xrange(10000):
             k = random.choice(keys) * random.randint(1,8)
+            ignored = db.nextkey(k)
             if random.random() < 0.01: # 1% chance of close and reopen
                 db.close()
-                db = esedb.open(self._database, lazyupdate=True)
+                db = esedb.open(self._database)
             elif random.random() < 0.05: # 5% chance of deleting a key
                 try:
                     del db[k]

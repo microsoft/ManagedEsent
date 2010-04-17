@@ -86,11 +86,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         };
 
         /// <summary>
-        /// The CLR type that this column supports.
-        /// </summary>
-        private readonly Type type;
-
-        /// <summary>
         /// The SetColumn delegate for this object.
         /// </summary>
         private readonly SetColumnDelegate setColumn;
@@ -136,8 +131,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             {
                 throw new ArgumentNullException("type");    
             }
-
-            this.type = type;    
 
             if (!SetColumnDelegates.ContainsKey(type))
             {
