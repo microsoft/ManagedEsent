@@ -104,6 +104,8 @@ from Microsoft.Isam.Esent.Interop import SystemParameters
 from Microsoft.Isam.Esent.Interop import EsentVersion
 from Microsoft.Isam.Esent.Interop import Conversions
 
+from Microsoft.Isam.Esent.Interop.Server2003 import Server2003Grbits
+
 from Microsoft.Isam.Esent.Interop.Vista import VistaParam
 
 from Microsoft.Isam.Esent.Interop.Windows7 import Windows7Param
@@ -1223,6 +1225,20 @@ class EseDBCursor(object):
     # Update the dictionary with the key/value pairs from other, overwriting existing keys. Return None.
     # update() accepts either another dictionary object or an iterable of key/value pairs (as a tuple or other iterable of length two). If keyword arguments are specified, the dictionary is then updated with those key/value pairs: d.update(red=1, blue=2).
     # Changed in version 2.4: Allowed the argument to be an iterable of key/value pairs and allowed keyword arguments.
+            
+    @cursorMustBeOpen
+    def sync(self):
+        """Forces any unwritten data to be written to disk. This method
+        has no effect when running on Windows XP.
+
+        >>> x = open('wdbtest.db', mode='n')
+        >>> x['a'] = 64
+        >>> x.sync()
+        >>> x.close()
+
+        """  
+        if EsentVersion.SupportsServer2003Features:
+            Api.JetCommitTransaction(self._sesid, Server2003Grbits.WaitAllLevel0Commit)
             
     def _checkNotClosed(self):
         if not self._isopen:

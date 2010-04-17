@@ -202,6 +202,11 @@ class EsedbSingleDBFixture(unittest.TestCase):
     def testSetDefaultUsesNone(self):
         self.assertEqual(self._db.setdefault('a', None), None)
         self.assertEqual(self._db['a'], None)
+
+    def testSync(self):
+        self._db.sync()
+        self._db['foo'] = 'bar'
+        self._db.sync()
         
 class EsedbIterationFixture(unittest.TestCase):
     """Iteration tests for esedb. This fixture creates a database with a
