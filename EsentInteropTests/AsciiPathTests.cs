@@ -127,6 +127,28 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Create a database with an ASCII path.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Call JetCreateDatabase2 with an ASCII path")]
+        public void CreateDatabase2WithAsciiPath()
+        {
+            using (var instance = new Instance("asciidbcreate"))
+            {
+                SetupHelper.SetLightweightConfiguration(instance);
+                instance.Parameters.CreatePathIfNotExist = true;
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    JET_DBID dbid;
+                    Api.JetCreateDatabase2(session, this.database, 1024, out dbid, CreateDatabaseGrbit.None);
+                    Assert.IsTrue(File.Exists(this.database));
+                }
+            }
+        }
+
+        /// <summary>
         /// Detach a database with an ASCII path.
         /// </summary>
         [TestMethod]

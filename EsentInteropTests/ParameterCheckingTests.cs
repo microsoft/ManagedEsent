@@ -102,6 +102,34 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Check that an exception is thrown when JetCreateDatabase2 gets a 
+        /// null database name.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentNullException))]
+        [Description("Check that an exception is thrown when JetCreateDatabase2 gets a null database name")]
+        public void JetCreateDatabase2ThrowsExceptionWhenDatabaseNameIsNull()
+        {
+            JET_DBID dbid;
+            Api.JetCreateDatabase2(this.sesid, null, 0, out dbid, CreateDatabaseGrbit.None);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetCreateDatabase2 gets a 
+        /// null database name.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(OverflowException))]
+        [Description("Check that an exception is thrown when JetCreateDatabase2 gets a negative page count")]
+        public void JetCreateDatabase2ThrowsExceptionWhenPageCountIsNegative()
+        {
+            JET_DBID dbid;
+            Api.JetCreateDatabase2(this.sesid, "foo.db", -2, out dbid, CreateDatabaseGrbit.None);
+        }
+
+        /// <summary>
         /// Check that an exception is thrown when JetAttachDatabase gets a 
         /// null database name.
         /// </summary>

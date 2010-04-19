@@ -153,6 +153,33 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Create a database with a unicode path.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Call JetCreateDatabase2 with a Unicode path")]
+        public void CreateDatabase2WithUnicodePath()
+        {
+            if (!EsentVersion.SupportsUnicodePaths)
+            {
+                return;
+            }
+
+            using (var instance = new Instance("unicodedbcreate"))
+            {
+                SetupHelper.SetLightweightConfiguration(instance);
+                instance.Parameters.CreatePathIfNotExist = true;
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    JET_DBID dbid;
+                    Api.JetCreateDatabase2(session, this.database, 512, out dbid, CreateDatabaseGrbit.None);
+                    Assert.IsTrue(File.Exists(this.database));
+                }
+            }
+        }
+
+        /// <summary>
         /// Detach a database with a unicode path.
         /// </summary>
         [TestMethod]

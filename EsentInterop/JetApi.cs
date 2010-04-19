@@ -428,6 +428,34 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         }
 
         /// <summary>
+        /// Creates and attaches a database file with a maximum database size specified.
+        /// <seealso cref="JetAttachDatabase2"/>.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="database">The path to the database file to create.</param>
+        /// <param name="maxPages">
+        /// The maximum size, in database pages, of the database. Passing 0 means there is
+        /// no enforced maximum.
+        /// </param>
+        /// <param name="dbid">Returns the dbid of the new database.</param>
+        /// <param name="grbit">Database creation options.</param>
+        /// <returns>An error or warning.</returns>
+        public int JetCreateDatabase2(JET_SESID sesid, string database, int maxPages, out JET_DBID dbid, CreateDatabaseGrbit grbit)
+        {
+            this.TraceFunctionCall("JetCreateDatabase");
+            this.CheckNotNull(database, "database");
+
+            dbid = JET_DBID.Nil;
+            uint cpgDatabaseSizeMax = checked((uint)maxPages);
+            if (this.Capabilities.SupportsUnicodePaths)
+            {
+                return this.Err(NativeMethods.JetCreateDatabase2W(sesid.Value, database, cpgDatabaseSizeMax, out dbid.Value, (uint)grbit));
+            }
+
+            return this.Err(NativeMethods.JetCreateDatabase2(sesid.Value, database, cpgDatabaseSizeMax, out dbid.Value, (uint)grbit));
+        }
+
+        /// <summary>
         /// Attaches a database file for use with a database instance. In order to use the
         /// database, it will need to be subsequently opened with <see cref="IJetApi.JetOpenDatabase"/>.
         /// </summary>
@@ -451,6 +479,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <summary>
         /// Attaches a database file for use with a database instance. In order to use the
         /// database, it will need to be subsequently opened with <see cref="JetOpenDatabase"/>.
+        /// <seealso cref="JetCreateDatabase2"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="database">The database to attach.</param>

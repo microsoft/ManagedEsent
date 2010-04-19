@@ -190,6 +190,21 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         int JetCreateDatabase(JET_SESID sesid, string database, string connect, out JET_DBID dbid, CreateDatabaseGrbit grbit);
 
         /// <summary>
+        /// Creates and attaches a database file with a maximum database size specified.
+        /// <seealso cref="JetAttachDatabase2"/>.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="database">The path to the database file to create.</param>
+        /// <param name="maxPages">
+        /// The maximum size, in database pages, of the database. Passing 0 means there is
+        /// no enforced maximum.
+        /// </param>
+        /// <param name="dbid">Returns the dbid of the new database.</param>
+        /// <param name="grbit">Database creation options.</param>
+        /// <returns>An error or warning.</returns>
+        int JetCreateDatabase2(JET_SESID sesid, string database, int maxPages, out JET_DBID dbid, CreateDatabaseGrbit grbit);
+
+        /// <summary>
         /// Attaches a database file for use with a database instance. In order to use the
         /// database, it will need to be subsequently opened with <see cref="JetOpenDatabase"/>.
         /// </summary>
