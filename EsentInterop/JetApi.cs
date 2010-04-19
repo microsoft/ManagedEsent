@@ -442,8 +442,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error or warning.</returns>
         public int JetCreateDatabase2(JET_SESID sesid, string database, int maxPages, out JET_DBID dbid, CreateDatabaseGrbit grbit)
         {
-            this.TraceFunctionCall("JetCreateDatabase");
+            this.TraceFunctionCall("JetCreateDatabase2");
             this.CheckNotNull(database, "database");
+            this.CheckNotNegative(maxPages, "maxPages");
 
             dbid = JET_DBID.Nil;
             uint cpgDatabaseSizeMax = checked((uint)maxPages);
@@ -517,8 +518,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetOpenDatabase(JET_SESID sesid, string database, string connect, out JET_DBID dbid, OpenDatabaseGrbit grbit)
         {
             this.TraceFunctionCall("JetOpenDatabase");
-            dbid = JET_DBID.Nil;
             this.CheckNotNull(database, "database");
+            dbid = JET_DBID.Nil;
 
             if (this.Capabilities.SupportsUnicodePaths)
             {

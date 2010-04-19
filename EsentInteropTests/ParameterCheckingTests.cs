@@ -121,7 +121,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [ExpectedException(typeof(OverflowException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         [Description("Check that an exception is thrown when JetCreateDatabase2 gets a negative page count")]
         public void JetCreateDatabase2ThrowsExceptionWhenPageCountIsNegative()
         {
@@ -161,11 +161,11 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         [Description("Check that an exception is thrown when JetAttachDatabase2 gets negative max page count")]
         public void JetAttachDatabase2ThrowsExceptionWhenMaxPagesIsNegative()
         {
-            Api.JetAttachDatabase2(this.sesid, null, -1, AttachDatabaseGrbit.None);
+            Api.JetAttachDatabase2(this.sesid, "foo.db", -1, AttachDatabaseGrbit.None);
         }
 
         /// <summary>
