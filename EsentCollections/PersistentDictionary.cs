@@ -732,6 +732,17 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
+        /// Determine if the given column can be compressed.
+        /// </summary>
+        /// <param name="columndef">The definition of the column.</param>
+        /// <returns>True if the column can be compressed.</returns>
+        private static bool ColumnCanBeCompressed(JET_COLUMNDEF columndef)
+        {
+            return EsentVersion.SupportsWindows7Features
+                   && (JET_coltyp.LongText == columndef.coltyp || JET_coltyp.LongBinary == columndef.coltyp);
+        }
+
+        /// <summary>
         /// Check the database meta-data. This makes sure the tables and columns exist and
         /// checks the type of the database.
         /// </summary>
@@ -896,25 +907,33 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             JET_COLUMNID keyColumnid;
             JET_COLUMNID valueColumnid;
 
-            ColumndefGrbit columndefGrbit = EsentVersion.SupportsWindows7Features
-                                       ? ColumndefGrbit.None
-                                       : Windows7Grbits.ColumnCompressed;
-
             Api.JetCreateTable(session, dbid, this.config.DataTableName, 128, 100, out tableid);
+            var columndef = new JET_COLUMNDEF { coltyp = this.converters.KeyColtyp, cp = JET_CP.Unicode, grbit = ColumndefGrbit.None };
+            if (ColumnCanBeCompressed(columndef))
+            {
+                columndef.grbit |= Windows7Grbits.ColumnCompressed;
+            }
+
             Api.JetAddColumn(
                 session,
                 tableid,
                 this.config.KeyColumnName,
-                new JET_COLUMNDEF { coltyp = this.converters.KeyColtyp, cp = JET_CP.Unicode, grbit = columndefGrbit },
+                columndef,
                 null,
                 0,
                 out keyColumnid);
+
+            columndef = new JET_COLUMNDEF { coltyp = this.converters.ValueColtyp, cp = JET_CP.Unicode, grbit = ColumndefGrbit.None };
+            if (ColumnCanBeCompressed(columndef))
+            {
+                columndef.grbit |= Windows7Grbits.ColumnCompressed;
+            }
 
             Api.JetAddColumn(
                 session,
                 tableid,
                 this.config.ValueColumnName,
-                new JET_COLUMNDEF { coltyp = this.converters.ValueColtyp, cp = JET_CP.Unicode, grbit = columndefGrbit },
+                columndef,
                 null,
                 0,
                 out valueColumnid);
