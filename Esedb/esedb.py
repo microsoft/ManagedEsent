@@ -85,7 +85,6 @@ from System import Array
 from System.Globalization import CompareOptions, CultureInfo
 from System.IO import File, Path, Directory
 from System.Text import Encoding
-from System.Threading import Interlocked
 
 clr.AddReferenceByPartialName('Esent.Interop')
 from Microsoft.Isam.Esent.Interop import Api

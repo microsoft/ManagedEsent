@@ -458,6 +458,70 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test JetGetLock.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test TryGetLock")]
+        public void TestTryGetLock()
+        {
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Api.JetBeginTransaction(this.sesid);
+            Assert.IsTrue(Api.TryGetLock(this.sesid, this.tableid, GetLockGrbit.Read));
+            Assert.IsTrue(Api.TryGetLock(this.sesid, this.tableid, GetLockGrbit.Write));
+            Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
+        }
+
+        /// <summary>
+        /// Verify that TryGetLock returns false when incompatible locks are requested.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Verify that TryGetLock returns false when incompatible locks are requested")]
+        public void VerifyTryGetLockReturnsFalseOnWriteConflict()
+        {
+            var bookmark = new byte[SystemParameters.BookmarkMost];
+            int bookmarkSize;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.JetUpdate(this.sesid, this.tableid, bookmark, bookmark.Length, out bookmarkSize);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            JET_SESID otherSesid;
+            JET_DBID otherDbid;
+            JET_TABLEID otherTableid;
+            Api.JetDupSession(this.sesid, out otherSesid);
+            Api.JetOpenDatabase(otherSesid, this.database, null, out otherDbid, OpenDatabaseGrbit.None);
+            Api.JetOpenTable(otherSesid, otherDbid, this.table, null, 0, OpenTableGrbit.None, out otherTableid);
+
+            Api.JetGotoBookmark(this.sesid, this.tableid, bookmark, bookmarkSize);
+            Api.JetGotoBookmark(otherSesid, otherTableid, bookmark, bookmarkSize);
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetBeginTransaction(otherSesid);
+
+            Assert.IsTrue(Api.TryGetLock(this.sesid, this.tableid, GetLockGrbit.Read));
+            Assert.IsFalse(Api.TryGetLock(otherSesid, otherTableid, GetLockGrbit.Write));
+
+            // Rollback the the first transaction which will let the second transaction
+            // lock the record.
+            Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
+
+            Assert.IsTrue(Api.TryGetLock(otherSesid, otherTableid, GetLockGrbit.Write));
+
+            Api.JetRollback(otherSesid, RollbackTransactionGrbit.None);
+
+            Api.JetCloseTable(otherSesid, otherTableid);
+            Api.JetCloseDatabase(otherSesid, otherDbid, CloseDatabaseGrbit.None);
+            Api.JetEndSession(otherSesid, EndSessionGrbit.None);
+        }
+
+        /// <summary>
         /// Call JetComputeStats.
         /// </summary>
         [TestMethod]

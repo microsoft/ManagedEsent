@@ -122,6 +122,8 @@ namespace InteropApiTests
             this.instance.Term();
         }
 
+        #endregion
+
         /// <summary>
         /// Measure performance of reading records with JetRetrieveColumn.
         /// </summary>
@@ -176,8 +178,6 @@ namespace InteropApiTests
         {
             DoTest(this.RetrieveWithRetrieveColumns);
         }
-
-        #endregion
 
         #region Helper Methods
 
@@ -424,6 +424,17 @@ namespace InteropApiTests
                 Assert.AreEqual(this.expectedString, actualString);
 
                 Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
+            }
+        }
+
+        /// <summary>
+        /// Make a Unicode key with the MakeKey helper.
+        /// </summary>
+        private void MakeUnicodeKey()
+        {
+            for (int i = 0; i < NumRetrieves; ++i)
+            {
+                Api.MakeKey(this.session, this.tableid, "foo", Encoding.Unicode, MakeKeyGrbit.NewKey);
             }
         }
 

@@ -288,6 +288,25 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify an exception is thrown when TryGetLock gets an unexpected error.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify an exception is thrown when TryGetLock gets an unexpected error")]
+        public void VerifyTryGetLockThrowsException()
+        {
+            this.SetupJetGetLockToReturnError();
+            try
+            {
+                Api.TryGetLock(JET_SESID.Nil, JET_TABLEID.Nil, GetLockGrbit.Read);
+                Assert.Fail("Expected an EsentError exception");
+            }
+            catch (EsentErrorException)
+            {
+            }
+        }
+
+        /// <summary>
         /// A retrieve column function which always claims that the data in the column
         /// is larger than the passed in buffer.
         /// </summary>
@@ -359,6 +378,19 @@ namespace InteropApiTests
         {
             SetupResult.For(
                 this.jetApi.JetMove(JET_SESID.Nil, JET_TABLEID.Nil, 0, MoveGrbit.None))
+                .IgnoreArguments()
+                .Return((int)JET_err.ReadVerifyFailure);
+            this.mocks.ReplayAll();
+        }
+
+        /// <summary>
+        /// Create a mock implementation and setup the JetGetLock stub to return
+        /// an unexpected error.
+        /// </summary>
+        private void SetupJetGetLockToReturnError()
+        {
+            SetupResult.For(
+                this.jetApi.JetGetLock(JET_SESID.Nil, JET_TABLEID.Nil, GetLockGrbit.Read))
                 .IgnoreArguments()
                 .Return((int)JET_err.ReadVerifyFailure);
             this.mocks.ReplayAll();

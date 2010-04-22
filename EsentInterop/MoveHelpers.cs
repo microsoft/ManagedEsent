@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
 
     /// <summary>
     /// Helper methods for the ESENT API. These aren't interop versions
@@ -51,17 +52,14 @@ namespace Microsoft.Isam.Esent.Interop
         public static bool TryMoveFirst(JET_SESID sesid, JET_TABLEID tableid)
         {
             var err = (JET_err)Impl.JetMove(sesid, tableid, (int)JET_Move.First, MoveGrbit.None);
-            if (err >= JET_err.Success)
-            {
-                return true;
-            }
-            else if (JET_err.NoCurrentRecord == err)
+            if (JET_err.NoCurrentRecord == err)
             {
                 return false;
             }
 
             Api.Check((int)err);
-            throw new NotImplementedException("Unreachable code");
+            Debug.Assert(err >= JET_err.Success, "Exception should have been thrown in case of error");
+            return true;
         }
 
         /// <summary>
@@ -74,17 +72,14 @@ namespace Microsoft.Isam.Esent.Interop
         public static bool TryMoveLast(JET_SESID sesid, JET_TABLEID tableid)
         {
             var err = (JET_err)Impl.JetMove(sesid, tableid, (int)JET_Move.Last, MoveGrbit.None);
-            if (err >= JET_err.Success)
-            {
-                return true;
-            }
-            else if (JET_err.NoCurrentRecord == err)
+            if (JET_err.NoCurrentRecord == err)
             {
                 return false;
             }
 
             Api.Check((int)err);
-            throw new NotImplementedException("Unreachable code");
+            Debug.Assert(err >= JET_err.Success, "Exception should have been thrown in case of error");
+            return true;
         }
 
         /// <summary>
@@ -97,17 +92,14 @@ namespace Microsoft.Isam.Esent.Interop
         public static bool TryMoveNext(JET_SESID sesid, JET_TABLEID tableid)
         {
             var err = (JET_err)Impl.JetMove(sesid, tableid, (int)JET_Move.Next, MoveGrbit.None);
-            if (err >= JET_err.Success)
-            {
-                return true;
-            }
-            else if (JET_err.NoCurrentRecord == err)
+            if (JET_err.NoCurrentRecord == err)
             {
                 return false;
             }
 
             Api.Check((int)err);
-            throw new NotImplementedException("Unreachable code");
+            Debug.Assert(err >= JET_err.Success, "Exception should have been thrown in case of error");
+            return true;
         }
 
         /// <summary>
@@ -120,17 +112,14 @@ namespace Microsoft.Isam.Esent.Interop
         public static bool TryMovePrevious(JET_SESID sesid, JET_TABLEID tableid)
         {
             var err = (JET_err)Impl.JetMove(sesid, tableid, (int)JET_Move.Previous, MoveGrbit.None);
-            if (err >= JET_err.Success)
-            {
-                return true;
-            }
-            else if (JET_err.NoCurrentRecord == err)
+            if (JET_err.NoCurrentRecord == err)
             {
                 return false;
             }
 
             Api.Check((int)err);
-            throw new NotImplementedException("Unreachable code");
+            Debug.Assert(err >= JET_err.Success, "Exception should have been thrown in case of error");
+            return true;
         }
 
         /// <summary>
@@ -145,17 +134,14 @@ namespace Microsoft.Isam.Esent.Interop
         public static bool TrySeek(JET_SESID sesid, JET_TABLEID tableid, SeekGrbit grbit)
         {
             var err = (JET_err)Impl.JetSeek(sesid, tableid, grbit);
-            if (err >= JET_err.Success)
-            {
-                return true;
-            }
-            else if (JET_err.RecordNotFound == err)
+            if (JET_err.RecordNotFound == err)
             {
                 return false;
             }
 
             Api.Check((int)err);
-            throw new NotImplementedException("Unreachable code");
+            Debug.Assert(err >= JET_err.Success, "Exception should have been thrown in case of error");
+            return true;
         }
 
         /// <summary>
@@ -172,17 +158,14 @@ namespace Microsoft.Isam.Esent.Interop
         public static bool TrySetIndexRange(JET_SESID sesid, JET_TABLEID tableid, SetIndexRangeGrbit grbit)
         {
             var err = (JET_err)Impl.JetSetIndexRange(sesid, tableid, grbit);
-            if (err >= JET_err.Success)
-            {
-                return true;
-            }
-            else if (JET_err.NoCurrentRecord == err)
+            if (JET_err.NoCurrentRecord == err)
             {
                 return false;
             }
 
             Api.Check((int)err);
-            throw new NotImplementedException("Unreachable code");
+            Debug.Assert(err >= JET_err.Success, "Exception should have been thrown in case of error");
+            return true;
         }
 
         /// <summary>

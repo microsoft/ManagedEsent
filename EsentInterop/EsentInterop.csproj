@@ -57,6 +57,7 @@
     <Compile Include="DateTimeColumnValue.cs" />
     <Compile Include="DoubleColumnValue.cs" />
     <Compile Include="FloatColumnValue.cs" />
+    <Compile Include="GetLockHelpers.cs" />
     <Compile Include="GuidColumnValue.cs" />
     <Compile Include="Int16ColumnValue.cs" />
     <Compile Include="Int32ColumnValue.cs" />

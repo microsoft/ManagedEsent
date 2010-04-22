@@ -12,7 +12,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Helper methods for the ESENT API. These do data conversion for
     /// JetMakeKey.
-    /// </summary>
+        /// </summary>
     public static partial class Api
     {
         /// <summary>
