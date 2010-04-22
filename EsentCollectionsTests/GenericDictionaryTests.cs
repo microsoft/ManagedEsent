@@ -363,6 +363,8 @@ namespace EsentCollectionsTests
 
             var query = from x in dictionary where x.Key.CompareTo(key) == 0 select x.Value;
             Assert.AreEqual(value, query.Single(), "Where == failed");
+            query = from x in dictionary where x.Key.CompareTo(key) == 0 select x.Value;
+            Assert.AreEqual(value, query.Reverse().Single(), "Where == failed (reversed)");
             query = from x in dictionary where x.Key.CompareTo(key) <= 0 select x.Value;
             Assert.AreEqual(value, query.Single(), "Where <= failed");
             query = from x in dictionary where x.Key.CompareTo(key) >= 0 select x.Value;
@@ -400,6 +402,8 @@ namespace EsentCollectionsTests
 
             var query = from x in dictionary.Keys where x.CompareTo(key) == 0 select x;
             Assert.AreEqual(key, query.Single(), "Where == failed");
+            query = from x in dictionary.Keys where x.CompareTo(key) == 0 select x;
+            Assert.AreEqual(key, query.Reverse().Single(), "Where == failed (reversed)");
             query = from x in dictionary.Keys where x.CompareTo(key) <= 0 select x;
             Assert.AreEqual(key, query.Single(), "Where <= failed");
             query = from x in dictionary.Keys where x.CompareTo(key) >= 0 select x;
