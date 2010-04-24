@@ -691,6 +691,7 @@ class EseDBCursor(object):
         self._keycolumnid = keycolumnid
         self._valuecolumnid = valuecolumnid
         self._isopen = True
+        self._encoding = Encoding.Unicode
         
     def __del__(self):
         """Called when garbage collection is removing the object. Close it."""
@@ -1407,7 +1408,7 @@ class EseDBCursor(object):
         
     def _setKeyColumn(self, key):
         """Sets the key column. An update should be prepared."""
-        Api.SetColumn(self._sesid, self._tableid, self._keycolumnid, str(key), Encoding.Unicode)
+        Api.SetColumn(self._sesid, self._tableid, self._keycolumnid, str(key), self._encoding)
 
     def _setValueColumn(self, value):
         """Sets the value column. An update should be prepared."""
@@ -1418,11 +1419,11 @@ class EseDBCursor(object):
             data = None
         else:
             data = str(value)        
-        Api.SetColumn(self._sesid, self._tableid, self._valuecolumnid, data, Encoding.Unicode, SetColumnGrbit.IntrinsicLV)
+        Api.SetColumn(self._sesid, self._tableid, self._valuecolumnid, data, self._encoding, SetColumnGrbit.IntrinsicLV)
                 
     def _makeKey(self, key):
         """Construct a key for the given value."""
-        Api.MakeKey(self._sesid, self._tableid, str(key), Encoding.Unicode, MakeKeyGrbit.NewKey)
+        Api.MakeKey(self._sesid, self._tableid, str(key), self._encoding, MakeKeyGrbit.NewKey)
 
     def _seekForKey(self, key):
         """Seek for the specified key. A KeyError exception is raised if the

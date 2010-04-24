@@ -950,7 +950,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                     cbKey = indexKey.Length,
                     pidxUnicode = new JET_UNICODEINDEX
                     {
-                        lcid = CultureInfo.InvariantCulture.LCID,
+                        lcid = CultureInfo.CurrentCulture.LCID,
                         dwMapFlags = Conversions.LCMapFlagsFromCompareOptions(CompareOptions.None),
                     },
                 },
