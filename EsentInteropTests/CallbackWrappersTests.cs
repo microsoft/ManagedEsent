@@ -301,6 +301,7 @@ namespace InteropApiTests
             WeakReference weakRef = new WeakReference(wrapper.NativeCallback);
             RunFullGarbageCollection();
             Assert.IsTrue(weakRef.IsAlive);
+            GC.KeepAlive(wrapper);
         }
 
         /// <summary>
