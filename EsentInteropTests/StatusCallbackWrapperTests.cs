@@ -53,7 +53,7 @@ namespace InteropApiTests
 
             unsafe
             {
-                wrapper.Callback(
+                wrapper.NativeCallback(
                     this.sesid.Value,
                     (uint) JET_SNP.Backup,
                     (uint) JET_SNT.Progress,
@@ -78,7 +78,7 @@ namespace InteropApiTests
                     throw new ArgumentException();
                 });
 
-            Assert.AreEqual(JET_err.CallbackFailed, wrapper.Callback(this.sesid.Value, 0, 0, IntPtr.Zero));
+            Assert.AreEqual(JET_err.CallbackFailed, wrapper.NativeCallback(this.sesid.Value, 0, 0, IntPtr.Zero));
 
             try
             {
@@ -106,7 +106,7 @@ namespace InteropApiTests
                     return JET_err.Success;
                 });
 
-            Assert.AreEqual(JET_err.CallbackFailed, wrapper.Callback(this.sesid.Value, 0, 0, IntPtr.Zero));
+            Assert.AreEqual(JET_err.CallbackFailed, wrapper.NativeCallback(this.sesid.Value, 0, 0, IntPtr.Zero));
 
             try
             {
@@ -118,6 +118,25 @@ namespace InteropApiTests
                 // expected
                 Thread.ResetAbort();
             }
+        }
+
+        /// <summary>
+        /// Verify that the NativeCallback isn't garbage collected.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that the NativeCallback isn't garbage collected")]
+        public void VerifyNativeCallbackIsNotGarbageCollected()
+        {
+            var wrapper = new StatusCallbackWrapper(
+                (session, snp, snt, snprog) =>
+                {
+                    throw new InvalidOperationException();
+                });
+
+            WeakReference weakRef = new WeakReference(wrapper.NativeCallback);
+            GC.Collect();
+            Assert.IsTrue(weakRef.IsAlive);
         }
     }
 }

@@ -64,6 +64,12 @@ namespace Microsoft.Isam.Esent.Interop
         private readonly JET_PFNSTATUS wrappedCallback;
 
         /// <summary>
+        /// The native version of the callback. This will be a closure (because we are wrapping
+        /// a non-static method) so keep track of it here to make sure it isn't garbage collected.
+        /// </summary>
+        private readonly NATIVE_PFNSTATUS nativeCallback;
+
+        /// <summary>
         /// Initializes static members of the <see cref="StatusCallbackWrapper"/> class. 
         /// </summary>
         static StatusCallbackWrapper()
@@ -86,16 +92,17 @@ namespace Microsoft.Isam.Esent.Interop
         public StatusCallbackWrapper(JET_PFNSTATUS wrappedCallback)
         {
             this.wrappedCallback = wrappedCallback;
+            this.nativeCallback = this.CallbackImpl;
         }
 
         /// <summary>
         /// Gets a NATIVE_PFNSTATUS callback that wraps the managed callback.
         /// </summary>
-        public NATIVE_PFNSTATUS Callback
+        public NATIVE_PFNSTATUS NativeCallback
         {
             get
             {
-                return this.CallbackImpl;
+                return this.nativeCallback;
             }
         }
 

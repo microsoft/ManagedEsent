@@ -52,6 +52,13 @@ namespace Microsoft.Isam.Esent.Interop
         private readonly WeakReference wrappedCallback;
 
         /// <summary>
+        /// The native version of the callback. This will actually be a closure
+        /// because we are calling a non-static method. Keep track of it here
+        /// to make sure that it isn't garbage collected.
+        /// </summary>
+        private readonly NATIVE_CALLBACK nativeCallback;
+
+        /// <summary>
         /// Initializes static members of the <see cref="JetCallbackWrapper"/> class. 
         /// </summary>
         static JetCallbackWrapper()
@@ -74,6 +81,7 @@ namespace Microsoft.Isam.Esent.Interop
         public JetCallbackWrapper(JET_CALLBACK callback)
         {
             this.wrappedCallback = new WeakReference(callback);
+            this.nativeCallback = this.CallbackImpl;
             Debug.Assert(this.wrappedCallback.IsAlive, "Callback isn't alive");
         }
 
@@ -92,11 +100,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets a NATIVE_CALLBACK callback that wraps the managed callback.
         /// </summary>
-        public NATIVE_CALLBACK Callback
+        public NATIVE_CALLBACK NativeCallback
         {
             get
             {
-                return this.CallbackImpl;
+                return this.nativeCallback;
             }
         }
 

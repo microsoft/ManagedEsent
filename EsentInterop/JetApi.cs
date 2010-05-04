@@ -317,17 +317,17 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
                 JetCallbackWrapper wrapper = this.callbackWrappers.Add(paramValue);
                 this.callbackWrappers.Collect();
-                unsafe
-                {
-                    return
-                        this.Err(
-                            NativeMethods.JetSetSystemParameter(
-                                pinstance,
-                                sesid.Value,
-                                (uint) paramid,
-                                Marshal.GetFunctionPointerForDelegate(wrapper.Callback),
-                                paramString));
-                }
+                IntPtr functionPointer = Marshal.GetFunctionPointerForDelegate(wrapper.NativeCallback);
+#if DEBUG
+                GC.Collect();
+#endif
+                return this.Err(
+                        NativeMethods.JetSetSystemParameter(
+                            pinstance,
+                            sesid.Value,
+                            (uint) paramid,
+                            functionPointer,
+                            paramString));
             }
         }
 
@@ -598,18 +598,21 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
 
             var callbackWrapper = new StatusCallbackWrapper(statusCallback);
-            IntPtr nativeCallback = (null == statusCallback) ? IntPtr.Zero : Marshal.GetFunctionPointerForDelegate(callbackWrapper.Callback);
+            IntPtr functionPointer = (null == statusCallback) ? IntPtr.Zero : Marshal.GetFunctionPointerForDelegate(callbackWrapper.NativeCallback);
+#if DEBUG
+            GC.Collect();
+#endif
 
             int err;
             if (this.Capabilities.SupportsUnicodePaths)
             {
                 err = this.Err(NativeMethods.JetCompactW(
-                            sesid.Value, sourceDatabase, destinationDatabase, nativeCallback, IntPtr.Zero, (uint)grbit));
+                            sesid.Value, sourceDatabase, destinationDatabase, functionPointer, IntPtr.Zero, (uint)grbit));
             }
             else
             {
                 err = this.Err(NativeMethods.JetCompact(
-                            sesid.Value, sourceDatabase, destinationDatabase, nativeCallback, IntPtr.Zero, (uint)grbit));
+                            sesid.Value, sourceDatabase, destinationDatabase, functionPointer, IntPtr.Zero, (uint)grbit));
             }
 
             callbackWrapper.ThrowSavedException();
@@ -694,16 +697,18 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.TraceFunctionCall("JetBackupInstance");
 
             var callbackWrapper = new StatusCallbackWrapper(statusCallback);
-            IntPtr nativeCallback = (null == statusCallback) ? IntPtr.Zero : Marshal.GetFunctionPointerForDelegate(callbackWrapper.Callback);
-
+            IntPtr functionPointer = (null == statusCallback) ? IntPtr.Zero : Marshal.GetFunctionPointerForDelegate(callbackWrapper.NativeCallback);
+#if DEBUG
+            GC.Collect();
+#endif
             int err;
             if (this.Capabilities.SupportsUnicodePaths)
             {
-                err = this.Err(NativeMethods.JetBackupInstanceW(instance.Value, destination, (uint)grbit, nativeCallback));
+                err = this.Err(NativeMethods.JetBackupInstanceW(instance.Value, destination, (uint)grbit, functionPointer));
             }
             else
             {
-                err = this.Err(NativeMethods.JetBackupInstance(instance.Value, destination, (uint)grbit, nativeCallback));                
+                err = this.Err(NativeMethods.JetBackupInstance(instance.Value, destination, (uint)grbit, functionPointer));                
             }
 
             callbackWrapper.ThrowSavedException();
@@ -736,16 +741,19 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.CheckNotNull(source, "source");
 
             var callbackWrapper = new StatusCallbackWrapper(statusCallback);
-            IntPtr nativeCallback = (null == statusCallback) ? IntPtr.Zero : Marshal.GetFunctionPointerForDelegate(callbackWrapper.Callback);
+            IntPtr functionPointer = (null == statusCallback) ? IntPtr.Zero : Marshal.GetFunctionPointerForDelegate(callbackWrapper.NativeCallback);
+#if DEBUG
+            GC.Collect();
+#endif
 
             int err;
             if (this.Capabilities.SupportsUnicodePaths)
             {
-                err = this.Err(NativeMethods.JetRestoreInstanceW(instance.Value, source, destination, nativeCallback));                
+                err = this.Err(NativeMethods.JetRestoreInstanceW(instance.Value, source, destination, functionPointer));                
             }
             else
             {
-                err = this.Err(NativeMethods.JetRestoreInstance(instance.Value, source, destination, nativeCallback));                
+                err = this.Err(NativeMethods.JetRestoreInstance(instance.Value, source, destination, functionPointer));                
             }
 
             callbackWrapper.ThrowSavedException();
@@ -3005,7 +3013,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 sesid.Value,
                 tableid.Value,
                 unchecked((uint)cbtyp), 
-                this.callbackWrappers.Add(callback).Callback,
+                this.callbackWrappers.Add(callback).NativeCallback,
                 context,
                 out callbackId.Value));
         }
@@ -3112,19 +3120,22 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             uint nativePasses = unchecked((uint)passes);
             uint nativeSeconds = unchecked((uint)seconds);
 
-            IntPtr nativeCallback;
+            IntPtr functionPointer;
             if (null == callback)
             {
-                nativeCallback = IntPtr.Zero;
+                functionPointer = IntPtr.Zero;
             }
             else
             {
                 JetCallbackWrapper callbackWrapper = this.callbackWrappers.Add(callback);
-                nativeCallback = Marshal.GetFunctionPointerForDelegate(callbackWrapper.Callback);
+                functionPointer = Marshal.GetFunctionPointerForDelegate(callbackWrapper.NativeCallback);
+#if DEBUG
+                GC.Collect();
+#endif
             }
 
             int err = this.Err(NativeMethods.JetDefragment2(
-                sesid.Value, dbid.Value, tableName, ref nativePasses, ref nativeSeconds, nativeCallback, (uint)grbit));
+                sesid.Value, dbid.Value, tableName, ref nativePasses, ref nativeSeconds, functionPointer, (uint)grbit));
             passes = unchecked((int)nativePasses);
             seconds = unchecked((int)nativeSeconds);
             this.callbackWrappers.Collect();

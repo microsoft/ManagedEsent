@@ -44,7 +44,7 @@ namespace InteropApiTests
                     return JET_err.Success;
                 });
 
-            wrapper.Callback(IntPtr.Zero, 0, IntPtr.Zero, 0, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+            wrapper.NativeCallback(IntPtr.Zero, 0, IntPtr.Zero, 0, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
             Assert.IsTrue(callbackWasCalled);
         }
 
@@ -89,7 +89,7 @@ namespace InteropApiTests
 
             Assert.AreEqual(
                 JET_err.WriteConflict,
-                wrapper.Callback(IntPtr.Zero, 0, IntPtr.Zero, 0, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero));
+                wrapper.NativeCallback(IntPtr.Zero, 0, IntPtr.Zero, 0, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero));
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace InteropApiTests
                     return JET_err.Success;
                 });
 
-            wrapper.Callback(
+            wrapper.NativeCallback(
                 expectedSesid.Value,
                 expectedDbid.Value,
                 expectedTableid.Value,
@@ -164,7 +164,7 @@ namespace InteropApiTests
 
             Assert.AreEqual(
                 JET_err.CallbackFailed,
-                wrapper.Callback(IntPtr.Zero, 0, IntPtr.Zero, 0, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero));
+                wrapper.NativeCallback(IntPtr.Zero, 0, IntPtr.Zero, 0, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero));
         }
 
         /// <summary>
@@ -284,6 +284,23 @@ namespace InteropApiTests
             long memory = memoryAtEnd - memoryAtStart;
             Console.WriteLine("{0:N0} bytes used", memory);
             Assert.IsTrue(memory < 1024 * 1024, "Test used too much memory. JetCallbackWrapper objects weren't collected.");
+        }
+
+        /// <summary>
+        /// Verify that the NativeCallback isn't garbage collected.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that the NativeCallback isn't garbage collected")]
+        public void VerifyNativeCallbackIsNotGarbageCollected()
+        {
+            JET_CALLBACK callback = CreateCallback();
+
+            var callbackWrappers = new CallbackWrappers();
+            JetCallbackWrapper wrapper = callbackWrappers.Add(callback);
+            WeakReference weakRef = new WeakReference(wrapper.NativeCallback);
+            RunFullGarbageCollection();
+            Assert.IsTrue(weakRef.IsAlive);
         }
 
         /// <summary>
