@@ -828,6 +828,59 @@ namespace InteropApiTests
 
         #endregion
 
+        #region Meta-data Helpers
+
+        /// <summary>
+        /// Verify that an exception is thrown when TryOpenTable gets a null table name.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that an exception is thrown when TryOpenTable gets a null table name")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyTryOpenTableThrowsExceptionWhenTableNameIsNull()
+        {
+            JET_TABLEID t;
+            Api.TryOpenTable(this.sesid, this.dbid, null, OpenTableGrbit.None, out t);
+        }
+
+        /// <summary>
+        /// Verify that an exception is thrown when GetTableColumnid gets a null column name.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that an exception is thrown when GetTableColumnid gets a null column name")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyGetTableColumnidThrowsExceptionWhenColumnNameIsNull()
+        {
+            Api.GetTableColumnid(this.sesid, this.tableid, null);
+        }
+
+        /// <summary>
+        /// Verify that an exception is thrown when GetTableColumns gets a null table name.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that an exception is thrown when GetTableColumns gets a null table name")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyGetTableColumnsThrowsExceptionWhenTableNameIsNull()
+        {
+            Api.GetTableColumns(this.sesid, this.dbid, null);
+        }
+
+        /// <summary>
+        /// Verify that an exception is thrown when GetTableIndexes gets a null table name.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that an exception is thrown when GetTableIndexes gets a null table name")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyGetTableIndexesThrowsExceptionWhenTableNameIsNull()
+        {
+            Api.GetTableIndexes(this.sesid, this.dbid, null);
+        }
+
+        #endregion
+
         #region Temporary Table Creation
 
         /// <summary>

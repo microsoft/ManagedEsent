@@ -5,7 +5,7 @@
   <add recursive='true'>*.resharper</add>
   <add recursive='true'>*.suo</add>
   <add recursive='true'>*.user</add>
-  <add>*.xml</add>
+  <add recursive='true'>Esent.Interop.xml</add>
   <add recursive='true'>StyleCop.Cache</add>
   <add recursive='true'>Debug</add>
   <add recursive='true'>Release</add>

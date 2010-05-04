@@ -202,7 +202,7 @@ namespace InteropApiTests
                 "Memory changed by {0} bytes ({1} GC cycles)",
                 memoryDelta,
                 collectionCountAtEnd - collectionCountAtStart);
-            Assert.IsTrue(memoryDelta < 1024 * 0124, "Too much memory used. Memory leak?");
+            Assert.IsTrue(memoryDelta < 1024 * 1024, "Too much memory used. Memory leak?");
         }
 
         /// <summary>

@@ -162,6 +162,32 @@ namespace InteropApiTests
         #endregion
 
         /// <summary>
+        /// Make sure TryOpenTable opens the table when it exists.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Verify TryOpenTable returns true when the table exists")]
+        public void VerifyTryOpenTableReturnsTrueWhenTableExists()
+        {
+            JET_TABLEID t;
+            Assert.IsTrue(Api.TryOpenTable(this.sesid, this.dbid, this.table, OpenTableGrbit.ReadOnly, out t));
+            Assert.AreNotEqual(t, JET_TABLEID.Nil);
+            Api.JetCloseTable(this.sesid, t);
+        }
+
+        /// <summary>
+        /// Make sure TryOpenTable returns false when the table doesn't exist.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Verify TryOpenTable returns false when the table doesn't exist")]
+        public void VerifyTryOpenTableReturnsFalseWhenTableDoesNotExist()
+        {
+            JET_TABLEID t;
+            Assert.IsFalse(Api.TryOpenTable(this.sesid, this.dbid, "nosuchtable", OpenTableGrbit.ReadOnly, out t));
+        }
+
+        /// <summary>
         /// Repeatedly retrieve meta-data. This is looking for bugs where we don't
         /// release the temp table used to retrieve the data.
         /// </summary>

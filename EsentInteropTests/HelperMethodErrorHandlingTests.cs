@@ -85,6 +85,26 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify an exception is thrown when TryOpenTable gets an unexpected error.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify an exception is thrown when TryOpenTable gets an unexpected error")]
+        public void VerifyTryOpenTableThrowsException()
+        {
+            this.SetupJetOpenTableToReturnError();
+            try
+            {
+                JET_TABLEID tableid;
+                Api.TryOpenTable(JET_SESID.Nil, JET_DBID.Nil, "table", OpenTableGrbit.None, out tableid);
+                Assert.Fail("Expected an EsentError exception");
+            }
+            catch (EsentErrorException)
+            {
+            }
+        }
+
+        /// <summary>
         /// Verify an exception is thrown when TryMoveFirst gets an unexpected error.
         /// </summary>
         [TestMethod]
@@ -354,6 +374,21 @@ namespace InteropApiTests
                     null))
                 .IgnoreArguments()
                 .Do(new RetrieveColumnDelegate(BadRetrieveColumn));
+            this.mocks.ReplayAll();
+        }
+
+        /// <summary>
+        /// Create a mock implementation and setup the JetOpenTable stub to return
+        /// an unexpected error.
+        /// </summary>
+        private void SetupJetOpenTableToReturnError()
+        {
+            JET_TABLEID tableid;
+            SetupResult.For(
+                this.jetApi.JetOpenTable(JET_SESID.Nil, JET_DBID.Nil, String.Empty, null, 0, OpenTableGrbit.None, out tableid))
+                .IgnoreArguments()
+                .OutRef(JET_TABLEID.Nil)
+                .Return((int)JET_err.ReadVerifyFailure);
             this.mocks.ReplayAll();
         }
 
