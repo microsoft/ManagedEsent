@@ -42,6 +42,7 @@
     <Compile Include="Cleanup.cs" />
     <Compile Include="EnumerableAssert.cs" />
     <Compile Include="GenericDictionaryTests.cs" />
+    <Compile Include="DictionaryInterfaceTests.cs" />
     <Compile Include="StringDictionaryLinqTests.cs" />
     <Compile Include="DictionaryAssert.cs" />
     <Compile Include="DictionaryLinqTests.cs" />
