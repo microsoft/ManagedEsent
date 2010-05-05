@@ -61,6 +61,7 @@
     <Compile Include="BasicDDLTests.cs" />
     <Compile Include="CallbackWrappersTests.cs" />
     <Compile Include="ColumnValueTests.cs" />
+    <Compile Include="HowDoI.cs" />
     <Compile Include="JetGetThreadStatsTests.cs" />
     <Compile Include="JetSetGetLs.cs" />
     <Compile Include="MakeKeyHelpersTests.cs" />
