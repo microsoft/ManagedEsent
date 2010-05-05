@@ -257,13 +257,10 @@ namespace InteropApiTests
 
             // This pattern can be used to enumerate all records in a table/index.
             int? sum = 0;
-            if (Api.TryMoveFirst(sesid, tableid))
+            Api.MoveBeforeFirst(sesid, tableid);
+            while (Api.TryMoveNext(sesid, tableid))
             {
-                do
-                {
-                    sum += Api.RetrieveColumnAsInt32(sesid, tableid, dataColumn);
-                }
-                while (Api.TryMoveNext(sesid, tableid));
+                sum += Api.RetrieveColumnAsInt32(sesid, tableid, dataColumn);
             }
 
             Assert.AreEqual(45, (int)sum);

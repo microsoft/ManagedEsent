@@ -62,10 +62,10 @@ namespace SampleApp
             // EsentErrorException).
             CreateDatabase(DatabaseName);
 
-            // Now the database has been created we can attach to it
-            // An instance object is disposable so the underlying esent resource
-            // can be freed. The disposable objects wrapped around esent resources
-            // _must_ be disposed properly. Esent resources must be freed in a
+            // Now the database has been created we can attach to it.
+            // The Instance object we create is disposable, so the underlying ESENT
+            // resource can be freed. The disposable objects wrapped around ESENT resources
+            // _must_ be disposed properly. ESENT resources must be freed in a
             // specific order, which the finalizer doesn't necessarily respect.
             using (var instance = new Instance("stocksample"))
             {
@@ -73,8 +73,8 @@ namespace SampleApp
                 // This is done to allow some parameters to be set
                 // before the instance is initialized.
 
-                // Circular logging is very useful, causing logfiles that are
-                // no longer needed are automatically deleted. Most applications
+                // Circular logging is very useful; it automatically deletes
+                // logfiles that are no longer needed. Most applications
                 // should use it.
                 instance.Parameters.CircularLog = true;
 
@@ -85,7 +85,7 @@ namespace SampleApp
 
                 // Create a disposable wrapper around a new JET_SESID. All database
                 // access is done with a session (JET_SESID). Transactions and database
-                // record visibility are per-session. Do not share sessions between
+                // record visibility is per-session. Do not share sessions between
                 // threads, instead create different sessions for different threads.
                 using (var session = new Session(instance))
                 {
@@ -94,7 +94,7 @@ namespace SampleApp
                     // The database only has to be attached once per instance, but each
                     // session has to open the database. Redundant JetAttachDatabase calls
                     // are safe to make though.
-                    // Here we use the fact that Instance, Session and Table object all have
+                    // Here we use the fact that Instance, Session, and Table objects all have
                     // implicit conversions to the underlying JET_* types. This allows the
                     // disposable wrappers to be used with any APIs that expect the JET_*
                     // structures.
@@ -110,69 +110,69 @@ namespace SampleApp
                     using (var table = new Table(session, dbid, TableName, OpenTableGrbit.None))
                     {
                         // Load the columnids from the table. This should be done each time the database is attached
-                        // as an offline defrag (esentutl /d) can change the name => columnid mapping.
+                        // because an offline defrag (esentutl /d) can change the name => columnid mapping.
                         IDictionary<string, JET_COLUMNID> columnids = Api.GetColumnDictionary(session, table);
                         columnidSymbol = columnids["symbol"];
                         columnidName = columnids["name"];
                         columnidPrice = columnids["price"];
                         columnidShares = columnids["shares_owned"];
 
-                        // Dump records by the primary index, this will be stock symbol order
+                        // Dump records by the primary index; this will be in stock symbol order.
                         Console.WriteLine("** Populating the table");
                         PopulateTable(session, table);
                         DumpByIndex(session, table, null);
 
-                        // The shares index is sparse, it only contains records where the
+                        // The shares index is sparse; it only contains records where the
                         // shares_owned column is non null.
                         Console.WriteLine("** Owned shares");
                         DumpByIndex(session, table, "shares");
 
-                        // Use the price index to find stocks sorted by price
+                        // Use the price index to find stocks sorted by price.
                         Console.WriteLine("** Sorted by price");
                         DumpByIndex(session, table, "price");
 
-                        // Seek and update an existing record
+                        // Seek to, and update an existing record.
                         Console.WriteLine("** Updating owned shares");
                         BuyShares(session, table, "SBUX", 50);
                         BuyShares(session, table, "MSFT", 100);
                         DumpByIndex(session, table, "shares");
 
-                        // Delete a record
+                        // Delete a record.
                         Console.WriteLine("** Deleting EBAY");
                         DeleteStock(session, table, "EBAY");
                         DumpByIndex(session, table, "name");
 
-                        // Create an index range over a prefix
+                        // Create an index range over a prefix.
                         Console.WriteLine("** Company names starting with 'app'");
                         DumpByNamePrefix(session, table, "app");
 
-                        // An empty index range
+                        // Create an empty index range.
                         Console.WriteLine("** Company names starting with 'xyz'");
                         DumpByNamePrefix(session, table, "xyz");
 
-                        // An index range over multiple records
+                        // Create an index range over multiple records.
                         Console.WriteLine("** Company names starting with 'm'");
                         DumpByNamePrefix(session, table, "m");
 
-                        // Move to the start of an index
+                        // Move to the start of an index.
                         Console.WriteLine("** Lowest price");
                         Api.JetSetCurrentIndex(session, table, "price");
                         Api.JetMove(session, table, JET_Move.First, MoveGrbit.None);
                         PrintOneRow(session, table);
                         Console.WriteLine();
 
-                        // Move to the end of an index
+                        // Move to the end of an index.
                         Console.WriteLine("** Highest price");
                         Api.JetSetCurrentIndex(session, table, "price");
                         Api.JetMove(session, table, JET_Move.Last, MoveGrbit.None);
                         PrintOneRow(session, table);
                         Console.WriteLine();
 
-                        // Create a range between two values
+                        // Create a index range between two values.
                         Console.WriteLine("** Prices fom $10-$20");
                         DumpPriceRange(session, table, 1000, 2000);
 
-                        // Use intersect indexes to find records that meet multiple criteria
+                        // Use intersect indexes to find records that meet multiple criteria.
                         Console.WriteLine("** Select by name and price");
                         IntersectIndexes(session, table, "Apple", "Pear", 1000, 2000);
                     }
@@ -200,7 +200,7 @@ namespace SampleApp
         /// <param name="tableid">The table to use.</param>
         private static void PopulateTable(JET_SESID sesid, JET_TABLEID tableid)
         {
-            // Create a disposable wrapper around JetBeginTransaction and JetCommitTransaction
+            // Create a disposable wrapper around JetBeginTransaction and JetCommitTransaction.
             using (var transaction = new Transaction(sesid))
             {
                 InsertOneStock(sesid, tableid, "SBUX", "Starbucks Corp.", 988, 0);
@@ -214,7 +214,7 @@ namespace SampleApp
                 InsertOneStock(sesid, tableid, "IBM", "International Business Machines Corp.", 8352, 150);
                 InsertOneStock(sesid, tableid, "EBAY", "eBay Inc.", 1445, 0);
 
-                // Commit the transaction at the end of the using block
+                // Commit the transaction at the end of the using block!
                 // If transaction.Commit isn't called then the transaction will 
                 // automatically rollback when disposed (throwing away
                 // the records that were just inserted).
@@ -240,30 +240,30 @@ namespace SampleApp
             int price,
             int sharesOwned)
         {
-            // Prepare an update, set some columns and then save the update.
-            // First, create a disposable wrapper around JetPrepareUpdate and JetUpdate.
+            // Prepare an update, set some columns, and then save the update.
+            // First create a disposable wrapper around JetPrepareUpdate and JetUpdate.
             using (var update = new Update(sesid, tableid, JET_prep.Insert))
             {
                 Api.SetColumn(sesid, tableid, columnidSymbol, symbol, Encoding.Unicode);
                 Api.SetColumn(sesid, tableid, columnidName, name, Encoding.Unicode);
                 Api.SetColumn(sesid, tableid, columnidPrice, price);
 
-                // The column defaults to null. Only set it if we have some shares.
+                // This column defaults to null. Only set it if we have some shares.
                 if (0 != sharesOwned)
                 {
                     Api.SetColumn(sesid, tableid, columnidShares, sharesOwned);
                 }
 
-                // Save the update at the end of the using block.
+                // Save the update at the end of the using block!
                 // If update.Save isn't called then the update will 
-                // be cancelled when disposed (and the record won't
+                // be canceled when disposed (and the record won't
                 // be inserted).
                 //
                 // Inserting a record does not change the location of
-                // the cursor (JET_TABLEID), it will have the same
-                // location that it did before the insert. In order
-                // to insert a record and then position the cursor
-                // on the record use Update.SaveAndGotoBookmark. That
+                // the cursor (JET_TABLEID); it will have the same
+                // location that it did before the insert.
+                // To insert a record and then position the cursor
+                // on the record, use Update.SaveAndGotoBookmark. That
                 // call uses the bookmark returned from JetUpdate to
                 // position the tableid on the new record.
                 update.Save();
@@ -271,7 +271,7 @@ namespace SampleApp
         }
 
         /// <summary>
-        /// Increment the number of shares.
+        /// Increment the number of shares for a specified symbol.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The table to insert into.</param>
@@ -283,8 +283,9 @@ namespace SampleApp
             string symbol,
             int shares)
         {
-            // Get the current value of the column, prepare an update,
-            // set the column to the new value and the save the update
+            // Seek to the record, get the current value of the column,
+            // prepare an update, set the column to the new value and the
+            // save the update.
             using (var transaction = new Transaction(sesid))
             {
                 SeekToSymbol(sesid, tableid, symbol);
@@ -295,14 +296,14 @@ namespace SampleApp
                 {
                     Api.SetColumn(sesid, tableid, columnidShares, newShares);
 
-                    // Save the update at the end of the using block.
+                    // Save the update at the end of the using block!
                     // If update.Save isn't called then the update will 
                     // be cancelled when disposed (undoing the updates 
                     // to the record).
                     update.Save();
                 }
 
-                // Commit the transaction at the end of the using block
+                // Commit the transaction at the end of the using block!
                 // If transaction.Commit isn't called then the transaction will 
                 // automatically rollback when disposed (throwing away
                 // the changes to the record).
@@ -313,7 +314,7 @@ namespace SampleApp
         /// <summary>
         /// Delete the stock with the given symbol.
         /// </summary>
-        /// <param name="sesid">The session to ue.</param>
+        /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The table cursor to use.</param>
         /// <param name="symbol">The symbol to delete.</param>
         private static void DeleteStock(JET_SESID sesid, JET_TABLEID tableid, string symbol)
@@ -324,7 +325,7 @@ namespace SampleApp
                 SeekToSymbol(sesid, tableid, symbol);
                 Api.JetDelete(sesid, tableid);
 
-                // Commit the transaction at the end of the using block
+                // Commit the transaction at the end of the using block!
                 // If transaction.Commit isn't called then the transaction will 
                 // automatically rollback when disposed (undeleting the record).
                 transaction.Commit(CommitTransactionGrbit.None);
@@ -339,7 +340,7 @@ namespace SampleApp
         /// <param name="symbol">The symbol to seek for.</param>
         private static void SeekToSymbol(JET_SESID sesid, JET_TABLEID tableid, string symbol)
         {
-            // We need to be on the primary index (which is over the 'symbol' column)
+            // We need to be on the primary index (which indexes the 'symbol' column).
             Api.JetSetCurrentIndex(sesid, tableid, null);
             Api.MakeKey(sesid, tableid, symbol, Encoding.Unicode, MakeKeyGrbit.NewKey);
 
@@ -350,28 +351,31 @@ namespace SampleApp
         }
 
         /// <summary>
-        /// Dump all records from the index whose name has the given prefix.
+        /// Dump all records where the name has the given prefix.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The table to dump.</param>
         /// <param name="namePrefix">The prefix to use.</param>
         private static void DumpByNamePrefix(JET_SESID sesid, JET_TABLEID tableid, string namePrefix)
         {
-            // Set up an index range on the name index.
+            // We are about to set up an index range on the name index.
             Api.JetSetCurrentIndex(sesid, tableid, "name");
 
-            // First, seek to the beginning of the range
+            // First, seek to the beginning of the range.
             Api.MakeKey(sesid, tableid, namePrefix, Encoding.Unicode, MakeKeyGrbit.NewKey);
             if (Api.TrySeek(sesid, tableid, SeekGrbit.SeekGE))
             {
-                // We have at least one record. Now create the end of the index range.
+                // We are on the first record with name >= namePrefix. This record may not
+                // be in the index range! We will now set the end of the index range, which
+                // will tell us if the range is empty.
                 Api.MakeKey(sesid, tableid, namePrefix, Encoding.Unicode, MakeKeyGrbit.NewKey | MakeKeyGrbit.SubStrLimit);
-                Api.JetSetIndexRange(sesid, tableid, SetIndexRangeGrbit.RangeUpperLimit | SetIndexRangeGrbit.RangeInclusive);
-                
-                // There are records in the range. We can now iterate through the range.
-                // When the end of the range is hit we will get a 'no more records' error and
-                // the range will be removed (so subsequent moves will go to the end of the table).
-                PrintRecordsToEnd(sesid, tableid);
+                if (Api.TrySetIndexRange(sesid, tableid, SetIndexRangeGrbit.RangeUpperLimit | SetIndexRangeGrbit.RangeInclusive))
+                {
+                    // There are records in the range. We can now iterate through the range.
+                    // When the end of the range is hit we will get a 'no more records' error and
+                    // the range will be removed (so subsequent moves will go to the end of the table).
+                    PrintRecordsToEnd(sesid, tableid);
+                }
             }
 
             Console.WriteLine();
@@ -386,21 +390,21 @@ namespace SampleApp
         /// <param name="high">The high end of the price range.</param>
         private static void DumpPriceRange(JET_SESID sesid, JET_TABLEID tableid, int low, int high)
         {
-            // Set up an index range on the name index.
+            // We are about to set up an index range on the price index.
             Api.JetSetCurrentIndex(sesid, tableid, "price");
 
             // First, seek to the beginning of the range.
             Api.MakeKey(sesid, tableid, low, MakeKeyGrbit.NewKey);
             if (Api.TrySeek(sesid, tableid, SeekGrbit.SeekGE))
             {
-                // We have at least one record. Now create the (exclusive) end of the index range.
                 Api.MakeKey(sesid, tableid, high, MakeKeyGrbit.NewKey);
-                Api.JetSetIndexRange(sesid, tableid, SetIndexRangeGrbit.RangeUpperLimit);
-
-                // There are records in the range. We can now iterate through the range.
-                // When the end of the range is hit we will get a 'no more records' error and
-                // the range will be removed (so subsequent moves will go to the end of the table).
-                PrintRecordsToEnd(sesid, tableid);
+                if (Api.TrySetIndexRange(sesid, tableid, SetIndexRangeGrbit.RangeUpperLimit))
+                {
+                    // There are records in the range. We can now iterate through the range.
+                    // When the end of the range is hit we will get a 'no more records' error and
+                    // the range will be removed (so subsequent moves will go to the end of the table).
+                    PrintRecordsToEnd(sesid, tableid);
+                }
             }
 
             Console.WriteLine();
@@ -449,7 +453,8 @@ namespace SampleApp
             Api.JetSetIndexRange(sesid, priceIndex, SetIndexRangeGrbit.RangeInclusive | SetIndexRangeGrbit.RangeUpperLimit);
 
             // This call will generate a set of bookmarks. The bookmarks are
-            // returned in primary key (i.e. symbol) order.
+            // returned in primary key order (for this table that will be symbol
+            // order).
             foreach (byte[] bookmark in Api.IntersectIndexes(sesid, nameIndex, priceIndex))
             {
                 Api.JetGotoBookmark(sesid, tableid, bookmark, bookmark.Length);
@@ -499,10 +504,10 @@ namespace SampleApp
             string symbol = Api.RetrieveColumnAsString(sesid, tableid, columnidSymbol);
             string name = Api.RetrieveColumnAsString(sesid, tableid, columnidName);
 
-            // this column can't be null so we cast to an int
+            // This column can't be null so we cast to an int.
             int price = (int)Api.RetrieveColumnAsInt32(sesid, tableid, columnidPrice);
 
-            // this column can be null so we keep the nullable type
+            // This column can be null so we keep the nullable type.
             int? shares = Api.RetrieveColumnAsInt32(sesid, tableid, columnidShares);
 
             Console.Write("\t{0,-40} {1,-4} ${2,-6}", name, symbol, price / 100.0);
@@ -515,7 +520,7 @@ namespace SampleApp
         }
 
         /// <summary>
-        /// Create a new database. Create the table, columns and indexes.
+        /// Create a new database. Create the table, columns, and indexes.
         /// </summary>
         /// <param name="database">Name of the database to create.</param>
         private static void CreateDatabase(string database)
@@ -597,15 +602,14 @@ namespace SampleApp
                 // Now add indexes. An index consists of several index segments (see
                 // EsentVersion.Capabilities.ColumnsKeyMost to determine the maximum number of
                 // segments). Each segment consists of a sort direction ('+' for ascending,
-                // '-' for descending), a column name and a '\0' separator. The index definition
+                // '-' for descending), a column name, and a '\0' separator. The index definition
                 // must end with "\0\0". The count of characters should include all terminators.
 
                 // The primary index is the stock symbol. The primary index is always unique.
                 string indexDef = "+symbol\0\0";
                 Api.JetCreateIndex(sesid, tableid, "primary", CreateIndexGrbit.IndexPrimary, indexDef, indexDef.Length, 100);
 
-                // An index on the company name
-                // There should be only one company with a given name, so the index is unique.
+                // An index on the company name.
                 indexDef = "+name\0+symbol\0\0";
                 Api.JetCreateIndex(sesid, tableid, "name", CreateIndexGrbit.IndexUnique, indexDef, indexDef.Length, 100);
 
