@@ -134,7 +134,7 @@ namespace EsentCollectionsTests
             // When a program often has to try keys that turn out not to
             // be in the dictionary, TryGetValue can be a more efficient 
             // way to retrieve values.
-            string value = "";
+            string value = String.Empty;
             if (openWith.TryGetValue("tif", out value))
             {
                 Console.WriteLine("For key = \"tif\", value = {0}.", value);

@@ -196,6 +196,17 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test setting and retrieving the database extension size setting.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting and retrieving the database extension size setting")]
+        public void PageTempDbExtensionSizeParameter()
+        {
+            IntegerParameterTest(JET_param.DbExtensionSize, 256);
+        }
+
+        /// <summary>
         /// Test setting and retrieving the checkpoint depth setting.
         /// </summary>
         [TestMethod]

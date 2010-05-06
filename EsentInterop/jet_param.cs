@@ -123,6 +123,12 @@ namespace Microsoft.Isam.Esent.Interop
         CircularLog = 17,
 
         /// <summary>
+        /// This parameter controls the amount of space that is added to a database file each
+        /// time it needs to grow to accommodate more data. The size is in database pages.
+        /// </summary>
+        DbExtensionSize = 18,
+
+        /// <summary>
         /// This parameter controls the initial size of the temporary database. The size is in
         /// database pages. A size of zero indicates that the default size of an ordinary
         /// database should be used. It is often desirable for small applications to configure

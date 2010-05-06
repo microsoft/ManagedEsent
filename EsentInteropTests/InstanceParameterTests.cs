@@ -438,6 +438,33 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test the DbExtensionSize property.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test the DbExtensionSize property")]
+        public void SetAndRetrieveInstanceParametersDbExtensionSize()
+        {
+            int expected = 512;
+            this.instanceParameters.DbExtensionSize = expected;
+            Assert.AreEqual(expected, this.instanceParameters.DbExtensionSize);
+        }
+
+        /// <summary>
+        /// Setting the DbExtensionSize property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Setting the DbExtensionSize property should set the parameter on the instance")]
+        public void VerifySetInstanceParametersDbExtensionSize()
+        {
+            int expected = 1024;
+            this.instanceParameters.DbExtensionSize = expected;
+            Assert.AreEqual(expected, this.GetIntegerParameter(JET_param.DbExtensionSize));
+        }
+
+        /// <summary>
         /// Test the CachedClosedTables property.
         /// </summary>
         [TestMethod]

@@ -416,7 +416,7 @@ namespace InteropApiTests
             private readonly JET_TABLEID tableid;
             
             /// <summary>
-            /// Intializes a new instance of the Worker class.
+            /// Initializes a new instance of the Worker class.
             /// </summary>
             /// <param name="sesid">The session to use.</param>
             /// <param name="tableid">The table to operate on.</param>

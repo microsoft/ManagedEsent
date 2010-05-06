@@ -221,7 +221,7 @@ namespace EsentCollectionsTests
         /// <summary>
         /// Measure the speed of LINQ queries against the dictionary.
         /// </summary>
-        /// <param name="dictionary"></param>
+        /// <param name="dictionary">The dictionary to query.</param>
         /// <param name="numQueries">Number of queries to perform.</param>
         private static void SlowLinqQueries(IDictionary<long, string> dictionary, int numQueries)
         {
@@ -254,7 +254,7 @@ namespace EsentCollectionsTests
         /// These queries are slow because they create the query inside of
         /// the loop and the query has to be compiled each time.
         /// </summary>
-        /// <param name="dictionary"></param>
+        /// <param name="dictionary">The dictionary to query.</param>
         /// <param name="numQueries">Number of queries to perform.</param>
         private static void SlowLinqQueries(PersistentDictionary<long, string> dictionary, int numQueries)
         {

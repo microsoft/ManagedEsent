@@ -361,6 +361,23 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Gets or sets the number of pages that are added to a database file each
+        /// time it needs to grow to accommodate more data.
+        /// </summary>
+        public int DbExtensionSize
+        {
+            get
+            {
+                return this.GetIntegerParameter(JET_param.DbExtensionSize);
+            }
+
+            set
+            {
+                this.SetIntegerParameter(JET_param.DbExtensionSize, value);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether crash recovery is on.
         /// </summary>
         public bool Recovery
