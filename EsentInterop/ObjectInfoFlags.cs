@@ -9,10 +9,11 @@ namespace Microsoft.Isam.Esent.Interop
     using System;
 
     /// <summary>
-    /// Flags for ESENT objects (tables).
+    /// Flags for ESENT objects (tables).  Used in <see cref="JET_OBJECTINFO"/>.
     /// </summary>
     [Flags]
-    internal enum ObjectInfoFlags : uint
+    [CLSCompliant(false)]
+    public enum ObjectInfoFlags : uint
     {
         /// <summary>
         /// Object is for internal use only.
@@ -25,7 +26,7 @@ namespace Microsoft.Isam.Esent.Interop
         TableFixedDDL = 0x40000000,
 
         /// <summary>
-        /// Table's DDL is inheritable (implied FixedDDL).
+        /// Table's DDL is inheritable.
         /// </summary>
         TableTemplate = 0x20000000,
 
@@ -35,7 +36,9 @@ namespace Microsoft.Isam.Esent.Interop
         TableDerived = 0x10000000,
 
         /// <summary>
-        /// Used in conjunction with JET_bitObjectTableTemplate.
+        /// Fixed or variable columns in derived tables (so that fixed or variable
+        /// columns can be added to the template in the future).
+        /// Used in conjunction with <see cref="TableTemplate"/>.
         /// </summary>
         TableNoFixedVarColumnsInDerivedTables = 0x04000000,
     }
