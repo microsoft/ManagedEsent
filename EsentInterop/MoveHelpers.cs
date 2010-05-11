@@ -178,13 +178,14 @@ namespace Microsoft.Isam.Esent.Interop
         public static void ResetIndexRange(JET_SESID sesid, JET_TABLEID tableid)
         {
             var err = (JET_err)Impl.JetSetIndexRange(sesid, tableid, SetIndexRangeGrbit.RangeRemove);
-            if (err >= JET_err.Success || JET_err.InvalidOperation == err)
+            if (JET_err.InvalidOperation == err)
             {
+                // this error is expected if there isn't currently an index range
                 return;
             }
 
             Api.Check((int)err);
-            throw new NotImplementedException("Unreachable code");
+            return;
         }
 
         /// <summary>

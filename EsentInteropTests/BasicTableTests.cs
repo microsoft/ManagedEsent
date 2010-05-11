@@ -602,6 +602,69 @@ namespace InteropApiTests
             Assert.AreEqual(2, size.cTaggedColumns, "cTaggedColumns");
         }
 
+        /// <summary>
+        /// Test JetGetCursorInfo.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test JetGetCursorInfo")]
+        public void TestJetGetCursorInfo()
+        {
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetGetCursorInfo(this.sesid, this.tableid);
+            Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
+        }
+
+        /// <summary>
+        /// Test JetGetCursorInfo when there is a write conflict.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test JetGetCursorInfo when there is a write conflict")]
+        public void TestJetGetCursorInfoWithWriteConflict()
+        {
+            byte[] bookmark = new byte[SystemParameters.BookmarkMost];
+            int bookmarkSize;
+
+            JET_SESID sesid2;
+            JET_DBID dbid2;
+            JET_TABLEID tableid2;
+            Api.JetBeginSession(this.instance, out sesid2, String.Empty, String.Empty);
+            Api.JetOpenDatabase(sesid2, this.database, String.Empty, out dbid2, OpenDatabaseGrbit.None);
+            Api.JetOpenTable(sesid2, dbid2, this.table, null, 0, OpenTableGrbit.None, out tableid2);
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.JetUpdate(this.sesid, this.tableid, bookmark, bookmark.Length, out bookmarkSize);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Api.JetBeginTransaction(sesid2);
+            Api.JetGotoBookmark(sesid2, tableid2, bookmark, bookmarkSize);
+            Api.JetPrepareUpdate(sesid2, tableid2, JET_prep.Replace);
+            Api.SetColumn(sesid2, tableid2, this.columnidLongText, "foo", Encoding.Unicode);
+            Api.JetUpdate(sesid2, tableid2);
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetGotoBookmark(this.sesid, this.tableid, bookmark, bookmarkSize);
+            try
+            {
+                Api.JetGetCursorInfo(this.sesid, this.tableid);
+                Assert.Fail("Expected and EsentErrorException");
+            }
+            catch (EsentErrorException)
+            {
+                // Expected
+            }
+            Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
+            Api.JetCommitTransaction(sesid2, CommitTransactionGrbit.None);
+            Api.JetEndSession(sesid2, EndSessionGrbit.None);
+        }
+
         #endregion DML Tests
 
         #region Navigation Tests

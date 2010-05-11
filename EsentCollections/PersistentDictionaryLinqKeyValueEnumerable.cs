@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PersistentDictionaryLinqEnumerable.cs" company="Microsoft Corporation">
+// <copyright file="PersistentDictionaryLinqKeyValueEnumerable.cs" company="Microsoft Corporation">
 //   Copyright (c) Microsoft Corporation.
 // </copyright>
 // <summary>
@@ -20,7 +20,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     /// </summary>
     /// <typeparam name="TKey">The type of the key in the dictionary.</typeparam>
     /// <typeparam name="TValue">The type of the value in the dictionary.</typeparam>
-    public sealed class PersistentDictionaryLinqEnumerable<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>
+    public sealed class PersistentDictionaryLinqKeyValueEnumerable<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>
         where TKey : IComparable<TKey>
     {
         /// <summary>
@@ -46,7 +46,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         private readonly bool isReversed;
 
         /// <summary>
-        /// Initializes a new instance of the PersistentDictionaryLinqEnumerable class.
+        /// Initializes a new instance of the PersistentDictionaryLinqKeyValueEnumerable class.
         /// </summary>
         /// <param name="dict">The dictionary to enumerate.</param>
         /// <param name="expression">The expression describing the range of keys to return.</param>
@@ -54,7 +54,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="isReversed">
         /// A value that controls whether enumerators produced by this enumerable should be reversed.
         /// </param>
-        public PersistentDictionaryLinqEnumerable(
+        public PersistentDictionaryLinqKeyValueEnumerable(
             PersistentDictionary<TKey, TValue> dict,
             Expression<Predicate<KeyValuePair<TKey, TValue>>> expression,
             Predicate<KeyValuePair<TKey, TValue>> predicate,
@@ -106,9 +106,9 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>
         /// A sequence whose elements correspond to those of the input sequence in reverse order.
         /// </returns>
-        public PersistentDictionaryLinqEnumerable<TKey, TValue> Reverse()
+        public PersistentDictionaryLinqKeyValueEnumerable<TKey, TValue> Reverse()
         {
-            return new PersistentDictionaryLinqEnumerable<TKey, TValue>(
+            return new PersistentDictionaryLinqKeyValueEnumerable<TKey, TValue>(
                 this.dictionary, this.expression, this.predicate, !this.isReversed);
         }
 

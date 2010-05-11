@@ -2,9 +2,6 @@
 // <copyright file="RandomInt32RangeExpressionTests.cs" company="Microsoft Corporation">
 //   Copyright (c) Microsoft Corporation.
 // </copyright>
-// <summary>
-//   Compare a PersistentDictionary against a generic dictionary.
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace EsentCollectionsTests
@@ -53,7 +50,7 @@ namespace EsentCollectionsTests
         /// </summary>
         [TestMethod]
         [Priority(3)]
-        [Description("Test the KeyExpressionEvaluator with random ranges")]
+        [Description("Test the PredicateExpressionEvaluator with random ranges")]
         public void TestRandomInt32KeyRangeExpressions()
         {
             DateTime endTime = DateTime.UtcNow + TimeSpan.FromSeconds(19.5);
@@ -161,7 +158,7 @@ namespace EsentCollectionsTests
         {
             // Unfortunately this generates a Func<KeyValuePair<int, int>, bool> instead
             // of a Predicate<KeyValuePair<int, int>. We work around that by calling
-            // KeyExpressionEvaluator directly.
+            // PredicateExpressionEvaluator directly.
             Expression<Func<KeyValuePair<int, int>, bool>> expression = this.CreateExpression();
             Func<KeyValuePair<int, int>, bool> func = expression.Compile();
 
@@ -184,7 +181,7 @@ namespace EsentCollectionsTests
                 }
             }
 
-            KeyRange<int> keyRange = KeyExpressionEvaluator<int>.GetKeyRange(expression.Body, keyMemberInfo);
+            KeyRange<int> keyRange = PredicateExpressionEvaluator<int>.GetKeyRange(expression.Body, keyMemberInfo);
             if (count > 0)
             {
                 Assert.IsTrue(

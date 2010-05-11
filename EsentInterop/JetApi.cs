@@ -1227,6 +1227,23 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return this.Err(err);
         }
 
+        /// <summary>
+        /// Determine whether an update of the current record of a cursor
+        /// will result in a write conflict, based on the current update
+        /// status of the record. It is possible that a write conflict will
+        /// ultimately be returned even if JetGetCursorInfo returns successfully.
+        /// because another session may update the record before the current
+        /// session is able to update the same record.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to check.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetCursorInfo(JET_SESID sesid, JET_TABLEID tableid)
+        {
+            this.TraceFunctionCall("JetGetCursorInfo");
+            return this.Err(NativeMethods.JetGetCursorInfo(sesid.Value, tableid.Value, IntPtr.Zero, 0, 0));
+        }
+
         #endregion
 
         #region Transactions

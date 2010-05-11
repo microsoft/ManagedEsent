@@ -243,6 +243,141 @@ namespace EsentCollectionsTests
             }
         }
 
+        /// <summary>
+        /// Verify that PersistentDictionary.Keys.Where throws an exception when the expression is null.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Verify that PersistentDictionary.Keys.Where throws an exception when the expression is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyKeysWhereThrowsExceptionWhenExpressionIsNull()
+        {
+            using (var persistentDictionary = new PersistentDictionary<Guid, Guid>(DictionaryLocation))
+            {
+                persistentDictionary.Keys.Where(null);
+            }
+        }
+
+        /// <summary>
+        /// Verify that PersistentDictionary.Keys.Any throws an exception when the expression is null.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Verify that PersistentDictionary.Keys.Any throws an exception when the expression is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyKeysAnyThrowsExceptionWhenExpressionIsNull()
+        {
+            using (var persistentDictionary = new PersistentDictionary<Guid, Guid>(DictionaryLocation))
+            {
+                persistentDictionary.Keys.Any(null);
+            }
+        }
+
+        /// <summary>
+        /// Verify that PersistentDictionary.Keys.First throws an exception when the expression is null.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Verify that PersistentDictionary.Keys.First throws an exception when the expression is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyKeysFirstThrowsExceptionWhenExpressionIsNull()
+        {
+            using (var persistentDictionary = new PersistentDictionary<Guid, Guid>(DictionaryLocation))
+            {
+                persistentDictionary.Keys.First(null);
+            }
+        }
+
+        /// <summary>
+        /// Verify that PersistentDictionary.Keys.FirstOrDefault throws an exception when the expression is null.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Verify that PersistentDictionary.Keys.FirstOrDefault throws an exception when the expression is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyKeysFirstOrDefaultThrowsExceptionWhenExpressionIsNull()
+        {
+            using (var persistentDictionary = new PersistentDictionary<Guid, Guid>(DictionaryLocation))
+            {
+                persistentDictionary.Keys.FirstOrDefault(null);
+            }
+        }
+
+        /// <summary>
+        /// Verify that PersistentDictionary.Keys.Last throws an exception when the expression is null.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Verify that PersistentDictionary.Keys.Last throws an exception when the expression is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyKeysLastThrowsExceptionWhenExpressionIsNull()
+        {
+            using (var persistentDictionary = new PersistentDictionary<Guid, Guid>(DictionaryLocation))
+            {
+                persistentDictionary.Keys.Last(null);
+            }
+        }
+
+        /// <summary>
+        /// Verify that PersistentDictionary.Keys.LastOrDefault throws an exception when the expression is null.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Verify that PersistentDictionary.Keys.LastOrDefault throws an exception when the expression is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyKeysLastOrDefaultThrowsExceptionWhenExpressionIsNull()
+        {
+            using (var persistentDictionary = new PersistentDictionary<Guid, Guid>(DictionaryLocation))
+            {
+                persistentDictionary.Keys.LastOrDefault(null);
+            }
+        }
+
+        /// <summary>
+        /// Verify that PersistentDictionary.Keys.Count throws an exception when the expression is null.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Verify that PersistentDictionary.Keys.Count throws an exception when the expression is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyKeysCountThrowsExceptionWhenExpressionIsNull()
+        {
+            using (var persistentDictionary = new PersistentDictionary<Guid, Guid>(DictionaryLocation))
+            {
+                persistentDictionary.Keys.Count(null);
+            }
+        }
+
+        /// <summary>
+        /// Verify that PersistentDictionary.Keys.Single throws an exception when the expression is null.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Verify that PersistentDictionary.Keys.Single throws an exception when the expression is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyKeysSingleThrowsExceptionWhenExpressionIsNull()
+        {
+            using (var persistentDictionary = new PersistentDictionary<Guid, Guid>(DictionaryLocation))
+            {
+                persistentDictionary.Keys.Single(null);
+            }
+        }
+
+        /// <summary>
+        /// Verify that PersistentDictionary.Keys.SingleOrDefault throws an exception when the expression is null.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Verify that PersistentDictionary.Keys.SingleOrDefault throws an exception when the expression is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyKeysSingleOrDefaultThrowsExceptionWhenExpressionIsNull()
+        {
+            using (var persistentDictionary = new PersistentDictionary<Guid, Guid>(DictionaryLocation))
+            {
+                persistentDictionary.Keys.SingleOrDefault(null);
+            }
+        }
+
         #endregion
 
         #region Any
@@ -274,6 +409,36 @@ namespace EsentCollectionsTests
                 Assert.IsFalse(persistentDictionary.Any(x => x.Key < 0));
                 Assert.IsFalse(persistentDictionary.Any(x => x.Key > 6));
                 Assert.IsFalse(persistentDictionary.Any(x => false));
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ Any operator on the key collection when records are found.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ Any operator when records are found")]
+        [Priority(2)]
+        public void TestLinqKeysAnyTrue()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                Assert.IsTrue(persistentDictionary.Keys.Any(x => x < 5));
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ Any operator on the key collection when records are not found.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ Any operator when records are not found")]
+        [Priority(2)]
+        public void TestLinqKeysAnyNotFound()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                Assert.IsFalse(persistentDictionary.Keys.Any(x => x < 0));
+                Assert.IsFalse(persistentDictionary.Keys.Any(x => x > 6));
+                Assert.IsFalse(persistentDictionary.Keys.Any(x => false));
             }
         }
 
@@ -340,6 +505,69 @@ namespace EsentCollectionsTests
             {
                 var expected = this.testDictionary1.FirstOrDefault(x => x.Key > 99);
                 var actual = persistentDictionary.FirstOrDefault(x => x.Key > 99);
+                Assert.AreEqual(expected, actual);
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ First operator when records are found.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ First operator when records are found")]
+        [Priority(2)]
+        public void TestLinqKeysFirstFound()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = this.testDictionary1.Keys.First(x => x >= 3);
+                var actual = persistentDictionary.Keys.First(x => x >= 3);
+                Assert.AreEqual(expected, actual);
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ First operator when records are not found.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ First operator when records are not found")]
+        [Priority(2)]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestLinqKeysFirstNotFound()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = persistentDictionary.Keys.First(x => x >= 99);
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ FirstOrDefault operator when records are found.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ FirstOrDefault operator when records are found")]
+        [Priority(2)]
+        public void TestLinqKeysFirstOrDefaultFound()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = this.testDictionary1.Keys.FirstOrDefault(x => x >= 3);
+                var actual = persistentDictionary.Keys.FirstOrDefault(x => x >= 3);
+                Assert.AreEqual(expected, actual);
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ FirstOrDefault operator when records are not found.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ FirstOrDefault operator when records are not found")]
+        [Priority(2)]
+        public void TestLinqKeysFirstOrDefaultNotFound()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = this.testDictionary1.Keys.FirstOrDefault(x => x > 99);
+                var actual = persistentDictionary.Keys.FirstOrDefault(x => x > 99);
                 Assert.AreEqual(expected, actual);
             }
         }
@@ -441,6 +669,99 @@ namespace EsentCollectionsTests
             }
         }
 
+        /// <summary>
+        /// Test the LINQ Single operator when records are found.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ Single operator when records are found")]
+        [Priority(2)]
+        public void TestLinqKeysSingleFound()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = this.testDictionary1.Keys.Single(x => x == 3);
+                var actual = persistentDictionary.Keys.Single(x => x == 3);
+                Assert.AreEqual(expected, actual);
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ Single operator when records are not found.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ Single operator when records are not found")]
+        [Priority(2)]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestLinqKeysSingleNotFound()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = persistentDictionary.Keys.Single(x => x >= 99);
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ Single operator when too many records are found.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ Single operator when too many records are found")]
+        [Priority(2)]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestLinqKeysSingleTooManyRecords()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = persistentDictionary.Keys.Single(x => x >= 0);
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ SingleOrDefault operator when records are found.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ SingleOrDefault operator when records are found")]
+        [Priority(2)]
+        public void TestLinqKeysSingleOrDefaultFound()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = this.testDictionary1.Keys.SingleOrDefault(x => x == 4);
+                var actual = persistentDictionary.Keys.SingleOrDefault(x => x == 4);
+                Assert.AreEqual(expected, actual);
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ SingleOrDefault operator when records are not found.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ SingleOrDefault operator when records are not found")]
+        [Priority(2)]
+        public void TestLinqKeysSingleOrDefaultNotFound()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = this.testDictionary1.Keys.SingleOrDefault(x => x > 99);
+                var actual = persistentDictionary.Keys.SingleOrDefault(x => x > 99);
+                Assert.AreEqual(expected, actual);
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ SingleOrDefault operator when too many records are found.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ SingleOrDefault operator when too many records are found")]
+        [Priority(2)]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestLinqKeysSingleOrDefaultTooManyRecords()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = persistentDictionary.Keys.SingleOrDefault(x => x >= 0);
+            }
+        }
+
         #endregion
 
         #region Last/LastOrDefault
@@ -508,6 +829,69 @@ namespace EsentCollectionsTests
             }
         }
 
+        /// <summary>
+        /// Test the LINQ Last operator when records are found.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ Last operator when records are found")]
+        [Priority(2)]
+        public void TestLinqKeysLastFound()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = this.testDictionary1.Keys.Last(x => x < 4);
+                var actual = persistentDictionary.Keys.Last(x => x < 4);
+                Assert.AreEqual(expected, actual);
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ Last operator when records are not found.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ Last operator when records are not found")]
+        [Priority(2)]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestLinqKeysLastNotFound()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = persistentDictionary.Keys.Last(x => x <= -99);
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ LastOrDefault operator when records are found.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ LastOrDefault operator when records are found")]
+        [Priority(2)]
+        public void TestLinqKeysLastOrDefaultFound()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = this.testDictionary1.Keys.LastOrDefault(x => x < 4);
+                var actual = persistentDictionary.Keys.LastOrDefault(x => x < 4);
+                Assert.AreEqual(expected, actual);
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ LastOrDefault operator when records are not found.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ LastOrDefault operator when records are not found")]
+        [Priority(2)]
+        public void TestLinqKeysLastOrDefaultNotFound()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = this.testDictionary1.Keys.LastOrDefault(x => x < -99);
+                var actual = persistentDictionary.Keys.LastOrDefault(x => x < -99);
+                Assert.AreEqual(expected, actual);
+            }
+        }
+
         #endregion
 
         #region Count
@@ -553,6 +937,50 @@ namespace EsentCollectionsTests
             using (var persistentDictionary = CloneDictionary(this.testDictionary1))
             {
                 Assert.AreEqual(0, persistentDictionary.Count(x => x.Key > 9999));
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ Count operator
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ Count operator")]
+        [Priority(2)]
+        public void TestLinqKeysCount()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                Assert.AreEqual(this.testDictionary1.Keys.Count(), persistentDictionary.Keys.Count());
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ Count operator with a query
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ Count operator with a query")]
+        [Priority(2)]
+        public void TestLinqKeysCountQuery()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                Assert.AreEqual(
+                    this.testDictionary1.Keys.Count(x => x > 4),
+                    persistentDictionary.Keys.Count(x => x > 4));
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ Count operator with a query that returns 0 records
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ Count operator with a query that return 0 records")]
+        [Priority(2)]
+        public void TestLinqKeysCountQueryZeroRecords()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                Assert.AreEqual(0, persistentDictionary.Keys.Count(x => x > 9999));
             }
         }
 
@@ -604,6 +1032,54 @@ namespace EsentCollectionsTests
             {
                 var expected = this.testDictionary1.Where(x => x.Key < 5 && x.Key > -1 && x.Key != 4).Reverse();
                 var actual = persistentDictionary.Where(x => x.Key < 5 && x.Key > -1 && x.Key != 4).Reverse();
+                EnumerableAssert.AreEqual(expected.Reverse(), actual.Reverse(), null);
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ Reverse operator.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ Reverse operator")]
+        [Priority(2)]
+        public void TestLinqKeysReverse()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = this.testDictionary1.Keys.Reverse();
+                var actual = persistentDictionary.Keys.Reverse();
+                EnumerableAssert.AreEqual(expected, actual, null);
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ Reverse operator.
+        /// </summary>
+        [TestMethod]
+        [Description("Test reversing a LINQ query")]
+        [Priority(2)]
+        public void TestLinqKeysReverseQuery()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = this.testDictionary1.Keys.Where(x => x < 5 && x > 2 && x != 4).Reverse();
+                var actual = persistentDictionary.Keys.Where(x => x < 5 && x > 2 && x != 4).Reverse();
+                EnumerableAssert.AreEqual(expected, actual, null);
+            }
+        }
+
+        /// <summary>
+        /// Test using the LINQ Reverse operator twice.
+        /// </summary>
+        [TestMethod]
+        [Description("Test double reversing a LINQ query")]
+        [Priority(2)]
+        public void TestLinqKeysDoubleReverseQuery()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = this.testDictionary1.Keys.Where(x => x < 5 && x > -1 && x != 4).Reverse();
+                var actual = persistentDictionary.Keys.Where(x => x < 5 && x > -1 && x != 4).Reverse();
                 EnumerableAssert.AreEqual(expected.Reverse(), actual.Reverse(), null);
             }
         }

@@ -49,6 +49,8 @@
   <ItemGroup>
     <Compile Include="CollectionsSystemParameters.cs" />
     <Compile Include="ConstantExpressionCompiler.cs" />
+    <Compile Include="PersistentDictionaryLinqKeyEnumerable.cs" />
+    <Compile Include="KeyExpressionEvaluator.cs" />
     <Compile Include="IPersistentDictionaryConfig.cs" />
     <Compile Include="KeyColumnConverter.cs" />
     <Compile Include="Compare.cs" />
@@ -56,7 +58,7 @@
     <Compile Include="ColumnConverter.cs" />
     <Compile Include="Copy.cs" />
     <Compile Include="Key.cs" />
-    <Compile Include="KeyExpressionEvaluator.cs" />
+    <Compile Include="PredicateExpressionEvaluator.cs" />
     <Compile Include="KeyRange.cs" />
     <Compile Include="LazyTransaction.cs" />
     <Compile Include="KeyValueExpressionEvaluator.cs" />
@@ -70,7 +72,7 @@
     <Compile Include="PersistentDictionaryFile.cs" />
     <Compile Include="PersistentDictionaryKeyCollection.cs" />
     <Compile Include="PersistentDictionaryLinq.cs" />
-    <Compile Include="PersistentDictionaryLinqEnumerable.cs" />
+    <Compile Include="PersistentDictionaryLinqKeyValueEnumerable.cs" />
     <Compile Include="PersistentDictionaryLinqExtensions.cs" />
     <Compile Include="PersistentDictionaryReverseEnumerator.cs" />
     <Compile Include="PersistentDictionaryTracing.cs" />

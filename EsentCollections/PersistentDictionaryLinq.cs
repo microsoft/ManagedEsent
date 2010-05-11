@@ -30,7 +30,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>
         /// An enumerator matching only the records matched by the predicate.
         /// </returns>
-        public PersistentDictionaryLinqEnumerable<TKey, TValue> Where(
+        public PersistentDictionaryLinqKeyValueEnumerable<TKey, TValue> Where(
             Expression<Predicate<KeyValuePair<TKey, TValue>>> expression)
         {
             if (null == expression)
@@ -40,7 +40,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 
             Predicate<KeyValuePair<TKey, TValue>> predicate =
                 KeyValueExpressionEvaluator<TKey, TValue>.KeyRangeIsExact(expression) ? x => true : expression.Compile();
-            return new PersistentDictionaryLinqEnumerable<TKey, TValue>(
+            return new PersistentDictionaryLinqKeyValueEnumerable<TKey, TValue>(
                 this,
                 expression,
                 predicate,
@@ -53,7 +53,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>
         /// A sequence whose elements correspond to those of the dictionary in reverse order.
         /// </returns>
-        public PersistentDictionaryLinqEnumerable<TKey, TValue> Reverse()
+        public PersistentDictionaryLinqKeyValueEnumerable<TKey, TValue> Reverse()
         {
             return this.Where(x => true).Reverse();
         }

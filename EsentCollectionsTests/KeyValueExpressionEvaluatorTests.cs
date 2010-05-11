@@ -2450,7 +2450,7 @@ namespace EsentCollectionsTests
         public void TestSample12()
         {
             Expression<Predicate<int>> expression = x => x >= -1 && x < 101;
-            KeyRange<int> actual = KeyExpressionEvaluator<int>.GetKeyRange(expression.Body, null);
+            KeyRange<int> actual = PredicateExpressionEvaluator<int>.GetKeyRange(expression.Body, null);
             KeyRange<int> expected = new KeyRange<int>(Key<int>.CreateKey(-1, true), Key<int>.CreateKey(101, false));
             Assert.AreEqual(expected, actual);
         }
@@ -2465,7 +2465,7 @@ namespace EsentCollectionsTests
         {
             string s = "foo";
             Expression<Predicate<int>> expression = x => x > -1 && s.Length < 101;
-            KeyRange<int> actual = KeyExpressionEvaluator<int>.GetKeyRange(expression.Body, null);
+            KeyRange<int> actual = PredicateExpressionEvaluator<int>.GetKeyRange(expression.Body, null);
             KeyRange<int> expected = new KeyRange<int>(Key<int>.CreateKey(-1, false), null);
             Assert.AreEqual(expected, actual);
         }

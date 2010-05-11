@@ -9,7 +9,9 @@ namespace InteropApiTests
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Text;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -547,6 +549,40 @@ namespace InteropApiTests
             catch (EsentErrorException)
             {
             }
+        }
+
+        /// <summary>
+        /// Verify an error is thrown when key is truncated and truncation is disallowed.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Verify an error is thrown when key is truncated and truncation is disallowed")]
+        public void TestDisallowTruncation()
+        {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
+            const string IndexDescription = "+TestColumn\0";
+            const string IndexName = "no_trunacation_index";
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetCreateIndex(this.sesid, this.tableid, IndexName, VistaGrbits.IndexDisallowTruncation, IndexDescription, IndexDescription.Length + 1, 100);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, this.testColumnid, new string('X', 4096), Encoding.Unicode);
+            try
+            {
+                Api.JetUpdate(this.sesid, this.tableid);
+                Assert.Fail("Expected a truncation error");
+            }
+            catch (EsentErrorException)
+            {
+                // Expected
+            }
+            Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
         }
 
         #endregion DDL Tests

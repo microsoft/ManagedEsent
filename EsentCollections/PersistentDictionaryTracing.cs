@@ -26,7 +26,10 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// Gets the TraceSwitch for the dictionary.
         /// </summary>
-        internal TraceSwitch TraceSwitch
+        /// <value>
+        /// The TraceSwitch for the dictionary.
+        /// </value>
+        public TraceSwitch TraceSwitch
         {
             get { return this.traceSwitch; }
         }

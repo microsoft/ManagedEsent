@@ -184,7 +184,7 @@ namespace EsentCollectionsTests
         {
             // Unfortunately this generates a Func<KeyValuePair<int, int>, bool> instead
             // of a Predicate<KeyValuePair<int, int>. We work around that by calling
-            // KeyExpressionEvaluator directly.
+            // PredicateExpressionEvaluator directly.
             Expression<Predicate<KeyValuePair<string, string>>> expression = this.CreateExpression();
             Predicate<KeyValuePair<string, string>> func = expression.Compile();
 

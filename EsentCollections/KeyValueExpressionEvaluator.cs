@@ -46,7 +46,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 throw new ArgumentNullException("expression");
             }
 
-            return KeyExpressionEvaluator<TKey>.GetKeyRange(expression.Body, KeyMemberInfo);
+            return PredicateExpressionEvaluator<TKey>.GetKeyRange(expression.Body, KeyMemberInfo);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 throw new ArgumentNullException("expression");
             }
 
-            return KeyExpressionEvaluator<TKey>.KeyRangeIsExact(expression.Body, KeyMemberInfo);
+            return PredicateExpressionEvaluator<TKey>.KeyRangeIsExact(expression.Body, KeyMemberInfo);
         }
     }
 }

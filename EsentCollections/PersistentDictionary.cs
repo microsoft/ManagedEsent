@@ -711,18 +711,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// Returns an enumerator that iterates through the keys.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the keys.
-        /// </returns>
-        internal IEnumerator<TKey> GetKeyEnumerator()
-        {
-            return new PersistentDictionaryEnumerator<TKey, TValue, TKey>(
-                this, KeyRange<TKey>.OpenRange, c => c.RetrieveCurrentKey(), x => true);
-        }
-
-        /// <summary>
-        /// Returns an enumerator that iterates through the keys.
-        /// </summary>
-        /// <returns>
         /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the values.
         /// </returns>
         internal IEnumerator<TValue> GetValueEnumerator()
