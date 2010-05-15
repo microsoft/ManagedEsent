@@ -178,6 +178,27 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
+        /// Returns the last element of the collection.
+        /// </summary>
+        /// <returns>The last element.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown if the collection is empty.
+        /// </exception>
+        public TKey Last()
+        {
+            return this.Reverse().Last();
+        }
+
+        /// <summary>
+        /// Returns the last element of the collection or a default value.
+        /// </summary>
+        /// <returns>The last element.</returns>
+        public TKey LastOrDefault()
+        {
+            return this.Reverse().LastOrDefault();
+        }
+
+        /// <summary>
         /// Returns the only element in the collection that satisfies a specified condition and throws
         /// an exception if there is more than one element.
         /// </summary>
@@ -206,27 +227,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         public TKey SingleOrDefault(Expression<Predicate<TKey>> expression)
         {
             return this.Where(expression).SingleOrDefault();
-        }
-
-        /// <summary>
-        /// Returns the last element of the collection.
-        /// </summary>
-        /// <returns>The last element.</returns>
-        /// <exception cref="InvalidOperationException">
-        /// Thrown if the collection is empty.
-        /// </exception>
-        public TKey Last()
-        {
-            return this.Reverse().Last();
-        }
-
-        /// <summary>
-        /// Returns the last element of the collection or a default value.
-        /// </summary>
-        /// <returns>The last element.</returns>
-        public TKey LastOrDefault()
-        {
-            return this.Reverse().LastOrDefault();
         }
     }
 }

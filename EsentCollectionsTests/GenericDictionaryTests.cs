@@ -42,7 +42,7 @@ namespace EsentCollectionsTests
         /// Test a PersistentDictionary{Boolean, Boolean}
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         [Description("Test a bool dictionary")]
         public void TestGenericBooleanDictionary()
         {
@@ -54,7 +54,7 @@ namespace EsentCollectionsTests
         /// Test a PersistentDictionary{Byte, Byte}
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         [Description("Test a byte dictionary")]
         public void TestGenericByteDictionary()
         {
@@ -66,7 +66,7 @@ namespace EsentCollectionsTests
         /// Test a PersistentDictionary{Int16, Int16}
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         [Description("Test an Int16 dictionary")]
         public void TestGenericInt16Dictionary()
         {
@@ -78,7 +78,7 @@ namespace EsentCollectionsTests
         /// Test a PersistentDictionary{UInt16, UInt16}
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         [Description("Test an UInt16 dictionary")]
         public void TestGenericUInt16Dictionary()
         {
@@ -90,7 +90,7 @@ namespace EsentCollectionsTests
         /// Test a PersistentDictionary{Int32, Int32}
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         [Description("Test an Int32 dictionary")]
         public void TestGenericInt32Dictionary()
         {
@@ -102,7 +102,7 @@ namespace EsentCollectionsTests
         /// Test a PersistentDictionary{UInt32, UInt32}
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         [Description("Test an UInt32 dictionary")]
         public void TestGenericUInt32Dictionary()
         {
@@ -114,7 +114,7 @@ namespace EsentCollectionsTests
         /// Test a PersistentDictionary{Int64, Int64}
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         [Description("Test an Int64 dictionary")]
         public void TestGenericInt64Dictionary()
         {
@@ -126,7 +126,7 @@ namespace EsentCollectionsTests
         /// Test a PersistentDictionary{UInt64, UInt64}
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         [Description("Test an UInt64 dictionary")]
         public void TestGenericUInt64Dictionary()
         {
@@ -138,7 +138,7 @@ namespace EsentCollectionsTests
         /// Test a PersistentDictionary{float, float}
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         [Description("Test a float dictionary")]
         public void TestGenericFloatDictionary()
         {
@@ -150,7 +150,7 @@ namespace EsentCollectionsTests
         /// Test a PersistentDictionary{double, double}
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         [Description("Test a double dictionary")]
         public void TestGenericDoubleDictionary()
         {
@@ -162,7 +162,7 @@ namespace EsentCollectionsTests
         /// Test a PersistentDictionary{DateTime, DateTime}
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         [Description("Test a DateTime dictionary")]
         public void TestGenericDateTimeDictionary()
         {
@@ -174,7 +174,7 @@ namespace EsentCollectionsTests
         /// Test a PersistentDictionary{TimeSpan, TimeSpan}
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         [Description("Test a TimeSpan dictionary")]
         public void TestGenericTimeSpanDictionary()
         {
@@ -186,7 +186,7 @@ namespace EsentCollectionsTests
         /// Test a PersistentDictionary{Guid, Guid}
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         [Description("Test a Guid dictionary")]
         public void TestGenericGuidDictionary()
         {
@@ -198,7 +198,7 @@ namespace EsentCollectionsTests
         /// Test a PersistentDictionary{String, String}
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         [Description("Test a String dictionary")]
         public void TestGenericStringDictionary()
         {
@@ -213,7 +213,7 @@ namespace EsentCollectionsTests
         /// Test a PersistentDictionary{String, Decimal}
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         [Description("Test a String => Decimal dictionary")]
         public void TestGenericStringDecimalDictionary()
         {
@@ -227,7 +227,7 @@ namespace EsentCollectionsTests
         /// Test a PersistentDictionary{String, IPAddress}
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         [Description("Test a String => IPAddress dictionary")]
         public void TestGenericStringIpAddressDictionary()
         {
@@ -241,7 +241,7 @@ namespace EsentCollectionsTests
         /// Test a PersistentDictionary{String, Uri}
         /// </summary>
         [TestMethod]
-        [Priority(2)]
+        [Priority(3)]
         [Description("Test a String => Uri dictionary")]
         public void TestGenericStringUriDictionary()
         {
@@ -381,8 +381,13 @@ namespace EsentCollectionsTests
             Assert.AreEqual(kvp, dictionary.Last(x => x.Key.CompareTo(key) == 0), "Last");
             Assert.AreEqual(kvp, dictionary.LastOrDefault(), "LastOrDefault");
             Assert.AreEqual(kvp, dictionary.LastOrDefault(x => x.Key.CompareTo(key) == 0), "LastOrDefault");
+            Assert.AreEqual(kvp, dictionary.Single(), "Single");
+            Assert.AreEqual(kvp, dictionary.Single(x => x.Key.CompareTo(key) == 0), "Single");
+            Assert.AreEqual(kvp, dictionary.SingleOrDefault(), "SingleOrDefault");
+            Assert.AreEqual(kvp, dictionary.SingleOrDefault(x => x.Key.CompareTo(key) == 0), "SingleOrDefault");
 
             Assert.AreEqual(1, dictionary.Count(x => x.Key.CompareTo(key) <= 0), "Count failed");
+            Assert.AreEqual(0, dictionary.Count(x => x.Key.CompareTo(key) != 0), "Count failed");
         }
 
         /// <summary>
@@ -420,13 +425,16 @@ namespace EsentCollectionsTests
             Assert.AreEqual(key, dictionary.Keys.Last(x => x.CompareTo(key) == 0), "Last");
             Assert.AreEqual(key, dictionary.Keys.LastOrDefault(), "LastOrDefault");
             Assert.AreEqual(key, dictionary.Keys.LastOrDefault(x => x.CompareTo(key) == 0), "LastOrDefault");
-            Assert.AreEqual(key, dictionary.Keys.Min(), "Min");
-            Assert.AreEqual(key, dictionary.Keys.Max(), "Max");
+            Assert.AreEqual(key, dictionary.Keys.Single(), "Single");
+            Assert.AreEqual(key, dictionary.Keys.Single(x => x.CompareTo(key) == 0), "Single");
+            Assert.AreEqual(key, dictionary.Keys.SingleOrDefault(), "SingleOrDefault");
+            Assert.AreEqual(key, dictionary.Keys.SingleOrDefault(x => x.CompareTo(key) == 0), "SingleOrDefault");
 
             Assert.AreEqual(key, dictionary.Keys.Min(), "Min");
             Assert.AreEqual(key, dictionary.Keys.Max(), "Max");
 
             Assert.AreEqual(1, dictionary.Keys.Count(x => x.CompareTo(key) <= 0), "Count failed");
+            Assert.AreEqual(0, dictionary.Keys.Count(x => x.CompareTo(key) != 0), "Count failed");
         }
 
         /// <summary>
@@ -443,6 +451,11 @@ namespace EsentCollectionsTests
             var kvp = new KeyValuePair<TKey, TValue>(key, value);
             IEnumerable enumerator = dictionary.Where(x => true);
             foreach (object o in enumerator)
+            {
+                Assert.AreEqual(o, kvp, "Dictionary query enumeration");
+            }
+
+            foreach (KeyValuePair<TKey, TValue> o in dictionary.Where(x => true).Reverse())
             {
                 Assert.AreEqual(o, kvp, "Dictionary query enumeration");
             }
@@ -523,14 +536,24 @@ namespace EsentCollectionsTests
             }
 
             // Reopen the database
+            Dictionary<TKey, TValue> temp;
             using (var dictionary = new PersistentDictionary<TKey, TValue>(DictionaryPath))
             {
+                 temp = new Dictionary<TKey, TValue>(dictionary);
             }
 
             // Delete the database
             Assert.IsTrue(PersistentDictionaryFile.Exists(DictionaryPath), "Dictionary should exist");
             PersistentDictionaryFile.DeleteFiles(DictionaryPath);
             Assert.IsFalse(PersistentDictionaryFile.Exists(DictionaryPath), "Dictionary should have been deleted");
+
+            // Recreate the database
+            using (var dictionary = new PersistentDictionary<TKey, TValue>(temp, DictionaryPath))
+            {
+                DictionaryAssert.AreEqual(temp, dictionary);
+            }
+
+            PersistentDictionaryFile.DeleteFiles(DictionaryPath);
         }
     }
 }
