@@ -273,6 +273,43 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Check that JET_INDEXID structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_INDEXID structures can be compared for equality")]
+        public void VerifyJetIndexIdEquality()
+        {
+            var x = new JET_INDEXID { IndexId1 = (IntPtr)0x1, IndexId2 = 0x2, IndexId3 = 0x3 };
+            var y = new JET_INDEXID { IndexId1 = (IntPtr)0x1, IndexId2 = 0x2, IndexId3 = 0x3 };
+            TestEqualObjects(x, y);
+            Assert.IsTrue(x == y);
+            Assert.IsFalse(x != y);
+        }
+
+        /// <summary>
+        /// Check that JET_INDEXID structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_INDEXID structures can be compared for inequality")]
+        public void VerifyJetIndexIdInequality()
+        {
+            var x = new JET_INDEXID { IndexId1 = (IntPtr)0x1, IndexId2 = 0x2, IndexId3 = 0x3 };
+            var y = new JET_INDEXID { IndexId1 = (IntPtr)0x1, IndexId2 = 0x22, IndexId3 = 0x3 };
+            var z = new JET_INDEXID { IndexId1 = (IntPtr)0x1, IndexId2 = 0x2, IndexId3 = 0x33 };
+
+            TestUnequalObjects(x, y);
+            TestUnequalObjects(x, z);
+            TestUnequalObjects(y, z);
+
+            Assert.IsTrue(x != y);
+            Assert.IsFalse(x == y);
+        }
+
+        /// <summary>
         /// Helper method to compare two equal objects.
         /// </summary>
         /// <typeparam name="T">The object type.</typeparam>
@@ -281,11 +318,14 @@ namespace InteropApiTests
         private static void TestEqualObjects<T>(T x, T y) where T : struct, IEquatable<T> 
         {
             Assert.IsTrue(x.Equals(y));
+            Assert.IsTrue(y.Equals(x));
             Assert.AreEqual(x.GetHashCode(), y.GetHashCode());
+            Assert.AreEqual(x.ToString(), y.ToString());
 
             object objA = x;
             object objB = y;
             Assert.IsTrue(objA.Equals(objB));
+            Assert.IsTrue(objB.Equals(objA));
             Assert.IsFalse(objA.Equals(Any.String));
         }
 
@@ -298,11 +338,14 @@ namespace InteropApiTests
         private static void TestUnequalObjects<T>(T x, T y) where T : struct, IEquatable<T>
         {
             Assert.IsFalse(x.Equals(y));
+            Assert.IsFalse(y.Equals(x));
             Assert.AreNotEqual(x.GetHashCode(), y.GetHashCode());
+            Assert.AreNotEqual(x.ToString(), y.ToString());
 
             object objA = x;
             object objB = y;
             Assert.IsFalse(objA.Equals(objB));
+            Assert.IsFalse(objB.Equals(objA));
             Assert.IsFalse(objA.Equals(null));
             Assert.IsFalse(objA.Equals(new Exception()));
         }

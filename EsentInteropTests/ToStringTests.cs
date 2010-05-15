@@ -111,5 +111,17 @@ namespace InteropApiTests
             var handle = new JET_LS { Value = (IntPtr)0x123ABC };
             Assert.AreEqual("JET_LS(0x123abc)", handle.ToString());
         }
+
+        /// <summary>
+        /// Test JET_INDEXID.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_INDEXID.ToString()")]
+        public void JetIndexIdToString()
+        {
+            var indexid = new JET_INDEXID { IndexId1 = (IntPtr)0x1, IndexId2 = 0x2, IndexId3 = 0x3 };
+            Assert.AreEqual("JET_INDEXID(0x1:0x2:0x3)", indexid.ToString());
+        }
     }
 }

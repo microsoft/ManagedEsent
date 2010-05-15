@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Globalization;
+    using System.Runtime.InteropServices;
 
     /// <summary>
     /// A JET_INSTANCE contains a handle to the instance of the database to use for calls to the JET Api.
@@ -714,5 +715,128 @@ namespace Microsoft.Isam.Esent.Interop
         {
             return this.Value.Equals(other.Value);
         }
+    }
+
+    /// <summary>
+    /// Holds an index ID. An index ID is a hint that is used to accelerate the
+    /// selection of the current index using JetSetCurrentIndex. It is most
+    /// useful when there is a very large number of indexes over a table. The
+    /// index ID can be retrieved using JetGetIndexInfo or JetGetTableIndexInfo.
+    /// </summary>
+    [StructLayout(LayoutKind.Sequential)]
+    public struct JET_INDEXID : IEquatable<JET_INDEXID>
+    {
+        /// <summary>
+        /// Size of the structure.
+        /// </summary>
+        internal uint CbStruct;
+
+        /// <summary>
+        /// Internal use only.
+        /// </summary>
+        internal IntPtr IndexId1;
+
+        /// <summary>
+        /// Internal use only.
+        /// </summary>
+        internal uint IndexId2;
+
+        /// <summary>
+        /// Internal use only.
+        /// </summary>
+        internal uint IndexId3;
+
+        /// <summary>
+        /// The size of a JET_INDEXID structure.
+        /// </summary>
+        private static readonly uint sizeOfIndexId = (uint)Marshal.SizeOf(typeof(JET_INDEXID));
+
+        /// <summary>
+        /// Gets the size of a JET_INDEXINDEXID structure.
+        /// </summary>
+        internal static uint SizeOfIndexId
+        {
+            get { return sizeOfIndexId; }
+        }
+
+        /// <summary>
+        /// Determines whether two specified instances of JET_INDEXID
+        /// are equal.
+        /// </summary>
+        /// <param name="lhs">The first instance to compare.</param>
+        /// <param name="rhs">The second instance to compare.</param>
+        /// <returns>True if the two instances are equal.</returns>
+        public static bool operator ==(JET_INDEXID lhs, JET_INDEXID rhs)
+        {
+            return lhs.Equals(rhs);
+        }
+
+        /// <summary>
+        /// Determines whether two specified instances of JET_INDEXID
+        /// are not equal.
+        /// </summary>
+        /// <param name="lhs">The first instance to compare.</param>
+        /// <param name="rhs">The second instance to compare.</param>
+        /// <returns>True if the two instances are not equal.</returns>
+        public static bool operator !=(JET_INDEXID lhs, JET_INDEXID rhs)
+        {
+            return !(lhs == rhs);
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether this instance is equal
+        /// to another instance.
+        /// </summary>
+        /// <param name="obj">An object to compare with this instance.</param>
+        /// <returns>True if the two instances are equal.</returns>
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            return this.Equals((JET_INDEXID)obj);
+        }
+
+        /// <summary>
+        /// Generate a string representation of the structure.
+        /// </summary>
+        /// <returns>The structure as a string.</returns>
+        public override string ToString()
+        {
+            return String.Format(
+                CultureInfo.InvariantCulture,
+                "JET_INDEXID(0x{0:x}:0x{1:x}:0x{2:x})",
+                this.IndexId1,
+                this.IndexId2,
+                this.IndexId3);
+        }
+
+        /// <summary>
+        /// Returns the hash code for this instance.
+        /// </summary>
+        /// <returns>The hash code for this instance.</returns>
+        public override int GetHashCode()
+        {
+            return this.CbStruct.GetHashCode()
+                   ^ this.IndexId1.GetHashCode()
+                   ^ this.IndexId2.GetHashCode()
+                   ^ this.IndexId3.GetHashCode();
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether this instance is equal
+        /// to another instance.
+        /// </summary>
+        /// <param name="other">An instance to compare with this instance.</param>
+        /// <returns>True if the two instances are equal.</returns>
+        public bool Equals(JET_INDEXID other)
+        {
+            return this.CbStruct == other.CbStruct
+                   && this.IndexId1 == other.IndexId1
+                   && this.IndexId2 == other.IndexId2
+                   && this.IndexId3 == other.IndexId3;
+        }        
     }
 }
