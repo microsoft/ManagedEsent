@@ -56,6 +56,17 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
+        /// Inverts the order of the elements in the collection.
+        /// </summary>
+        /// <returns>
+        /// A sequence whose elements correspond to those of the collection in reverse order.
+        /// </returns>
+        public PersistentDictionaryLinqKeyEnumerable<TKey, TValue> Reverse()
+        {
+            return this.Where(x => true).Reverse();
+        }
+
+        /// <summary>
         /// Optimize a where statement which uses this collection.
         /// </summary>
         /// <param name="expression">

@@ -660,6 +660,7 @@ namespace InteropApiTests
             {
                 // Expected
             }
+
             Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
             Api.JetCommitTransaction(sesid2, CommitTransactionGrbit.None);
             Api.JetEndSession(sesid2, EndSessionGrbit.None);

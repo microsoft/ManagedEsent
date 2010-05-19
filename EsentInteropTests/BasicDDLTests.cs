@@ -582,6 +582,7 @@ namespace InteropApiTests
             {
                 // Expected
             }
+
             Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
         }
 

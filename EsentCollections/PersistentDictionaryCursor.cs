@@ -190,16 +190,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
-        /// Position the cursor after the last record in the table.
-        /// A <see cref="TryMovePrevious"/> will then position the cursor
-        /// on the first record.
-        /// </summary>
-        public void MoveAfterLast()
-        {
-            Api.MoveAfterLast(this.sesid, this.dataTable);
-        }
-
-        /// <summary>
         /// Try to move to the previous record.
         /// </summary>
         /// <returns>
