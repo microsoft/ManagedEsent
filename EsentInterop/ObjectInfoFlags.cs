@@ -16,6 +16,11 @@ namespace Microsoft.Isam.Esent.Interop
     public enum ObjectInfoFlags : uint
     {
         /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
         /// Object is for internal use only.
         /// </summary>
         System = 0x80000000,

@@ -654,7 +654,7 @@ namespace InteropApiTests
             try
             {
                 Api.JetGetCursorInfo(this.sesid, this.tableid);
-                Assert.Fail("Expected and EsentErrorException");
+                Assert.Fail("Expected an EsentErrorException");
             }
             catch (EsentErrorException)
             {

@@ -15,27 +15,71 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.DocumentationRules",
-        "SA1600:ElementsMustBeDocumented",
-        Justification = "Internal interop struct only.")]
-    [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     internal struct NATIVE_OBJECTLIST
     {
+        /// <summary>
+        /// Size of the structure.
+        /// </summary>
         public uint cbStruct;
+
+        /// <summary>
+        /// Tableid of the temporary table.
+        /// </summary>
         public IntPtr tableid;
+
+        /// <summary>
+        /// Number of records in the temporary table.
+        /// </summary>
         public uint cRecord;
+
+        /// <summary>
+        /// The id of column containing the name of the container type.
+        /// </summary>
         public uint columnidcontainername;
+
+        /// <summary>
+        /// The id of the column containing the name of the object.
+        /// </summary>
         public uint columnidobjectname;
+
+        /// <summary>
+        /// The id of the column containing the type of the object.
+        /// </summary>
         public uint columnidobjtyp;
+
+        /// <summary>
+        /// Obsolete. Do not use.
+        /// </summary>
+        [Obsolete("Unused member")]
         public uint columniddtCreate;
+
+        /// <summary>
+        /// Obsolete. Do not use.
+        /// </summary>
+        [Obsolete("Unused member")]
         public uint columniddtUpdate;
+
+        /// <summary>
+        /// The id of the column containing object grbits.
+        /// </summary>
         public uint columnidgrbit;
+
+        /// <summary>
+        /// The id of the column containing object flags.
+        /// </summary>
         public uint columnidflags;
-        public uint columnidCollate;
+
+        /// <summary>
+        /// The id of the column containing the number of records in the table.
+        /// </summary>
         public uint columnidcRecord;
+
+        /// <summary>
+        /// The id of the column containing the number of pages the object uses.
+        /// </summary>
         public uint columnidcPage;
     }
 

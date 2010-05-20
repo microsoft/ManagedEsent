@@ -34,11 +34,13 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Obsolete. Do not use.
         /// </summary>
+        [Obsolete("Unused member")]
         public double ignored1;
 
         /// <summary>
         /// Obsolete. Do not use.
         /// </summary>
+        [Obsolete("Unused member")]
         public double ignored2;
 
         /// <summary>

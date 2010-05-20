@@ -1950,6 +1950,146 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         }
 
         /// <summary>
+        /// Retrieves various pieces of information about a table in a database.
+        /// </summary>
+        /// <remarks>
+        /// This overload is used with <see cref="JET_TblInfo.Default"/>.
+        /// </remarks>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to retrieve information about.</param>
+        /// <param name="result">Retrieved information.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetTableInfo(JET_SESID sesid, JET_TABLEID tableid, out JET_OBJECTINFO result, JET_TblInfo infoLevel)
+        {
+            this.TraceFunctionCall("JetGetTableInfo");
+            var nativeResult = new NATIVE_OBJECTINFO();
+
+            int err;
+            unsafe
+            {
+                var pvResult = new IntPtr(&nativeResult);
+                err = this.Err(NativeMethods.JetGetTableInfo(
+                            sesid.Value, tableid.Value, pvResult, (uint)Marshal.SizeOf(nativeResult), (uint)infoLevel));
+            }
+
+            result = new JET_OBJECTINFO();
+            result.SetFromNativeObjectinfo(nativeResult);
+            return err;
+        }
+
+        /// <summary>
+        /// Retrieves various pieces of information about a table in a database.
+        /// </summary>
+        /// <remarks>
+        /// This overload is used with <see cref="JET_TblInfo.Name"/> and
+        /// <see cref="JET_TblInfo.TemplateTableName"/>.
+        /// </remarks>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to retrieve information about.</param>
+        /// <param name="result">Retrieved information.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetTableInfo(JET_SESID sesid, JET_TABLEID tableid, out string result, JET_TblInfo infoLevel)
+        {
+            this.TraceFunctionCall("JetGetTableInfo");
+            var resultBuffer = new StringBuilder(SystemParameters.NameMost + 1);
+            int err = this.Err(NativeMethods.JetGetTableInfo(
+                        sesid.Value, tableid.Value, resultBuffer, (uint)resultBuffer.Capacity, (uint)infoLevel));
+
+            result = resultBuffer.ToString();
+            return err;
+        }
+
+        /// <summary>
+        /// Retrieves various pieces of information about a table in a database.
+        /// </summary>
+        /// <remarks>
+        /// This overload is used with <see cref="JET_TblInfo.Dbid"/>.
+        /// </remarks>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to retrieve information about.</param>
+        /// <param name="result">Retrieved information.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetTableInfo(JET_SESID sesid, JET_TABLEID tableid, out JET_DBID result, JET_TblInfo infoLevel)
+        {
+            this.TraceFunctionCall("JetGetTableInfo");
+            result = JET_DBID.Nil;
+
+            int err;
+            unsafe
+            {
+                uint nativeResult;
+                var pvResult = new IntPtr(&nativeResult);
+                err = this.Err(NativeMethods.JetGetTableInfo(sesid.Value, tableid.Value, pvResult, sizeof(uint), (uint)infoLevel));
+                result.Value = nativeResult;
+            }
+
+            return err;
+        }
+
+        /// <summary>
+        /// Retrieves various pieces of information about a table in a database.
+        /// </summary>
+        /// <remarks>
+        /// This overload is used with <see cref="JET_TblInfo.SpaceUsage"/> and
+        /// <see cref="JET_TblInfo.SpaceAlloc"/>.
+        /// </remarks>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to retrieve information about.</param>
+        /// <param name="result">Retrieved information.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetTableInfo(JET_SESID sesid, JET_TABLEID tableid, int[] result, JET_TblInfo infoLevel)
+        {
+            this.TraceFunctionCall("JetGetTableInfo");  
+            this.CheckNotNull(result, "result");
+
+            int err;
+            unsafe
+            {
+                fixed (int* pvResult = result)
+                {
+                    uint cbResult = (uint)(result.Length * sizeof(int));
+                    err = this.Err(NativeMethods.JetGetTableInfo(sesid.Value, tableid.Value, new IntPtr(pvResult), cbResult, (uint)infoLevel));
+                }
+            }
+
+            return err;
+        }
+
+        /// <summary>
+        /// Retrieves various pieces of information about a table in a database.
+        /// </summary>
+        /// <remarks>
+        /// This overload is used with <see cref="JET_TblInfo.SpaceOwned"/> and
+        /// <see cref="JET_TblInfo.SpaceAvailable"/>.
+        /// </remarks>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to retrieve information about.</param>
+        /// <param name="result">Retrieved information.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetTableInfo(JET_SESID sesid, JET_TABLEID tableid, out int result, JET_TblInfo infoLevel)
+        {
+            this.TraceFunctionCall("JetGetTableInfo");
+            result = 0;
+
+            int err;
+            unsafe
+            {
+                fixed (int* pvResult = &result)
+                {
+                    const uint CbResult = sizeof(int);
+                    err = this.Err(NativeMethods.JetGetTableInfo(sesid.Value, tableid.Value, new IntPtr(pvResult), CbResult, (uint)infoLevel));
+                }
+            }
+
+            return err;
+        }
+
+        /// <summary>
         /// Retrieves information about indexes on a table.
         /// </summary>
         /// <param name="sesid">The session to use.</param>

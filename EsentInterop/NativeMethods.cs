@@ -405,6 +405,22 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern int JetGetCurrentIndex(IntPtr sesid, IntPtr tableid, StringBuilder szIndexName, uint cchIndexName);
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetTableInfo(
+            IntPtr sesid,
+            IntPtr tableid,
+            IntPtr pvResult,
+            uint cbMax,
+            uint infoLevel);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetTableInfo(
+            IntPtr sesid,
+            IntPtr tableid,
+            [Out] StringBuilder pvResult,
+            uint cbMax,
+            uint infoLevel);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetGetIndexInfo(
             IntPtr sesid,
             uint dbid,

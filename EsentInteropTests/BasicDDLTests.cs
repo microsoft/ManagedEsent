@@ -586,6 +586,71 @@ namespace InteropApiTests
             Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
         }
 
+        /// <summary>
+        /// Test the version of JetGetTableInfo that returns a JET_OBJECTINFO.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test the version of JetGetTableInfo that returns a JET_OBJECTINFO")]
+        public void TestGetTableInfoObjectinfo()
+        {
+            JET_OBJECTINFO objectinfo;
+            Api.JetGetTableInfo(this.sesid, this.tableid, out objectinfo, JET_TblInfo.Default);
+            Assert.AreEqual(ObjectInfoFlags.None, objectinfo.flags);
+        }
+
+        /// <summary>
+        /// Test the version of JetGetTableInfo that returns a string.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test the version of JetGetTableInfo that returns a string")]
+        public void TestGetTableInfoString()
+        {
+            string name;
+            Api.JetGetTableInfo(this.sesid, this.tableid, out name, JET_TblInfo.Name);
+            Assert.AreEqual(this.table, name);
+        }
+
+        /// <summary>
+        /// Test the version of JetGetTableInfo that returns a JET_DBID.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test the version of JetGetTableInfo that returns a JET_DBID")]
+        public void TestGetTableInfoDbid()
+        {
+            JET_DBID actualDbid;
+            Api.JetGetTableInfo(this.sesid, this.tableid, out actualDbid, JET_TblInfo.Dbid);
+            Assert.AreEqual(this.dbid, actualDbid);
+        }
+
+        /// <summary>
+        /// Test the version of JetGetTableInfo that returns an array of integers.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test the version of JetGetTableInfo that returns an array of integers")]
+        public void TestGetTableInfoIntArray()
+        {
+            int[] result = new int[7];
+            Api.JetGetTableInfo(this.sesid, this.tableid, result, JET_TblInfo.SpaceUsage);
+            Assert.AreNotEqual(0, result[0]);
+        }
+
+        /// <summary>
+        /// Test the version of JetGetTableInfo that returns an integer.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test the version of JetGetTableInfo that returns an integer")]
+        public void TestGetTableInfoInt()
+        {
+            int result;
+            Api.JetGetTableInfo(this.sesid, this.tableid, out result, JET_TblInfo.SpaceOwned);
+            Assert.AreNotEqual(0, result);
+        }
+
         #endregion DDL Tests
 
         #region Helper Methods

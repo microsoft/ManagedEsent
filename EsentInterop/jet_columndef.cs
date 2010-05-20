@@ -6,6 +6,7 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
 
@@ -37,11 +38,13 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Reserved. Should be 0.
         /// </summary>
+        [Obsolete("Reserved")]
         public ushort wCountry;
 
         /// <summary>
         /// Obsolete. Should be 0.
         /// </summary>
+        [Obsolete("Use cp")]
         public ushort langid;
 
         /// <summary>
@@ -52,6 +55,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Reserved. Should be 0.
         /// </summary>
+        [Obsolete("Reserved")]
         public ushort wCollate;
 
         /// <summary>

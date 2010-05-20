@@ -1228,6 +1228,85 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Retrieves various pieces of information about a table in a database.
+        /// </summary>
+        /// <remarks>
+        /// This overload is used with <see cref="JET_TblInfo.Default"/>.
+        /// </remarks>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to retrieve information about.</param>
+        /// <param name="result">Retrieved information.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>       
+        [CLSCompliant(false)]
+        public static void JetGetTableInfo(JET_SESID sesid, JET_TABLEID tableid, out JET_OBJECTINFO result, JET_TblInfo infoLevel)
+        {
+            Api.Check(Impl.JetGetTableInfo(sesid, tableid, out result, infoLevel));
+        }
+
+        /// <summary>
+        /// Retrieves various pieces of information about a table in a database.
+        /// </summary>
+        /// <remarks>
+        /// This overload is used with <see cref="JET_TblInfo.Name"/> and
+        /// <see cref="JET_TblInfo.TemplateTableName"/>.
+        /// </remarks>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to retrieve information about.</param>
+        /// <param name="result">Retrieved information.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        public static void JetGetTableInfo(JET_SESID sesid, JET_TABLEID tableid, out string result, JET_TblInfo infoLevel)
+        {
+            Api.Check(Impl.JetGetTableInfo(sesid, tableid, out result, infoLevel));
+        }
+
+        /// <summary>
+        /// Retrieves various pieces of information about a table in a database.
+        /// </summary>
+        /// <remarks>
+        /// This overload is used with <see cref="JET_TblInfo.Dbid"/>.
+        /// </remarks>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to retrieve information about.</param>
+        /// <param name="result">Retrieved information.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        public static void JetGetTableInfo(JET_SESID sesid, JET_TABLEID tableid, out JET_DBID result, JET_TblInfo infoLevel)
+        {
+            Api.Check(Impl.JetGetTableInfo(sesid, tableid, out result, infoLevel));
+        }
+
+        /// <summary>
+        /// Retrieves various pieces of information about a table in a database.
+        /// </summary>
+        /// <remarks>
+        /// This overload is used with <see cref="JET_TblInfo.SpaceUsage"/> and
+        /// <see cref="JET_TblInfo.SpaceAlloc"/>.
+        /// </remarks>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to retrieve information about.</param>
+        /// <param name="result">Retrieved information.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        public static void JetGetTableInfo(JET_SESID sesid, JET_TABLEID tableid, int[] result, JET_TblInfo infoLevel)
+        {
+            Api.Check(Impl.JetGetTableInfo(sesid, tableid, result, infoLevel));
+        }
+
+        /// <summary>
+        /// Retrieves various pieces of information about a table in a database.
+        /// </summary>
+        /// <remarks>
+        /// This overload is used with <see cref="JET_TblInfo.SpaceOwned"/> and
+        /// <see cref="JET_TblInfo.SpaceAvailable"/>.
+        /// </remarks>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to retrieve information about.</param>
+        /// <param name="result">Retrieved information.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        public static void JetGetTableInfo(JET_SESID sesid, JET_TABLEID tableid, out int result, JET_TblInfo infoLevel)
+        {
+            Api.Check(Impl.JetGetTableInfo(sesid, tableid, out result, infoLevel));
+        }
+
+        /// <summary>
         /// Retrieves information about indexes on a table.
         /// </summary>
         /// <param name="sesid">The session to use.</param>

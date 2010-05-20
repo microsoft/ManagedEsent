@@ -373,6 +373,19 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Check that an exception is thrown when JetGetTableInfo gets a 
+        /// null result buffer.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetGetTableInfo gets a null result buffer")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetGetTableInfoThrowsExceptionWhenResultIsNull()
+        {
+            Api.JetGetTableInfo(this.sesid, this.tableid, null, JET_TblInfo.SpaceUsage);
+        }
+
+        /// <summary>
         /// Check that an exception is thrown when JetGetColumnInfo gets a 
         /// null table name.
         /// </summary>
@@ -415,6 +428,20 @@ namespace InteropApiTests
         {
             JET_COLUMNLIST columnlist;
             Api.JetGetColumnInfo(this.sesid, this.dbid, null, null, out columnlist);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetGetTableColumnInfo gets a 
+        /// null column name.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetGetTableColumnInfo gets a null column name")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetGetTableColumnInfoThrowsExceptionWhenColumnNameIsNull()
+        {
+            JET_COLUMNDEF columndef;
+            Api.JetGetTableColumnInfo(this.sesid, this.tableid, null, out columndef);
         }
 
         /// <summary>
@@ -810,20 +837,6 @@ namespace InteropApiTests
         public void JetDeleteIndexThrowsExceptionWhenIndexNameIsNull()
         {
             Api.JetDeleteIndex(this.sesid, this.tableid, null);
-        }
-
-        /// <summary>
-        /// Check that an exception is thrown when JetGetTableColumnInfo gets a 
-        /// null column name.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Check that an exception is thrown when JetGetTableColumnInfo gets a null column name")]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void JetGetTableColumnInfoThrowsExceptionWhenColumnNameIsNull()
-        {
-            JET_COLUMNDEF columndef;
-            Api.JetGetTableColumnInfo(this.sesid, this.tableid, null, out columndef);
         }
 
         #endregion

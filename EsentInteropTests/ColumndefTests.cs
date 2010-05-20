@@ -34,10 +34,12 @@ namespace InteropApiTests
             NATIVE_COLUMNDEF native = columndef.GetNativeColumndef();
             Assert.AreEqual<uint>(0, native.columnid);
             Assert.AreEqual<uint>(9, native.coltyp);
+#pragma warning disable 618,612 // Disable warning that wCountry/langid/wCollate are obsolete
             Assert.AreEqual<ushort>(0, native.wCountry);
             Assert.AreEqual<ushort>(0, native.langid);
             Assert.AreEqual<ushort>(1200, native.cp);
             Assert.AreEqual<ushort>(0, native.wCollate);
+#pragma warning restore 618,612
             Assert.AreEqual<uint>(1, native.cbMax);
             Assert.AreEqual<uint>(0x10, native.grbit);
         }

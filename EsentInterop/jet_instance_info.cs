@@ -58,6 +58,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// is attached to the database instance. The array has cDatabases
         /// elements. SLV files are not supported, so this field should be ignored.
         /// </summary>
+        [Obsolete("SLV files are not supported")]
         public IntPtr* szDatabaseSLVFileName;
     }
 
