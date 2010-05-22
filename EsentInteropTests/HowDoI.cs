@@ -412,7 +412,7 @@ namespace InteropApiTests
             string seekKey = prefix + "d";
             Api.JetSetCurrentIndex(sesid, tableid, "secondary");
             Api.MakeKey(sesid, tableid, prefix + "d", Encoding.Unicode, MakeKeyGrbit.NewKey);
-            Api.JetSeek(sesid, tableid, SeekGrbit.SeekGE);
+            Api.JetSeek(sesid, tableid, SeekGrbit.SeekEQ);
             string actualKey = Api.RetrieveColumnAsString(sesid, tableid, keyColumn);
             Assert.AreNotEqual(seekKey, actualKey);
             Assert.AreEqual(prefix + "a", actualKey);
@@ -422,7 +422,8 @@ namespace InteropApiTests
             Assert.AreEqual(seekKey, Api.RetrieveColumnAsString(sesid, tableid, keyColumn));
             Assert.AreEqual(3, Api.RetrieveColumnAsInt32(sesid, tableid, dataColumn));
 
-            Assert.IsTrue(TrySeekTruncatedString(sesid, tableid, "foo", keyColumn));
+            Assert.IsFalse(TrySeekTruncatedString(sesid, tableid, prefix + "z", keyColumn));
+            Assert.IsFalse(TrySeekTruncatedString(sesid, tableid, "foo", keyColumn));
         }
 
         /// <summary>
@@ -497,7 +498,7 @@ namespace InteropApiTests
             // through it until we find the record we want. We use the desired key
             // as both the start and end of the range, along with the inclusive flag.
             Api.MakeKey(sesid, tableid, key, Encoding.Unicode, MakeKeyGrbit.NewKey);
-            if (!Api.TrySeek(sesid, tableid, SeekGrbit.SeekGE))
+            if (!Api.TrySeek(sesid, tableid, SeekGrbit.SeekEQ))
             {
                 return false;
             }
