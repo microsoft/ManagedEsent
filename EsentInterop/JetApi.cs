@@ -3451,6 +3451,27 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         }
 
         /// <summary>
+        /// Make native conditionalcolumn structures from the managed ones.
+        /// </summary>
+        /// <param name="conditionalColumns">The conditional columns to convert.</param>
+        /// <returns>Native versions of the conditional columns.</returns>
+        private static NATIVE_CONDITIONALCOLUMN[] GetNativeConditionalColumns(JET_CONDITIONALCOLUMN[] conditionalColumns)
+        {
+            if (null == conditionalColumns)
+            {
+                return null;
+            }
+
+            var nativeConditionalcolumns = new NATIVE_CONDITIONALCOLUMN[conditionalColumns.Length];
+            for (int i = 0; i < conditionalColumns.Length; ++i)
+            {
+                nativeConditionalcolumns[i] = conditionalColumns[i].GetNativeConditionalColumn();
+            }
+
+            return nativeConditionalcolumns;
+        }
+
+        /// <summary>
         /// Set managed columnids from unmanaged columnids. This also sets the columnids
         /// in the columndefs.
         /// </summary>
@@ -3546,7 +3567,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                             nativeIndexcreates[i].pidxUnicode = (NATIVE_UNICODEINDEX*) handles.Add(unicode);
                             nativeIndexcreates[i].grbit |= (uint)VistaGrbits.IndexUnicode;
                         }
-                        ////nativeIndexcreates[i].rgconditionalcolumn = handles.Add(indexcreates[i].rgconditionalcolumn);
+
+                        nativeIndexcreates[i].rgconditionalcolumn = handles.Add(GetNativeConditionalColumns(indexcreates[i].rgconditionalcolumn));
                     }
 
                     return
@@ -3586,7 +3608,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                             nativeIndexcreates[i].indexcreate.pidxUnicode = (NATIVE_UNICODEINDEX*) handles.Add(unicode);
                             nativeIndexcreates[i].indexcreate.grbit |= (uint)VistaGrbits.IndexUnicode;
                         }
-                        ////nativeIndexcreates[i].rgconditionalcolumn = handles.Add(indexcreates[i].rgconditionalcolumn);
+
+                        nativeIndexcreates[i].indexcreate.rgconditionalcolumn = handles.Add(GetNativeConditionalColumns(indexcreates[i].rgconditionalcolumn));
                     }
 
                     return
