@@ -208,7 +208,24 @@ class EsedbSingleDBFixture(unittest.TestCase):
     def testSetDefaultUsesNone(self):
         self.assertEqual(self._db.setdefault('a', None), None)
         self.assertEqual(self._db['a'], None)
+        
+    def testUpdateWithDictionary(self):
+        d = { 'a': 'b', 'c': 4 }
+        self._db.update(d)
+        self.assertEqual(self._db['a'], 'b')
+        self.assertEqual(self._db['c'], '4')
 
+    def testUpdateWithIterable(self):
+        i = [ ('a', 'b'), ('c', 4) ]
+        self._db.update(i)
+        self.assertEqual(self._db['a'], 'b')
+        self.assertEqual(self._db['c'], '4')
+
+    def testUpdateWithKeywords(self):
+        self._db.update(foo=5, bar='a')
+        self.assertEqual(self._db['foo'], '5')
+        self.assertEqual(self._db['bar'], 'a')
+        
     def testSync(self):
         self._db.sync()
         self._db['foo'] = 'bar'
@@ -560,6 +577,9 @@ class EsedbClosedCursorFixture(unittest.TestCase):
     def testSetDefaultRaisesErrorOnClosedCursor(self):
         self.assertRaises(EseDBCursorClosedError, self._db.setdefault)
 
+    def testUpdateRaisesErrorOnClosedCursor(self):
+        self.assertRaises(EseDBCursorClosedError, self._db.update)
+        
 class EsedbDictionaryComparisonFixture(unittest.TestCase):
     """Test esedb against an in-memory dictionary, starting with an empty dictionary.
 
@@ -731,7 +751,38 @@ class EsedbDictionaryComparisonFixture(unittest.TestCase):
         for k,v in self._db.iteritems():
             self._delete(k)
         self._compareWithExpected()
+        
+    def testUpdateFromDictionary(self):
+        self._expected['this'] = '2'
+        self._expected['is'] = '3'
+        self._expected['a'] = '5'
+        self._expected['test'] = '7'
+        self._db.update(self._expected)
+        self._compareWithExpected()
 
+    def testUpdateFromIterable(self):
+        i = [('this', '2'), ('is', '3'), ('a', '5'), ('test', '7')]
+        self._expected.update(i)
+        self._db.update(i)
+        self._compareWithExpected()
+
+    def testUpdateFromKeywords(self):
+        self._expected.update(this='2', was='3', a='5', test='7')
+        self._db.update(this='2', was='3', a='5', test='7')
+        self._compareWithExpected()
+
+    def testUpdateFromDictionaryAndKeywords(self):
+        d = { 'foo': 'bar' }
+        self._expected.update(d, this='2', was='3', a='5', test='7')
+        self._db.update(d, this='2', was='3', a='5', test='7')
+        self._compareWithExpected()        
+
+    def testBigUpdate(self):
+        items = [(str(i),str(i)) for i in xrange(10000)]
+        self._expected.update(items)
+        self._db.update(items)
+        self._compareWithExpected()
+        
 class CounterTests(unittest.TestCase):
     """Test the counter class"""
 

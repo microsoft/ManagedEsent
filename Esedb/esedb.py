@@ -6,9 +6,6 @@
 
 # TODO
 #
-# Extra dictionary methods:
-#   update()
-#
 # Shelve support:
 #   Tests
 #
@@ -160,6 +157,7 @@ class _EseTransaction(object):
         assert not self._inTransaction, 'already in a transaction'
         Api.JetBeginTransaction(self._sesid)
         self._inTransaction = True
+        self._updatesThisBatch = 0
     
     def commit(self, lazyflush=False):
         assert self._inTransaction, 'not in a transaction'
@@ -173,7 +171,15 @@ class _EseTransaction(object):
     def rollback(self):
         assert self._inTransaction, 'not in a transaction'
         Api.JetRollback(self._sesid, RollbackTransactionGrbit.None)
-        self._inTransaction = False            
+        self._inTransaction = False      
+
+    def pulse(self):
+        assert self._inTransaction, 'not in a transaction'
+        self._updatesThisBatch = self._updatesThisBatch + 1
+        if (self._updatesThisBatch == 1000):
+            self.commit(lazyflush=True)
+            self.begin()
+        
 
 #-----------------------------------------------------------------------
 class _EseUpdate(object):
@@ -735,10 +741,7 @@ class EseDBCursor(object):
         self._database.getWriteLock(hash=key.GetHashCode())
         try:
             with _EseTransaction(self._sesid) as trx:
-                if self.has_key(key):
-                    self._updateItem(key, value)
-                else:
-                    self._insertItem(key, value)
+                self._insertOrUpdate(key, value)
                 trx.commit(self._lazyflush)
         finally:
             self._database.unlock(hash=key.GetHashCode())
@@ -953,7 +956,7 @@ class EseDBCursor(object):
         >>> x['c'] = 64
         >>> x['b'] = 128
         >>> x['a'] = 256
-        >>> for (k,v) in x:
+        >>> for (k,v) in x.iteritems():
         ...        print '%s => %s' % (k,v)    
         ...        
         a => 256
@@ -996,9 +999,8 @@ class EseDBCursor(object):
         >>> x.close()
             
         """
-        with _EseTransaction(self._sesid):                
-            self._makeKey(key)
-            return Api.TrySeek(self._sesid, self._tableid, SeekGrbit.SeekEQ)
+        with _EseTransaction(self._sesid):   
+            return self._has_key(key)
                 
     @cursorMustBeOpen
     def set_location(self, key):
@@ -1325,11 +1327,41 @@ class EseDBCursor(object):
                     return default
         finally:
             self._database.unlock(hash=key.GetHashCode())        
-        
-# update([other])
-    # Update the dictionary with the key/value pairs from other, overwriting existing keys. Return None.
-    # update() accepts either another dictionary object or an iterable of key/value pairs (as a tuple or other iterable of length two). If keyword arguments are specified, the dictionary is then updated with those key/value pairs: d.update(red=1, blue=2).
-    # Changed in version 2.4: Allowed the argument to be an iterable of key/value pairs and allowed keyword arguments.
+
+    @cursorMustBeOpen
+    def update(self, other=None, **keywords):
+        """Updates the dictionary with the key/value pairs from other,
+        overwriting existing keys. update() accepts either a dictionary,
+        and iterable of key/value pairs or as a set of keyword arguments
+
+        >>> x = open('wdbtest.db', flag='nf')
+        >>> x.update(foo=1, bar=2)
+        >>> x.items()
+        [('bar', '2'), ('foo', '1')]
+        >>> d = { 'baz': '3' }
+        >>> x.update(d)
+        >>> x.items()
+        [('bar', '2'), ('baz', '3'), ('foo', '1')]
+        >>> i = [ ('qux', '4') ]
+        >>> x.update(i)
+        >>> x.items()
+        [('bar', '2'), ('baz', '3'), ('foo', '1'), ('qux', '4')]
+        >>> x.close()
+            
+        """
+        # Lock all keys and use big transactions
+        self._database.getWriteLock()
+        try:
+            with _EseTransaction(self._sesid) as trx:
+                if isinstance(other, dict):
+                    self._updateItems(other.iteritems(), trx)
+                elif other:
+                    self._updateItems(other, trx)
+                if keywords:
+                    self._updateItems(keywords.items(), trx)
+                trx.commit(self._lazyflush)
+        finally:
+            self._database.unlock()     
             
     @cursorMustBeOpen
     def sync(self):
@@ -1346,6 +1378,7 @@ class EseDBCursor(object):
             Api.JetCommitTransaction(self._sesid, Server2003Grbits.WaitAllLevel0Commit)
             
     def _checkNotClosed(self):
+        """Throw an exception if the cursor has been closed."""
         if not self._isopen:
             raise EseDBCursorClosedError()
 
@@ -1368,13 +1401,44 @@ class EseDBCursor(object):
                 yield value
                 self._checkNotClosed()
                 trx.begin()
+
+    @cursorMustBeOpen
+    def _has_key(self, key):
+        """Returns True if the database contains the specified key,
+        otherwise returns False. The cursor should already be in a
+        transaction.
             
-    def _updateItem(self, key, value):
-        """Update the given key with the specified value. The key must
-        exist and the cursor should already be in a transaction.
+        """
+        self._makeKey(key)
+        return Api.TrySeek(self._sesid, self._tableid, SeekGrbit.SeekEQ)
+                
+    def _updateItems(self, items, trx):
+        """Insert or update the given key/value tuples. A transaction must
+        be provided and will be pulsed to prevent VSOOM problems. The cursor
+        should already be in a transaction.
         
         """
-        self._seekForKey(key)
+        for (k,v) in items:
+            self._insertOrUpdate(k, v)
+            trx.pulse()        
+                
+    def _insertOrUpdate(self, key, value):
+        """Inserts the given key/value if the key doesn't exist. Updates the
+        given key with the specified value if the key does exist. The cursor
+        should already be in a transaction.
+        
+        """
+        if self._has_key(key):
+            self._updateItem(key, value)
+        else:
+            self._insertItem(key, value)                    
+        
+    def _updateItem(self, key, value):
+        """Update the given key with the specified value. The key must
+        exist, the cursor should already be in a transaction and the
+        cursor must be positioned on the record.
+        
+        """
         with _EseUpdate(self._sesid, self._tableid, JET_prep.Replace) as u:
             self._setValueColumn(value)
             u.update()
