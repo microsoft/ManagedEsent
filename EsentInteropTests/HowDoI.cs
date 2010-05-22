@@ -343,6 +343,89 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Demonstrate how to deal with key truncation.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Demonstrate how to deal with key truncation")]
+        public void HowDoIDealWithKeyTruncation()
+        {
+            JET_SESID sesid = this.testSession;
+            JET_DBID dbid = this.testDbid;
+
+            JET_TABLEID tableid;
+            JET_COLUMNDEF columndef = new JET_COLUMNDEF();
+            JET_COLUMNID keyColumn;
+            JET_COLUMNID dataColumn;
+
+            // First create the table.
+            Api.JetCreateTable(sesid, dbid, "table", 0, 100, out tableid);
+            columndef.coltyp = JET_coltyp.LongText;
+            columndef.cp = JET_CP.Unicode;
+            Api.JetAddColumn(sesid, tableid, "key", columndef, null, 0, out keyColumn);
+            columndef.coltyp = JET_coltyp.Long;
+            Api.JetAddColumn(sesid, tableid, "data", columndef, null, 0, out dataColumn);
+
+            // Now create a secondary, non-unique column on the string column.
+            // ESENT keys are stored in a normalized form, which is typically 
+            // larger than the source data, but allow for very fast seeks. By
+            // default the maximum normalized key size is 255 bytes. Starting
+            // with Windows Vista the maximum key size can be increased. Setting
+            // cbKeyMost to SystemParameters.KeyMost will make ManagedEsent
+            // create the index with the largest allowable key.
+            const string KeyDescription = "+key\0\0";
+            JET_INDEXCREATE[] indexcreates = new JET_INDEXCREATE[1];
+            indexcreates[0] = new JET_INDEXCREATE
+            {
+                szIndexName = "secondary",
+                szKey = KeyDescription,
+                cbKey = KeyDescription.Length,
+                cbKeyMost = SystemParameters.KeyMost,
+                grbit = CreateIndexGrbit.None,
+            };
+            Api.JetCreateIndex2(sesid, tableid, indexcreates, indexcreates.Length);
+
+            // Insert some records. The key has the same value for the first
+            // 4096 characters and then is different. This string is too large
+            // for even the largest key sizes to differentiate.
+            // If the index was unique we would get a key duplicate error.
+            string prefix = new string('x', 4096);
+            using (var transaction = new Transaction(sesid))
+            {
+                int i = 0;
+                foreach (string k in new[] { "a", "b", "c", "d" })
+                {
+                    using (var update = new Update(sesid, tableid, JET_prep.Insert))
+                    {
+                        string key = prefix + k;
+                        Api.SetColumn(sesid, tableid, keyColumn, key, Encoding.Unicode);
+                        Api.SetColumn(sesid, tableid, dataColumn, i++);
+                        update.Save();
+                    }
+                }
+
+                transaction.Commit(CommitTransactionGrbit.LazyFlush);
+            }
+
+            // Seek for a record. This demonstrates the problem with key truncation.
+            // We seek for the key ending in 'd' but end up on the one ending in 'a'.
+            string seekKey = prefix + "d";
+            Api.JetSetCurrentIndex(sesid, tableid, "secondary");
+            Api.MakeKey(sesid, tableid, prefix + "d", Encoding.Unicode, MakeKeyGrbit.NewKey);
+            Api.JetSeek(sesid, tableid, SeekGrbit.SeekGE);
+            string actualKey = Api.RetrieveColumnAsString(sesid, tableid, keyColumn);
+            Assert.AreNotEqual(seekKey, actualKey);
+            Assert.AreEqual(prefix + "a", actualKey);
+
+            // Seek for the record using a key range.
+            Assert.IsTrue(TrySeekTruncatedString(sesid, tableid, seekKey, keyColumn));
+            Assert.AreEqual(seekKey, Api.RetrieveColumnAsString(sesid, tableid, keyColumn));
+            Assert.AreEqual(3, Api.RetrieveColumnAsInt32(sesid, tableid, dataColumn));
+
+            Assert.IsTrue(TrySeekTruncatedString(sesid, tableid, "foo", keyColumn));
+        }
+
+        /// <summary>
         /// Demonstrate how to lock records.
         /// </summary>
         [TestMethod]
@@ -398,6 +481,39 @@ namespace InteropApiTests
             {
                 Console.WriteLine("Worker {0} processed {1} records", i, workers[i].RecordsProcessed);
             }
+        }
+
+        /// <summary>
+        /// Seek for a string match on a non-unique secondary index.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to seek on.</param>
+        /// <param name="key">The key to look for.</param>
+        /// <param name="keyColumn">The value of the key column.</param>
+        /// <returns>True if a record was found, false otherwise.</returns>
+        private static bool TrySeekTruncatedString(JET_SESID sesid, JET_TABLEID tableid, string key, JET_COLUMNID keyColumn)
+        {
+            // To find the record we want we can set up an index range and iterate
+            // through it until we find the record we want. We use the desired key
+            // as both the start and end of the range, along with the inclusive flag.
+            Api.MakeKey(sesid, tableid, key, Encoding.Unicode, MakeKeyGrbit.NewKey);
+            if (!Api.TrySeek(sesid, tableid, SeekGrbit.SeekGE))
+            {
+                return false;
+            }
+
+            Api.MakeKey(sesid, tableid, key, Encoding.Unicode, MakeKeyGrbit.NewKey);
+            Api.JetSetIndexRange(sesid, tableid, SetIndexRangeGrbit.RangeInclusive | SetIndexRangeGrbit.RangeUpperLimit);
+
+            while (key != Api.RetrieveColumnAsString(sesid, tableid, keyColumn))
+            {
+                if (!Api.TryMoveNext(sesid, tableid))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
