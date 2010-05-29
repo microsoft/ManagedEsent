@@ -72,7 +72,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Verify JET_RETRIEVECOLUMN.UpdateFromNAtiveRetrievecolumns sets cbActual")]
+        [Description("Verify JET_RETRIEVECOLUMN.UpdateFromNativeRetrievecolumns sets cbActual")]
         public void VerifyUpdateFromNativeRetrievecolumnSetsCbactual()
         {
             var setcolumn = new JET_RETRIEVECOLUMN();
@@ -87,7 +87,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Verify JET_RETRIEVECOLUMN.UpdateFromNAtiveRetrievecolumns sets columnidNextTagged")]
+        [Description("Verify JET_RETRIEVECOLUMN.UpdateFromNativeRetrievecolumns sets columnidNextTagged")]
         public void VerifyUpdateFromNativeRetrievecolumnSetsColumnidNextTagged()
         {
             var setcolumn = new JET_RETRIEVECOLUMN();
@@ -98,12 +98,27 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// UpdateFromNativeRetrievecolumn should set the itagSequence
+        /// member on the JET_RETRIEVECOLUMN.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JET_RETRIEVECOLUMN.UpdateFromNativeRetrievecolumns sets itagSequence")]
+        public void VerifyUpdateFromNativeRetrievecolumnSetsItagSequence()
+        {
+            var setcolumn = new JET_RETRIEVECOLUMN();
+            var native = new NATIVE_RETRIEVECOLUMN { itagSequence = 7 };
+            setcolumn.UpdateFromNativeRetrievecolumn(native);
+            Assert.AreEqual(7, setcolumn.itagSequence);
+        }
+
+        /// <summary>
         /// UpdateFromNativeRetrievecolumn should set the err
         /// member on the JET_RETRIEVECOLUMN.
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Verify JET_RETRIEVECOLUMN.UpdateFromNAtiveRetrievecolumns sets err")]
+        [Description("Verify JET_RETRIEVECOLUMN.UpdateFromNativeRetrievecolumns sets err")]
         public void VerifyUpdateFromNativeRetrievecolumnSetsErr()
         {
             var setcolumn = new JET_RETRIEVECOLUMN();

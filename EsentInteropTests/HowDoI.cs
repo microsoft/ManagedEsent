@@ -485,6 +485,62 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Demonstrate how to deal with multivalues.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Demonstrate how to deal with multivalues")]
+        public void HowDoIDealWithMultivalues()
+        {
+            JET_SESID sesid = this.testSession;
+            JET_DBID dbid = this.testDbid;
+
+            JET_TABLEID tableid;
+            JET_COLUMNDEF columndef = new JET_COLUMNDEF();
+            JET_COLUMNID multivalueColumn;
+
+            // First create the table. There is one autoinc column.
+            Api.JetCreateTable(sesid, dbid, "table", 0, 100, out tableid);
+            columndef.coltyp = JET_coltyp.LongText;
+            Api.JetAddColumn(sesid, tableid, "data", columndef, null, 0, out multivalueColumn);
+
+            Api.JetBeginTransaction(sesid);
+
+            byte[] data;
+
+            // Now insert a record. An ESENT column can have multiple instances (multivalues)
+            // inside the same record. Each multivalue is identified by an itag, the first itag
+            // in a sequence is 1.
+            Api.JetPrepareUpdate(sesid, tableid, JET_prep.Insert);
+
+            // With no JET_SETINFO specified, itag 1 will be set.
+            data = Encoding.ASCII.GetBytes("foo");
+            Api.JetSetColumn(sesid, tableid, multivalueColumn, data, data.Length, SetColumnGrbit.None, null);
+
+            // Set a column with a setinfo. The itagSequence in the setinfo will be 0, which 
+            // means the value will be added to the collection of values, i.e. the column will
+            // have two instances, "foo" and "bar".
+            JET_SETINFO setinfo = new JET_SETINFO();
+            data = Encoding.ASCII.GetBytes("bar");
+            Api.JetSetColumn(sesid, tableid, multivalueColumn, data, data.Length, SetColumnGrbit.None, setinfo);
+
+            // Add a third instance, again using an itagSequence of 0
+            data = Encoding.ASCII.GetBytes("bar");
+            Api.JetSetColumn(sesid, tableid, multivalueColumn, data, data.Length, SetColumnGrbit.None, setinfo);
+
+            Api.JetUpdate(sesid, tableid);
+            Api.JetMove(sesid, tableid, JET_Move.First, MoveGrbit.None);
+
+            JET_RETRIEVECOLUMN retrievecolumn = new JET_RETRIEVECOLUMN();
+            retrievecolumn.columnid = multivalueColumn;
+            Api.JetRetrieveColumns(sesid, tableid, new[] { retrievecolumn }, 1); 
+            Console.WriteLine("{0}", retrievecolumn.itagSequence);
+            Assert.AreEqual(3, retrievecolumn.itagSequence);
+
+            Api.JetCommitTransaction(sesid, CommitTransactionGrbit.LazyFlush);
+        }
+
+        /// <summary>
         /// Seek for a string match on a non-unique secondary index.
         /// </summary>
         /// <param name="sesid">The session to use.</param>

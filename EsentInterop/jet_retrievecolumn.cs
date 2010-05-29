@@ -191,6 +191,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             this.cbActual = checked((int)native.cbActual);
             this.columnidNextTagged = new JET_COLUMNID { Value = native.columnidNextTagged };
+            this.itagSequence = checked((int)native.itagSequence);
             this.err = (JET_wrn) native.err;
         }
     }
