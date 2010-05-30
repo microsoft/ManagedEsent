@@ -497,16 +497,23 @@ namespace InteropApiTests
 
             JET_TABLEID tableid;
             JET_COLUMNDEF columndef = new JET_COLUMNDEF();
-            JET_COLUMNID multivalueColumn;
+            JET_COLUMNID tagColumn;
 
-            // First create the table. There is one autoinc column.
             Api.JetCreateTable(sesid, dbid, "table", 0, 100, out tableid);
+
+            // Create the column. Any column can be multivalued. Using
+            // ColumndefGrbit controls how the column is indexed.
             columndef.coltyp = JET_coltyp.LongText;
-            Api.JetAddColumn(sesid, tableid, "data", columndef, null, 0, out multivalueColumn);
+            columndef.cp = JET_CP.Unicode;
+            columndef.grbit = ColumndefGrbit.ColumnMultiValued;
+            Api.JetAddColumn(sesid, tableid, "tags", columndef, null, 0, out tagColumn);
+
+            // Create the index. There will be one entry in the index for each
+            // instance of the multivalued column.
+            const string IndexKey = "+tags\0\0";
+            Api.JetCreateIndex(sesid, tableid, "tagsindex", CreateIndexGrbit.None, IndexKey, IndexKey.Length, 100);
 
             Api.JetBeginTransaction(sesid);
-
-            byte[] data;
 
             // Now insert a record. An ESENT column can have multiple instances (multivalues)
             // inside the same record. Each multivalue is identified by an itag, the first itag
@@ -514,28 +521,93 @@ namespace InteropApiTests
             Api.JetPrepareUpdate(sesid, tableid, JET_prep.Insert);
 
             // With no JET_SETINFO specified, itag 1 will be set.
-            data = Encoding.ASCII.GetBytes("foo");
-            Api.JetSetColumn(sesid, tableid, multivalueColumn, data, data.Length, SetColumnGrbit.None, null);
+            byte[] data = Encoding.Unicode.GetBytes("foo");
+            Api.JetSetColumn(sesid, tableid, tagColumn, data, data.Length, SetColumnGrbit.None, null);
 
             // Set a column with a setinfo. The itagSequence in the setinfo will be 0, which 
             // means the value will be added to the collection of values, i.e. the column will
             // have two instances, "foo" and "bar".
             JET_SETINFO setinfo = new JET_SETINFO();
-            data = Encoding.ASCII.GetBytes("bar");
-            Api.JetSetColumn(sesid, tableid, multivalueColumn, data, data.Length, SetColumnGrbit.None, setinfo);
+            data = Encoding.Unicode.GetBytes("bar");
+            Api.JetSetColumn(sesid, tableid, tagColumn, data, data.Length, SetColumnGrbit.None, setinfo);
 
-            // Add a third instance, again using an itagSequence of 0
-            data = Encoding.ASCII.GetBytes("bar");
-            Api.JetSetColumn(sesid, tableid, multivalueColumn, data, data.Length, SetColumnGrbit.None, setinfo);
+            // Add a third instance, explicitly setting the itagSequence
+            data = Encoding.Unicode.GetBytes("baz");
+            setinfo.itagSequence = 4;
+            Api.JetSetColumn(sesid, tableid, tagColumn, data, data.Length, SetColumnGrbit.None, setinfo);
+
+            // Add a duplicate value, checking for uniqueness
+            data = Encoding.Unicode.GetBytes("foo");
+            setinfo.itagSequence = 0;
+            try
+            {
+                Api.JetSetColumn(sesid, tableid, tagColumn, data, data.Length, SetColumnGrbit.UniqueMultiValues, setinfo);
+                Assert.Fail("Expected an EsentErrorException");
+            }
+            catch (EsentErrorException ex)
+            {
+                Assert.AreEqual(JET_err.MultiValuedDuplicate, ex.Error);
+            }
 
             Api.JetUpdate(sesid, tableid);
-            Api.JetMove(sesid, tableid, JET_Move.First, MoveGrbit.None);
 
+            // Find the record. We can seek for any column instance.
+            Api.JetSetCurrentIndex(sesid, tableid, "tagsindex");
+            Api.MakeKey(sesid, tableid, "bar", Encoding.Unicode, MakeKeyGrbit.NewKey);
+            Assert.IsTrue(Api.TrySeek(sesid, tableid, SeekGrbit.SeekEQ));
+
+            // Retrieve the number of column instances. This can be done with JetRetrieveColumns by setting
+            // itagSequence to 0.
             JET_RETRIEVECOLUMN retrievecolumn = new JET_RETRIEVECOLUMN();
-            retrievecolumn.columnid = multivalueColumn;
+            retrievecolumn.columnid = tagColumn;
+            retrievecolumn.itagSequence = 0;
             Api.JetRetrieveColumns(sesid, tableid, new[] { retrievecolumn }, 1); 
             Console.WriteLine("{0}", retrievecolumn.itagSequence);
             Assert.AreEqual(3, retrievecolumn.itagSequence);
+
+            // Retrieve all the columns
+            for (int itag = 1; itag <= retrievecolumn.itagSequence; ++itag)
+            {
+                JET_RETINFO retinfo = new JET_RETINFO { itagSequence = itag };
+                string s = Encoding.Unicode.GetString(Api.RetrieveColumn(sesid, tableid, tagColumn, RetrieveColumnGrbit.None, retinfo));
+                Console.WriteLine("{0}: {1}", itag, s);
+            }
+
+            // Update the record
+            Api.JetPrepareUpdate(sesid, tableid, JET_prep.Replace);
+
+            // With no JET_SETINFO specified, itag 1 will be set, overwriting the existing value.
+            data = Encoding.Unicode.GetBytes("qux");
+            Api.JetSetColumn(sesid, tableid, tagColumn, data, data.Length, SetColumnGrbit.None, null);
+
+            // Set an instance to null to delete it.
+            setinfo.itagSequence = 2;
+            Api.JetSetColumn(sesid, tableid, tagColumn, null, 0, SetColumnGrbit.None, setinfo);
+
+            // Removing itag 2 moved the other itags down (i.e. itag 3 became itag 2).
+            // Overwrite itag 2.
+            data = Encoding.Unicode.GetBytes("xyzzy");
+            setinfo.itagSequence = 2;
+            Api.JetSetColumn(sesid, tableid, tagColumn, data, data.Length, SetColumnGrbit.None, setinfo);
+
+            // Now add a new instance by setting itag 0. This instance will go at the end.
+            data = Encoding.Unicode.GetBytes("flob");
+            setinfo.itagSequence = 0;
+            Api.JetSetColumn(sesid, tableid, tagColumn, data, data.Length, SetColumnGrbit.None, setinfo);
+
+            Api.JetUpdate(sesid, tableid);
+
+            // Retrieve the number of column instances again.
+            retrievecolumn.itagSequence = 0;
+            Api.JetRetrieveColumns(sesid, tableid, new[] { retrievecolumn }, 1);
+
+            // Retrieve all the columns
+            for (int itag = 1; itag <= retrievecolumn.itagSequence; ++itag)
+            {
+                JET_RETINFO retinfo = new JET_RETINFO { itagSequence = itag };
+                string s = Encoding.Unicode.GetString(Api.RetrieveColumn(sesid, tableid, tagColumn, RetrieveColumnGrbit.None, retinfo));
+                Console.WriteLine("{0}: {1}", itag, s);
+            }
 
             Api.JetCommitTransaction(sesid, CommitTransactionGrbit.LazyFlush);
         }
