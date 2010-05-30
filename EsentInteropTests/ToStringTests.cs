@@ -123,5 +123,17 @@ namespace InteropApiTests
             var indexid = new JET_INDEXID { IndexId1 = (IntPtr)0x1, IndexId2 = 0x2, IndexId3 = 0x3 };
             Assert.AreEqual("JET_INDEXID(0x1:0x2:0x3)", indexid.ToString());
         }
+
+        /// <summary>
+        /// Test JET_LOGTIME.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_LOGTIME.ToString()")]
+        public void JetLogtimeToString()
+        {
+            var logtime = new JET_LOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Utc));
+            Assert.AreEqual("JET_LOGTIME(17:44:4:31:5:110:0x80:0x0)", logtime.ToString());
+        }
     }
 }

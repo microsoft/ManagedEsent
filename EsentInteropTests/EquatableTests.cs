@@ -7,6 +7,7 @@
 namespace InteropApiTests
 {
     using System;
+    using System.Diagnostics;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -307,6 +308,74 @@ namespace InteropApiTests
 
             Assert.IsTrue(x != y);
             Assert.IsFalse(x == y);
+        }
+
+        /// <summary>
+        /// Check that null JET_LOGTIME structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that null JET_LOGTIME structures can be compared for equality")]
+        public void VerifyNullJetLogtimeEquality()
+        {
+            var x = new JET_LOGTIME();
+            var y = new JET_LOGTIME();
+            TestEqualObjects(x, y);
+            Assert.IsTrue(x == y);
+            Assert.IsFalse(x != y);
+        }
+
+        /// <summary>
+        /// Check that JET_LOGTIME structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_LOGTIME structures can be compared for equality")]
+        public void VerifyJetLogtimeEquality()
+        {
+            var x = new JET_LOGTIME(DateTime.Now);
+            var y = new JET_LOGTIME(DateTime.Now);
+            TestEqualObjects(x, y);
+            Assert.IsTrue(x == y);
+            Assert.IsFalse(x != y);
+        }
+
+        /// <summary>
+        /// Check that JET_LOGTIME structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_LOGTIME structures can be compared for inequality")]
+        public void VerifyJetLogtimeInequality()
+        {
+            // None of these objects are equal, most differ in only one member from the
+            // first object. We will compare them all against each other.
+            var times = new[]
+            {
+                new JET_LOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Utc)),
+                new JET_LOGTIME(new DateTime(2011, 5, 31, 4, 44, 17, DateTimeKind.Utc)),
+                new JET_LOGTIME(new DateTime(2010, 7, 31, 4, 44, 17, DateTimeKind.Utc)),
+                new JET_LOGTIME(new DateTime(2010, 5, 30, 4, 44, 17, DateTimeKind.Utc)),
+                new JET_LOGTIME(new DateTime(2010, 5, 31, 5, 44, 17, DateTimeKind.Utc)),
+                new JET_LOGTIME(new DateTime(2010, 5, 31, 4, 45, 17, DateTimeKind.Utc)),
+                new JET_LOGTIME(new DateTime(2010, 5, 31, 4, 44, 18, DateTimeKind.Utc)),
+                new JET_LOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Local)),
+                new JET_LOGTIME(),
+            };
+
+            for (int i = 0; i < times.Length - 1; ++i)
+            {
+                for (int j = i + 1; j < times.Length; ++j)
+                {
+                    Debug.Assert(i != j, "About to compare the same JET_LOGTIME");
+                    TestUnequalObjects(times[i], times[j]);
+                    Assert.IsTrue(times[i] != times[j]);
+                    Assert.IsFalse(times[i] == times[j]);
+                }
+            }
         }
 
         /// <summary>

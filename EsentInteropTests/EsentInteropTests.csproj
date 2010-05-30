@@ -64,6 +64,7 @@
     <Compile Include="HowDoI.cs" />
     <Compile Include="JetGetThreadStatsTests.cs" />
     <Compile Include="JetSetGetLs.cs" />
+    <Compile Include="LogtimeToDateTimeTests.cs" />
     <Compile Include="MakeKeyHelpersTests.cs" />
     <Compile Include="MultivalueIndexFixture.cs" />
     <Compile Include="NativeRecsize2ConversionTests.cs" />

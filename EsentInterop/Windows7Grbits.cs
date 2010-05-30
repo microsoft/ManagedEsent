@@ -59,6 +59,22 @@ namespace Microsoft.Isam.Esent.Interop.Windows7
     }
 
     /// <summary>
+    /// Options for JetPrereadKeys.
+    /// </summary>
+    public enum PrereadKeysGrbit
+    {
+        /// <summary>
+        /// Preread forward.
+        /// </summary>
+        Forward = 0x1,
+
+        /// <summary>
+        /// Preread backwards.
+        /// </summary>
+        Backwards = 0x2,
+    }
+
+    /// <summary>
     /// Grbits that have been added to the Windows 7 version of ESENT.
     /// </summary>
     public static class Windows7Grbits
