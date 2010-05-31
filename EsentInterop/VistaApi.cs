@@ -60,5 +60,16 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         {
             Api.Check(Api.Impl.JetOSSnapshotEnd(snapid, grbit));
         }
+
+        /// <summary>
+        /// Retrieves information about an instance.
+        /// </summary>
+        /// <param name="instance">The instance to get information about.</param>
+        /// <param name="signature">Retrieved information.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        public static void JetGetInstanceMiscInfo(JET_INSTANCE instance, out JET_SIGNATURE signature, JET_InstanceMiscInfo infoLevel)
+        {
+            Api.Check(Api.Impl.JetGetInstanceMiscInfo(instance, out signature, infoLevel));
+        }
     }
 }

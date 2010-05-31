@@ -15,6 +15,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
     /// A collection of GCHandles for pinned objects. The handles
     /// are freed when this object is disposed.
     /// </summary>
+    [StructLayout(LayoutKind.Auto)]
     internal struct GCHandleCollection : IDisposable
     {
         /// <summary>

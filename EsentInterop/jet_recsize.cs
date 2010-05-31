@@ -14,6 +14,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// requirements in user data space, number of set columns, number of
     /// values, and ESENT record structure overhead space.
     /// </summary>
+    [StructLayout(LayoutKind.Auto)]
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1300:ElementMustBeginWithUpperCaseLetter",

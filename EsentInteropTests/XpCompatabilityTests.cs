@@ -118,6 +118,20 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify that JetGetThreadStats throws an exception when using the
+        /// XP version of ESENT.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that JetGetInstanceMiscInfo throws an exception when using the XP version of ESENT")]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void VerifyXpThrowsExceptionOnJetGetInstanceMiscInfo()
+        {
+            JET_SIGNATURE signature;
+            VistaApi.JetGetInstanceMiscInfo(JET_INSTANCE.Nil, out signature, JET_InstanceMiscInfo.LogSignature);
+        }
+
+        /// <summary>
         /// Verify that JetOpenTemporaryTable throws an exception when using the
         /// XP version of ESENT.
         /// </summary>

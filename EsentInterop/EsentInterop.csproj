@@ -54,6 +54,7 @@
     <Compile Include="BytesColumnValue.cs" />
     <Compile Include="ColumnValueOfStruct.cs" />
     <Compile Include="Conversions.cs" />
+    <Compile Include="jet_signature.cs" />
     <Compile Include="DateTimeColumnValue.cs" />
     <Compile Include="DoubleColumnValue.cs" />
     <Compile Include="FloatColumnValue.cs" />

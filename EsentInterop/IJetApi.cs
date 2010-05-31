@@ -89,6 +89,15 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         int JetGetInstanceInfo(out int numInstances, out JET_INSTANCE_INFO[] instances);
 
         /// <summary>
+        /// Retrieves information about an instance.
+        /// </summary>
+        /// <param name="instance">The instance to get information about.</param>
+        /// <param name="signature">Retrieved information.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        /// <returns>An error code if the call fails.</returns>
+        int JetGetInstanceMiscInfo(JET_INSTANCE instance, out JET_SIGNATURE signature, JET_InstanceMiscInfo infoLevel);
+
+        /// <summary>
         /// Prevents streaming backup-related activity from continuing on a
         /// specific running instance, thus ending the streaming backup in
         /// a predictable way.

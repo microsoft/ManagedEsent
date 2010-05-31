@@ -335,8 +335,9 @@ namespace InteropApiTests
         [Description("Check that JET_LOGTIME structures can be compared for equality")]
         public void VerifyJetLogtimeEquality()
         {
-            var x = new JET_LOGTIME(DateTime.Now);
-            var y = new JET_LOGTIME(DateTime.Now);
+            DateTime t = DateTime.Now;
+            var x = new JET_LOGTIME(t);
+            var y = new JET_LOGTIME(t);
             TestEqualObjects(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
@@ -371,6 +372,74 @@ namespace InteropApiTests
                 for (int j = i + 1; j < times.Length; ++j)
                 {
                     Debug.Assert(i != j, "About to compare the same JET_LOGTIME");
+                    TestUnequalObjects(times[i], times[j]);
+                    Assert.IsTrue(times[i] != times[j]);
+                    Assert.IsFalse(times[i] == times[j]);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Check that null JET_SIGNATURE structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that null JET_SIGNATURE structures can be compared for equality")]
+        public void VerifyNullJetSignatureEquality()
+        {
+            var x = new JET_SIGNATURE();
+            var y = new JET_SIGNATURE();
+            TestEqualObjects(x, y);
+            Assert.IsTrue(x == y);
+            Assert.IsFalse(x != y);
+        }
+
+        /// <summary>
+        /// Check that JET_SIGNATURE structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_SIGNATURE structures can be compared for equality")]
+        public void VerifyJetSignatureEquality()
+        {
+            DateTime t = DateTime.Now;
+            var x = new JET_SIGNATURE(1, t, "COMPUTER");
+            var y = new JET_SIGNATURE(1, t, "COMPUTER");
+            TestEqualObjects(x, y);
+            Assert.IsTrue(x == y);
+            Assert.IsFalse(x != y);
+        }
+
+        /// <summary>
+        /// Check that JET_SIGNATURE structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_SIGNATURE structures can be compared for inequality")]
+        public void VerifyJetSignatureInequality()
+        {
+            // None of these objects are equal, most differ in only one member from the
+            // first object. We will compare them all against each other.
+            DateTime t = DateTime.UtcNow;
+            var times = new[]
+            {
+                new JET_SIGNATURE(1, t, "COMPUTER"),
+                new JET_SIGNATURE(2, t, "COMPUTER"),
+                new JET_SIGNATURE(1, DateTime.Now, "COMPUTER"),
+                new JET_SIGNATURE(1, null, "COMPUTER"),
+                new JET_SIGNATURE(1, t, "COMPUTER2"),
+                new JET_SIGNATURE(1, t, null),
+                new JET_SIGNATURE(),
+            };
+
+            for (int i = 0; i < times.Length - 1; ++i)
+            {
+                for (int j = i + 1; j < times.Length; ++j)
+                {
+                    Debug.Assert(i != j, "About to compare the same JET_SIGNATURE");
                     TestUnequalObjects(times[i], times[j]);
                     Assert.IsTrue(times[i] != times[j]);
                     Assert.IsFalse(times[i] == times[j]);

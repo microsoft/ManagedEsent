@@ -62,6 +62,7 @@
     <Compile Include="CallbackWrappersTests.cs" />
     <Compile Include="ColumnValueTests.cs" />
     <Compile Include="HowDoI.cs" />
+    <Compile Include="InstanceMiscInfoTests.cs" />
     <Compile Include="JetGetThreadStatsTests.cs" />
     <Compile Include="JetSetGetLs.cs" />
     <Compile Include="LogtimeToDateTimeTests.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="RetrieveColumnsPerfTest.cs" />
     <Compile Include="SetColumnValidationTests.cs" />
     <Compile Include="SetinfoTests.cs" />
+    <Compile Include="SignatureTests.cs" />
     <Compile Include="TempTableNavigationTests.cs" />
     <Compile Include="HelpersTempTableFixtureTests.cs" />
     <Compile Include="DatabaseFileTestHelper.cs" />

@@ -194,6 +194,34 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         }
 
         /// <summary>
+        /// Retrieves information about an instance.
+        /// </summary>
+        /// <param name="instance">The instance to get information about.</param>
+        /// <param name="signature">Retrieved information.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        /// <returns>An error code if the call fails.</returns>
+        public int JetGetInstanceMiscInfo(JET_INSTANCE instance, out JET_SIGNATURE signature, JET_InstanceMiscInfo infoLevel)
+        {
+            this.TraceFunctionCall("JetGetInstanceMiscInfo");
+            this.CheckSupportsVistaFeatures("JetGetInstanceMiscInfo");
+
+            int err;
+            var nativeSignature = new NATIVE_SIGNATURE();
+            unsafe
+            {
+                var pvResult = new IntPtr(&nativeSignature);
+                err = NativeMethods.JetGetInstanceMiscInfo(
+                    instance.Value,
+                    pvResult,
+                    checked((uint)NATIVE_SIGNATURE.Size), 
+                    unchecked((uint)infoLevel));
+            }
+
+            signature = new JET_SIGNATURE(nativeSignature);
+            return this.Err(err);
+        }
+
+        /// <summary>
         /// Prevents streaming backup-related activity from continuing on a
         /// specific running instance, thus ending the streaming backup in
         /// a predictable way.

@@ -23,6 +23,17 @@ namespace Microsoft.Isam.Esent.Interop.Vista
     }
 
     /// <summary>
+    /// Information levels for <see cref="VistaApi.JetGetInstanceMiscInfo"/>.
+    /// </summary>
+    public enum JET_InstanceMiscInfo
+    {
+        /// <summary>
+        /// Get the signature of the transaction log associated with this sequence.
+        /// </summary>
+        LogSignature = 0,
+    }
+
+    /// <summary>
     /// Grbits that have been added to the Vista version of ESENT.
     /// </summary>
     public static class VistaGrbits

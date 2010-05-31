@@ -135,5 +135,18 @@ namespace InteropApiTests
             var logtime = new JET_LOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Utc));
             Assert.AreEqual("JET_LOGTIME(17:44:4:31:5:110:0x80:0x0)", logtime.ToString());
         }
+
+        /// <summary>
+        /// Test JET_SIGNATURE.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_SIGNATURE.ToString()")]
+        public void JetSignatureToString()
+        {
+            var t = new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Utc);
+            var signature = new JET_SIGNATURE(99, t, "COMPUTER");
+            Assert.AreEqual("JET_SIGNATURE(99:05/31/2010 04:44:17:COMPUTER)", signature.ToString());
+        }
     }
 }
