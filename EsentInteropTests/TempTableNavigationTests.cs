@@ -590,8 +590,8 @@ namespace InteropApiTests
         public void TestTryMovePrevious()
         {
             int expected = this.numRecords - 2;
-            Assert.AreEqual(true, Api.TryMoveLast(this.sesid, this.tableid));
-            Assert.AreEqual(true, Api.TryMovePrevious(this.sesid, this.tableid));
+            Assert.IsTrue(Api.TryMoveLast(this.sesid, this.tableid));
+            Assert.IsTrue(Api.TryMovePrevious(this.sesid, this.tableid));
             int actual = this.GetLongColumn();
             Assert.AreEqual(expected, actual);
         }

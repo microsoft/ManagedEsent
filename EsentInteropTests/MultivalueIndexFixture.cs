@@ -270,6 +270,32 @@ namespace InteropApiTests
                 1, (int)Api.RetrieveColumnAsInt32(this.sesid, this.tableid, this.keyColumn), "should have been on the next record");
         }
 
+        /// <summary>
+        /// Test JetSetCurrentIndex3.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test JetSetCurrentIndex3")]
+        public void TestTryMove()
+        {
+            this.InsertRecord(0, "a", "b", "c");
+            this.InsertRecord(1, "a", "b", "c");
+            this.InsertRecord(2, "a", "b", "c");
+
+            Api.JetSetCurrentIndex3(this.sesid, this.tableid, "index", SetCurrentIndexGrbit.NoMove, 3);
+            Assert.IsTrue(Api.TryMoveFirst(this.sesid, this.tableid));
+
+            Assert.AreEqual(
+                0, (int)Api.RetrieveColumnAsInt32(this.sesid, this.tableid, this.keyColumn), "should be on the first record");
+            Assert.IsTrue(Api.TryMove(this.sesid, this.tableid, JET_Move.Next, MoveGrbit.MoveKeyNE), "unable to move to next record");
+            Assert.AreEqual(
+                0, (int)Api.RetrieveColumnAsInt32(this.sesid, this.tableid, this.keyColumn), "should be on the first record");
+            Assert.IsTrue(Api.TryMove(this.sesid, this.tableid, JET_Move.Next, MoveGrbit.MoveKeyNE), "unable to move to next record");
+            Assert.AreEqual(
+                0, (int)Api.RetrieveColumnAsInt32(this.sesid, this.tableid, this.keyColumn), "should be on the first record");
+            Assert.IsFalse(Api.TryMove(this.sesid, this.tableid, JET_Move.Next, MoveGrbit.MoveKeyNE), "able to move to next record");
+        }
+
         #region Helper Methods
 
         /// <summary>

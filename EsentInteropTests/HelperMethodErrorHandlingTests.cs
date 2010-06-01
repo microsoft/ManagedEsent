@@ -105,6 +105,25 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify an exception is thrown when TryMove gets an unexpected error.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify an exception is thrown when TryMove gets an unexpected error")]
+        public void VerifyTryMoveThrowsException()
+        {
+            this.SetupJetMoveToReturnError();
+            try
+            {
+                Api.TryMove(JET_SESID.Nil, JET_TABLEID.Nil, JET_Move.Next, MoveGrbit.MoveKeyNE);
+                Assert.Fail("Expected an EsentError exception");
+            }
+            catch (EsentErrorException)
+            {
+            }
+        }
+
+        /// <summary>
         /// Verify an exception is thrown when TryMoveFirst gets an unexpected error.
         /// </summary>
         [TestMethod]

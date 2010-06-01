@@ -43,15 +43,18 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Try to move to the first record in the table. If the table is empty this
-        /// returns false, if a different error is encountered an exception is thrown.
+        /// Try to navigate through an index. If the navigation succeeds this
+        /// method returns true. If there is no record to navigate to this
+        /// method returns false; an exception will be thrown for other errors.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to position.</param>
+        /// <param name="move">The direction to move in.</param>
+        /// <param name="grbit">Move options.</param>
         /// <returns>True if the move was successful.</returns>
-        public static bool TryMoveFirst(JET_SESID sesid, JET_TABLEID tableid)
+        public static bool TryMove(JET_SESID sesid, JET_TABLEID tableid, JET_Move move, MoveGrbit grbit)
         {
-            var err = (JET_err)Impl.JetMove(sesid, tableid, (int)JET_Move.First, MoveGrbit.None);
+            var err = (JET_err)Impl.JetMove(sesid, tableid, (int)move, grbit);
             if (JET_err.NoCurrentRecord == err)
             {
                 return false;
@@ -60,6 +63,18 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check((int)err);
             Debug.Assert(err >= JET_err.Success, "Exception should have been thrown in case of error");
             return true;
+        }
+
+        /// <summary>
+        /// Try to move to the first record in the table. If the table is empty this
+        /// returns false, if a different error is encountered an exception is thrown.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to position.</param>
+        /// <returns>True if the move was successful.</returns>
+        public static bool TryMoveFirst(JET_SESID sesid, JET_TABLEID tableid)
+        {
+            return TryMove(sesid, tableid, JET_Move.First, MoveGrbit.None);
         }
 
         /// <summary>
@@ -71,15 +86,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the move was successful.</returns>
         public static bool TryMoveLast(JET_SESID sesid, JET_TABLEID tableid)
         {
-            var err = (JET_err)Impl.JetMove(sesid, tableid, (int)JET_Move.Last, MoveGrbit.None);
-            if (JET_err.NoCurrentRecord == err)
-            {
-                return false;
-            }
-
-            Api.Check((int)err);
-            Debug.Assert(err >= JET_err.Success, "Exception should have been thrown in case of error");
-            return true;
+            return TryMove(sesid, tableid, JET_Move.Last, MoveGrbit.None);
         }
 
         /// <summary>
@@ -91,15 +98,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the move was successful.</returns>
         public static bool TryMoveNext(JET_SESID sesid, JET_TABLEID tableid)
         {
-            var err = (JET_err)Impl.JetMove(sesid, tableid, (int)JET_Move.Next, MoveGrbit.None);
-            if (JET_err.NoCurrentRecord == err)
-            {
-                return false;
-            }
-
-            Api.Check((int)err);
-            Debug.Assert(err >= JET_err.Success, "Exception should have been thrown in case of error");
-            return true;
+            return TryMove(sesid, tableid, JET_Move.Next, MoveGrbit.None);
         }
 
         /// <summary>
@@ -111,15 +110,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the move was successful.</returns>
         public static bool TryMovePrevious(JET_SESID sesid, JET_TABLEID tableid)
         {
-            var err = (JET_err)Impl.JetMove(sesid, tableid, (int)JET_Move.Previous, MoveGrbit.None);
-            if (JET_err.NoCurrentRecord == err)
-            {
-                return false;
-            }
-
-            Api.Check((int)err);
-            Debug.Assert(err >= JET_err.Success, "Exception should have been thrown in case of error");
-            return true;
+            return TryMove(sesid, tableid, JET_Move.Previous, MoveGrbit.None);
         }
 
         /// <summary>
