@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="RetrieveColumnAsStringPerfTests.cs" company="Microsoft Corporation">
+// <copyright file="SetColumnFromStringPerfTests.cs" company="Microsoft Corporation">
 // Copyright (c) Microsoft Corporation.
 // </copyright>
 //-----------------------------------------------------------------------
@@ -17,12 +17,12 @@ namespace InteropApiTests
     /// Basic performance tests for retrieve columns.
     /// </summary>
     [TestClass]
-    public class RetrieveColumnAsStringPerfTests
+    public class SetColumnFromStringPerfTests
     {
         /// <summary>
-        /// How many times to retrieve the record data.
+        /// How many times to set the record data.
         /// </summary>
-        private const int NumRetrieves = 5000000;
+        private const int NumSets = 3000000;
 
         /// <summary>
         /// The instance to use.
@@ -91,11 +91,11 @@ namespace InteropApiTests
         /// and a custom encoder.
         /// </summary>
         [TestMethod]
-        [Description("Test the performance of RetrieveColumnAsString with a short ASCII column and a custom encoder")]
+        [Description("Test the performance of RetrieveColumnAsString with a short ASCII column and a customer encoder")]
         [Priority(3)]
-        public void TimeRetrieveColumnAsStringShortCustomAscii()
+        public void TimeSetColumnFromStringShortCustomAscii()
         {
-            this.TimeRetrieveColumnAsString("ascii", 8, new ASCIIEncoding());
+            this.TimeSetColumnFromString("ascii", 8, new ASCIIEncoding());
         }
 
         /// <summary>
@@ -104,9 +104,9 @@ namespace InteropApiTests
         [TestMethod]
         [Description("Test the performance of RetrieveColumnAsString with a short ASCII column")]
         [Priority(3)]
-        public void TimeRetrieveColumnAsStringShortAscii()
+        public void TimeSetColumnFromStringShortAscii()
         {
-            this.TimeRetrieveColumnAsString("ascii", 8, Encoding.ASCII);
+            this.TimeSetColumnFromString("ascii", 8, Encoding.ASCII);
         }
 
         /// <summary>
@@ -115,9 +115,9 @@ namespace InteropApiTests
         [TestMethod]
         [Description("Test the performance of RetrieveColumnAsString with an ASCII column")]
         [Priority(3)]
-        public void TimeRetrieveColumnAsStringAscii()
+        public void TimeSetColumnFromStringAscii()
         {
-            this.TimeRetrieveColumnAsString("ascii", 512, Encoding.ASCII);
+            this.TimeSetColumnFromString("ascii", 512, Encoding.ASCII);
         }
 
         /// <summary>
@@ -126,9 +126,9 @@ namespace InteropApiTests
         [TestMethod]
         [Description("Test the performance of RetrieveColumnAsString with a long ASCII column")]
         [Priority(3)]
-        public void TimeRetrieveColumnAsStringLongAscii()
+        public void TimeSetColumnFromStringLongAscii()
         {
-            this.TimeRetrieveColumnAsString("ascii", 513, Encoding.ASCII);
+            this.TimeSetColumnFromString("ascii", 513, Encoding.ASCII);
         }
 
         /// <summary>
@@ -137,9 +137,9 @@ namespace InteropApiTests
         [TestMethod]
         [Description("Test the performance of RetrieveColumnAsString with a short Unicode column")]
         [Priority(3)]
-        public void TimeRetrieveColumnAsStringShortUnicode()
+        public void TimeSetColumnFromStringShortUnicode()
         {
-            this.TimeRetrieveColumnAsString("unicode", 8, Encoding.Unicode);
+            this.TimeSetColumnFromString("unicode", 8, Encoding.Unicode);
         }
 
         /// <summary>
@@ -148,9 +148,9 @@ namespace InteropApiTests
         [TestMethod]
         [Description("Test the performance of RetrieveColumnAsString with a Unicode column")]
         [Priority(3)]
-        public void TimeRetrieveColumnAsStringUnicode()
+        public void TimeSetColumnFromStringUnicode()
         {
-            this.TimeRetrieveColumnAsString("unicode", 512, Encoding.Unicode);
+            this.TimeSetColumnFromString("unicode", 512, Encoding.Unicode);
         }
 
         /// <summary>
@@ -160,9 +160,9 @@ namespace InteropApiTests
         [TestMethod]
         [Description("Test the performance of RetrieveColumnAsString with a Unicode column and a custom encoding")]
         [Priority(3)]
-        public void TimeRetrieveColumnAsStringUnicodeCustomEncoding()
+        public void TimeSetColumnFromStringUnicodeCustomEncoding()
         {
-            this.TimeRetrieveColumnAsString("unicode", 512, new UnicodeEncoding(false, false, true));
+            this.TimeSetColumnFromString("unicode", 512, new UnicodeEncoding(false, false, true));
         }
 
         /// <summary>
@@ -171,52 +171,51 @@ namespace InteropApiTests
         [TestMethod]
         [Description("Test the performance of RetrieveColumnAsString with a long Unicode column")]
         [Priority(3)]
-        public void TimeRetrieveColumnAsStringLongUnicode()
+        public void TimeSetColumnFromStringLongUnicode()
         {
-            this.TimeRetrieveColumnAsString("unicode", 513, Encoding.Unicode);
+            this.TimeSetColumnFromString("unicode", 513, Encoding.Unicode);
         }
 
         #endregion
 
         /// <summary>
-        /// Retrieve columns using the RetrieveColumnAsString API.
+        /// Retrieve columns using the SetColumn(string) API.
         /// </summary>
         /// <param name="columnName">Name of the column to set.</param>
         /// <param name="numChars">Number of characters in the string to set.</param>
         /// <param name="encoding">The encoding to use.</param>
-        private void TimeRetrieveColumnAsString(string columnName, int numChars, Encoding encoding)
+        private void TimeSetColumnFromString(string columnName, int numChars, Encoding encoding)
         {
-            string expected = Any.StringOfLength(numChars);
+            string data = Any.StringOfLength(numChars);
 
             // Insert a record and position the tableid on it.
             JET_COLUMNID columnid = this.columnidDict[columnName];
             using (var transaction = new Transaction(this.session))
             using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
             {
-                Api.SetColumn(this.session, this.tableid, columnid, expected, encoding, SetColumnGrbit.IntrinsicLV);
+                Api.SetColumn(this.session, this.tableid, columnid, data, encoding, SetColumnGrbit.IntrinsicLV);
 
                 update.SaveAndGotoBookmark();
                 transaction.Commit(CommitTransactionGrbit.None);
             }
 
+            Assert.AreEqual(data, Api.RetrieveColumnAsString(this.session, this.tableid, columnid, encoding));
+
             Api.JetBeginTransaction(this.session);
-
-            // Retrieve the column once to make sure we get the correct value.
-            string actual = Api.RetrieveColumnAsString(this.session, this.tableid, columnid, encoding);
-            Assert.AreEqual(expected, actual);
-
+            Api.JetPrepareUpdate(this.session, this.tableid, JET_prep.Replace);
+        
             GC.Collect();
             GC.WaitForPendingFinalizers();
             GC.Collect();
 
             Thread.Sleep(1);
 
-            // Time the retrieves
+            // Time the SetColumn calls
             var stopwatch = EsentStopwatch.StartNew();
 
-            for (int i = 0; i < NumRetrieves; ++i)
+            for (int i = 0; i < NumSets; ++i)
             {
-                actual = Api.RetrieveColumnAsString(this.session, this.tableid, columnid, encoding);
+                Api.SetColumn(this.session, this.tableid, columnid, data, encoding, SetColumnGrbit.IntrinsicLV);
             }
 
             stopwatch.Stop();

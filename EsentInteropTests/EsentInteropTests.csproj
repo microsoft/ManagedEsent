@@ -77,6 +77,7 @@
     <Compile Include="RecsizeSubtractionTests.cs" />
     <Compile Include="RetrieveColumnAsStringPerfTests.cs" />
     <Compile Include="RetrieveColumnsPerfTest.cs" />
+    <Compile Include="SetColumnFromStringPerfTests.cs" />
     <Compile Include="SetColumnValidationTests.cs" />
     <Compile Include="SetinfoTests.cs" />
     <Compile Include="SignatureTests.cs" />

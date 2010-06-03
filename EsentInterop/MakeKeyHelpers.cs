@@ -73,8 +73,21 @@ namespace Microsoft.Isam.Esent.Interop
             }
             else
             {
-                byte[] bytes = encoding.GetBytes(data);
-                Api.JetMakeKey(sesid, tableid, bytes, bytes.Length, grbit);
+                // Convert the string using a cached column buffer. The column buffer is far larger
+                // than the maximum key size, so any data truncation here won't matter.
+                byte[] buffer = Caches.ColumnCache.Allocate();
+                int dataSize;
+                unsafe
+                {
+                    fixed (char* chars = data)
+                    fixed (byte* bytes = buffer)
+                    {
+                        dataSize = encoding.GetBytes(chars, data.Length, bytes, buffer.Length);
+                    }
+                }
+
+                JetMakeKey(sesid, tableid, buffer, dataSize, grbit);
+                Caches.ColumnCache.Free(ref buffer);
             }
         }
 

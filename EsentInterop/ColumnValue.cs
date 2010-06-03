@@ -15,11 +15,6 @@ namespace Microsoft.Isam.Esent.Interop
     public abstract class ColumnValue
     {
         /// <summary>
-        /// Cached retrieve buffers.
-        /// </summary>
-        private static readonly MemoryCache memoryCache = new MemoryCache(128 * 1024, 16);
-
-        /// <summary>
         /// Initializes a new instance of the ColumnValue class.
         /// </summary>
         protected ColumnValue()
@@ -87,7 +82,7 @@ namespace Microsoft.Isam.Esent.Interop
             unsafe
             {
                 NATIVE_RETRIEVECOLUMN* nativeRetrievecolumns = stackalloc NATIVE_RETRIEVECOLUMN[columnValues.Length];
-                byte[] buffer = memoryCache.Allocate();
+                byte[] buffer = Caches.ColumnCache.Allocate();
                 fixed (byte* pinnedBuffer = buffer)
                 {
                     byte* currentBuffer = pinnedBuffer;
@@ -157,7 +152,7 @@ namespace Microsoft.Isam.Esent.Interop
                     }
                 }
 
-                memoryCache.Free(buffer);
+                Caches.ColumnCache.Free(ref buffer);
 
                 // Finally retrieve the buffers where the columns weren't large enough.
                 RetrieveTruncatedBuffers(sesid, tableid, columnValues, nativeRetrievecolumns);

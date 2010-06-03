@@ -44,6 +44,30 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify the BufferSize property.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify the BufferSizeProperty")]
+        public void VerifyBufferSizeProperty()
+        {
+            Assert.AreEqual(BufferSize, this.memoryCache.BufferSize);
+        }
+
+        /// <summary>
+        /// Test the Duplicate method.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test the Duplicate method")]
+        public void TestDuplicate()
+        {
+            byte[] input = new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6 };
+            byte[] output = MemoryCache.Duplicate(input, input.Length);
+            CollectionAssert.AreEqual(input, output);
+        }
+
+        /// <summary>
         /// Verify freeing a null buffer throws an exception.
         /// </summary>
         [TestMethod]
@@ -52,7 +76,8 @@ namespace InteropApiTests
         [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyFreeOfNullThrowsException()
         {
-            this.memoryCache.Free(null);
+            byte[] buffer = null;
+            this.memoryCache.Free(ref buffer);
         }
 
         /// <summary>
@@ -65,7 +90,7 @@ namespace InteropApiTests
         public void VerifyFreeOfIncorrectSizeBufferThrowsException()
         {
             var buffer = new byte[BufferSize / 2];
-            this.memoryCache.Free(buffer);
+            this.memoryCache.Free(ref buffer);
         }
 
         /// <summary>
@@ -114,8 +139,9 @@ namespace InteropApiTests
         public void VerifyAllocationLocality()
         {
             byte[] buffer = this.memoryCache.Allocate();
-            this.memoryCache.Free(buffer);
-            Assert.AreEqual(buffer, this.memoryCache.Allocate());
+            byte[] savedReference = buffer;
+            this.memoryCache.Free(ref buffer);
+            Assert.AreEqual(savedReference, this.memoryCache.Allocate());
         }
 
         /// <summary>
@@ -130,7 +156,8 @@ namespace InteropApiTests
             byte[][] buffers = (from i in Enumerable.Repeat(0, MaxBuffers) select this.memoryCache.Allocate()).ToArray();
             foreach (byte[] buffer in buffers)
             {
-                this.memoryCache.Free(buffer);
+                byte[] b = buffer;
+                this.memoryCache.Free(ref b);
             }
 
             byte[][] newBuffers = (from i in Enumerable.Repeat(0, MaxBuffers) select this.memoryCache.Allocate()).ToArray();
@@ -176,7 +203,7 @@ namespace InteropApiTests
                     buffer[0] = marker;
                     Thread.Sleep(0);
                     Assert.AreEqual(marker, buffer[0]);
-                    this.memoryCache.Free(buffer);
+                    this.memoryCache.Free(ref buffer);
                 }
             }
         }

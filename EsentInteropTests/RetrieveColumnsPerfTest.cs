@@ -22,7 +22,7 @@ namespace InteropApiTests
         /// <summary>
         /// How many times to retrieve the record data.
         /// </summary>
-        private const int NumRetrieves = 3000000;
+        private const int NumRetrieves = 2000000;
 
         /// <summary>
         /// The boolean value in the record.
@@ -123,6 +123,50 @@ namespace InteropApiTests
         }
 
         #endregion
+
+        /// <summary>
+        /// Measure performance of reading bookmarks with JetGetBookmark.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the performance of JetGetBookmark")]
+        [Priority(3)]
+        public void TestJetGetBookmarkPerf()
+        {
+            DoTest(this.JetGetBookmark);
+        }
+
+        /// <summary>
+        /// Measure performance of reading bookmarks with GetBookmark.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the performance of GetBookmark")]
+        [Priority(3)]
+        public void TestGetBookmarkPerf()
+        {
+            DoTest(this.GetBookmark);
+        }
+
+        /// <summary>
+        /// Measure performance of reading bookmarks with JetRetrieveKey.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the performance of JetRetrieveKey")]
+        [Priority(3)]
+        public void TestJetRetrieveKeyPerf()
+        {
+            DoTest(this.JetRetrieveKey);
+        }
+
+        /// <summary>
+        /// Measure performance of reading bookmarks with RetrieveKey.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the performance of RetrieveKey")]
+        [Priority(3)]
+        public void TestRetrieveKeyPerf()
+        {
+            DoTest(this.RetrieveKey);
+        }
 
         /// <summary>
         /// Measure performance of reading records with JetRetrieveColumns.
@@ -230,6 +274,66 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Retrieve columns using the JetGetBookmark API.
+        /// </summary>
+        private void JetGetBookmark()
+        {
+            byte[] bookmark = new byte[SystemParameters.BookmarkMost];
+            Api.JetBeginTransaction(this.session);
+            for (int i = 0; i < NumRetrieves; ++i)
+            {
+                int bookmarkSize;
+                Api.JetGetBookmark(this.session, this.tableid, bookmark, bookmark.Length, out bookmarkSize);
+            }
+
+            Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
+        }
+
+        /// <summary>
+        /// Retrieve columns using the GetBookmark API.
+        /// </summary>
+        private void GetBookmark()
+        {
+            Api.JetBeginTransaction(this.session);
+            for (int i = 0; i < NumRetrieves; ++i)
+            {
+                byte[] bookmark = Api.GetBookmark(this.session, this.tableid);
+            }
+
+            Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
+        }
+
+        /// <summary>
+        /// Retrieve columns using the JetRetrieveKey API.
+        /// </summary>
+        private void JetRetrieveKey()
+        {
+            byte[] key = new byte[SystemParameters.KeyMost];
+            Api.JetBeginTransaction(this.session);
+            for (int i = 0; i < NumRetrieves; ++i)
+            {
+                int keySize;
+                Api.JetRetrieveKey(this.session, this.tableid, key, key.Length, out keySize, RetrieveKeyGrbit.None);
+            }
+
+            Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
+        }
+
+        /// <summary>
+        /// Retrieve columns using the RetrieveKey API.
+        /// </summary>
+        private void RetrieveKey()
+        {
+            Api.JetBeginTransaction(this.session);
+            for (int i = 0; i < NumRetrieves; ++i)
+            {
+                byte[] key = Api.RetrieveKey(this.session, this.tableid, RetrieveKeyGrbit.None);
+            }
+
+            Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
+        }
+
+        /// <summary>
         /// Retrieve columns using the basic JetRetrieveColumn API.
         /// </summary>
         private void RetrieveWithJetRetrieveColumn()
@@ -246,10 +350,9 @@ namespace InteropApiTests
             JET_COLUMNID guidColumn = this.columnidDict["guid"];
             JET_COLUMNID stringColumn = this.columnidDict["unicode"];
 
+            Api.JetBeginTransaction(this.session);
             for (int i = 0; i < NumRetrieves; ++i)
-            {
-                Api.JetBeginTransaction(this.session);
-                
+            {                
                 int actualSize;
                 Api.JetRetrieveColumn(this.session, this.tableid, boolColumn, boolBuffer, boolBuffer.Length, out actualSize, RetrieveColumnGrbit.None, null);
                 Api.JetRetrieveColumn(this.session, this.tableid, int32Column, int32Buffer, int32Buffer.Length, out actualSize, RetrieveColumnGrbit.None, null);
@@ -270,9 +373,9 @@ namespace InteropApiTests
                 Assert.AreEqual(this.expectedInt64, actualInt64);
                 Assert.AreEqual(this.expectedGuid, actualGuid);
                 Assert.AreEqual(this.expectedString, actualString);
+            }
 
-                Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
-            }            
+            Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
         }
 
         /// <summary>
@@ -295,10 +398,9 @@ namespace InteropApiTests
                 new JET_RETRIEVECOLUMN { columnid = this.columnidDict["unicode"], pvData = stringBuffer, cbData = stringBuffer.Length, itagSequence = 1 },
             };
 
+            Api.JetBeginTransaction(this.session);
             for (int i = 0; i < NumRetrieves; ++i)
             {
-                Api.JetBeginTransaction(this.session);
-
                 Api.JetRetrieveColumns(this.session, this.tableid, retrievecolumns, retrievecolumns.Length);
 
                 bool actualBool = BitConverter.ToBoolean(boolBuffer, 0);
@@ -312,9 +414,9 @@ namespace InteropApiTests
                 Assert.AreEqual(this.expectedInt64, actualInt64);
                 Assert.AreEqual(this.expectedGuid, actualGuid);
                 Assert.AreEqual(this.expectedString, actualString);
-
-                Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
             }
+
+            Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
         }
 
         /// <summary>
@@ -328,10 +430,9 @@ namespace InteropApiTests
             JET_COLUMNID guidColumn = this.columnidDict["guid"];
             JET_COLUMNID stringColumn = this.columnidDict["unicode"];
 
+            Api.JetBeginTransaction(this.session);
             for (int i = 0; i < NumRetrieves; ++i)
             {
-                Api.JetBeginTransaction(this.session);
-
                 byte[] boolBuffer = Api.RetrieveColumn(this.session, this.tableid, boolColumn);
                 byte[] int32Buffer = Api.RetrieveColumn(this.session, this.tableid, int32Column);
                 byte[] int64Buffer = Api.RetrieveColumn(this.session, this.tableid, int64Column);
@@ -349,9 +450,9 @@ namespace InteropApiTests
                 Assert.AreEqual(this.expectedInt64, actualInt64);
                 Assert.AreEqual(this.expectedGuid, actualGuid);
                 Assert.AreEqual(this.expectedString, actualString);
-
-                Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
             }
+
+            Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
         }
 
         /// <summary>
@@ -365,10 +466,9 @@ namespace InteropApiTests
             JET_COLUMNID guidColumn = this.columnidDict["guid"];
             JET_COLUMNID stringColumn = this.columnidDict["unicode"];
 
+            Api.JetBeginTransaction(this.session);
             for (int i = 0; i < NumRetrieves; ++i)
             {
-                Api.JetBeginTransaction(this.session);
-
                 bool actualBool = (bool)Api.RetrieveColumnAsBoolean(this.session, this.tableid, boolColumn);
                 int actualInt32 = (int)Api.RetrieveColumnAsInt32(this.session, this.tableid, int32Column);
                 long actualInt64 = (long)Api.RetrieveColumnAsInt64(this.session, this.tableid, int64Column);
@@ -380,9 +480,9 @@ namespace InteropApiTests
                 Assert.AreEqual(this.expectedInt64, actualInt64);
                 Assert.AreEqual(this.expectedGuid, actualGuid);
                 Assert.AreEqual(this.expectedString, actualString);
-
-                Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
             }
+
+            Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
         }
 
         /// <summary>
@@ -405,10 +505,9 @@ namespace InteropApiTests
                 stringColumn,
             };
 
+            Api.JetBeginTransaction(this.session);
             for (int i = 0; i < NumRetrieves; ++i)
             {
-                Api.JetBeginTransaction(this.session);
-
                 Api.RetrieveColumns(this.session, this.tableid, retrievecolumns);
 
                 bool actualBool = (bool)boolColumn.Value;
@@ -422,9 +521,9 @@ namespace InteropApiTests
                 Assert.AreEqual(this.expectedInt64, actualInt64);
                 Assert.AreEqual(this.expectedGuid, actualGuid);
                 Assert.AreEqual(this.expectedString, actualString);
-
-                Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
             }
+
+            Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
         }
 
         #endregion

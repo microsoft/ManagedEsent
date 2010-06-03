@@ -1074,6 +1074,48 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test setting a long ASCII column from a string.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test setting a long ASCII column from a string")]
+        public void SetLongAsciiString()
+        {
+            JET_COLUMNID columnid = this.columnidDict["ascii"];
+            string expected = Any.StringOfLength(1024 * 1024);
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, expected, Encoding.ASCII);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            string actual = Encoding.ASCII.GetString(Api.RetrieveColumn(this.sesid, this.tableid, columnid));
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test setting and retrieving strings.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test setting and retrieving strings with boundary condition lengths")]
+        public void SetAndRetrieveboundaryStrings()
+        {
+            // This is the size of the internal buffer we use to cache data on
+            // set/retrieve. Use this to create boundary condition length strings.
+            const int InternalBufferSize = 128 * 1024;
+
+            this.SetAndRetrieveString("ascii", InternalBufferSize - 1, Encoding.ASCII);
+            this.SetAndRetrieveString("ascii", InternalBufferSize, Encoding.ASCII);
+            this.SetAndRetrieveString("ascii", InternalBufferSize + 1, Encoding.ASCII);
+
+            this.SetAndRetrieveString("unicode", (InternalBufferSize / sizeof(char)) - 1, Encoding.Unicode);
+            this.SetAndRetrieveString("unicode", InternalBufferSize / sizeof(char), Encoding.Unicode);
+            this.SetAndRetrieveString("unicode", (InternalBufferSize / sizeof(char)) + 1, Encoding.Unicode);
+        }
+
+        /// <summary>
         /// Verify using an encoding which is neither ASCII nor Unicode throws an exception.
         /// </summary>
         [TestMethod]
@@ -2287,6 +2329,30 @@ namespace InteropApiTests
             int bookmarkSize;
             Api.JetUpdate(this.sesid, this.tableid, bookmark, bookmark.Length, out bookmarkSize);
             Api.JetGotoBookmark(this.sesid, this.tableid, bookmark, bookmarkSize);
+        }
+
+        /// <summary>
+        /// Set a string and the retrieve it.
+        /// </summary>
+        /// <param name="columnName">The name of the column to set.</param>
+        /// <param name="numChars">The number of characters in the string to set.</param>
+        /// <param name="encoding">The encoding to use when setting/retrieving the string.</param>
+        private void SetAndRetrieveString(string columnName, int numChars, Encoding encoding)
+        {
+            JET_COLUMNID columnid = this.columnidDict[columnName];
+            string expected = Any.StringOfLength(numChars);
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, expected, encoding);
+            this.UpdateAndGotoBookmark();
+
+            string actual = Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, encoding);
+            Assert.AreEqual(expected, actual, "RetrieveColumnAsString");
+            actual = encoding.GetString(Api.RetrieveColumn(this.sesid, this.tableid, columnid));
+            Assert.AreEqual(expected, actual, "RetrieveColumn");
+
+            Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
         }
 
         #endregion Helper methods

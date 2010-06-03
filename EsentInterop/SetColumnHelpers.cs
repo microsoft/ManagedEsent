@@ -74,6 +74,23 @@ namespace Microsoft.Isam.Esent.Interop
                     }
                 }
             }
+            else if (encoding.GetMaxByteCount(data.Length) <= Caches.ColumnCache.BufferSize)
+            {
+                // The encoding output will fix in a cached buffer. Get one to avoid 
+                // more memory allocations.
+                byte[] buffer = Caches.ColumnCache.Allocate();
+                unsafe
+                {
+                    fixed (char* chars = data)
+                    fixed (byte* bytes = buffer)
+                    {
+                        int dataSize = encoding.GetBytes(chars, data.Length, bytes, buffer.Length);
+                        JetSetColumn(sesid, tableid, columnid, new IntPtr(bytes), dataSize, grbit, null);
+                    }                    
+                }
+
+                Caches.ColumnCache.Free(ref buffer);
+            }
             else
             {
                 byte[] bytes = encoding.GetBytes(data);
@@ -406,7 +423,7 @@ namespace Microsoft.Isam.Esent.Interop
             if ((AsciiCodePage != codePage) && (UnicodeCodePage != codePage))
             {
                 throw new ArgumentOutOfRangeException(
-                    "encoding", "Invalid Encoding type. Only ASCII and Unicode encodings are allowed");
+                    "encoding", codePage, "Invalid Encoding type. Only ASCII and Unicode encodings are allowed");
             }
         }
     }

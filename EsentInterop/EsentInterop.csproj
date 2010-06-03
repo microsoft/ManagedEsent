@@ -52,6 +52,7 @@
     <Compile Include="BoolColumnValue.cs" />
     <Compile Include="ByteColumnValue.cs" />
     <Compile Include="BytesColumnValue.cs" />
+    <Compile Include="Caches.cs" />
     <Compile Include="ColumnValueOfStruct.cs" />
     <Compile Include="Conversions.cs" />
     <Compile Include="jet_signature.cs" />

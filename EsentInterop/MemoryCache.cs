@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Diagnostics;
     using System.Threading;
 
     /// <summary>
@@ -47,6 +48,31 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Gets the size of the buffers that this cache returns.
+        /// </summary>
+        public int BufferSize
+        {
+            get
+            {
+                return this.bufferSize;
+            }
+        }
+
+        /// <summary>
+        /// Creates a new array containing a copy of 'length' bytes of data.
+        /// </summary>
+        /// <param name="data">The data to copy.</param>
+        /// <param name="length">The length of data to copy.</param>
+        /// <returns>An array containing the first length bytes of data.</returns>
+        public static byte[] Duplicate(byte[] data, int length)
+        {
+            Debug.Assert(data.Length >= length, "length parameter is too long");
+            var output = new byte[length];
+            Buffer.BlockCopy(data, 0, output, 0, length);
+            return output;
+        }
+
+        /// <summary>
         /// Allocates a chunk of memory. If memory is cached it is returned. If no memory
         /// is cached then it is allocated. Check the size of the returned buffer to determine
         /// how much memory was allocated.
@@ -72,7 +98,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Frees an unused buffer. This may be added to the cache.
         /// </summary>
         /// <param name="data">The memory to free.</param>
-        public void Free(byte[] data)
+        public void Free(ref byte[] data)
         {
             if (null == data)
             {
@@ -101,6 +127,8 @@ namespace Microsoft.Isam.Esent.Interop
                     break;
                 }
             }
+
+            data = null;
         }
 
         /// <summary>

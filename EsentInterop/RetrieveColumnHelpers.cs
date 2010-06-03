@@ -19,9 +19,10 @@ namespace Microsoft.Isam.Esent.Interop
     public static partial class Api
     {
         /// <summary>
-        /// Cached retrieve buffers.
+        /// Encoding to use to decode ASCII text. We use this because
+        /// UTF8.GetString is faster than ASCII.GetString.
         /// </summary>
-        private static readonly MemoryCache memoryCache = new MemoryCache(128 * 1024, 16);
+        private static readonly Encoding asciiDecoder = new UTF8Encoding(false, true);
 
         #region Nested type: ConversionFunc
 
@@ -50,17 +51,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The bookmark of the record.</returns>
         public static byte[] GetBookmark(JET_SESID sesid, JET_TABLEID tableid)
         {
-            // Get the size of the bookmark, allocate memory, retrieve the bookmark.
+            byte[] buffer = Caches.BookmarkCache.Allocate();
             int bookmarkSize;
-            var err = (JET_err) Impl.JetGetBookmark(sesid, tableid, null, 0, out bookmarkSize);
-            if (JET_err.BufferTooSmall != err)
-            {
-                Check((int) err);
-            }
-
-            var bookmark = new byte[bookmarkSize];
-            JetGetBookmark(sesid, tableid, bookmark, bookmark.Length, out bookmarkSize);
-
+            Api.JetGetBookmark(sesid, tableid, buffer, buffer.Length, out bookmarkSize);
+            byte[] bookmark = MemoryCache.Duplicate(buffer, bookmarkSize);
+            Caches.BookmarkCache.Free(ref buffer);
             return bookmark;
         }
 
@@ -73,13 +68,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The retrieved key.</returns>
         public static byte[] RetrieveKey(JET_SESID sesid, JET_TABLEID tableid, RetrieveKeyGrbit grbit)
         {
-            // Get the size of the key, allocate memory, retrieve the key.
+            byte[] buffer = Caches.BookmarkCache.Allocate();
             int keySize;
-            JetRetrieveKey(sesid, tableid, null, 0, out keySize, grbit);
-
-            var key = new byte[keySize];
-            JetRetrieveKey(sesid, tableid, key, key.Length, out keySize, grbit);
-
+            Api.JetRetrieveKey(sesid, tableid, buffer, buffer.Length, out keySize, grbit);
+            byte[] key = MemoryCache.Duplicate(buffer, keySize);
+            Caches.BookmarkCache.Free(ref buffer);
             return key;
         }
 
@@ -159,9 +152,10 @@ namespace Microsoft.Isam.Esent.Interop
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit, JET_RETINFO retinfo)
         {
             // We expect most column values retrieved this way to be small (retrieving a 1GB LV as one
-            // chunk is a bit extreme!). Allocate a small buffer and use that, allocating a larger one
+            // chunk is a bit extreme!). Allocate a cached buffer and use that, allocating a larger one
             // if needed.
-            var data = new byte[256];
+            byte[] cache = Caches.ColumnCache.Allocate();
+            byte[] data = cache;
             int dataSize;
             JET_wrn wrn = JetRetrieveColumn(
                 sesid, tableid, columnid, data, data.Length, out dataSize, grbit, retinfo);
@@ -171,27 +165,30 @@ namespace Microsoft.Isam.Esent.Interop
                 // null column
                 data = null;
             }
+            else if (JET_wrn.Success == wrn)
+            {
+                data = MemoryCache.Duplicate(data, dataSize);
+            }
             else
             {
-                Array.Resize(ref data, dataSize);
-                if (JET_wrn.BufferTruncated == wrn)
+                // there is more data to retrieve
+                Debug.Assert(JET_wrn.BufferTruncated == wrn, "Unexpected warning", wrn.ToString());
+                data = new byte[dataSize];
+                wrn = JetRetrieveColumn(
+                    sesid, tableid, columnid, data, data.Length, out dataSize, grbit, retinfo);
+                if (JET_wrn.Success != wrn)
                 {
-                    // there is more data to retrieve
-                    wrn = JetRetrieveColumn(
-                        sesid, tableid, columnid, data, data.Length, out dataSize, grbit, retinfo);
-                    if (JET_wrn.Success != wrn)
-                    {
-                        string error = String.Format(
-                            CultureInfo.CurrentCulture,
-                            "Column size changed from {0} to {1}. The record was probably updated by another thread.",
-                            data.Length,
-                            dataSize);
-                        Trace.TraceError(error);
-                        throw new InvalidOperationException(error);
-                    }
+                    string error = String.Format(
+                        CultureInfo.CurrentCulture,
+                        "Column size changed from {0} to {1}. The record was probably updated by another thread.",
+                        data.Length,
+                        dataSize);
+                    Trace.TraceError(error);
+                    throw new InvalidOperationException(error);
                 }
             }
 
+            Caches.ColumnCache.Free(ref cache);
             return data;
         }
 
@@ -261,7 +258,7 @@ namespace Microsoft.Isam.Esent.Interop
             // Retrieving a string happens in two stages: first the data is retrieved into a data
             // buffer and then the buffer is converted to a string. The buffer isn't needed for
             // very long so we try to use a cached buffer.
-            byte[] cachedBuffer = memoryCache.Allocate();
+            byte[] cachedBuffer = Caches.ColumnCache.Allocate();
             byte[] data = cachedBuffer;
 
             int dataSize;
@@ -288,10 +285,15 @@ namespace Microsoft.Isam.Esent.Interop
                 }
             }
 
-            string s = encoding.GetString(data, 0, dataSize);
+            // If we are about to decode ASCII data then use the UTF8 decoder instead. This
+            // is done because the UTF8 decoder is faster and will produce the same results
+            // on ASCII data. Different results will be produced on invalid data, but that
+            // behaviour can be considered undefined.
+            Encoding decoder = (encoding is ASCIIEncoding) ? asciiDecoder : encoding;
+            string s = decoder.GetString(data, 0, dataSize);
 
             // Now we have extracted the string from the buffer we can free (cache) the buffer.
-            memoryCache.Free(cachedBuffer);
+            Caches.ColumnCache.Free(ref cachedBuffer);
 
             return s;
         }
