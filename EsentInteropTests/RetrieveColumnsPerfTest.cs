@@ -125,17 +125,6 @@ namespace InteropApiTests
         #endregion
 
         /// <summary>
-        /// Measure performance of reading records with JetRetrieveColumn.
-        /// </summary>
-        [TestMethod]
-        [Description("Test the performance of JetRetrieveColumn")]
-        [Priority(3)]
-        public void TestJetRetrieveColumnPerf()
-        {
-            DoTest(this.RetrieveWithJetRetrieveColumn);
-        }
-
-        /// <summary>
         /// Measure performance of reading records with JetRetrieveColumns.
         /// </summary>
         [TestMethod]
@@ -177,6 +166,17 @@ namespace InteropApiTests
         public void TestRetrieveColumnsPerf()
         {
             DoTest(this.RetrieveWithRetrieveColumns);
+        }
+
+        /// <summary>
+        /// Measure performance of reading records with RetrieveColumnAsString.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the performance of RetrieveColumnAsString")]
+        [Priority(3)]
+        public void TestJetRetrieveColumnPerf()
+        {
+            DoTest(this.RetrieveWithJetRetrieveColumn);
         }
 
         #region Helper Methods

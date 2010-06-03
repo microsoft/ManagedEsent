@@ -252,33 +252,10 @@ namespace Microsoft.Isam.Esent.Interop
         {
             JET_wrn wrn;
 
-            // This is an optimization for retrieving small Unicode strings
-            // We use a stack-allocated buffer to retrieve the data and then create
-            // a string from the data
+            // This is an optimization for retrieving Unicode strings
             if (Encoding.Unicode == encoding)
             {
-                unsafe
-                {
-                    // 512 bytes give 256 Unicode characters.
-                    const int BufferSize = 512;
-                    char* buffer = stackalloc char[BufferSize];
-                    int actualDataSize;
-                    wrn = JetRetrieveColumn(
-                        sesid, tableid, columnid, new IntPtr(buffer), BufferSize, out actualDataSize, grbit, null);
-                    if (JET_wrn.ColumnNull == wrn)
-                    {
-                        return null;
-                    }
-
-                    if (JET_wrn.Success == wrn)
-                    {
-                        return new string(buffer, 0, actualDataSize / sizeof(char));
-                    }
-
-                    Debug.Assert(JET_wrn.BufferTruncated == wrn, "Unexpected warning code");
-
-                    // Fallthrough to normal case below
-                }
+                return RetrieveUnicodeString(sesid, tableid, columnid, grbit);
             }
 
             // Retrieving a string happens in two stages: first the data is retrieved into a data
@@ -311,7 +288,6 @@ namespace Microsoft.Isam.Esent.Interop
                 }
             }
 
-            // TODO: for Unicode strings pin the buffer and use the String(char*) constructor.
             string s = encoding.GetString(data, 0, dataSize);
 
             // Now we have extracted the string from the buffer we can free (cache) the buffer.
@@ -899,6 +875,55 @@ namespace Microsoft.Isam.Esent.Interop
 
                 return PinColumnsAndRetrieve(sesid, tableid, nativeretrievecolumns, retrievecolumns, numColumns, i + 1);
             }
+        }
+
+        /// <summary>
+        /// Retrieve a Unicode (UTF16) string. This is optimized to take advantage of the fact
+        /// that no conversion is needed.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to retrieve from.</param>
+        /// <param name="columnid">The column to retrieve.</param>
+        /// <param name="grbit">Retrieve options.</param>
+        /// <returns>The string retrieved from the column.</returns>
+        private static unsafe string RetrieveUnicodeString(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
+        {
+            // 512 Unicode characters (1kb on stack)
+            const int BufferSize = 512;
+            char* buffer = stackalloc char[BufferSize];
+            int actualDataSize;
+            JET_wrn wrn = JetRetrieveColumn(sesid, tableid, columnid, new IntPtr(buffer), BufferSize * sizeof(char), out actualDataSize, grbit, null);
+            if (JET_wrn.ColumnNull == wrn)
+            {
+                return null;
+            }
+
+            if (JET_wrn.Success == wrn)
+            {
+                return new string(buffer, 0, actualDataSize / sizeof(char));
+            }
+
+            Debug.Assert(JET_wrn.BufferTruncated == wrn, "Unexpected warning code");
+
+            // Create a fake string of the appropriate size and then fill it in.
+            var s = new string('\0', actualDataSize / sizeof(char));
+            fixed (char* p = s)
+            {
+                int newDataSize;
+                wrn = JetRetrieveColumn(sesid, tableid, columnid, new IntPtr(p), actualDataSize, out newDataSize, grbit, null);
+                if (JET_wrn.BufferTruncated == wrn)
+                {
+                    string error = String.Format(
+                        CultureInfo.CurrentCulture,
+                        "Column size changed from {0} to {1}. The record was probably updated by another thread.",
+                        actualDataSize,
+                        newDataSize);
+                    Trace.TraceError(error);
+                    throw new InvalidOperationException(error);
+                }
+            }
+
+            return s;
         }
     }
 }

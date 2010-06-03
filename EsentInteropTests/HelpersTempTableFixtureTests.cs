@@ -855,17 +855,55 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Retrieve an empty string as ASCII to make sure it is handled differently from a null column.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Retrieve an empty string as ASCII to make sure it is handled differently from a null column")]
+        public void RetrieveEmptyStringAsAscii()
+        {
+            JET_COLUMNID columnid = this.columnidDict["ASCII"];
+            string value = String.Empty;
+            byte[] data = Encoding.ASCII.GetBytes(value);
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.JetSetColumn(this.sesid, this.tableid, columnid, data, data.Length, SetColumnGrbit.ZeroLength, null);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, Encoding.ASCII));
+        }
+
+        /// <summary>
+        /// Retrieve an ASCII string that is too large for the cached retrieval buffer.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Retrieve an ASCII string that is too large for the cached retrieval buffer")]
+        public void RetrieveExtremelyLargeASciiString()
+        {
+            JET_COLUMNID columnid = this.columnidDict["Ascii"];
+            var value = new string('X', 1024 * 1024);
+            this.InsertRecord(columnid, Encoding.ASCII.GetBytes(value));
+            Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, Encoding.ASCII));
+        }
+
+        /// <summary>
         /// Retrieve a column as Unicode.
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a column as Unicode")]
+        [Description("Retrieve a Unicode (i.e. non ASCII) string")]
         public void RetrieveAsUnicode()
         {
             JET_COLUMNID columnid = this.columnidDict["Unicode"];
-            string value = Any.String;
-            this.InsertRecord(columnid, Encoding.Unicode.GetBytes(value));
-            Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, Encoding.Unicode));
+
+            // These characters include surrogate pairs. String.Length counts the
+            // surrogate pairs.
+            const string Expected = "☺ś𐐂𐐉𐐯𐑉𝓐𐒀";   
+            byte[] data = Encoding.Unicode.GetBytes(Expected);
+            this.InsertRecord(columnid, data);
+            string actual = Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, Encoding.Unicode);
+            Assert.AreEqual(Expected, actual);
         }
 
         /// <summary>
@@ -882,31 +920,36 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Retrieve a column as a (unicode) string.
+        /// Retrieve an empty string as Unicode to make sure it is handled differently from a null column.
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve a column as a (unicode) string")]
-        public void RetrieveAsString()
+        [Description("Retrieve an empty string as Unicode to make sure it is handled differently from a null column")]
+        public void RetrieveEmptyStringAsUnicode()
         {
             JET_COLUMNID columnid = this.columnidDict["Unicode"];
-            string value = Any.String;
-            this.InsertRecord(columnid, Encoding.Unicode.GetBytes(value));
-            Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid));
+            string value = String.Empty;
+            byte[] data = Encoding.Unicode.GetBytes(value);
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.JetSetColumn(this.sesid, this.tableid, columnid, data, data.Length, SetColumnGrbit.ZeroLength, null);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, Encoding.Unicode));
         }
 
         /// <summary>
-        /// Retrieve a string that is too large for the cached retrieval buffer.
+        /// Retrieve a string that is the size of the cached retrieval buffer.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Retrieve a string that is too large for the cached retrieval buffer")]
+        [Description("Retrieve a string that is the size of the cached retrieval buffer")]
         public void RetrieveLargeString()
         {
             JET_COLUMNID columnid = this.columnidDict["Unicode"];
-            var value = Any.StringOfLength(16384);
+            var value = new string('X', 512);
             this.InsertRecord(columnid, Encoding.Unicode.GetBytes(value));
-            Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid));
+            Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, Encoding.Unicode));
         }
 
         /// <summary>
@@ -918,28 +961,23 @@ namespace InteropApiTests
         public void RetrieveExtremelyLargeString()
         {
             JET_COLUMNID columnid = this.columnidDict["Unicode"];
-            var value = new string('X', 1024 * 1024);
+            string value = "Ẁ𐐂𐐉𐐯𐑉𝓐€" + new string('ᵫ', 1024 * 1024);
             this.InsertRecord(columnid, Encoding.Unicode.GetBytes(value));
-            Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid));
+            Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, Encoding.Unicode));
         }
 
         /// <summary>
-        /// Retrieve an empty string to make sure it is handled differently from a null column.
+        /// Retrieve a column as a (unicode) string.
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Retrieve an empty string to make sure it is handled differently from a null column")]
-        public void RetrieveEmptyString()
+        [Description("Retrieve a column as a (unicode) string")]
+        public void RetrieveAsString()
         {
             JET_COLUMNID columnid = this.columnidDict["Unicode"];
-            string value = String.Empty;
-            byte[] data = Encoding.Unicode.GetBytes(value);
-            Api.JetBeginTransaction(this.sesid);
-            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
-            Api.JetSetColumn(this.sesid, this.tableid, columnid, data, data.Length, SetColumnGrbit.ZeroLength, null);
-            this.UpdateAndGotoBookmark();
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-            Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, Encoding.Unicode));
+            string value = Any.String;
+            this.InsertRecord(columnid, Encoding.Unicode.GetBytes(value));
+            Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid));
         }
 
         /// <summary>
