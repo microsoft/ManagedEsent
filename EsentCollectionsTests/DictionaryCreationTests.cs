@@ -190,7 +190,7 @@ namespace EsentCollectionsTests
         [TestMethod]
         [Priority(2)]
         [ExpectedException(typeof(ArgumentException))]
-        public void VerifyOpenFailsOnMistmatchedKeyTypes()
+        public void VerifyOpenFailsOnMismatchedKeyTypes()
         {
             const string DictionaryLocation = "IntIntDictionary";
             var dict = new PersistentDictionary<int, int>(DictionaryLocation);
@@ -205,7 +205,7 @@ namespace EsentCollectionsTests
         [TestMethod]
         [Priority(2)]
         [ExpectedException(typeof(ArgumentException))]
-        public void VerifyOpenFailsOnMistmatchedValueTypes()
+        public void VerifyOpenFailsOnMismatchedValueTypes()
         {
             const string DictionaryLocation = "IntIntDictionary";
             var dict = new PersistentDictionary<int, int>(DictionaryLocation);

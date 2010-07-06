@@ -263,6 +263,60 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test the PreferredVerPages property.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test the PreferredVerPages property")]
+        public void SetAndRetrieveInstanceParametersPreferredVerPages()
+        {
+            int expected = 11;
+            this.instanceParameters.PreferredVerPages = expected;
+            Assert.AreEqual(expected, this.instanceParameters.PreferredVerPages);
+        }
+
+        /// <summary>
+        /// Setting the PreferredVerPages property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Setting the PreferredVerPages property should set the parameter on the instance")]
+        public void VerifySetInstanceParametersPreferredVerPages()
+        {
+            int expected = 13;
+            this.instanceParameters.PreferredVerPages = expected;
+            Assert.AreEqual(expected, this.GetIntegerParameter(JET_param.PreferredVerPages));
+        }
+
+        /// <summary>
+        /// Test the VersionStoreTaskQueueMax property.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test the VersionStoreTaskQueueMax property")]
+        public void SetAndRetrieveInstanceParametersVersionStoreTaskQueueMax()
+        {
+            int expected = 12;
+            this.instanceParameters.VersionStoreTaskQueueMax = expected;
+            Assert.AreEqual(expected, this.instanceParameters.VersionStoreTaskQueueMax);
+        }
+
+        /// <summary>
+        /// Setting the VersionStoreTaskQueueMax property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Setting the VersionStoreTaskQueueMax property should set the parameter on the instance")]
+        public void VerifySetInstanceParametersVersionStoreTaskQueueMax()
+        {
+            int expected = 14;
+            this.instanceParameters.VersionStoreTaskQueueMax = expected;
+            Assert.AreEqual(expected, this.GetIntegerParameter(JET_param.VersionStoreTaskQueueMax));
+        }
+
+        /// <summary>
         /// Test the MaxTemporaryTables property.
         /// </summary>
         [TestMethod]
@@ -368,6 +422,33 @@ namespace InteropApiTests
             bool expected = Any.Boolean;
             this.instanceParameters.CircularLog = expected;
             Assert.AreEqual(expected, this.GetBooleanParameter(JET_param.CircularLog));
+        }
+
+        /// <summary>
+        /// Test the CleanupMismatchedLogFiles property.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test the CleanupMismatchedLogFiles property")]
+        public void SetAndRetrieveInstanceParametersCleanupMismatchedLogFiles()
+        {
+            bool expected = Any.Boolean;
+            this.instanceParameters.CleanupMismatchedLogFiles = expected;
+            Assert.AreEqual(expected, this.instanceParameters.CleanupMismatchedLogFiles);
+        }
+
+        /// <summary>
+        /// Setting the CleanupMismatchedLogFiles property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Setting the CleanupMismatchedLogFiles property should set the parameter on the instance")]
+        public void VerifySetInstanceParametersCleanupMismatchedLogFiles()
+        {
+            bool expected = Any.Boolean;
+            this.instanceParameters.CleanupMismatchedLogFiles = expected;
+            Assert.AreEqual(expected, this.GetBooleanParameter(JET_param.CleanupMismatchedLogFiles));
         }
 
         /// <summary>

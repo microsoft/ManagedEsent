@@ -232,6 +232,43 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Gets or sets the preferred number of version store pages reserved
+        /// for this instance. If the size of the version store exceeds this
+        /// threshold then any information that is only used for optional
+        /// background tasks, such as reclaiming deleted space in the database,
+        /// is instead sacrificed to preserve room for transactional information.
+        /// </summary>
+        public int PreferredVerPages
+        {
+            get
+            {
+                return this.GetIntegerParameter(JET_param.PreferredVerPages);
+            }
+
+            set
+            {
+                this.SetIntegerParameter(JET_param.PreferredVerPages, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the the number of background cleanup work items that
+        /// can be queued to the database engine thread pool at any one time.
+        /// </summary>
+        public int VersionStoreTaskQueueMax
+        {
+            get
+            {
+                return this.GetIntegerParameter(JET_param.VersionStoreTaskQueueMax);
+            }
+
+            set
+            {
+                this.SetIntegerParameter(JET_param.VersionStoreTaskQueueMax, value);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the number of temporary table resources for use
         /// by an instance. This setting will affect how many temporary tables can be used at
         /// the same time. If this system parameter is set to zero then no temporary database
@@ -317,6 +354,32 @@ namespace Microsoft.Isam.Esent.Interop
             set
             {
                 this.SetBoolParameter(JET_param.CircularLog, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether JetInit fails when the database
+        /// engine is configured to start using transaction log files on disk
+        /// that are of a different size than what is configured. Normally,
+        /// <see cref="Api.JetInit"/> will successfully recover the databases
+        /// but will fail with <see cref="JET_err.LogFileSizeMismatchDatabasesConsistent"/>
+        /// to indicate that the log file size is misconfigured. However, when
+        /// this parameter is set to true then the database engine will silently
+        /// delete all the old log files, start a new set of transaction log files
+        /// using the configured log file size. This parameter is useful when the
+        /// application wishes to transparently change its transaction log file
+        /// size yet still work transparently in upgrade and restore scenarios.
+        /// </summary>
+        public bool CleanupMismatchedLogFiles
+        {
+            get
+            {
+                return this.GetBoolParameter(JET_param.CleanupMismatchedLogFiles);
+            }
+
+            set
+            {
+                this.SetBoolParameter(JET_param.CleanupMismatchedLogFiles, value);
             }
         }
 

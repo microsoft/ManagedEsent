@@ -63,6 +63,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         MaxOpenTables = 6,
 
+        // PreferredMaxOpenTables(7) is obsolete
+
         /// <summary>
         /// This parameter reserves the requested number of cursor resources for use by an
         /// instance. A cursor resource directly corresponds to a JET_TABLEID data type.
@@ -209,6 +211,14 @@ namespace Microsoft.Isam.Esent.Interop
         CacheSizeMin = 60,
 
         /// <summary>
+        /// This parameter represents a threshold relative to <see cref="JET_param.MaxVerPages"/> that controls
+        /// the discretionary use of version pages by the database engine. If the size of the version store exceeds
+        /// this threshold then any information that is only used for optional background tasks, such as reclaiming
+        /// deleted space in the database, is instead sacrificed to preserve room for transactional information.
+        /// </summary>
+        PreferredVerPages = 63,
+
+        /// <summary>
         /// This parameter configures the page size for the database. The page
         /// size is the smallest unit of space allocation possible for a database
         /// file. The database page size is also very important because it sets
@@ -238,6 +248,21 @@ namespace Microsoft.Isam.Esent.Interop
         RuntimeCallback = 73,
 
         /// <summary>
+        /// This parameter controls the outcome of JetInit when the database
+        /// engine is configured to start using transaction log files on disk
+        /// that are of a different size than what is configured. Normally,
+        /// <see cref="Api.JetInit"/> will successfully recover the databases
+        /// but will fail with <see cref="JET_err.LogFileSizeMismatchDatabasesConsistent"/>
+        /// to indicate that the log file size is misconfigured. However, when
+        /// this parameter is set to true then the database engine will silently
+        /// delete all the old log files, start a new set of transaction log files
+        /// using the configured log file size. This parameter is useful when the
+        /// application wishes to transparently change its transaction log file
+        /// size yet still work transparently in upgrade and restore scenarios.
+        /// </summary>
+        CleanupMismatchedLogFiles = 77,
+
+        /// <summary>
         /// When this parameter is set to true then any folder that is missing in a file system path in use by
         /// the database engine will be silently created. Otherwise, the operation that uses the missing file system
         /// path will fail with JET_err.InvalidPath.
@@ -248,5 +273,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// This parameter controls the maximum number of instances that can be created in a single process.
         /// </summary>
         MaxInstances = 104,
+
+        /// <summary>
+        /// This parameter controls the number of background cleanup work items that
+        /// can be queued to the database engine thread pool at any one time.
+        /// </summary>
+        VersionStoreTaskQueueMax = 105,
     }
 }

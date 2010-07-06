@@ -141,6 +141,28 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test setting and retrieving the preferred ver pages setting.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting and retrieving the preferred ver pages setting")]
+        public void PreferredVerPagesParameter()
+        {
+            IntegerParameterTest(JET_param.PreferredVerPages, 8);
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the version store task queue max setting.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting and retrieving the version store task queue max setting")]
+        public void VersionStoreTaskQueueMaxParameter()
+        {
+            IntegerParameterTest(JET_param.VersionStoreTaskQueueMax, 17);
+        }
+
+        /// <summary>
         /// Test setting and retrieving the max temporary tables setting.
         /// </summary>
         [TestMethod]
@@ -270,6 +292,17 @@ namespace InteropApiTests
         public void CreatePathIfNotExistParameter()
         {
             BooleanParameterTest(JET_param.CreatePathIfNotExist, Any.Boolean);
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the cleanup mismatched logfiles setting.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting and retrieving the cleanup mismatched logfiles setting")]
+        public void CleanupMismatchedLogFilesParameter()
+        {
+            BooleanParameterTest(JET_param.CleanupMismatchedLogFiles, Any.Boolean);
         }
 
         /// <summary>
