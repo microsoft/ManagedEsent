@@ -346,6 +346,21 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Check that an exception is thrown when JetOpenTable gets a 
+        /// parameters size that is too long.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetOpenTable gets a parameters size that is too long")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetOpenTableThrowsExceptionWhenParametersSizeIsTooLong()
+        {
+            byte[] parameters = new byte[1];
+            JET_TABLEID ignoredTableid;
+            Api.JetOpenTable(this.sesid, this.dbid, "table", parameters, parameters.Length + 1, OpenTableGrbit.None, out ignoredTableid);
+        }
+
+        /// <summary>
         /// Check that an exception is thrown when JetCreateTable gets a 
         /// null table name.
         /// </summary>

@@ -264,7 +264,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         #region tables
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
-        public static extern int JetOpenTable(IntPtr sesid, uint dbid, string tablename, IntPtr pvParameters, uint cbParameters, uint grbit, out IntPtr tableid);
+        public static extern int JetOpenTable(IntPtr sesid, uint dbid, string tablename, byte[] pvParameters, uint cbParameters, uint grbit, out IntPtr tableid);
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetCloseTable(IntPtr sesid, IntPtr tableid);

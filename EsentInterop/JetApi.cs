@@ -175,6 +175,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             unsafe
             {
                 uint nativeNumInstance;
+
+                // Esent will allocate memory which will be freed by the ConvertInstanceInfos call.
                 NATIVE_INSTANCE_INFO* nativeInstanceInfos;
                 int err;
                 if (this.Capabilities.SupportsUnicodePaths)
@@ -661,6 +663,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetGrowDatabase");
             this.CheckNotNegative(desiredPages, "desiredPages");
+
             uint actualPagesNative;
             int err = this.Err(NativeMethods.JetGrowDatabase(
                         sesid.Value, dbid.Value, checked((uint)desiredPages), out actualPagesNative));
@@ -683,6 +686,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.TraceFunctionCall("JetSetDatabaseSize");
             this.CheckNotNegative(desiredPages, "desiredPages");
             this.CheckNotNull(database, "database");
+
             uint actualPagesNative;
             int err;
             if (this.Capabilities.SupportsUnicodePaths)
@@ -1061,7 +1065,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetBeginSession");
             sesid = JET_SESID.Nil;
-            return this.Err(NativeMethods.JetBeginSession(instance.Value, out sesid.Value, null, null));
+            return this.Err(NativeMethods.JetBeginSession(instance.Value, out sesid.Value, username, password));
         }
 
         /// <summary>
@@ -1158,8 +1162,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.TraceFunctionCall("JetOpenTable");
             tableid = JET_TABLEID.Nil;
             this.CheckNotNull(tablename, "tablename");
+            this.CheckDataSize(parameters, parametersLength, "parametersLength");
 
-            return this.Err(NativeMethods.JetOpenTable(sesid.Value, dbid.Value, tablename, IntPtr.Zero, 0, (uint)grbit, out tableid.Value));
+            return this.Err(NativeMethods.JetOpenTable(sesid.Value, dbid.Value, tablename, parameters, checked((uint)parametersLength), (uint)grbit, out tableid.Value));
         }
 
         /// <summary>
@@ -1727,7 +1732,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetOpenTemporaryTable(JET_SESID sesid, JET_OPENTEMPORARYTABLE temporarytable)
         {
             this.TraceFunctionCall("JetOpenTemporaryTable");
-            this.CheckSupportsVistaFeatures("JetOpenTemporaryTables");
+            this.CheckSupportsVistaFeatures("JetOpenTemporaryTable");
             this.CheckNotNull(temporarytable, "temporarytable");
 
             NATIVE_OPENTEMPORARYTABLE nativetemporarytable = temporarytable.GetNativeOpenTemporaryTable();
