@@ -2085,7 +2085,7 @@ namespace Microsoft.Isam.Esent.Interop
                     int err = Impl.JetSetColumns(sesid, tableid, nativeSetColumns, numColumns);
                     for (int i = 0; i < numColumns; ++i)
                     {
-                        setcolumns[i].err = (JET_err) nativeSetColumns[i].err;
+                        setcolumns[i].err = (JET_wrn) nativeSetColumns[i].err;
                     }
 
                     return Api.Check(err);

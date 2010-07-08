@@ -22,18 +22,27 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="compareOptions">String comparison options.</param>
         /// <param name="indexSegments">Array of index segment descriptions.</param>
         /// <param name="grbit">Index options.</param>
+        /// <param name="keys">Number of unique keys in the index.</param>
+        /// <param name="entries">Number of entries in the index.</param>
+        /// <param name="pages">Number of pages in the index.</param>
         internal IndexInfo(
             string name,
             CultureInfo cultureInfo,
             CompareOptions compareOptions,
             IndexSegment[] indexSegments,
-            CreateIndexGrbit grbit)
+            CreateIndexGrbit grbit,
+            int keys,
+            int entries,
+            int pages)
         {
             this.Name = name;
             this.CultureInfo = cultureInfo;
             this.CompareOptions = compareOptions;
             this.IndexSegments = indexSegments;
             this.Grbit = grbit;
+            this.Keys = keys;
+            this.Entries = entries;
+            this.Pages = pages;
         }
 
         /// <summary>
@@ -60,5 +69,23 @@ namespace Microsoft.Isam.Esent.Interop
         /// Gets the index options.
         /// </summary>
         public CreateIndexGrbit Grbit { get; private set; }
+
+        /// <summary>
+        /// Gets the number of unique keys in the index.
+        /// This value is not current and is only is updated by <see cref="Api.JetComputeStats"/>.
+        /// </summary>
+        public int Keys { get; private set; }
+
+        /// <summary>
+        /// Gets the number of entries in the index.
+        /// This value is not current and is only is updated by <see cref="Api.JetComputeStats"/>.
+        /// </summary>
+        public int Entries { get; private set; }
+
+        /// <summary>
+        /// Gets the number of pages in the index.
+        /// This value is not current and is only is updated by <see cref="Api.JetComputeStats"/>.
+        /// </summary>
+        public int Pages { get; private set; }
     }
 }

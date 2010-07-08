@@ -310,6 +310,11 @@ namespace InteropApiTests
             Assert.AreEqual(indexname, info.Name);
             Assert.AreEqual(grbit, info.Grbit);
 
+            // The index has no stats
+            Assert.AreEqual(0, info.Keys);
+            Assert.AreEqual(0, info.Entries);
+            Assert.AreEqual(0, info.Pages);
+
             Assert.AreEqual(1, info.IndexSegments.Length);
             Assert.AreEqual("ascii", info.IndexSegments[0].ColumnName, true);
             Assert.IsTrue(info.IndexSegments[0].IsAscending);
@@ -349,6 +354,44 @@ namespace InteropApiTests
             Assert.AreEqual("boolean", info.IndexSegments[1].ColumnName, true);
             Assert.IsFalse(info.IndexSegments[1].IsAscending);
             Assert.AreEqual(JET_coltyp.Bit, info.IndexSegments[1].Coltyp);
+
+            Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
+        }
+
+        /// <summary>
+        /// Get index information for one index with stats.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Get index information for one index with stats.")]
+        public void GetIndexInformationOneIndexWithStats()
+        {
+            string indexname = "nonuniqueindex";
+            string indexdef = "+ascii\0\0";
+            CreateIndexGrbit grbit = CreateIndexGrbit.None;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetCreateIndex(this.sesid, this.tableid, indexname, grbit, indexdef, indexdef.Length, 100);
+
+            // Insert 9 records with 3 of each key value
+            for (int i = 0; i < 3; ++i)
+            {
+                this.InsertRecordWithString("ascii", "foo", Encoding.ASCII);
+                this.InsertRecordWithString("ascii", "bar", Encoding.ASCII);
+                this.InsertRecordWithString("ascii", "baz", Encoding.ASCII);
+            }
+
+            Api.JetComputeStats(this.sesid, this.tableid);
+            IEnumerable<IndexInfo> indexes = Api.GetTableIndexes(this.sesid, this.tableid);
+
+            // There should be only one index
+            IndexInfo info = indexes.Single();
+            Assert.AreEqual(indexname, info.Name);
+
+            // The index has 3 unique keys, 9 entries and everything should fit on one page.
+            Assert.AreEqual(3, info.Keys);
+            Assert.AreEqual(9, info.Entries);
+            Assert.AreEqual(1, info.Pages);
 
             Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
         }
@@ -429,5 +472,20 @@ namespace InteropApiTests
         }
 
         #endregion MetaData helpers tests
+
+        /// <summary>
+        /// Insert a record setting the specified column to the given string.
+        /// </summary>
+        /// <param name="columnName">Name of the column to set.</param>
+        /// <param name="data">Column data.</param>
+        /// <param name="encoding">Encoding to use.</param>
+        private void InsertRecordWithString(string columnName, string data, Encoding encoding)
+        {
+            using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            {
+                Api.SetColumn(this.sesid, this.tableid, this.columnidDict[columnName], data, encoding);
+                update.Save();
+            }
+        }
     }
 }

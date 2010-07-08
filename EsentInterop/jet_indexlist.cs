@@ -15,33 +15,108 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.DocumentationRules",
-        "SA1600:ElementsMustBeDocumented",
-        Justification = "Internal interop struct only.")]
-    [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     internal struct NATIVE_INDEXLIST
     {
+        /// <summary>
+        /// Size of the structure.
+        /// </summary>
         public uint cbStruct;
+
+        /// <summary>
+        /// Tableid of the temporary table.
+        /// </summary>
         public IntPtr tableid;
+
+        /// <summary>
+        /// Number of records in the table.
+        /// </summary>
         public uint cRecord;
+
+        /// <summary>
+        /// Id of the column containing the name of the index.
+        /// </summary>
         public uint columnidindexname;
+
+        /// <summary>
+        /// Id of the column containing index options.
+        /// </summary>
         public uint columnidgrbitIndex;
+
+        /// <summary>
+        /// Id of the column containing the number of unique keys in the index.
+        /// This is updated by <see cref="Api.JetComputeStats"/>.
+        /// </summary>
         public uint columnidcKey;
+
+        /// <summary>
+        /// Id of the column containing the number of entries in the index.
+        /// This is updated by <see cref="Api.JetComputeStats"/>.
+        /// </summary>
         public uint columnidcEntry;
+
+        /// <summary>
+        /// Id of the column containing the number of pages in the index.
+        /// This is updated by <see cref="Api.JetComputeStats"/>.
+        /// </summary>
         public uint columnidcPage;
+
+        /// <summary>
+        /// Id of the column containing the number of columns in the index
+        /// definition.
+        /// </summary>
         public uint columnidcColumn;
+
+        /// <summary>
+        /// Id of the column storing the index of this column in the index key.
+        /// </summary>
         public uint columnidiColumn;
+
+        /// <summary>
+        /// Id of the column containing the columnid.
+        /// </summary>
         public uint columnidcolumnid;
+
+        /// <summary>
+        /// Id of the column containing the column type.
+        /// </summary>
         public uint columnidcoltyp;
+
+        /// <summary>
+        /// Id of the column containing the country code (obsolete).
+        /// </summary>
         public uint columnidCountry;
+
+        /// <summary>
+        /// Id of the column containing the LCID of the index.
+        /// </summary>
         public uint columnidLangid;
+
+        /// <summary>
+        /// Id of the column containing the code page of the index.
+        /// </summary>
         public uint columnidCp;
+
+        /// <summary>
+        /// Obsolete. Ignored.
+        /// </summary>
         public uint columnidCollate;
+
+        /// <summary>
+        /// Id of the column giving the column options.
+        /// </summary>
         public uint columnidgrbitColumn;
+
+        /// <summary>
+        /// Id of the column giving the column name.
+        /// </summary>
         public uint columnidcolumnname;
+
+        /// <summary>
+        /// Id of the column giving the LCMapString options.
+        /// </summary>
         public uint columnidLCMapFlags;
     }
 
@@ -79,6 +154,30 @@ namespace Microsoft.Isam.Esent.Interop
         /// The column is of type JET_coltyp.Long.
         /// </summary>
         public JET_COLUMNID columnidgrbitIndex { get; internal set; }
+
+        /// <summary>
+        /// Gets the columnid of the column in the temporary table which
+        /// stores the number of unique keys in the index.
+        /// This value is not current and is only is updated by <see cref="Api.JetComputeStats"/>.
+        /// The column is of type JET_coltyp.Long.
+        /// </summary>
+        public JET_COLUMNID columnidcKey { get; internal set; }
+
+        /// <summary>
+        /// Gets the columnid of the column in the temporary table which
+        /// stores the number of entries in the index.
+        /// This value is not current and is only is updated by <see cref="Api.JetComputeStats"/>.
+        /// The column is of type JET_coltyp.Long.
+        /// </summary>
+        public JET_COLUMNID columnidcEntry { get; internal set; }
+
+        /// <summary>
+        /// Gets the columnid of the column in the temporary table which
+        /// stores the number of pages in the index.
+        /// This value is not current and is only is updated by <see cref="Api.JetComputeStats"/>.
+        /// The column is of type JET_coltyp.Long.
+        /// </summary>
+        public JET_COLUMNID columnidcPage { get; internal set; }
 
         /// <summary>
         /// Gets the columnid of the column in the temporary table which
@@ -155,6 +254,9 @@ namespace Microsoft.Isam.Esent.Interop
             this.cRecord = checked((int)value.cRecord);
             this.columnidindexname = new JET_COLUMNID { Value = value.columnidindexname };
             this.columnidgrbitIndex = new JET_COLUMNID { Value = value.columnidgrbitIndex };
+            this.columnidcKey = new JET_COLUMNID { Value = value.columnidcKey };
+            this.columnidcEntry = new JET_COLUMNID { Value = value.columnidcEntry };
+            this.columnidcPage = new JET_COLUMNID { Value = value.columnidcPage };
             this.columnidcColumn = new JET_COLUMNID { Value = value.columnidcColumn };
             this.columnidiColumn = new JET_COLUMNID { Value = value.columnidiColumn };
             this.columnidcolumnid = new JET_COLUMNID { Value = value.columnidcolumnid };

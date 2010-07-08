@@ -15,21 +15,44 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.DocumentationRules",
-        "SA1600:ElementsMustBeDocumented",
-        Justification = "Internal interop struct only.")]
-    [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     internal struct NATIVE_SETCOLUMN
     {
+        /// <summary>
+        /// Columnid to set.
+        /// </summary>
         public uint columnid;
+
+        /// <summary>
+        /// Data to set.
+        /// </summary>
         public IntPtr pvData;
+
+        /// <summary>
+        /// Size of data to set.
+        /// </summary>
         public uint cbData;
+
+        /// <summary>
+        /// SetColumns options.
+        /// </summary>
         public uint grbit;
+
+        /// <summary>
+        /// Long-value offset to set.
+        /// </summary>
         public uint ibLongValue;
+
+        /// <summary>
+        /// Itag sequence to set.
+        /// </summary>
         public uint itagSequence;
+
+        /// <summary>
+        /// Returns the error from setting the column.
+        /// </summary>
         public uint err;
     }
 
@@ -81,7 +104,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets the error code or warning returned from the set column operation.
         /// </summary>
-        public JET_err err { get; internal set; }
+        public JET_wrn err { get; internal set; }
 
         /// <summary>
         /// Check to see if cbData is negative or greater than cbData.

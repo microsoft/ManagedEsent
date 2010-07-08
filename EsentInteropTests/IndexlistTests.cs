@@ -105,6 +105,39 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Check the conversion of columnidcKey.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify converting a NATIVE_INDEXLIST to a JET_INDEXLIST sets columnidcKey")]
+        public void VerifyConvertIndexlistFromNativeSetsColumnidcKey()
+        {
+            Assert.AreEqual(new JET_COLUMNID { Value = this.native.columnidcKey }, this.converted.columnidcKey);
+        }
+
+        /// <summary>
+        /// Check the conversion of columnidcEntry.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify converting a NATIVE_INDEXLIST to a JET_INDEXLIST sets columnidcEntry")]
+        public void VerifyConvertIndexlistFromNativeSetsColumnidcEntry()
+        {
+            Assert.AreEqual(new JET_COLUMNID { Value = this.native.columnidcEntry }, this.converted.columnidcEntry);
+        }
+
+        /// <summary>
+        /// Check the conversion of columnidcPage.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify converting a NATIVE_INDEXLIST to a JET_INDEXLIST sets columnidcPage")]
+        public void VerifyConvertIndexlistFromNativeSetsColumnidcPage()
+        {
+            Assert.AreEqual(new JET_COLUMNID { Value = this.native.columnidcPage }, this.converted.columnidcPage);
+        }
+
+        /// <summary>
         /// Check the conversion of columnidcColumn.
         /// </summary>
         [TestMethod]

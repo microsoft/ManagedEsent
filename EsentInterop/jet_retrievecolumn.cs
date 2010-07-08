@@ -140,7 +140,7 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_COLUMNID columnidNextTagged { get; private set; }
 
         /// <summary>
-        /// Gets the warnings or error code returned from the retrieval of the column.
+        /// Gets the warning returned from the retrieval of the column.
         /// </summary>
         public JET_wrn err { get; private set; }
 
@@ -151,7 +151,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             if (this.cbData < 0)
             {
-                throw new ArgumentOutOfRangeException("cbData", "data length cannot be negative");
+                throw new ArgumentOutOfRangeException("cbData", this.cbData, "data length cannot be negative");
             }
 
             if ((null == this.pvData && 0 != this.cbData) || (null != this.pvData && this.cbData > this.pvData.Length))

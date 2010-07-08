@@ -14,19 +14,34 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.DocumentationRules",
-        "SA1600:ElementsMustBeDocumented",
-        Justification = "Internal interop struct only.")]
-    [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     internal struct NATIVE_RETINFO
     {
+        /// <summary>
+        /// The size of a NATIVE_RETINFO structure.
+        /// </summary>
         public static readonly int Size = Marshal.SizeOf(typeof(NATIVE_RETINFO));
+
+        /// <summary>
+        /// Size of this structure.
+        /// </summary>
         public uint cbStruct;
+
+        /// <summary>
+        /// Offset of the long value to retrieve.
+        /// </summary>
         public uint ibLongValue;
+
+        /// <summary>
+        /// Itag sequence to retrieve.
+        /// </summary>
         public uint itagSequence;
+
+        /// <summary>
+        /// Returns the columnid of the next tagged column.
+        /// </summary>
         public uint columnidNextTagged;
     }
 

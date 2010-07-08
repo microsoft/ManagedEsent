@@ -234,11 +234,15 @@ namespace Microsoft.Isam.Esent.Interop
         {
             string name = RetrieveColumnAsString(
                 sesid, indexlist.tableid, indexlist.columnidindexname, NativeMethods.Encoding, RetrieveColumnGrbit.None);
-            var lcid = (int) RetrieveColumnAsInt16(sesid, indexlist.tableid, indexlist.columnidLangid);
+            int lcid = (int) RetrieveColumnAsInt16(sesid, indexlist.tableid, indexlist.columnidLangid);
             var cultureInfo = new CultureInfo(lcid);
-            var lcmapFlags = (uint) RetrieveColumnAsUInt32(sesid, indexlist.tableid, indexlist.columnidLCMapFlags);
+            uint lcmapFlags = (uint) RetrieveColumnAsUInt32(sesid, indexlist.tableid, indexlist.columnidLCMapFlags);
             CompareOptions compareOptions = Conversions.CompareOptionsFromLCMapFlags(lcmapFlags);
-            var grbit = (uint) RetrieveColumnAsUInt32(sesid, indexlist.tableid, indexlist.columnidgrbitIndex);
+            uint grbit = (uint) RetrieveColumnAsUInt32(sesid, indexlist.tableid, indexlist.columnidgrbitIndex);
+
+            int keys = (int) RetrieveColumnAsInt32(sesid, indexlist.tableid, indexlist.columnidcKey);
+            int entries = (int) RetrieveColumnAsInt32(sesid, indexlist.tableid, indexlist.columnidcEntry);
+            int pages = (int) RetrieveColumnAsInt32(sesid, indexlist.tableid, indexlist.columnidcPage);
 
             IndexSegment[] segments = GetIndexSegmentsFromIndexlist(sesid, indexlist);
 
@@ -247,7 +251,10 @@ namespace Microsoft.Isam.Esent.Interop
                 cultureInfo,
                 compareOptions,
                 segments,
-                (CreateIndexGrbit) grbit);
+                (CreateIndexGrbit) grbit,
+                keys,
+                entries,
+                pages);
         }
 
         /// <summary>
