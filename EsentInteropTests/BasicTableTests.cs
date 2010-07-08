@@ -11,6 +11,7 @@ namespace InteropApiTests
     using System.Text;
     using System.Threading;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Windows7;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -776,6 +777,46 @@ namespace InteropApiTests
             Api.JetMakeKey(this.sesid, this.tableid, key, key.Length, MakeKeyGrbit.NormalizedKey);
             Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekEQ);
             Assert.AreEqual(expected, this.RetrieveColumnAsString());
+        }
+
+        /// <summary>
+        /// Preread keys.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test JetPrereadKeys")]
+        public void JetPrereadKeys()
+        {
+            if (!EsentVersion.SupportsWindows7Features)
+            {
+                return;
+            }
+
+            // We need enough records to force a vertical split. ESENT returns
+            // 0 for keysPreread when we have a single-level tree.
+            const int NumRecords = 128;
+            byte[][] keys = new byte[NumRecords][];
+            int[] keyLengths = new int[NumRecords];
+
+            Api.JetBeginTransaction(this.sesid);
+
+            // This table uses a sequential index so the records will
+            // be in key order.
+            for (int i = 0; i < NumRecords; ++i)
+            {
+                Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+                this.SetColumnFromString(Any.StringOfLength(255));
+                this.UpdateAndGotoBookmark();
+
+                keys[i] = Api.RetrieveKey(this.sesid, this.tableid, RetrieveKeyGrbit.None);
+                keyLengths[i] = keys[i].Length;
+            }
+
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.None);
+
+            int keysPreread;
+            Windows7Api.JetPrereadKeys(this.sesid, this.tableid, keys, keyLengths, NumRecords, out keysPreread, PrereadKeysGrbit.Forward);
+            Assert.AreNotEqual(0, keysPreread, "No keys were preread?!");
         }
 
         #endregion Navigation Tests

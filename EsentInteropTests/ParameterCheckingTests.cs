@@ -11,6 +11,7 @@ namespace InteropApiTests
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Server2003;
     using Microsoft.Isam.Esent.Interop.Vista;
+    using Microsoft.Isam.Esent.Interop.Windows7;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -1501,6 +1502,186 @@ namespace InteropApiTests
         public void IntersectIndexesThrowsExceptionWhenTableidIsNull()
         {
             Api.IntersectIndexes(this.sesid, null).ToArray();
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetPrereadKeys gets a negative count.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetPrereadKeys gets a negative count")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetPrereadKeysThrowsExceptionWhenCountIsNegative()
+        {
+            if (!EsentVersion.SupportsWindows7Features)
+            {
+                throw new ArgumentException();
+            }
+
+            int ignored;
+            Windows7Api.JetPrereadKeys(this.sesid, this.tableid, new byte[1][], new int[1], -1, out ignored, PrereadKeysGrbit.Forward);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetPrereadKeys gets null keys.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetPrereadKeys gets null keys")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetPrereadKeysThrowsExceptionWhenKeysIsNull()
+        {
+            if (!EsentVersion.SupportsWindows7Features)
+            {
+                throw new ArgumentNullException();
+            }
+
+            int ignored;
+            Windows7Api.JetPrereadKeys(this.sesid, this.tableid, null, new int[1], 0, out ignored, PrereadKeysGrbit.Forward);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetPrereadKeys gets null key lengths.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetPrereadKeys gets null key counts")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetPrereadKeysThrowsExceptionWhenKeyLengthsIsNull()
+        {
+            if (!EsentVersion.SupportsWindows7Features)
+            {
+                throw new ArgumentNullException();
+            }
+
+            int ignored;
+            Windows7Api.JetPrereadKeys(this.sesid, this.tableid, new byte[1][], null, 0, out ignored, PrereadKeysGrbit.Forward);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetPrereadKeys gets a count that is longer than the keys.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetPrereadKeys gets a count that is longer than the keys")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetPrereadKeysThrowsExceptionWhenCountIsLongerThanKeys()
+        {
+            if (!EsentVersion.SupportsWindows7Features)
+            {
+                throw new ArgumentException();
+            }
+
+            int ignored;
+            Windows7Api.JetPrereadKeys(this.sesid, this.tableid, new byte[1][], new int[2], 2, out ignored, PrereadKeysGrbit.Forward);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetPrereadKeys gets a count that is longer than the key lengths.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetPrereadKeys gets a count that is longer than the key lengths")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetPrereadKeysThrowsExceptionWhenCountIsLongerThanKeyLengths()
+        {
+            if (!EsentVersion.SupportsWindows7Features)
+            {
+                throw new ArgumentException();
+            }
+
+            int ignored;
+            Windows7Api.JetPrereadKeys(this.sesid, this.tableid, new byte[2][], new int[1], 2, out ignored, PrereadKeysGrbit.Forward);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetPrereadKeys gets a negative index.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetPrereadKeys gets a negative index")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetPrereadKeysThrowsExceptionWhenIndexIsNegative()
+        {
+            if (!EsentVersion.SupportsWindows7Features)
+            {
+                throw new ArgumentException();
+            }
+
+            int ignored;
+            Windows7Api.JetPrereadKeys(this.sesid, this.tableid, new byte[1][], new int[1], -1, 0, out ignored, PrereadKeysGrbit.Forward);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetPrereadKeys gets an index past the end of the keys.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetPrereadKeys gets an index past the end of the keys")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetPrereadKeysThrowsExceptionWhenIndexIsPastEndOfKeys()
+        {
+            if (!EsentVersion.SupportsWindows7Features)
+            {
+                throw new ArgumentException();
+            }
+
+            int ignored;
+            Windows7Api.JetPrereadKeys(this.sesid, this.tableid, new byte[1][], new int[2], 1, 0, out ignored, PrereadKeysGrbit.Forward);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetPrereadKeys gets an index past the end of the key lengths.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetPrereadKeys gets an index past the end of the key lengths")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetPrereadKeysThrowsExceptionWhenIndexIsPastEndOfKeyLengths()
+        {
+            if (!EsentVersion.SupportsWindows7Features)
+            {
+                throw new ArgumentException();
+            }
+
+            int ignored;
+            Windows7Api.JetPrereadKeys(this.sesid, this.tableid, new byte[2][], new int[1], 1, 0, out ignored, PrereadKeysGrbit.Forward);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetPrereadKeys gets an index/count past the end of the keys.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetPrereadKeys gets an index/count past the end of the keys")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetPrereadKeysThrowsExceptionWhenIndexCountIsPastEndOfKeys()
+        {
+            if (!EsentVersion.SupportsWindows7Features)
+            {
+                throw new ArgumentException();
+            }
+
+            int ignored;
+            Windows7Api.JetPrereadKeys(this.sesid, this.tableid, new byte[3][], new int[4], 1, 3, out ignored, PrereadKeysGrbit.Forward);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetPrereadKeys gets an index/count past the end of the key lengths.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetPrereadKeys gets an index/count past the end of the key lengths")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetPrereadKeysThrowsExceptionWhenIndexCountIsPastEndOfKeyLengths()
+        {
+            if (!EsentVersion.SupportsWindows7Features)
+            {
+                throw new ArgumentException();
+            }
+
+            int ignored;
+            Windows7Api.JetPrereadKeys(this.sesid, this.tableid, new byte[4][], new int[3], 1, 3, out ignored, PrereadKeysGrbit.Forward);
         }
 
         #endregion

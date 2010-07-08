@@ -2590,6 +2590,68 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return this.Err(NativeMethods.JetGotoPosition(sesid.Value, tableid.Value, ref native));
         }
 
+        /// <summary>
+        /// If the records with the specified keys are not in the buffer cache
+        /// then start asynchronous reads to bring the records into the database
+        /// buffer cache.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to issue the prereads against.</param>
+        /// <param name="keys">
+        /// The keys to preread. The keys must be sorted.
+        /// </param>
+        /// <param name="keyLengths">The lengths of the keys to preread.</param>
+        /// <param name="keyIndex">
+        /// The index of the first key in the keys array to read.
+        /// </param>
+        /// <param name="keyCount">
+        /// The maximum number of keys to preread.
+        /// </param>
+        /// <param name="keysPreread">
+        /// Returns the number of keys to actually preread.
+        /// </param>
+        /// <param name="grbit">
+        /// Preread options. Used to specify the direction of the preread.
+        /// </param>
+        /// <returns>An error or warning.</returns>
+        public int JetPrereadKeys(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            byte[][] keys,
+            int[] keyLengths,
+            int keyIndex,
+            int keyCount,
+            out int keysPreread,
+            PrereadKeysGrbit grbit)
+        {
+            this.TraceFunctionCall("JetPrereadKeys");
+            this.CheckSupportsWindows7Features("JetPrereadKeys");
+            this.CheckNotNull(keys, "keys");
+            this.CheckNotNull(keyLengths, "keyLengths");
+            this.CheckDataSize(keys, keyIndex, "keyIndex", keyCount, "keyCount");
+            this.CheckDataSize(keyLengths, keyIndex, "keyIndex", keyCount, "keyCount");
+
+            int err;
+            unsafe
+            {
+                void** rgpvKeys = stackalloc void*[keyCount];
+                uint* rgcbKeys = stackalloc uint[keyCount];
+                using (var gchandlecollection = new GCHandleCollection())
+                {
+                    for (int i = 0; i < keyCount; ++i)
+                    {
+                        rgpvKeys[i] = (void*)gchandlecollection.Add(keys[keyIndex + i]);
+                        rgcbKeys[i] = checked((uint)keyLengths[keyIndex + i]);
+                    }
+
+                    err = this.Err(NativeMethods.JetPrereadKeys(
+                                sesid.Value, tableid.Value, rgpvKeys, rgcbKeys, keyCount, out keysPreread, (uint)grbit));
+                }                
+            }
+
+            return err;
+        }
+
         #endregion
 
         #region Data Retrieval
@@ -3700,6 +3762,39 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         #region Parameter Checking and Tracing
 
         /// <summary>
+        /// Make sure the data, dataOffset and dataSize arguments match.
+        /// </summary>
+        /// <param name="data">The data buffer.</param>
+        /// <param name="dataOffset">The offset into the data.</param>
+        /// <param name="offsetArgumentName">The name of the offset argument.</param>
+        /// <param name="dataSize">The size of the data.</param>
+        /// <param name="sizeArgumentName">The name of the size argument.</param>
+        /// <typeparam name="T">The type of the data.</typeparam>
+        private void CheckDataSize<T>(ICollection<T> data, int dataOffset, string offsetArgumentName, int dataSize, string sizeArgumentName)
+        {
+            this.CheckNotNegative(dataSize, sizeArgumentName);
+            this.CheckNotNegative(dataOffset, offsetArgumentName);
+
+            if ((null == data && 0 != dataOffset) || (null != data && dataOffset >= data.Count))
+            {
+                Trace.WriteLineIf(this.traceSwitch.TraceError, "CheckDataSize failed");
+                throw new ArgumentOutOfRangeException(
+                    offsetArgumentName,
+                    dataOffset,
+                    "cannot be greater than the length of the buffer");
+            }
+
+            if ((null == data && 0 != dataSize) || (null != data && dataSize > data.Count - dataOffset))
+            {
+                Trace.WriteLineIf(this.traceSwitch.TraceError, "CheckDataSize failed");
+                throw new ArgumentOutOfRangeException(
+                    sizeArgumentName,
+                    dataSize,
+                    "cannot be greater than the length of the buffer");
+            }
+        }
+
+        /// <summary>
         /// Make sure the data and dataSize arguments match.
         /// </summary>
         /// <param name="data">The data buffer.</param>
@@ -3708,15 +3803,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <typeparam name="T">The type of the data.</typeparam>
         private void CheckDataSize<T>(ICollection<T> data, int dataSize, string argumentName)
         {
-            this.CheckNotNegative(dataSize, argumentName);
-            if ((null == data && 0 != dataSize) || (null != data && dataSize > data.Count))
-            {
-                Trace.WriteLineIf(this.traceSwitch.TraceError, "CheckDataSize failed");
-                throw new ArgumentOutOfRangeException(
-                    argumentName,
-                    dataSize,
-                    "cannot be greater than the length of the buffer");
-            }
+            this.CheckDataSize(data, 0, String.Empty, dataSize, argumentName);
         }
 
         /// <summary>

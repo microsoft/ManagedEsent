@@ -200,6 +200,20 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify that JetPrereadKeys throws an exception when using the
+        /// XP version of ESENT.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that JetPrereadKeys throws an exception when using the XP version of ESENT")]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void VerifyXpThrowsExceptionOnJetPrereadKeys()
+        {
+            int ignored;
+            Windows7Api.JetPrereadKeys(JET_SESID.Nil, JET_TABLEID.Nil, null, null, 0, out ignored, PrereadKeysGrbit.Forward);
+        }
+
+        /// <summary>
         /// Verify getting the LVChunk size on XP returns a default value.
         /// </summary>
         [TestMethod]

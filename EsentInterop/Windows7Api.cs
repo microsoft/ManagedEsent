@@ -46,14 +46,14 @@ namespace Microsoft.Isam.Esent.Interop.Windows7
         public static void JetPrereadKeys(
             JET_SESID sesid,
             JET_TABLEID tableid,
-            byte[] keys,
+            byte[][] keys,
             int[] keyLengths,
             int keyIndex,
             int keyCount,
             out int keysPreread,
             PrereadKeysGrbit grbit)
         {
-            keysPreread = 0;
+            Api.Check(Api.Impl.JetPrereadKeys(sesid, tableid, keys, keyLengths, keyIndex, keyCount, out keysPreread, grbit));
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows7
         public static void JetPrereadKeys(
             JET_SESID sesid,
             JET_TABLEID tableid,
-            byte[] keys,
+            byte[][] keys,
             int[] keyLengths,
             int keyCount,
             out int keysPreread,

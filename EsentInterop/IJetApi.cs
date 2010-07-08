@@ -1400,6 +1400,40 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         int JetGotoPosition(JET_SESID sesid, JET_TABLEID tableid, JET_RECPOS recpos);
 
+        /// <summary>
+        /// If the records with the specified keys are not in the buffer cache
+        /// then start asynchronous reads to bring the records into the database
+        /// buffer cache.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to issue the prereads against.</param>
+        /// <param name="keys">
+        /// The keys to preread. The keys must be sorted.
+        /// </param>
+        /// <param name="keyLengths">The lengths of the keys to preread.</param>
+        /// <param name="keyIndex">
+        /// The index of the first key in the keys array to read.
+        /// </param>
+        /// <param name="keyCount">
+        /// The maximum number of keys to preread.
+        /// </param>
+        /// <param name="keysPreread">
+        /// Returns the number of keys to actually preread.
+        /// </param>
+        /// <param name="grbit">
+        /// Preread options. Used to specify the direction of the preread.
+        /// </param>
+        /// <returns>An error or warning.</returns>
+        int JetPrereadKeys(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            byte[][] keys,
+            int[] keyLengths,
+            int keyIndex,
+            int keyCount,
+            out int keysPreread,
+            PrereadKeysGrbit grbit);
+
         #endregion
 
         #region Data Retrieval

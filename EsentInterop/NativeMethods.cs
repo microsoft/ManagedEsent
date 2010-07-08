@@ -514,6 +514,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetGotoPosition(IntPtr sesid, IntPtr tableid, [In] ref NATIVE_RECPOS precpos);
 
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static unsafe extern int JetPrereadKeys(
+            IntPtr sesid, IntPtr tableid, void** rgpvKeys, uint* rgcbKeys, int ckeys, out int pckeysPreread, uint grbit);
+
         #endregion
 
         #region Data Retrieval
