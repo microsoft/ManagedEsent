@@ -7,6 +7,7 @@
 namespace InteropApiTests
 {
     using System;
+    using System.Text;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Implementation;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -313,12 +314,32 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(1)]
         [Description("Verify an exception is thrown when RetrieveColumnAsString gets a column that grows when it tries to retrieve it")]
-        public void VerifyRetrieveColumnAsStringThrowsExceptionWhenColumnSizeGrows()
+        public void VerifyRetrieveColumnAsUnicodeStringThrowsExceptionWhenColumnSizeGrows()
         {
             this.SetupBadRetrieveColumn();
             try
             {
-                Api.RetrieveColumnAsString(JET_SESID.Nil, JET_TABLEID.Nil, JET_COLUMNID.Nil);
+                Api.RetrieveColumnAsString(JET_SESID.Nil, JET_TABLEID.Nil, JET_COLUMNID.Nil, Encoding.Unicode);
+                Assert.Fail("Expected an InvalidOperationException exception");
+            }
+            catch (InvalidOperationException)
+            {
+            }
+        }
+
+        /// <summary>
+        /// Verify an exception is thrown when RetrieveColumnAsString gets a column that grows
+        /// when it tries to retrieve it.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify an exception is thrown when RetrieveColumnAsString gets a column that grows when it tries to retrieve it")]
+        public void VerifyRetrieveColumnAsAsciiStringThrowsExceptionWhenColumnSizeGrows()
+        {
+            this.SetupBadRetrieveColumn();
+            try
+            {
+                Api.RetrieveColumnAsString(JET_SESID.Nil, JET_TABLEID.Nil, JET_COLUMNID.Nil, Encoding.ASCII);
                 Assert.Fail("Expected an InvalidOperationException exception");
             }
             catch (InvalidOperationException)

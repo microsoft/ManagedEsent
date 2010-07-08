@@ -260,6 +260,19 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test JetBackupInstance and JetRestoreInstance with an ASCII path and a status callback.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test JetBackupInstance and JetRestoreInstance with an ASCII path and a status callback")]
+        public void BackupRestoreDatabaseWithAsciiPathCallback()
+        {
+            var test = new DatabaseFileTestHelper("database", "backup", true);
+            test.TestBackupRestore();
+        }
+
+
+        /// <summary>
         /// Test snapshot backups with an ASCII path.
         /// </summary>
         [TestMethod]
@@ -281,6 +294,18 @@ namespace InteropApiTests
         {
             var test = new DatabaseFileTestHelper("database", "backup", false);
             test.TestStreamingBackup();
+        }
+
+        /// <summary>
+        /// Test streaming backups with an ASCII path and JetEndExternalBackup2.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test streaming backups with an ASCII path and JetEndExternalBackup2")]
+        public void StreamingBackupWithAsciiPathEndExternalBackup2()
+        {
+            var test = new DatabaseFileTestHelper("database", "backup", false);
+            test.TestStreamingBackup2();
         }
 
         /// <summary>

@@ -9,6 +9,7 @@ namespace InteropApiTests
     using System;
     using System.Threading;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Windows7;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -212,6 +213,27 @@ namespace InteropApiTests
                 instance.Parameters.MaxTemporaryTables = 0;
                 instance.Init();
                 Api.JetStopServiceInstance(instance);
+            }
+        }
+
+        /// <summary>
+        /// Call JetConfigureProcessForCrashDump.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Call JetConfigureProcessForCrashDump.")]
+        public void TestJetConfigureProcessForCrashDump()
+        {
+            if (!EsentVersion.SupportsWindows7Features)
+            {
+                return;
+            }
+
+            using (var instance = new Instance("TestJetConfigureProcessForCrashDump"))
+            {
+                SetupHelper.SetLightweightConfiguration(instance);
+                instance.Init();
+                Windows7Api.JetConfigureProcessForCrashDump(CrashDumpGrbit.Maximum);                
             }
         }
 

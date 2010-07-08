@@ -238,6 +238,23 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Create a database and do a streaming backup.
+        /// </summary>
+        public void TestStreamingBackup2()
+        {
+            try
+            {
+                this.CreateDatabase();
+                this.StreamingBackup2();
+                this.CheckDatabase();
+            }
+            finally
+            {
+                Cleanup.DeleteDirectoryWithRetry(this.databaseDirectory);
+            }
+        }
+
+        /// <summary>
         /// Create the database.
         /// </summary>
         private void CreateDatabase()
@@ -376,6 +393,34 @@ namespace InteropApiTests
                     Api.JetReadFileInstance(instance, handle, buffer, buffer.Length, out bytesRead);
                     Api.JetCloseFileInstance(instance, handle);
                     Api.JetEndExternalBackupInstance(instance);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Perform a streaming backup2.
+        /// </summary>
+        private void StreamingBackup2()
+        {
+            using (var instance = this.CreateInstance())
+            {
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
+                    JET_DBID dbid;
+                    Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+
+                    Api.JetBeginExternalBackupInstance(instance, BeginExternalBackupGrbit.None);
+                    JET_HANDLE handle;
+                    long fileSizeLow;
+                    long fileSizeHigh;
+                    Api.JetOpenFileInstance(instance, this.database, out handle, out fileSizeLow, out fileSizeHigh);
+                    var buffer = new byte[64 * 1024];
+                    int bytesRead;
+                    Api.JetReadFileInstance(instance, handle, buffer, buffer.Length, out bytesRead);
+                    Api.JetCloseFileInstance(instance, handle);
+                    Api.JetEndExternalBackupInstance2(instance, EndExternalBackupGrbit.Normal);
                 }
             }
         }
