@@ -87,6 +87,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Id of the column containing the country code (obsolete).
         /// </summary>
+        [Obsolete("Deprecated")]
         public uint columnidCountry;
 
         /// <summary>
@@ -102,6 +103,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Obsolete. Ignored.
         /// </summary>
+        [Obsolete("Deprecated")]
         public uint columnidCollate;
 
         /// <summary>

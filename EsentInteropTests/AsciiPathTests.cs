@@ -271,7 +271,6 @@ namespace InteropApiTests
             test.TestBackupRestore();
         }
 
-
         /// <summary>
         /// Test snapshot backups with an ASCII path.
         /// </summary>
