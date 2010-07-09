@@ -6,8 +6,10 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
+    using System.Text;
 
     /// <summary>
     /// The native version of the JET_CONDITIONALCOLUMN structure.
@@ -27,7 +29,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Name of the column.
         /// </summary>
-        public string szColumnName;
+        public IntPtr szColumnName;
 
         /// <summary>
         /// Conditional column option.
@@ -65,7 +67,6 @@ namespace Microsoft.Isam.Esent.Interop
         {
             var native = new NATIVE_CONDITIONALCOLUMN();
             native.cbStruct = (uint) Marshal.SizeOf(native);
-            native.szColumnName = this.szColumnName;
             native.grbit = (uint) this.grbit;
             return native;
         }

@@ -3549,21 +3549,23 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// Make native conditionalcolumn structures from the managed ones.
         /// </summary>
         /// <param name="conditionalColumns">The conditional columns to convert.</param>
-        /// <returns>Native versions of the conditional columns.</returns>
-        private static NATIVE_CONDITIONALCOLUMN[] GetNativeConditionalColumns(JET_CONDITIONALCOLUMN[] conditionalColumns)
+        /// <param name="handles">The handle collection used to pin the data.</param>
+        /// <returns>Pinned native versions of the conditional columns.</returns>
+        private static IntPtr GetNativeConditionalColumns(JET_CONDITIONALCOLUMN[] conditionalColumns, GCHandleCollection handles)
         {
             if (null == conditionalColumns)
             {
-                return null;
+                return IntPtr.Zero;
             }
 
             var nativeConditionalcolumns = new NATIVE_CONDITIONALCOLUMN[conditionalColumns.Length];
             for (int i = 0; i < conditionalColumns.Length; ++i)
             {
                 nativeConditionalcolumns[i] = conditionalColumns[i].GetNativeConditionalColumn();
+                nativeConditionalcolumns[i].szColumnName = handles.Add(Encoding.ASCII.GetBytes(conditionalColumns[i].szColumnName));
             }
 
-            return nativeConditionalcolumns;
+            return handles.Add(nativeConditionalcolumns);
         }
 
         /// <summary>
@@ -3663,7 +3665,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                             nativeIndexcreates[i].grbit |= (uint)VistaGrbits.IndexUnicode;
                         }
 
-                        nativeIndexcreates[i].rgconditionalcolumn = handles.Add(GetNativeConditionalColumns(indexcreates[i].rgconditionalcolumn));
+                        nativeIndexcreates[i].rgconditionalcolumn = GetNativeConditionalColumns(indexcreates[i].rgconditionalcolumn, handles);
                     }
 
                     return
@@ -3704,7 +3706,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                             nativeIndexcreates[i].indexcreate.grbit |= (uint)VistaGrbits.IndexUnicode;
                         }
 
-                        nativeIndexcreates[i].indexcreate.rgconditionalcolumn = handles.Add(GetNativeConditionalColumns(indexcreates[i].rgconditionalcolumn));
+                        nativeIndexcreates[i].indexcreate.rgconditionalcolumn = GetNativeConditionalColumns(indexcreates[i].rgconditionalcolumn, handles);
                     }
 
                     return

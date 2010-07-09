@@ -1116,6 +1116,28 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test setting and retrieving strings with a custom Unicode encoding.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Test setting and retrieving strings with custom unicode encoding")]
+        public void SetAndRetrieveStringsCustomUnicode()
+        {
+            this.SetAndRetrieveString("unicode", 16, new UnicodeEncoding());
+        }
+
+        /// <summary>
+        /// Test setting and retrieving strings with a custom ASCII encoding.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Test setting and retrieving strings with custom ASCII encoding")]
+        public void SetAndRetrieveStringsCustomAscii()
+        {
+            this.SetAndRetrieveString("ASCII", 16, new ASCIIEncoding());
+        }
+
+        /// <summary>
         /// Verify using an encoding which is neither ASCII nor Unicode throws an exception.
         /// </summary>
         [TestMethod]

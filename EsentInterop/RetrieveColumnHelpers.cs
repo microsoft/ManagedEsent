@@ -796,7 +796,7 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentOutOfRangeException("values", values.Length, "must have at least one value");
             }
 
-            Api.Check(ColumnValue.RetrieveColumns(sesid, tableid, values));
+            ColumnValue.RetrieveColumns(sesid, tableid, values);
         }
 
         /// <summary>

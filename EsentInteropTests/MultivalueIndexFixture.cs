@@ -125,11 +125,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Verify that BasicDDLTests has setup the test fixture properly.
+        /// Verify that MultivalueIndexFixture has setup the test fixture properly.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Verify that BasicDDLTests has setup the test fixture properly")]
+        [Description("Verify that MultivalueIndexFixture has setup the test fixture properly")]
         public void VerifyFixtureSetup()
         {
             Assert.IsNotNull(this.table);

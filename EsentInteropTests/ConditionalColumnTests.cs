@@ -6,6 +6,7 @@
 
 namespace InteropApiTests
 {
+    using System;
     using System.Runtime.InteropServices;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -62,7 +63,7 @@ namespace InteropApiTests
         [Description("Check the conversion to a NATIVE_CONDITIONALCOLUMN sets the column name")]
         public void VerifyConversionToNativeSetsColumnName()
         {
-            Assert.AreEqual("column", this.native.szColumnName);
+            Assert.AreEqual(IntPtr.Zero, this.native.szColumnName);
         }
 
         /// <summary>
