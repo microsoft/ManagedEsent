@@ -575,6 +575,15 @@ namespace InteropApiTests
                     Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
 
                     Api.JetBeginExternalBackupInstance(instance, BeginExternalBackupGrbit.None);
+
+                    string filelist;
+                    int actualChars;
+                    Api.JetGetAttachInfoInstance(instance, out filelist, 1024, out actualChars);
+                    Assert.AreNotEqual(0, actualChars, "Didn't get back any chars?");
+                    string[] files = filelist.Split(new[] { '\0' }, StringSplitOptions.RemoveEmptyEntries);
+                    Assert.AreEqual(1, files.Length, "Expected just one database");
+                    StringAssert.Contains(files[0], this.database, "File list didn't contain the database");
+
                     JET_HANDLE handle;
                     long fileSizeLow;
                     long fileSizeHigh;

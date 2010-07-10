@@ -87,10 +87,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         // The param is ref because it is an 'in' parameter when getting error text
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
-        public static extern int JetGetSystemParameter(IntPtr instance, IntPtr sesid, uint paramid, ref IntPtr plParam, StringBuilder szParam, uint cbMax);
+        public static extern int JetGetSystemParameter(IntPtr instance, IntPtr sesid, uint paramid, ref IntPtr plParam, [Out] StringBuilder szParam, uint cbMax);
 
         [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
-        public static extern int JetGetSystemParameterW(IntPtr instance, IntPtr sesid, uint paramid, ref IntPtr plParam, StringBuilder szParam, uint cbMax);
+        public static extern int JetGetSystemParameterW(IntPtr instance, IntPtr sesid, uint paramid, ref IntPtr plParam, [Out] StringBuilder szParam, uint cbMax);
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetGetVersion(IntPtr sesid, out uint dwVersion);
@@ -242,6 +242,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetEndExternalBackupInstance2(IntPtr instance, uint grbit);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetAttachInfoInstance(IntPtr instance, [Out] StringBuilder szz, uint cbMax, out uint pcbActual);
+
+        [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
+        public static extern int JetGetAttachInfoInstanceW(IntPtr instance, [Out] StringBuilder szz, uint cbMax, out uint pcbActual);
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetOpenFileInstance(
@@ -426,7 +432,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             uint InfoLevel);
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
-        public static extern int JetGetCurrentIndex(IntPtr sesid, IntPtr tableid, StringBuilder szIndexName, uint cchIndexName);
+        public static extern int JetGetCurrentIndex(IntPtr sesid, IntPtr tableid, [Out] StringBuilder szIndexName, uint cchIndexName);
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetGetTableInfo(
