@@ -1086,6 +1086,59 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         }
 
         /// <summary>
+        /// Used during a backup initiated by <see cref="JetBeginExternalBackupInstance"/>
+        /// to query an instance for the names of database patch files and logfiles that 
+        /// should become part of the backup file set. These files may subsequently be 
+        /// opened using <see cref="JetOpenFileInstance"/> and read using <see cref="JetReadFileInstance"/>.
+        /// </summary>
+        /// <remarks>
+        /// It is important to note that this API does not return an error or warning if
+        /// the output buffer is too small to accept the full list of files that should be
+        /// part of the backup file set. 
+        /// </remarks>
+        /// <param name="instance">The instance to get the information for.</param>
+        /// <param name="files">
+        /// Returns a list of null terminated strings describing the set of database patch files
+        /// and log files that should be a part of the backup file set. The list of strings returned in
+        /// this buffer is in the same format as a multi-string used by the registry. Each
+        /// null-terminated string is returned in sequence followed by a final null terminator.
+        /// </param>
+        /// <param name="maxChars">
+        /// Maximum number of characters to retrieve.
+        /// </param>
+        /// <param name="actualChars">
+        /// Actual size of the file list. If this is greater than maxChars
+        /// then the list has been truncated.
+        /// </param>
+        /// <returns>An error code if the call fails.</returns>
+        public int JetGetLogInfoInstance(JET_INSTANCE instance, out string files, int maxChars, out int actualChars)
+        {
+            this.TraceFunctionCall("JetGetLogInfoInstance");
+            this.CheckNotNegative(maxChars, "maxChars");
+
+            StringBuilder szz = new StringBuilder(maxChars);
+
+            int err;
+            if (this.Capabilities.SupportsUnicodePaths)
+            {
+                uint cbMax = checked((uint)maxChars) * sizeof(char);
+                uint cbActual;
+                err = this.Err(NativeMethods.JetGetLogInfoInstanceW(instance.Value, szz, cbMax, out cbActual));
+                actualChars = checked((int)cbActual) / sizeof(char);
+            }
+            else
+            {
+                uint cbMax = checked((uint)maxChars);
+                uint cbActual;
+                err = this.Err(NativeMethods.JetGetLogInfoInstance(instance.Value, szz, cbMax, out cbActual));
+                actualChars = checked((int)cbActual);
+            }
+
+            files = szz.ToString();
+            return err;            
+        }
+
+        /// <summary>
         /// Opens an attached database, database patch file, or transaction log
         /// file of an active instance for the purpose of performing a streaming
         /// fuzzy backup. The data from these files can subsequently be read

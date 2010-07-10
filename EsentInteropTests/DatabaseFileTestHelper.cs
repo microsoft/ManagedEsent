@@ -327,6 +327,29 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Read a file using the JetReadFileInstance API. A backup should be prepared.
+        /// </summary>
+        /// <param name="instance">The instance to use.</param>
+        /// <param name="file">The file to read.</param>
+        private static void ReadFile(JET_INSTANCE instance, string file)
+        {
+            JET_HANDLE handle;
+            long fileSizeLow;
+            long fileSizeHigh;
+            var buffer = new byte[64 * 1024];
+            int bytesRead;
+
+            Api.JetOpenFileInstance(instance, file, out handle, out fileSizeLow, out fileSizeHigh);
+            do
+            {
+                Api.JetReadFileInstance(instance, handle, buffer, buffer.Length, out bytesRead);                
+            }
+            while (bytesRead > 0);
+
+            Api.JetCloseFileInstance(instance, handle);            
+        }
+
+        /// <summary>
         /// Create the database.
         /// </summary>
         private void CreateDatabase()
@@ -574,24 +597,42 @@ namespace InteropApiTests
                     JET_DBID dbid;
                     Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
 
+                    // BeginExternalBackup
                     Api.JetBeginExternalBackupInstance(instance, BeginExternalBackupGrbit.None);
 
                     string filelist;
                     int actualChars;
+                    string[] files;
+
+                    // Get list of databases
                     Api.JetGetAttachInfoInstance(instance, out filelist, 1024, out actualChars);
-                    Assert.AreNotEqual(0, actualChars, "Didn't get back any chars?");
-                    string[] files = filelist.Split(new[] { '\0' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    // The string length doesn't include the double-null terminator
+                    Assert.AreEqual(actualChars - 2, filelist.Length, "actualChars doesn't give the length of filelist");
+                    files = filelist.Split(new[] { '\0' }, StringSplitOptions.RemoveEmptyEntries);
                     Assert.AreEqual(1, files.Length, "Expected just one database");
                     StringAssert.Contains(files[0], this.database, "File list didn't contain the database");
 
-                    JET_HANDLE handle;
-                    long fileSizeLow;
-                    long fileSizeHigh;
-                    Api.JetOpenFileInstance(instance, this.database, out handle, out fileSizeLow, out fileSizeHigh);
-                    var buffer = new byte[64 * 1024];
-                    int bytesRead;
-                    Api.JetReadFileInstance(instance, handle, buffer, buffer.Length, out bytesRead);
-                    Api.JetCloseFileInstance(instance, handle);
+                    // Backup the database
+                    ReadFile(instance, this.database);
+
+                    // Get list of logs
+                    Api.JetGetLogInfoInstance(instance, out filelist, 1024, out actualChars);
+
+                    // The string length doesn't include the double-null terminator
+                    Assert.AreEqual(actualChars - 2, filelist.Length, "actualChars doesn't give the length of filelist");
+                    files = filelist.Split(new[] { '\0' }, StringSplitOptions.RemoveEmptyEntries);
+                    Assert.AreNotEqual(0, files.Length, "Expected at least one log");
+
+                    // Backup the logs
+                    foreach (string log in files)
+                    {
+                        ReadFile(instance, log);
+                    }
+
+                    // Truncate logs
+                    Api.JetTruncateLogInstance(instance);
+
                     Api.JetEndExternalBackupInstance(instance);
                 }
             }

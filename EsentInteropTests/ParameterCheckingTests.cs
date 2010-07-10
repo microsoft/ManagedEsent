@@ -342,6 +342,20 @@ namespace InteropApiTests
             Api.JetGetAttachInfoInstance(JET_INSTANCE.Nil, out ignored, -1, out ignored2);
         }
 
+        /// <summary>
+        /// Check that an exception is thrown when JetGetLogInfoInstance gets a buffer size that is negative.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Description("Check that an exception is thrown when JetGetLogInfoInstance gets a buffer size that is negative")]
+        public void JetGetLogInfoInstanceThrowsExceptionWhenMaxCharsIsNegative()
+        {
+            string ignored;
+            int ignored2;
+            Api.JetGetLogInfoInstance(JET_INSTANCE.Nil, out ignored, -1, out ignored2);
+        }
+
         #endregion
 
         #region DDL

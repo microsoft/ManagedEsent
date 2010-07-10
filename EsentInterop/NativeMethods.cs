@@ -250,6 +250,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern int JetGetAttachInfoInstanceW(IntPtr instance, [Out] StringBuilder szz, uint cbMax, out uint pcbActual);
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetLogInfoInstance(IntPtr instance, [Out] StringBuilder szz, uint cbMax, out uint pcbActual);
+
+        [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
+        public static extern int JetGetLogInfoInstanceW(IntPtr instance, [Out] StringBuilder szz, uint cbMax, out uint pcbActual);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetOpenFileInstance(
             IntPtr instance, string szFileName, out IntPtr phfFile, out uint pulFileSizeLow, out uint pulFileSizeHigh);
 
