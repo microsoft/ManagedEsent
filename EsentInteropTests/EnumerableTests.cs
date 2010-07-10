@@ -28,6 +28,8 @@ namespace InteropApiTests
             IEnumerator<T> enumerator1 = enumerable.GetEnumerator();
             IEnumerator<T> enumerator2 = enumerable.GetEnumerator();
             Assert.AreNotEqual(enumerator1, enumerator2, "Got back the same enumerator");
+            enumerator1.Dispose();
+            enumerator2.Dispose();
 
             // Creating an enumerator should use very few resources. This shouldn't fail.);
             for (int i = 0; i < 10000; ++i)

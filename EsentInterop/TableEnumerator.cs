@@ -151,7 +151,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         protected virtual void CloseTable()
         {
-            Api.JetCloseTable(this.Sesid, this.TableidToEnumerate);
+            if (JET_TABLEID.Nil != this.TableidToEnumerate)
+            {
+                Api.JetCloseTable(this.Sesid, this.TableidToEnumerate);
+            }
+
             this.TableidToEnumerate = JET_TABLEID.Nil;
         }
     }
