@@ -177,13 +177,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         #region Snapshot Backup
 
-        // Introduced in Windows Server 2003
         [DllImport(EsentDll, ExactSpelling = true)]
-        public static extern int JetOSSnapshotAbort(IntPtr snapId, uint grbit);
+        public static extern int JetOSSnapshotPrepare(out IntPtr snapId, uint grbit);
 
         // Introduced in Windows Vista
         [DllImport(EsentDll, ExactSpelling = true)]
-        public static extern int JetOSSnapshotEnd(IntPtr snapId, uint grbit);
+        public static extern int JetOSSnapshotPrepareInstance(IntPtr snapId, IntPtr instance, uint grbit);
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern unsafe int JetOSSnapshotFreeze(
@@ -200,11 +199,33 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out NATIVE_INSTANCE_INFO* prgInstanceInfo,
             uint grbit);
 
+        // Introduced in Windows Vista
+        // Returns unicode strings in the NATIVE_INSTANCE_INFO.
         [DllImport(EsentDll, ExactSpelling = true)]
-        public static extern int JetOSSnapshotPrepare(out IntPtr snapId, uint grbit);
+        public static extern unsafe int JetOSSnapshotGetFreezeInfoW(
+            IntPtr snapId,
+            out uint pcInstanceInfo,
+            out NATIVE_INSTANCE_INFO* prgInstanceInfo,
+            uint grbit);
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetOSSnapshotThaw(IntPtr snapId, uint grbit);
+
+        // Introduced in Windows Vista
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetOSSnapshotTruncateLog(IntPtr snapId, uint grbit);
+
+        // Introduced in Windows Vista
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetOSSnapshotTruncateLogInstance(IntPtr snapId, IntPtr instance, uint grbit);
+
+        // Introduced in Windows Vista
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetOSSnapshotEnd(IntPtr snapId, uint grbit);
+
+        // Introduced in Windows Server 2003
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetOSSnapshotAbort(IntPtr snapId, uint grbit);
 
         #endregion
 

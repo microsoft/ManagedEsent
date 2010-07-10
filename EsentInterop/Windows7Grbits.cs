@@ -124,5 +124,10 @@ namespace Microsoft.Isam.Esent.Interop.Windows7
         /// be used in combination with any other option.
         /// </summary>
         public const CommitTransactionGrbit ForceNewLog = (CommitTransactionGrbit)0x10;
+
+        /// <summary>
+        /// No instances will be prepared by default. Instances must be added explicitly.
+        /// </summary>
+        public const SnapshotPrepareGrbit ExplicitPrepare = (SnapshotPrepareGrbit)0x8;
     }
 }

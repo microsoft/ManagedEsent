@@ -350,6 +350,57 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Tests for snapshot backup using unicode paths and Server 2K3 APIs.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Perform a snapshot backup of a database with a Unicode path and Server 2K3 APIs")]
+        public void SnapshotBackupWithUnicodePathServer2K3Apis()
+        {
+            if (!EsentVersion.SupportsUnicodePaths)
+            {
+                return;
+            }
+
+            var test = new DatabaseFileTestHelper(this.directory);
+            test.TestSnapshotBackupServer2003();
+        }
+
+        /// <summary>
+        /// Tests for snapshot backup using unicode paths and Vista APIs.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Perform a snapshot backup of a database with a Unicode path and Vista APIs")]
+        public void SnapshotBackupWithUnicodePathVistaApis()
+        {
+            if (!EsentVersion.SupportsUnicodePaths)
+            {
+                return;
+            }
+
+            var test = new DatabaseFileTestHelper(this.directory);
+            test.TestSnapshotBackupVista();
+        }
+
+        /// <summary>
+        /// Tests for snapshot backup using unicode paths and Win7 APIs.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Perform a snapshot backup of a database with a Unicode path and Win7 APIs")]
+        public void SnapshotBackupWithUnicodePathWin7Apis()
+        {
+            if (!EsentVersion.SupportsUnicodePaths)
+            {
+                return;
+            }
+
+            var test = new DatabaseFileTestHelper(this.directory);
+            test.TestSnapshotBackupWin7();
+        }
+
+        /// <summary>
         /// Compact a database using unicode paths.
         /// </summary>
         [TestMethod]

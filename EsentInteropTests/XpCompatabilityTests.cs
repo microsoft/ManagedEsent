@@ -160,16 +160,57 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Verify that JetOSSnapshotAbort throws an exception when using the
+        /// Verify that JetOSSnapshotPrepareInstance throws an exception when using the
         /// XP version of ESENT.
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Verify that JetOSSnapshotAbort throws an exception when using the XP version of ESENT")]
+        [Description("Verify that JetOSSnapshotPrepareInstance throws an exception when using the XP version of ESENT")]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void VerifyXpThrowsExceptionOnJetOSSnapshotAbort()
+        public void VerifyXpThrowsExceptionOnJetOSSnapshotPrepareInstance()
         {
-            Server2003Api.JetOSSnapshotAbort(JET_OSSNAPID.Nil, SnapshotAbortGrbit.None);
+            VistaApi.JetOSSnapshotPrepareInstance(JET_OSSNAPID.Nil, JET_INSTANCE.Nil, SnapshotPrepareInstanceGrbit.None);
+        }
+
+        /// <summary>
+        /// Verify that JetOSSnapshotGetFreezeInfo throws an exception when using the
+        /// XP version of ESENT.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that JetOSSnapshotGetFreezeInfo throws an exception when using the XP version of ESENT")]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void VerifyXpThrowsExceptionOnJetOSSnapshotGetFreezeInfo()
+        {
+            int ignored;
+            JET_INSTANCE_INFO[] ignored2;
+            VistaApi.JetOSSnapshotGetFreezeInfo(JET_OSSNAPID.Nil, out ignored, out ignored2, SnapshotGetFreezeInfoGrbit.None);
+        }
+
+        /// <summary>
+        /// Verify that JetOSSnapshotTruncateLog throws an exception when using the
+        /// XP version of ESENT.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that JetOSSnapshotTruncateLog throws an exception when using the XP version of ESENT")]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void VerifyXpThrowsExceptionOnJetOSSnapshotTruncateLog()
+        {
+            VistaApi.JetOSSnapshotTruncateLog(JET_OSSNAPID.Nil, SnapshotTruncateLogGrbit.None);
+        }
+
+        /// <summary>
+        /// Verify that JetOSSnapshotTruncateLogInstance throws an exception when using the
+        /// XP version of ESENT.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that JetOSSnapshotTruncateLogInstance throws an exception when using the XP version of ESENT")]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void VerifyXpThrowsExceptionOnJetOSSnapshotTruncateLogInstance()
+        {
+            VistaApi.JetOSSnapshotTruncateLogInstance(JET_OSSNAPID.Nil, JET_INSTANCE.Nil, SnapshotTruncateLogGrbit.None);
         }
 
         /// <summary>
@@ -183,6 +224,19 @@ namespace InteropApiTests
         public void VerifyXpThrowsExceptionOnJetOSSnapshotEnd()
         {
             VistaApi.JetOSSnapshotEnd(JET_OSSNAPID.Nil, SnapshotEndGrbit.None);
+        }
+
+        /// <summary>
+        /// Verify that JetOSSnapshotAbort throws an exception when using the
+        /// XP version of ESENT.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that JetOSSnapshotAbort throws an exception when using the XP version of ESENT")]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void VerifyXpThrowsExceptionOnJetOSSnapshotAbort()
+        {
+            Server2003Api.JetOSSnapshotAbort(JET_OSSNAPID.Nil, SnapshotAbortGrbit.None);
         }
 
         /// <summary>

@@ -369,21 +369,24 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         #region Snapshot Backup
 
         /// <summary>
-        /// Notifies the engine that it can resume normal IO operations after a
-        /// freeze period ended with a failed snapshot.
+        /// Begins the preparations for a snapshot session. A snapshot session
+        /// is a short time interval in which the engine does not issue any
+        /// write IOs to disk, so that the engine can participate in a volume
+        /// snapshot session (when driven by a snapshot writer).
         /// </summary>
-        /// <param name="snapid">Identifier of the snapshot session.</param>
-        /// <param name="grbit">Options for this call.</param>
+        /// <param name="snapid">Returns the ID of the snapshot session.</param>
+        /// <param name="grbit">Snapshot options.</param>
         /// <returns>An error code if the call fails.</returns>
-        int JetOSSnapshotAbort(JET_OSSNAPID snapid, SnapshotAbortGrbit grbit);
+        int JetOSSnapshotPrepare(out JET_OSSNAPID snapid, SnapshotPrepareGrbit grbit);
 
         /// <summary>
-        /// Notifies the engine that the snapshot session finished.
+        /// Selects a specific instance to be part of the snapshot session.
         /// </summary>
-        /// <param name="snapid">The identifier of the snapshot session.</param>
-        /// <param name="grbit">Snapshot end options.</param>
+        /// <param name="snapshot">The snapshot identifier.</param>
+        /// <param name="instance">The instance to add to the snapshot.</param>
+        /// <param name="grbit">Options for this call.</param>
         /// <returns>An error code if the call fails.</returns>
-        int JetOSSnapshotEnd(JET_OSSNAPID snapid, SnapshotEndGrbit grbit);
+        int JetOSSnapshotPrepareInstance(JET_OSSNAPID snapshot, JET_INSTANCE instance, SnapshotPrepareInstanceGrbit grbit);
 
         /// <summary>
         /// Starts a snapshot. While the snapshot is in progress, no
@@ -403,15 +406,19 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         int JetOSSnapshotFreeze(JET_OSSNAPID snapshot, out int numInstances, out JET_INSTANCE_INFO[] instances, SnapshotFreezeGrbit grbit);
 
         /// <summary>
-        /// Begins the preparations for a snapshot session. A snapshot session
-        /// is a short time interval in which the engine does not issue any
-        /// write IOs to disk, so that the engine can participate in a volume
-        /// snapshot session (when driven by a snapshot writer).
+        /// Retrieves the list of instances and databases that are part of the
+        /// snapshot session at any given moment.
         /// </summary>
-        /// <param name="snapid">Returns the ID of the snapshot session.</param>
-        /// <param name="grbit">Snapshot options.</param>
+        /// <param name="snapshot">The identifier of the snapshot session.</param>
+        /// <param name="numInstances">Returns the number of instances.</param>
+        /// <param name="instances">Returns information about the instances.</param>
+        /// <param name="grbit">Options for this call.</param>
         /// <returns>An error code if the call fails.</returns>
-        int JetOSSnapshotPrepare(out JET_OSSNAPID snapid, SnapshotPrepareGrbit grbit);
+        int JetOSSnapshotGetFreezeInfo(
+            JET_OSSNAPID snapshot,
+            out int numInstances,
+            out JET_INSTANCE_INFO[] instances,
+            SnapshotGetFreezeInfoGrbit grbit);
 
         /// <summary>
         /// Notifies the engine that it can resume normal IO operations after a
@@ -421,6 +428,50 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="grbit">Thaw options.</param>
         /// <returns>An error code if the call fails.</returns>
         int JetOSSnapshotThaw(JET_OSSNAPID snapid, SnapshotThawGrbit grbit);
+
+        /// <summary>
+        /// Enables log truncation for all instances that are part of the snapshot session.
+        /// </summary>
+        /// <remarks>
+        /// This function should be called only if the snapshot was created with the
+        /// <see cref="VistaGrbits.ContinueAfterThaw"/> option. Otherwise, the snapshot
+        /// session ends after the call to <see cref="Api.JetOSSnapshotThaw"/>.
+        /// </remarks>
+        /// <param name="snapshot">The snapshot identifier.</param>
+        /// <param name="grbit">Options for this call.</param>
+        /// <returns>An error code if the call fails.</returns>
+        int JetOSSnapshotTruncateLog(JET_OSSNAPID snapshot, SnapshotTruncateLogGrbit grbit);
+
+        /// <summary>
+        /// Truncates the log for a specified instance during a snapshot session.
+        /// </summary>
+        /// <remarks>
+        /// This function should be called only if the snapshot was created with the
+        /// <see cref="VistaGrbits.ContinueAfterThaw"/> option. Otherwise, the snapshot
+        /// session ends after the call to <see cref="Api.JetOSSnapshotThaw"/>.
+        /// </remarks>
+        /// <param name="snapshot">The snapshot identifier.</param>
+        /// <param name="instance">The instance to truncat the log for.</param>
+        /// <param name="grbit">Options for this call.</param>
+        /// <returns>An error code if the call fails.</returns>
+        int JetOSSnapshotTruncateLogInstance(JET_OSSNAPID snapshot, JET_INSTANCE instance, SnapshotTruncateLogGrbit grbit);
+
+        /// <summary>
+        /// Notifies the engine that the snapshot session finished.
+        /// </summary>
+        /// <param name="snapid">The identifier of the snapshot session.</param>
+        /// <param name="grbit">Snapshot end options.</param>
+        /// <returns>An error code if the call fails.</returns>
+        int JetOSSnapshotEnd(JET_OSSNAPID snapid, SnapshotEndGrbit grbit);
+
+        /// <summary>
+        /// Notifies the engine that it can resume normal IO operations after a
+        /// freeze period ended with a failed snapshot.
+        /// </summary>
+        /// <param name="snapid">Identifier of the snapshot session.</param>
+        /// <param name="grbit">Options for this call.</param>
+        /// <returns>An error code if the call fails.</returns>
+        int JetOSSnapshotAbort(JET_OSSNAPID snapid, SnapshotAbortGrbit grbit);
 
         #endregion
 

@@ -52,13 +52,72 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         }
 
         /// <summary>
+        /// Selects a specific instance to be part of the snapshot session.
+        /// </summary>
+        /// <param name="snapshot">The snapshot identifier.</param>
+        /// <param name="instance">The instance to add to the snapshot.</param>
+        /// <param name="grbit">Options for this call.</param>
+        public static void JetOSSnapshotPrepareInstance(JET_OSSNAPID snapshot, JET_INSTANCE instance, SnapshotPrepareInstanceGrbit grbit)
+        {
+            Api.Check(Api.Impl.JetOSSnapshotPrepareInstance(snapshot, instance, grbit));
+        }
+
+        /// <summary>
+        /// Enables log truncation for all instances that are part of the snapshot session.
+        /// </summary>
+        /// <remarks>
+        /// This function should be called only if the snapshot was created with the
+        /// <see cref="VistaGrbits.ContinueAfterThaw"/> option. Otherwise, the snapshot
+        /// session ends after the call to <see cref="Api.JetOSSnapshotThaw"/>.
+        /// </remarks>
+        /// <param name="snapshot">The snapshot identifier.</param>
+        /// <param name="grbit">Options for this call.</param>
+        public static void JetOSSnapshotTruncateLog(JET_OSSNAPID snapshot, SnapshotTruncateLogGrbit grbit)
+        {
+            Api.Check(Api.Impl.JetOSSnapshotTruncateLog(snapshot, grbit));
+        }
+
+        /// <summary>
+        /// Truncates the log for a specified instance during a snapshot session.
+        /// </summary>
+        /// <remarks>
+        /// This function should be called only if the snapshot was created with the
+        /// <see cref="VistaGrbits.ContinueAfterThaw"/> option. Otherwise, the snapshot
+        /// session ends after the call to <see cref="Api.JetOSSnapshotThaw"/>.
+        /// </remarks>
+        /// <param name="snapshot">The snapshot identifier.</param>
+        /// <param name="instance">The instance to truncat the log for.</param>
+        /// <param name="grbit">Options for this call.</param>
+        public static void JetOSSnapshotTruncateLogInstance(JET_OSSNAPID snapshot, JET_INSTANCE instance, SnapshotTruncateLogGrbit grbit)
+        {
+            Api.Check(Api.Impl.JetOSSnapshotTruncateLogInstance(snapshot, instance, grbit));
+        }
+
+        /// <summary>
+        /// Retrieves the list of instances and databases that are part of the
+        /// snapshot session at any given moment.
+        /// </summary>
+        /// <param name="snapshot">The identifier of the snapshot session.</param>
+        /// <param name="numInstances">Returns the number of instances.</param>
+        /// <param name="instances">Returns information about the instances.</param>
+        /// <param name="grbit">Options for this call.</param>
+        public static void JetOSSnapshotGetFreezeInfo(
+            JET_OSSNAPID snapshot,
+            out int numInstances,
+            out JET_INSTANCE_INFO[] instances,
+            SnapshotGetFreezeInfoGrbit grbit)
+        {
+            Api.Check(Api.Impl.JetOSSnapshotGetFreezeInfo(snapshot, out numInstances, out instances, grbit));
+        }
+
+        /// <summary>
         /// Notifies the engine that the snapshot session finished.
         /// </summary>
-        /// <param name="snapid">The identifier of the snapshot session.</param>
+        /// <param name="snapshot">The identifier of the snapshot session.</param>
         /// <param name="grbit">Snapshot end options.</param>
-        public static void JetOSSnapshotEnd(JET_OSSNAPID snapid, SnapshotEndGrbit grbit)
+        public static void JetOSSnapshotEnd(JET_OSSNAPID snapshot, SnapshotEndGrbit grbit)
         {
-            Api.Check(Api.Impl.JetOSSnapshotEnd(snapid, grbit));
+            Api.Check(Api.Impl.JetOSSnapshotEnd(snapshot, grbit));
         }
 
         /// <summary>

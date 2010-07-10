@@ -212,12 +212,6 @@ namespace Microsoft.Isam.Esent.Interop
         /// A copy snapshot (normal or incremental) with no log truncation.
         /// </summary>
         CopySnapshot = 0x2,
-
-        /// <summary>
-        /// The snapshot session continues after JetOSSnapshotThaw and will
-        /// require a JetOSSnapshotEnd function call.
-        /// </summary>
-        ContinueAfterThaw = 0x4,
     }
 
     /// <summary>

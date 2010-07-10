@@ -7,7 +7,6 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
-    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
 

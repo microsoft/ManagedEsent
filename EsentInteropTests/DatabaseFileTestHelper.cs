@@ -9,6 +9,9 @@ namespace InteropApiTests
     using System;
     using System.IO;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Server2003;
+    using Microsoft.Isam.Esent.Interop.Vista;
+    using Microsoft.Isam.Esent.Interop.Windows7;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -221,6 +224,75 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Create a database and do a snapshot backup using 
+        /// functionality available in Server 2K3 onwards.
+        /// </summary>
+        public void TestSnapshotBackupServer2003()
+        {
+            if (!EsentVersion.SupportsServer2003Features)
+            {
+                return;
+            }
+
+            try
+            {
+                this.CreateDatabase();
+                this.SnapshotBackupServer2003Apis();
+                this.CheckDatabase();
+            }
+            finally
+            {
+                Cleanup.DeleteDirectoryWithRetry(this.databaseDirectory);
+            }
+        }
+
+        /// <summary>
+        /// Create a database and do a snapshot backup using 
+        /// functionality available in Windows Vista onwards.
+        /// </summary>
+        public void TestSnapshotBackupVista()
+        {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
+            try
+            {
+                this.CreateDatabase();
+                this.SnapshotBackupVistaApis();
+                this.CheckDatabase();
+            }
+            finally
+            {
+                Cleanup.DeleteDirectoryWithRetry(this.databaseDirectory);
+            }
+        }
+
+        /// <summary>
+        /// Create a database and do a snapshot backup using 
+        /// functionality available in Windows 7 onwards.
+        /// </summary>
+        public void TestSnapshotBackupWin7()
+        {
+            if (!EsentVersion.SupportsWindows7Features)
+            {
+                return;
+            }
+
+            try
+            {
+                this.CreateDatabase();
+                this.SnapshotBackupWin7Apis();
+                this.CheckDatabase();
+            }
+            finally
+            {
+                Cleanup.DeleteDirectoryWithRetry(this.databaseDirectory);
+            }
+        }
+
+        /// <summary>
         /// Create a database and do a streaming backup.
         /// </summary>
         public void TestStreamingBackup()
@@ -365,6 +437,125 @@ namespace InteropApiTests
                     Assert.AreEqual(1, instances.Length);
                     Assert.AreEqual(1, instances[0].cDatabases);
                     Assert.AreEqual(Path.GetFullPath(this.database), instances[0].szDatabaseFileName[0]);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Perform a snapshot backup using the W2K3 abort API.
+        /// </summary>
+        private void SnapshotBackupServer2003Apis()
+        {
+            using (var instance = this.CreateInstance())
+            {
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
+                    JET_DBID dbid;
+                    Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+
+                    JET_OSSNAPID snapshot;
+                    Api.JetOSSnapshotPrepare(out snapshot, SnapshotPrepareGrbit.CopySnapshot);
+                    int numInstances;
+                    JET_INSTANCE_INFO[] instances;
+                    Api.JetOSSnapshotFreeze(snapshot, out numInstances, out instances, SnapshotFreezeGrbit.None);
+
+                    Server2003Api.JetOSSnapshotAbort(snapshot, SnapshotAbortGrbit.None);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Perform a snapshot backup using the extra Vista APIs.
+        /// </summary>
+        private void SnapshotBackupVistaApis()
+        {
+            using (var instance = this.CreateInstance())
+            {
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
+                    JET_DBID dbid;
+                    Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+
+                    // Prepare
+                    JET_OSSNAPID snapshot;
+                    Api.JetOSSnapshotPrepare(out snapshot, VistaGrbits.ContinueAfterThaw);
+
+                    int numInstances;
+                    JET_INSTANCE_INFO[] instances;
+
+                    // Freeze
+                    Api.JetOSSnapshotFreeze(snapshot, out numInstances, out instances, SnapshotFreezeGrbit.None);
+                    Assert.AreEqual(1, instances.Length);
+                    Assert.AreEqual(1, instances[0].cDatabases);
+                    Assert.AreEqual(Path.GetFullPath(this.database), instances[0].szDatabaseFileName[0]);
+
+                    // GetFreezeInfo
+                    VistaApi.JetOSSnapshotGetFreezeInfo(snapshot, out numInstances, out instances, SnapshotGetFreezeInfoGrbit.None);
+                    Assert.AreEqual(1, instances.Length);
+                    Assert.AreEqual(1, instances[0].cDatabases);
+                    Assert.AreEqual(Path.GetFullPath(this.database), instances[0].szDatabaseFileName[0]);
+
+                    // Thaw
+                    Api.JetOSSnapshotThaw(snapshot, SnapshotThawGrbit.None);
+
+                    // Truncate log
+                    VistaApi.JetOSSnapshotTruncateLog(snapshot, SnapshotTruncateLogGrbit.AllDatabasesSnapshot);
+
+                    // End
+                    VistaApi.JetOSSnapshotEnd(snapshot, SnapshotEndGrbit.None);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Perform a snapshot backup using the extra Windows7 grbits.
+        /// </summary>
+        private void SnapshotBackupWin7Apis()
+        {
+            using (var instance = this.CreateInstance())
+            {
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
+                    JET_DBID dbid;
+                    Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+
+                    // Prepare
+                    JET_OSSNAPID snapshot;
+                    Api.JetOSSnapshotPrepare(out snapshot, VistaGrbits.ContinueAfterThaw | Windows7Grbits.ExplicitPrepare);
+
+                    // Prepare instance
+                    VistaApi.JetOSSnapshotPrepareInstance(snapshot, instance, SnapshotPrepareInstanceGrbit.None);
+
+                    int numInstances;
+                    JET_INSTANCE_INFO[] instances;
+
+                    // Freeze
+                    Api.JetOSSnapshotFreeze(snapshot, out numInstances, out instances, SnapshotFreezeGrbit.None);
+                    Assert.AreEqual(1, instances.Length);
+                    Assert.AreEqual(1, instances[0].cDatabases);
+                    Assert.AreEqual(Path.GetFullPath(this.database), instances[0].szDatabaseFileName[0]);
+
+                    // GetFreezeInfo
+                    VistaApi.JetOSSnapshotGetFreezeInfo(snapshot, out numInstances, out instances, SnapshotGetFreezeInfoGrbit.None);
+                    Assert.AreEqual(1, instances.Length);
+                    Assert.AreEqual(1, instances[0].cDatabases);
+                    Assert.AreEqual(Path.GetFullPath(this.database), instances[0].szDatabaseFileName[0]);
+
+                    // Thaw
+                    Api.JetOSSnapshotThaw(snapshot, SnapshotThawGrbit.None);
+
+                    // Truncate log instance
+                    VistaApi.JetOSSnapshotTruncateLog(snapshot, SnapshotTruncateLogGrbit.AllDatabasesSnapshot);
+                    VistaApi.JetOSSnapshotTruncateLogInstance(snapshot, instance, SnapshotTruncateLogGrbit.AllDatabasesSnapshot);
+
+                    // End
+                    VistaApi.JetOSSnapshotEnd(snapshot, SnapshotEndGrbit.None);
                 }
             }
         }

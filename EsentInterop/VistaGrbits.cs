@@ -23,6 +23,46 @@ namespace Microsoft.Isam.Esent.Interop.Vista
     }
 
     /// <summary>
+    /// Options for <see cref="VistaApi.JetOSSnapshotPrepareInstance"/>.
+    /// </summary>
+    public enum SnapshotPrepareInstanceGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+    }
+
+    /// <summary>
+    /// Options for <see cref="VistaApi.JetOSSnapshotTruncateLog"/>
+    /// and <see cref="VistaApi.JetOSSnapshotTruncateLogInstance"/>.
+    /// </summary>
+    public enum SnapshotTruncateLogGrbit
+    {
+        /// <summary>
+        /// No truncation will occur.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// All the databases are attached so the storage engine can compute
+        /// and do the log truncation.
+        /// </summary>
+        AllDatabasesSnapshot = 0x1,
+    }
+
+    /// <summary>
+    /// Options for <see cref="VistaApi.JetOSSnapshotGetFreezeInfo"/>.
+    /// </summary>
+    public enum SnapshotGetFreezeInfoGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+    }
+
+    /// <summary>
     /// Information levels for <see cref="VistaApi.JetGetInstanceMiscInfo"/>.
     /// </summary>
     public enum JET_InstanceMiscInfo
@@ -73,6 +113,12 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// a full backup completed), even though the call to truncate was not completed.
         /// </summary>
         public const EndExternalBackupGrbit TruncateDone = (EndExternalBackupGrbit)0x100;
+
+        /// <summary>
+        /// The snapshot session continues after JetOSSnapshotThaw and will
+        /// require a JetOSSnapshotEnd function call.
+        /// </summary>
+        public const SnapshotPrepareGrbit ContinueAfterThaw = (SnapshotPrepareGrbit)0x4;
 
         /// <summary>
         /// Specifying this flag will cause the index to use the maximum key size
