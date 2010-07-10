@@ -244,16 +244,22 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern int JetEndExternalBackupInstance2(IntPtr instance, uint grbit);
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
-        public static extern int JetGetAttachInfoInstance(IntPtr instance, [Out] StringBuilder szz, uint cbMax, out uint pcbActual);
+        public static extern int JetGetAttachInfoInstance(IntPtr instance, [Out] byte[] szz, uint cbMax, out uint pcbActual);
 
         [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
-        public static extern int JetGetAttachInfoInstanceW(IntPtr instance, [Out] StringBuilder szz, uint cbMax, out uint pcbActual);
+        public static extern int JetGetAttachInfoInstanceW(IntPtr instance, [Out] byte[] szz, uint cbMax, out uint pcbActual);
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
-        public static extern int JetGetLogInfoInstance(IntPtr instance, [Out] StringBuilder szz, uint cbMax, out uint pcbActual);
+        public static extern int JetGetLogInfoInstance(IntPtr instance, [Out] byte[] szz, uint cbMax, out uint pcbActual);
 
         [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
-        public static extern int JetGetLogInfoInstanceW(IntPtr instance, [Out] StringBuilder szz, uint cbMax, out uint pcbActual);
+        public static extern int JetGetLogInfoInstanceW(IntPtr instance, [Out] byte[] szz, uint cbMax, out uint pcbActual);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetTruncateLogInfoInstance(IntPtr instance, [Out] byte[] szz, uint cbMax, out uint pcbActual);
+
+        [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
+        public static extern int JetGetTruncateLogInfoInstanceW(IntPtr instance, [Out] byte[] szz, uint cbMax, out uint pcbActual);
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetOpenFileInstance(

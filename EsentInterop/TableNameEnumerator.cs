@@ -66,7 +66,7 @@ namespace Microsoft.Isam.Esent.Interop
             return Api.RetrieveColumnAsString(
                 this.Sesid,
                 this.TableidToEnumerate,
-                objectlist.columnidobjectname,
+                this.objectlist.columnidobjectname,
                 NativeMethods.Encoding,
                 RetrieveColumnGrbit.None);
         }

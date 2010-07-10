@@ -1063,25 +1063,27 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.TraceFunctionCall("JetGetAttachInfoInstance");
             this.CheckNotNegative(maxChars, "maxChars");
 
-            StringBuilder szz = new StringBuilder(maxChars);
-
+            // These strings have embedded nulls so we can't use a StringBuilder.
             int err;
             if (this.Capabilities.SupportsUnicodePaths)
             {
                 uint cbMax = checked((uint)maxChars) * sizeof(char);
+                byte[] szz = new byte[cbMax];
                 uint cbActual;
                 err = this.Err(NativeMethods.JetGetAttachInfoInstanceW(instance.Value, szz, cbMax, out cbActual));
                 actualChars = checked((int)cbActual) / sizeof(char);
+                files = Encoding.Unicode.GetString(szz, 0, Math.Min(szz.Length, (int)cbActual));
             }
             else
             {
                 uint cbMax = checked((uint)maxChars);
+                byte[] szz = new byte[cbMax];
                 uint cbActual;
                 err = this.Err(NativeMethods.JetGetAttachInfoInstance(instance.Value, szz, cbMax, out cbActual));
                 actualChars = checked((int)cbActual);
+                files = Encoding.ASCII.GetString(szz, 0, Math.Min(szz.Length, (int)cbActual));
             }
 
-            files = szz.ToString();
             return err;
         }
 
@@ -1116,26 +1118,82 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.TraceFunctionCall("JetGetLogInfoInstance");
             this.CheckNotNegative(maxChars, "maxChars");
 
-            StringBuilder szz = new StringBuilder(maxChars);
-
+            // These strings have embedded nulls so we can't use a StringBuilder.
             int err;
             if (this.Capabilities.SupportsUnicodePaths)
             {
                 uint cbMax = checked((uint)maxChars) * sizeof(char);
+                byte[] szz = new byte[cbMax];
                 uint cbActual;
                 err = this.Err(NativeMethods.JetGetLogInfoInstanceW(instance.Value, szz, cbMax, out cbActual));
                 actualChars = checked((int)cbActual) / sizeof(char);
+                files = Encoding.Unicode.GetString(szz, 0, Math.Min(szz.Length, (int)cbActual));
             }
             else
             {
                 uint cbMax = checked((uint)maxChars);
+                byte[] szz = new byte[cbMax];
                 uint cbActual;
                 err = this.Err(NativeMethods.JetGetLogInfoInstance(instance.Value, szz, cbMax, out cbActual));
                 actualChars = checked((int)cbActual);
+                files = Encoding.ASCII.GetString(szz, 0, Math.Min(szz.Length, (int)cbActual));
             }
 
-            files = szz.ToString();
             return err;            
+        }
+
+        /// <summary>
+        /// Used during a backup initiated by <see cref="JetBeginExternalBackupInstance"/>
+        /// to query an instance for the names of the transaction log files that can be safely
+        /// deleted after the backup has successfully completed.
+        /// </summary>
+        /// <remarks>
+        /// It is important to note that this API does not return an error or warning if
+        /// the output buffer is too small to accept the full list of files that should be
+        /// part of the backup file set. 
+        /// </remarks>
+        /// <param name="instance">The instance to get the information for.</param>
+        /// <param name="files">
+        /// Returns a list of null terminated strings describing the set of database log files
+        /// that can be safely deleted after the backup completes. The list of strings returned in
+        /// this buffer is in the same format as a multi-string used by the registry. Each
+        /// null-terminated string is returned in sequence followed by a final null terminator.
+        /// </param>
+        /// <param name="maxChars">
+        /// Maximum number of characters to retrieve.
+        /// </param>
+        /// <param name="actualChars">
+        /// Actual size of the file list. If this is greater than maxChars
+        /// then the list has been truncated.
+        /// </param>
+        /// <returns>An error code if the call fails.</returns>
+        public int JetGetTruncateLogInfoInstance(JET_INSTANCE instance, out string files, int maxChars, out int actualChars)
+        {
+            this.TraceFunctionCall("JetGetTruncateLogInfoInstance");
+            this.CheckNotNegative(maxChars, "maxChars");
+
+            // These strings have embedded nulls so we can't use a StringBuilder.
+            int err;
+            if (this.Capabilities.SupportsUnicodePaths)
+            {
+                uint cbMax = checked((uint)maxChars) * sizeof(char);
+                byte[] szz = new byte[cbMax];
+                uint cbActual;
+                err = this.Err(NativeMethods.JetGetTruncateLogInfoInstanceW(instance.Value, szz, cbMax, out cbActual));
+                actualChars = checked((int)cbActual) / sizeof(char);
+                files = Encoding.Unicode.GetString(szz, 0, Math.Min(szz.Length, (int)cbActual));
+            }
+            else
+            {
+                uint cbMax = checked((uint)maxChars);
+                byte[] szz = new byte[cbMax];
+                uint cbActual;
+                err = this.Err(NativeMethods.JetGetTruncateLogInfoInstance(instance.Value, szz, cbMax, out cbActual));
+                actualChars = checked((int)cbActual);
+                files = Encoding.ASCII.GetString(szz, 0, Math.Min(szz.Length, (int)cbActual));
+            }
+
+            return err;
         }
 
         /// <summary>

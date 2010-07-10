@@ -597,6 +597,15 @@ namespace InteropApiTests
                     JET_DBID dbid;
                     Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
 
+                    // If possible, roll some logs so that we get back string with embedded nulls.
+                    if (EsentVersion.SupportsWindows7Features)
+                    {
+                        for (int i = 0; i < 10; ++i)
+                        {
+                            Api.JetCommitTransaction(session, Windows7Grbits.ForceNewLog);
+                        }
+                    }
+
                     // BeginExternalBackup
                     Api.JetBeginExternalBackupInstance(instance, BeginExternalBackupGrbit.None);
 
@@ -608,7 +617,7 @@ namespace InteropApiTests
                     Api.JetGetAttachInfoInstance(instance, out filelist, 1024, out actualChars);
 
                     // The string length doesn't include the double-null terminator
-                    Assert.AreEqual(actualChars - 2, filelist.Length, "actualChars doesn't give the length of filelist");
+                    Assert.AreEqual(actualChars, filelist.Length, "actualChars doesn't give the length of filelist");
                     files = filelist.Split(new[] { '\0' }, StringSplitOptions.RemoveEmptyEntries);
                     Assert.AreEqual(1, files.Length, "Expected just one database");
                     StringAssert.Contains(files[0], this.database, "File list didn't contain the database");
@@ -620,7 +629,7 @@ namespace InteropApiTests
                     Api.JetGetLogInfoInstance(instance, out filelist, 1024, out actualChars);
 
                     // The string length doesn't include the double-null terminator
-                    Assert.AreEqual(actualChars - 2, filelist.Length, "actualChars doesn't give the length of filelist");
+                    Assert.AreEqual(actualChars, filelist.Length, "actualChars doesn't give the length of filelist");
                     files = filelist.Split(new[] { '\0' }, StringSplitOptions.RemoveEmptyEntries);
                     Assert.AreNotEqual(0, files.Length, "Expected at least one log");
 
@@ -629,6 +638,10 @@ namespace InteropApiTests
                     {
                         ReadFile(instance, log);
                     }
+
+                    // Get list of logs to truncate (may be empty)
+                    Api.JetGetTruncateLogInfoInstance(instance, out filelist, 1024, out actualChars);
+                    Assert.AreEqual(actualChars, filelist.Length, "actualChars doesn't give the length of filelist");
 
                     // Truncate logs
                     Api.JetTruncateLogInstance(instance);
