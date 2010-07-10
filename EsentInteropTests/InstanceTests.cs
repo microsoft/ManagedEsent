@@ -142,6 +142,60 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// When JetInit fails the instance isn't initialized
+        /// so we shouldn't be able to use it.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify JetTerm is not called when JetInit2 fails")]
+        public void VerifyInitThrowsExceptionAfterJetInitFails()
+        {
+            var mocks = new MockRepository();
+            var mockApi = mocks.StrictMock<IJetApi>();
+            using (new ApiTestHook(mockApi))
+            {
+                var jetInstance = new JET_INSTANCE { Value = (IntPtr)0x1 };
+
+                Expect.Call(
+                    mockApi.JetCreateInstance2(
+                        out Arg<JET_INSTANCE>.Out(jetInstance).Dummy,
+                        Arg<string>.Is.Anything,
+                        Arg<string>.Is.Anything,
+                        Arg<CreateInstanceGrbit>.Is.Anything))
+                    .Return((int)JET_err.Success);
+                Expect.Call(
+                    mockApi.JetInit2(
+                        ref Arg<JET_INSTANCE>.Ref(Is.Equal(jetInstance), JET_INSTANCE.Nil).Dummy,
+                        Arg<InitGrbit>.Is.Anything))
+                    .Return((int)JET_err.OutOfMemory);
+                mocks.ReplayAll();
+
+                Instance instance = new Instance("testfail3");
+                try
+                {
+                    instance.Init();
+                    Assert.Fail("Expected an EsentErrorException");
+                }
+                catch (EsentErrorException)
+                {
+                    // expected
+                }
+
+                mocks.VerifyAll();
+
+                try
+                {
+                    instance.Init();
+                    Assert.Fail("Expected an ObjectDisposedException");
+                }
+                catch (ObjectDisposedException)
+                {                    
+                    // Expected
+                }
+            }
+        }
+
+        /// <summary>
         /// Allocate an instance and initialize it.
         /// </summary>
         [TestMethod]

@@ -19,6 +19,17 @@ namespace InteropApiTests
     public class MiscTests
     {
         /// <summary>
+        /// JET_INDEXID.SizeOfIndexId should not be 0.
+        /// </summary>
+        [TestMethod]
+        [Description("Verify JET_INDEXID.SizeOfIndexId is not 0")]
+        [Priority(0)]
+        public void VerifySizeOfIndexIdIsNotZero()
+        {
+            Assert.AreNotEqual(0, JET_INDEXID.SizeOfIndexId);
+        }
+
+        /// <summary>
         /// Test calling JetFreeBuffer on a null buffer.
         /// </summary>
         [TestMethod]

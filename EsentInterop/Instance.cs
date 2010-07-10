@@ -48,17 +48,13 @@ namespace Microsoft.Isam.Esent.Interop
         /// A display name for the instance. This will be used in eventlog
         /// entries.
         /// </param>
-        [SuppressMessage(
-            "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-            "SA1409:RemoveUnnecessaryCode",
-            Justification = "CER code belongs in the finally block, so the try clause is empty")]
         public Instance(string name, string displayName) : base(true)
         {
             JET_INSTANCE instance;
             RuntimeHelpers.PrepareConstrainedRegions();
             try
             {
-                // This try block deliberately left blank.
+                this.SetHandle(JET_INSTANCE.Nil.Value);
             }
             finally
             {

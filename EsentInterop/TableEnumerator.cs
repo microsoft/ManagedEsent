@@ -101,24 +101,28 @@ namespace Microsoft.Isam.Esent.Interop
                 this.OpenTable();
             }
 
-            bool gotEntry = this.moveToFirst
-                                ? Api.TryMoveFirst(this.Sesid, this.TableidToEnumerate)
-                                : Api.TryMoveNext(this.Sesid, this.TableidToEnumerate);
-            if (!gotEntry)
+            bool needMoveNext = true;
+            if (this.moveToFirst)
             {
-                this.isAtEnd = true;
-                return false;
-            }
+                if (!Api.TryMoveFirst(this.Sesid, this.TableidToEnumerate))
+                {
+                    this.isAtEnd = true;
+                    return false;                    
+                }
 
-            this.moveToFirst = false;
+                this.moveToFirst = false;
+                needMoveNext = false;
+            }           
 
-            while (this.SkipCurrent())
+            while (needMoveNext || this.SkipCurrent())
             {
                 if (!Api.TryMoveNext(this.Sesid, this.TableidToEnumerate))
                 {
                     this.isAtEnd = true;
                     return false;
-                }                
+                }
+
+                needMoveNext = false;
             }
 
             this.Current = this.GetCurrent();
