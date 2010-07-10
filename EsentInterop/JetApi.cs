@@ -2626,10 +2626,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetPrereadKeys");
             this.CheckSupportsWindows7Features("JetPrereadKeys");
-            this.CheckNotNull(keys, "keys");
-            this.CheckNotNull(keyLengths, "keyLengths");
             this.CheckDataSize(keys, keyIndex, "keyIndex", keyCount, "keyCount");
             this.CheckDataSize(keyLengths, keyIndex, "keyIndex", keyCount, "keyCount");
+            this.CheckNotNull(keys, "keys");
+            this.CheckNotNull(keyLengths, "keyLengths");
 
             int err;
             unsafe

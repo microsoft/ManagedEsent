@@ -201,31 +201,13 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentNullException("tableids");    
             }
 
-            JET_RECORDLIST recordlist;
-
             var ranges = new JET_INDEXRANGE[tableids.Length];
             for (int i = 0; i < tableids.Length; ++i)
             {
                 ranges[i] = new JET_INDEXRANGE { tableid = tableids[i] };
             }
 
-            Api.JetIntersectIndexes(sesid, ranges, ranges.Length, out recordlist, IntersectIndexesGrbit.None);
-
-            try
-            {
-                if (Api.TryMoveFirst(sesid, recordlist.tableid))
-                {
-                    do
-                    {
-                        yield return Api.RetrieveColumn(sesid, recordlist.tableid, recordlist.columnidBookmark);
-                    }
-                    while (Api.TryMoveNext(sesid, recordlist.tableid));
-                }
-            }
-            finally
-            {
-                Api.JetCloseTable(sesid, recordlist.tableid);
-            }
+            return new GenericEnumerable<byte[]>(() => new IntersectIndexesEnumerator(sesid, ranges));
         }
     }
 }

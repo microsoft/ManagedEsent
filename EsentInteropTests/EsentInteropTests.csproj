@@ -62,6 +62,7 @@
     <Compile Include="CallbackWrappersTests.cs" />
     <Compile Include="ColumnValueTests.cs" />
     <Compile Include="ConditionalIndexFixture.cs" />
+    <Compile Include="EnumerableTests.cs" />
     <Compile Include="HowDoI.cs" />
     <Compile Include="InstanceMiscInfoTests.cs" />
     <Compile Include="JetGetThreadStatsTests.cs" />

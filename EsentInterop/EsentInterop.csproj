@@ -53,8 +53,12 @@
     <Compile Include="ByteColumnValue.cs" />
     <Compile Include="BytesColumnValue.cs" />
     <Compile Include="Caches.cs" />
+    <Compile Include="ColumnInfoEnumerator.cs" />
     <Compile Include="ColumnValueOfStruct.cs" />
     <Compile Include="Conversions.cs" />
+    <Compile Include="GenericEnumerable.cs" />
+    <Compile Include="IndexInfoEnumerator.cs" />
+    <Compile Include="IntersectIndexesEnumerator.cs" />
     <Compile Include="jet_signature.cs" />
     <Compile Include="DateTimeColumnValue.cs" />
     <Compile Include="DoubleColumnValue.cs" />
@@ -92,6 +96,12 @@
     <Compile Include="ColumnValue.cs" />
     <Compile Include="Server2003Param.cs" />
     <Compile Include="StringColumnValue.cs" />
+    <Compile Include="TableColumnInfoEnumerator.cs" />
+    <Compile Include="TableEnumerator.cs" />
+    <Compile Include="TableidColumnInfoEnumerator.cs" />
+    <Compile Include="TableidIndexInfoEnumerator.cs" />
+    <Compile Include="TableIndexInfoEnumerator.cs" />
+    <Compile Include="TableNameEnumerator.cs" />
     <Compile Include="UInt16ColumnValue.cs" />
     <Compile Include="UInt32ColumnValue.cs" />
     <Compile Include="UInt64ColumnValue.cs" />

@@ -172,6 +172,28 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test the enumerable returned by IntersectIndexes.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test the enumerable returned by IntersectIndexes")]
+        public void TestIntersectIndexesEnumerable()
+        {
+            JET_TABLEID tableid1 = this.OpenTable();
+            JET_TABLEID tableid2 = this.OpenTable();
+
+            Api.JetSetCurrentIndex(this.sesid, tableid1, "index1");
+            this.SetIndexRange(tableid1, 8, 9);
+
+            Api.JetSetCurrentIndex(this.sesid, tableid2, "index2");
+            this.SetIndexRange(tableid2, 1, 2);
+
+            var tableids = new[] { tableid1, tableid2 };
+
+            EnumerableTests.TestEnumerable(Api.IntersectIndexes(this.sesid, tableids));
+        }
+
+        /// <summary>
         /// Verify that index intersection returns records with the correct criteria.
         /// </summary>
         [TestMethod]

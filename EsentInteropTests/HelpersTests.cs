@@ -221,17 +221,14 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Search the column information structures with Linq.
+        /// Test the table names enumerable.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Search the column information structures with Linq.")]
-        public void SearchColumnInfosWithLinq()
+        [Description("Test the table names enumerable.")]
+        public void TestTableNamesEnumerable()
         {
-            IEnumerable<string> columnnames = from c in Api.GetTableColumns(this.sesid, this.tableid)
-                             where c.Coltyp == JET_coltyp.Long
-                             select c.Name;
-            Assert.AreEqual("Int32", columnnames.Single());
+            EnumerableTests.TestEnumerable(Api.GetTableNames(this.sesid, this.dbid));
         }
 
         /// <summary>
@@ -246,6 +243,31 @@ namespace InteropApiTests
             {
                 Assert.AreEqual(this.columnidDict[col.Name], col.Columnid);
             }
+        }
+
+        /// <summary>
+        /// Search the column information structures with Linq.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Search the column information structures with Linq.")]
+        public void SearchColumnInfosWithLinq()
+        {
+            IEnumerable<string> columnnames = from c in Api.GetTableColumns(this.sesid, this.tableid)
+                                              where c.Coltyp == JET_coltyp.Long
+                                              select c.Name;
+            Assert.AreEqual("Int32", columnnames.Single());
+        }
+
+        /// <summary>
+        /// Test the table columns from tableid enumerable.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test the table columns from tableid enumerable.")]
+        public void TestTableColumnsFromTableidEnumerable()
+        {
+            EnumerableTests.TestEnumerable(Api.GetTableColumns(this.sesid, this.tableid));
         }
 
         /// <summary>
@@ -275,6 +297,17 @@ namespace InteropApiTests
             {
                 Assert.AreEqual(this.columnidDict[col.Name], col.Columnid);
             }
+        }
+
+        /// <summary>
+        /// Test the table columns from table name enumerable.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test the table columns from table name enumerable.")]
+        public void TestTableColumnsFromTableNameEnumerable()
+        {
+            EnumerableTests.TestEnumerable(Api.GetTableColumns(this.sesid, this.dbid, this.table));
         }
 
         /// <summary>
@@ -320,6 +353,25 @@ namespace InteropApiTests
             Assert.IsTrue(info.IndexSegments[0].IsAscending);
             Assert.AreEqual(JET_coltyp.LongText, info.IndexSegments[0].Coltyp);
             Assert.IsTrue(info.IndexSegments[0].IsASCII);
+
+            Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
+        }
+
+        /// <summary>
+        /// Test the table indexes from tableid enumerable.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test the table indexes from tableid enumerable.")]
+        public void TestTableIndexesFromTableidEnumerable()
+        {
+            string indexname = "myindex";
+            string indexdef = "+ascii\0\0";
+            CreateIndexGrbit grbit = CreateIndexGrbit.IndexUnique;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetCreateIndex(this.sesid, this.tableid, indexname, grbit, indexdef, indexdef.Length, 100);
+            EnumerableTests.TestEnumerable(Api.GetTableIndexes(this.sesid, this.tableid));
 
             Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
         }
@@ -427,11 +479,30 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Get index information for one index.
+        /// Test the table indexes from table name enumerable.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Get index information for one index.")]
+        [Description("Test the table indexes from table name enumerable.")]
+        public void TestTableIndexesFromTableNameEnumerable()
+        {
+            string indexname = "myindex";
+            string indexdef = "+ascii\0\0";
+            CreateIndexGrbit grbit = CreateIndexGrbit.IndexUnique;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetCreateIndex(this.sesid, this.tableid, indexname, grbit, indexdef, indexdef.Length, 100);
+            EnumerableTests.TestEnumerable(Api.GetTableIndexes(this.sesid, this.dbid, this.table));
+
+            Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
+        }
+
+        /// <summary>
+        /// Get index information for an index that has CompareOptions.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Get index information index with CompareOptions.")]
         public void GetIndexInformationOneIndexWithCompareOptions()
         {
             const string Indexname = "myindex";

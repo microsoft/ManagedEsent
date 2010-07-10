@@ -1613,6 +1613,42 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Check that an exception is thrown when JetPrereadKeys gets a non-zero index and null keys.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetPrereadKeys gets a non-zero index and null keys")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetPrereadKeysThrowsExceptionWhenIndexIsNonZeroAndKeysIsNull()
+        {
+            if (!EsentVersion.SupportsWindows7Features)
+            {
+                throw new ArgumentException();
+            }
+
+            int ignored;
+            Windows7Api.JetPrereadKeys(this.sesid, this.tableid, null, new int[2], 1, 1, out ignored, PrereadKeysGrbit.Forward);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetPrereadKeys gets a non-zero index and null key lengths.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetPrereadKeys gets a non-zero index and null key lengths")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetPrereadKeysThrowsExceptionWhenIndexIsNonZeroAndKeyLengthsIsNull()
+        {
+            if (!EsentVersion.SupportsWindows7Features)
+            {
+                throw new ArgumentException();
+            }
+
+            int ignored;
+            Windows7Api.JetPrereadKeys(this.sesid, this.tableid, new byte[2][], null, 1, 1, out ignored, PrereadKeysGrbit.Forward);
+        }
+
+        /// <summary>
         /// Check that an exception is thrown when JetPrereadKeys gets an index past the end of the keys.
         /// </summary>
         [TestMethod]
