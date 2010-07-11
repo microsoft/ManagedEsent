@@ -59,6 +59,8 @@
     <Compile Include="GenericEnumerable.cs" />
     <Compile Include="IndexInfoEnumerator.cs" />
     <Compile Include="IntersectIndexesEnumerator.cs" />
+    <Compile Include="jet_bklogtime.cs" />
+    <Compile Include="jet_lgpos.cs" />
     <Compile Include="jet_signature.cs" />
     <Compile Include="DateTimeColumnValue.cs" />
     <Compile Include="DoubleColumnValue.cs" />

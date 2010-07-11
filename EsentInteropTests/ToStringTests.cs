@@ -137,6 +137,18 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test JET_BKLOGTIME.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_BKLOGTIME.ToString()")]
+        public void JetBklogtimeToString()
+        {
+            var logtime = new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Utc), true);
+            Assert.AreEqual("JET_BKLOGTIME(17:44:4:31:5:110:0x80:0x80)", logtime.ToString());
+        }
+
+        /// <summary>
         /// Test JET_SIGNATURE.ToString().
         /// </summary>
         [TestMethod]
@@ -147,6 +159,18 @@ namespace InteropApiTests
             var t = new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Utc);
             var signature = new JET_SIGNATURE(99, t, "COMPUTER");
             Assert.AreEqual("JET_SIGNATURE(99:05/31/2010 04:44:17:COMPUTER)", signature.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_LGPOS.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_LGPOS.ToString()")]
+        public void JetLgposToString()
+        {
+            var lgpos = new JET_LGPOS { lGeneration = 1, isec = 0x1F, ib = 3 };
+            Assert.AreEqual("JET_LGPOS(0x1,1F,3)", lgpos.ToString());
         }
     }
 }

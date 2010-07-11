@@ -10,7 +10,6 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Runtime.InteropServices;
-    using System.Text;
 
     /// <summary>
     /// The JET_SIGNATURE structure contains information that uniquely

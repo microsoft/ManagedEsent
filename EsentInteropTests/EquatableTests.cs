@@ -367,11 +367,69 @@ namespace InteropApiTests
                 new JET_LOGTIME(),
             };
 
+            // It would be nice if this was a generic helper method, but that won't
+            // work for operator== and operator!=.
             for (int i = 0; i < times.Length - 1; ++i)
             {
                 for (int j = i + 1; j < times.Length; ++j)
                 {
                     Debug.Assert(i != j, "About to compare the same JET_LOGTIME");
+                    TestUnequalObjects(times[i], times[j]);
+                    Assert.IsTrue(times[i] != times[j]);
+                    Assert.IsFalse(times[i] == times[j]);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Check that JET_BKLOGTIME structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_BKLOGTIME structures can be compared for equality")]
+        public void VerifyJetBklogtimeEquality()
+        {
+            DateTime t = DateTime.Now;
+            var x = new JET_BKLOGTIME(t, false);
+            var y = new JET_BKLOGTIME(t, false);
+            TestEqualObjects(x, y);
+            Assert.IsTrue(x == y);
+            Assert.IsFalse(x != y);
+        }
+
+        /// <summary>
+        /// Check that JET_BKLOGTIME structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_BKLOGTIME structures can be compared for inequality")]
+        public void VerifyJetBklogtimeInequality()
+        {
+            // None of these objects are equal, most differ in only one member from the
+            // first object. We will compare them all against each other.
+            var times = new[]
+            {
+                new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Utc), true),
+                new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Utc), false),
+                new JET_BKLOGTIME(new DateTime(2011, 5, 31, 4, 44, 17, DateTimeKind.Utc), true),
+                new JET_BKLOGTIME(new DateTime(2010, 7, 31, 4, 44, 17, DateTimeKind.Utc), true),
+                new JET_BKLOGTIME(new DateTime(2010, 5, 30, 4, 44, 17, DateTimeKind.Utc), true),
+                new JET_BKLOGTIME(new DateTime(2010, 5, 31, 5, 44, 17, DateTimeKind.Utc), true),
+                new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 45, 17, DateTimeKind.Utc), true),
+                new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 18, DateTimeKind.Utc), true),
+                new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Local), true),
+                new JET_BKLOGTIME(),
+            };
+
+            // It would be nice if this was a generic helper method, but that won't
+            // work for operator== and operator!=.
+            for (int i = 0; i < times.Length - 1; ++i)
+            {
+                for (int j = i + 1; j < times.Length; ++j)
+                {
+                    Debug.Assert(i != j, "About to compare the same JET_BKLOGTIME");
                     TestUnequalObjects(times[i], times[j]);
                     Assert.IsTrue(times[i] != times[j]);
                     Assert.IsFalse(times[i] == times[j]);
@@ -435,6 +493,8 @@ namespace InteropApiTests
                 new JET_SIGNATURE(),
             };
 
+            // It would be nice if this was a generic helper method, but that won't
+            // work for operator== and operator!=.
             for (int i = 0; i < times.Length - 1; ++i)
             {
                 for (int j = i + 1; j < times.Length; ++j)
@@ -443,6 +503,55 @@ namespace InteropApiTests
                     TestUnequalObjects(times[i], times[j]);
                     Assert.IsTrue(times[i] != times[j]);
                     Assert.IsFalse(times[i] == times[j]);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Check that JET_LGPOS structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_LGPOS structures can be compared for equality")]
+        public void VerifyJetLgposEquality()
+        {
+            var x = new JET_LGPOS { lGeneration = 1, isec = 2, ib = 3 };
+            var y = new JET_LGPOS { lGeneration = 1, isec = 2, ib = 3 };
+            TestEqualObjects(x, y);
+            Assert.IsTrue(x == y);
+            Assert.IsFalse(x != y);
+        }
+
+        /// <summary>
+        /// Check that JET_LGPOS structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_LGPOS structures can be compared for inequality")]
+        public void VerifyJetLgposInequality()
+        {
+            // None of these objects are equal, most differ in only one member from the
+            // first object. We will compare them all against each other.
+            var positions = new[]
+            {
+                new JET_LGPOS { lGeneration = 1, isec = 2, ib = 3 },
+                new JET_LGPOS { lGeneration = 1, isec = 2, ib = 999 },
+                new JET_LGPOS { lGeneration = 1, isec = 999, ib = 3 },
+                new JET_LGPOS { lGeneration = 999, isec = 2, ib = 3 },
+            };
+
+            // It would be nice if this was a generic helper method, but that won't
+            // work for operator== and operator!=.
+            for (int i = 0; i < positions.Length - 1; ++i)
+            {
+                for (int j = i + 1; j < positions.Length; ++j)
+                {
+                    Debug.Assert(i != j, "About to compare the same JET_LGPOS");
+                    TestUnequalObjects(positions[i], positions[j]);
+                    Assert.IsTrue(positions[i] != positions[j]);
+                    Assert.IsFalse(positions[i] == positions[j]);
                 }
             }
         }

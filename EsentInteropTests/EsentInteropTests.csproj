@@ -61,6 +61,7 @@
     <Compile Include="BasicDDLTests.cs" />
     <Compile Include="CallbackWrappersTests.cs" />
     <Compile Include="ColumnValueTests.cs" />
+    <Compile Include="ComparableTests.cs" />
     <Compile Include="ConditionalIndexFixture.cs" />
     <Compile Include="EnumerableTests.cs" />
     <Compile Include="HowDoI.cs" />
