@@ -37,31 +37,31 @@ namespace Microsoft.Isam.Esent.Interop
         private int generation;
 
         /// <summary>
-        /// Gets or sets the byte offset represented by this log position. This
+        /// Gets the byte offset represented by this log position. This
         /// offset is inside of the sector.
         /// </summary>
         public int ib
         {
             get { return this.offset; }
-            set { this.offset = checked((ushort)value); }
+            internal set { this.offset = checked((ushort)value); }
         }
 
         /// <summary>
-        /// Gets or sets the sector number represented by this log position.
+        /// Gets the sector number represented by this log position.
         /// </summary>
         public int isec
         {
             get { return this.sector; }
-            set { this.sector = checked((ushort)value); }
+            internal set { this.sector = checked((ushort)value); }
         }
 
         /// <summary>
-        /// Gets or sets the generation of this log position.
+        /// Gets the generation of this log position.
         /// </summary>
         public int lGeneration
         {
             get { return this.generation; }
-            set { this.generation = value; }
+            internal set { this.generation = value; }
         }
 
         /// <summary>

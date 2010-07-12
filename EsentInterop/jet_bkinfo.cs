@@ -42,30 +42,30 @@ namespace Microsoft.Isam.Esent.Interop
         private uint highGeneration;
 
         /// <summary>
-        /// Gets or sets the log position of the backup.
+        /// Gets the log position of the backup.
         /// </summary>
         public JET_LGPOS lgposMark
         {
             get { return this.logPosition; }
-            set { this.logPosition = value; }
+            internal set { this.logPosition = value; }
         }
 
         /// <summary>
-        /// Gets or sets the time of the backup.
+        /// Gets the time of the backup.
         /// </summary>
         public JET_BKLOGTIME bklogtimeMark
         {
             get { return this.backupTime; }
-            set { this.backupTime = value; }
+            internal set { this.backupTime = value; }
         }
 
         /// <summary>
-        /// Gets or sets the low generation of the backup.
+        /// Gets the low generation of the backup.
         /// </summary>
         public int genLow
         {
             get { return (int)this.lowGeneration; }
-            set { this.lowGeneration = checked((uint)value); }
+            internal set { this.lowGeneration = checked((uint)value); }
         }
 
         /// <summary>
