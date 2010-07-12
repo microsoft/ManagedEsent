@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Diagnostics;
+    using System.Globalization;
     using System.Reflection;
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
@@ -135,7 +136,10 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Callback function for native code.
+        /// Callback function for native code. We don't want to throw an exception through
+        /// unmanaged ESENT because that will corrupt ESENT's internal state. Instead we
+        /// catch all exceptions and return an error instead. We use a CER to make catching
+        /// the exceptions as reliable as possible.
         /// </summary>
         /// <param name="nativeSesid">
         /// The session with which the long running operation was called.
@@ -176,7 +180,9 @@ namespace Microsoft.Isam.Esent.Interop
             }
             catch (Exception ex)
             {
-                Trace.WriteLineIf(this.traceSwitch.TraceWarning, "Caught Exception");
+                Trace.WriteLineIf(
+                    this.traceSwitch.TraceWarning,
+                    String.Format(CultureInfo.InvariantCulture, "Caught Exception {0}", ex));
                 this.SavedException = ex;
                 return JET_err.CallbackFailed;
             }

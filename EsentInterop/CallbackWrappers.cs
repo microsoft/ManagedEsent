@@ -25,7 +25,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// The reason this is hard to deal with is that the lifetime of a JET_CALLBACK
     /// isn't very clear. Table callbacks can stick around until the table meta-data
     /// is purged, while a JetDefragment callback can be used until defrag ends. On
-    /// the other hand, keeping the callback wrapper alive indefinitely could lead
+    /// the other hand, keeping the callback wrapper alive indefinitely would lead
     /// to unbounded memory use.
     /// </para>
     /// </summary>

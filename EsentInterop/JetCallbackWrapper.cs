@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Diagnostics;
+    using System.Globalization;
     using System.Reflection;
     using System.Runtime.CompilerServices;
 
@@ -119,7 +120,10 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Callback function for native code.
+        /// Callback function for native code. We don't want to throw an exception through
+        /// unmanaged ESENT because that will corrupt ESENT's internal state. Instead we
+        /// catch all exceptions and return an error instead. We use a CER to make catching
+        /// the exceptions as reliable as possible.
         /// </summary>
         /// <param name="nativeSesid">The session for which the callback is being made.</param>
         /// <param name="nativeDbid">The database for which the callback is being made.</param>
@@ -155,11 +159,13 @@ namespace Microsoft.Isam.Esent.Interop
                 JET_CALLBACK callback = (JET_CALLBACK) this.wrappedCallback.Target;
                 return callback(sesid, dbid, tableid, cbtyp, null, null, nativeContext, IntPtr.Zero);
             }
-            catch (Exception)
+            catch (Exception ex)
             {                
                 // Thread aborts aren't handled here. ESENT callbacks can execute on client threads or
                 // internal ESENT threads so it isn't clear what should be done on an abort.
-                Trace.WriteLineIf(traceSwitch.TraceWarning, "Caught Exception");
+                Trace.WriteLineIf(
+                    traceSwitch.TraceWarning,
+                    String.Format(CultureInfo.InvariantCulture, "Caught Exception {0}", ex));
                 return JET_err.CallbackFailed;
             }
         }
