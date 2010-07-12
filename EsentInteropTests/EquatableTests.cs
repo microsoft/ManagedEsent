@@ -557,6 +557,64 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Check that JET_BKINFO structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_BKINFO structures can be compared for equality")]
+        public void VerifyJetBkinfoEquality()
+        {
+            var bklogtime = new JET_BKLOGTIME(DateTime.Now, false);
+            var lgpos = new JET_LGPOS { lGeneration = 1, isec = 2, ib = 3 };
+
+            var x = new JET_BKINFO { bklogtimeMark = bklogtime, genHigh = 11, genLow = 3, lgposMark = lgpos };
+            var y = new JET_BKINFO { bklogtimeMark = bklogtime, genHigh = 11, genLow = 3, lgposMark = lgpos };
+            TestEqualObjects(x, y);
+            Assert.IsTrue(x == y);
+            Assert.IsFalse(x != y);
+        }
+
+        /// <summary>
+        /// Check that JET_BKINFO structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_BKINFO structures can be compared for inequality")]
+        public void VerifyJetBkinfoInequality()
+        {
+            var bklogtime1 = new JET_BKLOGTIME(DateTime.Now, false);
+            var bklogtime2 = new JET_BKLOGTIME(DateTime.Now, true);
+            var lgpos1 = new JET_LGPOS { lGeneration = 7, isec = 8, ib = 5 };
+            var lgpos2 = new JET_LGPOS { lGeneration = 7, isec = 8, ib = 9 };
+
+            // None of these objects are equal, most differ in only one member from the
+            // first object. We will compare them all against each other.
+            var positions = new[]
+            {
+                new JET_BKINFO { bklogtimeMark = bklogtime1, genHigh = 11, genLow = 3, lgposMark = lgpos1 },
+                new JET_BKINFO { bklogtimeMark = bklogtime1, genHigh = 11, genLow = 3, lgposMark = lgpos2 },
+                new JET_BKINFO { bklogtimeMark = bklogtime1, genHigh = 11, genLow = 4, lgposMark = lgpos1 },
+                new JET_BKINFO { bklogtimeMark = bklogtime1, genHigh = 12, genLow = 3, lgposMark = lgpos1 },
+                new JET_BKINFO { bklogtimeMark = bklogtime2, genHigh = 11, genLow = 3, lgposMark = lgpos1 },
+            };
+
+            // It would be nice if this was a generic helper method, but that won't
+            // work for operator== and operator!=.
+            for (int i = 0; i < positions.Length - 1; ++i)
+            {
+                for (int j = i + 1; j < positions.Length; ++j)
+                {
+                    Debug.Assert(i != j, "About to compare the same JET_LGPOS");
+                    TestUnequalObjects(positions[i], positions[j]);
+                    Assert.IsTrue(positions[i] != positions[j]);
+                    Assert.IsFalse(positions[i] == positions[j]);
+                }
+            }
+        }
+
+        /// <summary>
         /// Helper method to compare two equal objects.
         /// </summary>
         /// <typeparam name="T">The object type.</typeparam>
@@ -586,7 +644,7 @@ namespace InteropApiTests
         {
             Assert.IsFalse(x.Equals(y));
             Assert.IsFalse(y.Equals(x));
-            Assert.AreNotEqual(x.GetHashCode(), y.GetHashCode());
+            Assert.AreNotEqual(x.GetHashCode(), y.GetHashCode(), "{0} and {1} have the same hash code", x, y);
             Assert.AreNotEqual(x.ToString(), y.ToString());
 
             object objA = x;

@@ -73,6 +73,7 @@
     <Compile Include="MultivalueIndexFixture.cs" />
     <Compile Include="NativeRecsize2ConversionTests.cs" />
     <Compile Include="NativeRecsizeConversionTests.cs" />
+    <Compile Include="NullableStructureTests.cs" />
     <Compile Include="ObjectInfoConversionTests.cs" />
     <Compile Include="Recsize2ConversionTests.cs" />
     <Compile Include="RecsizeAdditionTests.cs" />

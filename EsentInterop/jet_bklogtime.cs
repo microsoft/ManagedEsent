@@ -19,7 +19,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the name of the unmanaged structure.")]
     [StructLayout(LayoutKind.Sequential)]
-    public struct JET_BKLOGTIME : IEquatable<JET_BKLOGTIME>
+    public struct JET_BKLOGTIME : IEquatable<JET_BKLOGTIME>, IJET_LOGTIME
     {
         /// <summary>
         /// The time in seconds. This value can be 0 to 59.
@@ -87,9 +87,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets a value indicating whether the JET_BKLOGTIME has a null value.
         /// </summary>
-        public bool IsNull
+        public bool HasValue
         {
-            get { return 0 == this.bMonth || 0 == this.bDays; }
+            get { return 0 != this.bMonth && 0 != this.bDays; }
         }
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </returns>
         public DateTime? ToDateTime()
         {
-            if (this.IsNull)
+            if (!this.HasValue)
             {
                 return null;
             }

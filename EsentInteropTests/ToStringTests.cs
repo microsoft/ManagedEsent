@@ -144,8 +144,8 @@ namespace InteropApiTests
         [Description("Test JET_BKLOGTIME.ToString()")]
         public void JetBklogtimeToString()
         {
-            var logtime = new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Utc), true);
-            Assert.AreEqual("JET_BKLOGTIME(17:44:4:31:5:110:0x80:0x80)", logtime.ToString());
+            var bklogtime = new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Utc), true);
+            Assert.AreEqual("JET_BKLOGTIME(17:44:4:31:5:110:0x80:0x80)", bklogtime.ToString());
         }
 
         /// <summary>
@@ -171,6 +171,20 @@ namespace InteropApiTests
         {
             var lgpos = new JET_LGPOS { lGeneration = 1, isec = 0x1F, ib = 3 };
             Assert.AreEqual("JET_LGPOS(0x1,1F,3)", lgpos.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_BKINFO.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_BKINFO.ToString()")]
+        public void JetBkinfoToString()
+        {
+            var bklogtime = new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Utc), true);
+            var lgpos = new JET_LGPOS { lGeneration = 1, isec = 2, ib = 3 };
+            var bkinfo = new JET_BKINFO { bklogtimeMark = bklogtime, genHigh = 57, genLow = 36, lgposMark = lgpos };
+            Assert.AreEqual("JET_BKINFO(36-57:JET_LGPOS(0x1,2,3):JET_BKLOGTIME(17:44:4:31:5:110:0x80:0x80))", bkinfo.ToString());
         }
     }
 }

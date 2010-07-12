@@ -19,7 +19,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the name of the unmanaged structure.")]
     [StructLayout(LayoutKind.Sequential)]
-    public struct JET_LGPOS : IEquatable<JET_LGPOS>, IComparable<JET_LGPOS>
+    public struct JET_LGPOS : IEquatable<JET_LGPOS>, IComparable<JET_LGPOS>, INullableJetStruct
     {
         /// <summary>
         /// Byte offset inside the sector.
@@ -62,6 +62,17 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get { return this.generation; }
             set { this.generation = value; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this log position is null.
+        /// </summary>
+        public bool HasValue
+        {
+            get
+            {
+                return 0 != this.lGeneration;
+            }
         }
 
         /// <summary>
@@ -143,9 +154,9 @@ namespace Microsoft.Isam.Esent.Interop
             return String.Format(
                 CultureInfo.InvariantCulture,
                 "JET_LGPOS(0x{0:X},{1:X},{2:X})",
-                this.generation,
-                this.sector,
-                this.offset);
+                this.lGeneration,
+                this.isec,
+                this.ib);
         }
 
         /// <summary>
