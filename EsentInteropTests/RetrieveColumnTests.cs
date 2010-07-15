@@ -34,17 +34,50 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// CheckDataSize should detect a negative data offset.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JET_RETRIEVECOLUMN.CheckDataSize throws an exception when ibData is negative")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyCheckThrowsExceptionWhenIbDataIsNegative()
+        {
+            var setcolumn = new JET_RETRIEVECOLUMN
+            {
+                ibData = -1,
+                pvData = new byte[1],
+            };
+            setcolumn.CheckDataSize();
+        }
+
+        /// <summary>
         /// CheckDataSize should detect null pvData and non-zero cbData.
         /// </summary>
         [TestMethod]
         [Priority(0)]
         [Description("Verify JET_RETRIEVECOLUMN.CheckDataSize throws an exception when cbData is invalid")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void VerifyCheckThrowsExceptionWhenPvDataIsNull()
+        public void VerifyCheckThrowsExceptionWhenCbDataIsNonZeroPvDataIsNull()
         {
             var setcolumn = new JET_RETRIEVECOLUMN
             {
                 cbData = 1,
+            };
+            setcolumn.CheckDataSize();
+        }
+
+        /// <summary>
+        /// CheckDataSize should detect null pvData and non-zero ibData.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JET_RETRIEVECOLUMN.CheckDataSize throws an exception when ibData is invalid")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyCheckThrowsExceptionWhenIbDataIsNonZeroAndPvDataIsNull()
+        {
+            var setcolumn = new JET_RETRIEVECOLUMN
+            {
+                ibData = 1,
             };
             setcolumn.CheckDataSize();
         }
@@ -62,6 +95,41 @@ namespace InteropApiTests
             {
                 cbData = 100,
                 pvData = new byte[9],
+            };
+            setcolumn.CheckDataSize();
+        }
+
+        /// <summary>
+        /// CheckDataSize should detect ibData that is too long.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JET_RETRIEVECOLUMN.CheckDataSize throws an exception when ibData is too long")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyCheckThrowsExceptionWhenIbDataIsTooLong()
+        {
+            var setcolumn = new JET_RETRIEVECOLUMN
+            {
+                ibData = 9,
+                pvData = new byte[9],
+            };
+            setcolumn.CheckDataSize();
+        }
+
+        /// <summary>
+        /// CheckDataSize should detect ibData/cbData that is too long.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify JET_RETRIEVECOLUMN.CheckDataSize throws an exception when ibData/cbData is too long")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyCheckThrowsExceptionWhenIbCbDataIsTooLong()
+        {
+            var setcolumn = new JET_RETRIEVECOLUMN
+            {
+                ibData = 8,
+                cbData = 3,
+                pvData = new byte[10],
             };
             setcolumn.CheckDataSize();
         }

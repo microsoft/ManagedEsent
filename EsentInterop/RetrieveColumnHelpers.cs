@@ -868,7 +868,7 @@ namespace Microsoft.Isam.Esent.Interop
             nativeretrievecolumns[i] = retrievecolumns[i].GetNativeRetrievecolumn();
             fixed (byte* pinnedBuffer = retrievecolumns[i].pvData)
             {
-                nativeretrievecolumns[i].pvData = new IntPtr(pinnedBuffer);
+                nativeretrievecolumns[i].pvData = new IntPtr(pinnedBuffer + retrievecolumns[i].ibData);
 
                 if (numColumns - 1 == i)
                 {

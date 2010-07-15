@@ -100,6 +100,11 @@ namespace Microsoft.Isam.Esent.Interop
         public byte[] pvData { get; set; }
 
         /// <summary>
+        /// Gets or sets the offset in the buffer that data will be stored in.
+        /// </summary>
+        public int ibData { get; set; }
+
+        /// <summary>
         /// Gets or sets the size of the <see cref="pvData"/> buffer, in bytes. The
         /// retrieve column operation will not store more data in pvData
         /// than cbData.
@@ -154,7 +159,20 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentOutOfRangeException("cbData", this.cbData, "data length cannot be negative");
             }
 
-            if ((null == this.pvData && 0 != this.cbData) || (null != this.pvData && this.cbData > this.pvData.Length))
+            if (this.ibData < 0)
+            {
+                throw new ArgumentOutOfRangeException("ibData", this.cbData, "data offset cannot be negative");
+            }
+
+            if (0 != this.ibData && (null == this.pvData || this.ibData >= this.pvData.Length))
+            {
+                throw new ArgumentOutOfRangeException(
+                    "ibData",
+                    this.ibData,
+                    "cannot be greater than the length of the pvData buffer");
+            }
+
+            if ((null == this.pvData && 0 != this.cbData) || (null != this.pvData && this.cbData > (this.pvData.Length - this.ibData)))
             {
                 throw new ArgumentOutOfRangeException(
                     "cbData",

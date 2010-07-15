@@ -2154,7 +2154,7 @@ namespace Microsoft.Isam.Esent.Interop
 
                     for (int i = 0; i < numColumns; ++i)
                     {
-                        setcolumns[i].Validate();
+                        setcolumns[i].CheckDataSize();
                         nativeSetColumns[i] = setcolumns[i].GetNativeSetcolumn();
                         if (null == setcolumns[i].pvData)
                         {
@@ -2163,13 +2163,14 @@ namespace Microsoft.Isam.Esent.Interop
                         else if (bufferRemaining >= setcolumns[i].cbData)
                         {
                             nativeSetColumns[i].pvData = new IntPtr(buffer);
-                            Marshal.Copy(setcolumns[i].pvData, 0, nativeSetColumns[i].pvData, setcolumns[i].cbData);
+                            Marshal.Copy(setcolumns[i].pvData, setcolumns[i].ibData, nativeSetColumns[i].pvData, setcolumns[i].cbData);
                             buffer += setcolumns[i].cbData;
                             bufferRemaining -= setcolumns[i].cbData;
                         }
                         else
                         {
-                            nativeSetColumns[i].pvData = gchandles.Add(setcolumns[i].pvData);
+                            byte* pinnedBuffer = (byte*)gchandles.Add(setcolumns[i].pvData).ToPointer();
+                            nativeSetColumns[i].pvData = new IntPtr(pinnedBuffer + setcolumns[i].ibData);
                         }
                     }
 

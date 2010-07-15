@@ -143,20 +143,20 @@ namespace InteropApiTests
             short s = Any.Int16;
             int i = Any.Int32;
             long l = Any.Int64;
-            string str = Any.String;
+            string str = Any.StringOfLength(256);
             float f = Any.Float;
             double d = Any.Double;
             byte[] data = Any.BytesOfLength(1023);
 
             var setcolumns = new[]
             {
-                new JET_SETCOLUMN { cbData = sizeof(byte), columnid = this.columnDict["Byte"], pvData = BitConverter.GetBytes(b) },
+                new JET_SETCOLUMN { cbData = sizeof(byte), columnid = this.columnDict["Byte"], pvData = new[] { (byte)0x0, b, (byte)0x1 }, ibData = 1 },
                 new JET_SETCOLUMN { cbData = sizeof(short), columnid = this.columnDict["Int16"], pvData = BitConverter.GetBytes(s) },
                 new JET_SETCOLUMN { cbData = sizeof(int), columnid = this.columnDict["Int32"], pvData = BitConverter.GetBytes(i) },
                 new JET_SETCOLUMN { cbData = sizeof(long), columnid = this.columnDict["Int64"], pvData = BitConverter.GetBytes(l) },
                 new JET_SETCOLUMN { cbData = sizeof(float), columnid = this.columnDict["Float"], pvData = BitConverter.GetBytes(f) },
                 new JET_SETCOLUMN { cbData = sizeof(double), columnid = this.columnDict["Double"], pvData = BitConverter.GetBytes(d) },
-                new JET_SETCOLUMN { cbData = str.Length * sizeof(char), columnid = this.columnDict["Unicode"], pvData = Encoding.Unicode.GetBytes(str) },
+                new JET_SETCOLUMN { cbData = (str.Length - 1) * sizeof(char), columnid = this.columnDict["Unicode"], pvData = Encoding.Unicode.GetBytes(str), ibData = sizeof(char) },
                 new JET_SETCOLUMN { cbData = data.Length, columnid = this.columnDict["Binary"], pvData = data },
             };
 
@@ -176,7 +176,7 @@ namespace InteropApiTests
             Assert.AreEqual(l, Api.RetrieveColumnAsInt64(this.session, this.tableid, this.columnDict["Int64"]));
             Assert.AreEqual(f, Api.RetrieveColumnAsFloat(this.session, this.tableid, this.columnDict["Float"]));
             Assert.AreEqual(d, Api.RetrieveColumnAsDouble(this.session, this.tableid, this.columnDict["Double"]));
-            Assert.AreEqual(str, Api.RetrieveColumnAsString(this.session, this.tableid, this.columnDict["Unicode"]));
+            Assert.AreEqual(str.Substring(1), Api.RetrieveColumnAsString(this.session, this.tableid, this.columnDict["Unicode"]));
             CollectionAssert.AreEqual(data, Api.RetrieveColumn(this.session, this.tableid, this.columnDict["Binary"]));
         }
 
@@ -212,8 +212,8 @@ namespace InteropApiTests
 
             var retrievecolumns = new[]
             {
-                new JET_RETRIEVECOLUMN { cbData = sizeof(short), columnid = this.columnDict["Int16"], pvData  = new byte[sizeof(short)] },
-                new JET_RETRIEVECOLUMN { cbData = sizeof(double), columnid = this.columnDict["Double"], pvData = new byte[sizeof(double)] },
+                new JET_RETRIEVECOLUMN { cbData = sizeof(short), columnid = this.columnDict["Int16"], pvData = new byte[sizeof(short) + 3], ibData = 3 },
+                new JET_RETRIEVECOLUMN { cbData = sizeof(double), columnid = this.columnDict["Double"], pvData = new byte[sizeof(double) + 2], ibData = 1 },
                 new JET_RETRIEVECOLUMN { cbData = str.Length * sizeof(char) * 2, columnid = this.columnDict["Unicode"], pvData = new byte[str.Length * sizeof(char) * 2] },
                 new JET_RETRIEVECOLUMN { cbData = 10, columnid = this.columnDict["Binary"], pvData = new byte[10] },
             };
@@ -228,17 +228,17 @@ namespace InteropApiTests
             // retrievecolumns[0] = short
             Assert.AreEqual(sizeof(short), retrievecolumns[0].cbActual);
             Assert.AreEqual(JET_wrn.Success, retrievecolumns[0].err);
-            Assert.AreEqual(s, BitConverter.ToInt16(retrievecolumns[0].pvData, 0));
+            Assert.AreEqual(s, BitConverter.ToInt16(retrievecolumns[0].pvData, retrievecolumns[0].ibData));
 
             // retrievecolumns[1] = double
             Assert.AreEqual(sizeof(double), retrievecolumns[1].cbActual);
             Assert.AreEqual(JET_wrn.Success, retrievecolumns[1].err);
-            Assert.AreEqual(d, BitConverter.ToDouble(retrievecolumns[1].pvData, 0));
+            Assert.AreEqual(d, BitConverter.ToDouble(retrievecolumns[1].pvData, retrievecolumns[1].ibData));
 
             // retrievecolumns[2] = string
             Assert.AreEqual(str.Length * sizeof(char), retrievecolumns[2].cbActual);
             Assert.AreEqual(JET_wrn.Success, retrievecolumns[2].err);
-            Assert.AreEqual(str, Encoding.Unicode.GetString(retrievecolumns[2].pvData, 0, retrievecolumns[2].cbActual));
+            Assert.AreEqual(str, Encoding.Unicode.GetString(retrievecolumns[2].pvData, retrievecolumns[2].ibData, retrievecolumns[2].cbActual));
 
             // retrievecolumns[3] = null
             Assert.AreEqual(0, retrievecolumns[3].cbActual);

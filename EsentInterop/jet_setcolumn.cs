@@ -78,6 +78,11 @@ namespace Microsoft.Isam.Esent.Interop
         public byte[] pvData { get; set; }
 
         /// <summary>
+        /// Gets or sets the offset of the data to set.
+        /// </summary>
+        public int ibData { get; set; }
+
+        /// <summary>
         /// Gets or sets the size of the data to set.
         /// </summary>
         public int cbData { get; set; }
@@ -107,23 +112,37 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_wrn err { get; internal set; }
 
         /// <summary>
-        /// Check to see if cbData is negative or greater than cbData.
+        /// Check to see if cbData is negative or greater than the length of pvData.
+        /// Check to see if ibData is negative or greater than the length of pvData.
         /// </summary>
-        internal void Validate()
+        internal void CheckDataSize()
         {
             if (this.cbData < 0)
             {
                 throw new ArgumentOutOfRangeException("cbData", "data length cannot be negative");    
             }
 
-            if ((null == this.pvData && 0 != this.cbData) || (null != this.pvData && this.cbData > this.pvData.Length))
+            if (this.ibData < 0)
+            {
+                throw new ArgumentOutOfRangeException("ibData", "data offset cannot be negative");
+            }
+
+            if (0 != this.ibData && (null == this.pvData || this.ibData >= this.pvData.Length))
+            {
+                throw new ArgumentOutOfRangeException(
+                    "ibData",
+                    this.ibData,
+                    "cannot be greater than the length of the pvData");
+            }
+
+            if ((null == this.pvData && 0 != this.cbData) || (null != this.pvData && this.cbData > (this.pvData.Length - this.ibData)))
             {
                 throw new ArgumentOutOfRangeException(
                     "cbData",
                     this.cbData,
                     "cannot be greater than the length of the pvData");
-            }    
-        
+            }
+            
             if (this.itagSequence < 0)
             {
                 throw new ArgumentOutOfRangeException("itagSequence", this.itagSequence, "cannot be negative");

@@ -350,6 +350,56 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Generate some logs. This is used by tests that do backups.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database to use to generate the logs.</param>
+        private static void GenerateSomeLogs(JET_SESID sesid, JET_DBID dbid)
+        {
+            if (EsentVersion.SupportsWindows7Features)
+            {
+                for (int i = 0; i < 10; ++i)
+                {
+                    Api.JetCommitTransaction(sesid, Windows7Grbits.ForceNewLog);
+                }
+            }
+            else
+            {
+                using (var transaction = new Transaction(sesid))
+                {
+                    JET_TABLEID junkTable;
+                    Api.JetCreateTable(sesid, dbid, "junk", 1, 100, out junkTable);
+                    JET_COLUMNID binaryColumn;
+                    Api.JetAddColumn(sesid, junkTable, "column", new JET_COLUMNDEF { coltyp = JET_coltyp.LongBinary }, null, 0, out binaryColumn);
+
+                    byte[] data = new byte[1023];
+                    for (int i = 0; i < 256; ++i)
+                    {
+                        using (var update = new Update(sesid, junkTable, JET_prep.Insert))
+                        {
+                            Api.JetSetColumn(
+                                sesid,
+                                junkTable,
+                                binaryColumn,
+                                data,
+                                data.Length,
+                                SetColumnGrbit.IntrinsicLV,
+                                null);
+                            update.SaveAndGotoBookmark();
+                        }
+
+                        transaction.Commit(CommitTransactionGrbit.LazyFlush);
+                        transaction.Begin();
+                    }
+
+                    Api.JetCloseTable(sesid, junkTable);
+                    Api.JetDeleteTable(sesid, dbid, "junk");
+                    transaction.Commit(CommitTransactionGrbit.LazyFlush);
+                }
+            }
+        }
+
+        /// <summary>
         /// Create the database.
         /// </summary>
         private void CreateDatabase()
@@ -574,7 +624,6 @@ namespace InteropApiTests
                     Api.JetOSSnapshotThaw(snapshot, SnapshotThawGrbit.None);
 
                     // Truncate log instance
-                    VistaApi.JetOSSnapshotTruncateLog(snapshot, SnapshotTruncateLogGrbit.AllDatabasesSnapshot);
                     VistaApi.JetOSSnapshotTruncateLogInstance(snapshot, instance, SnapshotTruncateLogGrbit.AllDatabasesSnapshot);
 
                     // End
@@ -597,14 +646,8 @@ namespace InteropApiTests
                     JET_DBID dbid;
                     Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
 
-                    // If possible, roll some logs so that we get back string with embedded nulls.
-                    if (EsentVersion.SupportsWindows7Features)
-                    {
-                        for (int i = 0; i < 10; ++i)
-                        {
-                            Api.JetCommitTransaction(session, Windows7Grbits.ForceNewLog);
-                        }
-                    }
+                    // Roll some logs so that we get back strings with embedded nulls.
+                    GenerateSomeLogs(session, dbid);
 
                     // BeginExternalBackup
                     Api.JetBeginExternalBackupInstance(instance, BeginExternalBackupGrbit.None);
@@ -614,7 +657,7 @@ namespace InteropApiTests
                     string[] files;
 
                     // Get list of databases
-                    Api.JetGetAttachInfoInstance(instance, out filelist, 1024, out actualChars);
+                    Api.JetGetAttachInfoInstance(instance, out filelist, 4096, out actualChars);
 
                     // The string length doesn't include the double-null terminator
                     Assert.AreEqual(actualChars, filelist.Length, "actualChars doesn't give the length of filelist");
@@ -626,7 +669,7 @@ namespace InteropApiTests
                     ReadFile(instance, this.database);
 
                     // Get list of logs
-                    Api.JetGetLogInfoInstance(instance, out filelist, 1024, out actualChars);
+                    Api.JetGetLogInfoInstance(instance, out filelist, 4096, out actualChars);
 
                     // The string length doesn't include the double-null terminator
                     Assert.AreEqual(actualChars, filelist.Length, "actualChars doesn't give the length of filelist");
@@ -640,7 +683,7 @@ namespace InteropApiTests
                     }
 
                     // Get list of logs to truncate (may be empty)
-                    Api.JetGetTruncateLogInfoInstance(instance, out filelist, 1024, out actualChars);
+                    Api.JetGetTruncateLogInfoInstance(instance, out filelist, 4096, out actualChars);
                     Assert.AreEqual(actualChars, filelist.Length, "actualChars doesn't give the length of filelist");
 
                     // Truncate logs
@@ -652,7 +695,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Perform a streaming backup2.
+        /// Perform a streaming backup and use JetEndExternalBackupInstance2.
         /// </summary>
         private void StreamingBackup2()
         {
@@ -837,12 +880,13 @@ namespace InteropApiTests
         private Instance CreateInstance()
         {
             var instance = new Instance(Guid.NewGuid().ToString());
-            instance.Parameters.LogFileSize = 256;
+            instance.Parameters.LogFileSize = 128;
             instance.Parameters.LogFileDirectory = this.databaseDirectory;
             instance.Parameters.TempDirectory = this.databaseDirectory;
             instance.Parameters.SystemDirectory = this.databaseDirectory;
             instance.Parameters.CreatePathIfNotExist = true;
             instance.Parameters.NoInformationEvent = true;
+            instance.Parameters.CheckpointDepthMax = 512 * 1024;
             return instance;
         }
 
