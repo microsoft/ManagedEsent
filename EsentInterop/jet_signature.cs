@@ -20,6 +20,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the name of the unmanaged structure.")]
     [StructLayout(LayoutKind.Auto)]
+    [Serializable]
     public struct JET_SIGNATURE : IEquatable<JET_SIGNATURE>
     {
         /// <summary>

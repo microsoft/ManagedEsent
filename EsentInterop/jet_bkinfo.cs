@@ -19,6 +19,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the name of the unmanaged structure.")]
     [StructLayout(LayoutKind.Sequential)]
+    [Serializable]
     public struct JET_BKINFO : IEquatable<JET_BKINFO>, INullableJetStruct
     {
         /// <summary>

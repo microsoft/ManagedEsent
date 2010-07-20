@@ -47,17 +47,36 @@ namespace Microsoft.Isam.Esent.Interop
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
+    [Serializable]
     public class JET_CONDITIONALCOLUMN
     {
         /// <summary>
+        /// Column name.
+        /// </summary>
+        private string columnName;
+
+        /// <summary>
+        /// Conditional column option.
+        /// </summary>
+        private ConditionalColumnGrbit option;
+
+        /// <summary>
         /// Gets or sets the name of the conditional column.
         /// </summary>
-        public string szColumnName { get; set; }
+        public string szColumnName
+        {
+            get { return this.columnName; }
+            set { this.columnName = value; }
+        }
 
         /// <summary>
         /// Gets or sets the options for the conditional index.
         /// </summary>
-        public ConditionalColumnGrbit grbit { get; set; }
+        public ConditionalColumnGrbit grbit
+        {
+            get { return this.option; }
+            set { this.option = value; }
+        }
 
         /// <summary>
         /// Gets the NATIVE_CONDITIONALCOLUMN version of this object.

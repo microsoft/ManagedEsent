@@ -76,35 +76,83 @@ namespace Microsoft.Isam.Esent.Interop
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
+    [Serializable]
     public class JET_COLUMNDEF
     {
         /// <summary>
+        /// The type of the column.
+        /// </summary>
+        private JET_coltyp columnType;
+
+        /// <summary>
+        /// The code page. Only valid for text columns.
+        /// </summary>
+        private JET_CP codePage;
+
+        /// <summary>
+        /// Maximum size of the column.
+        /// </summary>
+        private int maxSize;
+
+        /// <summary>
+        /// Id of the column. Not serialized because it is an internal
+        /// value and shouldn't be persisted.
+        /// </summary>
+        [NonSerialized]
+        private JET_COLUMNID id;
+
+        /// <summary>
+        /// Column options.
+        /// </summary>
+        private ColumndefGrbit options;
+
+        /// <summary>
         /// Gets or sets type of the column.
         /// </summary>
-        public JET_coltyp coltyp { get; set; }
+        public JET_coltyp coltyp
+        {
+            get { return this.columnType; }
+            set { this.columnType = value; }
+        }
 
         /// <summary>
         /// Gets or sets code page of the column. This is only meaningful for columns of type
         /// <see cref="JET_coltyp.Text"/> and <see cref="JET_coltyp.LongText"/>.
         /// </summary>
-        public JET_CP cp { get; set; }
+        public JET_CP cp
+        {
+            get { return this.codePage; }
+            set { this.codePage = value; }
+        }
 
         /// <summary>
         /// Gets or sets the maximum length of the column. This is only meaningful for columns of
         /// type <see cref="JET_coltyp.Text"/>, <see cref="JET_coltyp.LongText"/>, <see cref="JET_coltyp.Binary"/> and
         /// <see cref="JET_coltyp.LongBinary"/>.
         /// </summary>
-        public int cbMax { get; set; }
+        public int cbMax
+        {
+            get { return this.maxSize; }
+            set { this.maxSize = value; }
+        }
 
         /// <summary>
         /// Gets or sets the column options.
         /// </summary>
-        public ColumndefGrbit grbit { get; set; }
+        public ColumndefGrbit grbit
+        {
+            get { return this.options; }
+            set { this.options = value; }
+        }
 
         /// <summary>
         /// Gets the columnid of the column.
         /// </summary>
-        public JET_COLUMNID columnid { get; internal set; }
+        public JET_COLUMNID columnid
+        {
+            get { return this.id; }
+            internal set { this.id = value; }
+        }
 
         /// <summary>
         /// Returns the unmanaged columndef that represents this managed class.

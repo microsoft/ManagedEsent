@@ -6,6 +6,7 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
 
@@ -53,17 +54,36 @@ namespace Microsoft.Isam.Esent.Interop
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
+    [Serializable]
     public class JET_RECPOS
     {
         /// <summary>
+        /// The number of entries before the key.
+        /// </summary>
+        private long entriesBeforeKey;
+
+        /// <summary>
+        /// Total number of entries.
+        /// </summary>
+        private long totalEntries;
+
+        /// <summary>
         /// Gets or sets the approximate number of index entries less than the key.
         /// </summary>
-        public long centriesLT { get; set; }
+        public long centriesLT
+        {
+            get { return this.entriesBeforeKey; }
+            set { this.entriesBeforeKey = value; }
+        }
 
         /// <summary>
         /// Gets or sets the approximate number of entries in the index.
         /// </summary>
-        public long centriesTotal { get; set; }
+        public long centriesTotal
+        {
+            get { return this.totalEntries; }
+            set { this.totalEntries = value; }
+        }
 
         /// <summary>
         /// Get a NATIVE_RECPOS structure representing the object.

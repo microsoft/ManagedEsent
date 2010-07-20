@@ -6,11 +6,34 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+
     /// <summary>
     /// Describes one segment of an index.
     /// </summary>
+    [Serializable]
     public class IndexSegment
     {
+        /// <summary>
+        /// The name of the column.
+        /// </summary>
+        private readonly string columnName;
+
+        /// <summary>
+        /// The type of the column.
+        /// </summary>
+        private readonly JET_coltyp coltyp;
+
+        /// <summary>
+        /// True if the column is sorted in ascending order.
+        /// </summary>
+        private readonly bool isAscending;
+
+        /// <summary>
+        /// True if the column is an ASCII column.
+        /// </summary>
+        private readonly bool isASCII;
+
         /// <summary>
         /// Initializes a new instance of the IndexSegment class.
         /// </summary>
@@ -24,31 +47,43 @@ namespace Microsoft.Isam.Esent.Interop
             bool isAscending,
             bool isASCII)
         {
-            this.ColumnName = name;
-            this.Coltyp = coltyp;
-            this.IsAscending = isAscending;
-            this.IsASCII = isASCII;
+            this.columnName = name;
+            this.coltyp = coltyp;
+            this.isAscending = isAscending;
+            this.isASCII = isASCII;
         }
 
         /// <summary>
         /// Gets name of the column being indexed.
         /// </summary>
-        public string ColumnName { get; private set; }
+        public string ColumnName
+        {
+            get { return this.columnName; }
+        }
 
         /// <summary>
         /// Gets the type of the column being indexed.
         /// </summary>
-        public JET_coltyp Coltyp { get; private set; }
+        public JET_coltyp Coltyp
+        {
+            get { return this.coltyp; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the index segment is ascending.
         /// </summary>
-        public bool IsAscending { get; private set; }
+        public bool IsAscending
+        {
+            get { return this.isAscending; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the index segment is over an ASCII text
         /// column. This value is only meaningful for text column segments.
         /// </summary>
-        public bool IsASCII { get; private set; }
+        public bool IsASCII
+        {
+            get { return this.isASCII; }
+        }
     }
 }

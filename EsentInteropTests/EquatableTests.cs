@@ -9,6 +9,7 @@ namespace InteropApiTests
     using System;
     using System.Diagnostics;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -615,6 +616,390 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Check that JET_RECSIZE structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_RECSIZE structures can be compared for equality")]
+        public void VerifyJetRecsizeEquality()
+        {
+            var x = new JET_RECSIZE
+            {
+                cbData = 1,
+                cbDataCompressed = 2,
+                cbLongValueData = 3,
+                cbLongValueDataCompressed = 4,
+                cbLongValueOverhead = 5,
+                cbOverhead = 6,
+                cCompressedColumns = 7,
+                cLongValues = 8,
+                cMultiValues = 9,
+                cNonTaggedColumns = 10,
+                cTaggedColumns = 11
+            };
+            var y = new JET_RECSIZE
+            {
+                cbData = 1,
+                cbDataCompressed = 2,
+                cbLongValueData = 3,
+                cbLongValueDataCompressed = 4,
+                cbLongValueOverhead = 5,
+                cbOverhead = 6,
+                cCompressedColumns = 7,
+                cLongValues = 8,
+                cMultiValues = 9,
+                cNonTaggedColumns = 10,
+                cTaggedColumns = 11
+            };
+            TestEqualObjects(x, y);
+            Assert.IsTrue(x == y);
+            Assert.IsFalse(x != y);
+        }
+
+        /// <summary>
+        /// Check that JET_RECSIZE structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_RECSIZE structures can be compared for inequality")]
+        public void VerifyJetRecsizeInequality()
+        {
+            // None of these objects are equal, most differ in only one member from the
+            // first object. We will compare them all against each other.
+            var sizes = new[]
+            {
+                new JET_RECSIZE
+                {
+                    cbData = 1,
+                    cbDataCompressed = 2,
+                    cbLongValueData = 3,
+                    cbLongValueDataCompressed = 4,
+                    cbLongValueOverhead = 5,
+                    cbOverhead = 6,
+                    cCompressedColumns = 7,
+                    cLongValues = 8,
+                    cMultiValues = 9,
+                    cNonTaggedColumns = 10,
+                    cTaggedColumns = 11
+                },
+                new JET_RECSIZE
+                {
+                    cbData = 11,
+                    cbDataCompressed = 2,
+                    cbLongValueData = 3,
+                    cbLongValueDataCompressed = 4,
+                    cbLongValueOverhead = 5,
+                    cbOverhead = 6,
+                    cCompressedColumns = 7,
+                    cLongValues = 8,
+                    cMultiValues = 9,
+                    cNonTaggedColumns = 10,
+                    cTaggedColumns = 11
+                },
+                new JET_RECSIZE
+                {
+                    cbData = 1,
+                    cbDataCompressed = 12,
+                    cbLongValueData = 3,
+                    cbLongValueDataCompressed = 4,
+                    cbLongValueOverhead = 5,
+                    cbOverhead = 6,
+                    cCompressedColumns = 7,
+                    cLongValues = 8,
+                    cMultiValues = 9,
+                    cNonTaggedColumns = 10,
+                    cTaggedColumns = 11
+                },
+                new JET_RECSIZE
+                {
+                    cbData = 1,
+                    cbDataCompressed = 2,
+                    cbLongValueData = 13,
+                    cbLongValueDataCompressed = 4,
+                    cbLongValueOverhead = 5,
+                    cbOverhead = 6,
+                    cCompressedColumns = 7,
+                    cLongValues = 8,
+                    cMultiValues = 9,
+                    cNonTaggedColumns = 10,
+                    cTaggedColumns = 11
+                },
+                new JET_RECSIZE
+                {
+                    cbData = 1,
+                    cbDataCompressed = 2,
+                    cbLongValueData = 3,
+                    cbLongValueDataCompressed = 14,
+                    cbLongValueOverhead = 5,
+                    cbOverhead = 6,
+                    cCompressedColumns = 7,
+                    cLongValues = 8,
+                    cMultiValues = 9,
+                    cNonTaggedColumns = 10,
+                    cTaggedColumns = 11
+                },
+                new JET_RECSIZE
+                {
+                    cbData = 1,
+                    cbDataCompressed = 2,
+                    cbLongValueData = 3,
+                    cbLongValueDataCompressed = 4,
+                    cbLongValueOverhead = 15,
+                    cbOverhead = 6,
+                    cCompressedColumns = 7,
+                    cLongValues = 8,
+                    cMultiValues = 9,
+                    cNonTaggedColumns = 10,
+                    cTaggedColumns = 11
+                },
+                new JET_RECSIZE
+                {
+                    cbData = 1,
+                    cbDataCompressed = 2,
+                    cbLongValueData = 3,
+                    cbLongValueDataCompressed = 4,
+                    cbLongValueOverhead = 5,
+                    cbOverhead = 16,
+                    cCompressedColumns = 7,
+                    cLongValues = 8,
+                    cMultiValues = 9,
+                    cNonTaggedColumns = 10,
+                    cTaggedColumns = 11
+                },
+                new JET_RECSIZE
+                {
+                    cbData = 1,
+                    cbDataCompressed = 2,
+                    cbLongValueData = 3,
+                    cbLongValueDataCompressed = 4,
+                    cbLongValueOverhead = 5,
+                    cbOverhead = 6,
+                    cCompressedColumns = 17,
+                    cLongValues = 8,
+                    cMultiValues = 9,
+                    cNonTaggedColumns = 10,
+                    cTaggedColumns = 11
+                },
+                new JET_RECSIZE
+                {
+                    cbData = 1,
+                    cbDataCompressed = 2,
+                    cbLongValueData = 3,
+                    cbLongValueDataCompressed = 4,
+                    cbLongValueOverhead = 5,
+                    cbOverhead = 6,
+                    cCompressedColumns = 7,
+                    cLongValues = 18,
+                    cMultiValues = 9,
+                    cNonTaggedColumns = 10,
+                    cTaggedColumns = 11
+                },
+                new JET_RECSIZE
+                {
+                    cbData = 1,
+                    cbDataCompressed = 2,
+                    cbLongValueData = 3,
+                    cbLongValueDataCompressed = 4,
+                    cbLongValueOverhead = 5,
+                    cbOverhead = 6,
+                    cCompressedColumns = 7,
+                    cLongValues = 8,
+                    cMultiValues = 19,
+                    cNonTaggedColumns = 10,
+                    cTaggedColumns = 11
+                },
+                new JET_RECSIZE
+                {
+                    cbData = 1,
+                    cbDataCompressed = 2,
+                    cbLongValueData = 3,
+                    cbLongValueDataCompressed = 4,
+                    cbLongValueOverhead = 5,
+                    cbOverhead = 6,
+                    cCompressedColumns = 7,
+                    cLongValues = 8,
+                    cMultiValues = 9,
+                    cNonTaggedColumns = 20,
+                    cTaggedColumns = 11
+                },
+                new JET_RECSIZE
+                {
+                    cbData = 1,
+                    cbDataCompressed = 2,
+                    cbLongValueData = 3,
+                    cbLongValueDataCompressed = 4,
+                    cbLongValueOverhead = 5,
+                    cbOverhead = 6,
+                    cCompressedColumns = 7,
+                    cLongValues = 8,
+                    cMultiValues = 9,
+                    cNonTaggedColumns = 10,
+                    cTaggedColumns = 21
+                },
+            };
+
+            // It would be nice if this was a generic helper method, but that won't
+            // work for operator== and operator!=.
+            for (int i = 0; i < sizes.Length - 1; ++i)
+            {
+                for (int j = i + 1; j < sizes.Length; ++j)
+                {
+                    Debug.Assert(i != j, "About to compare the same JET_RECSIZE");
+                    TestUnequalObjects(sizes[i], sizes[j]);
+                    Assert.IsTrue(sizes[i] != sizes[j]);
+                    Assert.IsFalse(sizes[i] == sizes[j]);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Check that JET_THREADSTATS structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_THREADSTATS structures can be compared for equality")]
+        public void VerifyJetThreadstatsEquality()
+        {
+            DateTime t = DateTime.Now;
+            var x = new JET_THREADSTATS
+            {
+                cbLogRecord = 1,
+                cLogRecord = 2,
+                cPageDirtied = 3,
+                cPagePreread = 4,
+                cPageRead = 5,
+                cPageRedirtied = 6,
+                cPageReferenced = 7,
+            };
+            var y = new JET_THREADSTATS
+            {
+                cbLogRecord = 1,
+                cLogRecord = 2,
+                cPageDirtied = 3,
+                cPagePreread = 4,
+                cPageRead = 5,
+                cPageRedirtied = 6,
+                cPageReferenced = 7,
+            };
+            TestEqualObjects(x, y);
+            Assert.IsTrue(x == y);
+            Assert.IsFalse(x != y);
+        }
+
+        /// <summary>
+        /// Check that JET_THREADSTATS structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_THREADSTATS structures can be compared for inequality")]
+        public void VerifyJetThreadstatsInequality()
+        {
+            // None of these objects are equal, most differ in only one member from the
+            // first object. We will compare them all against each other.
+            var threadstats = new[]
+            {
+                new JET_THREADSTATS
+                {
+                    cbLogRecord = 1,
+                    cLogRecord = 2,
+                    cPageDirtied = 3,
+                    cPagePreread = 4,
+                    cPageRead = 5,
+                    cPageRedirtied = 6,
+                    cPageReferenced = 7,
+                },
+                new JET_THREADSTATS
+                {
+                    cbLogRecord = 11,
+                    cLogRecord = 2,
+                    cPageDirtied = 3,
+                    cPagePreread = 4,
+                    cPageRead = 5,
+                    cPageRedirtied = 6,
+                    cPageReferenced = 7,
+                },
+                new JET_THREADSTATS
+                {
+                    cbLogRecord = 1,
+                    cLogRecord = 12,
+                    cPageDirtied = 3,
+                    cPagePreread = 4,
+                    cPageRead = 5,
+                    cPageRedirtied = 6,
+                    cPageReferenced = 7,
+                },
+                new JET_THREADSTATS
+                {
+                    cbLogRecord = 1,
+                    cLogRecord = 2,
+                    cPageDirtied = 13,
+                    cPagePreread = 4,
+                    cPageRead = 5,
+                    cPageRedirtied = 6,
+                    cPageReferenced = 7,
+                },
+                new JET_THREADSTATS
+                {
+                    cbLogRecord = 1,
+                    cLogRecord = 2,
+                    cPageDirtied = 3,
+                    cPagePreread = 14,
+                    cPageRead = 5,
+                    cPageRedirtied = 6,
+                    cPageReferenced = 7,
+                },
+                new JET_THREADSTATS
+                {
+                    cbLogRecord = 1,
+                    cLogRecord = 2,
+                    cPageDirtied = 3,
+                    cPagePreread = 4,
+                    cPageRead = 15,
+                    cPageRedirtied = 6,
+                    cPageReferenced = 7,
+                },
+                new JET_THREADSTATS
+                {
+                    cbLogRecord = 1,
+                    cLogRecord = 2,
+                    cPageDirtied = 3,
+                    cPagePreread = 4,
+                    cPageRead = 5,
+                    cPageRedirtied = 16,
+                    cPageReferenced = 7,
+                },
+                new JET_THREADSTATS
+                {
+                    cbLogRecord = 1,
+                    cLogRecord = 2,
+                    cPageDirtied = 3,
+                    cPagePreread = 4,
+                    cPageRead = 5,
+                    cPageRedirtied = 6,
+                    cPageReferenced = 17,
+                },
+            };
+
+            // It would be nice if this was a generic helper method, but that won't
+            // work for operator== and operator!=.
+            for (int i = 0; i < threadstats.Length - 1; ++i)
+            {
+                for (int j = i + 1; j < threadstats.Length; ++j)
+                {
+                    Debug.Assert(i != j, "About to compare the same JET_THREADSTATS");
+                    TestUnequalObjects(threadstats[i], threadstats[j]);
+                    Assert.IsTrue(threadstats[i] != threadstats[j]);
+                    Assert.IsFalse(threadstats[i] == threadstats[j]);
+                }
+            }
+        }
+
+
+        /// <summary>
         /// Helper method to compare two equal objects.
         /// </summary>
         /// <typeparam name="T">The object type.</typeparam>
@@ -645,7 +1030,6 @@ namespace InteropApiTests
             Assert.IsFalse(x.Equals(y));
             Assert.IsFalse(y.Equals(x));
             Assert.AreNotEqual(x.GetHashCode(), y.GetHashCode(), "{0} and {1} have the same hash code", x, y);
-            Assert.AreNotEqual(x.ToString(), y.ToString());
 
             object objA = x;
             object objB = y;

@@ -6,8 +6,10 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Runtime.InteropServices;
 
     /// <summary>
@@ -50,19 +52,47 @@ namespace Microsoft.Isam.Esent.Interop
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
+    [Serializable]
     public class JET_SNPROG
     {
+        /// <summary>
+        /// Number of units of work that have completed.
+        /// </summary>
+        private int completedUnits;
+
+        /// <summary>
+        /// Total number of units of work to be done.
+        /// </summary>
+        private int totalUnits;
+
         /// <summary>
         /// Gets or sets the number of work units that are already completed during the long
         /// running operation.
         /// </summary>
-        public int cunitDone { get; set; }
+        public int cunitDone
+        {
+            get { return this.completedUnits; }
+            set { this.completedUnits = value; }
+        }
 
         /// <summary>
         /// Gets or sets the number of work units that need to be completed. This value will
         /// always be bigger than or equal to cunitDone.
         /// </summary>
-        public int cunitTotal { get; set; }
+        public int cunitTotal
+        {
+            get { return this.totalUnits; }
+            set { this.totalUnits = value; }
+        }
+
+        /// <summary>
+        /// Generate a string representation of the structure.
+        /// </summary>
+        /// <returns>The structure as a string.</returns>
+        public override string ToString()
+        {
+            return String.Format(CultureInfo.InvariantCulture, "JET_SNPROG({0}/{1})", this.cunitDone, this.cunitTotal);
+        }
 
         /// <summary>
         /// Set the members of this class from a <see cref="NATIVE_SNPROG"/>.

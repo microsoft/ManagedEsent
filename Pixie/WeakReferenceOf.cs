@@ -30,7 +30,7 @@ namespace Microsoft.Isam.Esent
         /// <param name="target">The object to hold a reference to.</param>
         public WeakReferenceOf(T target)
         {
-            this.weakReference = new WeakReference(target);
+            this.weakReference = new WeakReference(target, true);
             this.id = target.Id;
         }
 

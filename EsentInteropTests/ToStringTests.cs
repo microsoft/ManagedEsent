@@ -186,5 +186,17 @@ namespace InteropApiTests
             var bkinfo = new JET_BKINFO { bklogtimeMark = bklogtime, genHigh = 57, genLow = 36, lgposMark = lgpos };
             Assert.AreEqual("JET_BKINFO(36-57:JET_LGPOS(0x1,2,3):JET_BKLOGTIME(17:44:4:31:5:110:0x80:0x80))", bkinfo.ToString());
         }
+
+        /// <summary>
+        /// Test JET_SNPROG.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_SNPROG.ToString()")]
+        public void JetSnprogToString()
+        {
+            var snprog = new JET_SNPROG { cunitDone = 5, cunitTotal = 10 };
+            Assert.AreEqual("JET_SNPROG(5/10)", snprog.ToString());
+        }
     }
 }

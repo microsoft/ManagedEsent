@@ -19,6 +19,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the name of the unmanaged structure.")]
     [StructLayout(LayoutKind.Sequential)]
+    [Serializable]
     public struct JET_LOGTIME : IEquatable<JET_LOGTIME>, IJET_LOGTIME
     {
         /// <summary>

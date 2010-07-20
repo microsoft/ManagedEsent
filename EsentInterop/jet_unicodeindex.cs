@@ -38,18 +38,37 @@ namespace Microsoft.Isam.Esent.Interop
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
+    [Serializable]
     public class JET_UNICODEINDEX
     {
         /// <summary>
+        /// The LCID to be used when normalizing unicode data.
+        /// </summary>
+        private int localeId;
+
+        /// <summary>
+        /// Sets the flags to be used with LCMapString when normalizing unicode data.
+        /// </summary>
+        private uint lcMapStringFlags;
+
+        /// <summary>
         /// Gets or sets the LCID to be used when normalizing unicode data.
         /// </summary>
-        public int lcid { get; set; }
+        public int lcid
+        {
+            get { return this.localeId; }
+            set { this.localeId = value; }
+        }
 
         /// <summary>
         /// Gets or sets the flags to be used with LCMapString when normalizing unicode data.
         /// </summary>
         [CLSCompliant(false)]
-        public uint dwMapFlags { get; set; }
+        public uint dwMapFlags
+        {
+            get { return this.lcMapStringFlags; }
+            set { this.lcMapStringFlags = value; }
+        }
 
         /// <summary>
         /// Gets the native version of this object.

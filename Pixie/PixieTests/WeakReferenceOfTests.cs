@@ -30,8 +30,7 @@ namespace PixieTests
             DisposableObjectId id = obj.Id;
             var weakref = new WeakReferenceOf<ManagedDisposableObject>(obj);
             obj = null;
-            GC.WaitForPendingFinalizers();
-            GC.Collect();
+            DoFullGarbageCollection();
             Assert.AreEqual(id, weakref.Id);
         }
 
@@ -49,8 +48,7 @@ namespace PixieTests
         public void VerifyIsAliveReturnsFalseWhenObjectIsGarbageCollected()
         {
             var weakref = new WeakReferenceOf<ManagedDisposableObject>(new ManagedDisposableObject());
-            GC.WaitForPendingFinalizers();
-            GC.Collect();
+            DoFullGarbageCollection();
             Assert.IsFalse(weakref.IsAlive);
         }
 
@@ -68,9 +66,15 @@ namespace PixieTests
         public void VerifyTargetReturnsNullWhenObjectIsGarbageCollected()
         {
             var weakref = new WeakReferenceOf<ManagedDisposableObject>(new ManagedDisposableObject());
+            DoFullGarbageCollection();
+            Assert.AreEqual(null, weakref.Target);
+        }
+
+        private static void DoFullGarbageCollection()
+        {
+            GC.Collect();
             GC.WaitForPendingFinalizers();
             GC.Collect();
-            Assert.AreEqual(null, weakref.Target);
         }
     }
 }
