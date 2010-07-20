@@ -107,6 +107,7 @@ namespace Microsoft.Isam.Esent.Interop
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
+    [Serializable]
     public class JET_INDEXCREATE
     {
         /// <summary>
@@ -116,9 +117,77 @@ namespace Microsoft.Isam.Esent.Interop
         private const CreateIndexGrbit Unicode = (CreateIndexGrbit)0x00000800;
 
         /// <summary>
+        /// Name of the index.
+        /// </summary>
+        private string name;
+
+        /// <summary>
+        /// Index key.
+        /// </summary>
+        private string key;
+
+        /// <summary>
+        /// Length of the index key.
+        /// </summary>
+        private int keyLength;
+
+        /// <summary>
+        /// Index options.
+        /// </summary>
+        private CreateIndexGrbit options;
+
+        /// <summary>
+        /// Index density.
+        /// </summary>
+        private int density;
+
+        /// <summary>
+        /// Unicode comparison options.
+        /// </summary>
+        private JET_UNICODEINDEX unicodeOptions;
+
+        /// <summary>
+        /// Maximum length of a column to store in the index.
+        /// </summary>
+        private int maxSegmentLength;
+
+        /// <summary>
+        /// Conditional columns.
+        /// </summary>
+        private JET_CONDITIONALCOLUMN[] conditionalColumns;
+
+        /// <summary>
+        /// Number of conditional columns.
+        /// </summary>
+        private int numConditionalColumns;
+
+        /// <summary>
+        /// Error code from index creation.
+        /// </summary>
+        private JET_err errorCode;
+
+        /// <summary>
+        /// Maximum length of index keys.
+        /// </summary>
+        private int maximumKeyLength;
+
+        /// <summary>
+        /// Gets or sets the error code from creating this index.
+        /// </summary>
+        public JET_err err
+        {
+            get { return this.errorCode; }
+            set { this.errorCode = value; }
+        }
+
+        /// <summary>
         /// Gets or sets the name of the index to create. 
         /// </summary>
-        public string szIndexName { get; set; }
+        public string szIndexName
+        {
+            get { return this.name; }
+            set { this.name = value; }
+        }
 
         /// <summary>
         /// Gets or sets the description of the index key. This is a double 
@@ -129,47 +198,74 @@ namespace Microsoft.Isam.Esent.Interop
         /// "abc" (in ascending order), "def" (in descending order), and "ghi"
         /// (in ascending order).
         /// </summary>
-        public string szKey { get; set; }
+        public string szKey
+        {
+            get { return this.key; }
+            set { this.key = value; }
+        }
 
         /// <summary>
         /// Gets or sets the length, in characters, of szKey including the two terminating nulls.
         /// </summary>
-        public int cbKey { get; set; }
+        public int cbKey
+        {
+            get { return this.keyLength; }
+            set { this.keyLength = value; }
+        }
 
         /// <summary>
         /// Gets or sets index creation options.
         /// </summary>
-        public CreateIndexGrbit grbit { get; set; }
+        public CreateIndexGrbit grbit
+        {
+            get { return this.options; }
+            set { this.options = value; }
+        }
 
         /// <summary>
         /// Gets or sets the density of the index.
         /// </summary>
-        public int ulDensity { get; set; }
+        public int ulDensity
+        {
+            get { return this.density; }
+            set { this.density = value; }
+        }
 
         /// <summary>
         /// Gets or sets the optional unicode comparison options.
         /// </summary>
-        public JET_UNICODEINDEX pidxUnicode { get; set; }
+        public JET_UNICODEINDEX pidxUnicode
+        {
+            get { return this.unicodeOptions; }
+            set { this.unicodeOptions = value; }
+        }
 
         /// <summary>
         /// Gets or sets the maximum length, in bytes, of each column to store in the index.
         /// </summary>
-        public int cbVarSegMac { get; set; }
+        public int cbVarSegMac
+        {
+            get { return this.maxSegmentLength; }
+            set { this.maxSegmentLength = value; }
+        }
 
         /// <summary>
         /// Gets or sets the optional conditional columns.
         /// </summary>
-        public JET_CONDITIONALCOLUMN[] rgconditionalcolumn { get; set; }
+        public JET_CONDITIONALCOLUMN[] rgconditionalcolumn
+        {
+            get { return this.conditionalColumns; }
+            set { this.conditionalColumns = value; }
+        }
 
         /// <summary>
         /// Gets or sets the number of conditional columns.
         /// </summary>
-        public int cConditionalColumn { get; set; }
-
-        /// <summary>
-        /// Gets or sets the error code from creating this index.
-        /// </summary>
-        public JET_err err { get; set; }
+        public int cConditionalColumn
+        {
+            get { return this.numConditionalColumns; }
+            set { this.numConditionalColumns = value; }
+        }
 
         /// <summary>
         /// Gets or sets the maximum allowable size, in bytes, for keys in the index.
@@ -185,7 +281,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// (JET_bitIndexKeyMost) is not needed, it will be added automatically.
         /// </para>
         /// </summary>
-        public int cbKeyMost { get; set; }
+        public int cbKeyMost
+        {
+            get { return this.maximumKeyLength; }
+            set { this.maximumKeyLength = value; }
+        }
 
         /// <summary>
         /// Check this object to make sure its parameters are valid.

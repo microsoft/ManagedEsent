@@ -998,7 +998,6 @@ namespace InteropApiTests
             }
         }
 
-
         /// <summary>
         /// Helper method to compare two equal objects.
         /// </summary>

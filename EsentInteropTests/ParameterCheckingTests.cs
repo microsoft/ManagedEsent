@@ -283,7 +283,7 @@ namespace InteropApiTests
             JET_HANDLE handle;
             long fileSizeLow;
             long fileSizeHigh;
-            Api.JetOpenFileInstance(JET_INSTANCE.Nil, null, out handle, out fileSizeLow, out fileSizeHigh);
+            Api.JetOpenFileInstance(this.instance, null, out handle, out fileSizeLow, out fileSizeHigh);
         }
 
         /// <summary>
@@ -297,7 +297,7 @@ namespace InteropApiTests
         public void JetReadFileInstanceThrowsExceptionWhenBufferIsNull()
         {
             int bytesRead;
-            Api.JetReadFileInstance(JET_INSTANCE.Nil, JET_HANDLE.Nil, null, 0, out bytesRead);
+            Api.JetReadFileInstance(this.instance, JET_HANDLE.Nil, null, 0, out bytesRead);
         }
 
         /// <summary>
@@ -311,7 +311,7 @@ namespace InteropApiTests
         public void JetReadFileInstanceThrowsExceptionWhenBufferSizeIsNegative()
         {
             int bytesRead;
-            Api.JetReadFileInstance(JET_INSTANCE.Nil, JET_HANDLE.Nil, new byte[1], -1, out bytesRead);
+            Api.JetReadFileInstance(this.instance, JET_HANDLE.Nil, new byte[1], -1, out bytesRead);
         }
 
         /// <summary>
@@ -325,7 +325,7 @@ namespace InteropApiTests
         public void JetReadFileInstanceThrowsExceptionWhenBufferSizeIsTooLong()
         {
             int bytesRead;
-            Api.JetReadFileInstance(JET_INSTANCE.Nil, JET_HANDLE.Nil, new byte[1], 2, out bytesRead);
+            Api.JetReadFileInstance(this.instance, JET_HANDLE.Nil, new byte[1], 2, out bytesRead);
         }
 
         /// <summary>
@@ -339,7 +339,29 @@ namespace InteropApiTests
         {
             string ignored;
             int ignored2;
-            Api.JetGetAttachInfoInstance(JET_INSTANCE.Nil, out ignored, -1, out ignored2);
+            Api.JetGetAttachInfoInstance(this.instance, out ignored, -1, out ignored2);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetGetAttachInfoInstance gets a 
+        /// too large max param value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(OverflowException))]
+        [Description("Check that an exception is thrown when JetGetAttachInfoInstance gets a too large max param value")]
+        public void JetGetAttachInfoInstanceThrowsExceptionWhenMaxParamIsTooBig()
+        {
+            // This test only fails with the Unicode API (the overflow happens when we try
+            // to multiply maxParam by sizeof(char))
+            if (!EsentVersion.SupportsUnicodePaths)
+            {
+                return;
+            }
+
+            string ignored;
+            int ignored2;
+            Api.JetGetAttachInfoInstance(this.instance, out ignored, Int32.MaxValue, out ignored2);
         }
 
         /// <summary>
@@ -353,7 +375,29 @@ namespace InteropApiTests
         {
             string ignored;
             int ignored2;
-            Api.JetGetLogInfoInstance(JET_INSTANCE.Nil, out ignored, -1, out ignored2);
+            Api.JetGetLogInfoInstance(this.instance, out ignored, -1, out ignored2);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetGetLogInfoInstance gets a 
+        /// too large max param value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(OverflowException))]
+        [Description("Check that an exception is thrown when JetGetLogInfoInstance gets a too large max param value")]
+        public void JetGetLogInfoInstanceThrowsExceptionWhenMaxParamIsTooBig()
+        {
+            // This test only fails with the Unicode API (the overflow happens when we try
+            // to multiply maxParam by sizeof(char))
+            if (!EsentVersion.SupportsUnicodePaths)
+            {
+                return;
+            }
+
+            string ignored;
+            int ignored2;
+            Api.JetGetLogInfoInstance(this.instance, out ignored, Int32.MaxValue, out ignored2);
         }
 
         /// <summary>
@@ -367,7 +411,29 @@ namespace InteropApiTests
         {
             string ignored;
             int ignored2;
-            Api.JetGetTruncateLogInfoInstance(JET_INSTANCE.Nil, out ignored, -1, out ignored2);
+            Api.JetGetTruncateLogInfoInstance(this.instance, out ignored, -1, out ignored2);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetGetTruncateLogInfoInstance gets a 
+        /// too large max param value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(OverflowException))]
+        [Description("Check that an exception is thrown when JetGetTruncateLogInfoInstance gets a too large max param value")]
+        public void JetGetTruncateLogInfoInstanceThrowsExceptionWhenMaxParamIsTooBig()
+        {
+            // This test only fails with the Unicode API (the overflow happens when we try
+            // to multiply maxParam by sizeof(char))
+            if (!EsentVersion.SupportsUnicodePaths)
+            {
+                return;
+            }
+
+            string ignored;
+            int ignored2;
+            Api.JetGetTruncateLogInfoInstance(this.instance, out ignored, Int32.MaxValue, out ignored2);
         }
 
         #endregion

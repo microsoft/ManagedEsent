@@ -2332,7 +2332,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             {
                 fixed (int* pvResult = result)
                 {
-                    uint cbResult = (uint)(result.Length * sizeof(int));
+                    uint cbResult = checked((uint)(result.Length * sizeof(int)));
                     err = this.Err(NativeMethods.JetGetTableInfo(sesid.Value, tableid.Value, new IntPtr(pvResult), cbResult, (uint)infoLevel));
                 }
             }

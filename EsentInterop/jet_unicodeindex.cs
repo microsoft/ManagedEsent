@@ -49,7 +49,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Sets the flags to be used with LCMapString when normalizing unicode data.
         /// </summary>
-        private uint lcMapStringFlags;
+        private uint mapStringFlags;
 
         /// <summary>
         /// Gets or sets the LCID to be used when normalizing unicode data.
@@ -66,8 +66,8 @@ namespace Microsoft.Isam.Esent.Interop
         [CLSCompliant(false)]
         public uint dwMapFlags
         {
-            get { return this.lcMapStringFlags; }
-            set { this.lcMapStringFlags = value; }
+            get { return this.mapStringFlags; }
+            set { this.mapStringFlags = value; }
         }
 
         /// <summary>
