@@ -7,6 +7,7 @@
 namespace InteropApiTests
 {
     using System;
+    using System.IO;
     using System.Threading;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Implementation;
@@ -352,6 +353,31 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify AppDomain unload terminates the Instance.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify AppDomain unload terminates the Instance")]
+        public void VerifyAppDomainUnloadTerminatesInstance()
+        {
+            // By default vstesthost sets the AppDomain root directory
+            // to the vstesthost.exe path. We need to change that so
+            // our assembly can be found.
+            var setup = new AppDomainSetup
+            {
+                ApplicationBase = Environment.CurrentDirectory
+            };
+
+            var otherDomain = AppDomain.CreateDomain("InstanceTest", null, setup);
+            CreateInAppDomain<InstanceWrapper>(otherDomain);
+            AppDomain.Unload(otherDomain);
+
+            // If unloading the AppDomain didn't terminate the instance
+            // this will fail with an InstanceNameInUse error.
+            new InstanceWrapper();
+        }
+
+        /// <summary>
         /// Test thread aborts during init and term.
         /// </summary>
         [TestMethod]
@@ -364,9 +390,7 @@ namespace InteropApiTests
             var startTime = DateTime.UtcNow;
 
             const string InstanceNameTemplate = "ThreadAbortTest{0}";
-            int numThreads = Environment.ProcessorCount;
-
-            Assert.Inconclusive("ESENT crashes during Init/Term prevent this test from running reliably");
+            int numThreads = 1; // Should be Environment.ProcessorCount (see assert at end)
 
             int iteration = 0;
             while (DateTime.UtcNow < (startTime + timeToRun))
@@ -405,6 +429,30 @@ namespace InteropApiTests
             }
 
             Console.WriteLine("{0} iterations", iteration);
+
+            if (Environment.ProcessorCount > 1)
+            {
+                Assert.Inconclusive("ESENT crashes during Init/Term prevent this test from running reliably with multiple threads");
+            }
+        }
+
+        /// <summary>
+        /// Create an instance of the specified type in the given AppDomain.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type to create an instance of.
+        /// </typeparam>
+        /// <param name="appDomain">
+        /// The AppDomain to create the instance in.
+        /// </param>
+        /// <returns>
+        /// A proxy for an instance of the type, created in the given AppDomain.
+        /// </returns>
+        private static T CreateInAppDomain<T>(AppDomain appDomain)
+        {
+            string assembly = typeof(T).Assembly.FullName;
+            string type = typeof(T).FullName;
+            return (T)appDomain.CreateInstanceAndUnwrap(assembly, type);   
         }
 
         /// <summary>
@@ -451,6 +499,26 @@ namespace InteropApiTests
             var instance = new Instance("finalize_me");
             SetupHelper.SetLightweightConfiguration(instance);
             instance.Init();
+        }
+
+        /// <summary>
+        /// A wrapper object used to initialize an instance in another appdomain.
+        /// </summary>
+        private class InstanceWrapper : MarshalByRefObject
+        {
+            /// <summary>
+            /// The instance.
+            /// </summary>
+            private readonly Instance instance;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="InstanceWrapper"/> class.
+            /// </summary>
+            public InstanceWrapper()
+            {
+                this.instance = new Instance("InstanceWrapper");
+                SetupHelper.SetLightweightConfiguration(this.instance);
+            }
         }
     }
 }

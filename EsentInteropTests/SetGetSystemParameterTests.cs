@@ -20,6 +20,19 @@ namespace InteropApiTests
     public class SetGetSystemParameterTests
     {
         /// <summary>
+        /// Setup the SetGetSystemParameterTests fixture.
+        /// </summary>
+        [TestInitialize]
+        [Description("Setup the SetGetSystemParameterTests fixture")]
+        public void Setup()
+        {
+            if (EsentVersion.SupportsVistaFeatures)
+            {
+                Api.JetSetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.EnableAdvanced, 1, null);
+            }
+        }
+
+        /// <summary>
         /// Test setting and retrieving the system path.
         /// </summary>
         [TestMethod]

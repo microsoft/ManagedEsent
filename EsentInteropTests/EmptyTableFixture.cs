@@ -58,7 +58,7 @@ namespace InteropApiTests
             var columnids = new JET_COLUMNID[columns.Length];
 
             // BUG: use TempTableGrbit.Indexed once in-memory TT bugs are fixed
-            Api.JetOpenTempTable(this.sesid, columns, columns.Length, TempTableGrbit.None, out this.tableid, columnids);
+            Api.JetOpenTempTable(this.sesid, columns, columns.Length, TempTableGrbit.Scrollable, out this.tableid, columnids);
         }
 
         /// <summary>

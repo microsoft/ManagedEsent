@@ -44,12 +44,23 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
-        /// Creating a dictionary with an invalid key type fails.
+        /// Creating a dictionary with an invalid value type fails.
         /// </summary>
         [TestMethod]
         [Priority(0)]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyConstructorThrowsExceptionWhenValueTypeIsInvalid()
+        {
+            var dictionary = new PersistentDictionary<int, NonSerializableStruct>("foo");
+        }
+
+        /// <summary>
+        /// Creating a dictionary with an invalid value type fails.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyConstructorThrowsExceptionWhenValueTypeIsInvalid2()
         {
             var dictionary = new PersistentDictionary<int, NonSerializable>("foo");
         }
@@ -269,14 +280,27 @@ namespace EsentCollectionsTests
             /// <returns>Always returns 0.</returns>
             public int CompareTo(NonSerializableComparable other)
             {
-                return 0;
+                return this.dict.Count.CompareTo(other.dict.Count);
             }
+        }
+
+        /// <summary>
+        /// A dummy struct used to test invalid value types.
+        /// </summary>
+        [Serializable]
+        private struct NonSerializableStruct 
+        {
+            /// <summary>
+            /// Dummy object.
+            /// </summary>
+            public object Obj;
         }
 
         /// <summary>
         /// A dummy class used to test invalid value types.
         /// </summary>
-        private class NonSerializable 
+        [Serializable]
+        private class NonSerializable
         {
         }
     }

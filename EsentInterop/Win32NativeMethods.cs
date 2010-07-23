@@ -8,6 +8,7 @@
 namespace Microsoft.Isam.Esent.Interop.Win32
 {
     using System;
+    using System.ComponentModel;
     using System.Runtime.InteropServices;
 
     /// <summary>
@@ -54,6 +55,32 @@ namespace Microsoft.Isam.Esent.Interop.Win32
     /// </summary>
     internal static class NativeMethods
     {
+        /// <summary>
+        /// Throw an exception if the given pointer is null (IntPtr.Zero).
+        /// </summary>
+        /// <param name="ptr">The pointer to check.</param>
+        /// <param name="message">The message for the exception.</param>
+        public static void ThrowExceptionOnNull(IntPtr ptr, string message)
+        {
+            if (IntPtr.Zero == ptr)
+            {
+                throw new Win32Exception(Marshal.GetLastWin32Error(), message);
+            }            
+        }
+
+        /// <summary>
+        /// Throw an exception if the success code is not true.
+        /// </summary>
+        /// <param name="success">The success code.</param>
+        /// <param name="message">The message for the exception.</param>
+        public static void ThrowExceptionOnFailure(bool success, string message)
+        {
+            if (!success)
+            {
+                throw new Win32Exception(Marshal.GetLastWin32Error(), message);
+            }
+        }
+
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern IntPtr VirtualAlloc(IntPtr plAddress, UIntPtr dwSize, uint flAllocationType, uint flProtect);
 

@@ -74,7 +74,7 @@ namespace InteropApiTests
             };
             var columnids = new JET_COLUMNID[columns.Length];
 
-            Api.JetOpenTempTable(this.session, columns, columns.Length, TempTableGrbit.None, out tableid, columnids);
+            Api.JetOpenTempTable(this.session, columns, columns.Length, TempTableGrbit.Scrollable, out tableid, columnids);
 
             for (int i = 5; i >= 0; --i)
             {
@@ -107,7 +107,7 @@ namespace InteropApiTests
             };
             var columnids = new JET_COLUMNID[columns.Length];
 
-            Api.JetOpenTempTable2(this.session, columns, columns.Length, 1033, TempTableGrbit.None, out tableid, columnids);
+            Api.JetOpenTempTable2(this.session, columns, columns.Length, 1033, TempTableGrbit.Scrollable, out tableid, columnids);
 
             for (int i = 5; i >= 0; --i)
             {
@@ -140,7 +140,7 @@ namespace InteropApiTests
             };
             var columnids = new JET_COLUMNID[columns.Length];
 
-            Api.JetOpenTempTable3(this.session, columns, columns.Length, null, TempTableGrbit.None, out tableid, columnids);
+            Api.JetOpenTempTable3(this.session, columns, columns.Length, null, TempTableGrbit.Scrollable, out tableid, columnids);
 
             for (int i = 5; i >= 0; --i)
             {
@@ -177,7 +177,7 @@ namespace InteropApiTests
                 dwMapFlags = Conversions.LCMapFlagsFromCompareOptions(CompareOptions.None),
                 lcid = 1033,
             };
-            Api.JetOpenTempTable3(this.session, columns, columns.Length, idxunicode, TempTableGrbit.None, out tableid, columnids);
+            Api.JetOpenTempTable3(this.session, columns, columns.Length, idxunicode, TempTableGrbit.Scrollable, out tableid, columnids);
 
             var data = new[] { "g", "a", "A", "aa", "x", "b", "X" };
             foreach (string s in data)
@@ -214,7 +214,7 @@ namespace InteropApiTests
                 dwMapFlags = Conversions.LCMapFlagsFromCompareOptions(CompareOptions.None),
                 lcid = 1033,
             };
-            Api.JetOpenTempTable3(this.session, columns, columns.Length, idxunicode, TempTableGrbit.None, out tableid, columnids);
+            Api.JetOpenTempTable3(this.session, columns, columns.Length, idxunicode, TempTableGrbit.Scrollable, out tableid, columnids);
 
             var data = new[]
             {
@@ -275,7 +275,7 @@ namespace InteropApiTests
             {
                 cbKeyMost = SystemParameters.KeyMost,
                 ccolumn = columns.Length,
-                grbit = TempTableGrbit.None,
+                grbit = TempTableGrbit.Scrollable,
                 pidxunicode = idxunicode,
                 prgcolumndef = columns,
                 prgcolumnid = columnids,

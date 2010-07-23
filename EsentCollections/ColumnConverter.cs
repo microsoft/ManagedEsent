@@ -11,6 +11,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Net;
     using System.Reflection;
     using System.Text;
@@ -127,11 +128,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="type">The type to convert to/from.</param>
         public ColumnConverter(Type type)
         {
-            if (null == type)
-            {
-                throw new ArgumentNullException("type");    
-            }
-
             if (!SetColumnDelegates.ContainsKey(type))
             {
                 if (!IsSerializable(type))
@@ -265,19 +261,8 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             // This is a serializable struct. Recursively check that all members are serializable.
             // Unlike classes, structs cannot have cycles in their definitions so a simple enumeration
             // will work.
-            foreach (var member in type.GetMembers(BindingFlags.NonPublic | BindingFlags.Instance))
-            {
-                if (member.MemberType == MemberTypes.Field)
-                {
-                    var fieldinfo = (FieldInfo) member;
-                    if (!IsSerializable(fieldinfo.FieldType))
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
+            MemberInfo[] members = type.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+            return members.Cast<FieldInfo>().All(fieldinfo => IsSerializable(fieldinfo.FieldType));
         }
 
         /// <summary>

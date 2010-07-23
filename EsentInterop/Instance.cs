@@ -150,10 +150,34 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Terminate the JET_INSTANCE.
         /// </summary>
+        [SuppressMessage(
+            "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+            "SA1409:RemoveUnnecessaryCode",
+            Justification = "CER code belongs in the finally block, so the try clause is empty")]
         public void Term()
         {
-            Api.JetTerm(this.JetInstance);
-            this.SetHandleAsInvalid();
+            // Use a constrained region so that the handle is
+            // always set as invalid after JetTerm is called.
+            RuntimeHelpers.PrepareConstrainedRegions();
+            try
+            {
+                // This try block deliberately left blank.
+            }
+            finally
+            {
+                // This is the code that we want in a constrained execution region.
+                // We need to avoid the situation where JetTerm is called
+                // but the handle isn't invalidated, so the instance is terminated again.
+                // This would happen, for example, if there was a ThreadAbortException
+                // between the call to JetTerm and the call to SetHandle.
+                //
+                // If an Esent exception is generated we do not want to invalidate the handle
+                // because the instance isn't necessarily terminated. On the other hand if a 
+                // different exception (out of memory or thread abort) is generated we still need
+                // to invalidate the handle.
+                Api.JetTerm(this.JetInstance);
+                this.SetHandleAsInvalid();                
+            }
         }
 
         /// <summary>

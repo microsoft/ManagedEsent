@@ -141,7 +141,7 @@ namespace InteropApiTests
         /// <param name="arg2">Argument 2.</param>
         /// <param name="context">Unused context.</param>
         /// <param name="unused">This parameter is ignored.</param>
-        /// <returns>JET_err.Success.</returns>
+        /// <returns>Always returns JET_err.Success.</returns>
         private JET_err RuntimeCallback(
             JET_SESID callbackSesid,
             JET_DBID callbackDbid,

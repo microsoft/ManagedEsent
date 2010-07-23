@@ -801,7 +801,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                         Api.JetDetachDatabase(session, database);
                     }
                 }
-                catch (Exception)
+                catch
                 {
                     // Delete the partially constructed database
                     Api.JetCloseDatabase(session, dbid, CloseDatabaseGrbit.None);

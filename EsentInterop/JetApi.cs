@@ -1257,10 +1257,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 (UIntPtr)bufferSize,
                 (uint)(Win32.AllocationType.MEM_COMMIT | Win32.AllocationType.MEM_RESERVE),
                 (uint)Win32.MemoryProtection.PAGE_READWRITE);
-            if (IntPtr.Zero == alignedBuffer)
-            {
-                throw new Win32Exception(Marshal.GetLastWin32Error(), "VirtualAlloc");
-            }
+            Win32.NativeMethods.ThrowExceptionOnNull(alignedBuffer, "VirtualAlloc");
 
             try
             {
@@ -1277,10 +1274,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             finally
             {
-                if (!Win32.NativeMethods.VirtualFree(alignedBuffer, UIntPtr.Zero, (uint)Win32.FreeType.MEM_RELEASE))
-                {
-                    throw new Win32Exception(Marshal.GetLastWin32Error(), "VirtualFree");
-                }
+                bool freeSucceded = Win32.NativeMethods.VirtualFree(alignedBuffer, UIntPtr.Zero, (uint)Win32.FreeType.MEM_RELEASE);
+                Win32.NativeMethods.ThrowExceptionOnFailure(freeSucceded, "VirtualFree");
             }
         }
 
@@ -2882,7 +2877,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             int err;
             unsafe
             {
-                void** rgpvKeys = stackalloc void*[keyCount];
+                void** rgpvKeys = stackalloc void*[keyCount]; // [7/21/2010] StyleCop error? You need the 4.4 release of StyleCop
                 uint* rgcbKeys = stackalloc uint[keyCount];
                 using (var gchandlecollection = new GCHandleCollection())
                 {
@@ -3282,19 +3277,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.TraceFunctionCall("JetUpdate");
             this.CheckDataSize(bookmark, bookmarkSize, "bookmarkSize");
 
-            // BUG: debug builds of ESENT can fill cbActual with this value if no bookmark is given
-            const uint CbActualDebugFill = 0xDDDDDDDD;
             uint cbActual;
             int err = this.Err(NativeMethods.JetUpdate(sesid.Value, tableid.Value, bookmark, checked((uint)bookmarkSize), out cbActual));
-
-            if (CbActualDebugFill == cbActual)
-            {
-                actualBookmarkSize = 0;
-            }
-            else
-            {
-                actualBookmarkSize = checked((int)cbActual);
-            }
+            actualBookmarkSize = GetActualBookmarkSize(cbActual);
 
             return err;
         }
@@ -3323,19 +3308,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.CheckDataSize(bookmark, bookmarkSize, "bookmarkSize");
             this.CheckSupportsServer2003Features("JetUpdate2");
 
-            // BUG: debug builds of ESENT can fill cbActual with this value if no bookmark is given
-            const uint CbActualDebugFill = 0xDDDDDDDD;
             uint cbActual;
             int err = this.Err(NativeMethods.JetUpdate2(sesid.Value, tableid.Value, bookmark, checked((uint)bookmarkSize), out cbActual, (uint)grbit));
-
-            if (CbActualDebugFill == cbActual)
-            {
-                actualBookmarkSize = 0;
-            }
-            else
-            {
-                actualBookmarkSize = checked((int)cbActual);
-            }
+            actualBookmarkSize = GetActualBookmarkSize(cbActual);
 
             return err;            
         }
@@ -3687,6 +3662,29 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         #endregion
 
         #region Helper Methods
+
+        /// <summary>
+        /// Given the bookmark size returned by ESENT, get the bookmark size
+        /// to return to the user.
+        /// </summary>
+        /// <param name="cbActual">The bookmark size returned by ESENT.</param>
+        /// <returns>The bookmark size to return to the user.</returns>
+        internal static int GetActualBookmarkSize(uint cbActual)
+        {
+            // BUG: debug builds of ESENT can fill cbActual with this value if no bookmark is given
+            const uint CbActualDebugFill = 0xDDDDDDDD;
+            int actualBookmarkSize;
+            if (CbActualDebugFill == cbActual)
+            {
+                actualBookmarkSize = 0;
+            }
+            else
+            {
+                actualBookmarkSize = checked((int)cbActual);
+            }
+
+            return actualBookmarkSize;
+        }
 
         /// <summary>
         /// Convert managed JET_ENUMCOLUMNID objects to NATIVE_ENUMCOLUMNID

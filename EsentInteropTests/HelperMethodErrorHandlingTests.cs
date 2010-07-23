@@ -380,7 +380,7 @@ namespace InteropApiTests
         /// <param name="retinfo">
         /// Retrieve options.
         /// </param>
-        /// <returns><see cref="JET_wrn.BufferTruncated"/>.</returns>
+        /// <returns>Always returns <see cref="JET_wrn.BufferTruncated"/>.</returns>
         private static int BadRetrieveColumn(
             JET_SESID sesid,
             JET_TABLEID tableid,

@@ -175,10 +175,11 @@ namespace InteropApiTests
         [Description("Verify that a JET_INDEXCREATE can be serialized")]
         public void VerifyIndexCreateCanBeSerialized()
         {
-            var expected = new JET_INDEXCREATE { szIndexName = "index" };
+            var expected = new JET_INDEXCREATE { szIndexName = "index", err = JET_err.OutOfMemory };
             var actual = SerializeDeserialize(expected);
             Assert.AreNotSame(expected, actual);
             Assert.AreEqual(expected.szIndexName, actual.szIndexName);
+            Assert.AreEqual(expected.err, actual.err);
         }
 
         /// <summary>

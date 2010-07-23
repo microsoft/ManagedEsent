@@ -2166,6 +2166,7 @@ namespace Microsoft.Isam.Esent.Interop
                             Marshal.Copy(setcolumns[i].pvData, setcolumns[i].ibData, nativeSetColumns[i].pvData, setcolumns[i].cbData);
                             buffer += setcolumns[i].cbData;
                             bufferRemaining -= setcolumns[i].cbData;
+                            Debug.Assert(bufferRemaining >= 0, "Buffer remaining is negative");
                         }
                         else
                         {

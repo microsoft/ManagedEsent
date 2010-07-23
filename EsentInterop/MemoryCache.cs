@@ -22,12 +22,7 @@ namespace Microsoft.Isam.Esent.Interop
         private readonly int bufferSize;
         
         /// <summary>
-        /// Maximum number of buffers to cache.
-        /// </summary>
-        private readonly int maxCachedBuffers;
-
-        /// <summary>
-        /// Currently cached buffer.
+        /// Currently cached buffers.
         /// </summary>
         private readonly byte[][] cachedBuffers;
 
@@ -43,8 +38,7 @@ namespace Microsoft.Isam.Esent.Interop
         public MemoryCache(int bufferSize, int maxCachedBuffers)
         {
             this.bufferSize = bufferSize;
-            this.maxCachedBuffers = maxCachedBuffers;
-            this.cachedBuffers = new byte[this.maxCachedBuffers][];
+            this.cachedBuffers = new byte[maxCachedBuffers][];
         }
 
         /// <summary>

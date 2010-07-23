@@ -66,6 +66,7 @@
     <Compile Include="EnumerableTests.cs" />
     <Compile Include="HowDoI.cs" />
     <Compile Include="InstanceMiscInfoTests.cs" />
+    <Compile Include="JetApiHelpersTests.cs" />
     <Compile Include="JetGetThreadStatsTests.cs" />
     <Compile Include="JetSetGetLs.cs" />
     <Compile Include="LogtimeToDateTimeTests.cs" />
@@ -160,6 +161,7 @@
     <Compile Include="ToStringTests.cs" />
     <Compile Include="UtilityMethodsTests.cs" />
     <Compile Include="EsentVersionTests.cs" />
+    <Compile Include="Win32NativeMethodsTests.cs" />
     <Compile Include="XpCompatabilityTests.cs" />
   </ItemGroup>
   <ItemGroup>
