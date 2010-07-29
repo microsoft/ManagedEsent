@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop.Vista
 {
     using System;
+    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Runtime.InteropServices;
@@ -66,6 +67,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// </summary>
         public int cPageReferenced
         {
+            [DebuggerStepThrough]
             get { return this.pagesReferenced; }
             internal set { this.pagesReferenced = value; }
         }
@@ -76,6 +78,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// </summary>
         public int cPageRead
         {
+            [DebuggerStepThrough]
             get { return this.pagesRead; }
             internal set { this.pagesRead = value; }
         }
@@ -86,6 +89,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// </summary>
         public int cPagePreread
         {
+            [DebuggerStepThrough]
             get { return this.pagesPreread; }
             internal set { this.pagesPreread = value; }
         }
@@ -96,6 +100,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// </summary>
         public int cPageDirtied
         {
+            [DebuggerStepThrough]
             get { return this.pagesDirtied; }
             internal set { this.pagesDirtied = value; }
         }
@@ -106,6 +111,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// </summary>
         public int cPageRedirtied
         {
+            [DebuggerStepThrough]
             get { return this.pagesRedirtied; }
             internal set { this.pagesRedirtied = value; }
         }
@@ -116,6 +122,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// </summary>
         public int cLogRecord
         {
+            [DebuggerStepThrough]
             get { return this.numLogRecords; }
             internal set { this.numLogRecords = value; }
         }
@@ -126,6 +133,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// </summary>
         public int cbLogRecord
         {
+            [DebuggerStepThrough]
             get { return this.loggedBytes; }
             internal set { this.loggedBytes = value; }
         }
@@ -206,7 +214,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// <returns>A string representation of this object.</returns>
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder(128);
             sb.AppendFormat(CultureInfo.InvariantCulture, "{0:N0} page reference{1}, ", this.cPageReferenced, GetPluralS(this.cPageReferenced));
             sb.AppendFormat(CultureInfo.InvariantCulture, "{0:N0} page{1} read, ", this.cPageRead, GetPluralS(this.cPageRead));
             sb.AppendFormat(CultureInfo.InvariantCulture, "{0:N0} page{1} preread, ", this.cPagePreread, GetPluralS(this.cPagePreread));

@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Runtime.InteropServices;
@@ -47,6 +48,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public JET_LGPOS lgposMark
         {
+            [DebuggerStepThrough]
             get { return this.logPosition; }
             internal set { this.logPosition = value; }
         }
@@ -56,6 +58,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public JET_BKLOGTIME bklogtimeMark
         {
+            [DebuggerStepThrough]
             get { return this.backupTime; }
             internal set { this.backupTime = value; }
         }
@@ -65,6 +68,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public int genLow
         {
+            [DebuggerStepThrough]
             get { return (int)this.lowGeneration; }
             internal set { this.lowGeneration = checked((uint)value); }
         }
@@ -74,6 +78,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public int genHigh
         {
+            [DebuggerStepThrough]
             get { return (int)this.highGeneration; }
             set { this.highGeneration = checked((uint)value); }
         }

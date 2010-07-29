@@ -31,6 +31,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </value>
         public TraceSwitch TraceSwitch
         {
+            [DebuggerStepThrough]
             get { return this.traceSwitch; }
         }
 

@@ -6,6 +6,8 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System.Diagnostics;
+
     /// <summary>
     /// A <see cref="byte"/> column value.
     /// </summary>
@@ -17,6 +19,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         protected override int Size
         {
+            [DebuggerStepThrough]
             get { return sizeof(byte); }
         }
 

@@ -49,6 +49,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         object IEnumerator.Current
         {
+            [DebuggerStepThrough]
             get { return this.Current; }
         }
 

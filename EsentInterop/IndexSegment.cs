@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Diagnostics;
 
     /// <summary>
     /// Describes one segment of an index.
@@ -58,6 +59,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public string ColumnName
         {
+            [DebuggerStepThrough]
             get { return this.columnName; }
         }
 
@@ -66,6 +68,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public JET_coltyp Coltyp
         {
+            [DebuggerStepThrough]
             get { return this.coltyp; }
         }
 
@@ -74,6 +77,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public bool IsAscending
         {
+            [DebuggerStepThrough]
             get { return this.isAscending; }
         }
 
@@ -83,6 +87,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public bool IsASCII
         {
+            [DebuggerStepThrough]
             get { return this.isASCII; }
         }
     }

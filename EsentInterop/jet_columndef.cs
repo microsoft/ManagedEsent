@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
 
@@ -111,6 +112,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public JET_coltyp coltyp
         {
+            [DebuggerStepThrough]
             get { return this.columnType; }
             set { this.columnType = value; }
         }
@@ -121,6 +123,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public JET_CP cp
         {
+            [DebuggerStepThrough]
             get { return this.codePage; }
             set { this.codePage = value; }
         }
@@ -132,6 +135,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public int cbMax
         {
+            [DebuggerStepThrough]
             get { return this.maxSize; }
             set { this.maxSize = value; }
         }
@@ -141,6 +145,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public ColumndefGrbit grbit
         {
+            [DebuggerStepThrough]
             get { return this.options; }
             set { this.options = value; }
         }
@@ -150,6 +155,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public JET_COLUMNID columnid
         {
+            [DebuggerStepThrough]
             get { return this.id; }
             internal set { this.id = value; }
         }

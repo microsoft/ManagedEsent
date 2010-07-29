@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
 
@@ -72,6 +73,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public long centriesLT
         {
+            [DebuggerStepThrough]
             get { return this.entriesBeforeKey; }
             set { this.entriesBeforeKey = value; }
         }
@@ -81,6 +83,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public long centriesTotal
         {
+            [DebuggerStepThrough]
             get { return this.totalEntries; }
             set { this.totalEntries = value; }
         }

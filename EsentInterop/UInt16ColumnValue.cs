@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Diagnostics;
 
     /// <summary>
     /// A <see cref="ushort"/> column value.
@@ -20,6 +21,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         protected override int Size
         {
+            [DebuggerStepThrough]
             get { return sizeof(ushort); }
         }
 

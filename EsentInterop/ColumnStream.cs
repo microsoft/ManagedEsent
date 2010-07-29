@@ -70,6 +70,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public override bool CanRead
         {
+            [DebuggerStepThrough]
             get { return true; }
         }
 
@@ -78,6 +79,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public override bool CanWrite
         {
+            [DebuggerStepThrough]
             get { return true; }
         }
 
@@ -86,6 +88,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public override bool CanSeek
         {
+            [DebuggerStepThrough]
             get { return true; }
         }
 
@@ -94,6 +97,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public override long Position
         {
+            [DebuggerStepThrough]
             get
             {
                 return this.ibLongValue;
@@ -129,6 +133,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         private static RetrieveColumnGrbit RetrieveGrbit
         {
+            [DebuggerStepThrough]
             get
             {
                 // Always use the RetrieveCopy options. This makes the ColumnStream work

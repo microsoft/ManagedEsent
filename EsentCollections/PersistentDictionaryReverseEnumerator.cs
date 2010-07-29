@@ -12,6 +12,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Diagnostics;
 
     /// <summary>
     /// A PersistentDictionary enumerator that takes a key range and a filter and enumerates
@@ -84,6 +85,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         object IEnumerator.Current
         {
+            [DebuggerStepThrough]
             get { return this.Current; }
         }
 

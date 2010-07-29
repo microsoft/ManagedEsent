@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Diagnostics;
     using System.Globalization;
     using System.Runtime.InteropServices;
 
@@ -25,6 +26,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public static JET_INSTANCE Nil
         {
+            [DebuggerStepThrough]
             get { return new JET_INSTANCE(); }
         }
 
@@ -113,6 +115,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public static JET_SESID Nil
         {
+            [DebuggerStepThrough]
             get { return new JET_SESID(); }
         }
 
@@ -202,6 +205,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public static JET_TABLEID Nil
         {
+            [DebuggerStepThrough]
             get { return new JET_TABLEID(); }
         }
 
@@ -381,7 +385,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// Gets a null JET_COLUMNID.
         /// </summary>
         public static JET_COLUMNID Nil
-        { 
+        {
+            [DebuggerStepThrough]
             get { return new JET_COLUMNID(); }
         }
 
@@ -470,6 +475,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public static JET_OSSNAPID Nil
         {
+            [DebuggerStepThrough]
             get { return new JET_OSSNAPID(); }
         }
 
@@ -558,6 +564,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public static JET_HANDLE Nil
         {
+            [DebuggerStepThrough]
             get { return new JET_HANDLE(); }
         }
 
@@ -756,6 +763,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         internal static uint SizeOfIndexId
         {
+            [DebuggerStepThrough]
             get { return sizeOfIndexId; }
         }
 

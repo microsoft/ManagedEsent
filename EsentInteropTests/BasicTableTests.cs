@@ -146,9 +146,11 @@ namespace InteropApiTests
 
             var thread = new Thread(() =>
                 {
+                    Thread.BeginThreadAffinity();
                     Api.JetSetSessionContext(this.sesid, context);
                     Api.JetBeginTransaction(this.sesid);
                     Api.JetResetSessionContext(this.sesid);
+                    Thread.EndThreadAffinity();
                 });
             thread.Start();
             thread.Join();

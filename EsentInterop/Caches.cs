@@ -6,6 +6,8 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System.Diagnostics;
+
     /// <summary>
     /// Static class containing MemoryCaches for different ESENT buffers.
     /// Use these to avoid memory allocations when the memory will be
@@ -39,6 +41,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public static MemoryCache ColumnCache
         {
+            [DebuggerStepThrough]
             get { return columnCache; }
         }
 
@@ -47,6 +50,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public static MemoryCache BookmarkCache
         {
+            [DebuggerStepThrough]
             get { return bookmarkCache; }
         }
     }

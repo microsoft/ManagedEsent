@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Runtime.InteropServices;
@@ -43,6 +44,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public int ib
         {
+            [DebuggerStepThrough]
             get { return this.offset; }
             internal set { this.offset = checked((ushort)value); }
         }
@@ -52,6 +54,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public int isec
         {
+            [DebuggerStepThrough]
             get { return this.sector; }
             internal set { this.sector = checked((ushort)value); }
         }
@@ -61,6 +64,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public int lGeneration
         {
+            [DebuggerStepThrough]
             get { return this.generation; }
             internal set { this.generation = value; }
         }

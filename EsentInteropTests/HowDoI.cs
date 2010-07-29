@@ -683,6 +683,8 @@ namespace InteropApiTests
             /// </summary>
             public void DoWork()
             {
+                Thread.BeginThreadAffinity();
+
                 // We must be in a transaction for locking to work.
                 using (var transaction = new Transaction(this.sesid))
                 {
@@ -710,6 +712,8 @@ namespace InteropApiTests
 
                     transaction.Commit(CommitTransactionGrbit.LazyFlush);
                 }
+
+                Thread.EndThreadAffinity();
             }
         }
     }

@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
 
@@ -56,6 +57,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public int lcid
         {
+            [DebuggerStepThrough]
             get { return this.localeId; }
             set { this.localeId = value; }
         }
@@ -66,6 +68,7 @@ namespace Microsoft.Isam.Esent.Interop
         [CLSCompliant(false)]
         public uint dwMapFlags
         {
+            [DebuggerStepThrough]
             get { return this.mapStringFlags; }
             set { this.mapStringFlags = value; }
         }

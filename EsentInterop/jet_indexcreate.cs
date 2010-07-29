@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
     using Microsoft.Isam.Esent.Interop.Vista;
@@ -176,6 +177,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public JET_err err
         {
+            [DebuggerStepThrough]
             get { return this.errorCode; }
             set { this.errorCode = value; }
         }
@@ -185,6 +187,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public string szIndexName
         {
+            [DebuggerStepThrough]
             get { return this.name; }
             set { this.name = value; }
         }
@@ -200,6 +203,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public string szKey
         {
+            [DebuggerStepThrough]
             get { return this.key; }
             set { this.key = value; }
         }
@@ -209,6 +213,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public int cbKey
         {
+            [DebuggerStepThrough]
             get { return this.keyLength; }
             set { this.keyLength = value; }
         }
@@ -218,6 +223,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public CreateIndexGrbit grbit
         {
+            [DebuggerStepThrough]
             get { return this.options; }
             set { this.options = value; }
         }
@@ -227,6 +233,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public int ulDensity
         {
+            [DebuggerStepThrough]
             get { return this.density; }
             set { this.density = value; }
         }
@@ -236,6 +243,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public JET_UNICODEINDEX pidxUnicode
         {
+            [DebuggerStepThrough]
             get { return this.unicodeOptions; }
             set { this.unicodeOptions = value; }
         }
@@ -245,6 +253,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public int cbVarSegMac
         {
+            [DebuggerStepThrough]
             get { return this.maxSegmentLength; }
             set { this.maxSegmentLength = value; }
         }
@@ -254,6 +263,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public JET_CONDITIONALCOLUMN[] rgconditionalcolumn
         {
+            [DebuggerStepThrough]
             get { return this.conditionalColumns; }
             set { this.conditionalColumns = value; }
         }
@@ -263,6 +273,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public int cConditionalColumn
         {
+            [DebuggerStepThrough]
             get { return this.numConditionalColumns; }
             set { this.numConditionalColumns = value; }
         }
@@ -283,6 +294,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public int cbKeyMost
         {
+            [DebuggerStepThrough]
             get { return this.maximumKeyLength; }
             set { this.maximumKeyLength = value; }
         }

@@ -396,6 +396,7 @@ namespace InteropApiTests
             /// </param>
             public PerfTestWorker(JET_INSTANCE instance, string database)
             {
+                Thread.BeginThreadAffinity();
                 this.instance = instance;
                 this.database = database;
                 this.session = new Session(this.instance);
@@ -619,6 +620,8 @@ namespace InteropApiTests
                 {
                     this.session.Dispose();
                 }
+
+                Thread.EndThreadAffinity();
             }
 
             /// <summary>

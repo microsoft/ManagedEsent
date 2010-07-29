@@ -71,6 +71,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public int cunitDone
         {
+            [DebuggerStepThrough]
             get { return this.completedUnits; }
             set { this.completedUnits = value; }
         }
@@ -81,6 +82,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public int cunitTotal
         {
+            [DebuggerStepThrough]
             get { return this.totalUnits; }
             set { this.totalUnits = value; }
         }

@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
     using System.Text;
@@ -65,6 +66,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public string szColumnName
         {
+            [DebuggerStepThrough]
             get { return this.columnName; }
             set { this.columnName = value; }
         }
@@ -74,6 +76,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public ConditionalColumnGrbit grbit
         {
+            [DebuggerStepThrough]
             get { return this.option; }
             set { this.option = value; }
         }

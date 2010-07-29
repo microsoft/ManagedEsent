@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Diagnostics;
 
     /// <summary>
     /// Set a column of a struct type (e.g. Int32/Guid).
@@ -20,6 +21,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public override object ValueAsObject
         {
+            [DebuggerStepThrough]
             get { return this.Value; }
         }
 

@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
 
@@ -83,6 +84,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public long cbData
         {
+            [DebuggerStepThrough]
             get { return this.userData; }
             internal set { this.userData = value; }
         }
@@ -92,6 +94,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public long cbLongValueData
         {
+            [DebuggerStepThrough]
             get { return this.userLongValueData; }
             internal set { this.userLongValueData = value; }
         }
@@ -102,6 +105,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public long cbOverhead
         {
+            [DebuggerStepThrough]
             get { return this.overhead; }
             internal set { this.overhead = value; }
         }
@@ -111,6 +115,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public long cbLongValueOverhead
         {
+            [DebuggerStepThrough]
             get { return this.longValueOverhead; }
             internal set { this.longValueOverhead = value; }
         }
@@ -120,6 +125,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public long cNonTaggedColumns
         {
+            [DebuggerStepThrough]
             get { return this.numNonTaggedColumns; }
             internal set { this.numNonTaggedColumns = value; }
         }
@@ -129,6 +135,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public long cTaggedColumns
         {
+            [DebuggerStepThrough]
             get { return this.numTaggedColumns; }
             internal set { this.numTaggedColumns = value; }
         }
@@ -139,6 +146,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public long cLongValues
         {
+            [DebuggerStepThrough]
             get { return this.numLongValues; }
             internal set { this.numLongValues = value; }
         }
@@ -149,6 +157,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public long cMultiValues
         {
+            [DebuggerStepThrough]
             get { return this.numMultiValues; }
             internal set { this.numMultiValues = value; }
         }
@@ -158,6 +167,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public long cCompressedColumns
         {
+            [DebuggerStepThrough]
             get { return this.numCompressedColumns; }
             internal set { this.numCompressedColumns = value; }
         }
@@ -168,6 +178,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public long cbDataCompressed
         {
+            [DebuggerStepThrough]
             get { return this.userDataAfterCompression; }
             internal set { this.userDataAfterCompression = value; }
         }
@@ -179,6 +190,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public long cbLongValueDataCompressed
         {
+            [DebuggerStepThrough]
             get { return this.userLongValueDataCompressed; }
             internal set { this.userLongValueDataCompressed = value; }
         }

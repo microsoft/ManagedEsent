@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Diagnostics;
     using System.Globalization;
 
     /// <summary>
@@ -92,6 +93,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public string Name
         {
+            [DebuggerStepThrough]
             get { return this.name; }
         }
 
@@ -100,6 +102,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public CultureInfo CultureInfo
         {
+            [DebuggerStepThrough]
             get { return this.cultureInfo; }
         }
 
@@ -108,6 +111,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public CompareOptions CompareOptions
         {
+            [DebuggerStepThrough]
             get { return this.compareOptions; }
         }
 
@@ -116,6 +120,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public IndexSegment[] IndexSegments
         {
+            [DebuggerStepThrough]
             get { return this.indexSegments; }
         }
 
@@ -124,6 +129,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public CreateIndexGrbit Grbit
         {
+            [DebuggerStepThrough]
             get { return this.grbit; }
         }
 
@@ -133,6 +139,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public int Keys
         {
+            [DebuggerStepThrough]
             get { return this.keys; }
         }
 
@@ -142,6 +149,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public int Entries
         {
+            [DebuggerStepThrough]
             get { return this.entries; }
         }
 
@@ -151,6 +159,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public int Pages
         {
+            [DebuggerStepThrough]
             get { return this.pages; }
         }
     }

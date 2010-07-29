@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Diagnostics;
 
     /// <summary>
     /// A <see cref="Guid"/> column value.
@@ -19,6 +20,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         protected override int Size
         {
+            [DebuggerStepThrough]
             get { return 16; /* sizeof(Guid) */ }
         }
 

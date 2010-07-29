@@ -6,6 +6,8 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System.Diagnostics;
+
     /// <summary>
     /// A Unicode string column value.
     /// </summary>
@@ -17,6 +19,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public override object ValueAsObject
         {
+            [DebuggerStepThrough]
             get { return this.Value; }
         }
 
@@ -32,6 +35,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         protected override int Size
         {
+            [DebuggerStepThrough]
             get { return 0; }
         }
 

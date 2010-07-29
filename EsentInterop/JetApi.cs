@@ -2877,7 +2877,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             int err;
             unsafe
             {
-                void** rgpvKeys = stackalloc void*[keyCount]; // [7/21/2010] StyleCop error? You need the 4.4 release of StyleCop
+                void** rgpvKeys = stackalloc void*[keyCount]; // [7/21/2010] StyleCop error? You need at least the 4.4 release of StyleCop
                 uint* rgcbKeys = stackalloc uint[keyCount];
                 using (var gchandlecollection = new GCHandleCollection())
                 {
