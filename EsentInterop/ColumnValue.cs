@@ -72,7 +72,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         internal static void RetrieveColumns(JET_SESID sesid, JET_TABLEID tableid, ColumnValue[] columnValues)
         {
-            if (columnValues.Length > 1024)
+            const int MaxColumnValues = 1024;
+            if (columnValues.Length > MaxColumnValues)
             {
                 throw new ArgumentOutOfRangeException("columnValues", columnValues.Length, "Too many column values");    
             }
@@ -81,6 +82,8 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 NATIVE_RETRIEVECOLUMN* nativeRetrievecolumns = stackalloc NATIVE_RETRIEVECOLUMN[columnValues.Length];
                 byte[] buffer = Caches.ColumnCache.Allocate();
+                Debug.Assert(MaxColumnValues * 16 < buffer.Length, "Maximum size of fixed columns could exceed buffer size");
+
                 fixed (byte* pinnedBuffer = buffer)
                 {
                     byte* currentBuffer = pinnedBuffer;

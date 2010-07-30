@@ -145,7 +145,7 @@ namespace InteropApiTests
         {
             var setcolumn = new JET_RETRIEVECOLUMN();
             var native = new NATIVE_RETRIEVECOLUMN { cbActual = 0x100 };
-            setcolumn.UpdateFromNativeRetrievecolumn(native);
+            setcolumn.UpdateFromNativeRetrievecolumn(ref native);
             Assert.AreEqual(0x100, setcolumn.cbActual);
         }
 
@@ -160,7 +160,7 @@ namespace InteropApiTests
         {
             var setcolumn = new JET_RETRIEVECOLUMN();
             var native = new NATIVE_RETRIEVECOLUMN { columnidNextTagged = 0x20 };
-            setcolumn.UpdateFromNativeRetrievecolumn(native);
+            setcolumn.UpdateFromNativeRetrievecolumn(ref native);
             var expected = new JET_COLUMNID { Value = 0x20 };
             Assert.AreEqual(expected, setcolumn.columnidNextTagged);
         }
@@ -176,7 +176,7 @@ namespace InteropApiTests
         {
             var setcolumn = new JET_RETRIEVECOLUMN();
             var native = new NATIVE_RETRIEVECOLUMN { itagSequence = 7 };
-            setcolumn.UpdateFromNativeRetrievecolumn(native);
+            setcolumn.UpdateFromNativeRetrievecolumn(ref native);
             Assert.AreEqual(7, setcolumn.itagSequence);
         }
 
@@ -191,7 +191,7 @@ namespace InteropApiTests
         {
             var setcolumn = new JET_RETRIEVECOLUMN();
             var native = new NATIVE_RETRIEVECOLUMN { err = 1004 };
-            setcolumn.UpdateFromNativeRetrievecolumn(native);
+            setcolumn.UpdateFromNativeRetrievecolumn(ref native);
             Assert.AreEqual(JET_wrn.ColumnNull, setcolumn.err);
         }
     }

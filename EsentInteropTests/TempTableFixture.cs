@@ -246,6 +246,72 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test JetRetrieveColumns, retrieving into the same buffer.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Test JetRetrieveColumns with the same buffer")]
+        public void JetRetrieveColumnsSameBuffer()
+        {
+            short s = Any.Int16;
+            string str = Any.String;
+            double d = Any.Double;
+
+            var setcolumns = new[]
+            {
+                new JET_SETCOLUMN { cbData = sizeof(short), columnid = this.columnDict["Int16"], pvData = BitConverter.GetBytes(s) },
+                new JET_SETCOLUMN { cbData = sizeof(double), columnid = this.columnDict["Double"], pvData = BitConverter.GetBytes(d) },
+                new JET_SETCOLUMN { cbData = str.Length * sizeof(char), columnid = this.columnDict["Unicode"], pvData = Encoding.Unicode.GetBytes(str) },
+                new JET_SETCOLUMN { cbData = 0, columnid = this.columnDict["Binary"], pvData = null },
+            };
+
+            using (var trx = new Transaction(this.session))
+            using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
+            {
+                Api.JetSetColumns(this.session, this.tableid, setcolumns, setcolumns.Length);
+                update.Save();
+                trx.Commit(CommitTransactionGrbit.None);
+            }
+
+            Api.TryMoveFirst(this.session, this.tableid);
+
+            byte[] buffer = new byte[1024];
+            var retrievecolumns = new[]
+            {
+                new JET_RETRIEVECOLUMN { cbData = sizeof(short), columnid = this.columnDict["Int16"], pvData = buffer, ibData = 100 },
+                new JET_RETRIEVECOLUMN { cbData = sizeof(double), columnid = this.columnDict["Double"], pvData = buffer, ibData = 200 },
+                new JET_RETRIEVECOLUMN { cbData = str.Length * sizeof(char) * 2, columnid = this.columnDict["Unicode"], pvData = new byte[str.Length * sizeof(char) * 2] },
+                new JET_RETRIEVECOLUMN { cbData = 10, columnid = this.columnDict["Binary"], pvData = buffer },
+            };
+
+            for (int i = 0; i < retrievecolumns.Length; ++i)
+            {
+                retrievecolumns[i].itagSequence = 1;
+            }
+
+            Api.JetRetrieveColumns(this.session, this.tableid, retrievecolumns, retrievecolumns.Length);
+
+            // retrievecolumns[0] = short
+            Assert.AreEqual(sizeof(short), retrievecolumns[0].cbActual);
+            Assert.AreEqual(JET_wrn.Success, retrievecolumns[0].err);
+            Assert.AreEqual(s, BitConverter.ToInt16(retrievecolumns[0].pvData, retrievecolumns[0].ibData));
+
+            // retrievecolumns[1] = double
+            Assert.AreEqual(sizeof(double), retrievecolumns[1].cbActual);
+            Assert.AreEqual(JET_wrn.Success, retrievecolumns[1].err);
+            Assert.AreEqual(d, BitConverter.ToDouble(retrievecolumns[1].pvData, retrievecolumns[1].ibData));
+
+            // retrievecolumns[2] = string
+            Assert.AreEqual(str.Length * sizeof(char), retrievecolumns[2].cbActual);
+            Assert.AreEqual(JET_wrn.Success, retrievecolumns[2].err);
+            Assert.AreEqual(str, Encoding.Unicode.GetString(retrievecolumns[2].pvData, retrievecolumns[2].ibData, retrievecolumns[2].cbActual));
+
+            // retrievecolumns[3] = null
+            Assert.AreEqual(0, retrievecolumns[3].cbActual);
+            Assert.AreEqual(JET_wrn.ColumnNull, retrievecolumns[3].err);
+        }
+
+        /// <summary>
         /// Test JetRetrieveColumns with a null buffer.
         /// </summary>
         [TestMethod]

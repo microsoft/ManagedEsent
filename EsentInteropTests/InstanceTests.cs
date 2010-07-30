@@ -393,6 +393,10 @@ namespace InteropApiTests
             int numThreads = 1; // Should be Environment.ProcessorCount (see assert at end)
 
             int iteration = 0;
+
+            // Supressing execution context flow speeds up thread creation.
+            ExecutionContext.SuppressFlow();
+
             while (DateTime.UtcNow < (startTime + timeToRun))
             {
                 var threads = new Thread[numThreads];
@@ -418,6 +422,8 @@ namespace InteropApiTests
 
                 iteration++;
             }
+
+            ExecutionContext.RestoreFlow();
 
             // Make sure the instance name is still available
             for (int i = 0; i < numThreads; ++i)

@@ -180,6 +180,17 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Measure performance of reading records with JetRetrieveColumns, using one buffer to retrieve all data.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the performance of JetRetrieveColumns, using one buffer to retrieve all data")]
+        [Priority(3)]
+        public void TestJetRetrieveColumnsOneBufferPerf()
+        {
+            DoTest(this.RetrieveWithJetRetrieveColumnsOneBuffer);
+        }
+
+        /// <summary>
         /// Measure performance of reading records with RetrieveColumn, which allocates memory for every column.
         /// </summary>
         [TestMethod]
@@ -271,6 +282,33 @@ namespace InteropApiTests
             GC.Collect();
             GC.WaitForPendingFinalizers();
             GC.Collect();
+        }
+
+        /// <summary>
+        /// Returns a Guid value converted from 16 bytes at a specified position in a byte array.
+        /// </summary>
+        /// <param name="value">
+        /// The array containing the data to convert..
+        /// </param>
+        /// <param name="startIndex">
+        /// The index in the data to start converting from.
+        /// </param>
+        /// <returns>
+        /// A guid converted from the data;
+        /// </returns>
+        private static unsafe Guid ToGuid(byte[] value, int startIndex)
+        {
+            Guid guid = Guid.Empty;
+            byte* dest = (byte*)&guid;
+            for (int j = 0; j < 16; j += 4)
+            {
+                dest[j + 0] = value[startIndex + j + 0];
+                dest[j + 1] = value[startIndex + j + 1];
+                dest[j + 2] = value[startIndex + j + 2];
+                dest[j + 3] = value[startIndex + j + 3];
+            }
+
+            return guid;
         }
 
         /// <summary>
@@ -408,6 +446,57 @@ namespace InteropApiTests
                 long actualInt64 = BitConverter.ToInt64(int64Buffer, 0);
                 Guid actualGuid = new Guid(guidBuffer);
                 string actualString = Encoding.Unicode.GetString(stringBuffer, 0, retrievecolumns[4].cbActual);
+
+                Assert.AreEqual(this.expectedBool, actualBool);
+                Assert.AreEqual(this.expectedInt32, actualInt32);
+                Assert.AreEqual(this.expectedInt64, actualInt64);
+                Assert.AreEqual(this.expectedGuid, actualGuid);
+                Assert.AreEqual(this.expectedString, actualString);
+            }
+
+            Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
+        }
+
+        /// <summary>
+        /// Retrieve columns using the basic JetRetrieveColumns API, using one buffer to retrieve all data.
+        /// </summary>
+        private void RetrieveWithJetRetrieveColumnsOneBuffer()
+        {
+            // Calculate the buffer size and allocate it
+            const int BufferSize = sizeof(bool) + sizeof(int) + sizeof(long) + 16 + 512;
+            var buffer = new byte[BufferSize];
+
+            // Create the JET_RETRIEVECOLUMN array without any buffers
+            // The boolean column is retrieved last because its size is 1 and we don't want the other members
+            // to be located at odd offsets (that makes conversion slower).
+            var retrievecolumns = new[]
+            {
+                new JET_RETRIEVECOLUMN { columnid = this.columnidDict["int32"], cbData = sizeof(int), itagSequence = 1 },
+                new JET_RETRIEVECOLUMN { columnid = this.columnidDict["int64"], cbData = sizeof(long), itagSequence = 1 },
+                new JET_RETRIEVECOLUMN { columnid = this.columnidDict["guid"], cbData = 16, itagSequence = 1 },
+                new JET_RETRIEVECOLUMN { columnid = this.columnidDict["unicode"], cbData = 512, itagSequence = 1 },
+                new JET_RETRIEVECOLUMN { columnid = this.columnidDict["boolean"], cbData = sizeof(bool), itagSequence = 1 },
+            };
+
+            // Set the pvData/ibData members of the JET_RETRIEVECOLUMN objects
+            int offset = 0;
+            foreach (JET_RETRIEVECOLUMN retrievecolumn in retrievecolumns)
+            {
+                retrievecolumn.pvData = buffer;
+                retrievecolumn.ibData = offset;
+                offset += retrievecolumn.cbData;
+            }
+
+            Api.JetBeginTransaction(this.session);
+            for (int i = 0; i < NumRetrieves; ++i)
+            {
+                Api.JetRetrieveColumns(this.session, this.tableid, retrievecolumns, retrievecolumns.Length);
+
+                int actualInt32 = BitConverter.ToInt32(retrievecolumns[0].pvData, retrievecolumns[0].ibData);
+                long actualInt64 = BitConverter.ToInt64(retrievecolumns[1].pvData, retrievecolumns[1].ibData);
+                Guid actualGuid = ToGuid(retrievecolumns[2].pvData, retrievecolumns[2].ibData);
+                string actualString = Encoding.Unicode.GetString(retrievecolumns[3].pvData, retrievecolumns[3].ibData, retrievecolumns[3].cbActual);
+                bool actualBool = BitConverter.ToBoolean(retrievecolumns[4].pvData, retrievecolumns[4].ibData);
 
                 Assert.AreEqual(this.expectedBool, actualBool);
                 Assert.AreEqual(this.expectedInt32, actualInt32);

@@ -836,7 +836,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Recursively pin the retrieve buffers in the JET_RETRIEVECOLUMN
         /// structures and then retrieve the columns. This is done to avoid
-        /// creating GCHandles which is very expensive. This function pins
+        /// creating GCHandles, which are expensive. This function pins
         /// the current retrievecolumn structure (indicated by i) and then
         /// recursively calls itself until all structures are pinned. This
         /// is done because it isn't possible to create an arbitrary number
@@ -864,18 +864,21 @@ namespace Microsoft.Isam.Esent.Interop
             int numColumns,
             int i)
         {
-            retrievecolumns[i].CheckDataSize();
-            nativeretrievecolumns[i] = retrievecolumns[i].GetNativeRetrievecolumn();
+            // If consecutive JET_RETRIEVECOLUMN structures are using the same buffer then only pin it once.
             fixed (byte* pinnedBuffer = retrievecolumns[i].pvData)
             {
-                nativeretrievecolumns[i].pvData = new IntPtr(pinnedBuffer + retrievecolumns[i].ibData);
-
-                if (numColumns - 1 == i)
+                do
                 {
-                    return Impl.JetRetrieveColumns(sesid, tableid, nativeretrievecolumns, numColumns);
+                    retrievecolumns[i].CheckDataSize();
+                    retrievecolumns[i].GetNativeRetrievecolumn(ref nativeretrievecolumns[i]);
+                    nativeretrievecolumns[i].pvData = new IntPtr(pinnedBuffer + retrievecolumns[i].ibData);
+                    i++;
                 }
+                while (i < numColumns && retrievecolumns[i].pvData == retrievecolumns[i - 1].pvData);
 
-                return PinColumnsAndRetrieve(sesid, tableid, nativeretrievecolumns, retrievecolumns, numColumns, i + 1);
+                return i == numColumns ?
+                    Impl.JetRetrieveColumns(sesid, tableid, nativeretrievecolumns, numColumns)
+                    : PinColumnsAndRetrieve(sesid, tableid, nativeretrievecolumns, retrievecolumns, numColumns, i);
             }
         }
 

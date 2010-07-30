@@ -42,7 +42,7 @@ namespace InteropApiTests
                 ibLongValue = 3,
                 itagSequence = 4,
             };
-            this.native = this.managed.GetNativeRetrievecolumn();
+            this.managed.GetNativeRetrievecolumn(ref this.native);
         }
 
         /// <summary>

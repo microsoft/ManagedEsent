@@ -184,18 +184,18 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets the NATIVE_RETRIEVECOLUMN structure that represents the object.
         /// </summary>
-        /// <returns>A NATIVE_RETRIEVECOLUMN structure whose fields match the class.</returns>
-        internal NATIVE_RETRIEVECOLUMN GetNativeRetrievecolumn()
+        /// <param name="retrievecolumn">The NATIVE_RETRIEVECOLUMN structure to fill in.</param>
+        /// <remarks>
+        /// This takes a reference because a NATIVE_RETRIEVECOLUMN is quite large (40 bytes)
+        /// so copying it around can be expensive.
+        /// </remarks>
+        internal void GetNativeRetrievecolumn(ref NATIVE_RETRIEVECOLUMN retrievecolumn)
         {
-            var retrievecolumn = new NATIVE_RETRIEVECOLUMN
-            {
-                columnid = this.columnid.Value,
-                cbData = checked((uint)this.cbData),
-                grbit = (uint)this.grbit,
-                ibLongValue = checked((uint)this.ibLongValue),
-                itagSequence = checked((uint)this.itagSequence),
-            };
-            return retrievecolumn;
+            retrievecolumn.columnid = this.columnid.Value;
+            retrievecolumn.cbData = unchecked((uint)this.cbData); // guaranteed to not be negative
+            retrievecolumn.grbit = (uint)this.grbit;
+            retrievecolumn.ibLongValue = checked((uint)this.ibLongValue);
+            retrievecolumn.itagSequence = checked((uint)this.itagSequence);
         }
 
         /// <summary>
@@ -205,12 +205,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="native">
         /// The structure containing the updated output fields.
         /// </param>
-        internal void UpdateFromNativeRetrievecolumn(NATIVE_RETRIEVECOLUMN native)
+        /// <remarks>
+        /// This takes a reference because a NATIVE_RETRIEVECOLUMN is quite large (40 bytes)
+        /// so copying it around can be expensive.
+        /// </remarks>
+        internal void UpdateFromNativeRetrievecolumn(ref NATIVE_RETRIEVECOLUMN native)
         {
             this.cbActual = checked((int)native.cbActual);
             this.columnidNextTagged = new JET_COLUMNID { Value = native.columnidNextTagged };
             this.itagSequence = checked((int)native.itagSequence);
-            this.err = (JET_wrn) native.err;
+            this.err = (JET_wrn)native.err;
         }
     }
 }

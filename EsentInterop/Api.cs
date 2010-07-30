@@ -1929,7 +1929,7 @@ namespace Microsoft.Isam.Esent.Interop
                 int err = Api.PinColumnsAndRetrieve(sesid, tableid, nativeretrievecolumns, retrievecolumns, numColumns, 0);
                 for (int i = 0; i < numColumns; ++i)
                 {
-                    retrievecolumns[i].UpdateFromNativeRetrievecolumn(nativeretrievecolumns[i]);
+                    retrievecolumns[i].UpdateFromNativeRetrievecolumn(ref nativeretrievecolumns[i]);
                 }
 
                 return Api.Check(err);

@@ -2154,14 +2154,44 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Check that an exception is thrown when JetRetrieveColumns gets a 
-        /// null setcolumns array. 
+        /// Check that an exception is thrown when JetRetrieveColumn gets a 
+        /// negative itagSequence.
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Check that an exception is thrown when JetRetrieveColumns gets a null setcolumns array")]
+        [Description("Check that an exception is thrown when JetRetrieveColumn gets a negative itagSequence")]
+        [ExpectedException(typeof(OverflowException))]
+        public void JetRetrieveColumnThrowsExceptionWhenItagSequenceIsNegative()
+        {
+            int actualSize;
+            var retinfo = new JET_RETINFO { itagSequence = -1 };
+            Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, null, 0, out actualSize, RetrieveColumnGrbit.None, retinfo);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetRetrieveColumn gets a 
+        /// negative ibLongValue.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetRetrieveColumn gets a negative ibLongValue")]
+        [ExpectedException(typeof(OverflowException))]
+        public void JetRetrieveColumnThrowsExceptionWhenIbLongValueIsNegative()
+        {
+            int actualSize;
+            var retinfo = new JET_RETINFO { ibLongValue = -1 };
+            Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, null, 0, out actualSize, RetrieveColumnGrbit.None, retinfo);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetRetrieveColumns gets a 
+        /// null retrievecolumns array. 
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetRetrieveColumns gets a null retrievecolumns array")]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void JetRetrieveColumnsThrowsExceptionWhenSetColumnsIsNull()
+        public void JetRetrieveColumnsThrowsExceptionWhenRetrieveColumnsIsNull()
         {
             Api.JetRetrieveColumns(this.sesid, this.tableid, null, 0);
         }
@@ -2194,15 +2224,55 @@ namespace InteropApiTests
 
         /// <summary>
         /// Check that an exception is thrown when JetRetrieveColumns gets a 
+        /// negative itagSequence.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetRetrieveColumns gets a negative itagSequence")]
+        [ExpectedException(typeof(OverflowException))]
+        public void JetRetrieveColumnsThrowsExceptionWhenItagSequenceIsNegative()
+        {
+            var retrievecolumns = new[]
+            {
+                new JET_RETRIEVECOLUMN
+                {
+                    itagSequence = -1,
+                },
+            };
+            Api.JetRetrieveColumns(this.sesid, this.tableid, retrievecolumns, retrievecolumns.Length);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetRetrieveColumns gets a 
+        /// negative ibLongValue.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetRetrieveColumns gets a negative ibLongValue")]
+        [ExpectedException(typeof(OverflowException))]
+        public void JetRetrieveColumnsThrowsExceptionWhenIbLongValueIsNegative()
+        {
+            var retrievecolumns = new[]
+            {
+                new JET_RETRIEVECOLUMN
+                {
+                    ibLongValue = -1,
+                },
+            };
+            Api.JetRetrieveColumns(this.sesid, this.tableid, retrievecolumns, retrievecolumns.Length);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetRetrieveColumns gets a 
         /// cbData that is greater than the size of the pvData.
         /// </summary>
         [TestMethod]
         [Priority(0)]
         [Description("Check that an exception is thrown when JetRetrieveColumns gets a cbData that is greater than the size of the pvData")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void JetRetrieveColumnsThrowsExceptionWhenSetColumnDataIsInvalid()
+        public void JetRetrieveColumnsThrowsExceptionWhenRetrieveColumnDataIsInvalid()
         {
-            var setcolumns = new[]
+            var retrievecolumns = new[]
             {
                 new JET_RETRIEVECOLUMN
                 {
@@ -2210,7 +2280,7 @@ namespace InteropApiTests
                     pvData = new byte[10],
                 },
             };
-            Api.JetRetrieveColumns(this.sesid, this.tableid, setcolumns, setcolumns.Length);
+            Api.JetRetrieveColumns(this.sesid, this.tableid, retrievecolumns, retrievecolumns.Length);
         }
 
         /// <summary>
@@ -2515,6 +2585,34 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Check that an exception is thrown when JetSetColumn gets a 
+        /// negative itagSequence.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetSetColumn gets a negative itagSequence")]
+        [ExpectedException(typeof(OverflowException))]
+        public void JetSetColumnThrowsExceptionWhenItagSequenceIsNegative()
+        {
+            var setinfo = new JET_SETINFO { itagSequence = -1 };
+            Api.JetSetColumn(this.sesid, this.tableid, this.columnid, null, 0, SetColumnGrbit.None, setinfo);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetSetColumn gets a 
+        /// negative ibLongValue.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetSetColumn gets a negative ibLongValue")]
+        [ExpectedException(typeof(OverflowException))]
+        public void JetSetColumnThrowsExceptionWhenIbLongValueIsNegative()
+        {
+            var setinfo = new JET_SETINFO { ibLongValue = -1 };
+            Api.JetSetColumn(this.sesid, this.tableid, this.columnid, null, 0, SetColumnGrbit.None, setinfo);
+        }
+
+        /// <summary>
         /// Check that an exception is thrown when JetSetColumns gets a 
         /// null setcolumns array. 
         /// </summary>
@@ -2576,12 +2674,52 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Check that an exception is thrown when SetColumns gets a 
-        /// null column name.
+        /// Check that an exception is thrown when JetSetColumns gets a 
+        /// negative itagSequence.
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Check that an exception is thrown when SetColumns gets a null column name")]
+        [Description("Check that an exception is thrown when JetSetColumns gets a negative itagSequence")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetSetColumnsThrowsExceptionWhenItagSequenceIsNegative()
+        {
+            var setcolumns = new[]
+            {
+                new JET_SETCOLUMN
+                {
+                    itagSequence = -1,
+                },
+            };
+            Api.JetSetColumns(this.sesid, this.tableid, setcolumns, setcolumns.Length);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetSetColumns gets a 
+        /// negative ibLongValue.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetSetColumns gets a negative ibLongValue")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetSetColumnsThrowsExceptionWhenIbLongValueIsNegative()
+        {
+            var setcolumns = new[]
+            {
+                new JET_SETCOLUMN
+                {
+                    ibLongValue = -1,
+                },
+            };
+            Api.JetSetColumns(this.sesid, this.tableid, setcolumns, setcolumns.Length);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when SetColumns gets a 
+        /// null value list.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when SetColumns gets a null value list")]
         [ExpectedException(typeof(ArgumentNullException))]
         public void SetColumnsThrowsExceptionWhenColumnValuesIsNull()
         {
