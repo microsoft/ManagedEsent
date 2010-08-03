@@ -1304,7 +1304,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// index of a given cursor. This name is also used to later re-select
         /// that index as the current index using <see cref="JetSetCurrentIndex"/>.
         /// It can also be used to discover the properties of that index using
-        /// <see cref="JetGetTableIndexInfo"/>.
+        /// JetGetTableIndexInfo.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to get the index name for.</param>
@@ -1317,6 +1317,8 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetGetCurrentIndex(sesid, tableid, out indexName, maxNameLength));
         }
+
+        #region JetGetTableInfo overloads
 
         /// <summary>
         /// Retrieves various pieces of information about a table in a database.
@@ -1397,22 +1399,112 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetGetTableInfo(sesid, tableid, out result, infoLevel));
         }
 
+        #endregion
+
+        #region JetGetIndexInfo overloads
+
         /// <summary>
         /// Retrieves information about indexes on a table.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="dbid">The database to use.</param>
         /// <param name="tablename">The name of the table to retrieve index information about.</param>
-        /// <param name="ignored">This parameter is ignored.</param>
-        /// <param name="indexlist">Filled in with information about indexes on the table.</param>
+        /// <param name="indexname">The name of the index to retrieve information about.</param>
+        /// <param name="result">Filled in with information about indexes on the table.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        [CLSCompliant(false)]
         public static void JetGetIndexInfo(
                 JET_SESID sesid,
                 JET_DBID dbid,
                 string tablename,
-                string ignored,
-                out JET_INDEXLIST indexlist)
+                string indexname,
+                out ushort result,
+                JET_IdxInfo infoLevel)
         {
-            Api.Check(Impl.JetGetIndexInfo(sesid, dbid, tablename, ignored, out indexlist));
+            Api.Check(Impl.JetGetIndexInfo(sesid, dbid, tablename, indexname, out result, infoLevel));
+        }
+
+        /// <summary>
+        /// Retrieves information about indexes on a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database to use.</param>
+        /// <param name="tablename">The name of the table to retrieve index information about.</param>
+        /// <param name="indexname">The name of the index to retrieve information about.</param>
+        /// <param name="result">Filled in with information about indexes on the table.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        public static void JetGetIndexInfo(
+                JET_SESID sesid,
+                JET_DBID dbid,
+                string tablename,
+                string indexname,
+                out int result,
+                JET_IdxInfo infoLevel)
+        {
+            Api.Check(Impl.JetGetIndexInfo(sesid, dbid, tablename, indexname, out result, infoLevel));
+        }
+
+        /// <summary>
+        /// Retrieves information about indexes on a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database to use.</param>
+        /// <param name="tablename">The name of the table to retrieve index information about.</param>
+        /// <param name="indexname">The name of the index to retrieve information about.</param>
+        /// <param name="result">Filled in with information about indexes on the table.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        public static void JetGetIndexInfo(
+                JET_SESID sesid,
+                JET_DBID dbid,
+                string tablename,
+                string indexname,
+                out JET_INDEXID result,
+                JET_IdxInfo infoLevel)
+        {
+            Api.Check(Impl.JetGetIndexInfo(sesid, dbid, tablename, indexname, out result, infoLevel));
+        }
+
+        /// <summary>
+        /// Retrieves information about indexes on a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database to use.</param>
+        /// <param name="tablename">The name of the table to retrieve index information about.</param>
+        /// <param name="indexname">The name of the index to retrieve information about.</param>
+        /// <param name="result">Filled in with information about indexes on the table.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        public static void JetGetIndexInfo(
+                JET_SESID sesid,
+                JET_DBID dbid,
+                string tablename,
+                string indexname,
+                out JET_INDEXLIST result,
+                JET_IdxInfo infoLevel)
+        {
+            Api.Check(Impl.JetGetIndexInfo(sesid, dbid, tablename, indexname, out result, infoLevel));
+        }
+
+        #endregion
+
+        #region JetGetTableIndexInfo overloads
+
+        /// <summary>
+        /// Retrieves information about indexes on a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to retrieve index information about.</param>
+        /// <param name="indexname">The name of the index.</param>
+        /// <param name="result">Filled in with information about indexes on the table.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        [CLSCompliant(false)]
+        public static void JetGetTableIndexInfo(
+                JET_SESID sesid,
+                JET_TABLEID tableid,
+                string indexname,
+                out ushort result,
+                JET_IdxInfo infoLevel)
+        {
+            Api.Check(Impl.JetGetTableIndexInfo(sesid, tableid, indexname, out result, infoLevel));
         }
 
         /// <summary>
@@ -1420,16 +1512,56 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The table to retrieve index information about.</param>
-        /// <param name="ignored">This parameter is ignored.</param>
-        /// <param name="indexlist">Filled in with information about indexes on the table.</param>
+        /// <param name="indexname">The name of the index.</param>
+        /// <param name="result">Filled in with information about indexes on the table.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
         public static void JetGetTableIndexInfo(
                 JET_SESID sesid,
                 JET_TABLEID tableid,
-                string ignored,
-                out JET_INDEXLIST indexlist)
+                string indexname,
+                out int result,
+                JET_IdxInfo infoLevel)
         {
-            Api.Check(Impl.JetGetTableIndexInfo(sesid, tableid, ignored, out indexlist));
+            Api.Check(Impl.JetGetTableIndexInfo(sesid, tableid, indexname, out result, infoLevel));
         }
+
+        /// <summary>
+        /// Retrieves information about indexes on a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to retrieve index information about.</param>
+        /// <param name="indexname">The name of the index.</param>
+        /// <param name="result">Filled in with information about indexes on the table.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        public static void JetGetTableIndexInfo(
+                JET_SESID sesid,
+                JET_TABLEID tableid,
+                string indexname,
+                out JET_INDEXID result,
+                JET_IdxInfo infoLevel)
+        {
+            Api.Check(Impl.JetGetTableIndexInfo(sesid, tableid, indexname, out result, infoLevel));
+        }
+
+        /// <summary>
+        /// Retrieves information about indexes on a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to retrieve index information about.</param>
+        /// <param name="indexname">The name of the index.</param>
+        /// <param name="result">Filled in with information about indexes on the table.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        public static void JetGetTableIndexInfo(
+                JET_SESID sesid,
+                JET_TABLEID tableid,
+                string indexname,
+                out JET_INDEXLIST result,
+                JET_IdxInfo infoLevel)
+        {
+            Api.Check(Impl.JetGetTableIndexInfo(sesid, tableid, indexname, out result, infoLevel));
+        }
+
+        #endregion
 
         /// <summary>
         /// Changes the name of an existing table.
@@ -1695,6 +1827,40 @@ namespace Microsoft.Isam.Esent.Interop
         public static void JetSetCurrentIndex3(JET_SESID sesid, JET_TABLEID tableid, string index, SetCurrentIndexGrbit grbit, int itagSequence)
         {
             Api.Check(Impl.JetSetCurrentIndex3(sesid, tableid, index, grbit, itagSequence));
+        }
+
+        /// <summary>
+        /// Set the current index of a cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to set the index on.</param>
+        /// <param name="index">
+        /// The name of the index to be selected. If this is null or empty the primary
+        /// index will be selected.
+        /// </param>
+        /// <param name="indexid">
+        /// The id of the index to select. This id can be obtained using JetGetIndexInfo
+        /// or JetGetTableIndexInfo with the <see cref="JET_IdxInfo.IndexId"/> option.
+        /// </param>
+        /// <param name="grbit">
+        /// Set index options.
+        /// </param>
+        /// <param name="itagSequence">
+        /// Sequence number of the multi-valued column value which will be used
+        /// to position the cursor on the new index. This parameter is only used
+        /// in conjunction with <see cref="SetCurrentIndexGrbit.NoMove"/>. When
+        /// this parameter is not present or is set to zero, its value is presumed
+        /// to be 1.
+        /// </param>
+        public static void JetSetCurrentIndex4(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            string index,
+            JET_INDEXID indexid,
+            SetCurrentIndexGrbit grbit,
+            int itagSequence)
+        {
+            Api.Check(Impl.JetSetCurrentIndex4(sesid, tableid, index, indexid, grbit, itagSequence));
         }
 
         /// <summary>

@@ -65,6 +65,7 @@
     <Compile Include="ConditionalIndexFixture.cs" />
     <Compile Include="EnumerableTests.cs" />
     <Compile Include="HowDoI.cs" />
+    <Compile Include="IndexInfoTests.cs" />
     <Compile Include="InstanceMiscInfoTests.cs" />
     <Compile Include="JetApiHelpersTests.cs" />
     <Compile Include="JetGetThreadStatsTests.cs" />

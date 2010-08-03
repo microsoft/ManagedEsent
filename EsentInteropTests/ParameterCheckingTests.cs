@@ -574,12 +574,70 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Check that an exception is thrown when JetGetIndexInfo gets a null table name")]
+        [Description("Check that an exception is thrown when JetGetIndexInfo(obsolete) gets a null table name")]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void JetGetIndexInfoThrowsExceptionWhenTableNameIsNull()
+        public void JetGetIndexInfoObsoleteThrowsExceptionWhenTableNameIsNull()
         {
             JET_INDEXLIST indexlist;
+#pragma warning disable 612,618 // Obsolete
             Api.JetGetIndexInfo(this.sesid, this.dbid, null, String.Empty, out indexlist);
+#pragma warning restore 612,618
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetGetIndexInfo gets a 
+        /// null table name.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetGetIndexInfo(ushort) gets a null table name")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetGetIndexInfoUshortThrowsExceptionWhenTableNameIsNull()
+        {
+            ushort result;
+            Api.JetGetIndexInfo(this.sesid, this.dbid, null, String.Empty, out result, JET_IdxInfo.Default);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetGetIndexInfo gets a 
+        /// null table name.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetGetIndexInfo(int) gets a null table name")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetGetIndexInfoIntThrowsExceptionWhenTableNameIsNull()
+        {
+            int result;
+            Api.JetGetIndexInfo(this.sesid, this.dbid, null, String.Empty, out result, JET_IdxInfo.Default);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetGetIndexInfo gets a 
+        /// null table name.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetGetIndexInfo(JET_INDEXID) gets a null table name")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetGetIndexInfoIndexidThrowsExceptionWhenTableNameIsNull()
+        {
+            JET_INDEXID result;
+            Api.JetGetIndexInfo(this.sesid, this.dbid, null, String.Empty, out result, JET_IdxInfo.Default);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetGetIndexInfo gets a 
+        /// null table name.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetGetIndexInfo(JET_INDEXLIST) gets a null table name")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetGetIndexInfoIndexListThrowsExceptionWhenTableNameIsNull()
+        {
+            JET_INDEXLIST result;
+            Api.JetGetIndexInfo(this.sesid, this.dbid, null, String.Empty, out result, JET_IdxInfo.Default);
         }
 
         /// <summary>

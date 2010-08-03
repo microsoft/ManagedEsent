@@ -2224,6 +2224,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return err;
         }
 
+        #region JetGetTableInfo overloads
+
         /// <summary>
         /// Retrieves various pieces of information about a table in a database.
         /// </summary>
@@ -2364,24 +2366,131 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return err;
         }
 
+        #endregion
+
+        #region JetGetIndexInfo overloads
+
         /// <summary>
         /// Retrieves information about indexes on a table.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="dbid">The database to use.</param>
         /// <param name="tablename">The name of the table to retrieve index information about.</param>
-        /// <param name="ignored">This parameter is ignored.</param>
-        /// <param name="indexlist">Filled in with information about indexes on the table.</param>
+        /// <param name="indexname">The name of the index to retrieve information about.</param>
+        /// <param name="result">Filled in with information about indexes on the table.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
         /// <returns>An error if the call fails.</returns>
         public int JetGetIndexInfo(
-                JET_SESID sesid,
-                JET_DBID dbid,
-                string tablename,
-                string ignored,
-                out JET_INDEXLIST indexlist)
+            JET_SESID sesid,
+            JET_DBID dbid,
+            string tablename,
+            string indexname,
+            out ushort result,
+            JET_IdxInfo infoLevel)
         {
             this.TraceFunctionCall("JetGetIndexInfo");
-            indexlist = new JET_INDEXLIST();
+            this.CheckNotNull(tablename, "tablename");
+
+            int err = this.Err(NativeMethods.JetGetIndexInfo(
+                sesid.Value,
+                dbid.Value,
+                tablename,
+                indexname,
+                out result,
+                sizeof(ushort),
+                (uint)infoLevel));
+
+            return err;       
+        }
+
+        /// <summary>
+        /// Retrieves information about indexes on a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database to use.</param>
+        /// <param name="tablename">The name of the table to retrieve index information about.</param>
+        /// <param name="indexname">The name of the index to retrieve information about.</param>
+        /// <param name="result">Filled in with information about indexes on the table.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetIndexInfo(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            string tablename,
+            string indexname,
+            out int result,
+            JET_IdxInfo infoLevel)
+        {
+            this.TraceFunctionCall("JetGetIndexInfo");
+            this.CheckNotNull(tablename, "tablename");
+
+            uint nativeResult;
+            int err = this.Err(NativeMethods.JetGetIndexInfo(
+                sesid.Value,
+                dbid.Value,
+                tablename,
+                indexname,
+                out nativeResult,
+                sizeof(uint),
+                (uint)infoLevel));
+
+            result = unchecked((int)nativeResult);
+            return err;
+        }
+
+        /// <summary>
+        /// Retrieves information about indexes on a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database to use.</param>
+        /// <param name="tablename">The name of the table to retrieve index information about.</param>
+        /// <param name="indexname">The name of the index to retrieve information about.</param>
+        /// <param name="result">Filled in with information about indexes on the table.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetIndexInfo(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            string tablename,
+            string indexname,
+            out JET_INDEXID result,
+            JET_IdxInfo infoLevel)
+        {
+            this.TraceFunctionCall("JetGetIndexInfo");
+            this.CheckNotNull(tablename, "tablename");
+
+            result = new JET_INDEXID { CbStruct = JET_INDEXID.SizeOfIndexId };
+            int err = this.Err(NativeMethods.JetGetIndexInfo(
+                sesid.Value,
+                dbid.Value,
+                tablename,
+                indexname,
+                ref result,
+                JET_INDEXID.SizeOfIndexId,
+                (uint)infoLevel));
+
+            return err;
+        }
+
+        /// <summary>
+        /// Retrieves information about indexes on a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database to use.</param>
+        /// <param name="tablename">The name of the table to retrieve index information about.</param>
+        /// <param name="indexname">The name of the index to retrieve information about.</param>
+        /// <param name="result">Filled in with information about indexes on the table.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetIndexInfo(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            string tablename,
+            string indexname,
+            out JET_INDEXLIST result,
+            JET_IdxInfo infoLevel)
+        {
+            this.TraceFunctionCall("JetGetIndexInfo");
             this.CheckNotNull(tablename, "tablename");
 
             var nativeIndexlist = new NATIVE_INDEXLIST();
@@ -2390,11 +2499,46 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 sesid.Value,
                 dbid.Value,
                 tablename,
-                ignored,
+                indexname,
                 ref nativeIndexlist,
                 nativeIndexlist.cbStruct,
-                (uint)JET_IdxInfo.InfoList));
-            indexlist.SetFromNativeIndexlist(nativeIndexlist);
+                (uint)infoLevel));
+
+            result = new JET_INDEXLIST();
+            result.SetFromNativeIndexlist(nativeIndexlist);
+
+            return err;
+        }
+
+        #endregion
+
+        #region JetGetTableIndexInfo overloads
+
+        /// <summary>
+        /// Retrieves information about indexes on a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to retrieve index information about.</param>
+        /// <param name="indexname">The name of the index.</param>
+        /// <param name="result">Filled in with information about indexes on the table.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetTableIndexInfo(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            string indexname,
+            out ushort result,
+            JET_IdxInfo infoLevel)
+        {
+            this.TraceFunctionCall("JetGetTableIndexInfo");
+
+            int err = this.Err(NativeMethods.JetGetTableIndexInfo(
+                sesid.Value,
+                tableid.Value,
+                indexname,
+                out result,
+                sizeof(ushort),
+                (uint)infoLevel));
 
             return err;
         }
@@ -2404,31 +2548,96 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The table to retrieve index information about.</param>
-        /// <param name="ignored">This parameter is ignored.</param>
-        /// <param name="indexlist">Filled in with information about indexes on the table.</param>
+        /// <param name="indexname">The name of the index.</param>
+        /// <param name="result">Filled in with information about indexes on the table.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
         /// <returns>An error if the call fails.</returns>
         public int JetGetTableIndexInfo(
-                JET_SESID sesid,
-                JET_TABLEID tableid,
-                string ignored,
-                out JET_INDEXLIST indexlist)
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            string indexname,
+            out int result,
+            JET_IdxInfo infoLevel)
         {
             this.TraceFunctionCall("JetGetTableIndexInfo");
-            indexlist = new JET_INDEXLIST();
+
+            uint nativeResult;
+            int err = this.Err(NativeMethods.JetGetTableIndexInfo(
+                sesid.Value,
+                tableid.Value,
+                indexname,
+                out nativeResult,
+                sizeof(uint),
+                (uint)infoLevel));
+
+            result = unchecked((int)nativeResult);
+            return err;
+        }
+
+        /// <summary>
+        /// Retrieves information about indexes on a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to retrieve index information about.</param>
+        /// <param name="indexname">The name of the index.</param>
+        /// <param name="result">Filled in with information about indexes on the table.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetTableIndexInfo(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            string indexname,
+            out JET_INDEXID result,
+            JET_IdxInfo infoLevel)
+        {
+            this.TraceFunctionCall("JetGetTableIndexInfo");
+
+            result = new JET_INDEXID { CbStruct = JET_INDEXID.SizeOfIndexId };
+            int err = this.Err(NativeMethods.JetGetTableIndexInfo(
+                sesid.Value,
+                tableid.Value,
+                indexname,
+                ref result,
+                JET_INDEXID.SizeOfIndexId,
+                (uint)infoLevel));
+
+            return err;
+        }
+
+        /// <summary>
+        /// Retrieves information about indexes on a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to retrieve index information about.</param>
+        /// <param name="indexname">The name of the index.</param>
+        /// <param name="result">Filled in with information about indexes on the table.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetTableIndexInfo(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            string indexname,
+            out JET_INDEXLIST result,
+            JET_IdxInfo infoLevel)
+        {
+            this.TraceFunctionCall("JetGetTableIndexInfo");
 
             var nativeIndexlist = new NATIVE_INDEXLIST();
             nativeIndexlist.cbStruct = checked((uint)Marshal.SizeOf(nativeIndexlist));
             int err = this.Err(NativeMethods.JetGetTableIndexInfo(
                 sesid.Value,
                 tableid.Value,
-                ignored,
+                indexname,
                 ref nativeIndexlist,
                 nativeIndexlist.cbStruct,
-                (uint)JET_IdxInfo.InfoList));
-            indexlist.SetFromNativeIndexlist(nativeIndexlist);
+                (uint)infoLevel));
+            result = new JET_INDEXLIST();
+            result.SetFromNativeIndexlist(nativeIndexlist);
 
             return err;
         }
+
+        #endregion
 
         /// <summary>
         /// Changes the name of an existing table.
@@ -2742,6 +2951,44 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             // A null index name is valid here -- it will set the table to the primary index
             return this.Err(NativeMethods.JetSetCurrentIndex3(sesid.Value, tableid.Value, index, (uint)grbit, checked((uint)itagSequence)));
+        }
+
+        /// <summary>
+        /// Set the current index of a cursor.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to set the index on.</param>
+        /// <param name="index">
+        /// The name of the index to be selected. If this is null or empty the primary
+        /// index will be selected.
+        /// </param>
+        /// <param name="indexid">
+        /// The id of the index to select. This id can be obtained using JetGetIndexInfo
+        /// or JetGetTableIndexInfo with the <see cref="JET_IdxInfo.IndexId"/> option.
+        /// </param>
+        /// <param name="grbit">
+        /// Set index options.
+        /// </param>
+        /// <param name="itagSequence">
+        /// Sequence number of the multi-valued column value which will be used
+        /// to position the cursor on the new index. This parameter is only used
+        /// in conjunction with <see cref="SetCurrentIndexGrbit.NoMove"/>. When
+        /// this parameter is not present or is set to zero, its value is presumed
+        /// to be 1.
+        /// </param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetSetCurrentIndex4(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            string index,
+            JET_INDEXID indexid,
+            SetCurrentIndexGrbit grbit,
+            int itagSequence)
+        {
+            this.TraceFunctionCall("JetSetCurrentIndex4");
+
+            // A null index name is valid here -- it will set the table to the primary index
+            return this.Err(NativeMethods.JetSetCurrentIndex4(sesid.Value, tableid.Value, index, ref indexid, (uint)grbit, checked((uint)itagSequence)));            
         }
 
         /// <summary>

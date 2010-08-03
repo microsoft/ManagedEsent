@@ -271,11 +271,38 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test JetSetCurrentIndex3.
+        /// Test JetSetCurrentIndex4.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Test JetSetCurrentIndex3")]
+        [Description("Test JetSetCurrentIndex4")]
+        public void JetSetCurrentIndex4()
+        {
+            JET_INDEXID indexid;
+            Api.JetGetTableIndexInfo(this.sesid, this.tableid, "index", out indexid, JET_IdxInfo.IndexId);
+            Api.JetSetCurrentIndex(this.sesid, this.tableid, null);
+
+            this.InsertRecord(0, "a", "b", "c");
+            this.InsertRecord(1, "x", "y", "z");
+            this.InsertRecord(2, "i", "j", "k");
+
+            // This should position us on the last itag of record 2 ([2:k]). Moving next should take
+            // us to the next record ([1:x]).
+            Api.JetSetCurrentIndex4(this.sesid, this.tableid, "index", indexid, SetCurrentIndexGrbit.NoMove, 3);
+
+            Assert.AreEqual(
+                2, (int)Api.RetrieveColumnAsInt32(this.sesid, this.tableid, this.keyColumn), "should be on the same record");
+            Assert.IsTrue(Api.TryMoveNext(this.sesid, this.tableid), "unable to move to next record");
+            Assert.AreEqual(
+                1, (int)Api.RetrieveColumnAsInt32(this.sesid, this.tableid, this.keyColumn), "should have been on the next record");
+        }
+
+        /// <summary>
+        /// Test TryMove.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test TryMove")]
         public void TestTryMove()
         {
             this.InsertRecord(0, "a", "b", "c");

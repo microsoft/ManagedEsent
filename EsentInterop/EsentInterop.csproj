@@ -84,6 +84,7 @@
     <Compile Include="jet_recsize.cs" />
     <Compile Include="jet_tblinfo.cs" />
     <Compile Include="objectinfogrbit.cs" />
+    <Compile Include="ObsoleteApi.cs" />
     <Compile Include="Server2003Api.cs" />
     <Compile Include="jet_enumcolumn.cs" />
     <Compile Include="jet_enumcolumnid.cs" />

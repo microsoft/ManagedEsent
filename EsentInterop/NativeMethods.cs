@@ -446,6 +446,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetGetCurrentIndex(IntPtr sesid, IntPtr tableid, [Out] StringBuilder szIndexName, uint cchIndexName);
 
+        #region JetGetTableInfo overloads
+
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetGetTableInfo(
             IntPtr sesid,
@@ -462,13 +464,60 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             uint cbMax,
             uint infoLevel);
 
+        #endregion
+
+        #region JetGetIndexInfo overloads
+
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetGetIndexInfo(
             IntPtr sesid,
             uint dbid,
             string szTableName,
             string szIndexName,
-            [In] [Out] ref NATIVE_INDEXLIST indexlist,
+            [Out] out ushort result,
+            uint cbResult,
+            uint InfoLevel);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetIndexInfo(
+            IntPtr sesid,
+            uint dbid,
+            string szTableName,
+            string szIndexName,
+            [Out] out uint result,
+            uint cbResult,
+            uint InfoLevel);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetIndexInfo(
+            IntPtr sesid,
+            uint dbid,
+            string szTableName,
+            string szIndexName,
+            [In] [Out] ref JET_INDEXID result,
+            uint cbResult,
+            uint InfoLevel);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetIndexInfo(
+            IntPtr sesid,
+            uint dbid,
+            string szTableName,
+            string szIndexName,
+            [In] [Out] ref NATIVE_INDEXLIST result,
+            uint cbResult,
+            uint InfoLevel);
+
+        #endregion
+
+        #region JetGetTableIndexInfo overloads
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetTableIndexInfo(
+            IntPtr sesid,
+            IntPtr tableid,
+            string szIndexName,
+            [Out] out ushort result,
             uint cbResult,
             uint InfoLevel);
 
@@ -477,9 +526,29 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             IntPtr sesid,
             IntPtr tableid,
             string szIndexName,
-            [In] [Out] ref NATIVE_INDEXLIST indexlist,
+            [Out] out uint result,
             uint cbResult,
             uint InfoLevel);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetTableIndexInfo(
+            IntPtr sesid,
+            IntPtr tableid,
+            string szIndexName,
+            [In] [Out] ref JET_INDEXID result,
+            uint cbResult,
+            uint InfoLevel);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetTableIndexInfo(
+            IntPtr sesid,
+            IntPtr tableid,
+            string szIndexName,
+            [In] [Out] ref NATIVE_INDEXLIST result,
+            uint cbResult,
+            uint InfoLevel);
+
+        #endregion
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetRenameTable(IntPtr sesid, uint dbid, string szName, string szNameNew);
@@ -537,6 +606,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetSetCurrentIndex3(IntPtr sesid, IntPtr tableid, string szIndexName, uint grbit, uint itagSequence);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetSetCurrentIndex4(IntPtr sesid, IntPtr tableid, string szIndexName, [In] ref JET_INDEXID indexid, uint grbit, uint itagSequence);
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetIndexRecordCount(IntPtr sesid, IntPtr tableid, out uint crec, uint crecMax);

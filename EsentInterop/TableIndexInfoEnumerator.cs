@@ -46,7 +46,7 @@ namespace Microsoft.Isam.Esent.Interop
         protected override void OpenTable()
         {
             JET_INDEXLIST indexlist;
-            Api.JetGetIndexInfo(this.Sesid, this.dbid, this.tablename, string.Empty, out indexlist);
+            Api.JetGetIndexInfo(this.Sesid, this.dbid, this.tablename, string.Empty, out indexlist, JET_IdxInfo.List);
             this.Indexlist = indexlist;
             this.TableidToEnumerate = this.Indexlist.tableid;
         }
