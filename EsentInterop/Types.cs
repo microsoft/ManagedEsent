@@ -374,7 +374,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// A JET_COLUMNID identifies a column within a table.
     /// </summary>
-    public struct JET_COLUMNID : IEquatable<JET_COLUMNID>
+    public struct JET_COLUMNID : IEquatable<JET_COLUMNID>, IComparable<JET_COLUMNID>
     {
         /// <summary>
         /// The native value.
@@ -412,6 +412,52 @@ namespace Microsoft.Isam.Esent.Interop
         public static bool operator !=(JET_COLUMNID lhs, JET_COLUMNID rhs)
         {
             return !(lhs == rhs);
+        }
+
+        /// <summary>
+        /// Determine whether one columnid is before another columnid.
+        /// </summary>
+        /// <param name="lhs">The first columnid to compare.</param>
+        /// <param name="rhs">The second columnid to compare.</param>
+        /// <returns>True if lhs comes before rhs.</returns>
+        public static bool operator <(JET_COLUMNID lhs, JET_COLUMNID rhs)
+        {
+            return lhs.CompareTo(rhs) < 0;
+        }
+
+        /// <summary>
+        /// Determine whether one columnid is after another columnid.
+        /// </summary>
+        /// <param name="lhs">The first columnid to compare.</param>
+        /// <param name="rhs">The second columnid to compare.</param>
+        /// <returns>True if lhs comes after rhs.</returns>
+        public static bool operator >(JET_COLUMNID lhs, JET_COLUMNID rhs)
+        {
+            return lhs.CompareTo(rhs) > 0;
+        }
+
+        /// <summary>
+        /// Determine whether one columnid is before or equal to
+        /// another columnid.
+        /// </summary>
+        /// <param name="lhs">The first columnid to compare.</param>
+        /// <param name="rhs">The second columnid to compare.</param>
+        /// <returns>True if lhs comes before or is equal to rhs.</returns>
+        public static bool operator <=(JET_COLUMNID lhs, JET_COLUMNID rhs)
+        {
+            return lhs.CompareTo(rhs) <= 0;
+        }
+
+        /// <summary>
+        /// Determine whether one columnid is after or equal to
+        /// another columnid.
+        /// </summary>
+        /// <param name="lhs">The first columnid to compare.</param>
+        /// <param name="rhs">The second columnid to compare.</param>
+        /// <returns>True if lhs comes after or is equal to rhs.</returns>
+        public static bool operator >=(JET_COLUMNID lhs, JET_COLUMNID rhs)
+        {
+            return lhs.CompareTo(rhs) >= 0;
         }
 
         /// <summary>
@@ -457,6 +503,20 @@ namespace Microsoft.Isam.Esent.Interop
         public bool Equals(JET_COLUMNID other)
         {
             return this.Value.Equals(other.Value);
+        }
+
+        /// <summary>
+        /// Compares this columnid to another columnid and determines
+        /// whether this instance is before, the same as or after the other
+        /// instance.
+        /// </summary>
+        /// <param name="other">The columnid to compare to the current instance.</param>
+        /// <returns>
+        /// A signed number indicating the relative positions of this instance and the value parameter.
+        /// </returns>
+        public int CompareTo(JET_COLUMNID other)
+        {
+            return this.Value.CompareTo(other.Value);
         }
     }
 

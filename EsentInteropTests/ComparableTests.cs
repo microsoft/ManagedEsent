@@ -29,7 +29,9 @@ namespace InteropApiTests
             {
                 new JET_LGPOS { lGeneration = 1, isec = 3, ib = 5 },
                 new JET_LGPOS { lGeneration = 1, isec = 3, ib = 6 },
+                new JET_LGPOS { lGeneration = 1, isec = 4, ib = 4 },
                 new JET_LGPOS { lGeneration = 1, isec = 4, ib = 5 },
+                new JET_LGPOS { lGeneration = 2, isec = 2, ib = 2 },
                 new JET_LGPOS { lGeneration = 2, isec = 3, ib = 5 },
             };
 
@@ -48,6 +50,43 @@ namespace InteropApiTests
                     Assert.IsTrue(positions[i] <= positions[j], "<=");
                     Assert.IsTrue(positions[j] > positions[i], ">");
                     Assert.IsTrue(positions[j] >= positions[i], ">=");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Check that JET_COLUMNID structures can be compared.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_COLUMNID structures can be compared")]
+        public void VerifyJetColumnidComparison()
+        {
+            // These positions are in ascending order
+            var columnids = new[]
+            {
+                JET_COLUMNID.Nil,
+                new JET_COLUMNID { Value = 1U },
+                new JET_COLUMNID { Value = 2U },
+                new JET_COLUMNID { Value = 3U },
+                new JET_COLUMNID { Value = 4U },
+            };
+
+            // It would be nice if this was a generic helper method, but that won't
+            // work for the operators.);
+            for (int i = 0; i < columnids.Length - 1; ++i)
+            {
+                TestEqualObjects(columnids[i], columnids[i]);
+                Assert.IsTrue(columnids[i] <= columnids[i], "<=");
+                Assert.IsTrue(columnids[i] >= columnids[i], ">=");
+
+                for (int j = i + 1; j < columnids.Length; ++j)
+                {
+                    TestOrderedObjects(columnids[i], columnids[j]);
+                    Assert.IsTrue(columnids[i] < columnids[j], "<");
+                    Assert.IsTrue(columnids[i] <= columnids[j], "<=");
+                    Assert.IsTrue(columnids[j] > columnids[i], ">");
+                    Assert.IsTrue(columnids[j] >= columnids[i], ">=");
                 }
             }
         }

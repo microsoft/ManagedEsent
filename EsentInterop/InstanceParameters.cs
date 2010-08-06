@@ -7,7 +7,6 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
-    using System.Globalization;
     using System.IO;
     using Microsoft.Isam.Esent.Interop.Server2003;
     using Microsoft.Isam.Esent.Interop.Vista;
@@ -17,7 +16,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// This class provides properties to set and get system parameters
     /// on an ESENT instance.
     /// </summary>
-    public class InstanceParameters
+    public partial class InstanceParameters
     {
         /// <summary>
         /// The instance to set parameters on.

@@ -6,6 +6,7 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
     using System.Diagnostics;
     using System.Globalization;
     using Microsoft.Isam.Esent.Interop.Implementation;
@@ -50,6 +51,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             string name = Api.RetrieveColumnAsString(
                 sesid, indexlist.tableid, indexlist.columnidindexname, NativeMethods.Encoding, RetrieveColumnGrbit.None);
+            name = String.IsInterned(name) ?? name;
             int lcid = (int)Api.RetrieveColumnAsInt16(sesid, indexlist.tableid, indexlist.columnidLangid);
             var cultureInfo = new CultureInfo(lcid);
             uint lcmapFlags = (uint)Api.RetrieveColumnAsUInt32(sesid, indexlist.tableid, indexlist.columnidLCMapFlags);
@@ -93,6 +95,7 @@ namespace Microsoft.Isam.Esent.Interop
                     indexlist.columnidcolumnname,
                     NativeMethods.Encoding,
                     RetrieveColumnGrbit.None);
+                columnName = String.IsInterned(columnName) ?? columnName;
                 var coltyp = (JET_coltyp)Api.RetrieveColumnAsInt32(sesid, indexlist.tableid, indexlist.columnidcoltyp);
                 var grbit =
                     (IndexKeyGrbit)Api.RetrieveColumnAsInt32(sesid, indexlist.tableid, indexlist.columnidgrbitColumn);

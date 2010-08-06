@@ -452,7 +452,23 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern int JetGetTableInfo(
             IntPtr sesid,
             IntPtr tableid,
-            IntPtr pvResult,
+            [Out] out NATIVE_OBJECTINFO pvResult,
+            uint cbMax,
+            uint infoLevel);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetTableInfo(
+            IntPtr sesid,
+            IntPtr tableid,
+            [Out] out uint pvResult,
+            uint cbMax,
+            uint infoLevel);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetTableInfo(
+            IntPtr sesid,
+            IntPtr tableid,
+            [Out] int[] pvResult,
             uint cbMax,
             uint infoLevel);
 

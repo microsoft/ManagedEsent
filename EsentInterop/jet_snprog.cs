@@ -53,7 +53,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [Serializable]
-    public class JET_SNPROG
+    public class JET_SNPROG : IEquatable<JET_SNPROG>
     {
         /// <summary>
         /// Number of units of work that have completed.
@@ -88,12 +88,53 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Generate a string representation of the structure.
+        /// Returns a value indicating whether this instance is equal
+        /// to another instance.
+        /// </summary>
+        /// <param name="obj">An object to compare with this instance.</param>
+        /// <returns>True if the two instances are equal.</returns>
+        public override bool Equals(object obj)
+        {
+            if (obj == null || this.GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            return this.Equals((JET_SNPROG)obj);
+        }
+
+        /// <summary>
+        /// Generate a string representation of the instance.
         /// </summary>
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
             return String.Format(CultureInfo.InvariantCulture, "JET_SNPROG({0}/{1})", this.cunitDone, this.cunitTotal);
+        }
+
+        /// <summary>
+        /// Returns the hash code for this instance.
+        /// </summary>
+        /// <returns>The hash code for this instance.</returns>
+        public override int GetHashCode()
+        {
+            return unchecked(this.cunitDone * 31) ^ this.cunitTotal;
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether this instance is equal
+        /// to another instance.
+        /// </summary>
+        /// <param name="other">An instance to compare with this instance.</param>
+        /// <returns>True if the two instances are equal.</returns>
+        public bool Equals(JET_SNPROG other)
+        {
+            if (null == other)
+            {
+                return false;
+            }
+
+            return this.cunitDone == other.cunitDone && this.cunitTotal == other.cunitTotal;
         }
 
         /// <summary>

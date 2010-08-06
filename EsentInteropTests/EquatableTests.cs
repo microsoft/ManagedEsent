@@ -999,12 +999,273 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Check that JET_CONDITIONALCOLUMN objects can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_CONDITIONALCOLUMN objects can be compared for equality")]
+        public void VerifyJetConditionalColumnEquality()
+        {
+            var x = new JET_CONDITIONALCOLUMN { szColumnName = "Column", grbit = ConditionalColumnGrbit.ColumnMustBeNonNull };
+            var y = new JET_CONDITIONALCOLUMN { szColumnName = "Column", grbit = ConditionalColumnGrbit.ColumnMustBeNonNull };
+            TestEqualObjects(x, y);
+
+            // This is a reference class. Operator == and != still do reference comparisons.
+        }
+
+        /// <summary>
+        /// Check that JET_CONDITIONALCOLUMN objects can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_CONDITIONALCOLUMN objects can be compared for inequality")]
+        public void VerifyJetConditionalColumnInequality()
+        {
+            // None of these objects are equal, most differ in only one member from the
+            // first object. We will compare them all against each other.
+            var conditionalcolumns = new[]
+            {
+                new JET_CONDITIONALCOLUMN { szColumnName = "Column", grbit = ConditionalColumnGrbit.ColumnMustBeNonNull },
+                new JET_CONDITIONALCOLUMN { szColumnName = "Column", grbit = ConditionalColumnGrbit.ColumnMustBeNull },
+                new JET_CONDITIONALCOLUMN { szColumnName = "Column2", grbit = ConditionalColumnGrbit.ColumnMustBeNonNull },
+                new JET_CONDITIONALCOLUMN { szColumnName = null, grbit = ConditionalColumnGrbit.ColumnMustBeNonNull },
+            };
+
+            TestUnequal(conditionalcolumns);
+        }
+
+        /// <summary>
+        /// Check that JET_UNICODEINDEX objects can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_UNICODEINDEX objects can be compared for equality")]
+        public void VerifyJetUnicodeIndexEquality()
+        {
+            var x = new JET_UNICODEINDEX { lcid = 1033, dwMapFlags = 1 };
+            var y = new JET_UNICODEINDEX { lcid = 1033, dwMapFlags = 1 };
+            TestEqualObjects(x, y);
+
+            // This is a reference class. Operator == and != still do reference comparisons.
+        }
+
+        /// <summary>
+        /// Check that JET_UNICODEINDEX structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_UNICODEINDEX objects can be compared for inequality")]
+        public void VerifyJetUnicodeIndexInequality()
+        {
+            // None of these objects are equal, most differ in only one member from the
+            // first object. We will compare them all against each other.
+            var unicodeindexes = new[]
+            {
+                new JET_UNICODEINDEX { lcid = 1033, dwMapFlags = 1 },
+                new JET_UNICODEINDEX { lcid = 1033, dwMapFlags = 2 },
+                new JET_UNICODEINDEX { lcid = 1034, dwMapFlags = 1 },
+            };
+
+            TestUnequal(unicodeindexes);
+        }
+
+        /// <summary>
+        /// Check that JET_SNPROG objects can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_SNPROG objects can be compared for equality")]
+        public void VerifyJetSnprogEquality()
+        {
+            var x = new JET_SNPROG { cunitDone = 1, cunitTotal = 2 };
+            var y = new JET_SNPROG { cunitDone = 1, cunitTotal = 2 };
+            TestEqualObjects(x, y);
+
+            // This is a reference class. Operator == and != still do reference comparisons.
+        }
+
+        /// <summary>
+        /// Check that JET_SNPROG structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_SNPROG objects can be compared for inequality")]
+        public void VerifyJetSnprogInequality()
+        {
+            // None of these objects are equal, most differ in only one member from the
+            // first object. We will compare them all against each other.
+            var snprogs = new[]
+            {
+                new JET_SNPROG { cunitDone = 1, cunitTotal = 2 },
+                new JET_SNPROG { cunitDone = 1, cunitTotal = 3 },
+                new JET_SNPROG { cunitDone = 2, cunitTotal = 2 },
+            };
+
+            TestUnequal(snprogs);
+        }
+
+        /// <summary>
+        /// Check that JET_RECPOS objects can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_RECPOS objects can be compared for equality")]
+        public void VerifyJetRecposEquality()
+        {
+            var x = new JET_RECPOS { centriesLT = 1, centriesTotal = 2 };
+            var y = new JET_RECPOS { centriesLT = 1, centriesTotal = 2 };
+            TestEqualObjects(x, y);
+
+            // This is a reference class. Operator == and != still do reference comparisons.
+        }
+
+        /// <summary>
+        /// Check that JET_RECPOS structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_RECPOS objects can be compared for inequality")]
+        public void VerifyJetRecposInequality()
+        {
+            // None of these objects are equal, most differ in only one member from the
+            // first object. We will compare them all against each other.
+            var positions = new[]
+            {
+                new JET_RECPOS { centriesLT = 1, centriesTotal = 2 },
+                new JET_RECPOS { centriesLT = 1, centriesTotal = 3 },
+                new JET_RECPOS { centriesLT = 2, centriesTotal = 2 },
+            };
+
+            TestUnequal(positions);
+        }
+
+        /// <summary>
+        /// Check that JET_INDEXCREATE objects can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_INDEXCREATE objects can be compared for equality")]
+        public void VerifyJetIndexcreateEquality()
+        {
+            var x = new JET_INDEXCREATE { cbKey = 6, szKey = "-C1\0\0", szIndexName = "Index" };
+            var y = new JET_INDEXCREATE { cbKey = 6, szKey = "-C1\0\0", szIndexName = "Index" };
+            TestEqualObjects(x, y);
+
+            // This is a reference class. Operator == and != still do reference comparisons.
+        }
+
+        /// <summary>
+        /// Check that JET_INDEXCREATE structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_INDEXCREATE objects can be compared for inequality")]
+        public void VerifyJetIndexCreateInequality()
+        {
+            // create an array of indexcreate objects
+            var indexcreates = new JET_INDEXCREATE[13];
+
+            // First make them all the same
+            // (different objects with the same values)
+            for (int i = 0; i < indexcreates.Length; ++i)
+            {
+                indexcreates[i] = new JET_INDEXCREATE
+                {
+                    cbKey = 6,
+                    cbKeyMost = 300,
+                    cbVarSegMac = 100,
+                    cConditionalColumn = 2,
+                    err = JET_err.Success,
+                    grbit = CreateIndexGrbit.None,
+                    pidxUnicode = new JET_UNICODEINDEX { dwMapFlags = 0x1, lcid = 100 },
+                    rgconditionalcolumn = new[]
+                    {
+                        new JET_CONDITIONALCOLUMN { grbit = ConditionalColumnGrbit.ColumnMustBeNonNull, szColumnName = "a" },
+                        new JET_CONDITIONALCOLUMN { grbit = ConditionalColumnGrbit.ColumnMustBeNull, szColumnName = "b" },
+                    },
+                    szIndexName = "index",
+                    szKey = "+foo\0\0",
+                };
+            }
+
+            // Now make them all different
+            int j = 1;
+            indexcreates[j++].cbKey--;
+            indexcreates[j++].cbKeyMost--;
+            indexcreates[j++].cbVarSegMac--;
+            indexcreates[j++].cConditionalColumn--;
+            indexcreates[j++].cConditionalColumn = 0;
+            indexcreates[j++].err = JET_err.VersionStoreOutOfMemory;
+            indexcreates[j++].grbit = CreateIndexGrbit.IndexUnique;
+            indexcreates[j++].pidxUnicode = new JET_UNICODEINDEX { dwMapFlags = 0x2, lcid = 100 };
+            indexcreates[j++].pidxUnicode = null;
+            indexcreates[j++].rgconditionalcolumn[0].szColumnName = "c";
+            indexcreates[j++].szIndexName = "index2";
+            indexcreates[j++].szKey = "+bar\0\0";
+            Debug.Assert(j == indexcreates.Length, "Too many indexcreates in array");
+
+            // Finally compare them
+            TestUnequal(indexcreates);
+        }
+
+        /// <summary>
+        /// Check that JET_INSTANCE_INFO objects can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_INSTANCE_INFO objects can be compared for equality")]
+        public void VerifyJetInstanceInfoEquality()
+        {
+            var x = new JET_INSTANCE_INFO(JET_INSTANCE.Nil, "instance", new[] { "foo.edb" });
+            var y = new JET_INSTANCE_INFO(JET_INSTANCE.Nil, "instance", new[] { "foo.edb" });
+            TestEqualObjects(x, y);
+
+            // This is a reference class. Operator == and != still do reference comparisons.
+        }
+
+        /// <summary>
+        /// Check that JET_INSTANCE_INFO structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_INSTANCE_INFO objects can be compared for inequality")]
+        public void VerifyJetInstanceInfoInequality()
+        {
+            // None of these objects are equal, most differ in only one member from the
+            // first object. We will compare them all against each other.
+            var positions = new[]
+            {
+                new JET_INSTANCE_INFO(JET_INSTANCE.Nil, "instance", new[] { "foo.edb" }),
+                new JET_INSTANCE_INFO(JET_INSTANCE.Nil, "instance", new[] { "foo.edb", "bar.edb" }),
+                new JET_INSTANCE_INFO(JET_INSTANCE.Nil, "instance", new[] { "bar.edb" }),
+                new JET_INSTANCE_INFO(JET_INSTANCE.Nil, "instance", null),
+                new JET_INSTANCE_INFO(JET_INSTANCE.Nil, "instance2", new[] { "foo.edb" }),
+                new JET_INSTANCE_INFO(JET_INSTANCE.Nil, null, new[] { "foo.edb" }),
+                new JET_INSTANCE_INFO(new JET_INSTANCE { Value = new IntPtr(1) }, "instance", new[] { "foo.edb" }),
+            };
+
+            TestUnequal(positions);
+        }
+
+        /// <summary>
         /// Helper method to compare two equal objects.
         /// </summary>
         /// <typeparam name="T">The object type.</typeparam>
         /// <param name="x">The first object.</param>
         /// <param name="y">The second object.</param>
-        private static void TestEqualObjects<T>(T x, T y) where T : struct, IEquatable<T> 
+        private static void TestEqualObjects<T>(T x, T y) where T : IEquatable<T> 
         {
             Assert.IsTrue(x.Equals(y));
             Assert.IsTrue(y.Equals(x));
@@ -1024,7 +1285,7 @@ namespace InteropApiTests
         /// <typeparam name="T">The object type.</typeparam>
         /// <param name="x">The first object.</param>
         /// <param name="y">The second object.</param>
-        private static void TestUnequalObjects<T>(T x, T y) where T : struct, IEquatable<T>
+        private static void TestUnequalObjects<T>(T x, T y) where T : IEquatable<T>
         {
             Assert.IsFalse(x.Equals(y));
             Assert.IsFalse(y.Equals(x));
@@ -1036,6 +1297,29 @@ namespace InteropApiTests
             Assert.IsFalse(objB.Equals(objA));
             Assert.IsFalse(objA.Equals(null));
             Assert.IsFalse(objA.Equals(new Exception()));
+        }
+
+        /// <summary>
+        /// Verify that all objects in the collection are not equal to each other.
+        /// </summary>
+        /// <remarks>
+        /// This method doesn't test operator == or operator != so it should be 
+        /// used for reference classes, which don't normally provide those operators.
+        /// </remarks>
+        /// <typeparam name="T">The object type.</typeparam>
+        /// <param name="values">Collection of distinct objects.</param>
+        private static void TestUnequal<T>(T[] values) where T : class, IEquatable<T>
+        {
+            for (int i = 0; i < values.Length - 1; ++i)
+            {
+                TestEqualObjects(values[i], values[i]);
+                for (int j = i + 1; j < values.Length; ++j)
+                {
+                    Debug.Assert(i != j, "About to compare the same values");
+                    TestUnequalObjects(values[i], values[j]);
+                    Assert.IsFalse(values[i].Equals(null));
+                }
+            }           
         }
     }
 }

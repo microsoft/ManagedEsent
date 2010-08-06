@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Runtime.InteropServices;
 
     /// <summary>
@@ -69,8 +70,35 @@ namespace Microsoft.Isam.Esent.Interop
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
-    public class JET_INSTANCE_INFO
+    public class JET_INSTANCE_INFO : IEquatable<JET_INSTANCE_INFO>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JET_INSTANCE_INFO"/> class.
+        /// </summary>
+        internal JET_INSTANCE_INFO()
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JET_INSTANCE_INFO"/> class.
+        /// </summary>
+        /// <param name="instance">
+        /// The instance.
+        /// </param>
+        /// <param name="instanceName">
+        /// The name of the instance.
+        /// </param>
+        /// <param name="databases">
+        /// The databases in the instance.
+        /// </param>
+        internal JET_INSTANCE_INFO(JET_INSTANCE instance, string instanceName, string[] databases)
+        {
+            this.hInstanceId = instance;
+            this.szInstanceName = instanceName;
+            this.cDatabases = (null == databases) ? 0 : databases.Length;
+            this.szDatabaseFileName = databases;
+        }
+
         /// <summary>
         /// Gets the JET_INSTANCE of the given instance.
         /// </summary>
@@ -95,6 +123,80 @@ namespace Microsoft.Isam.Esent.Interop
         public string[] szDatabaseFileName { get; private set; }
 
         /// <summary>
+        /// Returns a value indicating whether this instance is equal
+        /// to another instance.
+        /// </summary>
+        /// <param name="obj">An object to compare with this instance.</param>
+        /// <returns>True if the two instances are equal.</returns>
+        public override bool Equals(object obj)
+        {
+            if (obj == null || this.GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            return this.Equals((JET_INSTANCE_INFO)obj);
+        }
+
+        /// <summary>
+        /// Generate a string representation of the instance.
+        /// </summary>
+        /// <returns>The structure as a string.</returns>
+        public override string ToString()
+        {
+            return String.Format(CultureInfo.InvariantCulture, "JET_INSTANCE_INFO({0})", this.szInstanceName);
+        }
+
+        /// <summary>
+        /// Returns the hash code for this instance.
+        /// </summary>
+        /// <returns>The hash code for this instance.</returns>
+        public override int GetHashCode()
+        {
+            int hash = this.hInstanceId.GetHashCode()
+                   ^ (this.szInstanceName ?? String.Empty).GetHashCode()
+                   ^ this.cDatabases << 20;
+
+            for (int i = 0; i < this.cDatabases; ++i)
+            {
+                hash ^= this.szDatabaseFileName[i].GetHashCode();
+            }
+
+            return hash;
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether this instance is equal
+        /// to another instance.
+        /// </summary>
+        /// <param name="other">An instance to compare with this instance.</param>
+        /// <returns>True if the two instances are equal.</returns>
+        public bool Equals(JET_INSTANCE_INFO other)
+        {
+            if (null == other)
+            {
+                return false;
+            }
+
+            if (this.hInstanceId != other.hInstanceId
+                || this.szInstanceName != other.szInstanceName
+                || this.cDatabases != other.cDatabases)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < this.cDatabases; ++i)
+            {
+                if (this.szDatabaseFileName[i] != other.szDatabaseFileName[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Set the properties of the object from a native instance info where the
         /// strings in the NATIVE_INSTANCE_INFO are ASCII.
         /// </summary>
@@ -116,7 +218,7 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// Set the properties of the object from a native instance info where the
-        /// strings i nthe NATIVE_INSTANCE_INFO are Unicode.
+        /// strings in the NATIVE_INSTANCE_INFO are Unicode.
         /// </summary>
         /// <param name="native">The native instance info.</param>
         internal void SetFromNativeUnicode(NATIVE_INSTANCE_INFO native)

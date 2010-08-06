@@ -8,6 +8,7 @@ namespace InteropApiTests
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Linq;
@@ -209,6 +210,47 @@ namespace InteropApiTests
         #region MetaData helpers tests
 
         /// <summary>
+        /// Verify that keys in the columnid dictionary are interned if possible.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Ignore]
+        [Description(" Verify that keys in the columnid dictionary are interned if possible")]
+        public void VerifyColumnDictionaryKeysAreInterned()
+        {
+            string s = this.columnidDict.Keys.Where(x => x.Equals("boolean", StringComparison.OrdinalIgnoreCase)).Single();
+            Assert.IsNotNull(String.IsInterned(s), "{0} is not interned", s);
+            Assert.AreSame(s, "Boolean", "Interning failed");
+        }
+
+        /// <summary>
+        /// See how fast we can find columnid entries in the dictionary.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("See how fast we can find columnid entries in the dictionary")]
+        public void TestDictionaryLookupPerf()
+        {
+            const int NumIterations = 200000;
+            const int LookupsPerIteration = 5;
+
+            var stopwatch = Stopwatch.StartNew();
+            for (int i = 0; i < NumIterations; ++i)
+            {
+                JET_COLUMNID boolean = this.columnidDict["Boolean"];
+                JET_COLUMNID int16 = this.columnidDict["Int16"];
+                JET_COLUMNID @float = this.columnidDict["Float"];
+                JET_COLUMNID ascii = this.columnidDict["Ascii"];
+                JET_COLUMNID uint64 = this.columnidDict["Uint64"];
+            }
+
+            stopwatch.Stop();
+            const double TotalLookups = NumIterations * LookupsPerIteration;
+            double lookupRate = TotalLookups / stopwatch.ElapsedMilliseconds;
+            Console.WriteLine("{0} lookups/millisecond", lookupRate);
+        }
+
+        /// <summary>
         /// Test the helper method that gets table names.
         /// </summary>
         [TestMethod]
@@ -218,6 +260,19 @@ namespace InteropApiTests
         {
             string actual = Api.GetTableNames(this.sesid, this.dbid).Single();
             Assert.AreEqual(this.table, actual);
+        }
+
+        /// <summary>
+        /// Verify that the helper method that interns table names.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test the helper method interns table names.")]
+        public void VerifyGetTableNamesInternsNames()
+        {
+            string name = Api.GetTableNames(this.sesid, this.dbid).Single();
+            Assert.IsNotNull(String.IsInterned(name), "{0} is not interned", name);
+            Assert.AreSame(name, this.table, "Interning failed");
         }
 
         /// <summary>

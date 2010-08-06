@@ -2590,31 +2590,22 @@ namespace Microsoft.Isam.Esent.Interop
         {
             if (err < 0)
             {
-                Fail(err);
+                Debug.Assert(err < 0, "expected a negative error code");
+
+                JET_err error = unchecked((JET_err)err);
+
+                var handler = Api.HandleError;
+                if (handler != null)
+                {
+                    handler(error);
+                }
+
+                // We didn't throw an exception from the handler, so
+                // generate the default exception.
+                throw new EsentErrorException(error);
             }
 
             return unchecked((JET_wrn)err);
-        }
-
-        /// <summary>
-        /// Called to throw an exception with a failing error code.
-        /// </summary>
-        /// <param name="err">The error to throw.</param>
-        private static void Fail(int err)
-        {
-            Debug.Assert(err < 0, "expected a negative error code");
-
-            JET_err error = unchecked((JET_err)err);
-
-            var handler = Api.HandleError;
-            if (handler != null)
-            {
-                handler(error);
-            }
-
-            // We didn't throw an exception from the handler, so
-            // generate the default exception.
-            throw new EsentErrorException(error);
         }
 
         #endregion Error Handling

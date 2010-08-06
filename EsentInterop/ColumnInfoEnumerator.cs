@@ -6,6 +6,7 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
     using Microsoft.Isam.Esent.Interop.Implementation;
 
     /// <summary>
@@ -52,6 +53,7 @@ namespace Microsoft.Isam.Esent.Interop
                 columnlist.columnidcolumnname,
                 NativeMethods.Encoding,
                 RetrieveColumnGrbit.None);
+            name = String.IsInterned(name) ?? name;
             var columnidValue = (uint)Api.RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcolumnid);
             var coltypValue = (uint)Api.RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcoltyp);
             uint codepageValue = (ushort)Api.RetrieveColumnAsUInt16(sesid, columnlist.tableid, columnlist.columnidCp);

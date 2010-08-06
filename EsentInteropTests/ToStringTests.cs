@@ -198,5 +198,65 @@ namespace InteropApiTests
             var snprog = new JET_SNPROG { cunitDone = 5, cunitTotal = 10 };
             Assert.AreEqual("JET_SNPROG(5/10)", snprog.ToString());
         }
+
+        /// <summary>
+        /// Test JET_RECPOS.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_RECPOS.ToString()")]
+        public void JetRecposToString()
+        {
+            var recpos = new JET_RECPOS { centriesLT = 5, centriesTotal = 10 };
+            Assert.AreEqual("JET_RECPOS(5/10)", recpos.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_CONDITIONALCOLUMN.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_CONDITIONALCOLUMN.ToString()")]
+        public void JetConditionalColumnToString()
+        {
+            var conditionalcolumn = new JET_CONDITIONALCOLUMN { szColumnName = "Foo", grbit = ConditionalColumnGrbit.ColumnMustBeNull };
+            Assert.AreEqual("JET_CONDITIONALCOLUMN(Foo:ColumnMustBeNull)", conditionalcolumn.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_UNICODEINDEX.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_UNICODEINDEX.ToString()")]
+        public void JetUnicodeIndexToString()
+        {
+            var unicodeindex = new JET_UNICODEINDEX { lcid = 1033, dwMapFlags = 0x12f };
+            Assert.AreEqual("JET_UNICODEINDEX(1033:0x12F)", unicodeindex.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_INDEXCREATE.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_INDEXCREATE.ToString()")]
+        public void JetIndexCreateToString()
+        {
+            var indexcreate = new JET_INDEXCREATE { cbKey = 5, szKey = "+C\0\0", szIndexName = "Index" };
+            Assert.AreEqual("JET_INDEXCREATE(Index:+C\0\0)", indexcreate.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_INSTANCE_INFO.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_INSTANCE_INFO.ToString()")]
+        public void JetInstanceInfoToString()
+        {
+            var instanceInfo = new JET_INSTANCE_INFO(JET_INSTANCE.Nil, "name", null);
+            Assert.AreEqual("JET_INSTANCE_INFO(name)", instanceInfo.ToString());
+        }
     }
 }

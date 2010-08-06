@@ -9,6 +9,7 @@ namespace Microsoft.Isam.Esent.Interop
     using System;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Runtime.InteropServices;
 
     /// <summary>
@@ -40,7 +41,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [Serializable]
-    public class JET_UNICODEINDEX
+    public class JET_UNICODEINDEX : IEquatable<JET_UNICODEINDEX>
     {
         /// <summary>
         /// The LCID to be used when normalizing unicode data.
@@ -71,6 +72,60 @@ namespace Microsoft.Isam.Esent.Interop
             [DebuggerStepThrough]
             get { return this.mapStringFlags; }
             set { this.mapStringFlags = value; }
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether this instance is equal
+        /// to another instance.
+        /// </summary>
+        /// <param name="obj">An object to compare with this instance.</param>
+        /// <returns>True if the two instances are equal.</returns>
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            return this.Equals((JET_UNICODEINDEX)obj);
+        }
+
+        /// <summary>
+        /// Generate a string representation of the instance.
+        /// </summary>
+        /// <returns>The structure as a string.</returns>
+        public override string ToString()
+        {
+            return String.Format(
+                CultureInfo.InvariantCulture,
+                "JET_UNICODEINDEX({0}:0x{1:X})",
+                this.localeId,
+                this.mapStringFlags);
+        }
+
+        /// <summary>
+        /// Returns the hash code for this instance.
+        /// </summary>
+        /// <returns>The hash code for this instance.</returns>
+        public override int GetHashCode()
+        {
+            return (this.localeId * 31) ^ unchecked((int)this.mapStringFlags);
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether this instance is equal
+        /// to another instance.
+        /// </summary>
+        /// <param name="other">An instance to compare with this instance.</param>
+        /// <returns>True if the two instances are equal.</returns>
+        public bool Equals(JET_UNICODEINDEX other)
+        {
+            if (null == other)
+            {
+                return false;
+            }
+
+            return this.localeId == other.localeId && this.mapStringFlags == other.mapStringFlags;
         }
 
         /// <summary>

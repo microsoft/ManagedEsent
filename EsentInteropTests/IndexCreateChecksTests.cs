@@ -186,5 +186,31 @@ namespace InteropApiTests
             this.indexcreate.cConditionalColumn = this.indexcreate.rgconditionalcolumn.Length + 1;
             this.indexcreate.CheckMembersAreValid();
         }
+
+        /// <summary>
+        /// GetHashCode should check the members.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_INDEXCREATE.GetHashCode checks the members")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyGetHashCodeThrowsExceptionWhenInvalid()
+        {
+            this.indexcreate.ulDensity = -1;
+            this.indexcreate.GetHashCode();
+        }
+
+        /// <summary>
+        /// Equals should check the members.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_INDEXCREATE.Equals checks the members")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyEqualsThrowsExceptionWhenInvalid()
+        {
+            this.indexcreate.ulDensity = -1;
+            this.indexcreate.Equals(this.indexcreate);
+        }
     }
 }

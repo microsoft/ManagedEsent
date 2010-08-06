@@ -42,12 +42,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>An error code.</returns>
         internal override unsafe int SetColumns(JET_SESID sesid, JET_TABLEID tableid, ColumnValue[] columnValues, NATIVE_SETCOLUMN* nativeColumns, int i)
         {
-            byte[] data = this.Value.GetValueOrDefault().ToByteArray();
-            fixed (void* buffer = data)
-            {
-                return this.SetColumns(
-                    sesid, tableid, columnValues, nativeColumns, i, buffer, data.Length, this.Value.HasValue);
-            }
+            Guid data = this.Value.GetValueOrDefault();
+            return this.SetColumns(sesid, tableid, columnValues, nativeColumns, i, &data, this.Size, this.Value.HasValue);
         }
 
         /// <summary>

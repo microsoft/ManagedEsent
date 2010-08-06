@@ -6,6 +6,7 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
     using Microsoft.Isam.Esent.Interop.Implementation;
 
     /// <summary>
@@ -63,12 +64,13 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The entry the cursor is currently positioned on.</returns>
         protected override string GetCurrent()
         {
-            return Api.RetrieveColumnAsString(
+            string name = Api.RetrieveColumnAsString(
                 this.Sesid,
                 this.TableidToEnumerate,
                 this.objectlist.columnidobjectname,
                 NativeMethods.Encoding,
                 RetrieveColumnGrbit.None);
+            return String.IsInterned(name) ?? name;
         }
     }
 }

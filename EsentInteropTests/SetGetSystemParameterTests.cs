@@ -33,6 +33,34 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify that retrieving a string parameter tries to intern the string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that retrieving a string parameter tries to intern the string")]
+        public void VerifyGetSystemParameterTriesToInternStrings()
+        {
+            string expected = String.Intern("edb");
+
+            JET_INSTANCE instance;
+            Api.JetCreateInstance(out instance, "StringParameterTest");
+            try
+            {
+                Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.BaseName, 0, expected);
+
+                int ignored = 0;
+                string actual;
+                Api.JetGetSystemParameter(instance, JET_SESID.Nil, JET_param.BaseName, ref ignored, out actual, 256);
+                Assert.AreEqual(expected, actual);
+                Assert.AreSame(expected, actual, "string wasn't interned");
+            }
+            finally
+            {
+                Api.JetTerm(instance);
+            }
+        }
+
+        /// <summary>
         /// Test setting and retrieving the system path.
         /// </summary>
         [TestMethod]

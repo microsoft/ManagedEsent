@@ -161,10 +161,7 @@ namespace InteropApiTests
         public void VerifyConditionalColumnCanBeSerialized()
         {
             var expected = new JET_CONDITIONALCOLUMN { szColumnName = "column" };
-            var actual = SerializeDeserialize(expected);
-            Assert.AreNotSame(expected, actual);
-            Assert.AreEqual(expected.szColumnName, actual.szColumnName);
-            Assert.AreEqual(expected.grbit, actual.grbit);
+            SerializeAndCompare(expected);
         }
 
         /// <summary>
@@ -175,11 +172,8 @@ namespace InteropApiTests
         [Description("Verify that a JET_INDEXCREATE can be serialized")]
         public void VerifyIndexCreateCanBeSerialized()
         {
-            var expected = new JET_INDEXCREATE { szIndexName = "index", err = JET_err.OutOfMemory };
-            var actual = SerializeDeserialize(expected);
-            Assert.AreNotSame(expected, actual);
-            Assert.AreEqual(expected.szIndexName, actual.szIndexName);
-            Assert.AreEqual(expected.err, actual.err);
+            var expected = new JET_INDEXCREATE { szIndexName = "index", cbKey = 6, szKey = "+key\0\0" };
+            SerializeAndCompare(expected);
         }
 
         /// <summary>
@@ -191,10 +185,7 @@ namespace InteropApiTests
         public void VerifyRecposCanBeSerialized()
         {
             var expected = new JET_RECPOS { centriesLT = 10, centriesTotal = 11 };
-            var actual = SerializeDeserialize(expected);
-            Assert.AreNotSame(expected, actual);
-            Assert.AreEqual(expected.centriesLT, actual.centriesLT);
-            Assert.AreEqual(expected.centriesTotal, actual.centriesTotal);
+            SerializeAndCompare(expected);
         }
 
         /// <summary>
@@ -218,10 +209,7 @@ namespace InteropApiTests
         public void VerifySnprogCanBeSerialized()
         {
             var expected = new JET_SNPROG { cunitDone = 10, cunitTotal = 11 };
-            var actual = SerializeDeserialize(expected);
-            Assert.AreNotSame(expected, actual);
-            Assert.AreEqual(expected.cunitDone, actual.cunitDone);
-            Assert.AreEqual(expected.cunitTotal, actual.cunitTotal);
+            SerializeAndCompare(expected);
         }
 
         /// <summary>
@@ -233,10 +221,7 @@ namespace InteropApiTests
         public void VerifyUnicodeIndexCanBeSerialized()
         {
             var expected = new JET_UNICODEINDEX { lcid = 1234 };
-            var actual = SerializeDeserialize(expected);
-            Assert.AreNotSame(expected, actual);
-            Assert.AreEqual(expected.dwMapFlags, actual.dwMapFlags);
-            Assert.AreEqual(expected.lcid, actual.lcid);
+            SerializeAndCompare(expected);
         }
 
         /// <summary>

@@ -9,6 +9,7 @@ namespace Microsoft.Isam.Esent.Interop
     using System;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Runtime.InteropServices;
     using Microsoft.Isam.Esent.Interop.Vista;
 
@@ -109,14 +110,8 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [Serializable]
-    public class JET_INDEXCREATE
+    public class JET_INDEXCREATE : IEquatable<JET_INDEXCREATE>
     {
-        /// <summary>
-        /// Option used to indicate that the pidxUnicode member of a NATIVE_INDEXCREATE
-        /// structure points to a NATIVE_UNICODEINDEX.
-        /// </summary>
-        private const CreateIndexGrbit Unicode = (CreateIndexGrbit)0x00000800;
-
         /// <summary>
         /// Name of the index.
         /// </summary>
@@ -300,6 +295,90 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Returns a value indicating whether this instance is equal
+        /// to another instance.
+        /// </summary>
+        /// <param name="obj">An object to compare with this instance.</param>
+        /// <returns>True if the two instances are equal.</returns>
+        public override bool Equals(object obj)
+        {
+            if (obj == null || this.GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            return this.Equals((JET_INDEXCREATE)obj);
+        }
+
+        /// <summary>
+        /// Generate a string representation of the instance.
+        /// </summary>
+        /// <returns>The structure as a string.</returns>
+        public override string ToString()
+        {
+            return String.Format(CultureInfo.InvariantCulture, "JET_INDEXCREATE({0}:{1})", this.szIndexName, this.szKey);
+        }
+
+        /// <summary>
+        /// Returns the hash code for this instance.
+        /// </summary>
+        /// <returns>The hash code for this instance.</returns>
+        public override int GetHashCode()
+        {
+            this.CheckMembersAreValid();
+
+            // These numbers are small, distribute them through the hash.
+            int hash = this.cbKey << 5
+                       ^ this.cbKeyMost << 10
+                       ^ this.cbVarSegMac << 15
+                       ^ this.cConditionalColumn << 20
+                       ^ this.ulDensity << 25;
+
+            hash ^= this.szIndexName.GetHashCode();
+            hash ^= ~this.szKey.GetHashCode();
+            hash ^= unchecked((int)this.grbit);
+            hash ^= unchecked((int)this.err) << 13;
+            hash ^= (null == this.pidxUnicode) ? 0x1234ABCD : this.pidxUnicode.GetHashCode();
+
+            if (null != this.rgconditionalcolumn)
+            {
+                for (int i = 0; i < this.cConditionalColumn; ++i)
+                {
+                    hash ^= this.rgconditionalcolumn[i].GetHashCode();
+                }
+            }
+
+            return hash;
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether this instance is equal
+        /// to another instance.
+        /// </summary>
+        /// <param name="other">An instance to compare with this instance.</param>
+        /// <returns>True if the two instances are equal.</returns>
+        public bool Equals(JET_INDEXCREATE other)
+        {
+            if (null == other)
+            {
+                return false;
+            }
+
+            this.CheckMembersAreValid();
+            other.CheckMembersAreValid();
+            return this.err == other.err
+                            && this.szIndexName == other.szIndexName
+                            && this.szKey == other.szKey
+                            && this.cbKey == other.cbKey
+                            && this.grbit == other.grbit
+                            && this.ulDensity == other.ulDensity
+                            && this.cbVarSegMac == other.cbVarSegMac
+                            && this.cbKeyMost == other.cbKeyMost
+                            && this.IsUnicodeIndexEqual(other)
+                            && this.IsConditionalColumnsEqual(other);
+        }
+
+        /// <summary>
         /// Check this object to make sure its parameters are valid.
         /// </summary>
         internal void CheckMembersAreValid()
@@ -361,16 +440,16 @@ namespace Microsoft.Isam.Esent.Interop
             this.CheckMembersAreValid();
 
             var native = new NATIVE_INDEXCREATE();
-            native.cbStruct = (uint) Marshal.SizeOf(native);
+            native.cbStruct = checked((uint)Marshal.SizeOf(native));
             native.szIndexName = this.szIndexName;
             native.szKey = this.szKey;
-            native.cbKey = checked((uint) this.cbKey);
-            native.grbit = (uint) this.grbit;
-            native.ulDensity = checked((uint) this.ulDensity);
+            native.cbKey = checked((uint)this.cbKey);
+            native.grbit = unchecked((uint)this.grbit);
+            native.ulDensity = checked((uint)this.ulDensity);
 
             native.cbVarSegMac = new IntPtr(this.cbVarSegMac);
 
-            native.cConditionalColumn = checked((uint) this.cConditionalColumn);
+            native.cConditionalColumn = checked((uint)this.cConditionalColumn);
             return native;
         }
 
@@ -382,14 +461,51 @@ namespace Microsoft.Isam.Esent.Interop
         {
             var native = new NATIVE_INDEXCREATE2();
             native.indexcreate = this.GetNativeIndexcreate();
-            native.indexcreate.cbStruct = (uint) Marshal.SizeOf(native);
+            native.indexcreate.cbStruct = checked((uint)Marshal.SizeOf(native));
             if (0 != this.cbKeyMost)
             {
-                native.cbKeyMost = checked((uint) this.cbKeyMost);
-                native.indexcreate.grbit |= (uint) VistaGrbits.IndexKeyMost;
+                native.cbKeyMost = checked((uint)this.cbKeyMost);
+                native.indexcreate.grbit |= unchecked((uint)VistaGrbits.IndexKeyMost);
             }
 
             return native;
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether the pidxUnicode member of this
+        /// instance is equal to another instance.
+        /// </summary>
+        /// <param name="other">An instance to compare with this instance.</param>
+        /// <returns>True if the pidxUnicode members of two instances are equal.</returns>
+        private bool IsUnicodeIndexEqual(JET_INDEXCREATE other)
+        {
+            return (null == this.pidxUnicode)
+                       ? (null == other.pidxUnicode)
+                       : this.pidxUnicode.Equals(other.pidxUnicode);
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether the conditional column members of this
+        /// instance is equal to another instance.
+        /// </summary>
+        /// <param name="other">An instance to compare with this instance.</param>
+        /// <returns>True if the conditional column members of two instances are equal.</returns>
+        private bool IsConditionalColumnsEqual(JET_INDEXCREATE other)
+        {
+            if (this.cConditionalColumn != other.cConditionalColumn)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < this.cConditionalColumn; ++i)
+            {
+                if (!this.rgconditionalcolumn[i].Equals(other.rgconditionalcolumn[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

@@ -395,6 +395,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
 
             paramString = sb.ToString();
+            paramString = String.IsInterned(paramString) ?? paramString;
             paramValue = intValue.ToInt32();
             return err;
         }
@@ -2221,6 +2222,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             var name = new StringBuilder(maxNameLength);
             int err = this.Err(NativeMethods.JetGetCurrentIndex(sesid.Value, tableid.Value, name, checked((uint)maxNameLength)));
             indexName = name.ToString();
+            indexName = String.IsInterned(indexName) ?? indexName;
             return err;
         }
 
@@ -2242,13 +2244,13 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.TraceFunctionCall("JetGetTableInfo");
             var nativeResult = new NATIVE_OBJECTINFO();
 
-            int err;
-            unsafe
-            {
-                var pvResult = new IntPtr(&nativeResult);
-                err = this.Err(NativeMethods.JetGetTableInfo(
-                            sesid.Value, tableid.Value, pvResult, (uint)Marshal.SizeOf(nativeResult), (uint)infoLevel));
-            }
+            int err = this.Err(
+                NativeMethods.JetGetTableInfo(
+                    sesid.Value,
+                    tableid.Value,
+                    out nativeResult,
+                    checked((uint)Marshal.SizeOf(nativeResult)),
+                    (uint)infoLevel));
 
             result = new JET_OBJECTINFO();
             result.SetFromNativeObjectinfo(nativeResult);
@@ -2275,6 +2277,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                         sesid.Value, tableid.Value, resultBuffer, (uint)resultBuffer.Capacity, (uint)infoLevel));
 
             result = resultBuffer.ToString();
+            result = String.IsInterned(result) ?? result;
             return err;
         }
 
@@ -2293,17 +2296,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             this.TraceFunctionCall("JetGetTableInfo");
             result = JET_DBID.Nil;
-
-            int err;
-            unsafe
-            {
-                uint nativeResult;
-                var pvResult = new IntPtr(&nativeResult);
-                err = this.Err(NativeMethods.JetGetTableInfo(sesid.Value, tableid.Value, pvResult, sizeof(uint), (uint)infoLevel));
-                result.Value = nativeResult;
-            }
-
-            return err;
+            return this.Err(NativeMethods.JetGetTableInfo(sesid.Value, tableid.Value, out result.Value, sizeof(uint), (uint)infoLevel));
         }
 
         /// <summary>
@@ -2323,17 +2316,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.TraceFunctionCall("JetGetTableInfo");  
             this.CheckNotNull(result, "result");
 
-            int err;
-            unsafe
-            {
-                fixed (int* pvResult = result)
-                {
-                    uint cbResult = checked((uint)(result.Length * sizeof(int)));
-                    err = this.Err(NativeMethods.JetGetTableInfo(sesid.Value, tableid.Value, new IntPtr(pvResult), cbResult, (uint)infoLevel));
-                }
-            }
-
-            return err;
+            uint cbResult = checked((uint)(result.Length * sizeof(int)));
+            return this.Err(NativeMethods.JetGetTableInfo(sesid.Value, tableid.Value, result, cbResult, (uint)infoLevel));
         }
 
         /// <summary>
@@ -2351,18 +2335,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetGetTableInfo(JET_SESID sesid, JET_TABLEID tableid, out int result, JET_TblInfo infoLevel)
         {
             this.TraceFunctionCall("JetGetTableInfo");
-            result = 0;
-
-            int err;
-            unsafe
-            {
-                fixed (int* pvResult = &result)
-                {
-                    const uint CbResult = sizeof(int);
-                    err = this.Err(NativeMethods.JetGetTableInfo(sesid.Value, tableid.Value, new IntPtr(pvResult), CbResult, (uint)infoLevel));
-                }
-            }
-
+            uint nativeResult;
+            int err = this.Err(NativeMethods.JetGetTableInfo(sesid.Value, tableid.Value, out nativeResult, sizeof(uint), (uint)infoLevel));
+            result = unchecked((int)nativeResult);
             return err;
         }
 
@@ -4221,7 +4196,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             if (!this.Capabilities.SupportsServer2003Features)
             {
-                this.ThrowUnsupportedApiException(api);
+                throw this.UnsupportedApiException(api);
             }
         }
 
@@ -4234,7 +4209,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             if (!this.Capabilities.SupportsVistaFeatures)
             {
-                this.ThrowUnsupportedApiException(api);
+                throw this.UnsupportedApiException(api);
             }
         }
 
@@ -4247,7 +4222,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             if (!this.Capabilities.SupportsWindows7Features)
             {
-                this.ThrowUnsupportedApiException(api);
+                throw this.UnsupportedApiException(api);
             }
         }
 
@@ -4332,14 +4307,15 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         /// <summary>
         /// Used when an unsupported API method is called. This 
-        /// logs an error and throws an InvalidOperationException.
+        /// logs an error and returns an InvalidOperationException.
         /// </summary>
         /// <param name="method">The name of the method.</param>
-        private void ThrowUnsupportedApiException(string method)
+        /// <returns>The exception to throw.</returns>
+        private Exception UnsupportedApiException(string method)
         {
             string error = String.Format(CultureInfo.InvariantCulture, "Method {0} is not supported by this version of ESENT", method);
             Trace.WriteLineIf(this.traceSwitch.TraceError, error);
-            throw new InvalidOperationException(error);
+            return new InvalidOperationException(error);
         }
 
         /// <summary>

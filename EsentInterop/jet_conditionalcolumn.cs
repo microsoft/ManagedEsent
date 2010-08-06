@@ -9,6 +9,7 @@ namespace Microsoft.Isam.Esent.Interop
     using System;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Runtime.InteropServices;
     using System.Text;
 
@@ -49,7 +50,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [Serializable]
-    public class JET_CONDITIONALCOLUMN
+    public class JET_CONDITIONALCOLUMN : IEquatable<JET_CONDITIONALCOLUMN>
     {
         /// <summary>
         /// Column name.
@@ -79,6 +80,61 @@ namespace Microsoft.Isam.Esent.Interop
             [DebuggerStepThrough]
             get { return this.option; }
             set { this.option = value; }
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether this instance is equal
+        /// to another instance.
+        /// </summary>
+        /// <param name="obj">An object to compare with this instance.</param>
+        /// <returns>True if the two instances are equal.</returns>
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            return this.Equals((JET_CONDITIONALCOLUMN)obj);
+        }
+
+        /// <summary>
+        /// Generate a string representation of the instance.
+        /// </summary>
+        /// <returns>The structure as a string.</returns>
+        public override string ToString()
+        {
+            return String.Format(
+                CultureInfo.InvariantCulture,
+                "JET_CONDITIONALCOLUMN({0}:{1})",
+                this.columnName,
+                this.option);
+        }
+
+        /// <summary>
+        /// Returns the hash code for this instance.
+        /// </summary>
+        /// <returns>The hash code for this instance.</returns>
+        public override int GetHashCode()
+        {
+            return (null == this.columnName) ? -1 : this.columnName.GetHashCode()
+                         ^ (int)this.option;
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether this instance is equal
+        /// to another instance.
+        /// </summary>
+        /// <param name="other">An instance to compare with this instance.</param>
+        /// <returns>True if the two instances are equal.</returns>
+        public bool Equals(JET_CONDITIONALCOLUMN other)
+        {
+            if (null == other)
+            {
+                return false;
+            }
+
+            return this.columnName == other.columnName && this.option == other.option;
         }
 
         /// <summary>
