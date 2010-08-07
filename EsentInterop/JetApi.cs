@@ -395,7 +395,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
 
             paramString = sb.ToString();
-            paramString = String.IsInterned(paramString) ?? paramString;
+            paramString = StringCache.TryToIntern(paramString);
             paramValue = intValue.ToInt32();
             return err;
         }
@@ -2222,7 +2222,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             var name = new StringBuilder(maxNameLength);
             int err = this.Err(NativeMethods.JetGetCurrentIndex(sesid.Value, tableid.Value, name, checked((uint)maxNameLength)));
             indexName = name.ToString();
-            indexName = String.IsInterned(indexName) ?? indexName;
+            indexName = StringCache.TryToIntern(indexName);
             return err;
         }
 
@@ -2277,7 +2277,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                         sesid.Value, tableid.Value, resultBuffer, (uint)resultBuffer.Capacity, (uint)infoLevel));
 
             result = resultBuffer.ToString();
-            result = String.IsInterned(result) ?? result;
+            result = StringCache.TryToIntern(result);
             return err;
         }
 

@@ -89,6 +89,7 @@
     <Compile Include="SetColumnValidationTests.cs" />
     <Compile Include="SetinfoTests.cs" />
     <Compile Include="SignatureTests.cs" />
+    <Compile Include="StringCacheTests.cs" />
     <Compile Include="TempTableNavigationTests.cs" />
     <Compile Include="HelpersTempTableFixtureTests.cs" />
     <Compile Include="DatabaseFileTestHelper.cs" />

@@ -70,7 +70,7 @@ namespace Microsoft.Isam.Esent.Interop
                 this.objectlist.columnidobjectname,
                 NativeMethods.Encoding,
                 RetrieveColumnGrbit.None);
-            return String.IsInterned(name) ?? name;
+            return StringCache.TryToIntern(name);
         }
     }
 }

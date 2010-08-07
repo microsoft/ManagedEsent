@@ -71,7 +71,7 @@ namespace Microsoft.Isam.Esent.Interop
                                 columnlist.columnidcolumnname,
                                 NativeMethods.Encoding,
                                 RetrieveColumnGrbit.None);
-                            name = String.IsInterned(name) ?? name;
+                            name = StringCache.TryToIntern(name);
                             var columnidValue =
                                 (uint)RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcolumnid);
 

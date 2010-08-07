@@ -93,18 +93,7 @@ namespace Microsoft.Isam.Esent.Interop
             }
             else
             {
-                // Encoding.Unicode.GetString copies the data to an array of chars and then
-                // makes a string from it, copying the data twice. Use the more efficient
-                // char* constructor.
-                unsafe
-                {
-                    fixed (byte* data = value)
-                    {
-                        char* chars = (char*)(data + startIndex);
-                        int numChars = count / 2;
-                        this.Value = new string(chars, 0, numChars);
-                    }
-                }
+                this.Value = StringCache.GetString(value, startIndex, count);
             }
         }
     }

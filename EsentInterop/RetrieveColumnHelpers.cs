@@ -905,6 +905,7 @@ namespace Microsoft.Isam.Esent.Interop
 
             if (JET_wrn.Success == wrn)
             {
+                ////return StringCache.GetString(buffer, 0, actualDataSize);
                 return new string(buffer, 0, actualDataSize / sizeof(char));
             }
 

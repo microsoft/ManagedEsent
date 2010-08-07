@@ -101,6 +101,7 @@
     <Compile Include="EsentStopwatch.cs" />
     <Compile Include="ColumnValue.cs" />
     <Compile Include="Server2003Param.cs" />
+    <Compile Include="StringCache.cs" />
     <Compile Include="StringColumnValue.cs" />
     <Compile Include="TableColumnInfoEnumerator.cs" />
     <Compile Include="TableEnumerator.cs" />
