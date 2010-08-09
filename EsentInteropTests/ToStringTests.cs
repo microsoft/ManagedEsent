@@ -258,5 +258,53 @@ namespace InteropApiTests
             var instanceInfo = new JET_INSTANCE_INFO(JET_INSTANCE.Nil, "name", null);
             Assert.AreEqual("JET_INSTANCE_INFO(name)", instanceInfo.ToString());
         }
+
+        /// <summary>
+        /// Test JET_COLUMNDEF.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_COLUMNDEF.ToString()")]
+        public void JetColumndefToString()
+        {
+            var columndef = new JET_COLUMNDEF { coltyp = JET_coltyp.Text, grbit = ColumndefGrbit.ColumnFixed };
+            Assert.AreEqual("JET_COLUMNDEF(Text,ColumnFixed)", columndef.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_INDEXRANGE.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_INDEXRANGE.ToString()")]
+        public void JetIndexrangeToString()
+        {
+            var indexrange = new JET_INDEXRANGE { grbit = IndexRangeGrbit.RecordInIndex };
+            Assert.AreEqual("JET_INDEXRANGE(JET_TABLEID(0x0),RecordInIndex)", indexrange.ToString());
+        }
+
+        /// <summary>
+        /// Test IndexSegment.ToString() with an ascending segment.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test IndexSegment.ToString() with an ascending segment")]
+        public void AscendingIndexSegmentToString()
+        {
+            var segment = new IndexSegment("column", JET_coltyp.IEEEDouble, true, false);
+            Assert.AreEqual("+column(IEEEDouble)", segment.ToString());
+        }
+
+        /// <summary>
+        /// Test IndexSegment.ToString() with an ascending segment.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test IndexSegment.ToString() with a descending segment")]
+        public void DescendingIndexSegmentToString()
+        {
+            var segment = new IndexSegment("othercolumn", JET_coltyp.Bit, false, false);
+            Assert.AreEqual("-othercolumn(Bit)", segment.ToString());
+        }
     }
 }

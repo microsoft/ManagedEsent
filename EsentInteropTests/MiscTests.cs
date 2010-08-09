@@ -7,6 +7,7 @@
 namespace InteropApiTests
 {
     using System;
+    using System.Globalization;
     using System.Linq;
     using System.Reflection;
     using Microsoft.Isam.Esent.Interop;
@@ -18,6 +19,21 @@ namespace InteropApiTests
     [TestClass]
     public class MiscTests
     {
+        /// <summary>
+        /// Verify that the index segments in an IndexInfo are read-only.
+        /// </summary>
+        [TestMethod]
+        [Description("Verify that the index segments in an IndexInfo are read-only")]
+        [Priority(0)]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void VerifyIndexInfoSegmentsAreReadOnly()
+        {
+            var segments = new[] { new IndexSegment("column1", JET_coltyp.LongText, true, false) };
+            var info = new IndexInfo(
+                "index", CultureInfo.InvariantCulture, CompareOptions.None, segments, CreateIndexGrbit.None, 0, 0, 0);
+            info.IndexSegments[0] = new IndexSegment("column2", JET_coltyp.Short, false, false);
+        }
+
         /// <summary>
         /// JET_INDEXID.SizeOfIndexId should not be 0.
         /// </summary>

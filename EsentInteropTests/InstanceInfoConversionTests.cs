@@ -60,6 +60,19 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify the szDatabases collection is read-only.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify the szDatabases collection is read-only")]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void VerifySzDatabasesIsReadOnly()
+        {
+            var info = new JET_INSTANCE_INFO(JET_INSTANCE.Nil, "instance", new[] { "foo.edb" });
+            info.szDatabaseFileName[0] = "bar.edb";
+        }
+
+        /// <summary>
         /// Check that a managed object has the correct members set.
         /// </summary>
         /// <param name="info">

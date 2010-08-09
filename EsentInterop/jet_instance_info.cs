@@ -7,6 +7,8 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Runtime.InteropServices;
@@ -73,6 +75,11 @@ namespace Microsoft.Isam.Esent.Interop
     public class JET_INSTANCE_INFO : IEquatable<JET_INSTANCE_INFO>
     {
         /// <summary>
+        /// Collection of database file names.
+        /// </summary>
+        private ReadOnlyCollection<string> databases;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="JET_INSTANCE_INFO"/> class.
         /// </summary>
         internal JET_INSTANCE_INFO()
@@ -95,8 +102,16 @@ namespace Microsoft.Isam.Esent.Interop
         {
             this.hInstanceId = instance;
             this.szInstanceName = instanceName;
-            this.cDatabases = (null == databases) ? 0 : databases.Length;
-            this.szDatabaseFileName = databases;
+            if (null == databases)
+            {
+                this.cDatabases = 0;
+                this.databases = null;
+            }
+            else
+            {
+                this.cDatabases = databases.Length;
+                this.databases = Array.AsReadOnly(databases);                
+            }
         }
 
         /// <summary>
@@ -116,11 +131,17 @@ namespace Microsoft.Isam.Esent.Interop
         public int cDatabases { get; private set; }
 
         /// <summary>
-        /// Gets an array of strings, each holding the file name of a database
+        /// Gets a collection of strings, each holding the file name of a database
         /// that is attached to the database instance. The array has cDatabases
         /// elements.
         /// </summary>
-        public string[] szDatabaseFileName { get; private set; }
+        public IList<string> szDatabaseFileName
+        {
+            get
+            {
+                return this.databases;
+            }
+        }
 
         /// <summary>
         /// Returns a value indicating whether this instance is equal
@@ -206,14 +227,16 @@ namespace Microsoft.Isam.Esent.Interop
             this.hInstanceId = new JET_INSTANCE { Value = native.hInstanceId };
             this.szInstanceName = Marshal.PtrToStringAnsi(native.szInstanceName);
             this.cDatabases = checked((int)native.cDatabases);
-            this.szDatabaseFileName = new string[this.cDatabases];
+            string[] files = new string[this.cDatabases];
             unsafe
             {
                 for (int i = 0; i < this.cDatabases; ++i)
                 {
-                    this.szDatabaseFileName[i] = Marshal.PtrToStringAnsi(native.szDatabaseFileName[i]);
+                    files[i] = Marshal.PtrToStringAnsi(native.szDatabaseFileName[i]);
                 }
             }
+
+            this.databases = Array.AsReadOnly(files);
         }
 
         /// <summary>
@@ -226,14 +249,16 @@ namespace Microsoft.Isam.Esent.Interop
             this.hInstanceId = new JET_INSTANCE { Value = native.hInstanceId };
             this.szInstanceName = Marshal.PtrToStringUni(native.szInstanceName);
             this.cDatabases = checked((int)native.cDatabases);
-            this.szDatabaseFileName = new string[this.cDatabases];
+            string[] files = new string[this.cDatabases];
             unsafe
             {
                 for (int i = 0; i < this.cDatabases; ++i)
                 {
-                    this.szDatabaseFileName[i] = Marshal.PtrToStringUni(native.szDatabaseFileName[i]);
+                    files[i] = Marshal.PtrToStringUni(native.szDatabaseFileName[i]);
                 }
             }
+
+            this.databases = Array.AsReadOnly(files);
         }
     }
 }

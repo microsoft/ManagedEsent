@@ -188,29 +188,16 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// GetHashCode should check the members.
+        /// ContentEquals should check the members.
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Test JET_INDEXCREATE.GetHashCode checks the members")]
+        [Description("Test JET_INDEXCREATE.ContentEquals checks the members")]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void VerifyGetHashCodeThrowsExceptionWhenInvalid()
+        public void VerifyContentEqualsThrowsExceptionWhenInvalid()
         {
             this.indexcreate.ulDensity = -1;
-            this.indexcreate.GetHashCode();
-        }
-
-        /// <summary>
-        /// Equals should check the members.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Test JET_INDEXCREATE.Equals checks the members")]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void VerifyEqualsThrowsExceptionWhenInvalid()
-        {
-            this.indexcreate.ulDensity = -1;
-            this.indexcreate.Equals(this.indexcreate);
+            this.indexcreate.ContentEquals(this.indexcreate);
         }
     }
 }

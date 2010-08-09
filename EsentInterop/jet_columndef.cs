@@ -9,6 +9,7 @@ namespace Microsoft.Isam.Esent.Interop
     using System;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Runtime.InteropServices;
 
     /// <summary>
@@ -78,7 +79,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [Serializable]
-    public class JET_COLUMNDEF
+    public class JET_COLUMNDEF : IContentEquatable<JET_COLUMNDEF>
     {
         /// <summary>
         /// The type of the column.
@@ -158,6 +159,37 @@ namespace Microsoft.Isam.Esent.Interop
             [DebuggerStepThrough]
             get { return this.id; }
             internal set { this.id = value; }
+        }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="JET_COLUMNDEF"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="JET_COLUMNDEF"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(CultureInfo.InvariantCulture, "JET_COLUMNDEF({0},{1})", this.columnType, this.options);
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether this instance is equal
+        /// to another instance.
+        /// </summary>
+        /// <param name="other">An instance to compare with this instance.</param>
+        /// <returns>True if the two instances are equal.</returns>
+        public bool ContentEquals(JET_COLUMNDEF other)
+        {
+            if (null == other)
+            {
+                return false;
+            }
+
+            return this.columnType == other.columnType
+                   && this.codePage == other.codePage
+                   && this.maxSize == other.maxSize
+                   && this.id == other.id
+                   && this.options == other.options;
         }
 
         /// <summary>

@@ -214,10 +214,10 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Ignore]
         [Description(" Verify that keys in the columnid dictionary are interned if possible")]
         public void VerifyColumnDictionaryKeysAreInterned()
         {
+            String.Intern("Boolean");
             string s = this.columnidDict.Keys.Where(x => x.Equals("boolean", StringComparison.OrdinalIgnoreCase)).Single();
             Assert.IsNotNull(String.IsInterned(s), "{0} is not interned", s);
             Assert.AreSame(s, "Boolean", "Interning failed");
@@ -403,7 +403,7 @@ namespace InteropApiTests
             Assert.AreEqual(0, info.Entries);
             Assert.AreEqual(0, info.Pages);
 
-            Assert.AreEqual(1, info.IndexSegments.Length);
+            Assert.AreEqual(1, info.IndexSegments.Count);
             Assert.AreEqual("ascii", info.IndexSegments[0].ColumnName, true);
             Assert.IsTrue(info.IndexSegments[0].IsAscending);
             Assert.AreEqual(JET_coltyp.LongText, info.IndexSegments[0].Coltyp);
@@ -452,7 +452,7 @@ namespace InteropApiTests
             Assert.AreEqual(indexname, info.Name);
             Assert.AreEqual(grbit, info.Grbit);
 
-            Assert.AreEqual(2, info.IndexSegments.Length);
+            Assert.AreEqual(2, info.IndexSegments.Count);
             Assert.AreEqual("ascii", info.IndexSegments[0].ColumnName, true);
             Assert.IsTrue(info.IndexSegments[0].IsAscending);
             Assert.AreEqual(JET_coltyp.LongText, info.IndexSegments[0].Coltyp);
@@ -524,7 +524,7 @@ namespace InteropApiTests
             Assert.AreEqual(indexname, info.Name);
             Assert.AreEqual(grbit, info.Grbit);
 
-            Assert.AreEqual(1, info.IndexSegments.Length);
+            Assert.AreEqual(1, info.IndexSegments.Count);
             Assert.AreEqual("ascii", info.IndexSegments[0].ColumnName, true);
             Assert.IsTrue(info.IndexSegments[0].IsAscending);
             Assert.AreEqual(JET_coltyp.LongText, info.IndexSegments[0].Coltyp);
@@ -587,7 +587,7 @@ namespace InteropApiTests
             Assert.AreEqual(Indexname, info.Name);
             Assert.AreEqual(CreateIndexGrbit.IndexDisallowNull, info.Grbit);
 
-            Assert.AreEqual(1, info.IndexSegments.Length);
+            Assert.AreEqual(1, info.IndexSegments.Count);
             Assert.AreEqual("unicode", info.IndexSegments[0].ColumnName, true);
             Assert.IsFalse(info.IndexSegments[0].IsAscending);
             Assert.AreEqual(JET_coltyp.LongText, info.IndexSegments[0].Coltyp);

@@ -110,7 +110,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [Serializable]
-    public class JET_INDEXCREATE : IEquatable<JET_INDEXCREATE>
+    public class JET_INDEXCREATE : IContentEquatable<JET_INDEXCREATE>
     {
         /// <summary>
         /// Name of the index.
@@ -295,22 +295,6 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Returns a value indicating whether this instance is equal
-        /// to another instance.
-        /// </summary>
-        /// <param name="obj">An object to compare with this instance.</param>
-        /// <returns>True if the two instances are equal.</returns>
-        public override bool Equals(object obj)
-        {
-            if (obj == null || this.GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            return this.Equals((JET_INDEXCREATE)obj);
-        }
-
-        /// <summary>
         /// Generate a string representation of the instance.
         /// </summary>
         /// <returns>The structure as a string.</returns>
@@ -320,44 +304,12 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Returns the hash code for this instance.
-        /// </summary>
-        /// <returns>The hash code for this instance.</returns>
-        public override int GetHashCode()
-        {
-            this.CheckMembersAreValid();
-
-            // These numbers are small, distribute them through the hash.
-            int hash = this.cbKey << 5
-                       ^ this.cbKeyMost << 10
-                       ^ this.cbVarSegMac << 15
-                       ^ this.cConditionalColumn << 20
-                       ^ this.ulDensity << 25;
-
-            hash ^= this.szIndexName.GetHashCode();
-            hash ^= ~this.szKey.GetHashCode();
-            hash ^= unchecked((int)this.grbit);
-            hash ^= unchecked((int)this.err) << 13;
-            hash ^= (null == this.pidxUnicode) ? 0x1234ABCD : this.pidxUnicode.GetHashCode();
-
-            if (null != this.rgconditionalcolumn)
-            {
-                for (int i = 0; i < this.cConditionalColumn; ++i)
-                {
-                    hash ^= this.rgconditionalcolumn[i].GetHashCode();
-                }
-            }
-
-            return hash;
-        }
-
-        /// <summary>
         /// Returns a value indicating whether this instance is equal
         /// to another instance.
         /// </summary>
         /// <param name="other">An instance to compare with this instance.</param>
         /// <returns>True if the two instances are equal.</returns>
-        public bool Equals(JET_INDEXCREATE other)
+        public bool ContentEquals(JET_INDEXCREATE other)
         {
             if (null == other)
             {
@@ -375,7 +327,7 @@ namespace Microsoft.Isam.Esent.Interop
                             && this.cbVarSegMac == other.cbVarSegMac
                             && this.cbKeyMost == other.cbKeyMost
                             && this.IsUnicodeIndexEqual(other)
-                            && this.IsConditionalColumnsEqual(other);
+                            && this.AreConditionalColumnsEqual(other);
         }
 
         /// <summary>
@@ -481,7 +433,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             return (null == this.pidxUnicode)
                        ? (null == other.pidxUnicode)
-                       : this.pidxUnicode.Equals(other.pidxUnicode);
+                       : this.pidxUnicode.ContentEquals(other.pidxUnicode);
         }
 
         /// <summary>
@@ -490,7 +442,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="other">An instance to compare with this instance.</param>
         /// <returns>True if the conditional column members of two instances are equal.</returns>
-        private bool IsConditionalColumnsEqual(JET_INDEXCREATE other)
+        private bool AreConditionalColumnsEqual(JET_INDEXCREATE other)
         {
             if (this.cConditionalColumn != other.cConditionalColumn)
             {
@@ -499,7 +451,7 @@ namespace Microsoft.Isam.Esent.Interop
 
             for (int i = 0; i < this.cConditionalColumn; ++i)
             {
-                if (!this.rgconditionalcolumn[i].Equals(other.rgconditionalcolumn[i]))
+                if (!this.rgconditionalcolumn[i].ContentEquals(other.rgconditionalcolumn[i]))
                 {
                     return false;
                 }

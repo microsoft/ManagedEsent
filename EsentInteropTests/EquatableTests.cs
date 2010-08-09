@@ -7,6 +7,7 @@
 namespace InteropApiTests
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Vista;
@@ -1009,9 +1010,7 @@ namespace InteropApiTests
         {
             var x = new JET_CONDITIONALCOLUMN { szColumnName = "Column", grbit = ConditionalColumnGrbit.ColumnMustBeNonNull };
             var y = new JET_CONDITIONALCOLUMN { szColumnName = "Column", grbit = ConditionalColumnGrbit.ColumnMustBeNonNull };
-            TestEqualObjects(x, y);
-
-            // This is a reference class. Operator == and != still do reference comparisons.
+            TestEqualContent(x, y);
         }
 
         /// <summary>
@@ -1033,7 +1032,7 @@ namespace InteropApiTests
                 new JET_CONDITIONALCOLUMN { szColumnName = null, grbit = ConditionalColumnGrbit.ColumnMustBeNonNull },
             };
 
-            TestUnequal(conditionalcolumns);
+            TestUnequalContent(conditionalcolumns);
         }
 
         /// <summary>
@@ -1047,9 +1046,7 @@ namespace InteropApiTests
         {
             var x = new JET_UNICODEINDEX { lcid = 1033, dwMapFlags = 1 };
             var y = new JET_UNICODEINDEX { lcid = 1033, dwMapFlags = 1 };
-            TestEqualObjects(x, y);
-
-            // This is a reference class. Operator == and != still do reference comparisons.
+            TestEqualContent(x, y);
         }
 
         /// <summary>
@@ -1070,7 +1067,7 @@ namespace InteropApiTests
                 new JET_UNICODEINDEX { lcid = 1034, dwMapFlags = 1 },
             };
 
-            TestUnequal(unicodeindexes);
+            TestUnequalContent(unicodeindexes);
         }
 
         /// <summary>
@@ -1121,9 +1118,7 @@ namespace InteropApiTests
         {
             var x = new JET_RECPOS { centriesLT = 1, centriesTotal = 2 };
             var y = new JET_RECPOS { centriesLT = 1, centriesTotal = 2 };
-            TestEqualObjects(x, y);
-
-            // This is a reference class. Operator == and != still do reference comparisons.
+            TestEqualContent(x, y);
         }
 
         /// <summary>
@@ -1144,7 +1139,7 @@ namespace InteropApiTests
                 new JET_RECPOS { centriesLT = 2, centriesTotal = 2 },
             };
 
-            TestUnequal(positions);
+            TestUnequalContent(positions);
         }
 
         /// <summary>
@@ -1156,11 +1151,23 @@ namespace InteropApiTests
         [Description("Check that JET_INDEXCREATE objects can be compared for equality")]
         public void VerifyJetIndexcreateEquality()
         {
-            var x = new JET_INDEXCREATE { cbKey = 6, szKey = "-C1\0\0", szIndexName = "Index" };
-            var y = new JET_INDEXCREATE { cbKey = 6, szKey = "-C1\0\0", szIndexName = "Index" };
-            TestEqualObjects(x, y);
-
-            // This is a reference class. Operator == and != still do reference comparisons.
+            var x = new JET_INDEXCREATE
+            {
+                cbKey = 6,
+                szKey = "-C1\0\0",
+                szIndexName = "Index",
+                cConditionalColumn = 1,
+                rgconditionalcolumn = new[] { new JET_CONDITIONALCOLUMN { grbit = ConditionalColumnGrbit.ColumnMustBeNonNull, szColumnName = "a" } }
+            };
+            var y = new JET_INDEXCREATE
+            {
+                cbKey = 6,
+                szKey = "-C1\0\0",
+                szIndexName = "Index",
+                cConditionalColumn = 1,
+                rgconditionalcolumn = new[] { new JET_CONDITIONALCOLUMN { grbit = ConditionalColumnGrbit.ColumnMustBeNonNull, szColumnName = "a" } }
+            };
+            TestEqualContent(x, y);
         }
 
         /// <summary>
@@ -1215,7 +1222,7 @@ namespace InteropApiTests
             Debug.Assert(j == indexcreates.Length, "Too many indexcreates in array");
 
             // Finally compare them
-            TestUnequal(indexcreates);
+            TestUnequalContent(indexcreates);
         }
 
         /// <summary>
@@ -1245,7 +1252,7 @@ namespace InteropApiTests
         {
             // None of these objects are equal, most differ in only one member from the
             // first object. We will compare them all against each other.
-            var positions = new[]
+            var infos = new[]
             {
                 new JET_INSTANCE_INFO(JET_INSTANCE.Nil, "instance", new[] { "foo.edb" }),
                 new JET_INSTANCE_INFO(JET_INSTANCE.Nil, "instance", new[] { "foo.edb", "bar.edb" }),
@@ -1256,7 +1263,170 @@ namespace InteropApiTests
                 new JET_INSTANCE_INFO(new JET_INSTANCE { Value = new IntPtr(1) }, "instance", new[] { "foo.edb" }),
             };
 
-            TestUnequal(positions);
+            TestUnequal(infos);
+        }
+
+        /// <summary>
+        /// Check that JET_INDEXRANGE structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_INDEXRANGE structures can be compared for equality")]
+        public void VerifyJetIndexrangeEquality()
+        {
+            var x = new JET_INDEXRANGE { grbit = IndexRangeGrbit.RecordInIndex };
+            var y = new JET_INDEXRANGE { grbit = IndexRangeGrbit.RecordInIndex };
+            TestEqualContent(x, y);
+        }
+
+        /// <summary>
+        /// Check that JET_INDEXRANGE structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_INDEXRANGE structures can be compared for inequality")]
+        public void VerifyJetIndexrangeInequality()
+        {
+            // None of these objects are equal, most differ in only one member from the
+            // first object. We will compare them all against each other.
+            var ranges = new[]
+            {
+                new JET_INDEXRANGE { tableid = new JET_TABLEID { Value = new IntPtr(1) }, grbit = IndexRangeGrbit.RecordInIndex },
+                new JET_INDEXRANGE { tableid = new JET_TABLEID { Value = new IntPtr(1) }, grbit = (IndexRangeGrbit)49 },
+                new JET_INDEXRANGE { tableid = new JET_TABLEID { Value = new IntPtr(2) }, grbit = IndexRangeGrbit.RecordInIndex },
+            };
+            TestUnequalContent(ranges);
+        }
+
+        /// <summary>
+        /// Check that IndexSegment structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that IndexSegment structures can be compared for equality")]
+        public void VerifyIndexSegmentEquality()
+        {
+            var x = new IndexSegment("column", JET_coltyp.Currency, true, true);
+            var y = new IndexSegment("column", JET_coltyp.Currency, true, true);
+            TestEqualObjects(x, y);
+        }
+
+        /// <summary>
+        /// Check that IndexSegment structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that IndexSegment structures can be compared for inequality")]
+        public void VerifyIndexSegmentInequality()
+        {
+            // None of these objects are equal, most differ in only one member from the
+            // first object. We will compare them all against each other.
+            var segments = new[]
+            {
+                new IndexSegment("column", JET_coltyp.Currency, true, true),
+                new IndexSegment("column", JET_coltyp.Currency, true, false),
+                new IndexSegment("column", JET_coltyp.Currency, false, true),
+                new IndexSegment("column", JET_coltyp.IEEESingle, true, true),
+                new IndexSegment("column2", JET_coltyp.Currency, true, true),
+            };
+            TestUnequal(segments);
+        }
+
+        /// <summary>
+        /// Check that JET_COLUMNDEF structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_COLUMNDEF structures can be compared for equality")]
+        public void VerifyJetColumndefEquality()
+        {
+            var x = new JET_COLUMNDEF
+            {
+                cbMax = 1,
+                coltyp = JET_coltyp.Bit,
+                columnid = new JET_COLUMNID { Value = 1 },
+                cp = JET_CP.ASCII,
+                grbit = ColumndefGrbit.None
+            };
+            var y = new JET_COLUMNDEF
+            {
+                cbMax = 1,
+                coltyp = JET_coltyp.Bit,
+                columnid = new JET_COLUMNID { Value = 1 },
+                cp = JET_CP.ASCII,
+                grbit = ColumndefGrbit.None
+            };
+            TestEqualContent(x, y);
+        }
+
+        /// <summary>
+        /// Check that JET_COLUMNDEF structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_COLUMNDEF structures can be compared for inequality")]
+        public void VerifyJetColumndefInequality()
+        {
+            // None of these objects are equal, most differ in only one member from the
+            // first object. We will compare them all against each other.
+            var positions = new[]
+            {
+                new JET_COLUMNDEF
+                {
+                    cbMax = 1,
+                    coltyp = JET_coltyp.Bit,
+                    columnid = new JET_COLUMNID { Value = 2 },
+                    cp = JET_CP.ASCII,
+                    grbit = ColumndefGrbit.None
+                },
+                new JET_COLUMNDEF
+                {
+                    cbMax = 1,
+                    coltyp = JET_coltyp.Bit,
+                    columnid = new JET_COLUMNID { Value = 2 },
+                    cp = JET_CP.ASCII,
+                    grbit = ColumndefGrbit.ColumnFixed
+                },
+                new JET_COLUMNDEF
+                {
+                    cbMax = 1,
+                    coltyp = JET_coltyp.Bit,
+                    columnid = new JET_COLUMNID { Value = 2 },
+                    cp = JET_CP.Unicode,
+                    grbit = ColumndefGrbit.None
+                },
+                new JET_COLUMNDEF
+                {
+                    cbMax = 1,
+                    coltyp = JET_coltyp.Bit,
+                    columnid = new JET_COLUMNID { Value = 3 },
+                    cp = JET_CP.ASCII,
+                    grbit = ColumndefGrbit.None
+                },
+                new JET_COLUMNDEF
+                {
+                    cbMax = 1,
+                    coltyp = JET_coltyp.UnsignedByte,
+                    columnid = new JET_COLUMNID { Value = 2 },
+                    cp = JET_CP.ASCII,
+                    grbit = ColumndefGrbit.None
+                },
+                new JET_COLUMNDEF
+                {
+                    cbMax = 2,
+                    coltyp = JET_coltyp.Bit,
+                    columnid = new JET_COLUMNID { Value = 2 },
+                    cp = JET_CP.ASCII,
+                    grbit = ColumndefGrbit.None
+                },
+            };
+            TestUnequalContent(positions);
         }
 
         /// <summary>
@@ -1280,6 +1450,19 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Helper method to compare two objects with equal content.
+        /// </summary>
+        /// <typeparam name="T">The object type.</typeparam>
+        /// <param name="x">The first object.</param>
+        /// <param name="y">The second object.</param>
+        private static void TestEqualContent<T>(T x, T y) where T : IContentEquatable<T>
+        {
+            Assert.IsTrue(x.ContentEquals(y));
+            Assert.IsTrue(y.ContentEquals(x));
+            Assert.AreEqual(x.ToString(), y.ToString());
+        }
+
+        /// <summary>
         /// Helper method to compare two unequal objects.
         /// </summary>
         /// <typeparam name="T">The object type.</typeparam>
@@ -1300,6 +1483,20 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Helper method to compare two objects with unequal content.
+        /// </summary>
+        /// <typeparam name="T">The object type.</typeparam>
+        /// <param name="x">The first object.</param>
+        /// <param name="y">The second object.</param>
+        private static void TestUnequalContent<T>(T x, T y) where T : class, IContentEquatable<T>
+        {
+            Assert.IsFalse(x.ContentEquals(y));
+            Assert.IsFalse(y.ContentEquals(x));
+            Assert.IsFalse(x.ContentEquals(null));
+            Assert.IsFalse(y.ContentEquals(null));
+        }
+
+        /// <summary>
         /// Verify that all objects in the collection are not equal to each other.
         /// </summary>
         /// <remarks>
@@ -1308,18 +1505,40 @@ namespace InteropApiTests
         /// </remarks>
         /// <typeparam name="T">The object type.</typeparam>
         /// <param name="values">Collection of distinct objects.</param>
-        private static void TestUnequal<T>(T[] values) where T : class, IEquatable<T>
+        private static void TestUnequal<T>(IList<T> values) where T : class, IEquatable<T>
         {
-            for (int i = 0; i < values.Length - 1; ++i)
+            for (int i = 0; i < values.Count - 1; ++i)
             {
                 TestEqualObjects(values[i], values[i]);
-                for (int j = i + 1; j < values.Length; ++j)
+                for (int j = i + 1; j < values.Count; ++j)
                 {
                     Debug.Assert(i != j, "About to compare the same values");
                     TestUnequalObjects(values[i], values[j]);
                     Assert.IsFalse(values[i].Equals(null));
                 }
             }           
+        }
+
+        /// <summary>
+        /// Verify that all objects in the collection are not content equal to each other.
+        /// </summary>
+        /// <remarks>
+        /// This method doesn't test operator == or operator != so it should be 
+        /// used for reference classes, which don't normally provide those operators.
+        /// </remarks>
+        /// <typeparam name="T">The object type.</typeparam>
+        /// <param name="values">Collection of distinct objects.</param>
+        private static void TestUnequalContent<T>(IList<T> values) where T : class, IContentEquatable<T>
+        {
+            for (int i = 0; i < values.Count - 1; ++i)
+            {
+                TestEqualContent(values[i], values[i]);
+                for (int j = i + 1; j < values.Count; ++j)
+                {
+                    Debug.Assert(i != j, "About to compare the same values");
+                    TestUnequalContent(values[i], values[j]);
+                }
+            }
         }
     }
 }

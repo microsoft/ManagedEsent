@@ -8,12 +8,13 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Diagnostics;
+    using System.Globalization;
 
     /// <summary>
     /// Describes one segment of an index.
     /// </summary>
     [Serializable]
-    public class IndexSegment
+    public class IndexSegment : IEquatable<IndexSegment>
     {
         /// <summary>
         /// The name of the column.
@@ -89,6 +90,63 @@ namespace Microsoft.Isam.Esent.Interop
         {
             [DebuggerStepThrough]
             get { return this.isASCII; }
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether this instance is equal
+        /// to another instance.
+        /// </summary>
+        /// <param name="obj">An object to compare with this instance.</param>
+        /// <returns>True if the two instances are equal.</returns>
+        public override bool Equals(object obj)
+        {
+            if (obj == null || this.GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            return this.Equals((IndexSegment)obj);
+        }
+
+        /// <summary>
+        /// Generate a string representation of the instance.
+        /// </summary>
+        /// <returns>The structure as a string.</returns>
+        public override string ToString()
+        {
+            return String.Format(
+                CultureInfo.InvariantCulture, "{0}{1}({2})", this.isAscending ? "+" : "-", this.columnName, this.coltyp);
+        }
+
+        /// <summary>
+        /// Returns the hash code for this instance.
+        /// </summary>
+        /// <returns>The hash code for this instance.</returns>
+        public override int GetHashCode()
+        {
+            return this.columnName.GetHashCode()
+                ^ (int)this.coltyp * 31
+                ^ (this.isAscending ? 0x10000 : 0x20000)
+                ^ (this.isASCII ? 0x40000 : 0x80000);
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether this instance is equal
+        /// to another instance.
+        /// </summary>
+        /// <param name="other">An instance to compare with this instance.</param>
+        /// <returns>True if the two instances are equal.</returns>
+        public bool Equals(IndexSegment other)
+        {
+            if (null == other)
+            {
+                return false;
+            }
+
+            return this.columnName.Equals(other.columnName, StringComparison.OrdinalIgnoreCase)
+                   && this.coltyp == other.coltyp
+                   && this.isAscending == other.isAscending
+                   && this.isASCII == other.isASCII;
         }
     }
 }

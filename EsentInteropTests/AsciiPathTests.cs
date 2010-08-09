@@ -367,10 +367,9 @@ namespace InteropApiTests
                     Assert.AreEqual(InstanceName, instances[0].szInstanceName);
 
                     Assert.AreEqual(2, instances[0].cDatabases);
-                    Assert.AreEqual(instances[0].cDatabases, instances[0].szDatabaseFileName.Length);
-                    CollectionAssert.AreEquivalent(
-                        new[] { database1, database2 },
-                        instances[0].szDatabaseFileName);
+                    Assert.AreEqual(instances[0].cDatabases, instances[0].szDatabaseFileName.Count);
+                    Assert.AreEqual(instances[0].szDatabaseFileName[0], database1);
+                    Assert.AreEqual(instances[0].szDatabaseFileName[1], database2);
                 }
             }
         }

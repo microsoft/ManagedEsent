@@ -7,6 +7,8 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Globalization;
 
@@ -35,7 +37,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Index segments.
         /// </summary>
-        private readonly IndexSegment[] indexSegments;
+        private readonly ReadOnlyCollection<IndexSegment> indexSegments;
 
         /// <summary>
         /// Index options.
@@ -81,7 +83,7 @@ namespace Microsoft.Isam.Esent.Interop
             this.name = name;
             this.cultureInfo = cultureInfo;
             this.compareOptions = compareOptions;
-            this.indexSegments = indexSegments;
+            this.indexSegments = Array.AsReadOnly(indexSegments);
             this.grbit = grbit;
             this.keys = keys;
             this.entries = entries;
@@ -118,7 +120,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets the segments of the index.
         /// </summary>
-        public IndexSegment[] IndexSegments
+        public IList<IndexSegment> IndexSegments
         {
             [DebuggerStepThrough]
             get { return this.indexSegments; }

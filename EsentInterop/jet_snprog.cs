@@ -66,25 +66,25 @@ namespace Microsoft.Isam.Esent.Interop
         private int totalUnits;
 
         /// <summary>
-        /// Gets or sets the number of work units that are already completed during the long
+        /// Gets the number of work units that are already completed during the long
         /// running operation.
         /// </summary>
         public int cunitDone
         {
             [DebuggerStepThrough]
             get { return this.completedUnits; }
-            set { this.completedUnits = value; }
+            internal set { this.completedUnits = value; }
         }
 
         /// <summary>
-        /// Gets or sets the number of work units that need to be completed. This value will
+        /// Gets the number of work units that need to be completed. This value will
         /// always be bigger than or equal to cunitDone.
         /// </summary>
         public int cunitTotal
         {
             [DebuggerStepThrough]
             get { return this.totalUnits; }
-            set { this.totalUnits = value; }
+            internal set { this.totalUnits = value; }
         }
 
         /// <summary>

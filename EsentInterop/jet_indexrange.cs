@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Runtime.InteropServices;
 
     /// <summary>
@@ -59,7 +60,7 @@ namespace Microsoft.Isam.Esent.Interop
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
-    public class JET_INDEXRANGE
+    public class JET_INDEXRANGE : IContentEquatable<JET_INDEXRANGE>
     {
         /// <summary>
         /// Initializes a new instance of the JET_INDEXRANGE class.
@@ -80,6 +81,34 @@ namespace Microsoft.Isam.Esent.Interop
         /// Gets or sets the indexrange option.
         /// </summary>
         public IndexRangeGrbit grbit { get; set; }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="JET_INDEXRANGE"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="JET_INDEXRANGE"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(CultureInfo.InvariantCulture, "JET_INDEXRANGE({0},{1})", this.tableid, this.grbit);
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether this instance is equal
+        /// to another instance.
+        /// </summary>
+        /// <param name="other">An instance to compare with this instance.</param>
+        /// <returns>True if the two instances are equal.</returns>
+        public bool ContentEquals(JET_INDEXRANGE other)
+        {
+            if (null == other)
+            {
+                return false;
+            }
+
+            return this.tableid == other.tableid
+                   && this.grbit == other.grbit;
+        }
 
         /// <summary>
         /// Get a NATIVE_INDEXRANGE structure representing the object.
