@@ -6,12 +6,21 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+
     /// <summary>
-    /// Information about one esent column. This is not an interop
+    /// Information about one Esent column. This is not an interop
     /// class, but is used by the meta-data helper methods.
     /// </summary>
-    public class ColumnInfo
+    public sealed class ColumnInfo
     {
+        /// <summary>
+        /// The default value of the column.
+        /// </summary>
+        private readonly ReadOnlyCollection<byte> defaultValue;
+
         /// <summary>
         /// Initializes a new instance of the ColumnInfo class.
         /// </summary>
@@ -36,7 +45,7 @@ namespace Microsoft.Isam.Esent.Interop
             this.Coltyp = coltyp;
             this.Cp = cp;
             this.MaxLength = maxLength;
-            this.DefaultValue = defaultValue;
+            this.defaultValue = (null == defaultValue) ? null : Array.AsReadOnly(defaultValue);
             this.Grbit = grbit;
         }
 
@@ -68,7 +77,10 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets the default value of the column.
         /// </summary>
-        public byte[] DefaultValue { get; private set; }
+        public IList<byte> DefaultValue
+        {
+            get { return this.defaultValue; }
+        }
 
         /// <summary>
         /// Gets the column options.

@@ -49,7 +49,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [Serializable]
-    public class JET_CONDITIONALCOLUMN : IContentEquatable<JET_CONDITIONALCOLUMN>
+    public sealed class JET_CONDITIONALCOLUMN : IContentEquatable<JET_CONDITIONALCOLUMN>, IDeepCloneable<JET_CONDITIONALCOLUMN>
     {
         /// <summary>
         /// Column name.
@@ -79,6 +79,15 @@ namespace Microsoft.Isam.Esent.Interop
             [DebuggerStepThrough]
             get { return this.option; }
             set { this.option = value; }
+        }
+
+        /// <summary>
+        /// Returns a deep copy of the object.
+        /// </summary>
+        /// <returns>A deep copy of the object.</returns>
+        public JET_CONDITIONALCOLUMN DeepClone()
+        {
+            return (JET_CONDITIONALCOLUMN)this.MemberwiseClone();
         }
 
         /// <summary>

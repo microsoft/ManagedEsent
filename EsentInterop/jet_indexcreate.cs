@@ -110,7 +110,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [Serializable]
-    public class JET_INDEXCREATE : IContentEquatable<JET_INDEXCREATE>
+    public sealed class JET_INDEXCREATE : IContentEquatable<JET_INDEXCREATE>, IDeepCloneable<JET_INDEXCREATE>
     {
         /// <summary>
         /// Name of the index.
@@ -292,6 +292,25 @@ namespace Microsoft.Isam.Esent.Interop
             [DebuggerStepThrough]
             get { return this.maximumKeyLength; }
             set { this.maximumKeyLength = value; }
+        }
+
+        /// <summary>
+        /// Returns a deep copy of the object.
+        /// </summary>
+        /// <returns>A deep copy of the object.</returns>
+        public JET_INDEXCREATE DeepClone()
+        {
+            JET_INDEXCREATE result = (JET_INDEXCREATE)this.MemberwiseClone();
+            result.conditionalColumns = new JET_CONDITIONALCOLUMN[this.conditionalColumns.Length];
+            result.pidxUnicode = (null == this.pidxUnicode) ? null : this.pidxUnicode.DeepClone();
+            for (int i = 0; i < this.conditionalColumns.Length; ++i)
+            {
+                result.conditionalColumns[i] = (null == this.conditionalColumns[i])
+                                                   ? null
+                                                   : this.conditionalColumns[i].DeepClone();
+            }
+
+            return result;
         }
 
         /// <summary>

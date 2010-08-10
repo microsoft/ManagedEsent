@@ -60,7 +60,7 @@ namespace Microsoft.Isam.Esent.Interop
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
-    public class JET_INDEXRANGE : IContentEquatable<JET_INDEXRANGE>
+    public class JET_INDEXRANGE : IContentEquatable<JET_INDEXRANGE>, IDeepCloneable<JET_INDEXRANGE>
     {
         /// <summary>
         /// Initializes a new instance of the JET_INDEXRANGE class.
@@ -81,6 +81,15 @@ namespace Microsoft.Isam.Esent.Interop
         /// Gets or sets the indexrange option.
         /// </summary>
         public IndexRangeGrbit grbit { get; set; }
+
+        /// <summary>
+        /// Returns a deep copy of the object.
+        /// </summary>
+        /// <returns>A deep copy of the object.</returns>
+        public JET_INDEXRANGE DeepClone()
+        {
+            return (JET_INDEXRANGE)this.MemberwiseClone();
+        }
 
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="JET_INDEXRANGE"/>.

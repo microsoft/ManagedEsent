@@ -130,7 +130,7 @@ namespace Microsoft.Isam.Esent.Interop
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
-    public class JET_INDEXLIST
+    public sealed class JET_INDEXLIST
     {
         /// <summary>
         /// Gets tableid of the temporary table. This should be closed

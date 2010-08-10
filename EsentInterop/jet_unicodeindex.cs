@@ -41,7 +41,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [Serializable]
-    public class JET_UNICODEINDEX : IContentEquatable<JET_UNICODEINDEX>
+    public sealed class JET_UNICODEINDEX : IContentEquatable<JET_UNICODEINDEX>, IDeepCloneable<JET_UNICODEINDEX>
     {
         /// <summary>
         /// The LCID to be used when normalizing unicode data.
@@ -72,6 +72,15 @@ namespace Microsoft.Isam.Esent.Interop
             [DebuggerStepThrough]
             get { return this.mapStringFlags; }
             set { this.mapStringFlags = value; }
+        }
+
+        /// <summary>
+        /// Returns a deep copy of the object.
+        /// </summary>
+        /// <returns>A deep copy of the object.</returns>
+        public JET_UNICODEINDEX DeepClone()
+        {
+            return (JET_UNICODEINDEX)this.MemberwiseClone();
         }
 
         /// <summary>

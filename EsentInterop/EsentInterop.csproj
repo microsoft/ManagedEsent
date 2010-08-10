@@ -58,6 +58,7 @@
     <Compile Include="Conversions.cs" />
     <Compile Include="GenericEnumerable.cs" />
     <Compile Include="IContentEquatable.cs" />
+    <Compile Include="IDeepCloneable.cs" />
     <Compile Include="ijet_logtime.cs" />
     <Compile Include="IndexInfoEnumerator.cs" />
     <Compile Include="IntersectIndexesEnumerator.cs" />

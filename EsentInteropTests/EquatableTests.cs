@@ -1199,6 +1199,7 @@ namespace InteropApiTests
                     {
                         new JET_CONDITIONALCOLUMN { grbit = ConditionalColumnGrbit.ColumnMustBeNonNull, szColumnName = "a" },
                         new JET_CONDITIONALCOLUMN { grbit = ConditionalColumnGrbit.ColumnMustBeNull, szColumnName = "b" },
+                        null,
                     },
                     szIndexName = "index",
                     szKey = "+foo\0\0",
@@ -1437,6 +1438,7 @@ namespace InteropApiTests
         /// <param name="y">The second object.</param>
         private static void TestEqualObjects<T>(T x, T y) where T : IEquatable<T> 
         {
+            Assert.IsTrue(x.Equals(x));
             Assert.IsTrue(x.Equals(y));
             Assert.IsTrue(y.Equals(x));
             Assert.AreEqual(x.GetHashCode(), y.GetHashCode());
@@ -1447,19 +1449,6 @@ namespace InteropApiTests
             Assert.IsTrue(objA.Equals(objB));
             Assert.IsTrue(objB.Equals(objA));
             Assert.IsFalse(objA.Equals(Any.String));
-        }
-
-        /// <summary>
-        /// Helper method to compare two objects with equal content.
-        /// </summary>
-        /// <typeparam name="T">The object type.</typeparam>
-        /// <param name="x">The first object.</param>
-        /// <param name="y">The second object.</param>
-        private static void TestEqualContent<T>(T x, T y) where T : IContentEquatable<T>
-        {
-            Assert.IsTrue(x.ContentEquals(y));
-            Assert.IsTrue(y.ContentEquals(x));
-            Assert.AreEqual(x.ToString(), y.ToString());
         }
 
         /// <summary>
@@ -1483,12 +1472,28 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Helper method to compare two objects with equal content.
+        /// </summary>
+        /// <typeparam name="T">The object type.</typeparam>
+        /// <param name="x">The first object.</param>
+        /// <param name="y">The second object.</param>
+        private static void TestEqualContent<T>(T x, T y) where T : class, IContentEquatable<T>, IDeepCloneable<T>
+        {
+            Assert.IsTrue(x.ContentEquals(x));
+            Assert.IsTrue(x.ContentEquals(y));
+            Assert.IsTrue(y.ContentEquals(x));
+            Assert.AreEqual(x.ToString(), y.ToString());
+            Assert.IsTrue(x.ContentEquals(y.DeepClone()));
+        }
+
+
+        /// <summary>
         /// Helper method to compare two objects with unequal content.
         /// </summary>
         /// <typeparam name="T">The object type.</typeparam>
         /// <param name="x">The first object.</param>
         /// <param name="y">The second object.</param>
-        private static void TestUnequalContent<T>(T x, T y) where T : class, IContentEquatable<T>
+        private static void TestUnequalContent<T>(T x, T y) where T : class, IContentEquatable<T>, IDeepCloneable<T>
         {
             Assert.IsFalse(x.ContentEquals(y));
             Assert.IsFalse(y.ContentEquals(x));
@@ -1528,7 +1533,7 @@ namespace InteropApiTests
         /// </remarks>
         /// <typeparam name="T">The object type.</typeparam>
         /// <param name="values">Collection of distinct objects.</param>
-        private static void TestUnequalContent<T>(IList<T> values) where T : class, IContentEquatable<T>
+        private static void TestUnequalContent<T>(IList<T> values) where T : class, IContentEquatable<T>, IDeepCloneable<T>
         {
             for (int i = 0; i < values.Count - 1; ++i)
             {

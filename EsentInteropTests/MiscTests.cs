@@ -7,6 +7,7 @@
 namespace InteropApiTests
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
@@ -19,6 +20,26 @@ namespace InteropApiTests
     [TestClass]
     public class MiscTests
     {
+        /// <summary>
+        /// Verify the default value in a ColumnInfo structure is read-only.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify the default value in a ColumnInfo structure is read-only")]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void VerifyColumnInfoDefaultValueIsReadOnly()
+        {
+            var columnInfo = new ColumnInfo(
+                "column",
+                JET_COLUMNID.Nil,
+                JET_coltyp.LongText,
+                JET_CP.Unicode,
+                8,
+                Any.BytesOfLength(8),
+                ColumndefGrbit.ColumnFixed);
+            columnInfo.DefaultValue[0] = 0x1;
+        }
+
         /// <summary>
         /// Verify that the index segments in an IndexInfo are read-only.
         /// </summary>
@@ -104,6 +125,27 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify that all public methods on public classes and structs in the assembly
+        /// override ToString().
+        /// </summary>
+        [TestMethod]
+        [Description("Verify that all public classes have a ToString() method")]
+        [Priority(1)]
+        public void VerifyAllPublicClassesHaveToString()
+        {
+            Assembly assembly = typeof(Api).Assembly;
+            var classes = FindPublicClassesWithoutToString(assembly);
+            bool fail = false;
+            foreach (Type @class in classes)
+            {
+                Console.WriteLine("{0} does not override Object.ToString", @class);
+                fail = true;
+            }
+
+            Assert.IsFalse(fail, "Some classes do not override Object.ToString()");
+        }
+
+        /// <summary>
         /// Verify that all TestMethods in an assembly have a specific attribute.
         /// If not all methods have the attribute then the names of the methods
         /// are printed and the test fails.
@@ -142,6 +184,25 @@ namespace InteropApiTests
                          select String.Format("{0}.{1}", method.DeclaringType, method.Name))
                 .OrderBy(x => x)
                 .ToArray();
+        }
+
+        /// <summary>
+        /// Return an array of all public methods on [TestClass] types in the given assembly that do not have
+        /// the [TestMethod] attribute. These are probably meant to be tests.
+        /// </summary>
+        /// <param name="assembly">The assembly to look in.</param>
+        /// <returns>An array of method names for methods without the TestMethod attribute.</returns>
+        private static IEnumerable<Type> FindPublicClassesWithoutToString(Assembly assembly)
+        {
+            return assembly.GetTypes()
+                .Where(type =>
+                       type.IsPublic
+                       && !type.IsAbstract
+                       && type.GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                           .Any(method =>
+                                  method.Name == "ToString"
+                                 //// && method.GetParameters().Length == 0 &&
+                                  && method.DeclaringType == typeof(object)));
         }
 
         /// <summary>

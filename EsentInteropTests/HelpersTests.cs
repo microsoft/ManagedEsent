@@ -151,6 +151,9 @@ namespace InteropApiTests
             columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = 8 };
             Api.JetAddColumn(this.sesid, this.tableid, "UInt64", columndef, null, 0, out columnid);
 
+            columndef = new JET_COLUMNDEF() { coltyp = JET_coltyp.Binary, cbMax = sizeof(int) };
+            Api.JetAddColumn(this.sesid, this.tableid, "Default", columndef, BitConverter.GetBytes(123), sizeof(int), out columnid);
+
             Api.JetCloseTable(this.sesid, this.tableid);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
             Api.JetOpenTable(this.sesid, this.dbid, this.table, null, 0, OpenTableGrbit.None, out this.tableid);
@@ -201,6 +204,7 @@ namespace InteropApiTests
             Assert.IsTrue(this.columnidDict.ContainsKey("uint16"));
             Assert.IsTrue(this.columnidDict.ContainsKey("uint32"));
             Assert.IsTrue(this.columnidDict.ContainsKey("uint64"));
+            Assert.IsTrue(this.columnidDict.ContainsKey("default"));
 
             Assert.IsFalse(this.columnidDict.ContainsKey("nosuchcolumn"));
         }
@@ -312,6 +316,20 @@ namespace InteropApiTests
                                               where c.Coltyp == JET_coltyp.Long
                                               select c.Name;
             Assert.AreEqual("Int32", columnnames.Single());
+        }
+
+        /// <summary>
+        /// Verify the default value in a ColumnInfo structure is set.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Verify the default value in a ColumnInfo structure is set.")]
+        public void GetColumnDefaultValue()
+        {
+            var columnInfo = (from c in Api.GetTableColumns(this.sesid, this.tableid)
+                                              where c.Name == "Default"
+                                              select c).Single();
+            Assert.AreEqual(123, BitConverter.ToInt32(columnInfo.DefaultValue.ToArray(), 0));
         }
 
         /// <summary>

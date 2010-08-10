@@ -4,4 +4,11 @@ bin
 obj
 *.user
 *.suo
+</Value></Property><Property><Name>svn:ignore</Name><Value>TestResults
+_ReSharper.Esent
+bin
+obj
+*.user
+*.suo
+Esent.Interop.xml
 </Value></Property></Properties></ItemProperties>

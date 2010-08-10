@@ -57,7 +57,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [Serializable]
-    public class JET_RECPOS : IContentEquatable<JET_RECPOS>
+    public sealed class JET_RECPOS : IContentEquatable<JET_RECPOS>, IDeepCloneable<JET_RECPOS>
     {
         /// <summary>
         /// The number of entries before the key.
@@ -87,6 +87,15 @@ namespace Microsoft.Isam.Esent.Interop
             [DebuggerStepThrough]
             get { return this.totalEntries; }
             set { this.totalEntries = value; }
+        }
+
+        /// <summary>
+        /// Returns a deep copy of the object.
+        /// </summary>
+        /// <returns>A deep copy of the object.</returns>
+        public JET_RECPOS DeepClone()
+        {
+            return (JET_RECPOS)this.MemberwiseClone();
         }
 
         /// <summary>
