@@ -114,6 +114,7 @@
     <Compile Include="UInt16ColumnValue.cs" />
     <Compile Include="UInt32ColumnValue.cs" />
     <Compile Include="UInt64ColumnValue.cs" />
+    <Compile Include="Util.cs" />
     <Compile Include="VistaApi.cs" />
     <Compile Include="VistaGrbits.cs" />
     <Compile Include="EsentInvalidColumnException.cs" />

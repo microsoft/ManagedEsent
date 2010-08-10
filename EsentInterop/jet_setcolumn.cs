@@ -8,7 +8,9 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Runtime.InteropServices;
+    using System.Text;
 
     /// <summary>
     /// The native version of the <see cref="JET_SETCOLUMN"/> structure.
@@ -65,7 +67,7 @@ namespace Microsoft.Isam.Esent.Interop
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
-    public class JET_SETCOLUMN
+    public class JET_SETCOLUMN : IContentEquatable<JET_SETCOLUMN>, IDeepCloneable<JET_SETCOLUMN>
     {
         /// <summary>
         /// Gets or sets the column identifier for a column to set.
@@ -110,6 +112,60 @@ namespace Microsoft.Isam.Esent.Interop
         /// Gets the error code or warning returned from the set column operation.
         /// </summary>
         public JET_wrn err { get; internal set; }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="JET_SETCOLUMN"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="JET_SETCOLUMN"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(
+                CultureInfo.InvariantCulture,
+                "JET_SETCOLUMN(0x{0:x},{1},ibLongValue={2},itagSequence={3}",
+                this.columnid.Value,
+                Util.DumpBytes(this.pvData, this.ibData, this.cbData),
+                this.ibLongValue,
+                this.itagSequence);
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether this instance is equal
+        /// to another instance.
+        /// </summary>
+        /// <param name="other">An instance to compare with this instance.</param>
+        /// <returns>True if the two instances are equal.</returns>
+        public bool ContentEquals(JET_SETCOLUMN other)
+        {
+            if (null == other)
+            {
+                return false;
+            }
+
+            this.CheckDataSize();
+            other.CheckDataSize();
+            return this.columnid == other.columnid
+                   && this.ibData == other.ibData
+                   && this.cbData == other.cbData
+                   && this.grbit == other.grbit
+                   && this.ibLongValue == other.ibLongValue
+                   && this.itagSequence == other.itagSequence
+                   && this.err == other.err
+                   && Util.ArrayEqual(this.pvData, other.pvData, this.ibData, this.cbData);
+        }
+
+        /// <summary>
+        /// Returns a deep copy of the object.
+        /// </summary>
+        /// <returns>A deep copy of the object.</returns>
+        public JET_SETCOLUMN DeepClone()
+        {
+            JET_SETCOLUMN result = (JET_SETCOLUMN)this.MemberwiseClone();
+            result.pvData = new byte[this.pvData.Length];
+            Array.Copy(this.pvData, result.pvData, this.cbData);
+            return result;
+        }
 
         /// <summary>
         /// Check to see if cbData is negative or greater than the length of pvData.

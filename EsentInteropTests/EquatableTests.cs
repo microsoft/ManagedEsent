@@ -30,7 +30,7 @@ namespace InteropApiTests
         {
             var x = JET_INSTANCE.Nil;
             var y = JET_INSTANCE.Nil;
-            TestEqualObjects(x, y);
+            TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
         }
@@ -46,7 +46,7 @@ namespace InteropApiTests
         {
             var x = JET_INSTANCE.Nil;
             var y = new JET_INSTANCE { Value = (IntPtr)0x7 };
-            TestUnequalObjects(x, y);
+            TestNotEquals(x, y);
             Assert.IsTrue(x != y);
             Assert.IsFalse(x == y);
         }
@@ -62,7 +62,7 @@ namespace InteropApiTests
         {
             var x = JET_SESID.Nil;
             var y = JET_SESID.Nil;
-            TestEqualObjects(x, y);
+            TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
         }
@@ -78,7 +78,7 @@ namespace InteropApiTests
         {
             var x = JET_SESID.Nil;
             var y = new JET_SESID { Value = (IntPtr)0x7 };
-            TestUnequalObjects(x, y);
+            TestNotEquals(x, y);
             Assert.IsTrue(x != y);
             Assert.IsFalse(x == y);
         }
@@ -94,7 +94,7 @@ namespace InteropApiTests
         {
             var x = JET_TABLEID.Nil;
             var y = JET_TABLEID.Nil;
-            TestEqualObjects(x, y);
+            TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
         }
@@ -110,7 +110,7 @@ namespace InteropApiTests
         {
             var x = JET_TABLEID.Nil;
             var y = new JET_TABLEID { Value = (IntPtr)0x7 };
-            TestUnequalObjects(x, y);
+            TestNotEquals(x, y);
             Assert.IsTrue(x != y);
             Assert.IsFalse(x == y);
         }
@@ -126,7 +126,7 @@ namespace InteropApiTests
         {
             var x = JET_DBID.Nil;
             var y = JET_DBID.Nil;
-            TestEqualObjects(x, y);
+            TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
         }
@@ -142,7 +142,7 @@ namespace InteropApiTests
         {
             var x = JET_DBID.Nil;
             var y = new JET_DBID { Value = 0x2 };
-            TestUnequalObjects(x, y);
+            TestNotEquals(x, y);
             Assert.IsTrue(x != y);
             Assert.IsFalse(x == y);
         }
@@ -158,7 +158,7 @@ namespace InteropApiTests
         {
             var x = JET_COLUMNID.Nil;
             var y = JET_COLUMNID.Nil;
-            TestEqualObjects(x, y);
+            TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
         }
@@ -174,7 +174,7 @@ namespace InteropApiTests
         {
             var x = JET_COLUMNID.Nil;
             var y = new JET_COLUMNID { Value = 0xF };
-            TestUnequalObjects(x, y);
+            TestNotEquals(x, y);
             Assert.IsTrue(x != y);
             Assert.IsFalse(x == y);
         }
@@ -190,7 +190,7 @@ namespace InteropApiTests
         {
             var x = JET_OSSNAPID.Nil;
             var y = JET_OSSNAPID.Nil;
-            TestEqualObjects(x, y);
+            TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
         }
@@ -206,7 +206,7 @@ namespace InteropApiTests
         {
             var x = JET_OSSNAPID.Nil;
             var y = new JET_OSSNAPID { Value = (IntPtr)0x7 };
-            TestUnequalObjects(x, y);
+            TestNotEquals(x, y);
             Assert.IsTrue(x != y);
             Assert.IsFalse(x == y);
         }
@@ -222,7 +222,7 @@ namespace InteropApiTests
         {
             var x = JET_HANDLE.Nil;
             var y = JET_HANDLE.Nil;
-            TestEqualObjects(x, y);
+            TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
         }
@@ -238,7 +238,7 @@ namespace InteropApiTests
         {
             var x = JET_HANDLE.Nil;
             var y = new JET_HANDLE { Value = (IntPtr)0x7 };
-            TestUnequalObjects(x, y);
+            TestNotEquals(x, y);
             Assert.IsTrue(x != y);
             Assert.IsFalse(x == y);
         }
@@ -254,7 +254,7 @@ namespace InteropApiTests
         {
             var x = JET_LS.Nil;
             var y = JET_LS.Nil;
-            TestEqualObjects(x, y);
+            TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
         }
@@ -270,7 +270,7 @@ namespace InteropApiTests
         {
             var x = JET_LS.Nil;
             var y = new JET_LS { Value = (IntPtr)0x7 };
-            TestUnequalObjects(x, y);
+            TestNotEquals(x, y);
             Assert.IsTrue(x != y);
             Assert.IsFalse(x == y);
         }
@@ -286,7 +286,7 @@ namespace InteropApiTests
         {
             var x = new JET_INDEXID { IndexId1 = (IntPtr)0x1, IndexId2 = 0x2, IndexId3 = 0x3 };
             var y = new JET_INDEXID { IndexId1 = (IntPtr)0x1, IndexId2 = 0x2, IndexId3 = 0x3 };
-            TestEqualObjects(x, y);
+            TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
         }
@@ -304,9 +304,9 @@ namespace InteropApiTests
             var y = new JET_INDEXID { IndexId1 = (IntPtr)0x1, IndexId2 = 0x22, IndexId3 = 0x3 };
             var z = new JET_INDEXID { IndexId1 = (IntPtr)0x1, IndexId2 = 0x2, IndexId3 = 0x33 };
 
-            TestUnequalObjects(x, y);
-            TestUnequalObjects(x, z);
-            TestUnequalObjects(y, z);
+            TestNotEquals(x, y);
+            TestNotEquals(x, z);
+            TestNotEquals(y, z);
 
             Assert.IsTrue(x != y);
             Assert.IsFalse(x == y);
@@ -323,7 +323,7 @@ namespace InteropApiTests
         {
             var x = new JET_LOGTIME();
             var y = new JET_LOGTIME();
-            TestEqualObjects(x, y);
+            TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
         }
@@ -340,7 +340,7 @@ namespace InteropApiTests
             DateTime t = DateTime.Now;
             var x = new JET_LOGTIME(t);
             var y = new JET_LOGTIME(t);
-            TestEqualObjects(x, y);
+            TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
         }
@@ -376,7 +376,7 @@ namespace InteropApiTests
                 for (int j = i + 1; j < times.Length; ++j)
                 {
                     Debug.Assert(i != j, "About to compare the same JET_LOGTIME");
-                    TestUnequalObjects(times[i], times[j]);
+                    TestNotEquals(times[i], times[j]);
                     Assert.IsTrue(times[i] != times[j]);
                     Assert.IsFalse(times[i] == times[j]);
                 }
@@ -395,7 +395,7 @@ namespace InteropApiTests
             DateTime t = DateTime.Now;
             var x = new JET_BKLOGTIME(t, false);
             var y = new JET_BKLOGTIME(t, false);
-            TestEqualObjects(x, y);
+            TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
         }
@@ -432,7 +432,7 @@ namespace InteropApiTests
                 for (int j = i + 1; j < times.Length; ++j)
                 {
                     Debug.Assert(i != j, "About to compare the same JET_BKLOGTIME");
-                    TestUnequalObjects(times[i], times[j]);
+                    TestNotEquals(times[i], times[j]);
                     Assert.IsTrue(times[i] != times[j]);
                     Assert.IsFalse(times[i] == times[j]);
                 }
@@ -450,7 +450,7 @@ namespace InteropApiTests
         {
             var x = new JET_SIGNATURE();
             var y = new JET_SIGNATURE();
-            TestEqualObjects(x, y);
+            TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
         }
@@ -467,7 +467,7 @@ namespace InteropApiTests
             DateTime t = DateTime.Now;
             var x = new JET_SIGNATURE(1, t, "COMPUTER");
             var y = new JET_SIGNATURE(1, t, "COMPUTER");
-            TestEqualObjects(x, y);
+            TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
         }
@@ -502,7 +502,7 @@ namespace InteropApiTests
                 for (int j = i + 1; j < times.Length; ++j)
                 {
                     Debug.Assert(i != j, "About to compare the same JET_SIGNATURE");
-                    TestUnequalObjects(times[i], times[j]);
+                    TestNotEquals(times[i], times[j]);
                     Assert.IsTrue(times[i] != times[j]);
                     Assert.IsFalse(times[i] == times[j]);
                 }
@@ -520,7 +520,7 @@ namespace InteropApiTests
         {
             var x = new JET_LGPOS { lGeneration = 1, isec = 2, ib = 3 };
             var y = new JET_LGPOS { lGeneration = 1, isec = 2, ib = 3 };
-            TestEqualObjects(x, y);
+            TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
         }
@@ -551,7 +551,7 @@ namespace InteropApiTests
                 for (int j = i + 1; j < positions.Length; ++j)
                 {
                     Debug.Assert(i != j, "About to compare the same JET_LGPOS");
-                    TestUnequalObjects(positions[i], positions[j]);
+                    TestNotEquals(positions[i], positions[j]);
                     Assert.IsTrue(positions[i] != positions[j]);
                     Assert.IsFalse(positions[i] == positions[j]);
                 }
@@ -572,7 +572,7 @@ namespace InteropApiTests
 
             var x = new JET_BKINFO { bklogtimeMark = bklogtime, genHigh = 11, genLow = 3, lgposMark = lgpos };
             var y = new JET_BKINFO { bklogtimeMark = bklogtime, genHigh = 11, genLow = 3, lgposMark = lgpos };
-            TestEqualObjects(x, y);
+            TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
         }
@@ -609,7 +609,7 @@ namespace InteropApiTests
                 for (int j = i + 1; j < positions.Length; ++j)
                 {
                     Debug.Assert(i != j, "About to compare the same JET_LGPOS");
-                    TestUnequalObjects(positions[i], positions[j]);
+                    TestNotEquals(positions[i], positions[j]);
                     Assert.IsTrue(positions[i] != positions[j]);
                     Assert.IsFalse(positions[i] == positions[j]);
                 }
@@ -653,7 +653,7 @@ namespace InteropApiTests
                 cNonTaggedColumns = 10,
                 cTaggedColumns = 11
             };
-            TestEqualObjects(x, y);
+            TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
         }
@@ -848,7 +848,7 @@ namespace InteropApiTests
                 for (int j = i + 1; j < sizes.Length; ++j)
                 {
                     Debug.Assert(i != j, "About to compare the same JET_RECSIZE");
-                    TestUnequalObjects(sizes[i], sizes[j]);
+                    TestNotEquals(sizes[i], sizes[j]);
                     Assert.IsTrue(sizes[i] != sizes[j]);
                     Assert.IsFalse(sizes[i] == sizes[j]);
                 }
@@ -885,7 +885,7 @@ namespace InteropApiTests
                 cPageRedirtied = 6,
                 cPageReferenced = 7,
             };
-            TestEqualObjects(x, y);
+            TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
         }
@@ -992,82 +992,11 @@ namespace InteropApiTests
                 for (int j = i + 1; j < threadstats.Length; ++j)
                 {
                     Debug.Assert(i != j, "About to compare the same JET_THREADSTATS");
-                    TestUnequalObjects(threadstats[i], threadstats[j]);
+                    TestNotEquals(threadstats[i], threadstats[j]);
                     Assert.IsTrue(threadstats[i] != threadstats[j]);
                     Assert.IsFalse(threadstats[i] == threadstats[j]);
                 }
             }
-        }
-
-        /// <summary>
-        /// Check that JET_CONDITIONALCOLUMN objects can be
-        /// compared for equality.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Check that JET_CONDITIONALCOLUMN objects can be compared for equality")]
-        public void VerifyJetConditionalColumnEquality()
-        {
-            var x = new JET_CONDITIONALCOLUMN { szColumnName = "Column", grbit = ConditionalColumnGrbit.ColumnMustBeNonNull };
-            var y = new JET_CONDITIONALCOLUMN { szColumnName = "Column", grbit = ConditionalColumnGrbit.ColumnMustBeNonNull };
-            TestEqualContent(x, y);
-        }
-
-        /// <summary>
-        /// Check that JET_CONDITIONALCOLUMN objects can be
-        /// compared for inequality.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Check that JET_CONDITIONALCOLUMN objects can be compared for inequality")]
-        public void VerifyJetConditionalColumnInequality()
-        {
-            // None of these objects are equal, most differ in only one member from the
-            // first object. We will compare them all against each other.
-            var conditionalcolumns = new[]
-            {
-                new JET_CONDITIONALCOLUMN { szColumnName = "Column", grbit = ConditionalColumnGrbit.ColumnMustBeNonNull },
-                new JET_CONDITIONALCOLUMN { szColumnName = "Column", grbit = ConditionalColumnGrbit.ColumnMustBeNull },
-                new JET_CONDITIONALCOLUMN { szColumnName = "Column2", grbit = ConditionalColumnGrbit.ColumnMustBeNonNull },
-                new JET_CONDITIONALCOLUMN { szColumnName = null, grbit = ConditionalColumnGrbit.ColumnMustBeNonNull },
-            };
-
-            TestUnequalContent(conditionalcolumns);
-        }
-
-        /// <summary>
-        /// Check that JET_UNICODEINDEX objects can be
-        /// compared for equality.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Check that JET_UNICODEINDEX objects can be compared for equality")]
-        public void VerifyJetUnicodeIndexEquality()
-        {
-            var x = new JET_UNICODEINDEX { lcid = 1033, dwMapFlags = 1 };
-            var y = new JET_UNICODEINDEX { lcid = 1033, dwMapFlags = 1 };
-            TestEqualContent(x, y);
-        }
-
-        /// <summary>
-        /// Check that JET_UNICODEINDEX structures can be
-        /// compared for inequality.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Check that JET_UNICODEINDEX objects can be compared for inequality")]
-        public void VerifyJetUnicodeIndexInequality()
-        {
-            // None of these objects are equal, most differ in only one member from the
-            // first object. We will compare them all against each other.
-            var unicodeindexes = new[]
-            {
-                new JET_UNICODEINDEX { lcid = 1033, dwMapFlags = 1 },
-                new JET_UNICODEINDEX { lcid = 1033, dwMapFlags = 2 },
-                new JET_UNICODEINDEX { lcid = 1034, dwMapFlags = 1 },
-            };
-
-            TestUnequalContent(unicodeindexes);
         }
 
         /// <summary>
@@ -1081,7 +1010,7 @@ namespace InteropApiTests
         {
             var x = new JET_SNPROG { cunitDone = 1, cunitTotal = 2 };
             var y = new JET_SNPROG { cunitDone = 1, cunitTotal = 2 };
-            TestEqualObjects(x, y);
+            TestEquals(x, y);
 
             // This is a reference class. Operator == and != still do reference comparisons.
         }
@@ -1104,126 +1033,7 @@ namespace InteropApiTests
                 new JET_SNPROG { cunitDone = 2, cunitTotal = 2 },
             };
 
-            TestUnequal(snprogs);
-        }
-
-        /// <summary>
-        /// Check that JET_RECPOS objects can be
-        /// compared for equality.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Check that JET_RECPOS objects can be compared for equality")]
-        public void VerifyJetRecposEquality()
-        {
-            var x = new JET_RECPOS { centriesLT = 1, centriesTotal = 2 };
-            var y = new JET_RECPOS { centriesLT = 1, centriesTotal = 2 };
-            TestEqualContent(x, y);
-        }
-
-        /// <summary>
-        /// Check that JET_RECPOS structures can be
-        /// compared for inequality.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Check that JET_RECPOS objects can be compared for inequality")]
-        public void VerifyJetRecposInequality()
-        {
-            // None of these objects are equal, most differ in only one member from the
-            // first object. We will compare them all against each other.
-            var positions = new[]
-            {
-                new JET_RECPOS { centriesLT = 1, centriesTotal = 2 },
-                new JET_RECPOS { centriesLT = 1, centriesTotal = 3 },
-                new JET_RECPOS { centriesLT = 2, centriesTotal = 2 },
-            };
-
-            TestUnequalContent(positions);
-        }
-
-        /// <summary>
-        /// Check that JET_INDEXCREATE objects can be
-        /// compared for equality.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Check that JET_INDEXCREATE objects can be compared for equality")]
-        public void VerifyJetIndexcreateEquality()
-        {
-            var x = new JET_INDEXCREATE
-            {
-                cbKey = 6,
-                szKey = "-C1\0\0",
-                szIndexName = "Index",
-                cConditionalColumn = 1,
-                rgconditionalcolumn = new[] { new JET_CONDITIONALCOLUMN { grbit = ConditionalColumnGrbit.ColumnMustBeNonNull, szColumnName = "a" } }
-            };
-            var y = new JET_INDEXCREATE
-            {
-                cbKey = 6,
-                szKey = "-C1\0\0",
-                szIndexName = "Index",
-                cConditionalColumn = 1,
-                rgconditionalcolumn = new[] { new JET_CONDITIONALCOLUMN { grbit = ConditionalColumnGrbit.ColumnMustBeNonNull, szColumnName = "a" } }
-            };
-            TestEqualContent(x, y);
-        }
-
-        /// <summary>
-        /// Check that JET_INDEXCREATE structures can be
-        /// compared for inequality.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Check that JET_INDEXCREATE objects can be compared for inequality")]
-        public void VerifyJetIndexCreateInequality()
-        {
-            // create an array of indexcreate objects
-            var indexcreates = new JET_INDEXCREATE[13];
-
-            // First make them all the same
-            // (different objects with the same values)
-            for (int i = 0; i < indexcreates.Length; ++i)
-            {
-                indexcreates[i] = new JET_INDEXCREATE
-                {
-                    cbKey = 6,
-                    cbKeyMost = 300,
-                    cbVarSegMac = 100,
-                    cConditionalColumn = 2,
-                    err = JET_err.Success,
-                    grbit = CreateIndexGrbit.None,
-                    pidxUnicode = new JET_UNICODEINDEX { dwMapFlags = 0x1, lcid = 100 },
-                    rgconditionalcolumn = new[]
-                    {
-                        new JET_CONDITIONALCOLUMN { grbit = ConditionalColumnGrbit.ColumnMustBeNonNull, szColumnName = "a" },
-                        new JET_CONDITIONALCOLUMN { grbit = ConditionalColumnGrbit.ColumnMustBeNull, szColumnName = "b" },
-                        null,
-                    },
-                    szIndexName = "index",
-                    szKey = "+foo\0\0",
-                };
-            }
-
-            // Now make them all different
-            int j = 1;
-            indexcreates[j++].cbKey--;
-            indexcreates[j++].cbKeyMost--;
-            indexcreates[j++].cbVarSegMac--;
-            indexcreates[j++].cConditionalColumn--;
-            indexcreates[j++].cConditionalColumn = 0;
-            indexcreates[j++].err = JET_err.VersionStoreOutOfMemory;
-            indexcreates[j++].grbit = CreateIndexGrbit.IndexUnique;
-            indexcreates[j++].pidxUnicode = new JET_UNICODEINDEX { dwMapFlags = 0x2, lcid = 100 };
-            indexcreates[j++].pidxUnicode = null;
-            indexcreates[j++].rgconditionalcolumn[0].szColumnName = "c";
-            indexcreates[j++].szIndexName = "index2";
-            indexcreates[j++].szKey = "+bar\0\0";
-            Debug.Assert(j == indexcreates.Length, "Too many indexcreates in array");
-
-            // Finally compare them
-            TestUnequalContent(indexcreates);
+            VerifyAllNotEquals(snprogs);
         }
 
         /// <summary>
@@ -1237,7 +1047,7 @@ namespace InteropApiTests
         {
             var x = new JET_INSTANCE_INFO(JET_INSTANCE.Nil, "instance", new[] { "foo.edb" });
             var y = new JET_INSTANCE_INFO(JET_INSTANCE.Nil, "instance", new[] { "foo.edb" });
-            TestEqualObjects(x, y);
+            TestEquals(x, y);
 
             // This is a reference class. Operator == and != still do reference comparisons.
         }
@@ -1264,41 +1074,7 @@ namespace InteropApiTests
                 new JET_INSTANCE_INFO(new JET_INSTANCE { Value = new IntPtr(1) }, "instance", new[] { "foo.edb" }),
             };
 
-            TestUnequal(infos);
-        }
-
-        /// <summary>
-        /// Check that JET_INDEXRANGE structures can be
-        /// compared for equality.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Check that JET_INDEXRANGE structures can be compared for equality")]
-        public void VerifyJetIndexrangeEquality()
-        {
-            var x = new JET_INDEXRANGE { grbit = IndexRangeGrbit.RecordInIndex };
-            var y = new JET_INDEXRANGE { grbit = IndexRangeGrbit.RecordInIndex };
-            TestEqualContent(x, y);
-        }
-
-        /// <summary>
-        /// Check that JET_INDEXRANGE structures can be
-        /// compared for inequality.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Check that JET_INDEXRANGE structures can be compared for inequality")]
-        public void VerifyJetIndexrangeInequality()
-        {
-            // None of these objects are equal, most differ in only one member from the
-            // first object. We will compare them all against each other.
-            var ranges = new[]
-            {
-                new JET_INDEXRANGE { tableid = new JET_TABLEID { Value = new IntPtr(1) }, grbit = IndexRangeGrbit.RecordInIndex },
-                new JET_INDEXRANGE { tableid = new JET_TABLEID { Value = new IntPtr(1) }, grbit = (IndexRangeGrbit)49 },
-                new JET_INDEXRANGE { tableid = new JET_TABLEID { Value = new IntPtr(2) }, grbit = IndexRangeGrbit.RecordInIndex },
-            };
-            TestUnequalContent(ranges);
+            VerifyAllNotEquals(infos);
         }
 
         /// <summary>
@@ -1312,7 +1088,7 @@ namespace InteropApiTests
         {
             var x = new IndexSegment("column", JET_coltyp.Currency, true, true);
             var y = new IndexSegment("column", JET_coltyp.Currency, true, true);
-            TestEqualObjects(x, y);
+            TestEquals(x, y);
         }
 
         /// <summary>
@@ -1334,100 +1110,7 @@ namespace InteropApiTests
                 new IndexSegment("column", JET_coltyp.IEEESingle, true, true),
                 new IndexSegment("column2", JET_coltyp.Currency, true, true),
             };
-            TestUnequal(segments);
-        }
-
-        /// <summary>
-        /// Check that JET_COLUMNDEF structures can be
-        /// compared for equality.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Check that JET_COLUMNDEF structures can be compared for equality")]
-        public void VerifyJetColumndefEquality()
-        {
-            var x = new JET_COLUMNDEF
-            {
-                cbMax = 1,
-                coltyp = JET_coltyp.Bit,
-                columnid = new JET_COLUMNID { Value = 1 },
-                cp = JET_CP.ASCII,
-                grbit = ColumndefGrbit.None
-            };
-            var y = new JET_COLUMNDEF
-            {
-                cbMax = 1,
-                coltyp = JET_coltyp.Bit,
-                columnid = new JET_COLUMNID { Value = 1 },
-                cp = JET_CP.ASCII,
-                grbit = ColumndefGrbit.None
-            };
-            TestEqualContent(x, y);
-        }
-
-        /// <summary>
-        /// Check that JET_COLUMNDEF structures can be
-        /// compared for inequality.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Check that JET_COLUMNDEF structures can be compared for inequality")]
-        public void VerifyJetColumndefInequality()
-        {
-            // None of these objects are equal, most differ in only one member from the
-            // first object. We will compare them all against each other.
-            var positions = new[]
-            {
-                new JET_COLUMNDEF
-                {
-                    cbMax = 1,
-                    coltyp = JET_coltyp.Bit,
-                    columnid = new JET_COLUMNID { Value = 2 },
-                    cp = JET_CP.ASCII,
-                    grbit = ColumndefGrbit.None
-                },
-                new JET_COLUMNDEF
-                {
-                    cbMax = 1,
-                    coltyp = JET_coltyp.Bit,
-                    columnid = new JET_COLUMNID { Value = 2 },
-                    cp = JET_CP.ASCII,
-                    grbit = ColumndefGrbit.ColumnFixed
-                },
-                new JET_COLUMNDEF
-                {
-                    cbMax = 1,
-                    coltyp = JET_coltyp.Bit,
-                    columnid = new JET_COLUMNID { Value = 2 },
-                    cp = JET_CP.Unicode,
-                    grbit = ColumndefGrbit.None
-                },
-                new JET_COLUMNDEF
-                {
-                    cbMax = 1,
-                    coltyp = JET_coltyp.Bit,
-                    columnid = new JET_COLUMNID { Value = 3 },
-                    cp = JET_CP.ASCII,
-                    grbit = ColumndefGrbit.None
-                },
-                new JET_COLUMNDEF
-                {
-                    cbMax = 1,
-                    coltyp = JET_coltyp.UnsignedByte,
-                    columnid = new JET_COLUMNID { Value = 2 },
-                    cp = JET_CP.ASCII,
-                    grbit = ColumndefGrbit.None
-                },
-                new JET_COLUMNDEF
-                {
-                    cbMax = 2,
-                    coltyp = JET_coltyp.Bit,
-                    columnid = new JET_COLUMNID { Value = 2 },
-                    cp = JET_CP.ASCII,
-                    grbit = ColumndefGrbit.None
-                },
-            };
-            TestUnequalContent(positions);
+            VerifyAllNotEquals(segments);
         }
 
         /// <summary>
@@ -1436,11 +1119,14 @@ namespace InteropApiTests
         /// <typeparam name="T">The object type.</typeparam>
         /// <param name="x">The first object.</param>
         /// <param name="y">The second object.</param>
-        private static void TestEqualObjects<T>(T x, T y) where T : IEquatable<T> 
+        private static void TestEquals<T>(T x, T y) where T : IEquatable<T> 
         {
             Assert.IsTrue(x.Equals(x));
+            Assert.IsTrue(y.Equals(y));
+
             Assert.IsTrue(x.Equals(y));
             Assert.IsTrue(y.Equals(x));
+
             Assert.AreEqual(x.GetHashCode(), y.GetHashCode());
             Assert.AreEqual(x.ToString(), y.ToString());
 
@@ -1448,7 +1134,6 @@ namespace InteropApiTests
             object objB = y;
             Assert.IsTrue(objA.Equals(objB));
             Assert.IsTrue(objB.Equals(objA));
-            Assert.IsFalse(objA.Equals(Any.String));
         }
 
         /// <summary>
@@ -1457,10 +1142,14 @@ namespace InteropApiTests
         /// <typeparam name="T">The object type.</typeparam>
         /// <param name="x">The first object.</param>
         /// <param name="y">The second object.</param>
-        private static void TestUnequalObjects<T>(T x, T y) where T : IEquatable<T>
+        private static void TestNotEquals<T>(T x, T y) where T : IEquatable<T>
         {
+            Assert.IsFalse(x.Equals(null));
+            Assert.IsFalse(y.Equals(null));
+
             Assert.IsFalse(x.Equals(y));
             Assert.IsFalse(y.Equals(x));
+
             Assert.AreNotEqual(x.GetHashCode(), y.GetHashCode(), "{0} and {1} have the same hash code", x, y);
 
             object objA = x;
@@ -1468,37 +1157,9 @@ namespace InteropApiTests
             Assert.IsFalse(objA.Equals(objB));
             Assert.IsFalse(objB.Equals(objA));
             Assert.IsFalse(objA.Equals(null));
-            Assert.IsFalse(objA.Equals(new Exception()));
-        }
-
-        /// <summary>
-        /// Helper method to compare two objects with equal content.
-        /// </summary>
-        /// <typeparam name="T">The object type.</typeparam>
-        /// <param name="x">The first object.</param>
-        /// <param name="y">The second object.</param>
-        private static void TestEqualContent<T>(T x, T y) where T : class, IContentEquatable<T>, IDeepCloneable<T>
-        {
-            Assert.IsTrue(x.ContentEquals(x));
-            Assert.IsTrue(x.ContentEquals(y));
-            Assert.IsTrue(y.ContentEquals(x));
-            Assert.AreEqual(x.ToString(), y.ToString());
-            Assert.IsTrue(x.ContentEquals(y.DeepClone()));
-        }
-
-
-        /// <summary>
-        /// Helper method to compare two objects with unequal content.
-        /// </summary>
-        /// <typeparam name="T">The object type.</typeparam>
-        /// <param name="x">The first object.</param>
-        /// <param name="y">The second object.</param>
-        private static void TestUnequalContent<T>(T x, T y) where T : class, IContentEquatable<T>, IDeepCloneable<T>
-        {
-            Assert.IsFalse(x.ContentEquals(y));
-            Assert.IsFalse(y.ContentEquals(x));
-            Assert.IsFalse(x.ContentEquals(null));
-            Assert.IsFalse(y.ContentEquals(null));
+            Assert.IsFalse(objB.Equals(null));
+            Assert.IsFalse(objA.Equals(Any.String));
+            Assert.IsFalse(objB.Equals(Any.String));
         }
 
         /// <summary>
@@ -1510,40 +1171,17 @@ namespace InteropApiTests
         /// </remarks>
         /// <typeparam name="T">The object type.</typeparam>
         /// <param name="values">Collection of distinct objects.</param>
-        private static void TestUnequal<T>(IList<T> values) where T : class, IEquatable<T>
+        private static void VerifyAllNotEquals<T>(IList<T> values) where T : class, IEquatable<T>
         {
             for (int i = 0; i < values.Count - 1; ++i)
             {
-                TestEqualObjects(values[i], values[i]);
+                TestEquals(values[i], values[i]);
                 for (int j = i + 1; j < values.Count; ++j)
                 {
                     Debug.Assert(i != j, "About to compare the same values");
-                    TestUnequalObjects(values[i], values[j]);
-                    Assert.IsFalse(values[i].Equals(null));
+                    TestNotEquals(values[i], values[j]);
                 }
             }           
-        }
-
-        /// <summary>
-        /// Verify that all objects in the collection are not content equal to each other.
-        /// </summary>
-        /// <remarks>
-        /// This method doesn't test operator == or operator != so it should be 
-        /// used for reference classes, which don't normally provide those operators.
-        /// </remarks>
-        /// <typeparam name="T">The object type.</typeparam>
-        /// <param name="values">Collection of distinct objects.</param>
-        private static void TestUnequalContent<T>(IList<T> values) where T : class, IContentEquatable<T>, IDeepCloneable<T>
-        {
-            for (int i = 0; i < values.Count - 1; ++i)
-            {
-                TestEqualContent(values[i], values[i]);
-                for (int j = i + 1; j < values.Count; ++j)
-                {
-                    Debug.Assert(i != j, "About to compare the same values");
-                    TestUnequalContent(values[i], values[j]);
-                }
-            }
         }
     }
 }

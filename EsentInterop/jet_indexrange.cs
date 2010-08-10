@@ -99,7 +99,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "JET_INDEXRANGE({0},{1})", this.tableid, this.grbit);
+            return String.Format(CultureInfo.InvariantCulture, "JET_INDEXRANGE(0x{0:x},{1})", this.tableid.Value, this.grbit);
         }
 
         /// <summary>

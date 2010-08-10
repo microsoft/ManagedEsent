@@ -63,6 +63,7 @@
     <Compile Include="ColumnValueTests.cs" />
     <Compile Include="ComparableTests.cs" />
     <Compile Include="ConditionalIndexFixture.cs" />
+    <Compile Include="ContentEquatableTests.cs" />
     <Compile Include="EnumerableTests.cs" />
     <Compile Include="HowDoI.cs" />
     <Compile Include="IndexInfoTests.cs" />

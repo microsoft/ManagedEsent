@@ -280,7 +280,19 @@ namespace InteropApiTests
         public void JetIndexrangeToString()
         {
             var indexrange = new JET_INDEXRANGE { grbit = IndexRangeGrbit.RecordInIndex };
-            Assert.AreEqual("JET_INDEXRANGE(JET_TABLEID(0x0),RecordInIndex)", indexrange.ToString());
+            Assert.AreEqual("JET_INDEXRANGE(0x0,RecordInIndex)", indexrange.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_SETCOLUMN.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_SETCOLUMN.ToString()")]
+        public void JetSetColumnToString()
+        {
+            var value = new JET_SETCOLUMN { columnid = new JET_COLUMNID { Value = 0x1234F } };
+            Assert.AreEqual("JET_SETCOLUMN(0x1234f)", value.ToString());
         }
 
         /// <summary>

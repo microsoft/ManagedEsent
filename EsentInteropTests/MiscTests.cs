@@ -21,6 +21,50 @@ namespace InteropApiTests
     public class MiscTests
     {
         /// <summary>
+        /// Test ArrayEqual with equal arrays.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test ArrayEqual with equal arrays")]
+        public void TestArrayEqualTrue()
+        {
+            byte[] a = new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6 };
+            byte[] b = new byte[] { 0xF, 0x2, 0x3, 0x4, 0x5, 0xF, 0x0 };
+            Assert.IsTrue(Util.ArrayEqual(a, b, 1, 4));
+        }
+
+        /// <summary>
+        /// Test ArrayEqual with unequal arrays.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test ArrayEqual with unequal arrays")]
+        public void TestArrayEqualFalse()
+        {
+            byte[] a = new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6 };
+            byte[] b = new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6 };
+
+            for (int offset = 0; offset < a.Length - 1; ++offset)
+            {
+                for (int count = 1; count < a.Length - offset; ++count)
+                {
+                    for (int i = 0; i < count; ++i)
+                    {
+                        b[offset + i] ^= 0xFF;
+                        Assert.IsFalse(
+                            Util.ArrayEqual(a, b, offset, count),
+                            "{0} is equal to {1} (offset = {2}, count = {3})",
+                            BitConverter.ToString(a),
+                            BitConverter.ToString(b),
+                            offset,
+                            count);
+                        b[offset + i] ^= 0xFF;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Verify the default value in a ColumnInfo structure is read-only.
         /// </summary>
         [TestMethod]
@@ -130,7 +174,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Description("Verify that all public classes have a ToString() method")]
-        [Priority(1)]
+        [Priority(0)]
         public void VerifyAllPublicClassesHaveToString()
         {
             Assembly assembly = typeof(Api).Assembly;
@@ -201,7 +245,6 @@ namespace InteropApiTests
                        && type.GetMethods(BindingFlags.Public | BindingFlags.Instance)
                            .Any(method =>
                                   method.Name == "ToString"
-                                 //// && method.GetParameters().Length == 0 &&
                                   && method.DeclaringType == typeof(object)));
         }
 
