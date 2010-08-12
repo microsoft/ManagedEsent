@@ -57,7 +57,15 @@ namespace Microsoft.Isam.Esent.Interop
         /// Gets the size of the value in the column. This returns 0 for
         /// variable sized columns (i.e. binary and string).
         /// </summary>
-        protected abstract int Size { get;  }
+        protected abstract int Size { get; }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="ColumnValue"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="ColumnValue"/>.
+        /// </returns>
+        public abstract override string ToString();
 
         /// <summary>
         /// Recursive RetrieveColumns method for data pinning. This should pin a buffer and

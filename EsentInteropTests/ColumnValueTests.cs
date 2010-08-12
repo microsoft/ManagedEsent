@@ -89,5 +89,29 @@ namespace InteropApiTests
             var instance = new GuidColumnValue { Value = guid };
             Assert.AreEqual(guid.ToString(), instance.ToString());
         }
+
+        /// <summary>
+        /// Test the ToString() method of a Bytes column value with a null value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test BytesColumnValue.ToString() with a null value")]
+        public void TestNullBytesColumnValueToString()
+        {
+            var instance = new BytesColumnValue { Value = null };
+            Assert.AreEqual(String.Empty, instance.ToString());
+        }
+
+        /// <summary>
+        /// Test the ToString() method of a Bytes column value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test BytesColumnValue.ToString()")]
+        public void TestBytesColumnValueToString()
+        {
+            var instance = new BytesColumnValue { Value = BitConverter.GetBytes(0x1122334455667788UL) };
+            Assert.AreEqual("88-77-66-55-44-33-22-11", instance.ToString());
+        }
     }
 }

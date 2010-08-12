@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Diagnostics;
+    using System.Globalization;
     using System.IO;
 
     /// <summary>
@@ -122,7 +123,7 @@ namespace Microsoft.Isam.Esent.Interop
             get
             {
                 int size;
-                var retinfo = new JET_RETINFO() { itagSequence = this.Itag, ibLongValue = 0 };
+                var retinfo = new JET_RETINFO { itagSequence = this.Itag, ibLongValue = 0 };
                 Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, null, 0, out size, RetrieveGrbit, retinfo);
                 return size;
             }
@@ -141,6 +142,17 @@ namespace Microsoft.Isam.Esent.Interop
                 // things like seeking from the end of a column might not work properly.
                 return RetrieveColumnGrbit.RetrieveCopy;
             }
+        }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="ColumnStream"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="ColumnStream"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(CultureInfo.InvariantCulture, "ColumnStream(0x{0:x}:{1})", this.columnid.Value, this.Itag);
         }
 
         /// <summary>
@@ -216,18 +228,17 @@ namespace Microsoft.Isam.Esent.Interop
                 return 0;
             }
 
-            int bytesToRead = checked((int) Math.Min(this.Length - this.ibLongValue, count));
-
-            int ignored;
+            int length;
             var retinfo = new JET_RETINFO { itagSequence = this.Itag, ibLongValue = this.ibLongValue };
-            Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, buffer, bytesToRead, offset, out ignored, RetrieveGrbit, retinfo);
+            Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnid, buffer, count, offset, out length, RetrieveGrbit, retinfo);
+            int bytesRead = Math.Min(length, count);
 
             checked
             {
-                this.ibLongValue += bytesToRead;                
+                this.ibLongValue += bytesRead;                
             }
 
-            return bytesToRead;
+            return bytesRead;
         }
 
         /// <summary>
@@ -266,13 +277,13 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 var setinfo = new JET_SETINFO { itagSequence = this.Itag };
                 SetColumnGrbit grbit = (0 == value) ? SetColumnGrbit.ZeroLength : SetColumnGrbit.SizeLV;
-                Api.JetSetColumn(this.sesid, this.tableid, this.columnid, null, checked((int) value), grbit, setinfo);                
+                Api.JetSetColumn(this.sesid, this.tableid, this.columnid, null, checked((int)value), grbit, setinfo);                
             }
 
             // Setting the length moves the offset back to the end of the data
             if (this.ibLongValue > value)
             {
-                this.ibLongValue = checked((int) value);
+                this.ibLongValue = checked((int)value);
             }
         }
 

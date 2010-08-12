@@ -41,6 +41,22 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="BytesColumnValue"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="BytesColumnValue"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            if (null == this.Value)
+            {
+                return String.Empty;
+            }
+
+            return BitConverter.ToString(this.Value, 0, Math.Min(this.Value.Length, 16));
+        }
+
+        /// <summary>
         /// Recursive SetColumns method for data pinning. This populates the buffer and
         /// calls the inherited SetColumns method.
         /// </summary>

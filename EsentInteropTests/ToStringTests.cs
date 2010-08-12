@@ -320,6 +320,19 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test ColumnStream.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test ColumnStream.ToString()")]
+        public void ColumnStreamToString()
+        {
+            var value = new ColumnStream(JET_SESID.Nil, JET_TABLEID.Nil, new JET_COLUMNID { Value = 0x1a });
+            value.Itag = 2;
+            Assert.AreEqual("ColumnStream(0x1a:2)", value.ToString());
+        }
+
+        /// <summary>
         /// Test IndexSegment.ToString() with an ascending segment.
         /// </summary>
         [TestMethod]
