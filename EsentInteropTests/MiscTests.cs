@@ -135,14 +135,14 @@ namespace InteropApiTests
         {
             Assembly assembly = typeof(Api).Assembly;
             var classes = FindPublicClassesWithoutToString(assembly);
-            bool fail = false;
+            int classesWithoutToString = 0;
             foreach (Type @class in classes)
             {
                 Console.WriteLine("{0} does not override Object.ToString", @class);
-                fail = true;
+                ++classesWithoutToString;
             }
 
-            Assert.IsFalse(fail, "Some classes do not override Object.ToString()");
+            Assert.AreEqual(0, classesWithoutToString, "Some classes do not override Object.ToString()");
         }
 
         /// <summary>

@@ -393,6 +393,71 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Check that JET_RETINFO structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_RETINFO structures can be compared for equality")]
+        public void VerifyJetRetinfoEquality()
+        {
+            var x = new JET_RETINFO { ibLongValue = 1, itagSequence = 2, columnidNextTagged = new JET_COLUMNID { Value = 3U } };
+            var y = new JET_RETINFO { ibLongValue = 1, itagSequence = 2, columnidNextTagged = new JET_COLUMNID { Value = 3U } };
+            TestContentEquals(x, y);
+        }
+
+        /// <summary>
+        /// Check that JET_RETINFO structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_RETINFO structures can be compared for inequality")]
+        public void VerifyJetRetinfoInequality()
+        {
+            var retinfos = new[]
+            {
+                new JET_RETINFO { ibLongValue = 1, itagSequence = 2, columnidNextTagged = new JET_COLUMNID { Value = 3U } },
+                new JET_RETINFO { ibLongValue = 1, itagSequence = 2, columnidNextTagged = new JET_COLUMNID { Value = 9U } },
+                new JET_RETINFO { ibLongValue = 1, itagSequence = 9, columnidNextTagged = new JET_COLUMNID { Value = 3U } },
+                new JET_RETINFO { ibLongValue = 9, itagSequence = 2, columnidNextTagged = new JET_COLUMNID { Value = 3U } },
+            };
+            VerifyAll(retinfos);
+        }
+
+        /// <summary>
+        /// Check that JET_SETINFO structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_SETINFO structures can be compared for equality")]
+        public void VerifyJetSetinfoEquality()
+        {
+            var x = new JET_SETINFO { ibLongValue = 1, itagSequence = 2 };
+            var y = new JET_SETINFO { ibLongValue = 1, itagSequence = 2 };
+            TestContentEquals(x, y);
+        }
+
+        /// <summary>
+        /// Check that JET_SETINFO structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_SETINFO structures can be compared for inequality")]
+        public void VerifyJetSetinfoInequality()
+        {
+            var setinfos = new[]
+            {
+                new JET_SETINFO { ibLongValue = 1, itagSequence = 2 },
+                new JET_SETINFO { ibLongValue = 1, itagSequence = 9 },
+                new JET_SETINFO { ibLongValue = 9, itagSequence = 2 },
+            };
+            VerifyAll(setinfos);
+        }
+
+        /// <summary>
         /// Make sure all reference non-string types are copied during cloning.
         /// </summary>
         /// <typeparam name="T">The type being cloned.</typeparam>

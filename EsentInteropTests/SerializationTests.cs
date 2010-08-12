@@ -233,6 +233,18 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify that a JET_SETINFO can be serialized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that a JET_SETINFO can be serialized")]
+        public void VerifySetinfoCanBeSerialized()
+        {
+            var expected = new JET_SETINFO { ibLongValue = 5, itagSequence = 6 };
+            SerializeAndCompareContent(expected);
+        }
+
+        /// <summary>
         /// Serialize an object to an in-memory stream then deserialize it
         /// and compare to the original.
         /// </summary>

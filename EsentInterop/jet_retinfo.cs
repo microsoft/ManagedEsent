@@ -6,7 +6,9 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Runtime.InteropServices;
 
     /// <summary>
@@ -52,7 +54,7 @@ namespace Microsoft.Isam.Esent.Interop
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
-    public class JET_RETINFO
+    public class JET_RETINFO : IContentEquatable<JET_RETINFO>, IDeepCloneable<JET_RETINFO>
     {
         /// <summary>
         /// Gets or sets the offset to the first byte to be retrieved from a column of
@@ -73,7 +75,49 @@ namespace Microsoft.Isam.Esent.Interop
         /// sparse, column when all tagged columns are retrieved by passing
         /// 0 as the columnid to JetRetrieveColumn.
         /// </summary>
-        public JET_COLUMNID columnidNextTagged { get; private set; }
+        public JET_COLUMNID columnidNextTagged { get; internal set; }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="JET_RETINFO"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="JET_RETINFO"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(
+                CultureInfo.InvariantCulture,
+                "JET_RETINFO(ibLongValue={0},itagSequence={1})",
+                this.ibLongValue,
+                this.itagSequence);
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether this instance is equal
+        /// to another instance.
+        /// </summary>
+        /// <param name="other">An instance to compare with this instance.</param>
+        /// <returns>True if the two instances are equal.</returns>
+        public bool ContentEquals(JET_RETINFO other)
+        {
+            if (null == other)
+            {
+                return false;
+            }
+
+            return this.ibLongValue == other.ibLongValue
+                   && this.itagSequence == other.itagSequence
+                   && this.columnidNextTagged == other.columnidNextTagged;
+        }
+
+        /// <summary>
+        /// Returns a deep copy of the object.
+        /// </summary>
+        /// <returns>A deep copy of the object.</returns>
+        public JET_RETINFO DeepClone()
+        {
+            return (JET_RETINFO)this.MemberwiseClone();
+        }
 
         /// <summary>
         /// Get a NATIVE_RETINFO structure representing the object.

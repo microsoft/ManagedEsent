@@ -292,7 +292,31 @@ namespace InteropApiTests
         public void JetSetColumnToString()
         {
             var value = new JET_SETCOLUMN { columnid = new JET_COLUMNID { Value = 0x1234F } };
-            Assert.AreEqual("JET_SETCOLUMN(0x1234f,<null>,ibLongValue=0,itagSequence=0", value.ToString());
+            Assert.AreEqual("JET_SETCOLUMN(0x1234f,<null>,ibLongValue=0,itagSequence=0)", value.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_RETINFO.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_RETINFO.ToString()")]
+        public void JetRetinfoToString()
+        {
+            var value = new JET_RETINFO { ibLongValue = 1, itagSequence = 2 };
+            Assert.AreEqual("JET_RETINFO(ibLongValue=1,itagSequence=2)", value.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_SETINFO.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_SETINFO.ToString()")]
+        public void JetSetinfoToString()
+        {
+            var value = new JET_SETINFO { ibLongValue = 1, itagSequence = 2 };
+            Assert.AreEqual("JET_SETINFO(ibLongValue=1,itagSequence=2)", value.ToString());
         }
 
         /// <summary>

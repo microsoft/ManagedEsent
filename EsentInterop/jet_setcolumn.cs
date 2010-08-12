@@ -123,7 +123,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             return String.Format(
                 CultureInfo.InvariantCulture,
-                "JET_SETCOLUMN(0x{0:x},{1},ibLongValue={2},itagSequence={3}",
+                "JET_SETCOLUMN(0x{0:x},{1},ibLongValue={2},itagSequence={3})",
                 this.columnid.Value,
                 Util.DumpBytes(this.pvData, this.ibData, this.cbData),
                 this.ibLongValue,
