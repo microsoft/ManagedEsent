@@ -262,7 +262,7 @@ namespace InteropApiTests
         public void TestJetCompactThrowsExceptionWhenIgnoredIsNonNull()
         {
 #pragma warning disable 618,612 // JET_CONVERT is obsolete
-            Api.JetCompact(this.sesid, "source", "destination", null, new JET_CONVERT(), CompactGrbit.None);
+            Api.JetCompact(this.sesid, "source", "destination", null, new Converter(), CompactGrbit.None);
 #pragma warning restore 618,612
         }
 
@@ -3021,5 +3021,14 @@ namespace InteropApiTests
         }
 
         #endregion
+
+        /// <summary>
+        /// Class used for testing JetCompact.
+        /// </summary>
+#pragma warning disable 612,618
+        private class Converter : JET_CONVERT
+#pragma warning restore 612,618
+        {            
+        }
     }
 }

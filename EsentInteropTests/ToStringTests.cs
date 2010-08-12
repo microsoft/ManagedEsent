@@ -333,6 +333,18 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test Instance.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test Instance.ToString()")]
+        public void InstanceToString()
+        {
+            var value = new Instance("name", "display");
+            Assert.AreEqual("display (name)", value.ToString());
+        }
+
+        /// <summary>
         /// Test IndexSegment.ToString() with an ascending segment.
         /// </summary>
         [TestMethod]

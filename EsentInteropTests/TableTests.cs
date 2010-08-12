@@ -104,6 +104,20 @@ namespace InteropApiTests
         #endregion Setup/Teardown
 
         /// <summary>
+        /// Test Table.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test Table.ToString()")]
+        public void TestTableToString()
+        {
+            using (var table = new Table(this.sesid, this.dbid, this.tableName, OpenTableGrbit.None))
+            {
+                Assert.AreEqual(this.tableName, table.ToString());
+            }
+        }
+
+        /// <summary>
         /// Verify that creating a table object gets a tableid.
         /// </summary>
         [TestMethod]

@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Diagnostics;
+    using System.Globalization;
 
     /// <summary>
     /// A class that encapsulates a transaction on a JET_SESID.
@@ -29,6 +30,17 @@ namespace Microsoft.Isam.Esent.Interop
         {
             this.sesid = sesid;
             this.Begin();
+        }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="Transaction"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="Transaction"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(CultureInfo.InvariantCulture, "Transaction (0x{0:x})", this.sesid.Value);
         }
 
         /// <summary>

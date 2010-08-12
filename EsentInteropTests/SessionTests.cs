@@ -67,6 +67,20 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test Session.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test Session.ToString()")]
+        public void TestSessionToString()
+        {
+            using (var session = new Session(this.instance))
+            {
+                StringAssert.StartsWith(session.ToString(), "Session (");
+            }
+        }
+
+        /// <summary>
         /// Test that a Session can be converted to a JET_SESID
         /// </summary>
         [TestMethod]

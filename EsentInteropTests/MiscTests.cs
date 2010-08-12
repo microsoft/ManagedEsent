@@ -198,6 +198,7 @@ namespace InteropApiTests
                 .Where(type =>
                        type.IsPublic
                        && !type.IsAbstract
+                       && !type.IsSubclassOf(typeof(Delegate))
                        && type.GetMethods(BindingFlags.Public | BindingFlags.Instance)
                            .Any(method =>
                                   method.Name == "ToString"

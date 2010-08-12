@@ -79,6 +79,20 @@ namespace InteropApiTests
         #endregion Setup/Teardown
 
         /// <summary>
+        /// Test Transaction.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Test Transaction.ToString()")]
+        public void TestTransactionToString()
+        {
+            using (var transaction = new Transaction(this.sesid))
+            {
+                StringAssert.StartsWith(transaction.ToString(), "Transaction (");
+            }
+        }
+
+        /// <summary>
         /// Start a transaction, commit and restart.
         /// </summary>
         [TestMethod]

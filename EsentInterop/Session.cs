@@ -6,6 +6,9 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+    using System.Globalization;
+
     /// <summary>
     /// A class that encapsulates a JET_SESID in a disposable object.
     /// </summary>
@@ -37,6 +40,17 @@ namespace Microsoft.Isam.Esent.Interop
                 this.CheckObjectIsNotDisposed();
                 return this.sesid;
             }
+        }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="Session"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="Session"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(CultureInfo.InvariantCulture, "Session (0x{0:x})", this.sesid.Value);
         }
 
         /// <summary>

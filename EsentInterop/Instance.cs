@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Runtime.CompilerServices;
     using System.Security.Permissions;
     using Microsoft.Win32.SafeHandles;
@@ -23,6 +24,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Parameters for the instance.
         /// </summary>
         private readonly InstanceParameters parameters;
+
+        /// <summary>
+        /// The name of the instance.
+        /// </summary>
+        private readonly string name;
+
+        /// <summary>
+        /// The display name of the instance.
+        /// </summary>
+        private readonly string displayName;
 
         /// <summary>
         /// Initializes a new instance of the Instance class. The underlying
@@ -50,6 +61,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         public Instance(string name, string displayName) : base(true)
         {
+            this.name = name;
+            this.displayName = displayName;
+
             JET_INSTANCE instance;
             RuntimeHelpers.PrepareConstrainedRegions();
             try
@@ -70,7 +84,7 @@ namespace Microsoft.Isam.Esent.Interop
                 // to set the handle to avoid losing track of the instance. The call to
                 // JetCreateInstance2 is in the CER to make sure that the only exceptions
                 // which can be generated are from ESENT failures.
-                Api.JetCreateInstance2(out instance, name, displayName, CreateInstanceGrbit.None);
+                Api.JetCreateInstance2(out instance, this.name, this.displayName, CreateInstanceGrbit.None);
                 this.SetHandle(instance.Value);
             }
 
@@ -111,6 +125,17 @@ namespace Microsoft.Isam.Esent.Interop
         public static implicit operator JET_INSTANCE(Instance instance)
         {
             return instance.JetInstance;
+        }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="Instance"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="Instance"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(CultureInfo.InvariantCulture, "{0} ({1})", this.displayName, this.name);
         }
 
         /// <summary>
