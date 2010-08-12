@@ -1033,7 +1033,7 @@ namespace InteropApiTests
                 new JET_SNPROG { cunitDone = 2, cunitTotal = 2 },
             };
 
-            VerifyAllNotEquals(snprogs);
+            VerifyAll(snprogs);
         }
 
         /// <summary>
@@ -1074,7 +1074,7 @@ namespace InteropApiTests
                 new JET_INSTANCE_INFO(new JET_INSTANCE { Value = new IntPtr(1) }, "instance", new[] { "foo.edb" }),
             };
 
-            VerifyAllNotEquals(infos);
+            VerifyAll(infos);
         }
 
         /// <summary>
@@ -1110,7 +1110,7 @@ namespace InteropApiTests
                 new IndexSegment("column", JET_coltyp.IEEESingle, true, true),
                 new IndexSegment("column2", JET_coltyp.Currency, true, true),
             };
-            VerifyAllNotEquals(segments);
+            VerifyAll(segments);
         }
 
         /// <summary>
@@ -1144,9 +1144,6 @@ namespace InteropApiTests
         /// <param name="y">The second object.</param>
         private static void TestNotEquals<T>(T x, T y) where T : IEquatable<T>
         {
-            Assert.IsFalse(x.Equals(null));
-            Assert.IsFalse(y.Equals(null));
-
             Assert.IsFalse(x.Equals(y));
             Assert.IsFalse(y.Equals(x));
 
@@ -1171,7 +1168,7 @@ namespace InteropApiTests
         /// </remarks>
         /// <typeparam name="T">The object type.</typeparam>
         /// <param name="values">Collection of distinct objects.</param>
-        private static void VerifyAllNotEquals<T>(IList<T> values) where T : class, IEquatable<T>
+        private static void VerifyAll<T>(IList<T> values) where T : class, IEquatable<T>
         {
             for (int i = 0; i < values.Count - 1; ++i)
             {
@@ -1180,6 +1177,10 @@ namespace InteropApiTests
                 {
                     Debug.Assert(i != j, "About to compare the same values");
                     TestNotEquals(values[i], values[j]);
+
+                    // Only this method has the 'class' constraint so we compare against null here.
+                    Assert.IsFalse(values[i].Equals(null));
+                    Assert.IsFalse(values[j].Equals(null));
                 }
             }           
         }

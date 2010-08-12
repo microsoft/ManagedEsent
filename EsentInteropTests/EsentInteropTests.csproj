@@ -115,6 +115,7 @@
     <Compile Include="IndexCreateChecksTests.cs" />
     <Compile Include="RetrieveColumnTests.cs" />
     <Compile Include="snprogconversiontests.cs" />
+    <Compile Include="UtilTests.cs" />
     <Compile Include="VistaCompatabilityTests.cs" />
     <Compile Include="EnumColumnidTests.cs" />
     <Compile Include="EnumColumnTests.cs" />

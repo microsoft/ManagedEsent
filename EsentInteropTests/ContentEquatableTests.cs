@@ -9,6 +9,7 @@ namespace InteropApiTests
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Reflection;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -51,7 +52,7 @@ namespace InteropApiTests
                 new JET_CONDITIONALCOLUMN { szColumnName = null, grbit = ConditionalColumnGrbit.ColumnMustBeNonNull },
             };
 
-            VerifyAllNotContentEquals(conditionalcolumns);
+            VerifyAll(conditionalcolumns);
         }
 
         /// <summary>
@@ -86,7 +87,7 @@ namespace InteropApiTests
                 new JET_UNICODEINDEX { lcid = 1034, dwMapFlags = 1 },
             };
 
-            VerifyAllNotContentEquals(unicodeindexes);
+            VerifyAll(unicodeindexes);
         }
 
         /// <summary>
@@ -121,7 +122,7 @@ namespace InteropApiTests
                 new JET_RECPOS { centriesLT = 2, centriesTotal = 2 },
             };
 
-            VerifyAllNotContentEquals(positions);
+            VerifyAll(positions);
         }
 
         /// <summary>
@@ -209,7 +210,7 @@ namespace InteropApiTests
             Debug.Assert(j == indexcreates.Length, "Too many indexcreates in array");
 
             // Finally compare them
-            VerifyAllNotContentEquals(indexcreates);
+            VerifyAll(indexcreates);
         }
 
         /// <summary>
@@ -243,7 +244,7 @@ namespace InteropApiTests
                 new JET_INDEXRANGE { tableid = new JET_TABLEID { Value = new IntPtr(1) }, grbit = (IndexRangeGrbit)49 },
                 new JET_INDEXRANGE { tableid = new JET_TABLEID { Value = new IntPtr(2) }, grbit = IndexRangeGrbit.RecordInIndex },
             };
-            VerifyAllNotContentEquals(ranges);
+            VerifyAll(ranges);
         }
 
         /// <summary>
@@ -336,7 +337,7 @@ namespace InteropApiTests
                     grbit = ColumndefGrbit.None
                 },
             };
-            VerifyAllNotContentEquals(positions);
+            VerifyAll(positions);
         }
 
         /// <summary>
@@ -388,7 +389,30 @@ namespace InteropApiTests
             setcolumns[j++].itagSequence++;
             setcolumns[j++].pvData = BitConverter.GetBytes(1L);
             Debug.Assert(j == setcolumns.Length, "Didn't fill in all entries of setcolumns");
-            VerifyAllNotContentEquals(setcolumns);
+            VerifyAll(setcolumns);
+        }
+
+        /// <summary>
+        /// Make sure all reference non-string types are copied during cloning.
+        /// </summary>
+        /// <typeparam name="T">The type being cloned.</typeparam>
+        /// <param name="obj">The object being cloned.</param>
+        private static void VerifyDeepCloneClones<T>(T obj) where T : class, IDeepCloneable<T>
+        {
+            T clone = obj.DeepClone();
+            Assert.AreNotSame(obj, clone);
+            foreach (FieldInfo field in typeof(T).GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
+            {
+                if (field.FieldType != typeof(string))
+                {
+                    object value = field.GetValue(obj);
+                    object clonedValue = field.GetValue(clone);
+                    if (null != value)
+                    {
+                        Assert.AreNotSame(value, clonedValue, "Field {0} was not cloned", field);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -406,9 +430,6 @@ namespace InteropApiTests
             Assert.IsTrue(y.ContentEquals(x));
 
             Assert.AreEqual(x.ToString(), y.ToString());
-
-            Assert.AreNotSame(x, x.DeepClone());
-            Assert.AreNotSame(y, y.DeepClone());
 
             Assert.IsTrue(x.ContentEquals(x.DeepClone()));
             Assert.IsTrue(x.ContentEquals(y.DeepClone()));
@@ -432,7 +453,8 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Verify that all objects in the collection are not content equal to each other.
+        /// Verify that all objects in the collection are not content equal to each other
+        /// and can be cloned.
         /// </summary>
         /// <remarks>
         /// This method doesn't test operator == or operator != so it should be 
@@ -440,8 +462,13 @@ namespace InteropApiTests
         /// </remarks>
         /// <typeparam name="T">The object type.</typeparam>
         /// <param name="values">Collection of distinct objects.</param>
-        private static void VerifyAllNotContentEquals<T>(IList<T> values) where T : class, IContentEquatable<T>, IDeepCloneable<T>
+        private static void VerifyAll<T>(IList<T> values) where T : class, IContentEquatable<T>, IDeepCloneable<T>
         {
+            foreach (T obj in values)
+            {
+                VerifyDeepCloneClones(obj);
+            }
+
             for (int i = 0; i < values.Count - 1; ++i)
             {
                 TestContentEquals(values[i], values[i]);

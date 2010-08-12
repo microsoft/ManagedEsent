@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Collections.Generic;
     using System.Text;
 
     /// <summary>
@@ -22,7 +23,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="offset">The offset to start comparing at.</param>
         /// <param name="count">The number of bytes to compare.</param>
         /// <returns>True if the arrays are equal, false otherwise.</returns>
-        public static bool ArrayEqual(byte[] a, byte[] b, int offset, int count)
+        public static bool ArrayEqual(IList<byte> a, IList<byte> b, int offset, int count)
         {
             for (int i = 0; i < count; ++i)
             {
@@ -54,7 +55,7 @@ namespace Microsoft.Isam.Esent.Interop
                 return String.Empty;
             }
 
-            if (offset >= data.Length || offset + count > data.Length)
+            if (offset < 0 || count < 0 || offset >= data.Length || offset + count > data.Length)
             {
                 return "<invalid>";
             }
@@ -65,7 +66,7 @@ namespace Microsoft.Isam.Esent.Interop
             if (count > MaxBytesToPrint)
             {
                 // The output was truncated
-                sb.AppendFormat("... ({0}) bytes", count);
+                sb.AppendFormat("... ({0} bytes)", count);
             }
 
             return sb.ToString();
