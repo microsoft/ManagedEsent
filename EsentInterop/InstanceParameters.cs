@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Globalization;
     using System.IO;
     using Microsoft.Isam.Esent.Interop.Server2003;
     using Microsoft.Isam.Esent.Interop.Vista;
@@ -596,6 +597,17 @@ namespace Microsoft.Isam.Esent.Interop
                     this.SetIntegerParameter(Windows7Param.WaypointLatency, value);
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="InstanceParameters"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="InstanceParameters"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(CultureInfo.InvariantCulture, "InstanceParameters (0x{0:x})", this.instance.Value);
         }
 
         /// <summary>

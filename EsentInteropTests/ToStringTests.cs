@@ -334,7 +334,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test Instance.
+        /// Test Instance.ToString().
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -343,6 +343,18 @@ namespace InteropApiTests
         {
             var value = new Instance("name", "display");
             Assert.AreEqual("display (name)", value.ToString());
+        }
+
+        /// <summary>
+        /// Test InstanceParameters.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test InstanceParameters.ToString()")]
+        public void InstanceParametersToString()
+        {
+            var value = new InstanceParameters(JET_INSTANCE.Nil);
+            Assert.AreEqual("InstanceParameters (0x0)", value.ToString());
         }
 
         /// <summary>
