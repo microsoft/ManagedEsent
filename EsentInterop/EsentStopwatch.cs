@@ -56,6 +56,17 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="Stopwatch"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="Stopwatch"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return this.IsRunning ? "EsentStopwatch (running)" : this.Elapsed.ToString();
+        }
+
+        /// <summary>
         /// Starts measuring ESENT work.
         /// </summary>
         public void Start()

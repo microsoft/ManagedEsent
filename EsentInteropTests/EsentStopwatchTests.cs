@@ -6,6 +6,7 @@
 
 namespace InteropApiTests
 {
+    using System;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -51,6 +52,34 @@ namespace InteropApiTests
             var stopwatch = EsentStopwatch.StartNew();
             stopwatch.Stop();
             stopwatch.Reset();
+            Assert.AreEqual(TimeSpan.Zero, stopwatch.Elapsed);
+        }
+
+        /// <summary>
+        /// Test EsentStopwatch.ToString() on a running stopwatch.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test EsentStopwatch.ToString() on a running stopwatch")]
+        public void TestRunningStopwatchToString()
+        {
+            var stopwatch = new EsentStopwatch();
+            stopwatch.Start();
+            Assert.AreEqual("EsentStopwatch (running)", stopwatch.ToString());
+        }
+
+        /// <summary>
+        /// Test EsentStopwatch.ToString() on a running stopwatch.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test EsentStopwatch.ToString() on a stopped stopwatch")]
+        public void TestStoppedStopwatchToString()
+        {
+            var stopwatch = new EsentStopwatch();
+            stopwatch.Start();
+            stopwatch.Stop();
+            Assert.AreEqual(stopwatch.Elapsed.ToString(), stopwatch.ToString());
         }
     }
 }
