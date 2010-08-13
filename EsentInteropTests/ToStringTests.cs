@@ -7,6 +7,7 @@
 namespace InteropApiTests
 {
     using System;
+    using System.Globalization;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -366,6 +367,31 @@ namespace InteropApiTests
         {
             var segment = new IndexSegment("othercolumn", JET_coltyp.Bit, false, false);
             Assert.AreEqual("-othercolumn(Bit)", segment.ToString());
+        }
+
+        /// <summary>
+        /// Test IndexInfo.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test IndexInfo.ToString()")]
+        public void IndexInfoToString()
+        {
+            var segments = new[]
+            {
+                new IndexSegment("foo", JET_coltyp.Short, true, false),
+                new IndexSegment("bar", JET_coltyp.Bit, false, false),
+            };
+            var expected = new IndexInfo(
+                "index",
+                CultureInfo.CurrentCulture,
+                CompareOptions.IgnoreKanaType,
+                segments,
+                CreateIndexGrbit.IndexUnique,
+                1,
+                2,
+                3);
+            Assert.AreEqual("index (+foo(Short)-bar(Bit))", expected.ToString());
         }
     }
 }

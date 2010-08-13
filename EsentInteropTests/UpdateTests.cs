@@ -92,6 +92,20 @@ namespace InteropApiTests
         #endregion Setup/Teardown
 
         /// <summary>
+        /// Test Update.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Test Update.ToString()")]
+        public void TestUpdateToString()
+        {
+            using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            {
+                Assert.AreEqual("Update (Insert)", update.ToString());
+            }
+        }
+
+        /// <summary>
         /// Start an update and insert the record.
         /// </summary>
         [TestMethod]

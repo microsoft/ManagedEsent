@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Globalization;
 
     /// <summary>
     /// A class that encapsulates an update on a JET_TABLEID.
@@ -22,6 +23,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// The underlying JET_TABLEID.
         /// </summary>
         private readonly JET_TABLEID tableid;
+
+        /// <summary>
+        /// The type of update.
+        /// </summary>
+        private readonly JET_prep prep;
 
         /// <summary>
         /// Initializes a new instance of the Update class. This automatically
@@ -40,8 +46,20 @@ namespace Microsoft.Isam.Esent.Interop
 
             this.sesid = sesid;
             this.tableid = tableid;
-            Api.JetPrepareUpdate(this.sesid, this.tableid, prep);
+            this.prep = prep;
+            Api.JetPrepareUpdate(this.sesid, this.tableid, this.prep);
             this.ResourceWasAllocated();
+        }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="Update"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="Update"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(CultureInfo.InvariantCulture, "Update ({0})", this.prep);
         }
 
         /// <summary>

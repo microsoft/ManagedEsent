@@ -11,6 +11,7 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Globalization;
+    using System.Text;
 
     /// <summary>
     /// Information about one esent index. This is not an interop
@@ -163,6 +164,25 @@ namespace Microsoft.Isam.Esent.Interop
         {
             [DebuggerStepThrough]
             get { return this.pages; }
+        }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="IndexInfo"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="IndexInfo"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(this.Name);
+            sb.Append(" (");
+            foreach (var segment in this.IndexSegments)
+            {
+                sb.Append(segment.ToString());
+            }
+            sb.Append(")");
+            return sb.ToString();
         }
     }
 }

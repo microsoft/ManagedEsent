@@ -86,5 +86,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Gets the column options.
         /// </summary>
         public ColumndefGrbit Grbit { get; private set; }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="ColumnInfo"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="ColumnInfo"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return this.Name;
+        }
     }
 }

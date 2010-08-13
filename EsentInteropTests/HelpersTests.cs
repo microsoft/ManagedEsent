@@ -301,6 +301,7 @@ namespace InteropApiTests
             foreach (ColumnInfo col in Api.GetTableColumns(this.sesid, this.tableid))
             {
                 Assert.AreEqual(this.columnidDict[col.Name], col.Columnid);
+                Assert.AreEqual(col.Name, col.ToString());
             }
         }
 
