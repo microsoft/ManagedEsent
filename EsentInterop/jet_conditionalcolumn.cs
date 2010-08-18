@@ -126,8 +126,8 @@ namespace Microsoft.Isam.Esent.Interop
         internal NATIVE_CONDITIONALCOLUMN GetNativeConditionalColumn()
         {
             var native = new NATIVE_CONDITIONALCOLUMN();
-            native.cbStruct = (uint) Marshal.SizeOf(native);
-            native.grbit = (uint) this.grbit;
+            native.cbStruct = (uint)Marshal.SizeOf(native);
+            native.grbit = (uint)this.grbit;
             return native;
         }
     }

@@ -125,7 +125,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="data">The data to set.</param>
         public static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, bool data)
         {
-            byte b = data ? (byte) 0xff : (byte) 0x0;
+            byte b = data ? (byte)0xff : (byte)0x0;
             SetColumn(sesid, tableid, columnid, b);
         }
 

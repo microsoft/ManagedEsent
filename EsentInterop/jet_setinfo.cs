@@ -131,9 +131,9 @@ namespace Microsoft.Isam.Esent.Interop
         internal NATIVE_SETINFO GetNativeSetinfo()
         {
             var setinfo = new NATIVE_SETINFO();
-            setinfo.cbStruct = checked((uint) NATIVE_SETINFO.Size);
-            setinfo.ibLongValue = checked((uint) this.ibLongValue);
-            setinfo.itagSequence = checked((uint) this.itagSequence);
+            setinfo.cbStruct = checked((uint)NATIVE_SETINFO.Size);
+            setinfo.ibLongValue = checked((uint)this.ibLongValue);
+            setinfo.itagSequence = checked((uint)this.itagSequence);
             return setinfo;
         }
     }

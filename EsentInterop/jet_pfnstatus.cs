@@ -154,14 +154,14 @@ namespace Microsoft.Isam.Esent.Interop
             try
             {
                 var sesid = new JET_SESID { Value = nativeSesid };
-                JET_SNP snp = (JET_SNP) nativeSnp;
-                JET_SNT snt = (JET_SNT) nativeSnt;
+                JET_SNP snp = (JET_SNP)nativeSnp;
+                JET_SNT snt = (JET_SNT)nativeSnt;
                 JET_SNPROG snprog = null;
 
                 // Other callback types can have pointers to different structures.
                 if (IntPtr.Zero != nativeSnprog && JET_SNT.Progress == snt)
                 {
-                    NATIVE_SNPROG native = (NATIVE_SNPROG) Marshal.PtrToStructure(nativeSnprog, typeof(NATIVE_SNPROG));
+                    NATIVE_SNPROG native = (NATIVE_SNPROG)Marshal.PtrToStructure(nativeSnprog, typeof(NATIVE_SNPROG));
                     snprog = new JET_SNPROG();
                     snprog.SetFromNative(native);
                 }

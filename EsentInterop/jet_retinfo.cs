@@ -126,9 +126,9 @@ namespace Microsoft.Isam.Esent.Interop
         internal NATIVE_RETINFO GetNativeRetinfo()
         {
             var retinfo = new NATIVE_RETINFO();
-            retinfo.cbStruct = checked((uint) NATIVE_RETINFO.Size);
-            retinfo.ibLongValue = checked((uint) this.ibLongValue);
-            retinfo.itagSequence = checked((uint) this.itagSequence);
+            retinfo.cbStruct = checked((uint)NATIVE_RETINFO.Size);
+            retinfo.ibLongValue = checked((uint)this.ibLongValue);
+            retinfo.itagSequence = checked((uint)this.itagSequence);
             return retinfo;
         }
 

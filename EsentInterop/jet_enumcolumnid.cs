@@ -106,7 +106,7 @@ namespace Microsoft.Isam.Esent.Interop
             var value = new NATIVE_ENUMCOLUMNID
             {
                 columnid = this.columnid.Value,
-                ctagSequence = checked((uint) this.ctagSequence)
+                ctagSequence = checked((uint)this.ctagSequence)
             };
             return value;
         }

@@ -67,7 +67,7 @@ namespace InteropApiTests
         [Description("Check the conversion to a NATIVE_OPENTEMPORARYTABLE sets ccolumn")]
         public void VerifyConversionToNativeSetsCcolumn()
         {
-            Assert.AreEqual((uint) 2, this.native.ccolumn);
+            Assert.AreEqual((uint)2, this.native.ccolumn);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace InteropApiTests
         [Description("Check the conversion to a NATIVE_OPENTEMPORARYTABLE sets grbit")]
         public void VerifyConversionToNativeSetsGrbit()
         {
-            Assert.AreEqual((uint) TempTableGrbit.SortNullsHigh, this.native.grbit);
+            Assert.AreEqual((uint)TempTableGrbit.SortNullsHigh, this.native.grbit);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace InteropApiTests
         [Description("Check the conversion to a NATIVE_OPENTEMPORARYTABLE sets cbKeyMost")]
         public void VerifyConversionToNativeSetsCbKeyMost()
         {
-            Assert.AreEqual((uint) 3, this.native.cbKeyMost);
+            Assert.AreEqual((uint)3, this.native.cbKeyMost);
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace InteropApiTests
         [Description("Check the conversion to a NATIVE_OPENTEMPORARYTABLE sets cbVarSegMac")]
         public void VerifyConversionToNativeSetsCbVarSegMac()
         {
-            Assert.AreEqual((uint) 4, this.native.cbVarSegMac);
+            Assert.AreEqual((uint)4, this.native.cbVarSegMac);
         }
     }
 }

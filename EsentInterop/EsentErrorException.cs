@@ -59,7 +59,7 @@ namespace Microsoft.Isam.Esent.Interop
 
                 string description;
                 var wrn = Api.Impl.JetGetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.ErrorToString, ref errNum, out description, 1024);
-                return (int) JET_wrn.Success == wrn ? description : "<unknown>";
+                return (int)JET_wrn.Success == wrn ? description : "<unknown>";
             }
         }
 

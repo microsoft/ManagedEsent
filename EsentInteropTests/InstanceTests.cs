@@ -77,7 +77,7 @@ namespace InteropApiTests
                         Arg<string>.Is.Anything,
                         Arg<string>.Is.Anything,
                         Arg<CreateInstanceGrbit>.Is.Anything))
-                    .Return((int) JET_err.InvalidName);
+                    .Return((int)JET_err.InvalidName);
                 mocks.ReplayAll();
 
                 try
@@ -109,7 +109,7 @@ namespace InteropApiTests
             var mockApi = mocks.StrictMock<IJetApi>();
             using (new ApiTestHook(mockApi))
             {
-                var jetInstance = new JET_INSTANCE { Value = (IntPtr) 0x1 };
+                var jetInstance = new JET_INSTANCE { Value = (IntPtr)0x1 };
 
                 Expect.Call(
                     mockApi.JetCreateInstance2(
@@ -117,12 +117,12 @@ namespace InteropApiTests
                         Arg<string>.Is.Anything,
                         Arg<string>.Is.Anything,
                         Arg<CreateInstanceGrbit>.Is.Anything))
-                    .Return((int) JET_err.Success);
+                    .Return((int)JET_err.Success);
                 Expect.Call(
                     mockApi.JetInit2(
                         ref Arg<JET_INSTANCE>.Ref(Is.Equal(jetInstance), JET_INSTANCE.Nil).Dummy,
                         Arg<InitGrbit>.Is.Anything))
-                    .Return((int) JET_err.OutOfMemory);
+                    .Return((int)JET_err.OutOfMemory);
                 mocks.ReplayAll();
 
                 try

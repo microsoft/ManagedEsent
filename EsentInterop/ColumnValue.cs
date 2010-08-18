@@ -128,7 +128,7 @@ namespace Microsoft.Isam.Esent.Interop
                             {
                                 columnValues[i].MakeNativeRetrieveColumn(ref nativeRetrievecolumns[i]);
                                 nativeRetrievecolumns[i].pvData = new IntPtr(currentBuffer);
-                                nativeRetrievecolumns[i].cbData = checked((uint) bufferPerColumn);
+                                nativeRetrievecolumns[i].cbData = checked((uint)bufferPerColumn);
                                 currentBuffer += nativeRetrievecolumns[i].cbData;
                                 Debug.Assert(currentBuffer <= pinnedBuffer + buffer.Length, "Moved past end of pinned buffer");
                             }
@@ -141,7 +141,7 @@ namespace Microsoft.Isam.Esent.Interop
                     // Propagate the warnings.
                     for (int i = 0; i < columnValues.Length; ++i)
                     {
-                        columnValues[i].Error = (JET_wrn) nativeRetrievecolumns[i].err;
+                        columnValues[i].Error = (JET_wrn)nativeRetrievecolumns[i].err;
                     }
 
                     // Now parse out the columns that were retrieved successfully
@@ -149,7 +149,7 @@ namespace Microsoft.Isam.Esent.Interop
                     {
                         if (nativeRetrievecolumns[i].err != (int)JET_wrn.BufferTruncated)
                         {
-                            byte* columnBuffer = (byte*) nativeRetrievecolumns[i].pvData;
+                            byte* columnBuffer = (byte*)nativeRetrievecolumns[i].pvData;
                             int startIndex = checked((int)(columnBuffer - pinnedBuffer));
                             columnValues[i].GetValueFromBytes(
                                 buffer,
@@ -235,7 +235,7 @@ namespace Microsoft.Isam.Esent.Interop
                           ? Api.Impl.JetSetColumns(sesid, tableid, nativeColumns, columnValues.Length)
                           : columnValues[i + 1].SetColumns(sesid, tableid, columnValues, nativeColumns, i + 1);
 
-            this.Error = (JET_wrn) nativeColumns[i].err;
+            this.Error = (JET_wrn)nativeColumns[i].err;
             return err;
         }
 
@@ -261,7 +261,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             for (int i = 0; i < columnValues.Length; ++i)
             {
-                if (nativeRetrievecolumns[i].err == (int) JET_wrn.BufferTruncated)
+                if (nativeRetrievecolumns[i].err == (int)JET_wrn.BufferTruncated)
                 {
                     var buffer = new byte[nativeRetrievecolumns[i].cbActual];
                     int actualSize;

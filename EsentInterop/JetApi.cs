@@ -340,7 +340,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                             NativeMethods.JetSetSystemParameter(
                                 pinstance,
                                 sesid.Value,
-                                (uint) paramid,
+                                (uint)paramid,
                                 IntPtr.Zero,
                                 paramString));
                 }
@@ -355,7 +355,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                         NativeMethods.JetSetSystemParameter(
                             pinstance,
                             sesid.Value,
-                            (uint) paramid,
+                            (uint)paramid,
                             functionPointer,
                             paramString));
             }
@@ -1987,8 +1987,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 using (var gchandlecollection = new GCHandleCollection())
                 {
                     // Pin memory
-                    nativetemporarytable.prgcolumndef = (NATIVE_COLUMNDEF*) gchandlecollection.Add(nativecolumndefs);
-                    nativetemporarytable.rgcolumnid = (uint*) gchandlecollection.Add(nativecolumnids);
+                    nativetemporarytable.prgcolumndef = (NATIVE_COLUMNDEF*)gchandlecollection.Add(nativecolumndefs);
+                    nativetemporarytable.rgcolumnid = (uint*)gchandlecollection.Add(nativecolumnids);
                     if (null != temporarytable.pidxunicode)
                     {
                         nativetemporarytable.pidxunicode = (NATIVE_UNICODEINDEX*)
@@ -4129,7 +4129,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                         if (null != indexcreates[i].pidxUnicode)
                         {
                             NATIVE_UNICODEINDEX unicode = indexcreates[i].pidxUnicode.GetNativeUnicodeIndex();
-                            nativeIndexcreates[i].pidxUnicode = (NATIVE_UNICODEINDEX*) handles.Add(unicode);
+                            nativeIndexcreates[i].pidxUnicode = (NATIVE_UNICODEINDEX*)handles.Add(unicode);
                             nativeIndexcreates[i].grbit |= (uint)VistaGrbits.IndexUnicode;
                         }
 
@@ -4170,7 +4170,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                         if (null != indexcreates[i].pidxUnicode)
                         {
                             NATIVE_UNICODEINDEX unicode = indexcreates[i].pidxUnicode.GetNativeUnicodeIndex();
-                            nativeIndexcreates[i].indexcreate.pidxUnicode = (NATIVE_UNICODEINDEX*) handles.Add(unicode);
+                            nativeIndexcreates[i].indexcreate.pidxUnicode = (NATIVE_UNICODEINDEX*)handles.Add(unicode);
                             nativeIndexcreates[i].indexcreate.grbit |= (uint)VistaGrbits.IndexUnicode;
                         }
 

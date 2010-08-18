@@ -46,7 +46,7 @@ namespace Microsoft.Isam.Esent.Interop
             var s = new NATIVE_INDEXRANGE
             {
                 tableid = tableid.Value,
-                grbit = (uint) IndexRangeGrbit.RecordInIndex,
+                grbit = (uint)IndexRangeGrbit.RecordInIndex,
             };
             s.cbStruct = (uint)Marshal.SizeOf(s);
             return s;
@@ -126,9 +126,9 @@ namespace Microsoft.Isam.Esent.Interop
         internal NATIVE_INDEXRANGE GetNativeIndexRange()
         {
             var indexrange = new NATIVE_INDEXRANGE();
-            indexrange.cbStruct = (uint) Marshal.SizeOf(indexrange);
+            indexrange.cbStruct = (uint)Marshal.SizeOf(indexrange);
             indexrange.tableid = this.tableid.Value;
-            indexrange.grbit = (uint) this.grbit;
+            indexrange.grbit = (uint)this.grbit;
             return indexrange;
         }
     }

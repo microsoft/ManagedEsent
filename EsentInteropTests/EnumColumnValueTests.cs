@@ -27,7 +27,7 @@ namespace InteropApiTests
             var native = new NATIVE_ENUMCOLUMNVALUE
             {
                 cbData = 1,
-                err = (int) JET_wrn.ColumnTruncated,
+                err = (int)JET_wrn.ColumnTruncated,
                 itagSequence = 2,
                 pvData = new IntPtr(3),
             };

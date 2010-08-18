@@ -120,8 +120,8 @@ namespace Microsoft.Isam.Esent.Interop
         {
             var native = new NATIVE_UNICODEINDEX
             {
-                lcid = (uint) this.lcid,
-                dwMapFlags = (uint) this.dwMapFlags,
+                lcid = (uint)this.lcid,
+                dwMapFlags = (uint)this.dwMapFlags,
             };
             return native;
         }        

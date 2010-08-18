@@ -85,9 +85,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         internal void SetFromNativeEnumColumnValue(NATIVE_ENUMCOLUMNVALUE value)
         {
-            this.itagSequence = checked((int) value.itagSequence);
-            this.err = (JET_wrn) value.err;
-            this.cbData = checked((int) value.cbData);
+            this.itagSequence = checked((int)value.itagSequence);
+            this.err = (JET_wrn)value.err;
+            this.cbData = checked((int)value.cbData);
             this.pvData = value.pvData;
         }
     }

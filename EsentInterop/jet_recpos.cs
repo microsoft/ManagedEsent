@@ -130,9 +130,9 @@ namespace Microsoft.Isam.Esent.Interop
         internal NATIVE_RECPOS GetNativeRecpos()
         {
             var recpos = new NATIVE_RECPOS();
-            recpos.cbStruct = checked((uint) NATIVE_RECPOS.Size);
-            recpos.centriesLT = checked((uint) this.centriesLT);
-            recpos.centriesTotal = checked((uint) this.centriesTotal);
+            recpos.cbStruct = checked((uint)NATIVE_RECPOS.Size);
+            recpos.centriesLT = checked((uint)this.centriesLT);
+            recpos.centriesTotal = checked((uint)this.centriesTotal);
             return recpos;
         }
 
@@ -142,8 +142,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="value">The NATIVE_RECPOS which will be used to set the fields.</param>
         internal void SetFromNativeRecpos(NATIVE_RECPOS value)
         {
-            this.centriesLT = checked((int) value.centriesLT);
-            this.centriesTotal = checked((int) value.centriesTotal);
+            this.centriesLT = checked((int)value.centriesLT);
+            this.centriesTotal = checked((int)value.centriesTotal);
         }
     }
 }

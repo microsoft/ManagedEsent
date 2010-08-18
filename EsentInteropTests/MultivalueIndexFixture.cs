@@ -219,7 +219,7 @@ namespace InteropApiTests
                 GotoSecondaryIndexBookmarkGrbit.None);
 
             Assert.AreEqual(
-                1, (int) Api.RetrieveColumnAsInt32(this.sesid, this.tableid, this.keyColumn), "landed on wrong record");
+                1, (int)Api.RetrieveColumnAsInt32(this.sesid, this.tableid, this.keyColumn), "landed on wrong record");
             Assert.IsTrue(Api.TryMoveNext(this.sesid, this.tableid), "unable to move to next record");
             Assert.AreEqual(
                 2, (int)Api.RetrieveColumnAsInt32(this.sesid, this.tableid, this.keyColumn), "should have been on the next record");

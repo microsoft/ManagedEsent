@@ -103,7 +103,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 case ExpressionType.AndAlso:
                 {
                     // Intersect the left and right parts
-                    var binaryExpression = (BinaryExpression) expression;
+                    var binaryExpression = (BinaryExpression)expression;
                     return GetKeyRangeOfSubtree(binaryExpression.Left, keyMemberInfo)
                            & GetKeyRangeOfSubtree(binaryExpression.Right, keyMemberInfo);
                 }
@@ -111,7 +111,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 case ExpressionType.OrElse:
                 {
                     // Union the left and right parts
-                    var binaryExpression = (BinaryExpression) expression;
+                    var binaryExpression = (BinaryExpression)expression;
                     return GetKeyRangeOfSubtree(binaryExpression.Left, keyMemberInfo)
                            | GetKeyRangeOfSubtree(binaryExpression.Right, keyMemberInfo);
                 }
@@ -140,7 +140,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 case ExpressionType.GreaterThanOrEqual:
                 {
                     // Return a range
-                    var binaryExpression = (BinaryExpression) expression;
+                    var binaryExpression = (BinaryExpression)expression;
                     TKey value;
                     ExpressionType expressionType;
                     if (IsConstantComparison(binaryExpression, keyMemberInfo, out value, out expressionType))
@@ -525,7 +525,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             // If keyMemberInfo is non-null then we are accessing this part of the parameter
             if (null != keyMemberInfo && ExpressionType.MemberAccess == expression.NodeType)
             {
-                var member = (MemberExpression) expression;
+                var member = (MemberExpression)expression;
                 if (
                     null != member.Expression
                     && member.Expression.NodeType == ExpressionType.Parameter

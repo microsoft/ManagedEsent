@@ -706,7 +706,7 @@ namespace InteropApiTests
             using (var u = new Update(this.sesid, this.tableid, JET_prep.Insert))
             using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
             {
-                stream.Seek(0x800000000, (SeekOrigin) 0x1234);
+                stream.Seek(0x800000000, (SeekOrigin)0x1234);
             }
         }
 
@@ -1095,7 +1095,7 @@ namespace InteropApiTests
             using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
             {
                 var deseriaizer = new BinaryFormatter();
-                var actual = (Dictionary<string, long>) deseriaizer.Deserialize(stream);
+                var actual = (Dictionary<string, long>)deseriaizer.Deserialize(stream);
                 CollectionAssert.AreEqual(expected, actual);
             }
         }

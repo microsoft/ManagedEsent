@@ -69,7 +69,7 @@ namespace InteropApiTests
         [Description("Check that conversion from a JET_TABLEID to a NATIVE_INDEXRANGE sets the grbit")]
         public void VerifyMakeIndexRangeFromTableidSetsGrbit()
         {
-            Assert.AreEqual((uint) IndexRangeGrbit.RecordInIndex, this.native.grbit);
+            Assert.AreEqual((uint)IndexRangeGrbit.RecordInIndex, this.native.grbit);
         }
     }
 }

@@ -38,7 +38,7 @@ namespace InteropApiTests
         {
             this.managed = new JET_INDEXRANGE
             {
-                tableid = new JET_TABLEID { Value = (IntPtr) 0x1234 },
+                tableid = new JET_TABLEID { Value = (IntPtr)0x1234 },
                 grbit = IndexRangeGrbit.RecordInIndex,
             };
             this.native = this.managed.GetNativeIndexRange();
@@ -88,7 +88,7 @@ namespace InteropApiTests
         [Description("Verify converting JET_INDEXRANGE to a NATIVE_INDEXRANGE sets the grbit")]
         public void VerifyMakeIndexRangeFromTableidSetsGrbit()
         {
-            Assert.AreEqual((uint) this.managed.grbit, this.native.grbit);
+            Assert.AreEqual((uint)this.managed.grbit, this.native.grbit);
         }
     }
 }

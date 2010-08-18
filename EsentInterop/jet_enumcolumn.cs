@@ -91,7 +91,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                return (NATIVE_ENUMCOLUMNVALUE*) this.pvData;
+                return (NATIVE_ENUMCOLUMNVALUE*)this.pvData;
             }
 
             set
@@ -165,15 +165,15 @@ namespace Microsoft.Isam.Esent.Interop
         internal void SetFromNativeEnumColumn(NATIVE_ENUMCOLUMN value)
         {
             this.columnid = new JET_COLUMNID { Value = value.columnid };
-            this.err = (JET_wrn) value.err;
+            this.err = (JET_wrn)value.err;
             if (JET_wrn.ColumnSingleValue == this.err)
             {
-                this.cbData = checked((int) value.cbData);
+                this.cbData = checked((int)value.cbData);
                 this.pvData = value.pvData;
             }
             else
             {
-                this.cEnumColumnValue = checked((int) value.cEnumColumnValue);
+                this.cEnumColumnValue = checked((int)value.cEnumColumnValue);
                 this.rgEnumColumnValue = null;
             }
         }

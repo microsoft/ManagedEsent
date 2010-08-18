@@ -310,7 +310,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>The key of the record.</returns>
         public TKey RetrieveCurrentKey()
         {
-            return (TKey) this.converters.RetrieveKeyColumn(this.sesid, this.dataTable, this.keyColumn);
+            return (TKey)this.converters.RetrieveKeyColumn(this.sesid, this.dataTable, this.keyColumn);
         }
 
         /// <summary>

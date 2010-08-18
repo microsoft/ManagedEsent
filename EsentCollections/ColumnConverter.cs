@@ -28,20 +28,20 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         private static readonly IDictionary<Type, SetColumnDelegate> SetColumnDelegates = new Dictionary<Type, SetColumnDelegate>
         {
-            { typeof(bool), (s, t, c, o) => Api.SetColumn(s, t, c, (bool) o) },
-            { typeof(byte), (s, t, c, o) => Api.SetColumn(s, t, c, (byte) o) },
-            { typeof(short), (s, t, c, o) => Api.SetColumn(s, t, c, (short) o) },
-            { typeof(ushort), (s, t, c, o) => Api.SetColumn(s, t, c, (ushort) o) },
-            { typeof(int), (s, t, c, o) => Api.SetColumn(s, t, c, (int) o) },
-            { typeof(uint), (s, t, c, o) => Api.SetColumn(s, t, c, (uint) o) },
-            { typeof(long), (s, t, c, o) => Api.SetColumn(s, t, c, (long) o) },
-            { typeof(ulong), (s, t, c, o) => Api.SetColumn(s, t, c, (ulong) o) },
-            { typeof(float), (s, t, c, o) => Api.SetColumn(s, t, c, (float) o) },
-            { typeof(double), (s, t, c, o) => Api.SetColumn(s, t, c, (double) o) },
-            { typeof(DateTime), (s, t, c, o) => Api.SetColumn(s, t, c, ((DateTime) o).Ticks) },
-            { typeof(TimeSpan), (s, t, c, o) => Api.SetColumn(s, t, c, ((TimeSpan) o).Ticks) },
-            { typeof(Guid), (s, t, c, o) => Api.SetColumn(s, t, c, (Guid) o) },
-            { typeof(string), (s, t, c, o) => Api.SetColumn(s, t, c, (string) o, Encoding.Unicode) },
+            { typeof(bool), (s, t, c, o) => Api.SetColumn(s, t, c, (bool)o) },
+            { typeof(byte), (s, t, c, o) => Api.SetColumn(s, t, c, (byte)o) },
+            { typeof(short), (s, t, c, o) => Api.SetColumn(s, t, c, (short)o) },
+            { typeof(ushort), (s, t, c, o) => Api.SetColumn(s, t, c, (ushort)o) },
+            { typeof(int), (s, t, c, o) => Api.SetColumn(s, t, c, (int)o) },
+            { typeof(uint), (s, t, c, o) => Api.SetColumn(s, t, c, (uint)o) },
+            { typeof(long), (s, t, c, o) => Api.SetColumn(s, t, c, (long)o) },
+            { typeof(ulong), (s, t, c, o) => Api.SetColumn(s, t, c, (ulong)o) },
+            { typeof(float), (s, t, c, o) => Api.SetColumn(s, t, c, (float)o) },
+            { typeof(double), (s, t, c, o) => Api.SetColumn(s, t, c, (double)o) },
+            { typeof(DateTime), (s, t, c, o) => Api.SetColumn(s, t, c, ((DateTime)o).Ticks) },
+            { typeof(TimeSpan), (s, t, c, o) => Api.SetColumn(s, t, c, ((TimeSpan)o).Ticks) },
+            { typeof(Guid), (s, t, c, o) => Api.SetColumn(s, t, c, (Guid)o) },
+            { typeof(string), (s, t, c, o) => Api.SetColumn(s, t, c, (string)o, Encoding.Unicode) },
         };
 
         /// <summary>

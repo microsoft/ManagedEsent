@@ -111,7 +111,7 @@ namespace Microsoft.Isam.Esent.Interop
                     throw new ArgumentOutOfRangeException("value", value, "A long-value offset has to be between 0 and 0x7fffffff bytes");
                 }
 
-                this.ibLongValue = checked((int) value);
+                this.ibLongValue = checked((int)value);
             }
         }
 
@@ -174,7 +174,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             CheckBufferArguments(buffer, offset, count);
 
-            int length = checked((int) this.Length);
+            int length = checked((int)this.Length);
             JET_SETINFO setinfo;
 
             int newIbLongValue = checked(this.ibLongValue + count);

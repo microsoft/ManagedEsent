@@ -963,10 +963,10 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             }
             
             // Remember: hash codes can be negative, and we can't negate Int32.MinValue.
-            uint hash = unchecked((uint) key.GetHashCode());
-            hash %= checked((uint) this.updateLocks.Length);
+            uint hash = unchecked((uint)key.GetHashCode());
+            hash %= checked((uint)this.updateLocks.Length);
 
-            return this.updateLocks[checked((int) hash)];
+            return this.updateLocks[checked((int)hash)];
         }
     }
 }

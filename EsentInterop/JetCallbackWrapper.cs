@@ -150,13 +150,13 @@ namespace Microsoft.Isam.Esent.Interop
                 var sesid = new JET_SESID { Value = nativeSesid };
                 var dbid = new JET_DBID { Value = nativeDbid };
                 var tableid = new JET_TABLEID { Value = nativeTableid };
-                JET_cbtyp cbtyp = (JET_cbtyp) nativeCbtyp;
+                JET_cbtyp cbtyp = (JET_cbtyp)nativeCbtyp;
 
                 Debug.Assert(this.wrappedCallback.IsAlive, "Wrapped callback has been garbage collected");
 
                 // This will throw an exception if the wrapped callback has been collected. The exception
                 // will be handled below.
-                JET_CALLBACK callback = (JET_CALLBACK) this.wrappedCallback.Target;
+                JET_CALLBACK callback = (JET_CALLBACK)this.wrappedCallback.Target;
                 return callback(sesid, dbid, tableid, cbtyp, null, null, nativeContext, IntPtr.Zero);
             }
             catch (Exception ex)

@@ -604,7 +604,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Check that an exception is thrown when JetGetIndexInfo(int) gets a null table name")]
+        [Description("Check that an exception is thrown when JetGetIndexInfo(int)gets a null table name")]
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetGetIndexInfoIntThrowsExceptionWhenTableNameIsNull()
         {

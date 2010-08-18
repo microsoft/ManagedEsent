@@ -219,10 +219,10 @@ namespace Microsoft.Isam.Esent.Interop
             var setinfo = new NATIVE_SETCOLUMN
             {
                 columnid = this.columnid.Value,
-                cbData = checked((uint) this.cbData),
-                grbit = (uint) this.grbit,
-                ibLongValue = checked((uint) this.ibLongValue),
-                itagSequence = checked((uint) this.itagSequence),
+                cbData = checked((uint)this.cbData),
+                grbit = (uint)this.grbit,
+                ibLongValue = checked((uint)this.ibLongValue),
+                itagSequence = checked((uint)this.itagSequence),
             };
             return setinfo;
         }

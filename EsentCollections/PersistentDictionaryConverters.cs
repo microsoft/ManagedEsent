@@ -32,7 +32,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         private readonly ColumnConverter valueColumnConverter;
 
         /// <summary>
-        /// Initializes a new instance of the PersistentDictionaryConverters
+        /// Initializes a new instance of the PersistentDictionaryConverters{TKey,TValue}
         /// class. This looks up the conversion types for
         /// <typeparamref name="TKey"/> and <typeparamref name="TValue"/>.
         /// </summary>

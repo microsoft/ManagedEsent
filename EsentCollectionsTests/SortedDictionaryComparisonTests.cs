@@ -114,7 +114,7 @@ namespace EsentCollectionsTests
         public void TestAddItem()
         {
             var item = new KeyValuePair<string, string>("thekey", "thevalue");
-            ((ICollection<KeyValuePair<string, string>>) this.expected).Add(item);
+            ((ICollection<KeyValuePair<string, string>>)this.expected).Add(item);
             this.actual.Add(item);
             DictionaryAssert.AreSortedAndEqual(this.expected, this.actual);
         }
@@ -129,7 +129,7 @@ namespace EsentCollectionsTests
             var item = new KeyValuePair<string, string>("thekey", "thevalue");
             this.expected.Add(item.Key, item.Value);
             this.actual.Add(item.Key, item.Value);
-            ((ICollection<KeyValuePair<string, string>>) this.expected).Remove(item);
+            ((ICollection<KeyValuePair<string, string>>)this.expected).Remove(item);
             Assert.IsTrue(this.actual.Remove(item));
             DictionaryAssert.AreSortedAndEqual(this.expected, this.actual);
         }

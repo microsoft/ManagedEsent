@@ -144,8 +144,8 @@ namespace Microsoft.Isam.Esent.Interop
         internal void SetFromNative(NATIVE_SNPROG native)
         {
             Debug.Assert(native.cbStruct == NATIVE_SNPROG.Size, "NATIVE_SNPROG is the wrong size");
-            this.cunitDone = checked((int) native.cunitDone);
-            this.cunitTotal = checked((int) native.cunitTotal);
+            this.cunitDone = checked((int)native.cunitDone);
+            this.cunitTotal = checked((int)native.cunitTotal);
         }
     }
 }

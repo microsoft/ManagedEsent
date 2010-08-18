@@ -58,7 +58,7 @@ namespace Microsoft.Isam.Esent.Interop.Server2003
         /// with duplicate index keys. See <see cref="TempTableGrbit.Unique"/>
         /// for more information.
         /// </summary>        
-        public const TempTableGrbit ForwardOnly = (TempTableGrbit) 0x40;
+        public const TempTableGrbit ForwardOnly = (TempTableGrbit)0x40;
 
         /// <summary>
         /// If a given column is not present in the record and it has a user
@@ -71,7 +71,7 @@ namespace Microsoft.Isam.Esent.Interop.Server2003
         /// This option is only available for Windows Server 2003 SP1 and later
         /// operating systems.
         /// </remarks>
-        public const EnumerateColumnsGrbit EnumerateIgnoreUserDefinedDefault = (EnumerateColumnsGrbit) 0x00100000;
+        public const EnumerateColumnsGrbit EnumerateIgnoreUserDefinedDefault = (EnumerateColumnsGrbit)0x00100000;
 
         /// <summary>
         /// All transactions previously committed by any session that have not

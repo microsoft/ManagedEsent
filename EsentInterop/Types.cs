@@ -76,7 +76,7 @@ namespace Microsoft.Isam.Esent.Interop
                 return false;
             }
 
-            return this.Equals((JET_INSTANCE) obj);
+            return this.Equals((JET_INSTANCE)obj);
         }
 
         /// <summary>

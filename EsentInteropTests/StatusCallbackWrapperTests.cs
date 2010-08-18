@@ -46,7 +46,7 @@ namespace InteropApiTests
 
             var native = new NATIVE_SNPROG
             {
-                cbStruct = checked((uint) NATIVE_SNPROG.Size),
+                cbStruct = checked((uint)NATIVE_SNPROG.Size),
                 cunitDone = 1,
                 cunitTotal = 100,
             };
@@ -55,8 +55,8 @@ namespace InteropApiTests
             {
                 wrapper.NativeCallback(
                     this.sesid.Value,
-                    (uint) JET_SNP.Backup,
-                    (uint) JET_SNT.Progress,
+                    (uint)JET_SNP.Backup,
+                    (uint)JET_SNT.Progress,
                     new IntPtr(&native));
             }
 

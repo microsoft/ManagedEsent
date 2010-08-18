@@ -178,7 +178,7 @@ namespace Microsoft.Isam.Esent.Interop
         internal void SetFromNativeColumnlist(NATIVE_COLUMNLIST value)
         {
             this.tableid = new JET_TABLEID { Value = value.tableid };
-            this.cRecord = checked((int) value.cRecord);
+            this.cRecord = checked((int)value.cRecord);
             this.columnidcolumnname = new JET_COLUMNID { Value = value.columnidcolumnname };
             this.columnidcolumnid = new JET_COLUMNID { Value = value.columnidcolumnid };
             this.columnidcoltyp = new JET_COLUMNID { Value = value.columnidcoltyp };

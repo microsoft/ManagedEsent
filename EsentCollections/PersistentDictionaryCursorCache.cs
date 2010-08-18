@@ -59,7 +59,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         private readonly object lockObject;
 
         /// <summary>
-        /// Initializes a new instance of the PersistentDictionaryCursorCache
+        /// Initializes a new instance of the PersistentDictionaryCursorCache{TKey,TValue}
         /// class.
         /// </summary>
         /// <param name="instance">The ESENT instance to use when opening a cursor.</param>

@@ -27,7 +27,7 @@ namespace InteropApiTests
             var native = new NATIVE_ENUMCOLUMN
             {
                 columnid = 1,
-                err = (int) JET_wrn.ColumnSingleValue,
+                err = (int)JET_wrn.ColumnSingleValue,
                 cbData = 3,
                 pvData = new IntPtr(4),
             };
@@ -56,7 +56,7 @@ namespace InteropApiTests
                 var native = new NATIVE_ENUMCOLUMN
                 {
                     columnid = 1,
-                    err = (int) JET_wrn.Success,
+                    err = (int)JET_wrn.Success,
                     cEnumColumnValue = 3,
                     rgEnumColumnValue = columnvalues,
                 };
