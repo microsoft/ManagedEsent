@@ -54,7 +54,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the current entry should be skipped.</returns>
         protected override bool SkipCurrent()
         {
-            uint flags = (uint)Api.RetrieveColumnAsUInt32(this.Sesid, this.TableidToEnumerate, this.objectlist.columnidflags);
+            int flags = (int)Api.RetrieveColumnAsInt32(this.Sesid, this.TableidToEnumerate, this.objectlist.columnidflags);
             return ObjectInfoFlags.System == ((ObjectInfoFlags)flags & ObjectInfoFlags.System);
         }
 

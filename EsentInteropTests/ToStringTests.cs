@@ -321,6 +321,18 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test JET_DBINFOMISC.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_DBINFOMISC.ToString()")]
+        public void JetDbinfoMiscToString()
+        {
+            var value = new JET_DBINFOMISC();
+            Assert.AreEqual("JET_DBINFOMISC(JET_SIGNATURE(0::))", value.ToString());
+        }
+
+        /// <summary>
         /// Test ColumnStream.ToString().
         /// </summary>
         [TestMethod]

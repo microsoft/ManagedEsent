@@ -1078,6 +1078,82 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Check that JET_DBINFOMISC objects can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JetDbinfoMisc objects can be compared for equality")]
+        public void VerifyJetDbinfoMiscEquality()
+        {
+            var x = CreateJetDbinfoMisc();
+            var y = CreateJetDbinfoMisc();
+            TestEquals(x, y);
+        }
+
+        /// <summary>
+        /// Check that JET_DBINFOMISC objects can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_DBINFOMISC objects can be compared for inequality")]
+        public void VerifyJetDbinfoMiscInequality()
+        {
+            // None of these objects are equal, most differ in only one member from the
+            // first object. We will compare them all against each other.
+            var values = new JET_DBINFOMISC[40];
+            for (int i = 0; i < values.Length; ++i)
+            {
+                values[i] = CreateJetDbinfoMisc();
+            }
+
+            int j = 1;
+            values[j++].ulVersion++;
+            values[j++].ulUpdate++;
+            values[j++].signDb = new JET_SIGNATURE(0, DateTime.Now, "XYZZY");
+            values[j++].dbstate = JET_dbstate.JustCreated;
+            values[j++].lgposConsistent = new JET_LGPOS();
+            values[j++].logtimeConsistent = new JET_LOGTIME(DateTime.UtcNow);
+            values[j++].logtimeAttach = new JET_LOGTIME(DateTime.UtcNow);
+            values[j++].lgposAttach = new JET_LGPOS();
+            values[j++].logtimeDetach = new JET_LOGTIME(DateTime.UtcNow);
+            values[j++].lgposDetach = new JET_LGPOS();
+            values[j++].signLog = new JET_SIGNATURE(0, DateTime.Now, "XYZZY");
+            values[j++].bkinfoFullPrev = new JET_BKINFO();
+            values[j++].bkinfoIncPrev = new JET_BKINFO();
+            values[j++].bkinfoFullCur = new JET_BKINFO();
+            values[j++].fShadowingDisabled = false;
+            values[j++].fUpgradeDb = false;
+            values[j++].dwMajorVersion++;
+            values[j++].dwMinorVersion++;
+            values[j++].dwBuildNumber++;
+            values[j++].lSPNumber++;
+            values[j++].cbPageSize++;
+            values[j++].genMinRequired++;
+            values[j++].genMaxRequired++;
+            values[j++].logtimeGenMaxCreate = new JET_LOGTIME(DateTime.UtcNow);
+            values[j++].ulRepairCount++;
+            values[j++].logtimeRepair = new JET_LOGTIME(DateTime.UtcNow);
+            values[j++].ulRepairCountOld++;
+            values[j++].ulECCFixSuccess++;
+            values[j++].logtimeECCFixSuccess = new JET_LOGTIME(DateTime.UtcNow);
+            values[j++].ulECCFixSuccessOld++;
+            values[j++].ulECCFixFail++;
+            values[j++].logtimeECCFixFail = new JET_LOGTIME(DateTime.UtcNow);
+            values[j++].ulECCFixFailOld++;
+            values[j++].ulBadChecksum++;
+            values[j++].logtimeBadChecksum = new JET_LOGTIME(DateTime.UtcNow);
+            values[j++].ulBadChecksumOld++;
+            values[j++].genCommitted++;
+            values[j++].bkinfoCopyPrev = new JET_BKINFO();
+            values[j++].bkinfoDiffPrev = new JET_BKINFO();
+            Debug.Assert(j == values.Length, "Not all members of values were changed", j.ToString());
+
+            VerifyAll(values);
+        }
+
+        /// <summary>
         /// Check that IndexSegment structures can be
         /// compared for equality.
         /// </summary>
@@ -1176,13 +1252,97 @@ namespace InteropApiTests
                 for (int j = i + 1; j < values.Count; ++j)
                 {
                     Debug.Assert(i != j, "About to compare the same values");
-                    TestNotEquals(values[i], values[j]);
+                    try
+                    {
+                        TestNotEquals(values[i], values[j]);
 
-                    // Only this method has the 'class' constraint so we compare against null here.
-                    Assert.IsFalse(values[i].Equals(null));
-                    Assert.IsFalse(values[j].Equals(null));
+                        // Only this method has the 'class' constraint so we compare against null here.
+                        Assert.IsFalse(values[i].Equals(null));
+                        Assert.IsFalse(values[j].Equals(null));
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error comparing {0} and {1}", i, j);
+                        throw;
+                    }
                 }
             }           
+        }
+
+        /// <summary>
+        /// Create a new JET_DBINFOMISC object. The same values are used each time.
+        /// </summary>
+        /// <returns>A new JET_DBINFOMISC object.</returns>
+        private static JET_DBINFOMISC CreateJetDbinfoMisc()
+        {
+            var epoch = new DateTime(2000, 1, 2, 3, 4, 10);
+            ushort i = 789;
+
+            Func<JET_BKINFO> bkinfo = () => new JET_BKINFO
+            {
+                bklogtimeMark = new JET_BKLOGTIME(epoch + TimeSpan.FromSeconds(++i), false),
+                genHigh = ++i,
+                genLow = ++i,
+                lgposMark = new JET_LGPOS { ib = ++i, isec = ++i, lGeneration = ++i },
+            };
+
+            var native = new NATIVE_DBINFOMISC4
+            {
+                dbinfo = new NATIVE_DBINFOMISC
+                {
+                    ulVersion = ++i,
+                    ulUpdate = ++i,
+                    signDb = new NATIVE_SIGNATURE
+                    {
+                        logtimeCreate = new JET_LOGTIME(epoch + TimeSpan.FromSeconds(++i)),
+                        ulRandom = ++i,
+                    },
+                    dbstate = (int)JET_dbstate.DirtyShutdown,
+                    lgposConsistent = new JET_LGPOS { ib = ++i, isec = ++i, lGeneration = ++i },
+                    logtimeConsistent = new JET_LOGTIME(epoch + TimeSpan.FromSeconds(++i)),
+                    logtimeAttach = new JET_LOGTIME(epoch + TimeSpan.FromSeconds(++i)),
+                    lgposAttach = new JET_LGPOS { ib = ++i, isec = ++i, lGeneration = ++i },
+                    logtimeDetach = new JET_LOGTIME(epoch + TimeSpan.FromSeconds(++i)),
+                    lgposDetach = new JET_LGPOS { ib = ++i, isec = ++i, lGeneration = ++i },
+                    signLog = new NATIVE_SIGNATURE
+                    {
+                        logtimeCreate = new JET_LOGTIME(epoch + TimeSpan.FromSeconds(++i)),
+                        ulRandom = ++i,
+                    },
+                    bkinfoFullPrev = bkinfo(),
+                    bkinfoIncPrev = bkinfo(),
+                    bkinfoFullCur = bkinfo(),
+                    fShadowingDisabled = ++i,
+                    fUpgradeDb = ++i,
+                    dwMajorVersion = ++i,
+                    dwMinorVersion = ++i,
+                    dwBuildNumber = ++i,
+                    lSPNumber = ++i,
+                    cbPageSize = ++i,
+                },
+                genMinRequired = ++i,
+                genMaxRequired = ++i,
+                logtimeGenMaxCreate = new JET_LOGTIME(epoch + TimeSpan.FromSeconds(++i)),
+                ulRepairCount = ++i,
+                logtimeRepair = new JET_LOGTIME(epoch + TimeSpan.FromSeconds(++i)),
+                ulRepairCountOld = ++i,
+                ulECCFixSuccess = ++i,
+                logtimeECCFixSuccess = new JET_LOGTIME(epoch + TimeSpan.FromSeconds(++i)),
+                ulECCFixSuccessOld = ++i,
+                ulECCFixFail = ++i,
+                logtimeECCFixFail = new JET_LOGTIME(epoch + TimeSpan.FromSeconds(++i)),
+                ulECCFixFailOld = ++i,
+                ulBadChecksum = ++i,
+                logtimeBadChecksum = new JET_LOGTIME(epoch + TimeSpan.FromSeconds(++i)),
+                ulBadChecksumOld = ++i,
+                genCommitted = ++i,
+                bkinfoCopyPrev = bkinfo(),
+                bkinfoDiffPrev = bkinfo(),
+            };
+
+            var managed = new JET_DBINFOMISC();
+            managed.SetFromNativeDbinfoMisc(ref native);
+            return managed;
         }
     }
 }

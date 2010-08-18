@@ -19,8 +19,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Initializes a new instance of the EsentErrorException class.
         /// </summary>
+        /// <param name="message">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        internal EsentErrorException(JET_err err)
+        internal EsentErrorException(string message, JET_err err) : base(message)
         {
             this.Data["error"] = err;
         }

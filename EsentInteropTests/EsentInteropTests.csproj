@@ -64,6 +64,7 @@
     <Compile Include="ComparableTests.cs" />
     <Compile Include="ConditionalIndexFixture.cs" />
     <Compile Include="ContentEquatableTests.cs" />
+    <Compile Include="DbinfoMiscConversionTests.cs" />
     <Compile Include="EnumerableTests.cs" />
     <Compile Include="HowDoI.cs" />
     <Compile Include="IndexInfoTests.cs" />

@@ -72,7 +72,6 @@ namespace Microsoft.Isam.Esent.Interop
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
-    [CLSCompliant(false)]
     public class JET_OBJECTINFO
     {
         /// <summary>

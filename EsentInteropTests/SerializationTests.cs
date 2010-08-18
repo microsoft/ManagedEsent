@@ -245,6 +245,18 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify that a JET_DBINFOMISC can be serialized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that a JET_DBINFOMISC can be serialized")]
+        public void VerifyDbinfoMiscCanBeSerialized()
+        {
+            var expected = new JET_DBINFOMISC { cbPageSize = 8192, signDb = new JET_SIGNATURE(1, DateTime.Now, "COMPUTAR!") };
+            SerializeAndCompare(expected);
+        }
+
+        /// <summary>
         /// Serialize an object to an in-memory stream then deserialize it
         /// and compare to the original.
         /// </summary>

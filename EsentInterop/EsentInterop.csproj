@@ -65,6 +65,8 @@
     <Compile Include="INullableJetStruct.cs" />
     <Compile Include="jet_bkinfo.cs" />
     <Compile Include="jet_bklogtime.cs" />
+    <Compile Include="jet_dbinfomisc.cs" />
+    <Compile Include="jet_dbstate.cs" />
     <Compile Include="jet_lgpos.cs" />
     <Compile Include="jet_signature.cs" />
     <Compile Include="DateTimeColumnValue.cs" />

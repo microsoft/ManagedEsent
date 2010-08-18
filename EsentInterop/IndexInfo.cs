@@ -181,6 +181,7 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 sb.Append(segment.ToString());
             }
+
             sb.Append(")");
             return sb.ToString();
         }

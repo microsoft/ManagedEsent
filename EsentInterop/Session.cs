@@ -43,17 +43,6 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="Session"/>.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="Session"/>.
-        /// </returns>
-        public override string ToString()
-        {
-            return String.Format(CultureInfo.InvariantCulture, "Session (0x{0:x})", this.sesid.Value);
-        }
-
-        /// <summary>
         /// Implicit conversion operator from a Session to a JET_SESID. This
         /// allows a Session to be used with APIs which expect a JET_SESID.
         /// </summary>
@@ -62,6 +51,17 @@ namespace Microsoft.Isam.Esent.Interop
         public static implicit operator JET_SESID(Session session)
         {
             return session.JetSesid;
+        }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="Session"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="Session"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(CultureInfo.InvariantCulture, "Session (0x{0:x})", this.sesid.Value);
         }
 
         /// <summary>

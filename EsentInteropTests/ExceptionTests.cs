@@ -23,31 +23,6 @@ namespace InteropApiTests
     public class ExceptionTests
     {
         /// <summary>
-        /// Verify that creating an EsentException with a message sets the message.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Verify that creating an EsentException with a message sets the message")]
-        public void VerifyEsentExceptionConstructorSetsMessage()
-        {
-            var ex = new EsentException("hello");
-            Assert.AreEqual("hello", ex.Message);
-        }
-
-        /// <summary>
-        /// Verify that creating an EsentException with an innner exception sets
-        /// the inner exception property.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Verify that creating an EsentException with an innner exception sets the inner exception property")]
-        public void VerifyEsentExceptionConstructorSetsInnerException()
-        {
-            var ex = new EsentException("foo", new OutOfMemoryException("InnerException"));
-            Assert.AreEqual("InnerException", ex.InnerException.Message);
-        }
-
-        /// <summary>
         /// Verify that the error passed into the constructor is set in the error
         /// property.
         /// </summary>
@@ -56,7 +31,7 @@ namespace InteropApiTests
         [Description("Verify that the error passed into the constructor is set in the error property")]
         public void VerifyEsentErrorExceptionConstructorSetsError()
         {
-            var ex = new EsentErrorException(JET_err.AccessDenied);
+            var ex = new EsentErrorException(String.Empty, JET_err.AccessDenied);
 
             Assert.AreEqual(JET_err.AccessDenied, ex.Error);
         }
@@ -70,7 +45,7 @@ namespace InteropApiTests
         [Description("Verify that the error passed into the constructor is set in the error property")]
         public void VerifyEsentErrorExceptionHasMessage()
         {
-            var ex = new EsentErrorException(JET_err.AccessDenied);
+            var ex = new EsentErrorException(String.Empty, JET_err.AccessDenied);
             Assert.IsNotNull(ex.Message);
         }
 
@@ -82,7 +57,7 @@ namespace InteropApiTests
         [Description("Verify that an EsentErrorException can be serialized and deserialized")]
         public void VerifyEsentErrorExceptionSerializationPreservesError()
         {
-            var originalException = new EsentErrorException(JET_err.VersionStoreOutOfMemory);
+            var originalException = new EsentErrorException(String.Empty, JET_err.VersionStoreOutOfMemory);
 
             var stream = new MemoryStream();
 
@@ -140,7 +115,7 @@ namespace InteropApiTests
                     .Return((int)JET_err.Success);
                 mocks.ReplayAll();
 
-                var ex = new EsentErrorException(JET_err.OutOfMemory);
+                var ex = new EsentErrorException(String.Empty, JET_err.OutOfMemory);
                 Assert.AreEqual(ExpectedDescription, ex.ErrorDescription);
             }
         }
@@ -169,7 +144,7 @@ namespace InteropApiTests
                     .Return((int)JET_err.InvalidParameter);
                 mocks.ReplayAll();
 
-                var ex = new EsentErrorException(JET_err.OutOfMemory);
+                var ex = new EsentErrorException(String.Empty, JET_err.OutOfMemory);
                 Assert.IsTrue(!String.IsNullOrEmpty(ex.ErrorDescription));
             }
         }

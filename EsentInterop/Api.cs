@@ -1330,7 +1330,6 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The table to retrieve information about.</param>
         /// <param name="result">Retrieved information.</param>
         /// <param name="infoLevel">The type of information to retrieve.</param>       
-        [CLSCompliant(false)]
         public static void JetGetTableInfo(JET_SESID sesid, JET_TABLEID tableid, out JET_OBJECTINFO result, JET_TblInfo infoLevel)
         {
             Api.Check(Impl.JetGetTableInfo(sesid, tableid, out result, infoLevel));
@@ -2590,22 +2589,32 @@ namespace Microsoft.Isam.Esent.Interop
         {
             if (err < 0)
             {
-                Debug.Assert(err < 0, "expected a negative error code");
-
-                JET_err error = unchecked((JET_err)err);
-
-                var handler = Api.HandleError;
-                if (handler != null)
-                {
-                    handler(error);
-                }
-
-                // We didn't throw an exception from the handler, so
-                // generate the default exception.
-                throw new EsentErrorException(error);
+                throw CreateErrorException(err);
             }
 
             return unchecked((JET_wrn)err);
+        }
+
+        /// <summary>
+        /// Create an error exception that should be thrown for a failure.
+        /// </summary>
+        /// <param name="err">The error code.</param>
+        /// <returns>A failure exception.</returns>
+        private static Exception CreateErrorException(int err)
+        {
+            Debug.Assert(err < 0, "expected a negative error code");
+
+            JET_err error = unchecked((JET_err)err);
+
+            var handler = Api.HandleError;
+            if (handler != null)
+            {
+                handler(error);
+            }
+
+            // We didn't throw an exception from the handler, so
+            // generate the default exception.
+            return new EsentErrorException(String.Empty, error);            
         }
 
         #endregion Error Handling

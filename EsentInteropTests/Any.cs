@@ -8,6 +8,7 @@ namespace InteropApiTests
 {
     using System;
     using System.Text;
+    using Microsoft.Isam.Esent.Interop;
 
     /// <summary>
     /// Generate arbitrary (random) values
@@ -162,7 +163,7 @@ namespace InteropApiTests
         {
             get
             {
-                // MSDN sayd: d must be a value between -657435.0 through positive 2958466.0.
+                // MSDN says: d must be a value between -657435.0 through positive 2958466.0.
                 double d = Any.random.Next(-657435, 2958466);
                 return DateTime.FromOADate(d);
             }
@@ -192,6 +193,42 @@ namespace InteropApiTests
             {
                 int length = Any.random.Next(1, 255);
                 return BytesOfLength(length);
+            }
+        }
+
+        /// <summary>
+        /// Gets a random JET_LOGTIME.
+        /// </summary>
+        public static JET_LOGTIME Logtime
+        {
+            get
+            {
+                return new JET_LOGTIME(DateTime.Now - TimeSpan.FromSeconds(Any.Int16));
+            }
+        }
+
+        /// <summary>
+        /// Gets a random JET_LGPOS.
+        /// </summary>
+        public static JET_LGPOS Lgpos
+        {
+            get { return new JET_LGPOS { ib = Any.UInt16, isec = Any.UInt16, lGeneration = Any.UInt16 }; }
+        }
+
+        /// <summary>
+        /// Gets a random JET_BKINFO.
+        /// </summary>
+        public static JET_BKINFO Bkinfo
+        {
+            get
+            {
+                return new JET_BKINFO
+                {
+                    bklogtimeMark = new JET_BKLOGTIME(DateTime.UtcNow, Any.Boolean),
+                    genHigh = Any.UInt16,
+                    genLow = Any.UInt16,
+                    lgposMark = Any.Lgpos,
+                };
             }
         }
 

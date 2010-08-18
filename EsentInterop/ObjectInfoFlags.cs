@@ -12,8 +12,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// Flags for ESENT objects (tables).  Used in <see cref="JET_OBJECTINFO"/>.
     /// </summary>
     [Flags]
-    [CLSCompliant(false)]
-    public enum ObjectInfoFlags : uint
+    public enum ObjectInfoFlags : int
     {
         /// <summary>
         /// Default options.
@@ -23,7 +22,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Object is for internal use only.
         /// </summary>
-        System = 0x80000000,
+        System = -2147483648, // 0x80000000
 
         /// <summary>
         /// Table's DDL is fixed.

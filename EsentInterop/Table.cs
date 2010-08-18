@@ -69,17 +69,6 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="Table"/>.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="Table"/>.
-        /// </returns>
-        public override string ToString()
-        {
-            return this.name;
-        }
-
-        /// <summary>
         /// Implicit conversion operator from a Table to a JET_TABLEID. This
         /// allows a Table to be used with APIs which expect a JET_TABLEID.
         /// </summary>
@@ -88,6 +77,17 @@ namespace Microsoft.Isam.Esent.Interop
         public static implicit operator JET_TABLEID(Table table)
         {
             return table.JetTableid;
+        }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="Table"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="Table"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return this.name;
         }
 
         /// <summary>
