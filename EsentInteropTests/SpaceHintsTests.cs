@@ -174,7 +174,7 @@ namespace InteropApiTests
         [Description("Check the conversion from JET_SPACEHINTS to a NATIVE_SPACEHINTS sets the structure size")]
         public void VerifyConversionToNativeSetsCbStruct()
         {
-            Assert.AreEqual((uint) Marshal.SizeOf(this.nativeTarget), this.nativeTarget.cbStruct);
+            Assert.AreEqual((uint)Marshal.SizeOf(this.nativeTarget), this.nativeTarget.cbStruct);
         }
 
         #region Managed-to-native conversion
@@ -187,7 +187,7 @@ namespace InteropApiTests
         [Description("Test conversion from NATIVE_COLUMNCREATE to JET_COLUMNCREATE sets ulInitialDensity.")]
         public void VerifyConversionFromNativeSetsUlInitialDensity()
         {
-            Assert.AreEqual<uint>(33, checked((uint) this.managedTarget.ulInitialDensity));
+            Assert.AreEqual<uint>(33, checked((uint)this.managedTarget.ulInitialDensity));
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace InteropApiTests
         [Description("Test conversion from NATIVE_COLUMNCREATE to JET_COLUMNCREATE sets cbInitial.")]
         public void VerifyConversionFromNativeSetsCbInitial()
         {
-            Assert.AreEqual<uint>(4096, checked((uint) this.managedTarget.cbInitial));
+            Assert.AreEqual<uint>(4096, checked((uint)this.managedTarget.cbInitial));
         }
 
         /// <summary>
@@ -209,7 +209,7 @@ namespace InteropApiTests
         [Description("Test conversion from NATIVE_COLUMNCREATE to JET_COLUMNCREATE sets grbit.")]
         public void VerifyConversionFromNativeSetsGrbit()
         {
-            Assert.AreEqual<uint>(0x12, checked((uint) this.managedTarget.grbit));
+            Assert.AreEqual<uint>(0x12, checked((uint)this.managedTarget.grbit));
         }
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace InteropApiTests
         [Description("Test conversion from NATIVE_COLUMNCREATE to JET_COLUMNCREATE sets ulMaintDensity.")]
         public void VerifyConversionFromNativeSetsUlMaintDensity()
         {
-            Assert.AreEqual<uint>(044, checked((uint) this.managedTarget.ulMaintDensity));
+            Assert.AreEqual<uint>(044, checked((uint)this.managedTarget.ulMaintDensity));
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace InteropApiTests
         [Description("Test conversion from NATIVE_COLUMNCREATE to JET_COLUMNCREATE sets ulGrowth.")]
         public void VerifyConversionFromNativeSetsUlGrowth()
         {
-            Assert.AreEqual<uint>(144, checked((uint) this.managedTarget.ulGrowth));
+            Assert.AreEqual<uint>(144, checked((uint)this.managedTarget.ulGrowth));
         }
 
         /// <summary>
@@ -242,7 +242,7 @@ namespace InteropApiTests
         [Description("Test conversion from NATIVE_COLUMNCREATE to JET_COLUMNCREATE sets cbMinExtent.")]
         public void VerifyConversionFromNativeSetsCbMinExtent()
         {
-            Assert.AreEqual<uint>(1024 * 1024, checked((uint) this.managedTarget.cbMinExtent));
+            Assert.AreEqual<uint>(1024 * 1024, checked((uint)this.managedTarget.cbMinExtent));
         }
 
         /// <summary>
@@ -253,7 +253,7 @@ namespace InteropApiTests
         [Description("Test conversion from NATIVE_COLUMNCREATE to JET_COLUMNCREATE sets cbMaxExtent.")]
         public void VerifyConversionFromNativeSetsCbMaxExtent()
         {
-            Assert.AreEqual<uint>(3 * 1024 * 1024, checked((uint) this.managedTarget.cbMaxExtent));
+            Assert.AreEqual<uint>(3 * 1024 * 1024, checked((uint)this.managedTarget.cbMaxExtent));
         }
 
         #endregion

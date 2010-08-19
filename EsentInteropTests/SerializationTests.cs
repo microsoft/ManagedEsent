@@ -220,14 +220,14 @@ namespace InteropApiTests
         [Description("Verify that a JET_TABLECREATE can be serialized")]
         public void VerifyTableCreateCanBeSerialized()
         {
-            var columncreates = new JET_COLUMNCREATE[]
+            var columncreates = new[]
             {
                 new JET_COLUMNCREATE()
                 {
                     szColumnName = "col1_short",
                     coltyp = JET_coltyp.Short,
                     cbMax = 2,
-                    pvDefault = BitConverter.GetBytes((short) 37),
+                    pvDefault = BitConverter.GetBytes((short)37),
                     cbDefault = 2,
                 },
                 new JET_COLUMNCREATE()

@@ -255,7 +255,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>A deep copy of the object.</returns>
         public JET_COLUMNCREATE DeepClone()
         {
-            JET_COLUMNCREATE result = (JET_COLUMNCREATE) this.MemberwiseClone();
+            JET_COLUMNCREATE result = (JET_COLUMNCREATE)this.MemberwiseClone();
             if (this.pvDefault != null)
             {
                 result.pvDefault = new byte[this.pvDefault.Length];
@@ -306,7 +306,7 @@ namespace Microsoft.Isam.Esent.Interop
         internal NATIVE_COLUMNCREATE GetNativeColumnCreate()
         {
             var native = new NATIVE_COLUMNCREATE();
-            native.cbStruct = checked((uint) Marshal.SizeOf(native));
+            native.cbStruct = checked((uint)Marshal.SizeOf(native));
 
             // columncreate.szColumnName is converted at pinvoke time.
             native.szColumnName = IntPtr.Zero;
@@ -317,9 +317,9 @@ namespace Microsoft.Isam.Esent.Interop
             // columncreate.pvDefault is converted at pinvoke time.
             native.pvDefault = IntPtr.Zero;
 
-            native.cbDefault = checked((uint) this.cbDefault);
+            native.cbDefault = checked((uint)this.cbDefault);
 
-            native.cp = (uint) this.cp;
+            native.cp = (uint)this.cp;
 
             return native;
         }
@@ -334,7 +334,7 @@ namespace Microsoft.Isam.Esent.Interop
         internal void SetFromNativeColumnCreate(NATIVE_COLUMNCREATE value)
         {
             this.columnid = new JET_COLUMNID { Value = value.columnid };
-            this.err = (JET_err) value.err;
+            this.err = (JET_err)value.err;
         }
     }
 }

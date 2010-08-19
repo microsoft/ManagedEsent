@@ -404,7 +404,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>A deep copy of the object.</returns>
         public JET_TABLECREATE DeepClone()
         {
-            JET_TABLECREATE result = (JET_TABLECREATE) this.MemberwiseClone();
+            JET_TABLECREATE result = (JET_TABLECREATE)this.MemberwiseClone();
 
             if (this.rgcolumncreate != null)
             {
@@ -493,26 +493,26 @@ namespace Microsoft.Isam.Esent.Interop
             this.CheckMembersAreValid();
 
             var native = new NATIVE_TABLECREATE3();
-            native.cbStruct = checked((uint) Marshal.SizeOf(native));
+            native.cbStruct = checked((uint)Marshal.SizeOf(native));
             native.szTableName = this.szTableName;
             native.szTemplateTableName = this.szTemplateTableName;
-            native.ulPages = checked((uint) this.ulPages);
-            native.ulDensity = checked((uint) this.ulDensity);
+            native.ulPages = checked((uint)this.ulPages);
+            native.ulDensity = checked((uint)this.ulDensity);
 
             // native.rgcolumncreate is done at pinvoke time.
-            native.cColumns = checked((uint) this.cColumns);
+            native.cColumns = checked((uint)this.cColumns);
 
             // native.rgindexcreate is done at pinvoke time.
-            native.cIndexes = checked((uint) this.cIndexes);
+            native.cIndexes = checked((uint)this.cIndexes);
             native.szCallback = this.szCallback;
             native.cbtyp = this.cbtyp;
             native.grbit = checked((uint)this.grbit);
 
             // native.pSeqSpacehints is done at pinvoke time.
             // native.pLVSpacehints is done at pinvoke time.
-            native.cbSeparateLV = checked((uint) this.cbSeparateLV);
+            native.cbSeparateLV = checked((uint)this.cbSeparateLV);
             native.tableid = this.tableid;
-            native.cCreated = checked((uint) this.cCreated);
+            native.cCreated = checked((uint)this.cCreated);
 
             return native;
         }

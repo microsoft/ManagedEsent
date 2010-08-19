@@ -65,14 +65,14 @@ namespace InteropApiTests
             this.nativeSource = new NATIVE_COLUMNCREATE()
             {
                 szColumnName = Marshal.StringToHGlobalAnsi("column9"),
-                coltyp = (uint) JET_coltyp.Binary,
+                coltyp = (uint)JET_coltyp.Binary,
                 cbMax = 0x42,
-                grbit = (uint) ColumndefGrbit.ColumnAutoincrement,
+                grbit = (uint)ColumndefGrbit.ColumnAutoincrement,
                 pvDefault = IntPtr.Zero,
                 cbDefault = 0,
-                cp = (uint) JET_CP.Unicode,
+                cp = (uint)JET_CP.Unicode,
                 columnid = 7,
-                err = (int) JET_err.RecoveredWithoutUndo,
+                err = (int)JET_err.RecoveredWithoutUndo,
             };
 
             this.managedTarget = new JET_COLUMNCREATE();
@@ -187,7 +187,7 @@ namespace InteropApiTests
         [Description("Test conversion from NATIVE_COLUMNCREATE to JET_COLUMNCREATE sets columnid.")]
         public void VerifyConversionFromNativeSetsColumnId()
         {
-            Assert.AreEqual<uint>(7, (uint) this.managedTarget.columnid.Value);
+            Assert.AreEqual<uint>(7, (uint)this.managedTarget.columnid.Value);
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace InteropApiTests
         [Description("Test conversion from NATIVE_COLUMNCREATE to JET_COLUMNCREATE sets err.")]
         public void VerifyConversionFromNativeSetsErr()
         {
-            Assert.AreEqual<int>(-579, (int) this.managedTarget.err);
+            Assert.AreEqual<int>(-579, (int)this.managedTarget.err);
         }
 
         /// <summary>

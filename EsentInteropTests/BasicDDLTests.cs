@@ -657,14 +657,14 @@ namespace InteropApiTests
         [Description("Creates a table, two columns, and two indexes using JetCreateTableColumnIndex3 and Space Hints.")]
         public void JetCreateTableColumnIndexSpaceHints()
         {
-            var columncreates = new JET_COLUMNCREATE[]
+            var columncreates = new[]
             {
                 new JET_COLUMNCREATE()
                 {
                     szColumnName = "col1_short",
                     coltyp = JET_coltyp.Short,
                     cbMax = 2,
-                    pvDefault = BitConverter.GetBytes((short) 37),
+                    pvDefault = BitConverter.GetBytes((short)37),
                     cbDefault = 2,
                 },
                 new JET_COLUMNCREATE()

@@ -52,7 +52,7 @@ namespace InteropApiTests
                 pSeqSpacehints = null,
                 pLVSpacehints = null,
                 cbSeparateLV = 0x999,
-                tableid = (IntPtr) 456,
+                tableid = (IntPtr)456,
                 cCreated = 3,
             };
 
@@ -177,7 +177,7 @@ namespace InteropApiTests
         [Description("Check the conversion from JET_TABLECREATE to a NATIVE_TABLECREATE3 sets cbtyp.")]
         public void VerifyConversionToNativeSetsCbtyp()
         {
-            Assert.AreEqual(0x10 /*JET_cbtyp.AfterReplace*/, (int) this.native.cbtyp);
+            Assert.AreEqual(0x10 /*JET_cbtyp.AfterReplace*/, (int)this.native.cbtyp);
         }
 
         /// <summary>
@@ -222,7 +222,7 @@ namespace InteropApiTests
         [Description("Check the conversion from JET_TABLECREATE to a NATIVE_TABLECREATE3 sets tableid.")]
         public void VerifyConversionToNativeSetsTableid()
         {
-            Assert.AreEqual<IntPtr>((IntPtr) 456, this.native.tableid);
+            Assert.AreEqual<IntPtr>((IntPtr)456, this.native.tableid);
         }
 
         /// <summary>

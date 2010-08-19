@@ -498,7 +498,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             var native = new NATIVE_INDEXCREATE2();
             native.indexcreate1 = this.GetNativeIndexcreate1();
-            native.indexcreate1.indexcreate.cbStruct = checked((uint) Marshal.SizeOf(native));
+            native.indexcreate1.indexcreate.cbStruct = checked((uint)Marshal.SizeOf(native));
 
             // pSpaceHints conversion is done at pinvoke time.
             return native;

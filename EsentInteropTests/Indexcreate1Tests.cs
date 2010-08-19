@@ -96,7 +96,7 @@ namespace InteropApiTests
         [Description("Check the conversion from JET_INDEXCREATE to a NATIVE_INDEXCREATE1 sets the key length")]
         public void VerifyConversionToNativeSetsKeyLength()
         {
-            Assert.AreEqual((uint) 8, this.native.indexcreate.cbKey);
+            Assert.AreEqual((uint)8, this.native.indexcreate.cbKey);
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace InteropApiTests
         [Description("Check the conversion from JET_INDEXCREATE to a NATIVE_INDEXCREATE1 sets the grbit")]
         public void VerifyConversionToNativeSetsGrbit()
         {
-            Assert.IsTrue(0 != ((uint) CreateIndexGrbit.IndexSortNullsHigh & this.native.indexcreate.grbit));
+            Assert.IsTrue(0 != ((uint)CreateIndexGrbit.IndexSortNullsHigh & this.native.indexcreate.grbit));
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace InteropApiTests
         [Description("Check the conversion from JET_INDEXCREATE to a NATIVE_INDEXCREATE1 sets the density")]
         public void VerifyConversionToNativeSetsDensity()
         {
-            Assert.AreEqual((uint) 100, this.native.indexcreate.ulDensity);
+            Assert.AreEqual((uint)100, this.native.indexcreate.ulDensity);
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace InteropApiTests
         [Description("Check the conversion from JET_INDEXCREATE to a NATIVE_INDEXCREATE1 sets cConditionalColumn")]
         public void VerifyConversionToNativeSetsCConditionalColumn()
         {
-            Assert.AreEqual((uint) 0, this.native.indexcreate.cConditionalColumn);
+            Assert.AreEqual((uint)0, this.native.indexcreate.cConditionalColumn);
         }
 
         /// <summary>

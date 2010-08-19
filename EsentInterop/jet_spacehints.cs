@@ -220,7 +220,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>A deep copy of the object.</returns>
         public JET_SPACEHINTS DeepClone()
         {
-            JET_SPACEHINTS result = (JET_SPACEHINTS) this.MemberwiseClone();
+            JET_SPACEHINTS result = (JET_SPACEHINTS)this.MemberwiseClone();
 
             return result;
         }
@@ -246,7 +246,7 @@ namespace Microsoft.Isam.Esent.Interop
 
             native.ulInitialDensity = checked((uint)this.ulInitialDensity);
             native.cbInitial = checked((uint)this.cbInitial);
-            native.grbit = (uint) this.grbit;
+            native.grbit = (uint)this.grbit;
             native.ulMaintDensity = checked((uint)this.ulMaintDensity);
             native.ulGrowth = checked((uint)this.ulGrowth);
             native.cbMinExtent = checked((uint)this.cbMinExtent);
@@ -263,13 +263,13 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         internal void SetFromNativeSpaceHints(NATIVE_SPACEHINTS value)
         {
-            this.ulInitialDensity = checked((int) value.ulInitialDensity);
-            this.cbInitial = checked((int) value.cbInitial);
-            this.grbit = (SpaceHintsGrbit) value.grbit;
-            this.ulMaintDensity = checked((int) value.ulMaintDensity);
-            this.ulGrowth = checked((int) value.ulGrowth);
-            this.cbMinExtent = checked((int) value.cbMinExtent);
-            this.cbMaxExtent = checked((int) value.cbMaxExtent);
+            this.ulInitialDensity = checked((int)value.ulInitialDensity);
+            this.cbInitial = checked((int)value.cbInitial);
+            this.grbit = (SpaceHintsGrbit)value.grbit;
+            this.ulMaintDensity = checked((int)value.ulMaintDensity);
+            this.ulGrowth = checked((int)value.ulGrowth);
+            this.cbMinExtent = checked((int)value.cbMinExtent);
+            this.cbMaxExtent = checked((int)value.cbMaxExtent);
         }
     }
 }
