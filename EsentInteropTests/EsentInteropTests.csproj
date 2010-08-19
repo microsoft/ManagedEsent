@@ -60,6 +60,7 @@
     <Compile Include="ApiTests.cs" />
     <Compile Include="BasicDDLTests.cs" />
     <Compile Include="CallbackWrappersTests.cs" />
+    <Compile Include="ColumnCreateTests.cs" />
     <Compile Include="ColumnValueTests.cs" />
     <Compile Include="ComparableTests.cs" />
     <Compile Include="ConditionalIndexFixture.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="DbinfoMiscConversionTests.cs" />
     <Compile Include="EnumerableTests.cs" />
     <Compile Include="HowDoI.cs" />
+    <Compile Include="Indexcreate1Tests.cs" />
     <Compile Include="IndexInfoTests.cs" />
     <Compile Include="InstanceInfoConversionTests.cs" />
     <Compile Include="InstanceMiscInfoTests.cs" />
@@ -91,7 +93,9 @@
     <Compile Include="SetColumnValidationTests.cs" />
     <Compile Include="SetinfoTests.cs" />
     <Compile Include="SignatureTests.cs" />
+    <Compile Include="SpaceHintsTests.cs" />
     <Compile Include="StringCacheTests.cs" />
+    <Compile Include="TableCreate3Tests.cs" />
     <Compile Include="TempTableNavigationTests.cs" />
     <Compile Include="HelpersTempTableFixtureTests.cs" />
     <Compile Include="DatabaseFileTestHelper.cs" />

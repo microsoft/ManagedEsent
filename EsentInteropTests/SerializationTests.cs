@@ -173,6 +173,151 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify that a JET_COLUMNCREATE can be serialized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that a JET_COLUMNCREATE can be serialized")]
+        public void VerifyColumnCreateCanBeSerialized()
+        {
+            var expected = new JET_COLUMNCREATE
+            {
+                szColumnName = "col1_short",
+                coltyp = JET_coltyp.Short,
+                cbMax = 2,
+                pvDefault = BitConverter.GetBytes((short)37),
+                cbDefault = 2,
+            };
+            SerializeAndCompareContent(expected);
+        }
+
+        /// <summary>
+        /// Verify that a JET_SPACEHINTS can be serialized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that a JET_SPACEHINTS can be serialized")]
+        public void VerifySpaceHintsCanBeSerialized()
+        {
+            var expected = new JET_SPACEHINTS
+            {
+                ulInitialDensity = 33,
+                cbInitial = 4096,
+                grbit = SpaceHintsGrbit.CreateHintAppendSequential | SpaceHintsGrbit.RetrieveHintTableScanForward,
+                ulMaintDensity = 44,
+                ulGrowth = 144,
+                cbMinExtent = 1024 * 1024,
+                cbMaxExtent = 3 * 1024 * 1024,
+            };
+            SerializeAndCompareContent(expected);
+        }
+
+        /// <summary>
+        /// Verify that a JET_TABLECREATE can be serialized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that a JET_TABLECREATE can be serialized")]
+        public void VerifyTableCreateCanBeSerialized()
+        {
+            var columncreates = new JET_COLUMNCREATE[]
+            {
+                new JET_COLUMNCREATE()
+                {
+                    szColumnName = "col1_short",
+                    coltyp = JET_coltyp.Short,
+                    cbMax = 2,
+                    pvDefault = BitConverter.GetBytes((short) 37),
+                    cbDefault = 2,
+                },
+                new JET_COLUMNCREATE()
+                {
+                    szColumnName = "col2_longtext",
+                    coltyp = JET_coltyp.LongText,
+                    cp = JET_CP.Unicode,
+                },
+            };
+
+            const string Index1Name = "firstIndex";
+            const string Index1Description = "+col1_short\0-col2_longtext\0";
+
+            const string Index2Name = "secondIndex";
+            const string Index2Description = "+col2_longtext\0-col1_short\0";
+
+            var spacehintsIndex = new JET_SPACEHINTS()
+            {
+                ulInitialDensity = 33,
+                cbInitial = 4096,
+                grbit = SpaceHintsGrbit.CreateHintAppendSequential | SpaceHintsGrbit.RetrieveHintTableScanForward,
+                ulMaintDensity = 44,
+                ulGrowth = 144,
+                cbMinExtent = 1024 * 1024,
+                cbMaxExtent = 3 * 1024 * 1024,
+            };
+
+            var spacehintsSeq = new JET_SPACEHINTS()
+            {
+                ulInitialDensity = 33,
+                cbInitial = 4096,
+                grbit = SpaceHintsGrbit.CreateHintAppendSequential | SpaceHintsGrbit.RetrieveHintTableScanForward,
+                ulMaintDensity = 44,
+                ulGrowth = 144,
+                cbMinExtent = 1024 * 1024,
+                cbMaxExtent = 3 * 1024 * 1024,
+            };
+
+            var spacehintsLv = new JET_SPACEHINTS()
+            {
+                ulInitialDensity = 33,
+                cbInitial = 4096,
+                grbit = SpaceHintsGrbit.CreateHintAppendSequential | SpaceHintsGrbit.RetrieveHintTableScanForward,
+                ulMaintDensity = 44,
+                ulGrowth = 144,
+                cbMinExtent = 1024 * 1024,
+                cbMaxExtent = 3 * 1024 * 1024,
+            };
+
+            var indexcreates = new JET_INDEXCREATE[]
+            {
+                new JET_INDEXCREATE
+                {
+                    szIndexName = Index1Name,
+                    szKey = Index1Description,
+                    cbKey = Index1Description.Length + 1,
+                    grbit = CreateIndexGrbit.None,
+                    ulDensity = 99,
+                    pSpaceHints = spacehintsIndex,
+                },
+                new JET_INDEXCREATE
+                {
+                    szIndexName = Index2Name,
+                    szKey = Index2Description,
+                    cbKey = Index2Description.Length + 1,
+                    grbit = CreateIndexGrbit.None,
+                    ulDensity = 79,
+                },
+            };
+
+            var expected = new JET_TABLECREATE()
+            {
+                szTableName = "tableBigBang",
+                ulPages = 23,
+                ulDensity = 75,
+                cColumns = columncreates.Length,
+                rgcolumncreate = columncreates,
+                rgindexcreate = indexcreates,
+                cIndexes = indexcreates.Length,
+                cbSeparateLV = 100,
+                cbtyp = JET_cbtyp.Null,
+                grbit = CreateTableColumnIndexGrbit.None,
+                pSeqSpacehints = spacehintsSeq,
+                pLVSpacehints = spacehintsLv,
+            };
+
+            SerializeAndCompareContent(expected);
+        }
+
+        /// <summary>
         /// Verify that a JET_RECPOS can be serialized.
         /// </summary>
         [TestMethod]

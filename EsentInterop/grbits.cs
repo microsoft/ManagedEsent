@@ -1159,6 +1159,33 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Options for JetCreateTableColumnIndex.
+    /// </summary>
+    [Flags]
+    public enum CreateTableColumnIndexGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0x0,
+
+        /// <summary>
+        /// The DDL is fixed.
+        /// </summary>
+        FixedDdl = 0x1,
+
+        /// <summary>
+        /// The DDL is inheritable. Implies FixedDdl.
+        /// </summary>
+        TemplateTable = 0x2,
+
+        /// <summary>
+        /// Used in conjunction with TemplateTable.
+        /// </summary>
+        NoFixedVarColumnsInDerivedTables = 0x4,
+    }
+
+    /// <summary>
     /// Options for JetCreateIndex.
     /// </summary>
     [Flags]
@@ -1448,5 +1475,71 @@ namespace Microsoft.Isam.Esent.Interop
         /// Stops a defragmentation task.
         /// </summary>
         BatchStop = 0x2, 
+    }
+
+    /// <summary>
+    /// Options for <see cref="JET_SPACEHINTS"/>.
+    /// </summary>
+    [Flags]
+    public enum SpaceHintsGrbit
+    {
+        // Generic bits.
+
+        /// <summary>
+        /// This changes the internal allocation policy to get space hierarchically
+        /// from a B-Tree's immediate parent.
+        /// </summary>
+        SpaceHintUtilizeParentSpace = 0x00000001,
+
+        // Create bits.
+
+        /// <summary>
+        /// This bit will enable Append split behavior to grow according to the
+        /// growth dynamics of the table (set by cbMinExtent, ulGrowth, cbMaxExtent).
+        /// </summary>
+        CreateHintAppendSequential = 0x00000002,
+
+        /// <summary>
+        /// This bit will enable Hotpoint split behavior to grow according to the
+        /// growth dynamics of the table (set by cbMinExtent, ulGrowth, cbMaxExtent).
+        /// </summary>
+        CreateHintHotpointSequential = 0x00000004,
+
+        // Retrieve bits.
+
+        /// <summary>
+        /// Reserved and ignored.
+        /// </summary>
+        RetrieveHintReserve1 = 0x00000008,
+
+        /// <summary>
+        /// By setting this the client indicates that forward sequential scan is
+        /// the predominant usage pattern of this table.
+        /// </summary>
+        RetrieveHintTableScanForward = 0x00000010,
+
+        /// <summary>
+        /// By setting this the client indicates that backwards sequential scan
+        /// is the predominant usage pattern of this table.
+        /// </summary>
+        RetrieveHintTableScanBackward = 0x00000020,
+
+        /// <summary>
+        /// Reserved and ignored.
+        /// </summary>
+        RetrieveHintReserve2 = 0x00000040,
+
+        /// <summary>
+        /// Reserved and ignored.
+        /// </summary>
+        RetrieveHintReserve3 = 0x00000080,
+
+        // Delete bits.
+
+        /// <summary>
+        /// The application expects this table to be cleaned up in-order
+        /// sequentially (from lowest key to highest key).
+        /// </summary>
+        DeleteHintTableSequential = 0x00000100,
     }
 }

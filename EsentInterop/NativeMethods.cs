@@ -368,9 +368,15 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern int JetCreateIndex2(
             IntPtr sesid, IntPtr tableid, [In] NATIVE_INDEXCREATE[] pindexcreate, uint cIndexCreate);
 
-        // Introduced in Windows Vista, this versions takes the larger NATIVE_INDEXCREATE2 structure
+        // Introduced in Windows Vista, this version takes the larger NATIVE_INDEXCREATE1 structure.
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetCreateIndex2(
+            IntPtr sesid, IntPtr tableid, [In] NATIVE_INDEXCREATE1[] pindexcreate, uint cIndexCreate);
+
+        // Introduced in Windows 7, this version takes the larger NATIVE_INDEXCREATE2 structure, supporting
+        // space hints.
+        [DllImport(EsentDll, CharSet = CharSet.Ansi, ExactSpelling = true)]
+        public static extern int JetCreateIndex3A(
             IntPtr sesid, IntPtr tableid, [In] NATIVE_INDEXCREATE2[] pindexcreate, uint cIndexCreate);
 
         [DllImport(EsentDll, ExactSpelling = true)]
@@ -416,6 +422,15 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             uint grbit,
             out IntPtr ptableid,
             [Out] uint[] rgcolumnid);
+
+#if TODO
+        // Introduced in Windows Vista
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetCreateTableColumnIndex2(IntPtr sesid, uint dbid, ref NATIVE_TABLECREATE2 tablecreate3);
+#endif
+        // Introduced in Windows 7
+        [DllImport(EsentDll, CharSet = CharSet.Ansi, ExactSpelling = true)]
+        public static extern int JetCreateTableColumnIndex3A(IntPtr sesid, uint dbid, ref NATIVE_TABLECREATE3 tablecreate3);
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetGetTableColumnInfo(IntPtr sesid, IntPtr tableid, string szColumnName, ref NATIVE_COLUMNDEF columndef, uint cbMax, uint InfoLevel);

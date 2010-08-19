@@ -31,12 +31,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Name of the index.
         /// </summary>
-        public string szIndexName;
+        public IntPtr szIndexName;
 
         /// <summary>
         /// Index key description.
         /// </summary>
-        public string szKey;
+        public IntPtr szKey;
 
         /// <summary>
         /// Size of index key description.
@@ -82,14 +82,15 @@ namespace Microsoft.Isam.Esent.Interop
 
     /// <summary>
     /// The native version of the JET_INDEXCREATE structure. This version includes the cbKeyMost
-    /// member, which is only valid on Windows Vista and above.
+    /// member, which is only valid on Windows Vista and above, but the name of the structure
+    /// was not changed for Vista.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
-    internal struct NATIVE_INDEXCREATE2
+    internal struct NATIVE_INDEXCREATE1
     {
         /// <summary>
         /// Nested NATIVE_INDEXCREATE structure.
@@ -100,6 +101,28 @@ namespace Microsoft.Isam.Esent.Interop
         /// Maximum size of the key.
         /// </summary>
         public uint cbKeyMost;
+    }
+
+    /// <summary>
+    /// The native version of the JET_INDEXCREATE2 structure. Introduced in Windows 7,
+    /// this includes a <see cref="JET_SPACEHINTS"/> member.
+    /// </summary>
+    [StructLayout(LayoutKind.Sequential)]
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
+    internal struct NATIVE_INDEXCREATE2
+    {
+        /// <summary>
+        /// Nested NATIVE_INDEXCREATE1 structure.
+        /// </summary>
+        public NATIVE_INDEXCREATE1 indexcreate1;
+
+        /// <summary>
+        /// A <see cref="NATIVE_SPACEHINTS"/> pointer.
+        /// </summary>
+        public IntPtr pSpaceHints;
     }
 
     /// <summary>
@@ -166,6 +189,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// Maximum length of index keys.
         /// </summary>
         private int maximumKeyLength;
+
+        /// <summary>
+        /// Space allocation, maintenance, and usage hints.
+        /// </summary>
+        private JET_SPACEHINTS spaceHints;
 
         /// <summary>
         /// Gets or sets the error code from creating this index.
@@ -295,19 +323,32 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Gets or sets space allocation, maintenance, and usage hints.
+        /// </summary>
+        public JET_SPACEHINTS pSpaceHints
+        {
+            [DebuggerStepThrough]
+            get { return this.spaceHints; }
+            set { this.spaceHints = value; }
+        }
+
+        /// <summary>
         /// Returns a deep copy of the object.
         /// </summary>
         /// <returns>A deep copy of the object.</returns>
         public JET_INDEXCREATE DeepClone()
         {
             JET_INDEXCREATE result = (JET_INDEXCREATE)this.MemberwiseClone();
-            result.conditionalColumns = new JET_CONDITIONALCOLUMN[this.conditionalColumns.Length];
             result.pidxUnicode = (null == this.pidxUnicode) ? null : this.pidxUnicode.DeepClone();
-            for (int i = 0; i < this.conditionalColumns.Length; ++i)
+            if (this.conditionalColumns != null)
             {
-                result.conditionalColumns[i] = (null == this.conditionalColumns[i])
-                                                   ? null
-                                                   : this.conditionalColumns[i].DeepClone();
+                result.conditionalColumns = new JET_CONDITIONALCOLUMN[this.conditionalColumns.Length];
+                for (int i = 0; i < this.conditionalColumns.Length; ++i)
+                {
+                    result.conditionalColumns[i] = (null == this.conditionalColumns[i])
+                                                       ? null
+                                                       : this.conditionalColumns[i].DeepClone();
+                }
             }
 
             return result;
@@ -403,7 +444,8 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Gets the native (interop) version of this object.
+        /// Gets the native (interop) version of this object, except for
+        /// <see cref="szIndexName"/> and <see cref="szKey"/>.
         /// </summary>
         /// <returns>The native (interop) version of this object.</returns>
         internal NATIVE_INDEXCREATE GetNativeIndexcreate()
@@ -412,8 +454,11 @@ namespace Microsoft.Isam.Esent.Interop
 
             var native = new NATIVE_INDEXCREATE();
             native.cbStruct = checked((uint)Marshal.SizeOf(native));
-            native.szIndexName = this.szIndexName;
-            native.szKey = this.szKey;
+
+            // szIndexName and szKey are converted at pinvoke time.
+            //
+            // native.szIndexName = this.szIndexName;
+            // native.szKey = this.szKey;
             native.cbKey = checked((uint)this.cbKey);
             native.grbit = unchecked((uint)this.grbit);
             native.ulDensity = checked((uint)this.ulDensity);
@@ -425,12 +470,13 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Gets the native (interop) version of this object.
+        /// Gets the native (interop) version of this object, except for
+        /// <see cref="szIndexName"/> and <see cref="szKey"/>.
         /// </summary>
         /// <returns>The native (interop) version of this object.</returns>
-        internal NATIVE_INDEXCREATE2 GetNativeIndexcreate2()
+        internal NATIVE_INDEXCREATE1 GetNativeIndexcreate1()
         {
-            var native = new NATIVE_INDEXCREATE2();
+            var native = new NATIVE_INDEXCREATE1();
             native.indexcreate = this.GetNativeIndexcreate();
             native.indexcreate.cbStruct = checked((uint)Marshal.SizeOf(native));
             if (0 != this.cbKeyMost)
@@ -439,6 +485,22 @@ namespace Microsoft.Isam.Esent.Interop
                 native.indexcreate.grbit |= unchecked((uint)VistaGrbits.IndexKeyMost);
             }
 
+            return native;
+        }
+
+        /// <summary>
+        /// Gets the native (interop) version of this object. The following members
+        /// are not converted:
+        /// <see cref="szIndexName"/>, <see cref="szKey"/>, <see cref="pSpaceHints"/>.
+        /// </summary>
+        /// <returns>The native (interop) version of this object.</returns>
+        internal NATIVE_INDEXCREATE2 GetNativeIndexcreate2()
+        {
+            var native = new NATIVE_INDEXCREATE2();
+            native.indexcreate1 = this.GetNativeIndexcreate1();
+            native.indexcreate1.indexcreate.cbStruct = checked((uint) Marshal.SizeOf(native));
+
+            // pSpaceHints conversion is done at pinvoke time.
             return native;
         }
 

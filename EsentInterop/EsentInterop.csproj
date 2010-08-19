@@ -65,6 +65,7 @@
     <Compile Include="INullableJetStruct.cs" />
     <Compile Include="jet_bkinfo.cs" />
     <Compile Include="jet_bklogtime.cs" />
+    <Compile Include="jet_columncreate.cs" />
     <Compile Include="jet_dbinfo.cs" />
     <Compile Include="jet_dbinfomisc.cs" />
     <Compile Include="jet_dbstate.cs" />
@@ -88,6 +89,8 @@
     <Compile Include="jet_instance_info.cs" />
     <Compile Include="jet_logtime.cs" />
     <Compile Include="jet_recsize.cs" />
+    <Compile Include="jet_spacehints.cs" />
+    <Compile Include="jet_tablecreate.cs" />
     <Compile Include="jet_tblinfo.cs" />
     <Compile Include="objectinfogrbit.cs" />
     <Compile Include="ObsoleteApi.cs" />

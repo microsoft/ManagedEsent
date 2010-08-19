@@ -343,6 +343,7 @@ namespace InteropApiTests
 
             const string IndexName = "another_index";
             const string IndexDescription = "-TestColumn\0\0";
+
             var indexcreate = new JET_INDEXCREATE
             {
                 szIndexName = IndexName,
@@ -350,6 +351,45 @@ namespace InteropApiTests
                 cbKey = IndexDescription.Length,
                 grbit = CreateIndexGrbit.IndexIgnoreAnyNull,
                 ulDensity = 100,
+            };
+            Api.JetCreateIndex2(this.sesid, this.tableid, new[] { indexcreate }, 1);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Api.JetSetCurrentIndex(this.sesid, this.tableid, IndexName);
+        }
+
+        /// <summary>
+        /// Creates an index with JetCreateIndex2 and space hints.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Creates an index with JetCreateIndex2 and space hints.")]
+        public void JetCreateIndex2SpaceHints()
+        {
+            Api.JetBeginTransaction(this.sesid);
+
+            const string IndexName = "another_index";
+            const string IndexDescription = "-TestColumn\0\0";
+
+            var spacehintsIndex = new JET_SPACEHINTS()
+            {
+                ulInitialDensity = 33,
+                cbInitial = 4096,
+                grbit = SpaceHintsGrbit.CreateHintAppendSequential | SpaceHintsGrbit.RetrieveHintTableScanForward,
+                ulMaintDensity = 44,
+                ulGrowth = 144,
+                cbMinExtent = 1024 * 1024,
+                cbMaxExtent = 3 * 1024 * 1024,
+            };
+
+            var indexcreate = new JET_INDEXCREATE
+            {
+                szIndexName = IndexName,
+                szKey = IndexDescription,
+                cbKey = IndexDescription.Length,
+                grbit = CreateIndexGrbit.IndexIgnoreAnyNull,
+                ulDensity = 100,
+                pSpaceHints = spacehintsIndex,
             };
             Api.JetCreateIndex2(this.sesid, this.tableid, new[] { indexcreate }, 1);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
@@ -412,6 +452,320 @@ namespace InteropApiTests
             Api.JetSetCurrentIndex(this.sesid, tableToIndex, Index2Name);
             Api.JetSetCurrentIndex(this.sesid, tableToIndex, null);
             Api.JetCloseTable(this.sesid, tableToIndex);
+        }
+
+        /// <summary>
+        /// Creates a table, two columns, and two indexes using JetCreateTableColumnIndex3.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Creates a table, two columns, and two indexes using JetCreateTableColumnIndex3")]
+        public void JetCreateTableColumnIndex()
+        {
+            var columncreates = new JET_COLUMNCREATE[]
+            {
+                new JET_COLUMNCREATE()
+                {
+                    szColumnName = "col1_short",
+                    coltyp = JET_coltyp.Short,
+                    cbMax = 2,
+                },
+                new JET_COLUMNCREATE()
+                {
+                    szColumnName = "col2_longtext",
+                    coltyp = JET_coltyp.LongText,
+                    cp = JET_CP.Unicode,
+                },
+            };
+
+            const string Index1Name = "firstIndex";
+            const string Index1Description = "+col1_short\0-col2_longtext\0";
+
+            const string Index2Name = "secondIndex";
+            const string Index2Description = "+col2_longtext\0-col1_short\0";
+
+            var indexcreates = new JET_INDEXCREATE[]
+            {
+                  new JET_INDEXCREATE
+                {
+                    szIndexName = Index1Name,
+                    szKey = Index1Description,
+                    cbKey = Index1Description.Length + 1,
+                    grbit = CreateIndexGrbit.None,
+                    ulDensity = 99,
+                },
+                new JET_INDEXCREATE
+                {
+                    szIndexName = Index2Name,
+                    szKey = Index2Description,
+                    cbKey = Index2Description.Length + 1,
+                    grbit = CreateIndexGrbit.None,
+                    ulDensity = 79,
+                },
+            };
+
+            var tablecreate = new JET_TABLECREATE()
+            {
+                szTableName = "tableBigBang",
+                ulPages = 23,
+                ulDensity = 75,
+                cColumns = columncreates.Length,
+                rgcolumncreate = columncreates,
+                rgindexcreate = indexcreates,
+                cIndexes = indexcreates.Length,
+                cbSeparateLV = 100,
+                cbtyp = JET_cbtyp.Null,
+                grbit = CreateTableColumnIndexGrbit.None,
+            };
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetCreateTableColumnIndex3(this.sesid, this.dbid, tablecreate);
+
+            var tableCreated = new JET_TABLEID()
+            {
+                Value = tablecreate.tableid
+            };
+
+            Assert.AreNotEqual<JET_TABLEID>(JET_TABLEID.Nil, tableCreated);
+
+            // 1 table, 2 columns, 2 indices = 5 objects.
+            Assert.AreEqual<int>(tablecreate.cCreated, 5);
+
+            Assert.AreNotEqual(tablecreate.rgcolumncreate[0].columnid, JET_COLUMNID.Nil);
+            Assert.AreNotEqual(tablecreate.rgcolumncreate[1].columnid, JET_COLUMNID.Nil);
+
+            Api.JetCloseTable(this.sesid, tableCreated);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+        }
+
+        /// <summary>
+        /// Creates a template table, two columns, and two indexes using JetCreateTableColumnIndex3.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Creates a template table, two columns, and two indexes using JetCreateTableColumnIndex3")]
+        public void JetCreateTemplateTableColumnIndex()
+        {
+            var columncreates = new JET_COLUMNCREATE[]
+            {
+                new JET_COLUMNCREATE()
+                {
+                    szColumnName = "col1_short",
+                    coltyp = JET_coltyp.Short,
+                    cbMax = 2,
+                },
+                new JET_COLUMNCREATE()
+                {
+                    szColumnName = "col2_longtext",
+                    coltyp = JET_coltyp.LongText,
+                    cp = JET_CP.Unicode,
+                },
+            };
+
+            const string Index1Name = "firstIndex";
+            const string Index1Description = "+col1_short\0-col2_longtext\0";
+
+            const string Index2Name = "secondIndex";
+            const string Index2Description = "+col2_longtext\0-col1_short\0";
+
+            var indexcreates = new JET_INDEXCREATE[]
+            {
+                  new JET_INDEXCREATE
+                {
+                    szIndexName = Index1Name,
+                    szKey = Index1Description,
+                    cbKey = Index1Description.Length + 1,
+                    grbit = CreateIndexGrbit.None,
+                    ulDensity = 99,
+                },
+                new JET_INDEXCREATE
+                {
+                    szIndexName = Index2Name,
+                    szKey = Index2Description,
+                    cbKey = Index2Description.Length + 1,
+                    grbit = CreateIndexGrbit.None,
+                    ulDensity = 79,
+                },
+            };
+
+            var tablecreateTemplate = new JET_TABLECREATE()
+            {
+                szTableName = "tableOld",
+                ulPages = 23,
+                ulDensity = 75,
+                cColumns = columncreates.Length,
+                rgcolumncreate = columncreates,
+                rgindexcreate = indexcreates,
+                cIndexes = indexcreates.Length,
+                cbSeparateLV = 100,
+                cbtyp = JET_cbtyp.Null,
+                grbit = CreateTableColumnIndexGrbit.TemplateTable,
+            };
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetCreateTableColumnIndex3(this.sesid, this.dbid, tablecreateTemplate);
+
+            var tableCreated = new JET_TABLEID()
+            {
+                Value = tablecreateTemplate.tableid
+            };
+
+            Assert.AreNotEqual<JET_TABLEID>(JET_TABLEID.Nil, tableCreated);
+
+            // 1 table, 2 columns, 2 indices = 5 objects.
+            Assert.AreEqual<int>(tablecreateTemplate.cCreated, 5);
+
+            Assert.AreNotEqual(tablecreateTemplate.rgcolumncreate[0].columnid, JET_COLUMNID.Nil);
+            Assert.AreNotEqual(tablecreateTemplate.rgcolumncreate[1].columnid, JET_COLUMNID.Nil);
+
+            var tablecreateChild = new JET_TABLECREATE()
+            {
+                szTableName = "tableNew",
+                szTemplateTableName = "tableOld",
+                ulPages = 23,
+                ulDensity = 75,
+                rgcolumncreate = null,
+                cColumns = 0,
+                rgindexcreate = null,
+                cIndexes = 0,
+                cbSeparateLV = 100,
+                cbtyp = JET_cbtyp.Null,
+                grbit = CreateTableColumnIndexGrbit.None,
+            };
+
+            Api.JetCreateTableColumnIndex3(this.sesid, this.dbid, tablecreateChild);
+
+            var tableidChild = new JET_TABLEID()
+            {
+                Value = tablecreateTemplate.tableid
+            };
+
+            Assert.AreNotEqual<JET_TABLEID>(JET_TABLEID.Nil, tableidChild);
+
+            // 1 table = 1 object
+            Assert.AreEqual<int>(tablecreateChild.cCreated, 1);
+
+            Api.JetCloseTable(this.sesid, tableCreated);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+        }
+
+        /// <summary>
+        /// Creates a table, two columns, and two indexes using JetCreateTableColumnIndex3 and Space Hints.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Creates a table, two columns, and two indexes using JetCreateTableColumnIndex3 and Space Hints.")]
+        public void JetCreateTableColumnIndexSpaceHints()
+        {
+            var columncreates = new JET_COLUMNCREATE[]
+            {
+                new JET_COLUMNCREATE()
+                {
+                    szColumnName = "col1_short",
+                    coltyp = JET_coltyp.Short,
+                    cbMax = 2,
+                    pvDefault = BitConverter.GetBytes((short) 37),
+                    cbDefault = 2,
+                },
+                new JET_COLUMNCREATE()
+                {
+                    szColumnName = "col2_longtext",
+                    coltyp = JET_coltyp.LongText,
+                    cp = JET_CP.Unicode,
+                },
+            };
+
+            const string Index1Name = "firstIndex";
+            const string Index1Description = "+col1_short\0-col2_longtext\0";
+
+            const string Index2Name = "secondIndex";
+            const string Index2Description = "+col2_longtext\0-col1_short\0";
+
+            var spacehintsIndex = new JET_SPACEHINTS()
+            {
+                ulInitialDensity = 33,
+                cbInitial = 4096,
+                grbit = SpaceHintsGrbit.CreateHintAppendSequential | SpaceHintsGrbit.RetrieveHintTableScanForward,
+                ulMaintDensity = 44,
+                ulGrowth = 144,
+                cbMinExtent = 1024 * 1024,
+                cbMaxExtent = 3 * 1024 * 1024,
+            };
+
+            var spacehintsSeq = new JET_SPACEHINTS()
+            {
+                ulInitialDensity = 33,
+                cbInitial = 4096,
+                grbit = SpaceHintsGrbit.CreateHintAppendSequential | SpaceHintsGrbit.RetrieveHintTableScanForward,
+                ulMaintDensity = 44,
+                ulGrowth = 144,
+                cbMinExtent = 1024 * 1024,
+                cbMaxExtent = 3 * 1024 * 1024,
+            };
+
+            var spacehintsLv = new JET_SPACEHINTS()
+            {
+                ulInitialDensity = 33,
+                cbInitial = 4096,
+                grbit = SpaceHintsGrbit.CreateHintAppendSequential | SpaceHintsGrbit.RetrieveHintTableScanForward,
+                ulMaintDensity = 44,
+                ulGrowth = 144,
+                cbMinExtent = 1024 * 1024,
+                cbMaxExtent = 3 * 1024 * 1024,
+            };
+
+            var indexcreates = new JET_INDEXCREATE[]
+            {
+                new JET_INDEXCREATE
+                {
+                    szIndexName = Index1Name,
+                    szKey = Index1Description,
+                    cbKey = Index1Description.Length + 1,
+                    grbit = CreateIndexGrbit.None,
+                    ulDensity = 99,
+                    pSpaceHints = spacehintsIndex,
+                },
+                new JET_INDEXCREATE
+                {
+                    szIndexName = Index2Name,
+                    szKey = Index2Description,
+                    cbKey = Index2Description.Length + 1,
+                    grbit = CreateIndexGrbit.None,
+                    ulDensity = 79,
+                },
+            };
+
+            var tablecreate = new JET_TABLECREATE()
+            {
+                szTableName = "tableBigBang",
+                ulPages = 23,
+                ulDensity = 75,
+                cColumns = columncreates.Length,
+                rgcolumncreate = columncreates,
+                rgindexcreate = indexcreates,
+                cIndexes = indexcreates.Length,
+                cbSeparateLV = 100,
+                cbtyp = JET_cbtyp.Null,
+                grbit = CreateTableColumnIndexGrbit.None,
+                pSeqSpacehints = spacehintsSeq,
+                pLVSpacehints = spacehintsLv,
+            };
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetCreateTableColumnIndex3(this.sesid, this.dbid, tablecreate);
+
+            var tableCreated = new JET_TABLEID()
+            {
+                Value = tablecreate.tableid
+            };
+
+            Assert.AreNotEqual<JET_TABLEID>(JET_TABLEID.Nil, tableCreated);
+
+            // 1 table, 2 columns, 2 indices = 5 objects.
+            Assert.AreEqual<int>(tablecreate.cCreated, 5);
+
+            Api.JetCloseTable(this.sesid, tableCreated);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
         }
 
         /// <summary>

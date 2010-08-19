@@ -261,6 +261,40 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test JET_COLUMNCREATE.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_COLUMNCREATE.ToString()")]
+        public void JetColumnCreateToString()
+        {
+            var columncreate = new JET_COLUMNCREATE
+            {
+                szColumnName = "ImaginativeColumnName",
+                coltyp = JET_coltyp.Text,
+                grbit = ColumndefGrbit.ColumnFixed
+            };
+            Assert.AreEqual("JET_COLUMNCREATE(ImaginativeColumnName,Text,ColumnFixed)", columncreate.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_TABLECREATE.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_TABLECREATE.ToString()")]
+        public void JetTableCreateToString()
+        {
+            var tablecreate = new JET_TABLECREATE
+            {
+                szTableName = "BoringTableName",
+                cColumns = 33,
+                cIndexes = 71,
+            };
+            Assert.AreEqual("JET_TABLECREATE(BoringTableName:33 columns:71 indices)", tablecreate.ToString());
+        }
+
+        /// <summary>
         /// Test JET_COLUMNDEF.ToString().
         /// </summary>
         [TestMethod]

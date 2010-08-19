@@ -25,6 +25,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the arrays are equal, false otherwise.</returns>
         public static bool ArrayEqual(IList<byte> a, IList<byte> b, int offset, int count)
         {
+            if (a == null && b == null)
+            {
+                return true;
+            }
+
             for (int i = 0; i < count; ++i)
             {
                 if (a[offset + i] != b[offset + i])
@@ -70,6 +75,77 @@ namespace Microsoft.Isam.Esent.Interop
             }
 
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Compares two objects with ContentEquals.
+        /// If both are null, there are considered equal.
+        /// </summary>
+        /// <typeparam name="T">A type that implements IContentEquatable.</typeparam>
+        /// <param name="left">First object to compare.</param>
+        /// <param name="right">Second object to compare.</param>
+        /// <returns>Whether the two objects are equal.</returns>
+        public static bool ObjectContentEquals<T>(
+            T left,
+            T right)
+            where T : IContentEquatable<T>
+        {
+            if (null == left)
+            {
+                if (null == right)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            return left.ContentEquals(right);
+        }
+
+        /// <summary>
+        /// Compares two objects with ContentEquals.
+        /// If both are null, there are considered equal.
+        /// </summary>
+        /// <typeparam name="T">A type that implements IContentEquatable.</typeparam>
+        /// <param name="left">First object to compare.</param>
+        /// <param name="right">Second object to compare.</param>
+        /// <returns>Whether the two objects are equal.</returns>
+        public static bool ArrayObjectContentEquals<T>(
+            T[] left,
+            T[] right)
+            where T : IContentEquatable<T>
+        {
+            if (null == left)
+            {
+                if (null == right)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            else if (right == null)
+            {
+                return false;
+            }
+
+            if (left.Length != right.Length)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < left.Length; ++i)
+            {
+                if (!ObjectContentEquals(left[i], right[i]))
+                {
+                    return false;
+                }
+            }
+
+            // All the individual members are equal, all of the elements of the arrays are
+            // equal, so they must be equal!
+            return true;
         }
     }
 }

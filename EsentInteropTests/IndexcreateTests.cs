@@ -70,7 +70,8 @@ namespace InteropApiTests
         [Description("Check the conversion from JET_INDEXCREATE to a NATIVE_INDEXCREATE sets the index name")]
         public void VerifyConversionToNativeSetsName()
         {
-            Assert.AreEqual("index", this.native.szIndexName);
+            // Done at pinvoke time.
+            Assert.AreEqual(IntPtr.Zero, this.native.szIndexName);
         }
 
         /// <summary>
@@ -81,7 +82,8 @@ namespace InteropApiTests
         [Description("Check the conversion from JET_INDEXCREATE to a NATIVE_INDEXCREATE sets the index key")]
         public void VerifyConversionToNativeSetsKey()
         {
-            Assert.AreEqual("+foo\0-bar\0\0", this.native.szKey);
+            // Done at pinvoke time.
+            Assert.AreEqual(IntPtr.Zero, this.native.szKey);
         }
 
         /// <summary>

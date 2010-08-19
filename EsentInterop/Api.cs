@@ -1205,6 +1205,20 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Creates a table, adds columns, and indices on that table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database to which to add the new table.</param>
+        /// <param name="tablecreate">Object describing the table to create.</param>
+        public static void JetCreateTableColumnIndex3(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            JET_TABLECREATE tablecreate)
+        {
+            Api.Check(Impl.JetCreateTableColumnIndex3(sesid, dbid, tablecreate));
+        }
+
+        /// <summary>
         /// Retrieves information about a table column.
         /// </summary>
         /// <param name="sesid">The session to use.</param>

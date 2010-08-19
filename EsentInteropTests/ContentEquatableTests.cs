@@ -195,11 +195,12 @@ namespace InteropApiTests
 
             // Now make them all different
             int j = 1;
+            indexcreates[j].rgconditionalcolumn = null; // When rgconditionalcolumn is null, cConditionalColumn must be 0.
+            indexcreates[j++].cConditionalColumn = 0;
             indexcreates[j++].cbKey--;
             indexcreates[j++].cbKeyMost--;
             indexcreates[j++].cbVarSegMac--;
             indexcreates[j++].cConditionalColumn--;
-            indexcreates[j++].cConditionalColumn = 0;
             indexcreates[j++].err = JET_err.VersionStoreOutOfMemory;
             indexcreates[j++].grbit = CreateIndexGrbit.IndexUnique;
             indexcreates[j++].pidxUnicode = new JET_UNICODEINDEX { dwMapFlags = 0x2, lcid = 100 };
@@ -455,6 +456,514 @@ namespace InteropApiTests
                 new JET_SETINFO { ibLongValue = 9, itagSequence = 2 },
             };
             VerifyAll(setinfos);
+        }
+
+        /// <summary>
+        /// Check that JET_COLUMNCREATE structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_COLUMNCREATE structures can be compared for equality")]
+        public void VerifyJetColumncreateEquality()
+        {
+            var x = new JET_COLUMNCREATE()
+            {
+                szColumnName = "column9",
+                coltyp = JET_coltyp.Binary,
+                cbMax = 0x42,
+                grbit = ColumndefGrbit.ColumnAutoincrement,
+                pvDefault = BitConverter.GetBytes(253),
+                cbDefault = 4,
+                cp = JET_CP.Unicode,
+                columnid = new JET_COLUMNID
+                {
+                    Value = 7
+                },
+                err = JET_err.RecoveredWithoutUndo,
+            };
+
+            var y = new JET_COLUMNCREATE()
+            {
+                szColumnName = "column9",
+                coltyp = JET_coltyp.Binary,
+                cbMax = 0x42,
+                grbit = ColumndefGrbit.ColumnAutoincrement,
+                pvDefault = BitConverter.GetBytes(253),
+                cbDefault = 4,
+                cp = JET_CP.Unicode,
+                columnid = new JET_COLUMNID
+                {
+                    Value = 7
+                },
+                err = JET_err.RecoveredWithoutUndo,
+            };
+
+            TestContentEquals(x, y);
+        }
+
+        /// <summary>
+        /// Check that JET_COLUMNCREATE structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_COLUMNCREATE structures can be compared for inequality")]
+        public void VerifyJetColumncreateInequality()
+        {
+            var columncreates = new JET_COLUMNCREATE[9];
+            for (int i = 0; i < columncreates.Length; ++i)
+            {
+                columncreates[i] = new JET_COLUMNCREATE()
+                {
+                    szColumnName = "column9",
+                    coltyp = JET_coltyp.Binary,
+                    cbMax = 0x42,
+                    grbit = ColumndefGrbit.ColumnAutoincrement,
+                    pvDefault = BitConverter.GetBytes(253),
+                    cbDefault = 4,
+                    cp = JET_CP.Unicode,
+                    columnid = new JET_COLUMNID
+                    {
+                        Value = 7
+                    },
+                    err = JET_err.RecoveredWithoutUndo,
+                };
+            }
+
+            int j = 1;
+            columncreates[j++].szColumnName = "different";
+            columncreates[j++].coltyp = JET_coltyp.LongBinary;
+            columncreates[j++].grbit = ColumndefGrbit.ColumnEscrowUpdate;
+            columncreates[j++].pvDefault = BitConverter.GetBytes(254);
+            columncreates[j++].cbDefault--;
+            columncreates[j++].cp = JET_CP.ASCII;
+            columncreates[j++].columnid = new JET_COLUMNID
+            {
+                Value = 8
+            };
+            columncreates[j++].err = JET_err.UnicodeNormalizationNotSupported;
+            Debug.Assert(j == columncreates.Length, "Didn't fill in all entries of setcolumns");
+            VerifyAll(columncreates);
+        }
+
+        /// <summary>
+        /// Check that JET_TABLECREATE structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_TABLECREATE structures can be compared for equality")]
+        public void VerifyJetTablecreateEquality()
+        {
+            var columncreatesX = new JET_COLUMNCREATE[]
+            {
+                new JET_COLUMNCREATE()
+                {
+                    szColumnName = "col1_short",
+                    coltyp = JET_coltyp.Short,
+                    cbMax = 2,
+                },
+                new JET_COLUMNCREATE()
+                {
+                    szColumnName = "col2_longtext",
+                    coltyp = JET_coltyp.LongText,
+                    cp = JET_CP.Unicode,
+                },
+            };
+
+            const string Index1NameX = "firstIndex";
+            const string Index1DescriptionX = "+col1_short\0-col2_longtext\0";
+
+            const string Index2NameX = "secondIndex";
+            const string Index2DescriptionX = "+col2_longtext\0-col1_short\0";
+
+            var spacehintsIndexX = new JET_SPACEHINTS()
+            {
+                ulInitialDensity = 33,
+                cbInitial = 4096,
+                grbit = SpaceHintsGrbit.CreateHintAppendSequential | SpaceHintsGrbit.RetrieveHintTableScanForward,
+                ulMaintDensity = 44,
+                ulGrowth = 144,
+                cbMinExtent = 1024 * 1024,
+                cbMaxExtent = 3 * 1024 * 1024,
+            };
+
+            var spacehintsSeqX = new JET_SPACEHINTS()
+            {
+                ulInitialDensity = 33,
+                cbInitial = 4096,
+                grbit = SpaceHintsGrbit.CreateHintAppendSequential | SpaceHintsGrbit.RetrieveHintTableScanForward,
+                ulMaintDensity = 44,
+                ulGrowth = 144,
+                cbMinExtent = 1024 * 1024,
+                cbMaxExtent = 3 * 1024 * 1024,
+            };
+
+            var spacehintsLvX = new JET_SPACEHINTS()
+            {
+                ulInitialDensity = 33,
+                cbInitial = 4096,
+                grbit = SpaceHintsGrbit.CreateHintAppendSequential | SpaceHintsGrbit.RetrieveHintTableScanForward,
+                ulMaintDensity = 44,
+                ulGrowth = 144,
+                cbMinExtent = 1024 * 1024,
+                cbMaxExtent = 3 * 1024 * 1024,
+            };
+
+            var indexcreatesX = new JET_INDEXCREATE[]
+            {
+                new JET_INDEXCREATE
+                {
+                    szIndexName = Index1NameX,
+                    szKey = Index1DescriptionX,
+                    cbKey = Index1DescriptionX.Length + 1,
+                    grbit = CreateIndexGrbit.None,
+                    ulDensity = 99,
+                    pSpaceHints = spacehintsIndexX,
+                },
+                new JET_INDEXCREATE
+                {
+                    szIndexName = Index2NameX,
+                    szKey = Index2DescriptionX,
+                    cbKey = Index2DescriptionX.Length + 1,
+                    grbit = CreateIndexGrbit.None,
+                    ulDensity = 79,
+                },
+            };
+
+            var tablecreateX = new JET_TABLECREATE()
+            {
+                szTableName = "tableBigBang",
+                ulPages = 23,
+                ulDensity = 75,
+                cColumns = columncreatesX.Length,
+                rgcolumncreate = columncreatesX,
+                rgindexcreate = indexcreatesX,
+                cIndexes = indexcreatesX.Length,
+                cbSeparateLV = 100,
+                cbtyp = JET_cbtyp.Null,
+                grbit = CreateTableColumnIndexGrbit.NoFixedVarColumnsInDerivedTables,
+                pSeqSpacehints = spacehintsSeqX,
+                pLVSpacehints = spacehintsLvX,
+                tableid = new IntPtr(2),
+                cCreated = 7,
+            };
+
+            var columncreatesY = new JET_COLUMNCREATE[]
+            {
+                new JET_COLUMNCREATE()
+                {
+                    szColumnName = "col1_short",
+                    coltyp = JET_coltyp.Short,
+                    cbMax = 2,
+                },
+                new JET_COLUMNCREATE()
+                {
+                    szColumnName = "col2_longtext",
+                    coltyp = JET_coltyp.LongText,
+                    cp = JET_CP.Unicode,
+                },
+            };
+
+            const string Index1NameY = "firstIndex";
+            const string Index1DescriptionY = "+col1_short\0-col2_longtext\0";
+
+            const string Index2NameY = "secondIndex";
+            const string Index2DescriptionY = "+col2_longtext\0-col1_short\0";
+
+            var spacehintsIndexY = new JET_SPACEHINTS()
+            {
+                ulInitialDensity = 33,
+                cbInitial = 4096,
+                grbit = SpaceHintsGrbit.CreateHintAppendSequential | SpaceHintsGrbit.RetrieveHintTableScanForward,
+                ulMaintDensity = 44,
+                ulGrowth = 144,
+                cbMinExtent = 1024 * 1024,
+                cbMaxExtent = 3 * 1024 * 1024,
+            };
+
+            var spacehintsSeqY = new JET_SPACEHINTS()
+            {
+                ulInitialDensity = 33,
+                cbInitial = 4096,
+                grbit = SpaceHintsGrbit.CreateHintAppendSequential | SpaceHintsGrbit.RetrieveHintTableScanForward,
+                ulMaintDensity = 44,
+                ulGrowth = 144,
+                cbMinExtent = 1024 * 1024,
+                cbMaxExtent = 3 * 1024 * 1024,
+            };
+
+            var spacehintsLvY = new JET_SPACEHINTS()
+            {
+                ulInitialDensity = 33,
+                cbInitial = 4096,
+                grbit = SpaceHintsGrbit.CreateHintAppendSequential | SpaceHintsGrbit.RetrieveHintTableScanForward,
+                ulMaintDensity = 44,
+                ulGrowth = 144,
+                cbMinExtent = 1024 * 1024,
+                cbMaxExtent = 3 * 1024 * 1024,
+            };
+
+            var indexcreatesY = new JET_INDEXCREATE[]
+            {
+                new JET_INDEXCREATE
+                {
+                    szIndexName = Index1NameY,
+                    szKey = Index1DescriptionY,
+                    cbKey = Index1DescriptionY.Length + 1,
+                    grbit = CreateIndexGrbit.None,
+                    ulDensity = 99,
+                    pSpaceHints = spacehintsIndexY,
+                },
+                new JET_INDEXCREATE
+                {
+                    szIndexName = Index2NameY,
+                    szKey = Index2DescriptionY,
+                    cbKey = Index2DescriptionY.Length + 1,
+                    grbit = CreateIndexGrbit.None,
+                    ulDensity = 79,
+                },
+            };
+
+            var tablecreateY = new JET_TABLECREATE()
+            {
+                szTableName = "tableBigBang",
+                ulPages = 23,
+                ulDensity = 75,
+                cColumns = columncreatesY.Length,
+                rgcolumncreate = columncreatesY,
+                rgindexcreate = indexcreatesY,
+                cIndexes = indexcreatesY.Length,
+                cbSeparateLV = 100,
+                cbtyp = JET_cbtyp.Null,
+                grbit = CreateTableColumnIndexGrbit.NoFixedVarColumnsInDerivedTables,
+                pSeqSpacehints = spacehintsSeqY,
+                pLVSpacehints = spacehintsLvY,
+                tableid = new IntPtr(2),
+                cCreated = 7,
+            };
+
+            TestContentEquals(tablecreateX, tablecreateY);
+        }
+
+        /// <summary>
+        /// Check that JET_TABLECREATE structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_TABLECREATE structures can be compared for inequality")]
+        public void VerifyJetTablecreateInequality()
+        {
+            var columncreates = new JET_COLUMNCREATE[]
+            {
+                new JET_COLUMNCREATE()
+                {
+                    szColumnName = "col1_short",
+                    coltyp = JET_coltyp.Short,
+                    cbMax = 2,
+                },
+                new JET_COLUMNCREATE()
+                {
+                    szColumnName = "col2_longtext",
+                    coltyp = JET_coltyp.LongText,
+                    cp = JET_CP.Unicode,
+                },
+            };
+
+            const string Index1Name = "firstIndex";
+            const string Index1Description = "+col1_short\0-col2_longtext\0";
+
+            const string Index2Name = "secondIndex";
+            const string Index2Description = "+col2_longtext\0-col1_short\0";
+
+            var spacehintsIndex = new JET_SPACEHINTS()
+            {
+                ulInitialDensity = 33,
+                cbInitial = 4096,
+                grbit = SpaceHintsGrbit.CreateHintHotpointSequential | SpaceHintsGrbit.RetrieveHintTableScanForward,
+                ulMaintDensity = 44,
+                ulGrowth = 144,
+                cbMinExtent = 1024 * 1024,
+                cbMaxExtent = 3 * 1024 * 1024,
+            };
+
+            var spacehintsSeq = new JET_SPACEHINTS()
+            {
+                ulInitialDensity = 33,
+                cbInitial = 4096,
+                grbit = SpaceHintsGrbit.CreateHintAppendSequential | SpaceHintsGrbit.RetrieveHintTableScanForward,
+                ulMaintDensity = 44,
+                ulGrowth = 144,
+                cbMinExtent = 1024 * 1024,
+                cbMaxExtent = 3 * 1024 * 1024,
+            };
+
+            var spacehintsLv = new JET_SPACEHINTS()
+            {
+                ulInitialDensity = 33,
+                cbInitial = 4096,
+                grbit = SpaceHintsGrbit.CreateHintAppendSequential | SpaceHintsGrbit.RetrieveHintTableScanBackward,
+                ulMaintDensity = 44,
+                ulGrowth = 144,
+                cbMinExtent = 1024 * 1024,
+                cbMaxExtent = 3 * 1024 * 1024,
+            };
+
+            var indexcreates = new JET_INDEXCREATE[]
+            {
+                new JET_INDEXCREATE
+                {
+                    szIndexName = Index1Name,
+                    szKey = Index1Description,
+                    cbKey = Index1Description.Length + 1,
+                    grbit = CreateIndexGrbit.None,
+                    ulDensity = 99,
+                    pSpaceHints = spacehintsIndex,
+                },
+                null,
+                new JET_INDEXCREATE
+                {
+                    szIndexName = Index2Name,
+                    szKey = Index2Description,
+                    cbKey = Index2Description.Length + 1,
+                    grbit = CreateIndexGrbit.None,
+                    ulDensity = 79,
+                },
+            };
+
+            var tablecreates = new JET_TABLECREATE[20];
+            for (int i = 0; i < tablecreates.Length; ++i)
+            {
+                tablecreates[i] = new JET_TABLECREATE()
+                {
+                    szTableName = "tableBigBang",
+                    ulPages = 23,
+                    ulDensity = 75,
+                    cColumns = columncreates.Length,
+                    rgcolumncreate = columncreates,
+                    rgindexcreate = indexcreates,
+                    cIndexes = indexcreates.Length,
+                    cbSeparateLV = 100,
+                    cbtyp = JET_cbtyp.Null,
+                    grbit = CreateTableColumnIndexGrbit.NoFixedVarColumnsInDerivedTables,
+                    pSeqSpacehints = spacehintsSeq,
+                    pLVSpacehints = spacehintsLv,
+                    tableid = new IntPtr(2),
+                    cCreated = 7,
+                };
+            }
+
+            int j = 1;
+            tablecreates[j++].szTableName = "different";
+            tablecreates[j++].ulPages = 57;
+            tablecreates[j++].ulDensity = 98;
+            tablecreates[j++].cColumns = 1;
+            tablecreates[j++].rgcolumncreate = new JET_COLUMNCREATE[]
+            {
+                null,
+                columncreates[0],
+            };
+            tablecreates[j].rgcolumncreate = null;
+            tablecreates[j++].cColumns = 0;
+            tablecreates[j++].cIndexes--;
+            tablecreates[j++].cbSeparateLV = 24;
+            tablecreates[j++].rgindexcreate = new JET_INDEXCREATE[]
+            {
+                indexcreates[1],
+                indexcreates[0],
+                indexcreates[0],
+            };
+            tablecreates[j++].rgindexcreate = new JET_INDEXCREATE[]
+            {
+                indexcreates[1],
+                null,
+                indexcreates[0],
+            };
+            tablecreates[j].rgindexcreate = null;
+            tablecreates[j++].cIndexes = 0;
+            tablecreates[j++].cbtyp = JET_cbtyp.AfterInsert;
+            tablecreates[j++].grbit = CreateTableColumnIndexGrbit.FixedDdl;
+            tablecreates[j++].pSeqSpacehints = spacehintsLv;
+            tablecreates[j++].pSeqSpacehints = null;
+            tablecreates[j++].pLVSpacehints = spacehintsSeq;
+            tablecreates[j++].pLVSpacehints = null;
+            tablecreates[j++].tableid = new IntPtr(63);
+            tablecreates[j++].cCreated--;
+            Debug.Assert(j == tablecreates.Length, "Didn't fill in all entries of setcolumns");
+            VerifyAll(tablecreates);
+        }
+
+        /// <summary>
+        /// Check that JET_SPACEHINTS structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_SPACEHINTS structures can be compared for equality")]
+        public void VerifyJetSpaceHintsEquality()
+        {
+            var x = new JET_SPACEHINTS()
+            {
+                ulInitialDensity = 33,
+                cbInitial = 4096,
+                grbit = SpaceHintsGrbit.CreateHintAppendSequential | SpaceHintsGrbit.RetrieveHintTableScanForward,
+                ulMaintDensity = 44,
+                ulGrowth = 144,
+                cbMinExtent = 1024 * 1024,
+                cbMaxExtent = 3 * 1024 * 1024,
+            };
+
+            var y = new JET_SPACEHINTS()
+            {
+                ulInitialDensity = 33,
+                cbInitial = 4096,
+                grbit = SpaceHintsGrbit.CreateHintAppendSequential | SpaceHintsGrbit.RetrieveHintTableScanForward,
+                ulMaintDensity = 44,
+                ulGrowth = 144,
+                cbMinExtent = 1024 * 1024,
+                cbMaxExtent = 3 * 1024 * 1024,
+            };
+
+            TestContentEquals(x, y);
+        }
+
+        /// <summary>
+        /// Check that JET_SPACEHINTS structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_SPACEHINTS structures can be compared for inequality")]
+        public void VerifyJetSpaceHintsInequality()
+        {
+            var spacehints = new JET_SPACEHINTS[8];
+            for (int i = 0; i < spacehints.Length; ++i)
+            {
+                spacehints[i] = new JET_SPACEHINTS()
+                {
+                    ulInitialDensity = 33,
+                    cbInitial = 4096,
+                    grbit = SpaceHintsGrbit.CreateHintAppendSequential | SpaceHintsGrbit.RetrieveHintTableScanForward,
+                    ulMaintDensity = 44,
+                    ulGrowth = 144,
+                    cbMinExtent = 1024 * 1024,
+                    cbMaxExtent = 3 * 1024 * 1024,
+                };
+            }
+
+            int j = 1;
+            spacehints[j++].ulInitialDensity = 35;
+            spacehints[j++].cbInitial = 2048;
+            spacehints[j++].grbit = SpaceHintsGrbit.DeleteHintTableSequential;
+            spacehints[j++].ulMaintDensity = 79;
+            spacehints[j++].ulGrowth = 288;
+            spacehints[j++].cbMinExtent = 3 * 1024 * 1024;
+            spacehints[j++].cbMaxExtent = 2 * 1024 * 1024;
+
+            Debug.Assert(j == spacehints.Length, "Didn't fill in all entries of setcolumns");
+            VerifyAll(spacehints);
         }
 
         /// <summary>
