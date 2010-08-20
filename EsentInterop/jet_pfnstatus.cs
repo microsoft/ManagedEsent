@@ -57,7 +57,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// API call tracing.
         /// </summary>
-        private readonly TraceSwitch traceSwitch = new TraceSwitch("ESENT StatusCallbackWrapper", "Wrapper around unmanaged ESENT status callback");
+        private static readonly TraceSwitch TraceSwitch = new TraceSwitch("ESENT StatusCallbackWrapper", "Wrapper around unmanaged ESENT status callback");
 
         /// <summary>
         /// The wrapped status callback.
@@ -170,7 +170,7 @@ namespace Microsoft.Isam.Esent.Interop
             }
             catch (ThreadAbortException)
             {
-                Trace.WriteLineIf(this.traceSwitch.TraceWarning, "Caught ThreadAbortException");
+                Trace.WriteLineIf(TraceSwitch.TraceWarning, "Caught ThreadAbortException");
 
                 // Stop the thread abort and let the unmanaged ESENT code finish.
                 // ThrowSavedException will call Thread.Abort() again.
@@ -181,7 +181,7 @@ namespace Microsoft.Isam.Esent.Interop
             catch (Exception ex)
             {
                 Trace.WriteLineIf(
-                    this.traceSwitch.TraceWarning,
+                    TraceSwitch.TraceWarning,
                     String.Format(CultureInfo.InvariantCulture, "Caught Exception {0}", ex));
                 this.SavedException = ex;
                 return JET_err.CallbackFailed;

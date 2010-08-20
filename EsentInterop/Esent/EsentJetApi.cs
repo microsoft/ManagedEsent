@@ -37,30 +37,30 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             var buildNumber = (int)((version & 0xFFFFFF) >> 8);
 
             Trace.WriteLineIf(
-                this.traceSwitch.TraceVerbose,
+                TraceSwitch.TraceVerbose,
                 String.Format(CultureInfo.InvariantCulture, "Version = {0}, BuildNumber = {1}", version, buildNumber));
 
             if (buildNumber >= Server2003BuildNumber)
             {
-                Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports Server 2003 features");
+                Trace.WriteLineIf(TraceSwitch.TraceVerbose, "Supports Server 2003 features");
                 this.Capabilities.SupportsServer2003Features = true;
             }
 
             if (buildNumber >= VisaBuildNumber)
             {
-                Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports Vista features");
+                Trace.WriteLineIf(TraceSwitch.TraceVerbose, "Supports Vista features");
                 this.Capabilities.SupportsVistaFeatures = true;
-                Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports Unicode paths");
+                Trace.WriteLineIf(TraceSwitch.TraceVerbose, "Supports Unicode paths");
                 this.Capabilities.SupportsUnicodePaths = true;
-                Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports large keys");
+                Trace.WriteLineIf(TraceSwitch.TraceVerbose, "Supports large keys");
                 this.Capabilities.SupportsLargeKeys = true;
-                Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports 16-column keys");
+                Trace.WriteLineIf(TraceSwitch.TraceVerbose, "Supports 16-column keys");
                 this.Capabilities.ColumnsKeyMost = 16;
             }
 
             if (buildNumber >= Windows7BuildNumber)
             {
-                Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "Supports Windows 7 features");
+                Trace.WriteLineIf(TraceSwitch.TraceVerbose, "Supports Windows 7 features");
                 this.Capabilities.SupportsWindows7Features = true;
             }
         }

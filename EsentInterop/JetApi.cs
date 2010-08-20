@@ -28,7 +28,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <summary>
         /// API call tracing.
         /// </summary>
-        private readonly TraceSwitch traceSwitch = new TraceSwitch("ESENT P/Invoke", "P/Invoke calls to ESENT");
+        private static readonly TraceSwitch TraceSwitch = new TraceSwitch("ESENT P/Invoke", "P/Invoke calls to ESENT");
 
         /// <summary>
         /// The version of esent. If this is zero then it is looked up
@@ -417,7 +417,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             {
                 // We have an explicitly set version
                 Trace.WriteLineIf(
-                    this.traceSwitch.TraceVerbose, String.Format(CultureInfo.InvariantCulture, "JetGetVersion overridden with 0x{0:X}", this.versionOverride));
+                    TraceSwitch.TraceVerbose, String.Format(CultureInfo.InvariantCulture, "JetGetVersion overridden with 0x{0:X}", this.versionOverride));
                 nativeVersion = this.versionOverride;
                 err = 0;
             }
@@ -4458,7 +4458,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             if ((null == data && 0 != dataOffset) || (null != data && dataOffset >= data.Count))
             {
-                Trace.WriteLineIf(this.traceSwitch.TraceError, "CheckDataSize failed");
+                Trace.WriteLineIf(TraceSwitch.TraceError, "CheckDataSize failed");
                 throw new ArgumentOutOfRangeException(
                     offsetArgumentName,
                     dataOffset,
@@ -4467,7 +4467,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             if ((null == data && 0 != dataSize) || (null != data && dataSize > data.Count - dataOffset))
             {
-                Trace.WriteLineIf(this.traceSwitch.TraceError, "CheckDataSize failed");
+                Trace.WriteLineIf(TraceSwitch.TraceError, "CheckDataSize failed");
                 throw new ArgumentOutOfRangeException(
                     sizeArgumentName,
                     dataSize,
@@ -4497,7 +4497,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             if (null == o)
             {
-                Trace.WriteLineIf(this.traceSwitch.TraceError, "CheckNotNull failed");
+                Trace.WriteLineIf(TraceSwitch.TraceError, "CheckNotNull failed");
                 throw new ArgumentNullException(paramName);
             }
         }
@@ -4512,7 +4512,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             if (i < 0)
             {
-                Trace.WriteLineIf(this.traceSwitch.TraceError, "CheckNotNegative failed");
+                Trace.WriteLineIf(TraceSwitch.TraceError, "CheckNotNegative failed");
                 throw new ArgumentOutOfRangeException(paramName, i, "cannot be negative");
             }
         }
@@ -4526,7 +4526,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         private Exception UnsupportedApiException(string method)
         {
             string error = String.Format(CultureInfo.InvariantCulture, "Method {0} is not supported by this version of ESENT", method);
-            Trace.WriteLineIf(this.traceSwitch.TraceError, error);
+            Trace.WriteLineIf(TraceSwitch.TraceError, error);
             return new InvalidOperationException(error);
         }
 
@@ -4537,7 +4537,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         [Conditional("TRACE")]
         private void TraceFunctionCall(string function)
         {
-            Trace.WriteLineIf(this.traceSwitch.TraceInfo, function);
+            Trace.WriteLineIf(TraceSwitch.TraceInfo, function);
         }
 
         /// <summary>
@@ -4560,15 +4560,15 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             if (0 == err)
             {
-                Trace.WriteLineIf(this.traceSwitch.TraceVerbose, "JET_err.Success");
+                Trace.WriteLineIf(TraceSwitch.TraceVerbose, "JET_err.Success");
             }
             else if (err > 0)
             {
-                Trace.WriteLineIf(this.traceSwitch.TraceWarning, unchecked((JET_wrn)err));
+                Trace.WriteLineIf(TraceSwitch.TraceWarning, unchecked((JET_wrn)err));
             }
             else
             {
-                Trace.WriteLineIf(this.traceSwitch.TraceError, unchecked((JET_err)err));
+                Trace.WriteLineIf(TraceSwitch.TraceError, unchecked((JET_err)err));
             }
         }
 
