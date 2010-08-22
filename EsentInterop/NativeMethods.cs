@@ -65,7 +65,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern unsafe int JetGetInstanceInfoW(out uint pcInstanceInfo, out NATIVE_INSTANCE_INFO* prgInstanceInfo);
 
         [DllImport(EsentDll, ExactSpelling = true)]
-        public static extern int JetGetInstanceMiscInfo(IntPtr instance, IntPtr pvResult, uint cbMax, uint infoLevel);
+        public static extern int JetGetInstanceMiscInfo(IntPtr instance, ref NATIVE_SIGNATURE pvResult, uint cbMax, uint infoLevel);
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetStopBackupInstance(IntPtr instance);

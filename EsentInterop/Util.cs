@@ -85,19 +85,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="left">First object to compare.</param>
         /// <param name="right">Second object to compare.</param>
         /// <returns>Whether the two objects are equal.</returns>
-        public static bool ObjectContentEquals<T>(
-            T left,
-            T right)
-            where T : IContentEquatable<T>
+        public static bool ObjectContentEquals<T>(T left, T right)
+            where T : class, IContentEquatable<T>
         {
-            if (null == left)
+            if (null == left || null == right)
             {
-                if (null == right)
-                {
-                    return true;
-                }
-
-                return false;
+                return Object.ReferenceEquals(left, right);
             }
 
             return left.ContentEquals(right);
@@ -111,23 +104,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="left">First object to compare.</param>
         /// <param name="right">Second object to compare.</param>
         /// <returns>Whether the two objects are equal.</returns>
-        public static bool ArrayObjectContentEquals<T>(
-            T[] left,
-            T[] right)
-            where T : IContentEquatable<T>
+        public static bool ArrayObjectContentEquals<T>(T[] left, T[] right)
+            where T : class, IContentEquatable<T>
         {
-            if (null == left)
+            if (null == left || null == right)
             {
-                if (null == right)
-                {
-                    return true;
-                }
-
-                return false;
-            }
-            else if (right == null)
-            {
-                return false;
+                return Object.ReferenceEquals(left, right);
             }
 
             if (left.Length != right.Length)
@@ -146,6 +128,26 @@ namespace Microsoft.Isam.Esent.Interop
             // All the individual members are equal, all of the elements of the arrays are
             // equal, so they must be equal!
             return true;
+        }
+
+        /// <summary>
+        /// Given a list of hash codes calculate a hash of the hashes.
+        /// </summary>
+        /// <param name="hashes">The sub hash codes.</param>
+        /// <returns>A hash of the hash codes.</returns>
+        public static int CalculateHashCode(params int[] hashes)
+        {
+            int hash = 0;
+            foreach (int h in hashes)
+            {
+                hash ^= h;
+                unchecked
+                {
+                    hash *= 33;
+                }
+            }
+
+            return hash;
         }
     }
 }

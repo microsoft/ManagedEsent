@@ -56,6 +56,7 @@
     <Compile Include="ColumnInfoEnumerator.cs" />
     <Compile Include="ColumnValueOfStruct.cs" />
     <Compile Include="Conversions.cs" />
+    <Compile Include="jet_columnbase.cs" />
     <Compile Include="GenericEnumerable.cs" />
     <Compile Include="IContentEquatable.cs" />
     <Compile Include="IDeepCloneable.cs" />

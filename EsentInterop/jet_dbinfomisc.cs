@@ -7,7 +7,6 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
@@ -870,8 +869,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            const int NumMembers = 39;
-            var hashes = new List<int>(NumMembers)
+            var hashes = new[]
             {
                 this._ulVersion,
                 this._ulUpdate,
@@ -913,19 +911,8 @@ namespace Microsoft.Isam.Esent.Interop
                 this._bkinfoCopyPrev.GetHashCode(),
                 this._bkinfoDiffPrev.GetHashCode(),
             };
-            Debug.Assert(NumMembers == hashes.Count, "Hash list is sized incorrectly", hashes.Count.ToString());
 
-            int hash = 0;
-            foreach (int h in hashes)
-            {
-                hash ^= h;
-                unchecked
-                {
-                    hash *= 33;
-                }
-            }
-
-            return hash;
+            return Util.CalculateHashCode(hashes);
         }
 
         /// <summary>

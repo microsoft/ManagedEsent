@@ -864,7 +864,6 @@ namespace InteropApiTests
         [Description("Check that JET_THREADSTATS structures can be compared for equality")]
         public void VerifyJetThreadstatsEquality()
         {
-            DateTime t = DateTime.Now;
             var x = new JET_THREADSTATS
             {
                 cbLogRecord = 1,
@@ -1151,6 +1150,79 @@ namespace InteropApiTests
             Debug.Assert(j == values.Length, "Not all members of values were changed", j.ToString());
 
             VerifyAll(values);
+        }
+
+        /// <summary>
+        /// Check that JET_COLUMNBASE objects can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_COLUMNBASE objects can be compared for equality")]
+        public void VerifyJetColumnbaseEquality()
+        {
+            var x = new JET_COLUMNBASE
+            {
+                cbMax = 1,
+                coltyp = JET_coltyp.Bit,
+                columnid = new JET_COLUMNID { Value = 2 },
+                cp = JET_CP.ASCII,
+                grbit = ColumndefGrbit.ColumnFixed,
+                szBaseColumnName = "foo",
+                szBaseTableName = "bar"
+            };
+            var y = new JET_COLUMNBASE
+            {
+                cbMax = 1,
+                coltyp = JET_coltyp.Bit,
+                columnid = new JET_COLUMNID { Value = 2 },
+                cp = JET_CP.ASCII,
+                grbit = ColumndefGrbit.ColumnFixed,
+                szBaseColumnName = "foo",
+                szBaseTableName = "bar"
+            };
+            TestEquals(x, y);
+
+            // This is a reference class. Operator == and != still do reference comparisons.
+        }
+
+        /// <summary>
+        /// Check that JET_COLUMNBASE structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_COLUMNBASE objects can be compared for inequality")]
+        public void VerifyJetColumnbaseInequality()
+        {
+            // None of these objects are equal, most differ in only one member from the
+            // first object. We will compare them all against each other.
+            var infos = new JET_COLUMNBASE[8];
+            for (int i = 0; i < infos.Length; ++i)
+            {
+                infos[i] = new JET_COLUMNBASE
+                {
+                    cbMax = 1,
+                    coltyp = JET_coltyp.Bit,
+                    columnid = new JET_COLUMNID { Value = 2 },
+                    cp = JET_CP.ASCII,
+                    grbit = ColumndefGrbit.ColumnFixed,
+                    szBaseColumnName = "foo",
+                    szBaseTableName = "bar"
+                };
+            }
+
+            int j = 1;
+            infos[j++].cbMax++;
+            infos[j++].coltyp = JET_coltyp.UnsignedByte;
+            infos[j++].columnid = new JET_COLUMNID { Value = 101 };
+            infos[j++].cp = JET_CP.Unicode;
+            infos[j++].grbit |= ColumndefGrbit.ColumnNotNULL;
+            infos[j++].szBaseColumnName += "baz";
+            infos[j++].szBaseTableName += "baz";
+            Debug.Assert(j == infos.Length, "Didn't fill in all members", infos.Length.ToString());
+
+            VerifyAll(infos);
         }
 
         /// <summary>

@@ -60,12 +60,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             this.ulRandom = native.ulRandom;
             this.logtimeCreate = native.logtimeCreate;
-            unsafe
-            {
-                // Enforce null termination
-                native.szComputerName[NATIVE_SIGNATURE.ComputerNameSize - 1] = 0;
-                this.szComputerName = native.szComputerName[0] == 0 ? null : Marshal.PtrToStringAnsi(new IntPtr(native.szComputerName));
-            }
+            this.szComputerName = native.szComputerName;
         }
 
         /// <summary>
@@ -164,8 +159,8 @@ namespace Microsoft.Isam.Esent.Interop
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
         Justification = "This should match the name of the unmanaged structure.")]
-    [StructLayout(LayoutKind.Sequential)]
-    internal unsafe struct NATIVE_SIGNATURE
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+    internal struct NATIVE_SIGNATURE
     {
         /// <summary>
         /// Size of the szComputerName array.
@@ -190,6 +185,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// NetBIOS name of the computer.
         /// </summary>
-        public fixed byte szComputerName[ComputerNameSize]; 
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = ComputerNameSize)]
+        public string szComputerName;
     }
 }

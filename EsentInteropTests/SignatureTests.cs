@@ -34,15 +34,7 @@ namespace InteropApiTests
                 logtimeCreate = new JET_LOGTIME(t),
             };
 
-            unsafe
-            {
-                byte[] name = Encoding.ASCII.GetBytes("COMPUTER");
-                Debug.Assert(name.Length < NATIVE_SIGNATURE.ComputerNameSize, "Computer name length is too long");
-                for (int i = 0; i < name.Length; ++i)
-                {
-                    native.szComputerName[i] = name[i];
-                }
-            }
+            native.szComputerName = "COMPUTER";
 
             var expected = new JET_SIGNATURE(9, t, "COMPUTER");
             var actual = new JET_SIGNATURE(native);

@@ -209,15 +209,11 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             int err;
             var nativeSignature = new NATIVE_SIGNATURE();
-            unsafe
-            {
-                var pvResult = new IntPtr(&nativeSignature);
-                err = NativeMethods.JetGetInstanceMiscInfo(
+            err = NativeMethods.JetGetInstanceMiscInfo(
                     instance.Value,
-                    pvResult,
+                    ref nativeSignature,
                     checked((uint)NATIVE_SIGNATURE.Size), 
                     unchecked((uint)infoLevel));
-            }
 
             signature = new JET_SIGNATURE(nativeSignature);
             return this.Err(err);

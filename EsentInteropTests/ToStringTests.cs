@@ -307,6 +307,18 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test JET_COLUMNBASE.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_COLUMNBASE.ToString()")]
+        public void JetColumnbaseToString()
+        {
+            var columndef = new JET_COLUMNBASE { coltyp = JET_coltyp.Text, grbit = ColumndefGrbit.ColumnFixed };
+            Assert.AreEqual("JET_COLUMNBASE(Text,ColumnFixed)", columndef.ToString());
+        }
+
+        /// <summary>
         /// Test JET_INDEXRANGE.ToString().
         /// </summary>
         [TestMethod]

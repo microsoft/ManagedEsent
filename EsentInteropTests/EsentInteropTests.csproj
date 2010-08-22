@@ -60,6 +60,7 @@
     <Compile Include="ApiTests.cs" />
     <Compile Include="BasicDDLTests.cs" />
     <Compile Include="CallbackWrappersTests.cs" />
+    <Compile Include="ColumnbaseConversionTests.cs" />
     <Compile Include="ColumnCreateTests.cs" />
     <Compile Include="ColumnValueTests.cs" />
     <Compile Include="ComparableTests.cs" />

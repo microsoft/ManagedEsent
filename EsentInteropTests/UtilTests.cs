@@ -161,44 +161,28 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Check that ArrayObjectContentEquals compares null correctly.
+        /// Check that ArrayObjectContentEquals compares null arrays correctly.
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Check that ArrayObjectContentEquals compares null correctly.")]
-        public void TestArrayObjectContentEqualsNullArgs()
+        [Description("Check that ArrayObjectContentEquals compares null arrays correctly")]
+        public void TestArrayObjectContentEqualsNullArrays()
         {
-            var spacehints = new JET_SPACEHINTS[]
-            {
-                new JET_SPACEHINTS()
-                {
-                    ulInitialDensity = 33,
-                    cbInitial = 4096,
-                }
-            };
-            JET_SPACEHINTS[] nil = null;
-            JET_SPACEHINTS[] empty = new JET_SPACEHINTS[] { };
+            Assert.IsTrue(Util.ArrayObjectContentEquals<JET_SPACEHINTS>(null, null)); 
+        }
 
-            JET_SPACEHINTS[] nullArray1 = new JET_SPACEHINTS[]
-            {
-                null,
-                null,
-            };
+        /// <summary>
+        /// Check that ArrayObjectContentEquals compares null entries correctly.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that ArrayObjectContentEquals compares null members correctly")]
+        public void TestArrayObjectContentEqualsNullMembers()
+        {
+            var x = new JET_SPACEHINTS[] { null, null };
+            var y = new JET_SPACEHINTS[] { null, null };
 
-            JET_SPACEHINTS[] nullArray2 = new JET_SPACEHINTS[]
-            {
-                null,
-                null,
-            };
-
-            Assert.IsFalse(Util.ArrayObjectContentEquals(spacehints, null));
-            Assert.IsFalse(Util.ArrayObjectContentEquals(null, spacehints));
-
-            Assert.IsTrue(Util.ArrayObjectContentEquals(nil, null));
-            Assert.IsTrue(Util.ArrayObjectContentEquals(null, nil));
-
-            Assert.IsTrue(Util.ArrayObjectContentEquals(nullArray1, nullArray2));
-            Assert.IsTrue(Util.ArrayObjectContentEquals(nullArray2, nullArray1));
+            Assert.IsTrue(Util.ArrayObjectContentEquals(x, y));
         }
 
         /// <summary>
@@ -206,55 +190,47 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Check that ArrayObjectContentEquals compares differeing arrays correctly.")]
+        [Description("Check that ArrayObjectContentEquals compares differeing arrays correctly")]
         public void TestArrayObjectContentEqualsDiffer()
         {
-            var x = new JET_SPACEHINTS[]
+            var a = new[]
             {
-                new JET_SPACEHINTS()
+                new JET_SPACEHINTS
                 {
                     ulInitialDensity = 33,
                     cbInitial = 4096,
                 }
             };
 
-            var x2 = new JET_SPACEHINTS[]
+            var b = new[]
             {
-                x[0],
-                x[0],
+                a[0],
+                a[0],
             };
 
-            var y = new JET_SPACEHINTS[]
+            var c = new[]
             {
-                new JET_SPACEHINTS()
+                new JET_SPACEHINTS
                 {
                     ulInitialDensity = 33,
                     cbInitial = 4077,
                 }
             };
 
-            var z = new JET_SPACEHINTS[]
+            var d = new JET_SPACEHINTS[]
             {
                 null,
             };
 
-            Assert.IsFalse(Util.ArrayObjectContentEquals(x, y));
-            Assert.IsFalse(Util.ArrayObjectContentEquals(y, x));
+            JET_SPACEHINTS[][] values = new[] { a, b, c, d, null };
 
-            Assert.IsFalse(Util.ArrayObjectContentEquals(y, z));
-            Assert.IsFalse(Util.ArrayObjectContentEquals(z, y));
-
-            Assert.IsFalse(Util.ArrayObjectContentEquals(x, z));
-            Assert.IsFalse(Util.ArrayObjectContentEquals(z, x));
-
-            Assert.IsFalse(Util.ArrayObjectContentEquals(x2, y));
-            Assert.IsFalse(Util.ArrayObjectContentEquals(y, x2));
-
-            Assert.IsFalse(Util.ArrayObjectContentEquals(x2, z));
-            Assert.IsFalse(Util.ArrayObjectContentEquals(z, x2));
-
-            Assert.IsFalse(Util.ArrayObjectContentEquals(x, x2));
-            Assert.IsFalse(Util.ArrayObjectContentEquals(x2, x));
+            for (int i = 0; i < values.Length - 1; i++)
+            {
+                for (int j = i + 1; j < values.Length; j++)
+                {
+                    Assert.IsFalse(Util.ArrayObjectContentEquals(values[i], values[j]));
+                }
+            }
         }
 
         /// <summary>
@@ -262,39 +238,41 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Check that ArrayObjectContentEquals compares identical arrays correctly.")]
+        [Description("Check that ArrayObjectContentEquals compares identical arrays correctly")]
         public void TestArrayObjectContentEqualsIdentical()
         {
-            var x = new JET_SPACEHINTS[]
+            var x = new[]
             {
-                new JET_SPACEHINTS()
-                {
-                    ulInitialDensity = 33,
-                    cbInitial = 4096,
-                }
-            };
-            var y = new JET_SPACEHINTS[]
-            {
-                new JET_SPACEHINTS()
+                new JET_SPACEHINTS
                 {
                     ulInitialDensity = 33,
                     cbInitial = 4096,
                 }
             };
 
-            var z = new JET_SPACEHINTS[]
+            var y = new[]
+            {
+                new JET_SPACEHINTS
+                {
+                    ulInitialDensity = 33,
+                    cbInitial = 4096,
+                }
+            };
+
+            var z = new[]
             {
                 x[0],
             };
 
-            Assert.IsTrue(Util.ArrayObjectContentEquals(x, y));
-            Assert.IsTrue(Util.ArrayObjectContentEquals(y, x));
+            JET_SPACEHINTS[][] values = new[] { x, y, z };
 
-            Assert.IsTrue(Util.ArrayObjectContentEquals(y, z));
-            Assert.IsTrue(Util.ArrayObjectContentEquals(z, y));
-
-            Assert.IsTrue(Util.ArrayObjectContentEquals(x, z));
-            Assert.IsTrue(Util.ArrayObjectContentEquals(z, x));
+            for (int i = 0; i < values.Length; i++)
+            {
+                for (int j = 0; j < values.Length; j++)
+                {
+                    Assert.IsTrue(Util.ArrayObjectContentEquals(values[i], values[j]));
+                }
+            }
         }
     }
 }
