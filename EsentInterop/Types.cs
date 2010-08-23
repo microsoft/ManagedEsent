@@ -79,12 +79,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            if ("G" == format)
-            {
-                return this.ToString();
-            }
-
-            return this.Value.ToInt64().ToString(format, formatProvider);
+            return "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
         }
 
         /// <summary>
@@ -192,12 +187,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            if ("G" == format)
-            {
-                return this.ToString();
-            }
-
-            return this.Value.ToInt64().ToString(format, formatProvider);
+            return "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
         }
 
         /// <summary>

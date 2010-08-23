@@ -162,7 +162,6 @@ namespace InteropApiTests
             Assert.AreEqual("123ABC", String.Format("{0:X}", value));
         }
 
-
         /// <summary>
         /// Test JET_COLUMNID.ToString().
         /// </summary>
