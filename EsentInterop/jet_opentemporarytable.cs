@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Runtime.InteropServices;
 
     /// <summary>
@@ -143,6 +144,21 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// of a successful call to JetOpenTemporaryTable.
         /// </summary>
         public JET_TABLEID tableid { get; internal set; }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="JET_OPENTEMPORARYTABLE"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="JET_OPENTEMPORARYTABLE"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(
+                CultureInfo.InvariantCulture,
+                "JET_OPENTEMPORARYTABLE({0}, {1} columns)",
+                this.grbit,
+                this.ccolumn);
+        }
 
         /// <summary>
         /// Returns the unmanaged opentemporarytable that represents this managed class.

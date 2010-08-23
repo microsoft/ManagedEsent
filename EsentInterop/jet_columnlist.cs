@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Runtime.InteropServices;
 
     /// <summary>
@@ -168,6 +169,21 @@ namespace Microsoft.Isam.Esent.Interop
         /// stores the default value of the column.
         /// </summary>
         public JET_COLUMNID columnidDefault { get; internal set; }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="JET_COLUMNLIST"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="JET_COLUMNLIST"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(
+                CultureInfo.InvariantCulture,
+                "JET_COLUMNLIST(0x{0:x},{1} records)",
+                this.tableid,
+                this.cRecord);
+        }
 
         /// <summary>
         /// Sets the fields of the object from a native JET_COLUMNLIST struct.

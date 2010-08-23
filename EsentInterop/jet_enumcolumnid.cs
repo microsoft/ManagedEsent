@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Runtime.InteropServices;
 
     /// <summary>
@@ -75,6 +76,17 @@ namespace Microsoft.Isam.Esent.Interop
         /// 2 means the second, and so on.
         /// </summary>
         public int[] rgtagSequence { get; set; }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="JET_ENUMCOLUMNID"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="JET_ENUMCOLUMNID"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(CultureInfo.InvariantCulture, "JET_ENUMCOLUMNID(0x{0:x})", this.columnid);
+        }
 
         /// <summary>
         /// Check to see if ctagSequence is negative or greater than the length

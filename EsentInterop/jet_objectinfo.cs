@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Runtime.InteropServices;
 
     /// <summary>
@@ -99,6 +100,17 @@ namespace Microsoft.Isam.Esent.Interop
         /// Gets the number of pages used by the table.
         /// </summary>
         public int cPage { get; private set; }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="JET_OBJECTINFO"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="JET_OBJECTINFO"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(CultureInfo.InvariantCulture, "JET_OBJECTINFO({0})", this.flags);
+        }
 
         /// <summary>
         /// Sets the fields of the object from a native JET_OBJECTINFO struct.

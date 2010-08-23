@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Runtime.InteropServices;
 
     /// <summary>
@@ -148,6 +149,17 @@ namespace Microsoft.Isam.Esent.Interop
         /// Gets the warning returned from the retrieval of the column.
         /// </summary>
         public JET_wrn err { get; private set; }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="JET_RETRIEVECOLUMN"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="JET_RETRIEVECOLUMN"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(CultureInfo.InvariantCulture, "JET_RETRIEVECOLUMN(0x{0:x})", this.columnid);
+        }
 
         /// <summary>
         /// Check to see if cbData is negative or greater than cbData.

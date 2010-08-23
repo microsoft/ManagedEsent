@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Runtime.InteropServices;
 
     /// <summary>
@@ -243,6 +244,21 @@ namespace Microsoft.Isam.Esent.Interop
         /// The column is of type JET_coltyp.Long.
         /// </summary>
         public JET_COLUMNID columnidLCMapFlags { get; internal set; }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="JET_INDEXLIST"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="JET_INDEXLIST"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(
+                CultureInfo.InvariantCulture,
+                "JET_INDEXLIST(0x{0:x},{1} records)",
+                this.tableid,
+                this.cRecord);
+        }
 
         /// <summary>
         /// Sets the fields of the object from a native JET_INDEXLIST struct.

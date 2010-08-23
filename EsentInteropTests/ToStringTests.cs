@@ -9,6 +9,7 @@ namespace InteropApiTests
     using System;
     using System.Globalization;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -25,8 +26,32 @@ namespace InteropApiTests
         [Description("Test JET_INSTANCE.ToString()")]
         public void JetInstanceToString()
         {
-            var instance = new JET_INSTANCE() { Value = (IntPtr)0x123ABC };
-            Assert.AreEqual("JET_INSTANCE(0x123abc)", instance.ToString());
+            var value = new JET_INSTANCE { Value = (IntPtr)0x123ABC };
+            Assert.AreEqual("JET_INSTANCE(0x123abc)", value.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_INSTANCE.ToString() with the general format string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_INSTANCE.ToString() with the general format string")]
+        public void JetInstanceToStringGeneralFormat()
+        {
+            var value = new JET_INSTANCE { Value = (IntPtr)0x123ABC };
+            VerifyIFormattableGeneralEqualsToString(value);
+        }
+
+        /// <summary>
+        /// Test JET_INSTANCE.ToString() with a format string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_INSTANCE.ToString() with a format string")]
+        public void JetInstanceToStringFormat()
+        {
+            var value = new JET_INSTANCE { Value = (IntPtr)0x123ABC };
+            Assert.AreEqual("123ABC", String.Format("{0:X}", value));
         }
 
         /// <summary>
@@ -42,6 +67,30 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test JET_SESID.ToString() with the general format string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_SESID.ToString() with the general format string")]
+        public void JetSesidToStringGeneralFormat()
+        {
+            var value = new JET_SESID { Value = (IntPtr)0x123ABC };
+            VerifyIFormattableGeneralEqualsToString(value);
+        }
+
+        /// <summary>
+        /// Test JET_SESID.ToString() with a format string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_SESID.ToString() with a format string")]
+        public void JetSesidToStringFormat()
+        {
+            var value = new JET_SESID { Value = (IntPtr)0x123ABC };
+            Assert.AreEqual("123ABC", String.Format("{0:X}", value));
+        }
+
+        /// <summary>
         /// Test JET_DBID.ToString().
         /// </summary>
         [TestMethod]
@@ -49,8 +98,32 @@ namespace InteropApiTests
         [Description("Test JET_DBID.ToString()")]
         public void JetDbidToString()
         {
-            var dbid = new JET_DBID() { Value = 23 };
-            Assert.AreEqual("JET_DBID(23)", dbid.ToString());
+            var value = new JET_DBID { Value = 23 };
+            Assert.AreEqual("JET_DBID(23)", value.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_DBID.ToString() with the general format string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_DBID.ToString() with the general format string")]
+        public void JetDbidToStringGeneralFormat()
+        {
+            var value = new JET_DBID { Value = 23 };
+            VerifyIFormattableGeneralEqualsToString(value);
+        }
+
+        /// <summary>
+        /// Test JET_DBID.ToString() with a format string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_DBID.ToString() with a format string")]
+        public void JetDbidToStringFormat()
+        {
+            var value = new JET_DBID { Value = 23 };
+            Assert.AreEqual("17", String.Format("{0:x}", value));
         }
 
         /// <summary>
@@ -61,9 +134,34 @@ namespace InteropApiTests
         [Description("Test JET_TABLEID.ToString()")]
         public void JetTableidToString()
         {
-            var tableid = new JET_TABLEID() { Value = (IntPtr)0x123ABC };
-            Assert.AreEqual("JET_TABLEID(0x123abc)", tableid.ToString());
+            var value = new JET_TABLEID { Value = (IntPtr)0x123ABC };
+            Assert.AreEqual("JET_TABLEID(0x123abc)", value.ToString());
         }
+
+        /// <summary>
+        /// Test JET_TABLEID.ToString() with the general format string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_TABLEID.ToString() with the general format string")]
+        public void JetTableidToStringGeneralFormat()
+        {
+            var value = new JET_TABLEID { Value = (IntPtr)0x123ABC };
+            VerifyIFormattableGeneralEqualsToString(value);
+        }
+
+        /// <summary>
+        /// Test JET_TABLEID.ToString() with a format string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_TABLEID.ToString() with a format string")]
+        public void JetTableidToStringFormat()
+        {
+            var value = new JET_TABLEID() { Value = (IntPtr)0x123ABC };
+            Assert.AreEqual("123ABC", String.Format("{0:X}", value));
+        }
+
 
         /// <summary>
         /// Test JET_COLUMNID.ToString().
@@ -73,8 +171,32 @@ namespace InteropApiTests
         [Description("Test JET_COLUMNID.ToString()")]
         public void JetColumnidToString()
         {
-            var columnid = new JET_COLUMNID() { Value = 0x12EC };
-            Assert.AreEqual("JET_COLUMNID(0x12ec)", columnid.ToString());
+            var value = new JET_COLUMNID() { Value = 0x12EC };
+            Assert.AreEqual("JET_COLUMNID(0x12ec)", value.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_COLUMNID.ToString() with the general format string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_COLUMNID.ToString() with the general format string")]
+        public void JetColumnidToStringGeneralFormat()
+        {
+            var value = new JET_COLUMNID() { Value = 0x12EC };
+            VerifyIFormattableGeneralEqualsToString(value);
+        }
+
+        /// <summary>
+        /// Test JET_COLUMNID.ToString() with a format string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_COLUMNID.ToString() with a format string")]
+        public void JetColumnidToStringFormat()
+        {
+            var value = new JET_COLUMNID() { Value = 0x12EC };
+            Assert.AreEqual("12EC", String.Format("{0:X}", value));
         }
 
         /// <summary>
@@ -83,10 +205,34 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(0)]
         [Description("Test JET_OSSNAPID.ToString()")]
-        public void JetOsSnapidToString()
+        public void JetOssnapidToString()
         {
-            var ossnapid = new JET_OSSNAPID { Value = (IntPtr)0x123ABC };
-            Assert.AreEqual("JET_OSSNAPID(0x123abc)", ossnapid.ToString());
+            var value = new JET_OSSNAPID { Value = (IntPtr)0x123ABC };
+            Assert.AreEqual("JET_OSSNAPID(0x123abc)", value.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_OSSNAPID.ToString() with the general format string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_OSSNAPID.ToString() with the general format string")]
+        public void JetOssnapidToStringGeneralFormat()
+        {
+            var value = new JET_OSSNAPID { Value = (IntPtr)0x123ABC };
+            VerifyIFormattableGeneralEqualsToString(value);
+        }
+
+        /// <summary>
+        /// Test JET_OSSNAPID.ToString() with a format string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_OSSNAPID.ToString() with a format string")]
+        public void JetOssnapidToStringFormat()
+        {
+            var value = new JET_OSSNAPID { Value = (IntPtr)0x123ABC };
+            Assert.AreEqual("123ABC", String.Format("{0:X}", value));
         }
 
         /// <summary>
@@ -97,8 +243,32 @@ namespace InteropApiTests
         [Description("Test JET_HANDLE.ToString()")]
         public void JetHandleToString()
         {
-            var handle = new JET_HANDLE { Value = (IntPtr)0x123ABC };
-            Assert.AreEqual("JET_HANDLE(0x123abc)", handle.ToString());
+            var value = new JET_HANDLE { Value = (IntPtr)0x123ABC };
+            Assert.AreEqual("JET_HANDLE(0x123abc)", value.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_HANDLE.ToString() with the general format string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_HANDLE.ToString() with the general format string")]
+        public void JetHandleToStringGeneralFormat()
+        {
+            var value = new JET_HANDLE { Value = (IntPtr)0x123ABC };
+            VerifyIFormattableGeneralEqualsToString(value);
+        }
+
+        /// <summary>
+        /// Test JET_HANDLE.ToString() with a format string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_HANDLE.ToString() with a format string")]
+        public void JetHandleToStringFormat()
+        {
+            var value = new JET_HANDLE { Value = (IntPtr)0x123ABC };
+            Assert.AreEqual("123ABC", String.Format("{0:X}", value));
         }
 
         /// <summary>
@@ -109,8 +279,32 @@ namespace InteropApiTests
         [Description("Test JET_LS.ToString()")]
         public void JetLsToString()
         {
-            var handle = new JET_LS { Value = (IntPtr)0x123ABC };
-            Assert.AreEqual("JET_LS(0x123abc)", handle.ToString());
+            var value = new JET_LS { Value = (IntPtr)0x123ABC };
+            Assert.AreEqual("JET_LS(0x123abc)", value.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_LS.ToString() with the general format string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_LS.ToString() with the general format string")]
+        public void JetLsToStringGeneralFormat()
+        {
+            var value = new JET_LS { Value = (IntPtr)0x123ABC };
+            VerifyIFormattableGeneralEqualsToString(value);
+        }
+
+        /// <summary>
+        /// Test JET_LS.ToString() with a format string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_LS.ToString() with a format string")]
+        public void JetLsToStringFormat()
+        {
+            var value = new JET_LS { Value = (IntPtr)0x123ABC };
+            Assert.AreEqual("123ABC", String.Format("{0:X}", value));
         }
 
         /// <summary>
@@ -372,10 +566,130 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(0)]
         [Description("Test JET_DBINFOMISC.ToString()")]
-        public void JetDbinfoMiscToString()
+        public void JetDbinfomiscToString()
         {
             var value = new JET_DBINFOMISC();
             Assert.AreEqual("JET_DBINFOMISC(JET_SIGNATURE(0::))", value.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_OBJECTINFO.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_OBJECTINFO.ToString()")]
+        public void JetObjectinfoToString()
+        {
+            var value = new JET_OBJECTINFO();
+            Assert.AreEqual("JET_OBJECTINFO(None)", value.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_OPENTEMPORARYTABLE.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_OPENTEMPORARYTABLE.ToString()")]
+        public void JetOpentemporarytableToString()
+        {
+            var value = new JET_OPENTEMPORARYTABLE { grbit = TempTableGrbit.Indexed };
+            Assert.AreEqual("JET_OPENTEMPORARYTABLE(Indexed, 0 columns)", value.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_INDEXLIST.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_INDEXLIST.ToString()")]
+        public void JetIndexlistToString()
+        {
+            var value = new JET_INDEXLIST { cRecord = 3, tableid = new JET_TABLEID { Value = (IntPtr)0x1a } };
+            Assert.AreEqual("JET_INDEXLIST(0x1a,3 records)", value.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_COLUMNLIST.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_COLUMNLIST.ToString()")]
+        public void JetColumnlistToString()
+        {
+            var value = new JET_COLUMNLIST { cRecord = 3, tableid = new JET_TABLEID { Value = (IntPtr)0x1a } };
+            Assert.AreEqual("JET_COLUMNLIST(0x1a,3 records)", value.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_OBJECTLIST.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_OBJECTLIST.ToString()")]
+        public void JetObjectlistToString()
+        {
+            var value = new JET_OBJECTLIST { cRecord = 3, tableid = new JET_TABLEID { Value = (IntPtr)0x1a } };
+            Assert.AreEqual("JET_OBJECTLIST(0x1a,3 records)", value.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_RECORDLIST.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_RECORDLIST.ToString()")]
+        public void JetRecordlistToString()
+        {
+            var value = new JET_RECORDLIST { cRecords = 3, tableid = new JET_TABLEID { Value = (IntPtr)0x1a } };
+            Assert.AreEqual("JET_RECORDLIST(0x1a,3 records)", value.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_RETRIEVECOLUMN.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_RETRIEVECOLUMN.ToString()")]
+        public void JetRetrievecolumnToString()
+        {
+            var value = new JET_RETRIEVECOLUMN { columnid = new JET_COLUMNID { Value = 27 } };
+            Assert.AreEqual("JET_RETRIEVECOLUMN(0x1b)", value.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_ENUMCOLUMN.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_ENUMCOLUMN.ToString()")]
+        public void JetEnumcolumnToString()
+        {
+            var value = new JET_ENUMCOLUMN { columnid = new JET_COLUMNID { Value = 27 } };
+            Assert.AreEqual("JET_ENUMCOLUMN(0x1b)", value.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_ENUMCOLUMNID.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_ENUMCOLUMNID.ToString()")]
+        public void JetEnumcolumnidToString()
+        {
+            var value = new JET_ENUMCOLUMNID { columnid = new JET_COLUMNID { Value = 27 } };
+            Assert.AreEqual("JET_ENUMCOLUMNID(0x1b)", value.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_ENUMCOLUMNVALUE.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_ENUMCOLUMNVALUE.ToString()")]
+        public void JetEnumcolumnvalueToString()
+        {
+            var value = new JET_ENUMCOLUMNVALUE { itagSequence = 11, cbData = 12 };
+            Assert.AreEqual("JET_ENUMCOLUMNVALUE(itagSequence = 11, cbData = 12)", value.ToString());
         }
 
         /// <summary>
@@ -462,6 +776,15 @@ namespace InteropApiTests
                 2,
                 3);
             Assert.AreEqual("index (+foo(Short)-bar(Bit))", expected.ToString());
+        }
+
+        /// <summary>
+        /// Test that the "G" format gives the same result as ToString().
+        /// </summary>
+        /// <param name="obj">The object to test</param>
+        private static void VerifyIFormattableGeneralEqualsToString(IFormattable obj)
+        {
+            Assert.AreEqual(obj.ToString(), obj.ToString("G", CultureInfo.InvariantCulture));
         }
     }
 }

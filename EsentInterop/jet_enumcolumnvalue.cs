@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Runtime.InteropServices;
 
     /// <summary>
@@ -76,6 +77,21 @@ namespace Microsoft.Isam.Esent.Interop
         /// Gets the value that was enumerated for the column.
         /// </summary>
         public IntPtr pvData { get; internal set; }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="JET_ENUMCOLUMNVALUE"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="JET_ENUMCOLUMNVALUE"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(
+                CultureInfo.InvariantCulture,
+                "JET_ENUMCOLUMNVALUE(itagSequence = {0}, cbData = {1})",
+                this.itagSequence,
+                this.cbData);
+        }
 
         /// <summary>
         /// Sets the fields of the object from a native JET_ENUMCOLUMN struct.

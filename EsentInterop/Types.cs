@@ -14,7 +14,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// A JET_INSTANCE contains a handle to the instance of the database to use for calls to the JET Api.
     /// </summary>
-    public struct JET_INSTANCE : IEquatable<JET_INSTANCE>
+    public struct JET_INSTANCE : IEquatable<JET_INSTANCE>, IFormattable
     {
         /// <summary>
         /// The native value.
@@ -64,6 +64,30 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Formats the value of the current instance using the specified format.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> containing the value of the current instance in the specified format.
+        /// </returns>
+        /// <param name="format">The <see cref="T:System.String"/> specifying the format to use.
+        /// -or- 
+        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation. 
+        /// </param>
+        /// <param name="formatProvider">The <see cref="T:System.IFormatProvider"/> to use to format the value.
+        /// -or- 
+        /// null to obtain the numeric format information from the current locale setting of the operating system. 
+        /// </param>
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            if ("G" == format)
+            {
+                return this.ToString();
+            }
+
+            return this.Value.ToInt64().ToString(format, formatProvider);
+        }
+
+        /// <summary>
         /// Returns a value indicating whether this instance is equal
         /// to another instance.
         /// </summary>
@@ -103,7 +127,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// A JET_SESID contains a handle to the session to use for calls to the JET Api.
     /// </summary>
-    public struct JET_SESID : IEquatable<JET_SESID>
+    public struct JET_SESID : IEquatable<JET_SESID>, IFormattable
     {
         /// <summary>
         /// The native value.
@@ -153,6 +177,30 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Formats the value of the current instance using the specified format.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> containing the value of the current instance in the specified format.
+        /// </returns>
+        /// <param name="format">The <see cref="T:System.String"/> specifying the format to use.
+        /// -or- 
+        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation. 
+        /// </param>
+        /// <param name="formatProvider">The <see cref="T:System.IFormatProvider"/> to use to format the value.
+        /// -or- 
+        /// null to obtain the numeric format information from the current locale setting of the operating system. 
+        /// </param>
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            if ("G" == format)
+            {
+                return this.ToString();
+            }
+
+            return this.Value.ToInt64().ToString(format, formatProvider);
+        }
+
+        /// <summary>
         /// Returns a value indicating whether this instance is equal
         /// to another instance.
         /// </summary>
@@ -193,7 +241,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// A JET_TABLEID contains a handle to the database cursor to use for a call to the JET Api.
     /// A cursor can only be used with the session that was used to open that cursor.
     /// </summary>
-    public struct JET_TABLEID : IEquatable<JET_TABLEID>
+    public struct JET_TABLEID : IEquatable<JET_TABLEID>, IFormattable
     {
         /// <summary>
         /// The native value.
@@ -243,6 +291,25 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Formats the value of the current instance using the specified format.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> containing the value of the current instance in the specified format.
+        /// </returns>
+        /// <param name="format">The <see cref="T:System.String"/> specifying the format to use.
+        /// -or- 
+        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation. 
+        /// </param>
+        /// <param name="formatProvider">The <see cref="T:System.IFormatProvider"/> to use to format the value.
+        /// -or- 
+        /// null to obtain the numeric format information from the current locale setting of the operating system. 
+        /// </param>
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            return "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
+        }
+
+        /// <summary>
         /// Returns a value indicating whether this instance is equal
         /// to another instance.
         /// </summary>
@@ -283,7 +350,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// A JET_DBID contains the handle to the database. A database handle is used to manage the
     /// schema of a database. It can also be used to manage the tables inside of that database.
     /// </summary>
-    public struct JET_DBID : IEquatable<JET_DBID>
+    public struct JET_DBID : IEquatable<JET_DBID>, IFormattable
     {
         /// <summary>
         /// The native value.
@@ -335,6 +402,25 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Formats the value of the current instance using the specified format.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> containing the value of the current instance in the specified format.
+        /// </returns>
+        /// <param name="format">The <see cref="T:System.String"/> specifying the format to use.
+        /// -or- 
+        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation. 
+        /// </param>
+        /// <param name="formatProvider">The <see cref="T:System.IFormatProvider"/> to use to format the value.
+        /// -or- 
+        /// null to obtain the numeric format information from the current locale setting of the operating system. 
+        /// </param>
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            return "G" == format ? this.ToString() : this.Value.ToString(format, formatProvider);
+        }
+
+        /// <summary>
         /// Returns a value indicating whether this instance is equal
         /// to another instance.
         /// </summary>
@@ -374,7 +460,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// A JET_COLUMNID identifies a column within a table.
     /// </summary>
-    public struct JET_COLUMNID : IEquatable<JET_COLUMNID>, IComparable<JET_COLUMNID>
+    public struct JET_COLUMNID : IEquatable<JET_COLUMNID>, IComparable<JET_COLUMNID>, IFormattable
     {
         /// <summary>
         /// The native value.
@@ -470,6 +556,25 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Formats the value of the current instance using the specified format.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> containing the value of the current instance in the specified format.
+        /// </returns>
+        /// <param name="format">The <see cref="T:System.String"/> specifying the format to use.
+        /// -or- 
+        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation. 
+        /// </param>
+        /// <param name="formatProvider">The <see cref="T:System.IFormatProvider"/> to use to format the value.
+        /// -or- 
+        /// null to obtain the numeric format information from the current locale setting of the operating system. 
+        /// </param>
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            return "G" == format ? this.ToString() : this.Value.ToString(format, formatProvider);
+        }
+
+        /// <summary>
         /// Returns a value indicating whether this instance is equal
         /// to another instance.
         /// </summary>
@@ -523,7 +628,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// A JET_OSSNAPID contains a handle to a snapshot of a database.
     /// </summary>
-    public struct JET_OSSNAPID : IEquatable<JET_OSSNAPID>
+    public struct JET_OSSNAPID : IEquatable<JET_OSSNAPID>, IFormattable
     {
         /// <summary>
         /// The native value.
@@ -573,6 +678,25 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Formats the value of the current instance using the specified format.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> containing the value of the current instance in the specified format.
+        /// </returns>
+        /// <param name="format">The <see cref="T:System.String"/> specifying the format to use.
+        /// -or- 
+        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation. 
+        /// </param>
+        /// <param name="formatProvider">The <see cref="T:System.IFormatProvider"/> to use to format the value.
+        /// -or- 
+        /// null to obtain the numeric format information from the current locale setting of the operating system. 
+        /// </param>
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            return "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
+        }
+
+        /// <summary>
         /// Returns a value indicating whether this instance is equal
         /// to another instance.
         /// </summary>
@@ -612,7 +736,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// A JET_HANDLE contains a generic handle.
     /// </summary>
-    public struct JET_HANDLE : IEquatable<JET_HANDLE>
+    public struct JET_HANDLE : IEquatable<JET_HANDLE>, IFormattable
     {
         /// <summary>
         /// The native value.
@@ -662,6 +786,25 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Formats the value of the current instance using the specified format.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> containing the value of the current instance in the specified format.
+        /// </returns>
+        /// <param name="format">The <see cref="T:System.String"/> specifying the format to use.
+        /// -or- 
+        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation. 
+        /// </param>
+        /// <param name="formatProvider">The <see cref="T:System.IFormatProvider"/> to use to format the value.
+        /// -or- 
+        /// null to obtain the numeric format information from the current locale setting of the operating system. 
+        /// </param>
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            return "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
+        }
+
+        /// <summary>
         /// Returns a value indicating whether this instance is equal
         /// to another instance.
         /// </summary>
@@ -702,7 +845,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// Local storage for an ESENT handle. Used by <see cref="Api.JetGetLS"/>
     /// and <see cref="Api.JetSetLS"/>.
     /// </summary>
-    public struct JET_LS : IEquatable<JET_LS>
+    public struct JET_LS : IEquatable<JET_LS>, IFormattable
     {
         /// <summary>
         /// The null handle.
@@ -745,6 +888,25 @@ namespace Microsoft.Isam.Esent.Interop
         public override string ToString()
         {
             return String.Format(CultureInfo.InvariantCulture, "JET_LS(0x{0:x})", this.Value.ToInt64());
+        }
+
+        /// <summary>
+        /// Formats the value of the current instance using the specified format.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> containing the value of the current instance in the specified format.
+        /// </returns>
+        /// <param name="format">The <see cref="T:System.String"/> specifying the format to use.
+        /// -or- 
+        /// null to use the default format defined for the type of the <see cref="T:System.IFormattable"/> implementation. 
+        /// </param>
+        /// <param name="formatProvider">The <see cref="T:System.IFormatProvider"/> to use to format the value.
+        /// -or- 
+        /// null to obtain the numeric format information from the current locale setting of the operating system. 
+        /// </param>
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            return "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
         }
 
         /// <summary>

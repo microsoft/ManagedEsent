@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Runtime.InteropServices;
 
     /// <summary>
@@ -155,6 +156,17 @@ namespace Microsoft.Isam.Esent.Interop
         /// release the memory when finished.
         /// </summary>
         public IntPtr pvData { get; internal set; }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="JET_ENUMCOLUMN"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="JET_ENUMCOLUMN"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return String.Format(CultureInfo.InvariantCulture, "JET_ENUMCOLUMN(0x{0:x})", this.columnid);
+        }
 
         /// <summary>
         /// Sets the fields of the object from a native JET_ENUMCOLUMN struct.
