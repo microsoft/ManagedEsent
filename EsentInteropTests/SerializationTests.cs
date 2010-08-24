@@ -395,10 +395,22 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(0)]
         [Description("Verify that a JET_DBINFOMISC can be serialized")]
-        public void VerifyDbinfoMiscCanBeSerialized()
+        public void VerifyDbinfomiscCanBeSerialized()
         {
             var expected = new JET_DBINFOMISC { cbPageSize = 8192, signDb = new JET_SIGNATURE(1, DateTime.Now, "COMPUTAR!") };
             SerializeAndCompare(expected);
+        }
+
+        /// <summary>
+        /// Verify that a JET_RSTMAP can be serialized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that a JET_RSTMAP can be serialized")]
+        public void VerifyRstmapCanBeSerialized()
+        {
+            var expected = new JET_RSTMAP { szDatabaseName = "from.edb", szNewDatabaseName = "to.edb" };
+            SerializeAndCompareContent(expected);
         }
 
         /// <summary>

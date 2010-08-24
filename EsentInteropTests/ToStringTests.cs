@@ -692,6 +692,18 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test JET_RSTMAP.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_RSTMAP.ToString()")]
+        public void JetRstmapToString()
+        {
+            var value = new JET_RSTMAP { szDatabaseName = "foo", szNewDatabaseName = "bar" };
+            Assert.AreEqual("JET_RSTINFO(szDatabaseName=foo,szNewDatabaseName=bar)", value.ToString());
+        }
+
+        /// <summary>
         /// Test ColumnStream.ToString().
         /// </summary>
         [TestMethod]

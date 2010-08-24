@@ -68,6 +68,33 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test the Duplicate method with a zero-length array.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test the Duplicate method with a zero-length array")]
+        public void TestDuplicateZeroLength()
+        {
+            byte[] input = new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6 };
+            byte[] output = MemoryCache.Duplicate(input, 0);
+            Assert.AreEqual(0, output.Length);
+        }
+
+        /// <summary>
+        /// Verify duplicating a zero-length array returns the same array.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify duplicating a zero-length array returns the same array")]
+        public void TestDuplicateZeroLengthReturnsSameArray()
+        {
+            byte[] input = new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6 };
+            byte[] output1 = MemoryCache.Duplicate(input, 0);
+            byte[] output2 = MemoryCache.Duplicate(input, 0);
+            Assert.AreSame(output1, output2);
+        }
+
+        /// <summary>
         /// Verify freeing a null buffer throws an exception.
         /// </summary>
         [TestMethod]

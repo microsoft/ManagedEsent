@@ -17,6 +17,11 @@ namespace Microsoft.Isam.Esent.Interop
     internal sealed class MemoryCache
     {
         /// <summary>
+        /// A zero-length array that should be used whenever we want to return one.
+        /// </summary>
+        private static readonly byte[] zeroLengthArray = new byte[0];
+
+        /// <summary>
         /// Default size for newly allocated buffers.
         /// </summary>
         private readonly int bufferSize;
@@ -61,6 +66,11 @@ namespace Microsoft.Isam.Esent.Interop
         public static byte[] Duplicate(byte[] data, int length)
         {
             Debug.Assert(data.Length >= length, "length parameter is too long");
+            if (0 == length)
+            {
+                return zeroLengthArray;
+            }
+
             var output = new byte[length];
             Buffer.BlockCopy(data, 0, output, 0, length);
             return output;

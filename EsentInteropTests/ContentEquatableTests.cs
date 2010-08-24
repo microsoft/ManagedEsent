@@ -756,7 +756,7 @@ namespace InteropApiTests
         [Description("Check that JET_TABLECREATE structures can be compared for inequality")]
         public void VerifyJetTablecreateInequality()
         {
-            var columncreates = new JET_COLUMNCREATE[]
+            var columncreates = new[]
             {
                 new JET_COLUMNCREATE()
                 {
@@ -778,7 +778,7 @@ namespace InteropApiTests
             const string Index2Name = "secondIndex";
             const string Index2Description = "+col2_longtext\0-col1_short\0";
 
-            var spacehintsIndex = new JET_SPACEHINTS()
+            var spacehintsIndex = new JET_SPACEHINTS
             {
                 ulInitialDensity = 33,
                 cbInitial = 4096,
@@ -789,7 +789,7 @@ namespace InteropApiTests
                 cbMaxExtent = 3 * 1024 * 1024,
             };
 
-            var spacehintsSeq = new JET_SPACEHINTS()
+            var spacehintsSeq = new JET_SPACEHINTS
             {
                 ulInitialDensity = 33,
                 cbInitial = 4096,
@@ -800,7 +800,7 @@ namespace InteropApiTests
                 cbMaxExtent = 3 * 1024 * 1024,
             };
 
-            var spacehintsLv = new JET_SPACEHINTS()
+            var spacehintsLv = new JET_SPACEHINTS
             {
                 ulInitialDensity = 33,
                 cbInitial = 4096,
@@ -811,7 +811,7 @@ namespace InteropApiTests
                 cbMaxExtent = 3 * 1024 * 1024,
             };
 
-            var indexcreates = new JET_INDEXCREATE[]
+            var indexcreates = new[]
             {
                 new JET_INDEXCREATE
                 {
@@ -836,7 +836,7 @@ namespace InteropApiTests
             var tablecreates = new JET_TABLECREATE[20];
             for (int i = 0; i < tablecreates.Length; ++i)
             {
-                tablecreates[i] = new JET_TABLECREATE()
+                tablecreates[i] = new JET_TABLECREATE
                 {
                     szTableName = "tableBigBang",
                     ulPages = 23,
@@ -860,7 +860,7 @@ namespace InteropApiTests
             tablecreates[j++].ulPages = 57;
             tablecreates[j++].ulDensity = 98;
             tablecreates[j++].cColumns = 1;
-            tablecreates[j++].rgcolumncreate = new JET_COLUMNCREATE[]
+            tablecreates[j++].rgcolumncreate = new[]
             {
                 null,
                 columncreates[0],
@@ -869,13 +869,13 @@ namespace InteropApiTests
             tablecreates[j++].cColumns = 0;
             tablecreates[j++].cIndexes--;
             tablecreates[j++].cbSeparateLV = 24;
-            tablecreates[j++].rgindexcreate = new JET_INDEXCREATE[]
+            tablecreates[j++].rgindexcreate = new[]
             {
                 indexcreates[1],
                 indexcreates[0],
                 indexcreates[0],
             };
-            tablecreates[j++].rgindexcreate = new JET_INDEXCREATE[]
+            tablecreates[j++].rgindexcreate = new[]
             {
                 indexcreates[1],
                 null,
@@ -941,7 +941,7 @@ namespace InteropApiTests
             var spacehints = new JET_SPACEHINTS[8];
             for (int i = 0; i < spacehints.Length; ++i)
             {
-                spacehints[i] = new JET_SPACEHINTS()
+                spacehints[i] = new JET_SPACEHINTS
                 {
                     ulInitialDensity = 33,
                     cbInitial = 4096,
@@ -964,6 +964,40 @@ namespace InteropApiTests
 
             Debug.Assert(j == spacehints.Length, "Didn't fill in all entries of setcolumns");
             VerifyAll(spacehints);
+        }
+
+        /// <summary>
+        /// Check that JET_RSTMAP structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_RSTMAP structures can be compared for equality")]
+        public void VerifyJetRstmapEquality()
+        {
+            var x = new JET_RSTMAP { szDatabaseName = "foo.edb", szNewDatabaseName = "bar.edb" };
+            var y = new JET_RSTMAP { szDatabaseName = "foo.edb", szNewDatabaseName = "bar.edb" };
+            TestContentEquals(x, y);
+        }
+
+        /// <summary>
+        /// Check that JET_RSTMAP structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_RSTMAP structures can be compared for inequality")]
+        public void VerifyJetRstmapInequality()
+        {
+            var values = new[]
+            {
+                new JET_RSTMAP { szDatabaseName = "foo.edb", szNewDatabaseName = "bar.edb" },
+                new JET_RSTMAP { szDatabaseName = "foo.edb", szNewDatabaseName = null },
+                new JET_RSTMAP { szDatabaseName = "foo.edb", szNewDatabaseName = "baz.edb" },
+                new JET_RSTMAP { szDatabaseName = null, szNewDatabaseName = "bar.edb" },
+                new JET_RSTMAP { szDatabaseName = "baz.edb", szNewDatabaseName = "bar.edb" },
+            };
+            VerifyAll(values);
         }
 
         /// <summary>
