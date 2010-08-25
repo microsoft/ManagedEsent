@@ -392,8 +392,8 @@ namespace Microsoft.Isam.Esent.Interop
                 && Util.ObjectContentEquals(this.pLVSpacehints, other.pLVSpacehints)
                 && this.tableid == other.tableid
                 && this.cCreated == other.cCreated
-                && Util.ArrayObjectContentEquals(this.rgcolumncreate, other.rgcolumncreate)
-                && Util.ArrayObjectContentEquals(this.rgindexcreate, other.rgindexcreate);
+                && Util.ArrayObjectContentEquals(this.rgcolumncreate, other.rgcolumncreate, this.cColumns)
+                && Util.ArrayObjectContentEquals(this.rgindexcreate, other.rgindexcreate, this.cIndexes);
         }
         #endregion
 
@@ -405,27 +405,10 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_TABLECREATE DeepClone()
         {
             JET_TABLECREATE result = (JET_TABLECREATE)this.MemberwiseClone();
-
-            if (this.rgcolumncreate != null)
-            {
-                result.rgcolumncreate = new JET_COLUMNCREATE[this.rgcolumncreate.Length];
-                for (int i = 0; i < this.rgcolumncreate.Length; ++i)
-                {
-                    result.rgcolumncreate[i] = (this.rgcolumncreate[i] == null) ? null : this.rgcolumncreate[i].DeepClone();
-                }
-            }
-
-            if (this.rgindexcreate != null)
-            {
-                result.rgindexcreate = new JET_INDEXCREATE[this.rgindexcreate.Length];
-                for (int i = 0; i < this.rgindexcreate.Length; ++i)
-                {
-                    result.rgindexcreate[i] = (this.rgindexcreate[i] == null) ? null : this.rgindexcreate[i].DeepClone();
-                }
-            }
-
-            result.seqSpacehints = (this.seqSpacehints == null) ? null : this.seqSpacehints.DeepClone();
-            result.pLVSpacehints = (this.pLVSpacehints == null) ? null : this.pLVSpacehints.DeepClone();
+            result.rgcolumncreate = Util.DeepCloneArray(this.rgcolumncreate);
+            result.rgindexcreate = Util.DeepCloneArray(this.rgindexcreate);
+            result.seqSpacehints = (null == this.seqSpacehints) ? null : this.seqSpacehints.DeepClone();
+            result.pLVSpacehints = (null == this.pLVSpacehints) ? null : this.pLVSpacehints.DeepClone();
 
             return result;
         }

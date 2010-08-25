@@ -162,8 +162,12 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_SETCOLUMN DeepClone()
         {
             JET_SETCOLUMN result = (JET_SETCOLUMN)this.MemberwiseClone();
-            result.pvData = new byte[this.pvData.Length];
-            Array.Copy(this.pvData, result.pvData, this.cbData);
+            if (null != this.pvData)
+            {
+                result.pvData = new byte[this.pvData.Length];
+                Array.Copy(this.pvData, result.pvData, this.cbData);
+            }
+
             return result;
         }
 

@@ -61,11 +61,13 @@
     <Compile Include="BasicDDLTests.cs" />
     <Compile Include="CallbackWrappersTests.cs" />
     <Compile Include="ColumnbaseConversionTests.cs" />
-    <Compile Include="ColumnCreateTests.cs" />
+    <Compile Include="ColumnCreateValidationTests.cs" />
     <Compile Include="ColumnValueTests.cs" />
     <Compile Include="ComparableTests.cs" />
     <Compile Include="ConditionalIndexFixture.cs" />
     <Compile Include="ContentEquatableTests.cs" />
+    <Compile Include="ColumnCreateConversionTests.cs" />
+    <Compile Include="ColumnCreateConvertFromNativeTests.cs" />
     <Compile Include="DbinfoMiscConversionTests.cs" />
     <Compile Include="EnumerableTests.cs" />
     <Compile Include="HowDoI.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="RecsizeSubtractionTests.cs" />
     <Compile Include="RetrieveColumnAsStringPerfTests.cs" />
     <Compile Include="RetrieveColumnsPerfTest.cs" />
+    <Compile Include="RstinfoValidationTests.cs" />
     <Compile Include="SerializationTests.cs" />
     <Compile Include="SetColumnFromStringPerfTests.cs" />
     <Compile Include="SetColumnValidationTests.cs" />

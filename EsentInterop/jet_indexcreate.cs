@@ -340,17 +340,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             JET_INDEXCREATE result = (JET_INDEXCREATE)this.MemberwiseClone();
             result.pidxUnicode = (null == this.pidxUnicode) ? null : this.pidxUnicode.DeepClone();
-            if (this.conditionalColumns != null)
-            {
-                result.conditionalColumns = new JET_CONDITIONALCOLUMN[this.conditionalColumns.Length];
-                for (int i = 0; i < this.conditionalColumns.Length; ++i)
-                {
-                    result.conditionalColumns[i] = (null == this.conditionalColumns[i])
-                                                       ? null
-                                                       : this.conditionalColumns[i].DeepClone();
-                }
-            }
-
+            this.conditionalColumns = Util.DeepCloneArray(this.conditionalColumns);
             return result;
         }
 

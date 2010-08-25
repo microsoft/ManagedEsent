@@ -704,6 +704,18 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test JET_RSTINFO.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_RSTINFO.ToString()")]
+        public void JetRstinfoToString()
+        {
+            var value = new JET_RSTINFO();
+            Assert.AreEqual("JET_RSTINFO(crstmap=0)", value.ToString());
+        }
+
+        /// <summary>
         /// Test ColumnStream.ToString().
         /// </summary>
         [TestMethod]

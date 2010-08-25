@@ -221,7 +221,6 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_SPACEHINTS DeepClone()
         {
             JET_SPACEHINTS result = (JET_SPACEHINTS)this.MemberwiseClone();
-
             return result;
         }
         #endregion

@@ -67,6 +67,17 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// NATIVE_RSTINFO.SizeOfRstinfo should not be 0.
+        /// </summary>
+        [TestMethod]
+        [Description("Verify NATIVE_RSTINFO.SizeOfIndexId is not 0")]
+        [Priority(0)]
+        public void VerifySizeOfRstinfoIsNotZero()
+        {
+            Assert.AreNotEqual(0, NATIVE_RSTINFO.SizeOfRstinfo);
+        }
+
+        /// <summary>
         /// Test calling JetFreeBuffer on a null buffer.
         /// </summary>
         [TestMethod]

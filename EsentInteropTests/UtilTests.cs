@@ -168,7 +168,7 @@ namespace InteropApiTests
         [Description("Check that ArrayObjectContentEquals compares null arrays correctly")]
         public void TestArrayObjectContentEqualsNullArrays()
         {
-            Assert.IsTrue(Util.ArrayObjectContentEquals<JET_SPACEHINTS>(null, null)); 
+            Assert.IsTrue(Util.ArrayObjectContentEquals<JET_SPACEHINTS>(null, null, 0)); 
         }
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace InteropApiTests
             var x = new JET_SPACEHINTS[] { null, null };
             var y = new JET_SPACEHINTS[] { null, null };
 
-            Assert.IsTrue(Util.ArrayObjectContentEquals(x, y));
+            Assert.IsTrue(Util.ArrayObjectContentEquals(x, y, x.Length));
         }
 
         /// <summary>
@@ -204,8 +204,11 @@ namespace InteropApiTests
 
             var b = new[]
             {
-                a[0],
-                a[0],
+                new JET_SPACEHINTS
+                {
+                    ulInitialDensity = 34,
+                    cbInitial = 4096,
+                }
             };
 
             var c = new[]
@@ -228,7 +231,7 @@ namespace InteropApiTests
             {
                 for (int j = i + 1; j < values.Length; j++)
                 {
-                    Assert.IsFalse(Util.ArrayObjectContentEquals(values[i], values[j]));
+                    Assert.IsFalse(Util.ArrayObjectContentEquals(values[i], values[j], 1));
                 }
             }
         }
@@ -270,7 +273,7 @@ namespace InteropApiTests
             {
                 for (int j = 0; j < values.Length; j++)
                 {
-                    Assert.IsTrue(Util.ArrayObjectContentEquals(values[i], values[j]));
+                    Assert.IsTrue(Util.ArrayObjectContentEquals(values[i], values[j], 1));
                 }
             }
         }

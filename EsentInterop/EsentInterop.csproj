@@ -72,6 +72,7 @@
     <Compile Include="jet_dbstate.cs" />
     <Compile Include="jet_filetype.cs" />
     <Compile Include="jet_lgpos.cs" />
+    <Compile Include="jet_rstinfo.cs" />
     <Compile Include="jet_rstmap.cs" />
     <Compile Include="jet_signature.cs" />
     <Compile Include="DateTimeColumnValue.cs" />

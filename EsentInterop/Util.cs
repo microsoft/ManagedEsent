@@ -103,8 +103,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <typeparam name="T">A type that implements IContentEquatable.</typeparam>
         /// <param name="left">First object to compare.</param>
         /// <param name="right">Second object to compare.</param>
+        /// <param name="length">The number of entries to compare.</param>
         /// <returns>Whether the two objects are equal.</returns>
-        public static bool ArrayObjectContentEquals<T>(T[] left, T[] right)
+        public static bool ArrayObjectContentEquals<T>(T[] left, T[] right, int length)
             where T : class, IContentEquatable<T>
         {
             if (null == left || null == right)
@@ -112,12 +113,7 @@ namespace Microsoft.Isam.Esent.Interop
                 return Object.ReferenceEquals(left, right);
             }
 
-            if (left.Length != right.Length)
-            {
-                return false;
-            }
-
-            for (int i = 0; i < left.Length; ++i)
+            for (int i = 0; i < length; ++i)
             {
                 if (!ObjectContentEquals(left[i], right[i]))
                 {
@@ -128,6 +124,27 @@ namespace Microsoft.Isam.Esent.Interop
             // All the individual members are equal, all of the elements of the arrays are
             // equal, so they must be equal!
             return true;
+        }
+
+        /// <summary>
+        /// Clone an array of objects.
+        /// </summary>
+        /// <typeparam name="T">The type of object in the array.</typeparam>
+        /// <param name="value">The values to clone.</param>
+        /// <returns>A clone of the values.</returns>
+        public static T[] DeepCloneArray<T>(T[] value) where T : class, IDeepCloneable<T>
+        {
+            T[] clone = null;
+            if (null != value)
+            {
+                clone = new T[value.Length];
+                for (int i = 0; i < clone.Length; ++i)
+                {
+                    clone[i] = (null == value[i]) ? null : value[i].DeepClone();
+                }
+            }
+
+            return clone;
         }
 
         /// <summary>

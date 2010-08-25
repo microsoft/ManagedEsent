@@ -414,6 +414,24 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify that a JET_RSTINFO can be serialized.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that a JET_RSTINFO can be serialized")]
+        public void VerifyRstinfoCanBeSerialized()
+        {
+            var expected = new JET_RSTINFO
+            {
+                crstmap = 1,
+                lgposStop = Any.Lgpos,
+                logtimeStop = Any.Logtime,
+                rgrstmap = new[] { new JET_RSTMAP { szDatabaseName = "foo", szNewDatabaseName = "bar" } },
+            };
+            SerializeAndCompareContent(expected);
+        }
+
+        /// <summary>
         /// Serialize an object to an in-memory stream then deserialize it
         /// and compare to the original.
         /// </summary>

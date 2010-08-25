@@ -364,7 +364,7 @@ namespace InteropApiTests
         [Description("Check that JET_SETCOLUMN structures can be compared for inequality")]
         public void VerifyJetSetcolumnInequality()
         {
-            var setcolumns = new JET_SETCOLUMN[9];
+            var setcolumns = new JET_SETCOLUMN[10];
             for (int i = 0; i < setcolumns.Length; ++i)
             {
                 setcolumns[i] = new JET_SETCOLUMN
@@ -389,6 +389,7 @@ namespace InteropApiTests
             setcolumns[j++].ibLongValue++;
             setcolumns[j++].itagSequence++;
             setcolumns[j++].pvData = BitConverter.GetBytes(1L);
+            setcolumns[j++] = new JET_SETCOLUMN();
             Debug.Assert(j == setcolumns.Length, "Didn't fill in all entries of setcolumns");
             VerifyAll(setcolumns);
         }
@@ -467,7 +468,7 @@ namespace InteropApiTests
         [Description("Check that JET_COLUMNCREATE structures can be compared for equality")]
         public void VerifyJetColumncreateEquality()
         {
-            var x = new JET_COLUMNCREATE()
+            var x = new JET_COLUMNCREATE
             {
                 szColumnName = "column9",
                 coltyp = JET_coltyp.Binary,
@@ -483,7 +484,7 @@ namespace InteropApiTests
                 err = JET_err.RecoveredWithoutUndo,
             };
 
-            var y = new JET_COLUMNCREATE()
+            var y = new JET_COLUMNCREATE
             {
                 szColumnName = "column9",
                 coltyp = JET_coltyp.Binary,
@@ -511,10 +512,10 @@ namespace InteropApiTests
         [Description("Check that JET_COLUMNCREATE structures can be compared for inequality")]
         public void VerifyJetColumncreateInequality()
         {
-            var columncreates = new JET_COLUMNCREATE[9];
+            var columncreates = new JET_COLUMNCREATE[10];
             for (int i = 0; i < columncreates.Length; ++i)
             {
-                columncreates[i] = new JET_COLUMNCREATE()
+                columncreates[i] = new JET_COLUMNCREATE
                 {
                     szColumnName = "column9",
                     coltyp = JET_coltyp.Binary,
@@ -543,7 +544,8 @@ namespace InteropApiTests
                 Value = 8
             };
             columncreates[j++].err = JET_err.UnicodeNormalizationNotSupported;
-            Debug.Assert(j == columncreates.Length, "Didn't fill in all entries of setcolumns");
+            columncreates[j++] = new JET_COLUMNCREATE { szColumnName = "another" };
+            Debug.Assert(j == columncreates.Length, "Didn't fill in all entries of columncreates");
             VerifyAll(columncreates);
         }
 
@@ -556,15 +558,15 @@ namespace InteropApiTests
         [Description("Check that JET_TABLECREATE structures can be compared for equality")]
         public void VerifyJetTablecreateEquality()
         {
-            var columncreatesX = new JET_COLUMNCREATE[]
+            var columncreatesX = new[]
             {
-                new JET_COLUMNCREATE()
+                new JET_COLUMNCREATE
                 {
                     szColumnName = "col1_short",
                     coltyp = JET_coltyp.Short,
                     cbMax = 2,
                 },
-                new JET_COLUMNCREATE()
+                new JET_COLUMNCREATE
                 {
                     szColumnName = "col2_longtext",
                     coltyp = JET_coltyp.LongText,
@@ -578,7 +580,7 @@ namespace InteropApiTests
             const string Index2NameX = "secondIndex";
             const string Index2DescriptionX = "+col2_longtext\0-col1_short\0";
 
-            var spacehintsIndexX = new JET_SPACEHINTS()
+            var spacehintsIndexX = new JET_SPACEHINTS
             {
                 ulInitialDensity = 33,
                 cbInitial = 4096,
@@ -589,7 +591,7 @@ namespace InteropApiTests
                 cbMaxExtent = 3 * 1024 * 1024,
             };
 
-            var spacehintsSeqX = new JET_SPACEHINTS()
+            var spacehintsSeqX = new JET_SPACEHINTS
             {
                 ulInitialDensity = 33,
                 cbInitial = 4096,
@@ -600,7 +602,7 @@ namespace InteropApiTests
                 cbMaxExtent = 3 * 1024 * 1024,
             };
 
-            var spacehintsLvX = new JET_SPACEHINTS()
+            var spacehintsLvX = new JET_SPACEHINTS
             {
                 ulInitialDensity = 33,
                 cbInitial = 4096,
@@ -611,7 +613,7 @@ namespace InteropApiTests
                 cbMaxExtent = 3 * 1024 * 1024,
             };
 
-            var indexcreatesX = new JET_INDEXCREATE[]
+            var indexcreatesX = new[]
             {
                 new JET_INDEXCREATE
                 {
@@ -632,7 +634,7 @@ namespace InteropApiTests
                 },
             };
 
-            var tablecreateX = new JET_TABLECREATE()
+            var tablecreateX = new JET_TABLECREATE
             {
                 szTableName = "tableBigBang",
                 ulPages = 23,
@@ -650,19 +652,23 @@ namespace InteropApiTests
                 cCreated = 7,
             };
 
-            var columncreatesY = new JET_COLUMNCREATE[]
+            var columncreatesY = new[]
             {
-                new JET_COLUMNCREATE()
+                new JET_COLUMNCREATE
                 {
                     szColumnName = "col1_short",
                     coltyp = JET_coltyp.Short,
                     cbMax = 2,
                 },
-                new JET_COLUMNCREATE()
+                new JET_COLUMNCREATE
                 {
                     szColumnName = "col2_longtext",
                     coltyp = JET_coltyp.LongText,
                     cp = JET_CP.Unicode,
+                },
+                new JET_COLUMNCREATE
+                {
+                    szColumnName = "col3_ignored",
                 },
             };
 
@@ -672,7 +678,7 @@ namespace InteropApiTests
             const string Index2NameY = "secondIndex";
             const string Index2DescriptionY = "+col2_longtext\0-col1_short\0";
 
-            var spacehintsIndexY = new JET_SPACEHINTS()
+            var spacehintsIndexY = new JET_SPACEHINTS
             {
                 ulInitialDensity = 33,
                 cbInitial = 4096,
@@ -683,7 +689,7 @@ namespace InteropApiTests
                 cbMaxExtent = 3 * 1024 * 1024,
             };
 
-            var spacehintsSeqY = new JET_SPACEHINTS()
+            var spacehintsSeqY = new JET_SPACEHINTS
             {
                 ulInitialDensity = 33,
                 cbInitial = 4096,
@@ -694,7 +700,7 @@ namespace InteropApiTests
                 cbMaxExtent = 3 * 1024 * 1024,
             };
 
-            var spacehintsLvY = new JET_SPACEHINTS()
+            var spacehintsLvY = new JET_SPACEHINTS
             {
                 ulInitialDensity = 33,
                 cbInitial = 4096,
@@ -705,7 +711,7 @@ namespace InteropApiTests
                 cbMaxExtent = 3 * 1024 * 1024,
             };
 
-            var indexcreatesY = new JET_INDEXCREATE[]
+            var indexcreatesY = new[]
             {
                 new JET_INDEXCREATE
                 {
@@ -724,6 +730,7 @@ namespace InteropApiTests
                     grbit = CreateIndexGrbit.None,
                     ulDensity = 79,
                 },
+                null,
             };
 
             var tablecreateY = new JET_TABLECREATE()
@@ -731,10 +738,10 @@ namespace InteropApiTests
                 szTableName = "tableBigBang",
                 ulPages = 23,
                 ulDensity = 75,
-                cColumns = columncreatesY.Length,
+                cColumns = columncreatesX.Length,
                 rgcolumncreate = columncreatesY,
                 rgindexcreate = indexcreatesY,
-                cIndexes = indexcreatesY.Length,
+                cIndexes = indexcreatesX.Length,
                 cbSeparateLV = 100,
                 cbtyp = JET_cbtyp.Null,
                 grbit = CreateTableColumnIndexGrbit.NoFixedVarColumnsInDerivedTables,
@@ -758,13 +765,13 @@ namespace InteropApiTests
         {
             var columncreates = new[]
             {
-                new JET_COLUMNCREATE()
+                new JET_COLUMNCREATE
                 {
                     szColumnName = "col1_short",
                     coltyp = JET_coltyp.Short,
                     cbMax = 2,
                 },
-                new JET_COLUMNCREATE()
+                new JET_COLUMNCREATE
                 {
                     szColumnName = "col2_longtext",
                     coltyp = JET_coltyp.LongText,
@@ -833,7 +840,7 @@ namespace InteropApiTests
                 },
             };
 
-            var tablecreates = new JET_TABLECREATE[20];
+            var tablecreates = new JET_TABLECREATE[21];
             for (int i = 0; i < tablecreates.Length; ++i)
             {
                 tablecreates[i] = new JET_TABLECREATE
@@ -891,7 +898,8 @@ namespace InteropApiTests
             tablecreates[j++].pLVSpacehints = null;
             tablecreates[j++].tableid = new IntPtr(63);
             tablecreates[j++].cCreated--;
-            Debug.Assert(j == tablecreates.Length, "Didn't fill in all entries of setcolumns");
+            tablecreates[j++] = new JET_TABLECREATE();
+            Debug.Assert(j == tablecreates.Length, "Didn't fill in all entries of tablecreates");
             VerifyAll(tablecreates);
         }
 
@@ -904,7 +912,7 @@ namespace InteropApiTests
         [Description("Check that JET_SPACEHINTS structures can be compared for equality")]
         public void VerifyJetSpaceHintsEquality()
         {
-            var x = new JET_SPACEHINTS()
+            var x = new JET_SPACEHINTS
             {
                 ulInitialDensity = 33,
                 cbInitial = 4096,
@@ -915,7 +923,7 @@ namespace InteropApiTests
                 cbMaxExtent = 3 * 1024 * 1024,
             };
 
-            var y = new JET_SPACEHINTS()
+            var y = new JET_SPACEHINTS
             {
                 ulInitialDensity = 33,
                 cbInitial = 4096,
@@ -938,7 +946,7 @@ namespace InteropApiTests
         [Description("Check that JET_SPACEHINTS structures can be compared for inequality")]
         public void VerifyJetSpaceHintsInequality()
         {
-            var spacehints = new JET_SPACEHINTS[8];
+            var spacehints = new JET_SPACEHINTS[9];
             for (int i = 0; i < spacehints.Length; ++i)
             {
                 spacehints[i] = new JET_SPACEHINTS
@@ -961,8 +969,9 @@ namespace InteropApiTests
             spacehints[j++].ulGrowth = 288;
             spacehints[j++].cbMinExtent = 3 * 1024 * 1024;
             spacehints[j++].cbMaxExtent = 2 * 1024 * 1024;
+            spacehints[j++] = new JET_SPACEHINTS();
 
-            Debug.Assert(j == spacehints.Length, "Didn't fill in all entries of setcolumns");
+            Debug.Assert(j == spacehints.Length, "Didn't fill in all entries of spacehints");
             VerifyAll(spacehints);
         }
 
@@ -996,7 +1005,78 @@ namespace InteropApiTests
                 new JET_RSTMAP { szDatabaseName = "foo.edb", szNewDatabaseName = "baz.edb" },
                 new JET_RSTMAP { szDatabaseName = null, szNewDatabaseName = "bar.edb" },
                 new JET_RSTMAP { szDatabaseName = "baz.edb", szNewDatabaseName = "bar.edb" },
+                new JET_RSTMAP(),
             };
+            VerifyAll(values);
+        }
+
+        /// <summary>
+        /// Check that JET_RSTINFO structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_RSTINFO structures can be compared for equality")]
+        public void VerifyJetRstinfoEquality()
+        {
+            DateTime now = DateTime.Now;
+            JET_PFNSTATUS status = (sesid, snp, snt, data) => JET_err.Success;
+            var x = new JET_RSTINFO
+            {
+                crstmap = 1,
+                lgposStop = new JET_LGPOS { ib = 1, isec = 2, lGeneration = 3 },
+                logtimeStop = new JET_LOGTIME(now),
+                pfnStatus = status,
+                rgrstmap = new[] { new JET_RSTMAP { szDatabaseName = "foo", szNewDatabaseName = "bar" } },
+            };
+            var y = new JET_RSTINFO
+            {
+                crstmap = 1,
+                lgposStop = new JET_LGPOS { ib = 1, isec = 2, lGeneration = 3 },
+                logtimeStop = new JET_LOGTIME(now),
+                pfnStatus = status,
+                rgrstmap = new[]
+                {
+                    new JET_RSTMAP { szDatabaseName = "foo", szNewDatabaseName = "bar" },
+                    new JET_RSTMAP { szDatabaseName = "foo", szNewDatabaseName = "bar" }
+                },
+            };
+            TestContentEquals(x, y);
+        }
+
+        /// <summary>
+        /// Check that JET_RSTINFO structures can be
+        /// compared for inequality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_RSTINFO structures can be compared for inequality")]
+        public void VerifyJetRstinfoInequality()
+        {
+            DateTime now = DateTime.Now;
+            JET_PFNSTATUS status = (sesid, snp, snt, data) => JET_err.Success;
+
+            var values = new JET_RSTINFO[7];
+            for (int i = 0; i < values.Length; ++i)
+            {
+                values[i] = new JET_RSTINFO
+                {
+                    crstmap = 1,
+                    lgposStop = new JET_LGPOS { ib = 1, isec = 2, lGeneration = 3 },
+                    logtimeStop = new JET_LOGTIME(now),
+                    pfnStatus = status,
+                    rgrstmap = new[] { new JET_RSTMAP { szDatabaseName = "foo", szNewDatabaseName = "bar" } },
+                };
+            }
+
+            int j = 1;
+            values[j++].crstmap--;
+            values[j++].lgposStop = Any.Lgpos;
+            values[j++].logtimeStop = Any.Logtime;
+            values[j++].pfnStatus = (sesid, snp, snt, data) => JET_err.OutOfMemory;
+            values[j++].rgrstmap = new[] { new JET_RSTMAP { szDatabaseName = "foo", szNewDatabaseName = "baz" } };
+            values[j++] = new JET_RSTINFO();
+            Debug.Assert(j == values.Length, "Didn't fill in all entries of values", values.Length.ToString());
             VerifyAll(values);
         }
 
@@ -1011,7 +1091,7 @@ namespace InteropApiTests
             Assert.AreNotSame(obj, clone);
             foreach (FieldInfo field in typeof(T).GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
             {
-                if (field.FieldType != typeof(string))
+                if (field.FieldType != typeof(string) && !field.FieldType.IsSubclassOf(typeof(System.Delegate)))
                 {
                     object value = field.GetValue(obj);
                     object clonedValue = field.GetValue(clone);

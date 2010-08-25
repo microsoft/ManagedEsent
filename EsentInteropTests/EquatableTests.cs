@@ -1101,7 +1101,7 @@ namespace InteropApiTests
         {
             // None of these objects are equal, most differ in only one member from the
             // first object. We will compare them all against each other.
-            var values = new JET_DBINFOMISC[40];
+            var values = new JET_DBINFOMISC[41];
             for (int i = 0; i < values.Length; ++i)
             {
                 values[i] = CreateJetDbinfoMisc();
@@ -1147,6 +1147,7 @@ namespace InteropApiTests
             values[j++].genCommitted++;
             values[j++].bkinfoCopyPrev = new JET_BKINFO();
             values[j++].bkinfoDiffPrev = new JET_BKINFO();
+            values[j++] = new JET_DBINFOMISC();
             Debug.Assert(j == values.Length, "Not all members of values were changed", j.ToString());
 
             VerifyAll(values);

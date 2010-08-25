@@ -280,7 +280,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         internal void CheckMembersAreValid()
         {
-            if (this.szColumnName == null)
+            if (null == this.szColumnName)
             {
                 throw new ArgumentNullException("szColumnName");
             }
@@ -290,10 +290,14 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentOutOfRangeException("cbDefault", this.cbDefault, "cannot be negative");
             }
 
-            if (this.pvDefault != null && (this.cbDefault > this.pvDefault.Length))
+            if (null == this.pvDefault && 0 != this.cbDefault)
             {
-                throw new ArgumentOutOfRangeException(
-                    "cbDefault", this.cbDefault, "can't be greater than pvDefault.Length");
+                throw new ArgumentOutOfRangeException("cbDefault", this.cbDefault, "must be 0");
+            }
+
+            if (null != this.pvDefault && (this.cbDefault > this.pvDefault.Length))
+            {
+                throw new ArgumentOutOfRangeException("cbDefault", this.cbDefault, "can't be greater than pvDefault.Length");
             }
         }
 
