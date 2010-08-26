@@ -24,5 +24,20 @@ namespace Microsoft.Isam.Esent.Interop.Windows7
         /// size increases efficiency.
         /// </summary>
         public const JET_param LVChunkSizeMost = (JET_param)163;
+
+        /// <summary>
+        /// Throttling of the database scan, in milliseconds.
+        /// </summary>
+        public const JET_param DbScanThrottle = (JET_param)170;
+
+        /// <summary>
+        /// Minimum interval to repeat the database scan, in seconds.
+        /// </summary>
+        public const JET_param DbScanIntervalMinSec = (JET_param)171;
+
+        /// <summary>
+        /// Maximum interval to allow the database scan to finish, in seconds.
+        /// </summary>
+        public const JET_param DbScanIntervalMaxSec = (JET_param)172;
     }
 }

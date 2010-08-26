@@ -115,6 +115,28 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         public const EndExternalBackupGrbit TruncateDone = (EndExternalBackupGrbit)0x100;
 
         /// <summary>
+        /// Perform recovery, but halt at the Undo phase. Allows whatever logs are present to
+        /// be replayed, then later additional logs can be copied and replayed.
+        /// </summary>
+        public const InitGrbit RecoveryWithoutUndo = (InitGrbit)0x4;
+
+        /// <summary>
+        /// On successful soft recovery, truncate log files.
+        /// </summary>
+        public const InitGrbit TruncateLogsAfterRecovery = (InitGrbit)0x00000010;
+
+        /// <summary>
+        /// Missing database map entry default to same location.
+        /// </summary>
+        public const InitGrbit ReplayMissingMapEntryDB = (InitGrbit)0x00000020;
+
+        /// <summary>
+        /// Transaction logs must exist in the log file directory
+        /// (i.e. can't auto-start a new stream).
+        /// </summary>
+        public const InitGrbit LogStreamMustExist = (InitGrbit)0x40;
+
+        /// <summary>
         /// The snapshot session continues after JetOSSnapshotThaw and will
         /// require a JetOSSnapshotEnd function call.
         /// </summary>

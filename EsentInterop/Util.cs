@@ -25,9 +25,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the arrays are equal, false otherwise.</returns>
         public static bool ArrayEqual(IList<byte> a, IList<byte> b, int offset, int count)
         {
-            if (a == null && b == null)
+            if (null == a || null == b)
             {
-                return true;
+                return Object.ReferenceEquals(a, b);
             }
 
             for (int i = 0; i < count; ++i)

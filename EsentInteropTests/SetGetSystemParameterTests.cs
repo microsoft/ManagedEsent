@@ -470,6 +470,48 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test setting and retrieving the DbScanThrottle parameter (if esent supports it)
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting and retrieving the WaypointLatency parameter (if esent supports it)")]
+        public void DbScanThrottleWin7Parameter()
+        {
+            if (EsentVersion.SupportsWindows7Features)
+            {
+                IntegerParameterTest(Windows7Param.DbScanThrottle, 1);
+            }
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the DbScanIntervalMinSec parameter (if esent supports it)
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting and retrieving the DbScanIntervalMinSec parameter (if esent supports it)")]
+        public void DbScanIntervalMinSecWin7Parameter()
+        {
+            if (EsentVersion.SupportsWindows7Features)
+            {
+                IntegerParameterTest(Windows7Param.DbScanIntervalMinSec, 3600);
+            }
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the DbScanIntervalMaxSec parameter (if esent supports it)
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting and retrieving the DbScanIntervalMaxSec parameter (if esent supports it)")]
+        public void DbScanIntervalMaxSecWin7Parameter()
+        {
+            if (EsentVersion.SupportsWindows7Features)
+            {
+                IntegerParameterTest(Windows7Param.DbScanIntervalMaxSec, 7200);
+            }
+        }
+
+        /// <summary>
         /// Test retrieving the LVChunkSizeMost parameter (if esent supports it)
         /// </summary>
         [TestMethod]

@@ -108,9 +108,25 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="data">The data to set.</param>
         public static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data)
         {
-            SetColumnGrbit grbit = ((null != data) && (0 == data.Length))
-                                       ? SetColumnGrbit.ZeroLength
-                                       : SetColumnGrbit.None;
+            SetColumn(sesid, tableid, columnid, data, SetColumnGrbit.None);
+        }
+
+        /// <summary>
+        /// Modifies a single column value in a modified record to be inserted or to
+        /// update the current record.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to update. An update should be prepared.</param>
+        /// <param name="columnid">The columnid to set.</param>
+        /// <param name="data">The data to set.</param>
+        /// <param name="grbit">SetColumn options.</param>
+        public static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, SetColumnGrbit grbit)
+        {
+            if ((null != data) && (0 == data.Length))
+            {
+                grbit |= SetColumnGrbit.ZeroLength;
+            }
+
             int dataLength = (null == data) ? 0 : data.Length;
             JetSetColumn(sesid, tableid, columnid, data, dataLength, grbit, null);
         }

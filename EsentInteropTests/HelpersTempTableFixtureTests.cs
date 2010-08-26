@@ -1039,6 +1039,28 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test setting a unicode column from a string, using a grbit.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Test setting a unicode column from a string, using a grbit")]
+        public void SetUnicodeStringGrbit()
+        {
+            JET_COLUMNID columnid = this.columnidDict["unicode"];
+            string data = Any.String;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, data, Encoding.Unicode, SetColumnGrbit.None);
+            Api.SetColumn(this.sesid, this.tableid, columnid, data, Encoding.Unicode, SetColumnGrbit.AppendLV);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            string actual = Encoding.Unicode.GetString(Api.RetrieveColumn(this.sesid, this.tableid, columnid));
+            Assert.AreEqual(data + data, actual);
+        }
+
+        /// <summary>
         /// Test setting a ColumnValue with a string.
         /// </summary>
         [TestMethod]
@@ -1641,6 +1663,31 @@ namespace InteropApiTests
             var value = Any.DateTime;
             this.InsertRecordWithSetColumns(columnid, new DateTimeColumnValue { Columnid = columnid, Value = value });
             Assert.AreEqual(value, Api.RetrieveColumnAsDateTime(this.sesid, this.tableid, columnid));
+        }
+
+        /// <summary>
+        /// Test setting a column from an array of bytes using a grbit.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Test setting a column from an array of bytes using a grbit")]
+        public void SetBytesWithGrbit()
+        {
+            JET_COLUMNID columnid = this.columnidDict["binary"];
+            byte[] data = Any.Bytes;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, data, SetColumnGrbit.None);
+            Api.SetColumn(this.sesid, this.tableid, columnid, data, SetColumnGrbit.AppendLV);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            byte[] expected = new byte[data.Length * 2];
+            Array.Copy(data, 0, expected, 0, data.Length);
+            Array.Copy(data, 0, expected, data.Length, data.Length);
+            byte[] actual = Api.RetrieveColumn(this.sesid, this.tableid, columnid);
+            CollectionAssert.AreEqual(expected, actual);
         }
 
         /// <summary>
