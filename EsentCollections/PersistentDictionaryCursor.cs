@@ -310,7 +310,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>The key of the record.</returns>
         public TKey RetrieveCurrentKey()
         {
-            return (TKey)this.converters.RetrieveKeyColumn(this.sesid, this.dataTable, this.keyColumn);
+            return this.converters.RetrieveKeyColumn(this.sesid, this.dataTable, this.keyColumn);
         }
 
         /// <summary>
@@ -319,7 +319,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>The value of the record.</returns>
         public TValue RetrieveCurrentValue()
         {
-            return (TValue)this.converters.RetrieveValueColumn(this.sesid, this.dataTable, this.valueColumn);
+            return this.converters.RetrieveValueColumn(this.sesid, this.dataTable, this.valueColumn);
         }
 
         /// <summary>
@@ -420,7 +420,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="key">The value of the key column.</param>
         private void MakePrefixKey(TKey key)
         {
-            // Casts TKey to object
             this.converters.MakeKey(this.sesid, this.dataTable, key, MakeKeyGrbit.NewKey | MakeKeyGrbit.PartialColumnEndLimit);
         }
 
@@ -430,7 +429,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="key">The value of the key column.</param>
         private void MakeKey(TKey key)
         {
-            // Casts TKey to object
             this.converters.MakeKey(this.sesid, this.dataTable, key, MakeKeyGrbit.NewKey);
         }
 
@@ -440,7 +438,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="key">The value of the key column.</param>
         private void SetKeyColumn(TKey key)
         {
-            // Casts TKey to object
             this.converters.SetKeyColumn(this.sesid, this.dataTable, this.keyColumn, key);
         }
 
@@ -450,7 +447,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="value">The value of the value column.</param>
         private void SetValue(TValue value)
         {
-            // Casts TValue to object
             this.converters.SetValueColumn(this.sesid, this.dataTable, this.valueColumn, value);
         }
 

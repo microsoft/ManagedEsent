@@ -24,33 +24,22 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// Column converter for the key column.
         /// </summary>
-        private readonly KeyColumnConverter keyColumnConverter;
+        private readonly KeyColumnConverter<TKey> keyColumnConverter = new KeyColumnConverter<TKey>();
 
         /// <summary>
         /// Column converter for the value column.
         /// </summary>
-        private readonly ColumnConverter valueColumnConverter;
-
-        /// <summary>
-        /// Initializes a new instance of the PersistentDictionaryConverters{TKey,TValue}
-        /// class. This looks up the conversion types for
-        /// <typeparamref name="TKey"/> and <typeparamref name="TValue"/>.
-        /// </summary>
-        public PersistentDictionaryConverters()
-        {
-            this.keyColumnConverter = new KeyColumnConverter(typeof(TKey));
-            this.valueColumnConverter = new ColumnConverter(typeof(TValue));
-        }
+        private readonly ColumnConverter<TValue> valueColumnConverter = new ColumnConverter<TValue>();
 
         /// <summary>
         /// Gets a delegate that can be used to call JetMakeKey with an object of
         /// type <typeparamref name="TKey"/>.
         /// </summary>
-        public KeyColumnConverter.MakeKeyDelegate MakeKey
+        public KeyColumnConverter<TKey>.MakeKeyDelegate MakeKey
         {
             get
             {
-                return this.keyColumnConverter.MakeKey;
+                return this.keyColumnConverter.KeyMaker;
             }
         }
 
@@ -58,11 +47,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// Gets a delegate that can be used to set the Key column with an object of
         /// type <typeparamref name="TKey"/>.
         /// </summary>
-        public ColumnConverter.SetColumnDelegate SetKeyColumn
+        public ColumnConverter<TKey>.SetColumnDelegate SetKeyColumn
         {
             get
             {
-                return this.keyColumnConverter.SetColumn;
+                return this.keyColumnConverter.ColumnSetter;
             }
         }
 
@@ -70,11 +59,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// Gets a delegate that can be used to set the Value column with an object of
         /// type <typeparamref name="TValue"/>.
         /// </summary>
-        public ColumnConverter.SetColumnDelegate SetValueColumn
+        public ColumnConverter<TValue>.SetColumnDelegate SetValueColumn
         {
             get
             {
-                return this.valueColumnConverter.SetColumn;
+                return this.valueColumnConverter.ColumnSetter;
             }
         }
 
@@ -82,11 +71,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// Gets a delegate that can be used to retrieve the Key column, returning
         /// an object of type <typeparamref name="TKey"/>.
         /// </summary>
-        public ColumnConverter.RetrieveColumnDelegate RetrieveKeyColumn
+        public ColumnConverter<TKey>.RetrieveColumnDelegate RetrieveKeyColumn
         {
             get
             {
-                return this.keyColumnConverter.RetrieveColumn;
+                return this.keyColumnConverter.ColumnRetriever;
             }
         }
 
@@ -94,11 +83,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// Gets a delegate that can be used to retrieve the Value column, returning
         /// an object of type <typeparamref name="TValue"/>.
         /// </summary>
-        public ColumnConverter.RetrieveColumnDelegate RetrieveValueColumn
+        public ColumnConverter<TValue>.RetrieveColumnDelegate RetrieveValueColumn
         {
             get
             {
-                return this.valueColumnConverter.RetrieveColumn;
+                return this.valueColumnConverter.ColumnRetriever;
             }
         }
 

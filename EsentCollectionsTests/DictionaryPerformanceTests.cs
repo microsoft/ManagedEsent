@@ -23,6 +23,11 @@ namespace EsentCollectionsTests
     public class DictionaryPerformanceTests
     {
         /// <summary>
+        /// Number of records to insert during testing.
+        /// </summary>
+        private const int N = 1000000;
+
+        /// <summary>
         /// The location of the dictionary we use for the tests.
         /// </summary>
         private const string DictionaryLocation = "PerformanceDictionary";
@@ -96,6 +101,47 @@ namespace EsentCollectionsTests
         /// Randomly insert records into a PersistentDictionary and measure the speed.
         /// </summary>
         [TestMethod]
+        [Priority(3)]
+        public void TestPersistentDictionaryBoxing()
+        {
+            using (var dictionary = new PersistentDictionary<long, long>(DictionaryLocation))
+            {
+                long[] keys = (from x in Enumerable.Range(0, N) select (long)x).ToArray();
+
+                long data = 1;
+                long newData = 2;
+
+                GC.Collect();
+                int collectionsAtStart = GC.CollectionCount(0);
+
+                // Insert the records
+                Insert(dictionary, keys, data);
+
+                // Scan all entries to make sure they are in the cache
+                ScanEntries(dictionary);
+
+                // Retrieve one record
+                RetrieveOneRecord(dictionary, 1000000, 1234);
+
+                // Now lookup entries
+                keys.Shuffle();
+                LookupEntries(dictionary, keys);
+
+                // Now update the entries
+                keys.Shuffle();
+                UpdateAllEntries(dictionary, keys, newData);
+
+                int collectionsAtEnd = GC.CollectionCount(0);
+                Console.WriteLine("{0} generation 0 collections", collectionsAtEnd - collectionsAtStart);
+            }
+
+            Cleanup.DeleteDirectoryWithRetry(DictionaryLocation);
+        }
+
+        /// <summary>
+        /// Randomly insert records into a PersistentDictionary and measure the speed.
+        /// </summary>
+        [TestMethod]
         [Priority(4)]
         public void TestPersistentDictionaryRandomInsertAndLookupSpeed()
         {
@@ -113,7 +159,7 @@ namespace EsentCollectionsTests
         /// <param name="dictionary">The dictionary to test.</param>
         private static void MeasureSequentialInsertAndLookupSpeed(IDictionary<long, string> dictionary)
         {
-            SequentInsertLookupAndUpdate(dictionary);
+            SequentialInsertLookupAndUpdate(dictionary);
             SlowLinqQueries(dictionary, 20);
             LinqQueries(dictionary, 20);
             FastLinqQueries(dictionary, 20);
@@ -126,7 +172,7 @@ namespace EsentCollectionsTests
         /// <param name="dictionary">The dictionary to test.</param>
         private static void MeasureSequentialInsertAndLookupSpeed(PersistentDictionary<long, string> dictionary)
         {
-            SequentInsertLookupAndUpdate(dictionary);
+            SequentialInsertLookupAndUpdate(dictionary);
             SlowLinqQueries(dictionary, 1000);
             LinqQueries(dictionary, 10000);
             FastLinqQueries(dictionary, 100000);
@@ -161,9 +207,8 @@ namespace EsentCollectionsTests
         /// Insert records in sequential order, retrieve them and update.
         /// </summary>
         /// <param name="dictionary">The dictionary to use.</param>
-        private static void SequentInsertLookupAndUpdate(IDictionary<long, string> dictionary)
+        private static void SequentialInsertLookupAndUpdate(IDictionary<long, string> dictionary)
         {
-            const int N = 1000000;
             const string Data = "01234567890ABCDEF01234567890ABCDEF";
             const string Newdata = "something completely different";
 
@@ -196,7 +241,6 @@ namespace EsentCollectionsTests
         /// <param name="dictionary">The dictionary to use.</param>
         private static void RandomInsertLookupAndUpdate(IDictionary<long, string> dictionary)
         {
-            const int N = 1000000;
             long[] keys = (from x in Enumerable.Range(0, N) select (long)x).ToArray();
             keys.Shuffle();
 
@@ -423,13 +467,17 @@ namespace EsentCollectionsTests
         /// <param name="dictionary">The dictionary containing the element.</param>
         /// <param name="numRetrieves">Number of times to retrieve the entry.</param>
         /// <param name="key">The key of the entry to retrieve.</param>
-        private static void RetrieveOneRecord(IDictionary<long, string> dictionary, int numRetrieves, long key)
+        /// <typeparam name="TKey">The type of the dictionary key.</typeparam>
+        /// <typeparam name="TValue">The type of the dictionary value.</typeparam>
+        private static void RetrieveOneRecord<TKey, TValue>(IDictionary<TKey, TValue> dictionary, int numRetrieves, TKey key)
+            where TKey : IComparable<TKey>
+            where TValue : IEquatable<TValue>
         {
-            string expected = dictionary[key];
+            TValue expected = dictionary[key];
             Stopwatch stopwatch = Stopwatch.StartNew();
             for (int i = 0; i < numRetrieves; ++i)
             {
-                Assert.AreEqual(expected, dictionary[key]);
+                Assert.IsTrue(expected.Equals(dictionary[key]), "Got wrong entry");
             }
 
             stopwatch.Stop();
@@ -446,10 +494,13 @@ namespace EsentCollectionsTests
         /// <param name="dictionary">The dictionary to update.</param>
         /// <param name="keys">The keys of the entries to update.</param>
         /// <param name="newData">The data to set the entries to.</param>
-        private static void UpdateAllEntries(IDictionary<long, string> dictionary, ICollection<long> keys, string newData)
+        /// <typeparam name="TKey">The type of the dictionary key.</typeparam>
+        /// <typeparam name="TValue">The type of the dictionary value.</typeparam>
+        private static void UpdateAllEntries<TKey, TValue>(IDictionary<TKey, TValue> dictionary, ICollection<TKey> keys, TValue newData)
+            where TKey : IComparable<TKey>
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
-            foreach (int key in keys)
+            foreach (TKey key in keys)
             {
                 dictionary[key] = newData;
             }
@@ -467,12 +518,15 @@ namespace EsentCollectionsTests
         /// </summary>
         /// <param name="dictionary">The dictionary to lookup entries in.</param>
         /// <param name="keys">The keys to retrieve.</param>
-        private static void LookupEntries(IDictionary<long, string> dictionary, ICollection<long> keys)
+        /// <typeparam name="TKey">The type of the dictionary key.</typeparam>
+        /// <typeparam name="TValue">The type of the dictionary value.</typeparam>
+        private static void LookupEntries<TKey, TValue>(IDictionary<TKey, TValue> dictionary, ICollection<TKey> keys)
+            where TKey : IComparable<TKey>
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
-            foreach (int key in keys)
+            foreach (TKey key in keys)
             {
-                string s;
+                TValue s;
                 if (!dictionary.TryGetValue(key, out s))
                 {
                     Assert.Fail("Key wasn't found");
@@ -491,11 +545,14 @@ namespace EsentCollectionsTests
         /// Scan all the dictionary entries.
         /// </summary>
         /// <param name="dictionary">The dictionary to scan.</param>
-        private static void ScanEntries(IDictionary<long, string> dictionary)
+        /// <typeparam name="TKey">The type of the dictionary key.</typeparam>
+        /// <typeparam name="TValue">The type of the dictionary value.</typeparam>
+        private static void ScanEntries<TKey, TValue>(IEnumerable<KeyValuePair<TKey, TValue>> dictionary)
+            where TKey : IComparable<TKey>
         {
             int i = 0;
             Stopwatch stopwatch = Stopwatch.StartNew();
-            foreach (var item in dictionary)
+            foreach (KeyValuePair<TKey, TValue> item in dictionary)
             {
                 i++;
             }
@@ -514,10 +571,13 @@ namespace EsentCollectionsTests
         /// <param name="dictionary">The dictionary to add elements to.</param>
         /// <param name="keys">The keys to insert.</param>
         /// <param name="data">The data for the keys.</param>
-        private static void Insert(IDictionary<long, string> dictionary, ICollection<long> keys, string data)
+        /// <typeparam name="TKey">The type of the dictionary key.</typeparam>
+        /// <typeparam name="TValue">The type of the dictionary value.</typeparam>
+        private static void Insert<TKey, TValue>(IDictionary<TKey, TValue> dictionary, ICollection<TKey> keys, TValue data)
+            where TKey : IComparable<TKey>
         {
             var stopwatch = Stopwatch.StartNew();
-            foreach (int key in keys)
+            foreach (TKey key in keys)
             {
                 dictionary.Add(key, data);
             }

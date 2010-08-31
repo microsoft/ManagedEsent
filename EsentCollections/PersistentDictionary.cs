@@ -708,7 +708,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
-        /// Returns an enumerator that iterates through the keys.
+        /// Returns an enumerator that iterates through the values.
         /// </summary>
         /// <returns>
         /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the values.
