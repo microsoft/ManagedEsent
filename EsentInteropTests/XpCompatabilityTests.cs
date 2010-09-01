@@ -268,6 +268,20 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify that JetInit3 throws an exception when using the
+        /// XP version of ESENT.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that JetInit3 throws an exception when using the XP version of ESENT")]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void VerifyXpThrowsExceptionOnJetInit3()
+        {
+            JET_INSTANCE instance = JET_INSTANCE.Nil;
+            VistaApi.JetInit3(ref instance, null, InitGrbit.None);
+        }
+
+        /// <summary>
         /// Verify getting the LVChunk size on XP returns a default value.
         /// </summary>
         [TestMethod]

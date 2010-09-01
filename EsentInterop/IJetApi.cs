@@ -76,6 +76,24 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         int JetInit2(ref JET_INSTANCE instance, InitGrbit grbit);
 
         /// <summary>
+        /// Initialize the ESENT database engine.
+        /// </summary>
+        /// <param name="instance">
+        /// The instance to initialize. If an instance hasn't been
+        /// allocated then a new one is created and the engine
+        /// will operate in single-instance mode.
+        /// </param>
+        /// <param name="recoveryOptions">
+        /// Additional recovery parameters for remapping databases during
+        /// recovery, position where to stop recovery at, or recovery status.
+        /// </param>
+        /// <param name="grbit">
+        /// Initialization options.
+        /// </param>
+        /// <returns>An error code or warning.</returns>
+        int JetInit3(ref JET_INSTANCE instance, JET_RSTINFO recoveryOptions, InitGrbit grbit);
+
+        /// <summary>
         /// Retrieves information about the instances that are running.
         /// </summary>
         /// <param name="numInstances">

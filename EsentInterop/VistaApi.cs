@@ -130,5 +130,28 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         {
             Api.Check(Api.Impl.JetGetInstanceMiscInfo(instance, out signature, infoLevel));
         }
+
+        /// <summary>
+        /// Initialize the ESENT database engine.
+        /// </summary>
+        /// <param name="instance">
+        /// The instance to initialize. If an instance hasn't been
+        /// allocated then a new one is created and the engine
+        /// will operate in single-instance mode.
+        /// </param>
+        /// <param name="recoveryOptions">
+        /// Additional recovery parameters for remapping databases during
+        /// recovery, position where to stop recovery at, or recovery status.
+        /// </param>
+        /// <param name="grbit">
+        /// Initialization options.
+        /// </param>
+        /// <returns>
+        /// A warning code.
+        /// </returns>
+        public static JET_wrn JetInit3(ref JET_INSTANCE instance, JET_RSTINFO recoveryOptions, InitGrbit grbit)
+        {
+            return Api.Check(Api.Impl.JetInit3(ref instance, recoveryOptions, grbit));            
+        }
     }
 }

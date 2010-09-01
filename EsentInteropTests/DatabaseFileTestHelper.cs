@@ -270,6 +270,30 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Create a database and do a recovery to a different
+        /// path using  
+        /// functionality available in Windows Vista onwards.
+        /// </summary>
+        public void TestJetInit3()
+        {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
+            try
+            {
+                this.CreateDatabase();
+                this.RecoverAlternatePathWithJetInit3();
+                this.CheckDatabase();
+            }
+            finally
+            {
+                Cleanup.DeleteDirectoryWithRetry(this.databaseDirectory);
+            }
+        }
+
+        /// <summary>
         /// Create a database and do a snapshot backup using 
         /// functionality available in Windows 7 onwards.
         /// </summary>
@@ -537,6 +561,52 @@ namespace InteropApiTests
                     Server2003Api.JetOSSnapshotAbort(snapshot, SnapshotAbortGrbit.None);
                 }
             }
+        }
+
+        /// <summary>
+        /// Recovery to an alternate path with JetInit3.
+        /// </summary>
+        private void RecoverAlternatePathWithJetInit3()
+        {
+            using (var instance = this.CreateInstance())
+            {
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
+                    JET_DBID dbid;
+                    Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+                }
+            }
+
+            // Delete the database and checkpoint
+            File.Delete(this.database);
+            File.Delete(Path.Combine(this.databaseDirectory, "edb.chk"));
+
+            // Recovery to a different database
+            string newDatabaseName = this.database + ".moved";
+            var recoveryOptions = new JET_RSTINFO
+            {
+                crstmap = 1,
+                pfnStatus = this.StatusCallback,
+                rgrstmap = new[]
+                {
+                    new JET_RSTMAP { szDatabaseName = this.database, szNewDatabaseName = newDatabaseName },
+                },
+            };
+
+            JET_INSTANCE recoveryInstance;
+            Api.JetCreateInstance(out recoveryInstance, "JetInit3");
+            Api.JetSetSystemParameter(recoveryInstance, JET_SESID.Nil, JET_param.LogFileSize, 128, null);
+            Api.JetSetSystemParameter(recoveryInstance, JET_SESID.Nil, JET_param.LogFilePath, 0, this.databaseDirectory);
+            Api.JetSetSystemParameter(recoveryInstance, JET_SESID.Nil, JET_param.TempPath, 0, this.databaseDirectory);
+            Api.JetSetSystemParameter(recoveryInstance, JET_SESID.Nil, JET_param.SystemPath, 0, this.databaseDirectory);
+            VistaApi.JetInit3(ref recoveryInstance, recoveryOptions, InitGrbit.None);
+            Api.JetTerm(recoveryInstance);
+
+            Assert.IsTrue(File.Exists(newDatabaseName), "New database ({0}) doesn't exist", newDatabaseName);
+            Assert.IsFalse(File.Exists(this.database), "Old database ({0}) still exists", this.database);
+            File.Move(newDatabaseName, this.database);
         }
 
         /// <summary>

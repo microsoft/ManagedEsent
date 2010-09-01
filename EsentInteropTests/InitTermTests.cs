@@ -9,6 +9,7 @@ namespace InteropApiTests
     using System;
     using System.Threading;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Isam.Esent.Interop.Windows7;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -73,7 +74,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Initialize and terminate one instance.")]
+        [Description("Initialize and terminate one instance with JetInit2.")]
         public void InitializeInstanceWithJetInit2()
         {
             JET_INSTANCE instance;
@@ -85,6 +86,58 @@ namespace InteropApiTests
             systemParameters.NoInformationEvent = true;
 
             Api.JetInit2(ref instance, InitGrbit.None);
+            Api.JetTerm(instance);
+        }
+
+        /// <summary>
+        /// Initialize and terminate one instance. The instance is initialized
+        /// with JetInit3.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Initialize and terminate one instance with JetInit3.")]
+        public void InitializeInstanceWithJetInit3()
+        {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
+            JET_INSTANCE instance;
+            Api.JetCreateInstance2(out instance, Guid.NewGuid().ToString(), "Instance Display Name", CreateInstanceGrbit.None);
+
+            var systemParameters = new InstanceParameters(instance);
+            systemParameters.MaxTemporaryTables = 0;
+            systemParameters.Recovery = false;
+            systemParameters.NoInformationEvent = true;
+
+            VistaApi.JetInit3(ref instance, null, InitGrbit.None);
+            Api.JetTerm(instance);
+        }
+
+        /// <summary>
+        /// Initialize and terminate one instance. The instance is initialized
+        /// with JetInit3 and a JET_RSTINFO.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Initialize and terminate one instance with JetInit3 and a JET_RSTINFO.")]
+        public void InitializeInstanceWithJetInit3AndRstinfo()
+        {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
+            JET_INSTANCE instance;
+            Api.JetCreateInstance2(out instance, Guid.NewGuid().ToString(), "Instance Display Name", CreateInstanceGrbit.None);
+
+            var systemParameters = new InstanceParameters(instance);
+            systemParameters.MaxTemporaryTables = 0;
+            systemParameters.Recovery = false;
+            systemParameters.NoInformationEvent = true;
+
+            VistaApi.JetInit3(ref instance, new JET_RSTINFO(), InitGrbit.None);
             Api.JetTerm(instance);
         }
 

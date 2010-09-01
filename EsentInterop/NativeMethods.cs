@@ -58,6 +58,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern int JetInit2(ref IntPtr instance, uint grbit);
 
         [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetInit3W(ref IntPtr instance, ref NATIVE_RSTINFO prstinfo, uint grbit);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetInit3W(ref IntPtr instance, IntPtr prstinfo, uint grbit);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
         public static extern unsafe int JetGetInstanceInfo(out uint pcInstanceInfo, out NATIVE_INSTANCE_INFO* prgInstanceInfo);
 
         // Returns unicode strings in the NATIVE_INSTANCE_INFO.

@@ -10,6 +10,7 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Runtime.InteropServices;
+    using Microsoft.Isam.Esent.Interop.Implementation;
 
     /// <summary>
     /// The native version of the JET_RSTINFO structure.
@@ -34,7 +35,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// The array of <see cref="NATIVE_RSTMAP"/> structures.
         /// </summary>
-        public NATIVE_RSTMAP[] rgrstmap;
+        public unsafe NATIVE_RSTMAP* rgrstmap;
 
         /// <summary>
         /// The number of elements in the restore-map array.
@@ -161,6 +162,24 @@ namespace Microsoft.Isam.Esent.Interop
                     this.crstmap,
                     "cannot be greater than the length of rgrstmap");
             }
+        }
+
+        /// <summary>
+        /// Get a native version of this managed structure.
+        /// </summary>
+        /// <returns>A native version of this object.</returns>
+        internal NATIVE_RSTINFO GetNativeRstmap()
+        {
+            this.CheckMembersAreValid();
+            var native = new NATIVE_RSTINFO
+            {
+                cbStruct = (uint)NATIVE_RSTINFO.SizeOfRstinfo,
+                crstmap = checked((uint)this.crstmap),
+                lgposStop = this.lgposStop,
+                logtimeStop = this.logtimeStop
+            };
+
+            return native;
         }
     }
 }

@@ -384,6 +384,23 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Tests for snapshot backup using unicode paths and Vista APIs.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Perform a snapshot backup of a database with a Unicode path and Vista APIs")]
+        public void AlternatePathRecoveryWithJetInit3()
+        {
+            if (!EsentVersion.SupportsUnicodePaths)
+            {
+                return;
+            }
+
+            var test = new DatabaseFileTestHelper(this.directory);
+            test.TestJetInit3();
+        }
+
+        /// <summary>
         /// Tests for snapshot backup using unicode paths and Win7 APIs.
         /// </summary>
         [TestMethod]

@@ -11,6 +11,8 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Runtime.InteropServices;
+    using System.Text;
+    using Microsoft.Isam.Esent.Interop.Implementation;
 
     /// <summary>
     /// The native version of the JET_RSTMAP structure.
@@ -31,6 +33,15 @@ namespace Microsoft.Isam.Esent.Interop
         ///  The current name/path of the database. Must not be null.
         /// </summary>
         public IntPtr szNewDatabaseName;
+
+        /// <summary>
+        /// Free the string memory.
+        /// </summary>
+        public void FreeHGlobal()
+        {
+            Marshal.FreeHGlobal(this.szDatabaseName);
+            Marshal.FreeHGlobal(this.szNewDatabaseName);
+        }
     }
 
     /// <summary>
@@ -112,6 +123,22 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_RSTMAP DeepClone()
         {
             return (JET_RSTMAP)this.MemberwiseClone();
+        }
+
+        /// <summary>
+        /// Get a native version of this managed structure.
+        /// </summary>
+        /// <returns>A native version of this object.</returns>
+        internal NATIVE_RSTMAP GetNativeRstmap()
+        {
+            return new NATIVE_RSTMAP
+            {
+                // Don't pin this memory -- these structures are used by JetInit3,
+                // which can run for a long time and we don't want to fragment the
+                // heap. We do have to remember to free the memory though.
+                szDatabaseName = Marshal.StringToHGlobalUni(this.szDatabaseName),
+                szNewDatabaseName = Marshal.StringToHGlobalUni(this.szNewDatabaseName),
+            };
         }
     }
 }
