@@ -10,10 +10,13 @@
 namespace InteropApiTests
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Text;
     using System.Threading;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -610,6 +613,78 @@ namespace InteropApiTests
             }
 
             Api.JetCommitTransaction(sesid, CommitTransactionGrbit.LazyFlush);
+        }
+
+        /// <summary>
+        /// Demonstrate how to get the Vista GUID normalization behaviour on XP.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Demonstrate how to get the Vista GUID normalization behaviour on XP")]
+        public void HowDoINormalizeAGuidOnXp()
+        {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
+            JET_SESID sesid = this.testSession;
+            JET_DBID dbid = this.testDbid;
+
+            JET_TABLEID tableid;
+            JET_COLUMNDEF columndef = new JET_COLUMNDEF();
+            JET_COLUMNID guidColumn, binaryColumn;
+
+            Api.JetCreateTable(sesid, dbid, "table", 0, 100, out tableid);
+
+            columndef.coltyp = VistaColtyp.GUID;
+            Api.JetAddColumn(sesid, tableid, "guid", columndef, null, 0, out guidColumn);
+            columndef.coltyp = JET_coltyp.Binary;
+            Api.JetAddColumn(sesid, tableid, "guid_as_binary", columndef, null, 0, out binaryColumn);
+
+            const string GuidIndexKey = "+guid\0\0";
+            Api.JetCreateIndex(sesid, tableid, "guid", CreateIndexGrbit.IndexUnique, GuidIndexKey, GuidIndexKey.Length, 100);
+            const string BinaryIndexKey = "+guid_as_binary\0\0";
+            Api.JetCreateIndex(sesid, tableid, "binary", CreateIndexGrbit.IndexUnique, BinaryIndexKey, BinaryIndexKey.Length, 100);
+
+            Api.JetBeginTransaction(sesid);
+            foreach (Guid g in from x in Enumerable.Range(0, 200) select Guid.NewGuid())
+            {
+                Api.JetPrepareUpdate(sesid, tableid, JET_prep.Insert);
+                Api.SetColumn(sesid, tableid, guidColumn, g);
+
+                byte[] input = g.ToByteArray();
+                int[] transform = new[] { 10, 11, 12, 13, 14, 15, 8, 9, 6, 7, 4, 5, 0, 1, 2, 3 };
+                byte[] transformed = (from i in transform select input[i]).ToArray();
+
+                Api.SetColumn(sesid, tableid, binaryColumn, transformed);
+                Api.JetUpdate(sesid, tableid);
+            }
+
+            Api.JetCommitTransaction(sesid, CommitTransactionGrbit.LazyFlush);
+
+            Api.JetSetCurrentIndex(sesid, tableid, "guid");
+            Guid[] guidOrder = GetGuids(sesid, tableid, guidColumn).ToArray();
+            Api.JetSetCurrentIndex(sesid, tableid, "binary");
+            Guid[] binaryOrder = GetGuids(sesid, tableid, guidColumn).ToArray();
+
+            CollectionAssert.AreEqual(guidOrder, binaryOrder);
+        }
+
+        /// <summary>
+        /// Enumerate all records in a table returning the values of the specified column.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to use.</param>
+        /// <param name="columnid">The column to retrieve.</param>
+        /// <returns>An enumeration of the column values as guids.</returns>
+        private static IEnumerable<Guid> GetGuids(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
+        {
+            Api.MoveBeforeFirst(sesid, tableid);
+            while (Api.TryMoveNext(sesid, tableid))
+            {
+                yield return Api.RetrieveColumnAsGuid(sesid, tableid, columnid).Value;
+            }
         }
 
         /// <summary>

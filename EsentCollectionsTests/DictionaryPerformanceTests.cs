@@ -101,7 +101,7 @@ namespace EsentCollectionsTests
         /// Randomly insert records into a PersistentDictionary and measure the speed.
         /// </summary>
         [TestMethod]
-        [Priority(3)]
+        [Priority(4)]
         public void TestPersistentDictionaryBoxing()
         {
             using (var dictionary = new PersistentDictionary<long, long>(DictionaryLocation))

@@ -1438,6 +1438,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code if the operation fails.</returns>
         public int JetGetThreadStats(out JET_THREADSTATS threadstats)
         {
+            TraceFunctionCall("JetGetThreadStats");
             this.CheckSupportsVistaFeatures("JetGetThreadStats");
 
             NATIVE_THREADSTATS native;

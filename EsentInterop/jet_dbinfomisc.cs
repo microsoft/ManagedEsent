@@ -257,7 +257,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1309:FieldNamesMustNotBeginWithUnderscore",
         Justification = "Need to avoid clash between members and properties.")]
     [Serializable]
-    public sealed class JET_DBINFOMISC : IEquatable<JET_DBINFOMISC>
+    public sealed partial class JET_DBINFOMISC : IEquatable<JET_DBINFOMISC>
     {
         /// <summary>
         /// Version of Esent that created the database.

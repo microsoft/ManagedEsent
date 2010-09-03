@@ -11,7 +11,6 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Globalization;
     using System.Reflection;
     using System.Runtime.CompilerServices;
-    using System.Runtime.InteropServices;
     using System.Threading;
 
     /// <summary>
@@ -146,9 +145,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         /// <param name="nativeSnp">The type of operation.</param>
         /// <param name="nativeSnt">The status of the operation.</param>
-        /// <param name="nativeSnprog">Optional <see cref="NATIVE_SNPROG"/>.</param>
+        /// <param name="nativeData">Optional <see cref="NATIVE_SNPROG"/>.</param>
         /// <returns>An error code.</returns>
-        private JET_err CallbackImpl(IntPtr nativeSesid, uint nativeSnp, uint nativeSnt, IntPtr nativeSnprog)
+        private JET_err CallbackImpl(IntPtr nativeSesid, uint nativeSnp, uint nativeSnt, IntPtr nativeData)
         {
             RuntimeHelpers.PrepareConstrainedRegions();
             try
@@ -156,17 +155,8 @@ namespace Microsoft.Isam.Esent.Interop
                 var sesid = new JET_SESID { Value = nativeSesid };
                 JET_SNP snp = (JET_SNP)nativeSnp;
                 JET_SNT snt = (JET_SNT)nativeSnt;
-                JET_SNPROG snprog = null;
-
-                // Other callback types can have pointers to different structures.
-                if (IntPtr.Zero != nativeSnprog && JET_SNT.Progress == snt)
-                {
-                    NATIVE_SNPROG native = (NATIVE_SNPROG)Marshal.PtrToStructure(nativeSnprog, typeof(NATIVE_SNPROG));
-                    snprog = new JET_SNPROG();
-                    snprog.SetFromNative(native);
-                }
-
-                return this.wrappedCallback(sesid, snp, snt, snprog);
+                object data = CallbackDataConverter.GetManagedData(nativeData, snp, snt);
+                return this.wrappedCallback(sesid, snp, snt, data);
             }
             catch (ThreadAbortException)
             {
