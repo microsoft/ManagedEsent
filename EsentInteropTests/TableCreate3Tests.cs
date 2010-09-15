@@ -36,6 +36,10 @@ namespace InteropApiTests
         [Description("Initialize the Indexcreate2Tests fixture")]
         public void Setup()
         {
+            JET_TABLEID tableidTemp = new JET_TABLEID()
+            {
+                Value = (IntPtr) 456,
+            };
             this.managed = new JET_TABLECREATE()
             {
                 szTableName = "table7",
@@ -48,11 +52,11 @@ namespace InteropApiTests
                 cIndexes = 0,
                 szCallback = "module!FunkyFunction",
                 cbtyp = JET_cbtyp.AfterReplace,
-                grbit = CreateTableColumnIndexGrbit.FixedDdl,
+                grbit = CreateTableColumnIndexGrbit.FixedDDL,
                 pSeqSpacehints = null,
                 pLVSpacehints = null,
                 cbSeparateLV = 0x999,
-                tableid = (IntPtr)456,
+                tableid = tableidTemp,
                 cCreated = 3,
             };
 

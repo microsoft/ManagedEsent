@@ -1131,6 +1131,12 @@ namespace Microsoft.Isam.Esent.Interop
         ColumnUnversioned = 0x1000,
 
         /// <summary>
+        /// In doing an outer join, the retrieve column operation might not have a match
+        /// from the inner table.
+        /// </summary>
+        ColumnMaybeNull = 0x2000,
+
+        /// <summary>
         /// The default value for a column will be provided by a callback function. A column that
         /// has a user-defined default must be a tagged column. Specifying JET_bitColumnUserDefinedDefault
         /// means that pvDefault must point to a JET_USERDEFINEDDEFAULT structure, and cbDefault must be
@@ -1172,10 +1178,10 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// The DDL is fixed.
         /// </summary>
-        FixedDdl = 0x1,
+        FixedDDL = 0x1,
 
         /// <summary>
-        /// The DDL is inheritable. Implies FixedDdl.
+        /// The DDL is inheritable. Implies FixedDDL.
         /// </summary>
         TemplateTable = 0x2,
 
@@ -1483,6 +1489,11 @@ namespace Microsoft.Isam.Esent.Interop
     [Flags]
     public enum SpaceHintsGrbit
     {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0x0,
+        
         // Generic bits.
 
         /// <summary>

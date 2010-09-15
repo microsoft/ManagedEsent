@@ -494,6 +494,11 @@ namespace Microsoft.Isam.Esent.Interop
         SectorSizeNotSupported = -583,
 
         /// <summary>
+        /// Soft recovery successfully replayed all operations and intended to skip the Undo phase of recovery, but the Undo phase was not required.
+        /// </summary>
+        RecoveredWithoutUndoDatabasesConsistent  = -584,
+
+        /// <summary>
         /// Unicode translation buffer too small
         /// </summary>
         UnicodeTranslationBufferTooSmall = -601,

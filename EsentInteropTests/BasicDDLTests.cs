@@ -523,7 +523,7 @@ namespace InteropApiTests
 
             var tableCreated = new JET_TABLEID()
             {
-                Value = tablecreate.tableid
+                Value = tablecreate.tableid.Value
             };
 
             Assert.AreNotEqual<JET_TABLEID>(JET_TABLEID.Nil, tableCreated);
@@ -607,7 +607,7 @@ namespace InteropApiTests
 
             var tableCreated = new JET_TABLEID()
             {
-                Value = tablecreateTemplate.tableid
+                Value = tablecreateTemplate.tableid.Value
             };
 
             Assert.AreNotEqual<JET_TABLEID>(JET_TABLEID.Nil, tableCreated);
@@ -637,7 +637,7 @@ namespace InteropApiTests
 
             var tableidChild = new JET_TABLEID()
             {
-                Value = tablecreateTemplate.tableid
+                Value = tablecreateTemplate.tableid.Value
             };
 
             Assert.AreNotEqual<JET_TABLEID>(JET_TABLEID.Nil, tableidChild);
@@ -756,7 +756,7 @@ namespace InteropApiTests
 
             var tableCreated = new JET_TABLEID()
             {
-                Value = tablecreate.tableid
+                Value = tablecreate.tableid.Value
             };
 
             Assert.AreNotEqual<JET_TABLEID>(JET_TABLEID.Nil, tableCreated);

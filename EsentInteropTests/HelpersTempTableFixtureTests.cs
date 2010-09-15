@@ -1745,6 +1745,25 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test setting a binary column from a zero-length array with grbits.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Test setting a binary column from a zero-length array using a grbit")]
+        public void SetZeroLengthBytesWithGrbit()
+        {
+            JET_COLUMNID columnid = this.columnidDict["binary"];
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.SetColumn(this.sesid, this.tableid, columnid, new byte[0], SetColumnGrbit.IntrinsicLV);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Assert.AreEqual(0, Api.RetrieveColumn(this.sesid, this.tableid, columnid).Length);
+        }
+
+        /// <summary>
         /// Test setting a binary column from a null object.
         /// </summary>
         [TestMethod]

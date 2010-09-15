@@ -634,6 +634,11 @@ namespace InteropApiTests
                 },
             };
 
+            JET_TABLEID tableidTemp = new JET_TABLEID()
+            {
+                Value = (IntPtr)2,
+            };
+
             var tablecreateX = new JET_TABLECREATE
             {
                 szTableName = "tableBigBang",
@@ -648,7 +653,7 @@ namespace InteropApiTests
                 grbit = CreateTableColumnIndexGrbit.NoFixedVarColumnsInDerivedTables,
                 pSeqSpacehints = spacehintsSeqX,
                 pLVSpacehints = spacehintsLvX,
-                tableid = new IntPtr(2),
+                tableid = tableidTemp,
                 cCreated = 7,
             };
 
@@ -747,7 +752,7 @@ namespace InteropApiTests
                 grbit = CreateTableColumnIndexGrbit.NoFixedVarColumnsInDerivedTables,
                 pSeqSpacehints = spacehintsSeqY,
                 pLVSpacehints = spacehintsLvY,
-                tableid = new IntPtr(2),
+                tableid = tableidTemp,
                 cCreated = 7,
             };
 
@@ -840,6 +845,11 @@ namespace InteropApiTests
                 },
             };
 
+            JET_TABLEID tableidTemp = new JET_TABLEID()
+            {
+                Value = (IntPtr)2,
+            };
+
             var tablecreates = new JET_TABLECREATE[21];
             for (int i = 0; i < tablecreates.Length; ++i)
             {
@@ -857,7 +867,7 @@ namespace InteropApiTests
                     grbit = CreateTableColumnIndexGrbit.NoFixedVarColumnsInDerivedTables,
                     pSeqSpacehints = spacehintsSeq,
                     pLVSpacehints = spacehintsLv,
-                    tableid = new IntPtr(2),
+                    tableid = tableidTemp,
                     cCreated = 7,
                 };
             }
@@ -891,12 +901,13 @@ namespace InteropApiTests
             tablecreates[j].rgindexcreate = null;
             tablecreates[j++].cIndexes = 0;
             tablecreates[j++].cbtyp = JET_cbtyp.AfterInsert;
-            tablecreates[j++].grbit = CreateTableColumnIndexGrbit.FixedDdl;
+            tablecreates[j++].grbit = CreateTableColumnIndexGrbit.FixedDDL;
             tablecreates[j++].pSeqSpacehints = spacehintsLv;
             tablecreates[j++].pSeqSpacehints = null;
             tablecreates[j++].pLVSpacehints = spacehintsSeq;
             tablecreates[j++].pLVSpacehints = null;
-            tablecreates[j++].tableid = new IntPtr(63);
+            tableidTemp.Value = new IntPtr(63);
+            tablecreates[j++].tableid = tableidTemp;
             tablecreates[j++].cCreated--;
             tablecreates[j++] = new JET_TABLECREATE();
             Debug.Assert(j == tablecreates.Length, "Didn't fill in all entries of tablecreates");

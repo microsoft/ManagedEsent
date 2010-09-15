@@ -711,8 +711,11 @@ namespace InteropApiTests
         [Description("Test JET_RSTINFO.ToString()")]
         public void JetRstinfoToString()
         {
-            var value = new JET_RSTINFO();
-            Assert.AreEqual("JET_RSTINFO(crstmap=0)", value.ToString());
+            var value = new JET_RSTINFO()
+            {
+                crstmap = 3,
+            };
+            Assert.AreEqual("JET_RSTINFO(crstmap=3)", value.ToString());
         }
 
         /// <summary>

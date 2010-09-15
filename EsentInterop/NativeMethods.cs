@@ -57,6 +57,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetInit2(ref IntPtr instance, uint grbit);
 
+        // JetInit3 was introduced in Vista, so therefore we'll only support the Unicode version.
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetInit3W(ref IntPtr instance, ref NATIVE_RSTINFO prstinfo, uint grbit);
 

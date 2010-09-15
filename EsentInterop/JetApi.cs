@@ -182,7 +182,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             if (null != recoveryOptions)
             {
                 var callbackWrapper = new StatusCallbackWrapper(recoveryOptions.pfnStatus);
-                NATIVE_RSTINFO rstinfo = recoveryOptions.GetNativeRstmap();
+                NATIVE_RSTINFO rstinfo = recoveryOptions.GetNativeRstinfo();
 
                 unsafe
                 {
@@ -4322,22 +4322,32 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="managedIndexCreates">Index create structures to convert.</param>
         /// <param name="handles">The handle collection used to pin the data.</param>
         /// <returns>Pinned native versions of the index creates.</returns>
-        private static IntPtr GetNativeIndexCreate2s(
+        private static unsafe NATIVE_INDEXCREATE2[] GetNativeIndexCreate2s(
             JET_INDEXCREATE[] managedIndexCreates,
             GCHandleCollection handles)
         {
-            IntPtr nativeBuffer = IntPtr.Zero;
+            NATIVE_INDEXCREATE2[] nativeIndices = null;
+
             if (managedIndexCreates != null && managedIndexCreates.Length > 0)
             {
-                var nativeIndices = new NATIVE_INDEXCREATE2[managedIndexCreates.Length];
+                nativeIndices = new NATIVE_INDEXCREATE2[managedIndexCreates.Length];
 
                 for (int i = 0; i < managedIndexCreates.Length; ++i)
                 {
                     nativeIndices[i] = managedIndexCreates[i].GetNativeIndexcreate2();
 
+                    if (null != managedIndexCreates[i].pidxUnicode)
+                    {
+                        NATIVE_UNICODEINDEX unicode = managedIndexCreates[i].pidxUnicode.GetNativeUnicodeIndex();
+                        nativeIndices[i].indexcreate1.indexcreate.pidxUnicode = (NATIVE_UNICODEINDEX*)handles.Add(unicode);
+                        nativeIndices[i].indexcreate1.indexcreate.grbit |= (uint)VistaGrbits.IndexUnicode;
+                    }
+
                     nativeIndices[i].indexcreate1.indexcreate.szKey = handles.Add(Encoding.ASCII.GetBytes(managedIndexCreates[i].szKey));
                     nativeIndices[i].indexcreate1.indexcreate.szIndexName = handles.Add(Encoding.ASCII.GetBytes(managedIndexCreates[i].szIndexName));
+                    nativeIndices[i].indexcreate1.indexcreate.rgconditionalcolumn = GetNativeConditionalColumns(managedIndexCreates[i].rgconditionalcolumn, handles);
 
+                    // Convert pSpaceHints.
                     if (managedIndexCreates[i].pSpaceHints != null)
                     {
                         NATIVE_SPACEHINTS nativeSpaceHints = managedIndexCreates[i].pSpaceHints.GetNativeSpaceHints();
@@ -4345,11 +4355,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                         nativeIndices[i].pSpaceHints = handles.Add(nativeSpaceHints);
                     }
                 }
-
-                nativeBuffer = handles.Add(nativeIndices);
             }
 
-            return nativeBuffer;
+            return nativeIndices;
         }
 
         /// <summary>
@@ -4464,42 +4472,16 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code.</returns>
         private static int CreateIndexes2(JET_SESID sesid, JET_TABLEID tableid, JET_INDEXCREATE[] indexcreates, int numIndexCreates)
         {
-            var nativeIndexcreates = new NATIVE_INDEXCREATE2[indexcreates.Length];
-            for (int i = 0; i < numIndexCreates; ++i)
-            {
-                nativeIndexcreates[i] = indexcreates[i].GetNativeIndexcreate2();
-            }
+            NATIVE_INDEXCREATE2[] nativeIndexcreates;
 
             // pin the memory
-            unsafe
+            using (var handles = new GCHandleCollection())
             {
-                using (var handles = new GCHandleCollection())
-                {
-                    for (int i = 0; i < numIndexCreates; ++i)
-                    {
-                        if (null != indexcreates[i].pidxUnicode)
-                        {
-                            NATIVE_UNICODEINDEX unicode = indexcreates[i].pidxUnicode.GetNativeUnicodeIndex();
-                            nativeIndexcreates[i].indexcreate1.indexcreate.pidxUnicode = (NATIVE_UNICODEINDEX*)handles.Add(unicode);
-                            nativeIndexcreates[i].indexcreate1.indexcreate.grbit |= (uint)VistaGrbits.IndexUnicode;
-                        }
+                nativeIndexcreates = GetNativeIndexCreate2s(indexcreates, handles);
 
-                        nativeIndexcreates[i].indexcreate1.indexcreate.szKey = handles.Add(Encoding.ASCII.GetBytes(indexcreates[i].szKey));
-                        nativeIndexcreates[i].indexcreate1.indexcreate.szIndexName = handles.Add(Encoding.ASCII.GetBytes(indexcreates[i].szIndexName));
-                        nativeIndexcreates[i].indexcreate1.indexcreate.rgconditionalcolumn = GetNativeConditionalColumns(indexcreates[i].rgconditionalcolumn, handles);
-
-                        // Convert pSpaceHints.
-                        if (indexcreates[i].pSpaceHints != null)
-                        {
-                            NATIVE_SPACEHINTS nativeSpaceHints = indexcreates[i].pSpaceHints.GetNativeSpaceHints();
-                            nativeIndexcreates[i].pSpaceHints = handles.Add(nativeSpaceHints);
-                        }
-                    }
-
-                    return
-                        Err(
-                            NativeMethods.JetCreateIndex3A(sesid.Value, tableid.Value, nativeIndexcreates, checked((uint)numIndexCreates)));
-                }
+                return
+                    Err(
+                        NativeMethods.JetCreateIndex3A(sesid.Value, tableid.Value, nativeIndexcreates, checked((uint)numIndexCreates)));
             }
         }
 
@@ -4525,7 +4507,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     nativeTableCreate.rgcolumncreate = (NATIVE_COLUMNCREATE*)GetNativeColumnCreates(tablecreate.rgcolumncreate, handles);
 
                     // Convert/pin the index definitions.
-                    nativeTableCreate.rgindexcreate = GetNativeIndexCreate2s(tablecreate.rgindexcreate, handles);
+                    NATIVE_INDEXCREATE2[] nativeIndexCreates = GetNativeIndexCreate2s(tablecreate.rgindexcreate, handles);
+                    nativeTableCreate.rgindexcreate = handles.Add(nativeIndexCreates);
 
                     // Convert/pin the space hints.
                     if (tablecreate.pSeqSpacehints != null)
@@ -4543,7 +4526,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     int err = NativeMethods.JetCreateTableColumnIndex3A(sesid.Value, dbid.Value, ref nativeTableCreate);
 
                     // Modified fields.
-                    tablecreate.tableid = nativeTableCreate.tableid;
+                    tablecreate.tableid = new JET_TABLEID()
+                    {
+                        Value = nativeTableCreate.tableid
+                    };
                     tablecreate.cCreated = checked((int)nativeTableCreate.cCreated);
 
                     if (tablecreate.rgcolumncreate != null)

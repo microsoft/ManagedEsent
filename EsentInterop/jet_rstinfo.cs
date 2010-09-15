@@ -168,7 +168,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Get a native version of this managed structure.
         /// </summary>
         /// <returns>A native version of this object.</returns>
-        internal NATIVE_RSTINFO GetNativeRstmap()
+        internal NATIVE_RSTINFO GetNativeRstinfo()
         {
             this.CheckMembersAreValid();
             var native = new NATIVE_RSTINFO

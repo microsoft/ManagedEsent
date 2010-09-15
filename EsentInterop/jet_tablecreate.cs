@@ -193,7 +193,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Returned tabledid.
         /// </summary>
-        private IntPtr tableIdentifier;
+        [NonSerialized]
+        private JET_TABLEID tableIdentifier;
 
         /// <summary>
         /// Count of objects created (columns+table+indexes+callbacks).
@@ -344,7 +345,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets or sets the returned tabledid.
         /// </summary>
-        public IntPtr tableid
+        public JET_TABLEID tableid
         {
             [DebuggerStepThrough]
             get { return this.tableIdentifier; }
@@ -494,7 +495,7 @@ namespace Microsoft.Isam.Esent.Interop
             // native.pSeqSpacehints is done at pinvoke time.
             // native.pLVSpacehints is done at pinvoke time.
             native.cbSeparateLV = checked((uint)this.cbSeparateLV);
-            native.tableid = this.tableid;
+            native.tableid = this.tableid.Value;
             native.cCreated = checked((uint)this.cCreated);
 
             return native;
