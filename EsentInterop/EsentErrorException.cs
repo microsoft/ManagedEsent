@@ -7,7 +7,6 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
-    using System.Globalization;
     using System.Runtime.Serialization;
 
     /// <summary>
@@ -35,32 +34,6 @@ namespace Microsoft.Isam.Esent.Interop
         protected EsentErrorException(SerializationInfo info, StreamingContext context) :
                 base(info, context)
         {
-        }
-
-        /// <summary>
-        /// Gets a text message describing the error.
-        /// </summary>
-        public override string Message
-        {
-            get
-            {
-                return String.Format(CultureInfo.InvariantCulture, "Error {0} ({1})", this.Error, this.ErrorDescription);
-            }
-        }
-
-        /// <summary>
-        /// Gets a text description of the error.
-        /// </summary>
-        public string ErrorDescription
-        {
-            get
-            {
-                var errNum = (int)this.Data["error"];
-
-                string description;
-                var wrn = Api.Impl.JetGetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.ErrorToString, ref errNum, out description, 1024);
-                return (int)JET_wrn.Success == wrn ? description : "<unknown>";
-            }
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="jet_err.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -26,7 +26,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         Success = 0,
 
-        #region Errors
+        #region Errors        
 
         /// <summary>
         /// Resource Failure Simulator failure
@@ -62,6 +62,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// Fatal internal error
         /// </summary>
         InternalError = -107,
+
+        /// <summary>
+        /// You are running MinESE, that does not have all features compiled in.  This functionality is only supported in a full version of ESE.
+        /// </summary>
+        DisabledFunctionality = -112,
 
         /// <summary>
         /// Buffer dependencies improperly set. Recovery failure
@@ -134,9 +139,19 @@ namespace Microsoft.Isam.Esent.Interop
         KeyTruncated = -346,
 
         /// <summary>
+        /// Some database pages have become unreachable even from the avail tree, only an offline defragmentation can return the lost space.
+        /// </summary>
+        DatabaseLeakInSpace = -348,
+
+        /// <summary>
         /// Key is too large
         /// </summary>
         KeyTooBig = -408,
+
+        /// <summary>
+        /// illegal attempt to separate an LV which must be intrinsic
+        /// </summary>
+        CannotSeparateIntrinsicLV = -416,
 
         /// <summary>
         /// Logged operation cannot be redone
@@ -404,7 +419,7 @@ namespace Microsoft.Isam.Esent.Interop
         MissingRestoreLogFiles = -557,
 
         /// <summary>
-        /// The database miss a previous full backup befor incremental backup
+        /// The database missed a previous full backup before incremental backup
         /// </summary>
         MissingFullBackup = -560,
 
@@ -424,7 +439,7 @@ namespace Microsoft.Isam.Esent.Interop
         DatabaseIncompleteUpgrade = -563,
 
         /// <summary>
-        /// Some current log files are missing for continous restore
+        /// Some current log files are missing for continuous restore
         /// </summary>
         MissingCurrentLogFiles = -565,
 
@@ -489,14 +504,24 @@ namespace Microsoft.Isam.Esent.Interop
         SoftRecoveryOnSnapshot = -581,
 
         /// <summary>
+        /// One or more logs that were committed to this database, are missing.  These log files are required to maintain durable ACID semantics, but not required to maintain consistency if the JET_bitReplayIgnoreLostLogs bit is specified during recovery.
+        /// </summary>
+        CommittedLogFilesMissing = -582,
+
+        /// <summary>
         /// The physical sector size reported by the disk subsystem, is unsupported by ESE for a specific file type.
         /// </summary>
         SectorSizeNotSupported = -583,
 
         /// <summary>
-        /// Soft recovery successfully replayed all operations and intended to skip the Undo phase of recovery, but the Undo phase was not required.
+        /// Soft recovery successfully replayed all operations and intended to skip the Undo phase of recovery, but the Undo phase was not required
         /// </summary>
-        RecoveredWithoutUndoDatabasesConsistent  = -584,
+        RecoveredWithoutUndoDatabasesConsistent = -584,
+
+        /// <summary>
+        /// One or more logs were found to be corrupt during recovery.  These log files are required to maintain durable ACID semantics, but not required to maintain consistency if the JET_bitIgnoreLostLogs bit and JET_paramDeleteOutOfRangeLogs is specified during recovery.
+        /// </summary>
+        CommittedLogFileCorrupt = -586,
 
         /// <summary>
         /// Unicode translation buffer too small
@@ -549,7 +574,17 @@ namespace Microsoft.Isam.Esent.Interop
         LogFileNotCopied = -616,
 
         /// <summary>
-        /// Invalid parameter
+        /// A surrogate backup is in progress.
+        /// </summary>
+        SurrogateBackupInProgress = -617,
+
+        /// <summary>
+        /// Backup was aborted by server by calling JetTerm with JET_bitTermStopBackup or by calling JetStopBackup
+        /// </summary>
+        BackupAbortByServer = -801,
+
+        /// <summary>
+        /// Invalid flags parameter
         /// </summary>
         InvalidGrbit = -900,
 
@@ -559,7 +594,7 @@ namespace Microsoft.Isam.Esent.Interop
         TermInProgress = -1000,
 
         /// <summary>
-        /// Api not supported
+        /// API not supported
         /// </summary>
         FeatureNotAvailable = -1001,
 
@@ -569,7 +604,7 @@ namespace Microsoft.Isam.Esent.Interop
         InvalidName = -1002,
 
         /// <summary>
-        /// Invalid Api parameter
+        /// Invalid API parameter
         /// </summary>
         InvalidParameter = -1003,
 
@@ -634,6 +669,11 @@ namespace Microsoft.Isam.Esent.Interop
         OutOfFileHandles = -1020,
 
         /// <summary>
+        /// The OS returned ERROR_CRC from file IO
+        /// </summary>
+        DiskReadVerificationFailure = -1021,
+
+        /// <summary>
         /// Disk IO error
         /// </summary>
         DiskIO = -1022,
@@ -687,6 +727,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Cannot access file, the file is locked or in use
         /// </summary>
         FileAccessDenied = -1032,
+
+        /// <summary>
+        /// Query support unavailable
+        /// </summary>
+        QueryNotSupported = -1034,
+
+        /// <summary>
+        /// SQL Link support unavailable
+        /// </summary>
+        SQLLinkNotSupported = -1035,
 
         /// <summary>
         /// Buffer is too small
@@ -749,12 +799,17 @@ namespace Microsoft.Isam.Esent.Interop
         NotInTransaction = -1054,
 
         /// <summary>
+        /// Transaction must rollback because failure of unversioned update
+        /// </summary>
+        MustRollback = -1057,
+
+        /// <summary>
         /// Too many active database users
         /// </summary>
         TooManyActiveUsers = -1059,
 
         /// <summary>
-        /// Invalid or unknown country code
+        /// Invalid or unknown country/region code
         /// </summary>
         InvalidCountry = -1061,
 
@@ -787,6 +842,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// Version store out of memory (cleanup already attempted)
         /// </summary>
         VersionStoreOutOfMemory = -1069,
+
+        /// <summary>
+        /// UNUSED: lCSRPerfFUCB * g_lCursorsMax exceeded (XJET only)
+        /// </summary>
+        CurrencyStackOutOfMemory = -1070,
 
         /// <summary>
         /// Cannot index escrow column or SLV column
@@ -944,9 +1004,59 @@ namespace Microsoft.Isam.Esent.Interop
         InvalidInstance = -1115,
 
         /// <summary>
-        ///  The instance was shutdown successfully but all the attached databases were left in a dirty state by request via JET_bitTermDirty
+        /// The instance was shutdown successfully but all the attached databases were left in a dirty state by request via JET_bitTermDirty
         /// </summary>
         DirtyShutdown = -1116,
+
+        /// <summary>
+        /// The database page read from disk had the wrong page number.
+        /// </summary>
+        ReadPgnoVerifyFailure = -1118,
+
+        /// <summary>
+        /// The database page read from disk had a previous write not represented on the page.
+        /// </summary>
+        ReadLostFlushVerifyFailure = -1119,
+
+        /// <summary>
+        /// Attempted to PrepareToCommit a distributed transaction to non-zero level
+        /// </summary>
+        MustCommitDistributedTransactionToLevel0 = -1150,
+
+        /// <summary>
+        /// Attempted a write-operation after a distributed transaction has called PrepareToCommit
+        /// </summary>
+        DistributedTransactionAlreadyPreparedToCommit = -1151,
+
+        /// <summary>
+        /// Attempted to PrepareToCommit a non-distributed transaction
+        /// </summary>
+        NotInDistributedTransaction = -1152,
+
+        /// <summary>
+        /// Attempted to commit a distributed transaction, but PrepareToCommit has not yet been called
+        /// </summary>
+        DistributedTransactionNotYetPreparedToCommit = -1153,
+
+        /// <summary>
+        /// Attempted to begin a distributed transaction when not at level 0
+        /// </summary>
+        CannotNestDistributedTransactions = -1154,
+
+        /// <summary>
+        /// Attempted to begin a distributed transaction but no callback for DTC coordination was specified on initialisation
+        /// </summary>
+        DTCMissingCallback = -1160,
+
+        /// <summary>
+        /// Attempted to recover a distributed transaction but no callback for DTC coordination was specified on initialisation
+        /// </summary>
+        DTCMissingCallbackOnRecovery = -1161,
+
+        /// <summary>
+        /// Unexpected error code returned from DTC callback
+        /// </summary>
+        DTCCallbackUnexpectedError = -1162,
 
         /// <summary>
         /// Database already exists
@@ -1067,6 +1177,26 @@ namespace Microsoft.Isam.Esent.Interop
         /// recovery tried to replay a database creation, but the database was originally created with an incompatible (likely older) version of the database engine
         /// </summary>
         InvalidCreateDbVersion = -1225,
+
+        /// <summary>
+        /// The database cannot be attached because it is currently being rebuilt as part of an incremental reseed.
+        /// </summary>
+        DatabaseIncompleteIncrementalReseed = -1226,
+
+        /// <summary>
+        /// The database is not a valid state to perform an incremental reseed.
+        /// </summary>
+        DatabaseInvalidIncrementalReseed = -1227,
+
+        /// <summary>
+        /// The incremental reseed being performed on the specified database cannot be completed due to a fatal error.  A full reseed is required to recover this database.
+        /// </summary>
+        DatabaseFailedIncrementalReseed = -1228,
+
+        /// <summary>
+        /// The incremental reseed being performed on the specified database cannot be completed because the min required log contains no attachment info.  A full reseed is required to recover this database.
+        /// </summary>
+        NoAttachmentsFailedIncrementalReseed = -1229,
 
         /// <summary>
         /// Table is exclusively locked
@@ -1409,6 +1539,11 @@ namespace Microsoft.Isam.Esent.Interop
         InvalidPlaceholderColumn = -1530,
 
         /// <summary>
+        /// Only JET_coltypLongText and JET_coltypLongBinary columns can be compressed
+        /// </summary>
+        ColumnCannotBeCompressed = -1538,
+
+        /// <summary>
         /// The key was not found
         /// </summary>
         RecordNotFound = -1601,
@@ -1457,6 +1592,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Windows installation does not support language
         /// </summary>
         LanguageNotSupported = -1619,
+
+        /// <summary>
+        /// Internal error: data could not be decompressed
+        /// </summary>
+        DecompressionFailed = -1620,
+
+        /// <summary>
+        /// No version updates only for uncommitted tables
+        /// </summary>
+        UpdateMustVersion = -1621,
 
         /// <summary>
         /// Too many sort processes
@@ -1564,6 +1709,11 @@ namespace Microsoft.Isam.Esent.Interop
         RollbackError = -1917,
 
         /// <summary>
+        /// The operation did not complete successfully because the database is already running maintenance on specified database
+        /// </summary>
+        DatabaseAlreadyRunningMaintenance = -2004,
+
+        /// <summary>
         /// A callback failed
         /// </summary>
         CallbackFailed = -2101,
@@ -1574,7 +1724,202 @@ namespace Microsoft.Isam.Esent.Interop
         CallbackNotResolved = -2102,
 
         /// <summary>
-        /// OS Shadow copy Api used in an invalid sequence
+        /// An element of the JET space hints structure was not correct or actionable.
+        /// </summary>
+        SpaceHintsInvalid = -2103,
+
+        /// <summary>
+        /// Corruption encountered in space manager of streaming file
+        /// </summary>
+        SLVSpaceCorrupted = -2201,
+
+        /// <summary>
+        /// Corruption encountered in streaming file
+        /// </summary>
+        SLVCorrupted = -2202,
+
+        /// <summary>
+        /// SLV columns cannot have a default value
+        /// </summary>
+        SLVColumnDefaultValueNotAllowed = -2203,
+
+        /// <summary>
+        /// Cannot find streaming file associated with this database
+        /// </summary>
+        SLVStreamingFileMissing = -2204,
+
+        /// <summary>
+        /// Streaming file exists, but database to which it belongs is missing
+        /// </summary>
+        SLVDatabaseMissing = -2205,
+
+        /// <summary>
+        /// Tried to create a streaming file when one already exists or is already recorded in the catalog
+        /// </summary>
+        SLVStreamingFileAlreadyExists = -2206,
+
+        /// <summary>
+        /// Specified path to a streaming file is invalid
+        /// </summary>
+        SLVInvalidPath = -2207,
+
+        /// <summary>
+        /// Tried to perform an SLV operation but streaming file was never created
+        /// </summary>
+        SLVStreamingFileNotCreated = -2208,
+
+        /// <summary>
+        /// Attach a readonly streaming file for read/write operations
+        /// </summary>
+        SLVStreamingFileReadOnly = -2209,
+
+        /// <summary>
+        /// SLV file header failed checksum verification
+        /// </summary>
+        SLVHeaderBadChecksum = -2210,
+
+        /// <summary>
+        /// SLV file header contains invalid information
+        /// </summary>
+        SLVHeaderCorrupted = -2211,
+
+        /// <summary>
+        /// Tried to move pages from the Free state when they were not in that state
+        /// </summary>
+        SLVPagesNotFree = -2213,
+
+        /// <summary>
+        /// Tried to move pages from the Reserved state when they were not in that state
+        /// </summary>
+        SLVPagesNotReserved = -2214,
+
+        /// <summary>
+        /// Tried to move pages from the Committed state when they were not in that state
+        /// </summary>
+        SLVPagesNotCommitted = -2215,
+
+        /// <summary>
+        /// Tried to move pages from the Deleted state when they were not in that state
+        /// </summary>
+        SLVPagesNotDeleted = -2216,
+
+        /// <summary>
+        /// Unexpected conflict detected trying to write-latch SLV space pages
+        /// </summary>
+        SLVSpaceWriteConflict = -2217,
+
+        /// <summary>
+        /// The database can not be created/attached because its corresponding SLV Root is still open by another process.
+        /// </summary>
+        SLVRootStillOpen = -2218,
+
+        /// <summary>
+        /// The database can not be created/attached because the SLV Provider has not been loaded.
+        /// </summary>
+        SLVProviderNotLoaded = -2219,
+
+        /// <summary>
+        /// The specified SLV EA List is corrupted.
+        /// </summary>
+        SLVEAListCorrupt = -2220,
+
+        /// <summary>
+        /// The database cannot be created/attached because the SLV Root Name was omitted
+        /// </summary>
+        SLVRootNotSpecified = -2221,
+
+        /// <summary>
+        /// The specified SLV Root path was invalid.
+        /// </summary>
+        SLVRootPathInvalid = -2222,
+
+        /// <summary>
+        /// The specified SLV EA List has no allocated space.
+        /// </summary>
+        SLVEAListZeroAllocation = -2223,
+
+        /// <summary>
+        /// Deletion of SLV columns is not currently supported.
+        /// </summary>
+        SLVColumnCannotDelete = -2224,
+
+        /// <summary>
+        /// Tried to create a new catalog entry for SLV Ownership Map when one already exists
+        /// </summary>
+        SLVOwnerMapAlreadyExists = -2225,
+
+        /// <summary>
+        /// Corruption encountered in SLV Ownership Map
+        /// </summary>
+        SLVOwnerMapCorrupted = -2226,
+
+        /// <summary>
+        /// Corruption encountered in SLV Ownership Map
+        /// </summary>
+        SLVOwnerMapPageNotFound = -2227,
+
+        /// <summary>
+        /// The specified SLV File handle belongs to a SLV Root that no longer exists.
+        /// </summary>
+        SLVFileStale = -2229,
+
+        /// <summary>
+        /// The specified SLV File is currently in use
+        /// </summary>
+        SLVFileInUse = -2230,
+
+        /// <summary>
+        /// The specified streaming file is currently in use
+        /// </summary>
+        SLVStreamingFileInUse = -2231,
+
+        /// <summary>
+        /// An I/O error occurred while accessing an SLV File (general read / write failure)
+        /// </summary>
+        SLVFileIO = -2232,
+
+        /// <summary>
+        /// No space left in the streaming file
+        /// </summary>
+        SLVStreamingFileFull = -2233,
+
+        /// <summary>
+        /// Specified path to a SLV File was invalid
+        /// </summary>
+        SLVFileInvalidPath = -2234,
+
+        /// <summary>
+        /// Cannot access SLV File, the SLV File is locked or is in use
+        /// </summary>
+        SLVFileAccessDenied = -2235,
+
+        /// <summary>
+        /// The specified SLV File was not found
+        /// </summary>
+        SLVFileNotFound = -2236,
+
+        /// <summary>
+        /// An unknown error occurred while accessing an SLV File
+        /// </summary>
+        SLVFileUnknown = -2237,
+
+        /// <summary>
+        /// The specified SLV EA List could not be returned because it is too large to fit in the standard EA format.  Retrieve the SLV File as a file handle instead.
+        /// </summary>
+        SLVEAListTooBig = -2238,
+
+        /// <summary>
+        /// The loaded SLV Provider's version does not match the database engine's version.
+        /// </summary>
+        SLVProviderVersionMismatch = -2239,
+
+        /// <summary>
+        /// Buffer allocated for SLV data or meta-data was too small
+        /// </summary>
+        SLVBufferTooSmall = -2243,
+
+        /// <summary>
+        /// OS Shadow copy API used in an invalid sequence
         /// </summary>
         OSSnapshotInvalidSequence = -2401,
 
@@ -1592,6 +1937,21 @@ namespace Microsoft.Isam.Esent.Interop
         /// invalid JET_OSSNAPID
         /// </summary>
         OSSnapshotInvalidSnapId = -2404,
+
+        /// <summary>
+        /// Internal test injection limit hit
+        /// </summary>
+        TooManyTestInjections = -2501,
+
+        /// <summary>
+        /// Test injection not supported
+        /// </summary>
+        TestInjectionNotSupported = -2502,
+
+        /// <summary>
+        /// Some how the log data provided got out of sequence with the current state of the instance
+        /// </summary>
+        InvalidLogDataSequence = -2601,
 
         /// <summary>
         /// Attempted to use Local Storage without a callback function being specified

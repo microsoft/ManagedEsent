@@ -2628,7 +2628,7 @@ namespace Microsoft.Isam.Esent.Interop
 
             // We didn't throw an exception from the handler, so
             // generate the default exception.
-            return new EsentErrorException(String.Empty, error);            
+            return EsentExceptionHelper.JetErrToException(error);            
         }
 
         #endregion Error Handling

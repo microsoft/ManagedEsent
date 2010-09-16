@@ -214,7 +214,7 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(1)]
         [Description("Test moving previous to the first record")]
-        [ExpectedException(typeof(EsentErrorException))]
+        [ExpectedException(typeof(EsentNoCurrentRecordException))]
         public void MovingBeforeFirstThrowsException()
         {
             Api.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
@@ -272,7 +272,7 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(1)]
         [Description("Test moving after the last record")]
-        [ExpectedException(typeof(EsentErrorException))]
+        [ExpectedException(typeof(EsentNoCurrentRecordException))]
         public void MovingAfterLastThrowsException()
         {
             Api.JetMove(this.sesid, this.tableid, JET_Move.Last, MoveGrbit.None);

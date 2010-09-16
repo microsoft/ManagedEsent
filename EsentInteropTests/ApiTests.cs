@@ -91,7 +91,7 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(1)]
         [Description("Verify that an error returned from the IJetApi implementation causes an exception to be thrown.")]
-        [ExpectedException(typeof(EsentErrorException))]
+        [ExpectedException(typeof(EsentOutOfMemoryException))]
         public void VerifyErrorFromJetApiImplementationGeneratesException()
         {
             var jetApi = this.mocks.Stub<IJetApi>();

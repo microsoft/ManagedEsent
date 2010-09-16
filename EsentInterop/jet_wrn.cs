@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="jet_wrn.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -26,7 +26,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         Success = 0,
 
-        #region Warnings
+        #region Warnings        
 
         /// <summary>
         /// The version store is still active
@@ -44,6 +44,16 @@ namespace Microsoft.Isam.Esent.Interop
         SeparateLongValue = 406,
 
         /// <summary>
+        /// Existing log file has bad signature
+        /// </summary>
+        ExistingLogFileHasBadSignature = 558,
+
+        /// <summary>
+        /// Existing log file is not contiguous
+        /// </summary>
+        ExistingLogFileIsNotContiguous = 559,
+
+        /// <summary>
         /// INTERNAL ERROR
         /// </summary>
         SkipThisRecord = 564,
@@ -52,6 +62,21 @@ namespace Microsoft.Isam.Esent.Interop
         /// TargetInstance specified for restore is running
         /// </summary>
         TargetInstanceRunning = 578,
+
+        /// <summary>
+        /// One or more logs that were committed to this database, were not recovered.  The database is still clean/consistent, as though the lost log's transactions were committed lazily (and lost).
+        /// </summary>
+        CommittedLogFilesLost = 585,
+
+        /// <summary>
+        /// One or more logs that were committed to this database, were no recovered.  The database is still clean/consistent, as though the corrupted log's transactions were committed lazily (and lost).
+        /// </summary>
+        CommittedLogFilesRemoved = 587,
+
+        /// <summary>
+        /// Signal used by clients to indicate JetInit() finished with undo
+        /// </summary>
+        FinishWithUndo = 588,
 
         /// <summary>
         /// Database corruption has been repaired
@@ -104,6 +129,16 @@ namespace Microsoft.Isam.Esent.Interop
         ColumnSetNull = 1068,
 
         /// <summary>
+        /// Warning code DTC callback should return if the specified transaction is to be committed
+        /// </summary>
+        DTCCommitTransaction = 1163,
+
+        /// <summary>
+        /// Warning code DTC callback should return if the specified transaction is to be rolled back
+        /// </summary>
+        DTCRollbackTransaction = 1164,
+
+        /// <summary>
         /// Opened an empty table
         /// </summary>
         TableEmpty = 1301,
@@ -127,6 +162,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// Single instance column bursted
         /// </summary>
         CopyLongValue = 1520,
+
+        /// <summary>
+        /// RetrieveTaggedColumnList ran out of copy buffer before retrieving all tagged columns
+        /// </summary>
+        TaggedColumnsRemaining = 1523,
 
         /// <summary>
         /// Column value(s) not returned because the corresponding column id or itagSequence requested for enumeration was null
@@ -164,6 +204,16 @@ namespace Microsoft.Isam.Esent.Interop
         ColumnDefault = 1537,
 
         /// <summary>
+        /// Column value(s) not returned because they could not be reconstructed from the data in the record
+        /// </summary>
+        ColumnNotInRecord = 1539,
+
+        /// <summary>
+        /// Data has changed
+        /// </summary>
+        DataHasChanged = 1610,
+
+        /// <summary>
         /// Moved to new key
         /// </summary>
         KeyChanged = 1618,
@@ -189,9 +239,24 @@ namespace Microsoft.Isam.Esent.Interop
         DefragNotRunning = 2001,
 
         /// <summary>
+        /// JetDatabaseScan already running on specified database
+        /// </summary>
+        DatabaseScanAlreadyRunning = 2002,
+
+        /// <summary>
+        /// JetDatabaseScan not running on specified database
+        /// </summary>
+        DatabaseScanNotRunning = 2003,
+
+        /// <summary>
         /// Unregistered a non-existant callback function
         /// </summary>
         CallbackNotRegistered = 2100,
+
+        /// <summary>
+        /// The log data provided jumped to the next log suddenly, we have deleted the incomplete log file as a precautionary measure
+        /// </summary>
+        PreviousLogFileIncomplete = 2602,
 
         #endregion
     }

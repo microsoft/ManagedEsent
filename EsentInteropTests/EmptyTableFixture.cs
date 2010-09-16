@@ -163,7 +163,7 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(1)]
         [Description("Verify that TrySetIndexRange throws an exception when ESENT returns an unexpected error.")]
-        [ExpectedException(typeof(EsentErrorException))]
+        [ExpectedException(typeof(EsentIllegalOperationException))]
         public void TrySetIndexRangeThrowsExceptionOnError()
         {
             // No key has been made so this call will fail
