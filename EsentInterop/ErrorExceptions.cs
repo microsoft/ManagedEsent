@@ -47,7 +47,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        public EsentOperationException(string description, JET_err err) :
+        protected EsentOperationException(string description, JET_err err) :
             base(description, err)
         {
         }
@@ -79,7 +79,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        public EsentDataException(string description, JET_err err) :
+        protected EsentDataException(string description, JET_err err) :
             base(description, err)
         {
         }
@@ -111,7 +111,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        public EsentApiException(string description, JET_err err) :
+        protected EsentApiException(string description, JET_err err) :
             base(description, err)
         {
         }
@@ -143,7 +143,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        public EsentFatalException(string description, JET_err err) :
+        protected EsentFatalException(string description, JET_err err) :
             base(description, err)
         {
         }
@@ -175,7 +175,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        public EsentIOException(string description, JET_err err) :
+        protected EsentIOException(string description, JET_err err) :
             base(description, err)
         {
         }
@@ -207,7 +207,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        public EsentResourceException(string description, JET_err err) :
+        protected EsentResourceException(string description, JET_err err) :
             base(description, err)
         {
         }
@@ -239,7 +239,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        public EsentMemoryException(string description, JET_err err) :
+        protected EsentMemoryException(string description, JET_err err) :
             base(description, err)
         {
         }
@@ -271,7 +271,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        public EsentQuotaException(string description, JET_err err) :
+        protected EsentQuotaException(string description, JET_err err) :
             base(description, err)
         {
         }
@@ -303,7 +303,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        public EsentDiskException(string description, JET_err err) :
+        protected EsentDiskException(string description, JET_err err) :
             base(description, err)
         {
         }
@@ -335,7 +335,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        public EsentCorruptionException(string description, JET_err err) :
+        protected EsentCorruptionException(string description, JET_err err) :
             base(description, err)
         {
         }
@@ -367,7 +367,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        public EsentMishandlingException(string description, JET_err err) :
+        protected EsentMishandlingException(string description, JET_err err) :
             base(description, err)
         {
         }
@@ -399,7 +399,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        public EsentFragmentationException(string description, JET_err err) :
+        protected EsentFragmentationException(string description, JET_err err) :
             base(description, err)
         {
         }
@@ -431,7 +431,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        public EsentUsageException(string description, JET_err err) :
+        protected EsentUsageException(string description, JET_err err) :
             base(description, err)
         {
         }
@@ -463,7 +463,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        public EsentStateException(string description, JET_err err) :
+        protected EsentStateException(string description, JET_err err) :
             base(description, err)
         {
         }
@@ -495,7 +495,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        public EsentObsoleteException(string description, JET_err err) :
+        protected EsentObsoleteException(string description, JET_err err) :
             base(description, err)
         {
         }
