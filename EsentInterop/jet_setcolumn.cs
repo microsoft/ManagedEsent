@@ -10,7 +10,6 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Runtime.InteropServices;
-    using System.Text;
 
     /// <summary>
     /// The native version of the <see cref="JET_SETCOLUMN"/> structure.

@@ -11,8 +11,6 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Runtime.InteropServices;
-    using System.Text;
-    using Microsoft.Isam.Esent.Interop.Implementation;
 
     /// <summary>
     /// The native version of the JET_RSTMAP structure.

@@ -24,23 +24,6 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         private static readonly Encoding asciiDecoder = new UTF8Encoding(false, true);
 
-        #region Nested type: ConversionFunc
-
-        /// <summary>
-        /// Conversion function delegate.
-        /// </summary>
-        /// <typeparam name="TResult">The return type.</typeparam>
-        /// <param name="data">The data to convert.</param>
-        /// <returns>An object of type TRresult.</returns>
-        /// <remarks>
-        /// We create this delegate here, instead of using the built-in
-        /// Func/Converter generics to avoid taking a dependency on 
-        /// a higher version (3.5) of the CLR.
-        /// </remarks>
-        private delegate TResult ConversionFunc<TResult>(byte[] data);
-
-        #endregion
-
         /// <summary>
         /// Retrieves the bookmark for the record that is associated with the index entry
         /// at the current position of a cursor. This bookmark can then be used to

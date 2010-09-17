@@ -6,7 +6,6 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
     using System.Diagnostics;
 
     /// <summary>

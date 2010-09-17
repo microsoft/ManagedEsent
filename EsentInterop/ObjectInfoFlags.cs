@@ -12,7 +12,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// Flags for ESENT objects (tables).  Used in <see cref="JET_OBJECTINFO"/>.
     /// </summary>
     [Flags]
-    public enum ObjectInfoFlags : int
+    public enum ObjectInfoFlags
     {
         /// <summary>
         /// Default options.

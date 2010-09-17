@@ -145,8 +145,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             // Using the current CPU number would be ideal, but there doesn't seem to 
             // be a cheap way to get that information in managed code.
-            ////return Thread.CurrentThread.ManagedThreadId % this.cachedBuffers.Length;
-            return 0;
+            return Thread.CurrentThread.ManagedThreadId % this.cachedBuffers.Length;
         }
     }
 }

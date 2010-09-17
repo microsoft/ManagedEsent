@@ -9,7 +9,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Offsets for JetMove.
     /// </summary>
-    public enum JET_Move : int
+    public enum JET_Move
     {
         /// <summary>
         /// Move the cursor to the first index entry.

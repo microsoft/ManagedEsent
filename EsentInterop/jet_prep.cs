@@ -9,7 +9,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Update types for JetPrepareUpdate.
     /// </summary>
-    public enum JET_prep : int
+    public enum JET_prep
     {
         /// <summary>
         ///  This flag causes the cursor to prepare for an insert of a new record.

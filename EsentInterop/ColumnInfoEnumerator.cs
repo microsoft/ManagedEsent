@@ -6,7 +6,6 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
     using Microsoft.Isam.Esent.Interop.Implementation;
 
     /// <summary>
@@ -63,7 +62,7 @@ namespace Microsoft.Isam.Esent.Interop
 
             return new ColumnInfo(
                 name,
-                new JET_COLUMNID() { Value = columnidValue },
+                new JET_COLUMNID { Value = columnidValue },
                 (JET_coltyp)coltypValue,
                 (JET_CP)codepageValue,
                 checked((int)maxLength),
