@@ -144,7 +144,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// <param name="t1">The first JET_THREADSTATS.</param>
         /// <param name="t2">The second JET_THREADSTATS.</param>
         /// <returns>A JET_THREADSTATS containing the result of adding the stats in t1 and t2.</returns>
-        public static JET_THREADSTATS operator +(JET_THREADSTATS t1, JET_THREADSTATS t2)
+        public static JET_THREADSTATS Add(JET_THREADSTATS t1, JET_THREADSTATS t2)
         {
             checked
             {
@@ -157,8 +157,19 @@ namespace Microsoft.Isam.Esent.Interop.Vista
                     cPageRedirtied = t1.cPageRedirtied + t2.cPageRedirtied,
                     cLogRecord = t1.cLogRecord + t2.cLogRecord,
                     cbLogRecord = t1.cbLogRecord + t2.cbLogRecord,
-                };                
+                };
             }
+        }
+
+        /// <summary>
+        /// Add the stats in two JET_THREADSTATS structures.
+        /// </summary>
+        /// <param name="t1">The first JET_THREADSTATS.</param>
+        /// <param name="t2">The second JET_THREADSTATS.</param>
+        /// <returns>A JET_THREADSTATS containing the result of adding the stats in t1 and t2.</returns>
+        public static JET_THREADSTATS operator +(JET_THREADSTATS t1, JET_THREADSTATS t2)
+        {
+            return Add(t1, t2);
         }
 
         /// <summary>
@@ -167,7 +178,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// <param name="t1">The first JET_THREADSTATS.</param>
         /// <param name="t2">The second JET_THREADSTATS.</param>
         /// <returns>A JET_THREADSTATS containing the difference in stats between t1 and t2.</returns>
-        public static JET_THREADSTATS operator -(JET_THREADSTATS t1, JET_THREADSTATS t2)
+        public static JET_THREADSTATS Subtract(JET_THREADSTATS t1, JET_THREADSTATS t2)
         {
             checked
             {
@@ -182,6 +193,17 @@ namespace Microsoft.Isam.Esent.Interop.Vista
                     cbLogRecord = t1.cbLogRecord - t2.cbLogRecord,
                 };
             }
+        }
+
+        /// <summary>
+        /// Calculate the difference in stats between two JET_THREADSTATS structures.
+        /// </summary>
+        /// <param name="t1">The first JET_THREADSTATS.</param>
+        /// <param name="t2">The second JET_THREADSTATS.</param>
+        /// <returns>A JET_THREADSTATS containing the difference in stats between t1 and t2.</returns>
+        public static JET_THREADSTATS operator -(JET_THREADSTATS t1, JET_THREADSTATS t2)
+        {
+            return Subtract(t1, t2);
         }
 
         /// <summary>

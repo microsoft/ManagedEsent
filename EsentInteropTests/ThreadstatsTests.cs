@@ -160,6 +160,8 @@ namespace InteropApiTests
             Assert.AreEqual(17, sum.cPageRedirtied);
             Assert.AreEqual(19, sum.cLogRecord);
             Assert.AreEqual(21, sum.cbLogRecord);
+
+            Assert.AreEqual(sum, JET_THREADSTATS.Add(t1, t2));
         }
 
         /// <summary>
@@ -191,14 +193,16 @@ namespace InteropApiTests
                 cbLogRecord = 14,
             };
 
-            JET_THREADSTATS sum = t1 - t2;
-            Assert.AreEqual(12, sum.cPageReferenced);
-            Assert.AreEqual(10, sum.cPageRead);
-            Assert.AreEqual(8, sum.cPagePreread);
-            Assert.AreEqual(6, sum.cPageDirtied);
-            Assert.AreEqual(4, sum.cPageRedirtied);
-            Assert.AreEqual(2, sum.cLogRecord);
-            Assert.AreEqual(0, sum.cbLogRecord);
+            JET_THREADSTATS difference = t1 - t2;
+            Assert.AreEqual(12, difference.cPageReferenced);
+            Assert.AreEqual(10, difference.cPageRead);
+            Assert.AreEqual(8, difference.cPagePreread);
+            Assert.AreEqual(6, difference.cPageDirtied);
+            Assert.AreEqual(4, difference.cPageRedirtied);
+            Assert.AreEqual(2, difference.cLogRecord);
+            Assert.AreEqual(0, difference.cbLogRecord);
+
+            Assert.AreEqual(difference, JET_THREADSTATS.Subtract(t1, t2));
         }
 
         /// <summary>
