@@ -63,6 +63,7 @@ namespace BasicTest
                 {
                     message = String.Format(message, args);
                 }
+
                 throw new Exception(message);
             }
         }

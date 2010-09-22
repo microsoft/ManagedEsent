@@ -16,114 +16,6 @@ namespace InteropApiTests
     public class ThreadstatTests
     {
         /// <summary>
-        /// Native version of the threadstats.
-        /// </summary>
-        private NATIVE_THREADSTATS native;
-
-        /// <summary>
-        /// Managed version of the threadstats, created from the native.
-        /// </summary>
-        private JET_THREADSTATS managed;
- 
-        /// <summary>
-        /// Initialize the native and managed objects.
-        /// </summary>
-        [TestInitialize]
-        [Description("Setup the ThreadstatTests fixture")]
-        public void Setup()
-        {
-            this.native = new NATIVE_THREADSTATS
-            {
-                cPageReferenced = 1,
-                cPageRead = 2,
-                cPagePreread = 3,
-                cPageDirtied = 4,
-                cPageRedirtied = 5,
-                cLogRecord = 6,
-                cbLogRecord = 7,
-            };
-            this.managed = new JET_THREADSTATS();
-            this.managed.SetFromNativeThreadstats(this.native);
-        }
-
-        /// <summary>
-        /// Test conversion from the native stuct
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Verify that JET_THREADSTATS.SetFromNativeThreadstats sets cPageReferenced")]
-        public void TestSetFromNativeSetsCpageReferenced()
-        {
-            Assert.AreEqual(1, this.managed.cPageReferenced);
-        }
-
-        /// <summary>
-        /// Test conversion from the native stuct
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Verify that JET_THREADSTATS.SetFromNativeThreadstats sets cPageRead")]
-        public void TestSetFromNativeSetsCpageRead()
-        {
-            Assert.AreEqual(2, this.managed.cPageRead);
-        }
-
-        /// <summary>
-        /// Test conversion from the native stuct
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Verify that JET_THREADSTATS.SetFromNativeThreadstats sets cPagePreread")]
-        public void TestSetFromNativeSetsCpagePreread()
-        {
-            Assert.AreEqual(3, this.managed.cPagePreread);
-        }
-
-        /// <summary>
-        /// Test conversion from the native stuct
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Verify that JET_THREADSTATS.SetFromNativeThreadstats sets cPageDirtied")]
-        public void TestSetFromNativeSetsCpageDirtied()
-        {
-            Assert.AreEqual(4, this.managed.cPageDirtied);
-        }
-
-        /// <summary>
-        /// Test conversion from the native stuct
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Verify that JET_THREADSTATS.SetFromNativeThreadstats sets cPageRedirtied")]
-        public void TestSetFromNativeSetsCpageRedirtied()
-        {
-            Assert.AreEqual(5, this.managed.cPageRedirtied);
-        }
-
-        /// <summary>
-        /// Test conversion from the native stuct
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Verify that JET_THREADSTATS.SetFromNativeThreadstats sets cLogRecord")]
-        public void TestSetFromNativeSetsClogrecord()
-        {
-            Assert.AreEqual(6, this.managed.cLogRecord);
-        }
-
-        /// <summary>
-        /// Test conversion from the native stuct
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("Verify that JET_THREADSTATS.SetFromNativeThreadstats sets cbLogRecord")]
-        public void TestSetFromNativeSetsCblogrecord()
-        {
-            Assert.AreEqual(7, this.managed.cbLogRecord);
-        }
-
-        /// <summary>
         /// Test the Create method.
         /// </summary>
         [TestMethod]
@@ -132,7 +24,13 @@ namespace InteropApiTests
         public void TestCreateSetsMembers()
         {
             JET_THREADSTATS actual = JET_THREADSTATS.Create(1, 2, 3, 4, 5, 6, 7);
-            Assert.AreEqual(this.managed, actual);
+            Assert.AreEqual(1, actual.cPageReferenced);
+            Assert.AreEqual(2, actual.cPageRead);
+            Assert.AreEqual(3, actual.cPagePreread);
+            Assert.AreEqual(4, actual.cPageDirtied);
+            Assert.AreEqual(5, actual.cPageRedirtied);
+            Assert.AreEqual(6, actual.cLogRecord);
+            Assert.AreEqual(7, actual.cbLogRecord);
         }
 
         /// <summary>

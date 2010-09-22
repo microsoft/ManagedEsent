@@ -1440,12 +1440,15 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             TraceFunctionCall("JetGetThreadStats");
             this.CheckSupportsVistaFeatures("JetGetThreadStats");
 
-            NATIVE_THREADSTATS native;
-            int err = Err(NativeMethods.JetGetThreadStats(out native, checked((uint)NATIVE_THREADSTATS.Size)));
-
-            threadstats = new JET_THREADSTATS();
-            threadstats.SetFromNativeThreadstats(native);
-            return err;
+            // To speed up the interop we use unsafe code to avoid initializing
+            // the out parameter. We just call the interop code.
+            unsafe
+            {
+                fixed (JET_THREADSTATS* pvResult = &threadstats)
+                {
+                    return Err(NativeMethods.JetGetThreadStats(pvResult, JET_THREADSTATS.Size));
+                }                
+            }
         }
 
         #endregion

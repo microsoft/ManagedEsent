@@ -303,7 +303,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern int JetDupSession(IntPtr sesid, out IntPtr newSesid);
 
         [DllImport(EsentDll, ExactSpelling = true)]
-        public static extern int JetGetThreadStats(out NATIVE_THREADSTATS pvResult, uint cbMax);
+        public static unsafe extern int JetGetThreadStats(JET_THREADSTATS* pvResult, uint cbMax);
 
         #endregion
 

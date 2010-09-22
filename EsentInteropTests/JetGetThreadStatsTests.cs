@@ -7,6 +7,7 @@
 namespace InteropApiTests
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Vista;
@@ -126,6 +127,43 @@ namespace InteropApiTests
         }
 
         #endregion Setup/Teardown
+
+        /// <summary>
+        /// Measure JetGetThreadStats perf.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Measure JetGetThreadStats perf")]
+        public void JetGetThreadStatsPerf()
+        {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
+            // Call the method once to force JIT compilation
+            JET_THREADSTATS threadstats;
+            VistaApi.JetGetThreadStats(out threadstats);
+
+#if DEBUG 
+            const int N = 1000;
+#else
+            const int N = 5000000;
+#endif
+            var stopwatch = Stopwatch.StartNew();
+            for (int i = 0; i < N; ++i)
+            {
+                VistaApi.JetGetThreadStats(out threadstats);
+            }                
+
+            stopwatch.Stop();
+
+            Console.WriteLine(
+                "Made {0:N0} calls to JetGetThreadStats in {1} ({2:N6} milliseconds/call)",
+                N,
+                stopwatch.Elapsed,
+                (double)stopwatch.ElapsedMilliseconds / N);
+        }
 
         /// <summary>
         /// Call JetGetThreadStats.
