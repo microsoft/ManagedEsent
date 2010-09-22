@@ -139,6 +139,55 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         }
 
         /// <summary>
+        /// Create a new <see cref="JET_THREADSTATS"/> struct with the specified
+        /// valued.
+        /// </summary>
+        /// <param name="cPageReferenced">
+        /// Number of pages visited.
+        /// </param>
+        /// <param name="cPageRead">
+        /// Number of pages read.
+        /// </param>
+        /// <param name="cPagePreread">
+        /// Number of pages preread.
+        /// </param>
+        /// <param name="cPageDirtied">
+        /// TNumber of pages dirtied.
+        /// </param>
+        /// <param name="cPageRedirtied">
+        /// Number of pages redirtied.
+        /// </param>
+        /// <param name="cLogRecord">
+        /// Number of log records generated.
+        /// </param>
+        /// <param name="cbLogRecord">
+        /// Bytes of log records written.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="JET_THREADSTATS"/> struct with the specified values.
+        /// </returns>
+        public static JET_THREADSTATS Create(
+            int cPageReferenced,
+            int cPageRead,
+            int cPagePreread,
+            int cPageDirtied,
+            int cPageRedirtied,
+            int cLogRecord,
+            int cbLogRecord)
+        {
+            return new JET_THREADSTATS
+            {
+                cPageReferenced = cPageReferenced,
+                cPageRead = cPageRead,
+                cPagePreread = cPagePreread,
+                cPageDirtied = cPageDirtied,
+                cPageRedirtied = cPageRedirtied,
+                cLogRecord = cLogRecord,
+                cbLogRecord = cbLogRecord,
+            };
+        }
+
+        /// <summary>
         /// Add the stats in two JET_THREADSTATS structures.
         /// </summary>
         /// <param name="t1">The first JET_THREADSTATS.</param>

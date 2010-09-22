@@ -124,6 +124,18 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test the Create method.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that JET_THREADSTATS.Create sets the members")]
+        public void TestCreateSetsMembers()
+        {
+            JET_THREADSTATS actual = JET_THREADSTATS.Create(1, 2, 3, 4, 5, 6, 7);
+            Assert.AreEqual(this.managed, actual);
+        }
+
+        /// <summary>
         /// Test adding two JET_THREADSTATS
         /// </summary>
         [TestMethod]
