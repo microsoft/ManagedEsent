@@ -205,7 +205,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// <returns>A JET_THREADSTATS containing the result of adding the stats in t1 and t2.</returns>
         public static JET_THREADSTATS Add(JET_THREADSTATS t1, JET_THREADSTATS t2)
         {
-            checked
+            unchecked
             {
                 return new JET_THREADSTATS
                 {
@@ -239,7 +239,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// <returns>A JET_THREADSTATS containing the difference in stats between t1 and t2.</returns>
         public static JET_THREADSTATS Subtract(JET_THREADSTATS t1, JET_THREADSTATS t2)
         {
-            checked
+            unchecked
             {
                 return new JET_THREADSTATS
                 {
