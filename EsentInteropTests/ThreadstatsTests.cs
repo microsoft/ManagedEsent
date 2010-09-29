@@ -6,6 +6,8 @@
 
 namespace InteropApiTests
 {
+    using System;
+    using System.Diagnostics;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -179,6 +181,41 @@ namespace InteropApiTests
             };
             const string Expected = "10 page references, 2 pages read, 3 pages preread, 4 pages dirtied, 5 pages redirtied, 6 log records, 7 bytes logged";
             Assert.AreEqual(Expected, t.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_THREADSTATS.ToString() performance.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test JET_THREADSTATS.ToString performance")]
+        public void TestJetThreadstatsToStringPerf()
+        {
+            var t = new JET_THREADSTATS
+            {
+                cPageReferenced = 10,
+                cPageRead = 5,
+                cPagePreread = 4,
+                cPageDirtied = 3,
+                cPageRedirtied = 2,
+                cLogRecord = 1,
+                cbLogRecord = 0,
+            };
+
+            // Call the method once to make sure it is compiled.
+            string ignored = t.ToString();
+
+            const int N = 100000;
+            Stopwatch s = Stopwatch.StartNew();
+            for (int i = 0; i < N; ++i)
+            {
+                ignored = t.ToString();
+            }
+
+            s.Stop();
+
+            double ms = Math.Max(1, s.ElapsedMilliseconds);
+            Console.WriteLine("{0} calls in {1} ({2} ms/call)", N, s.Elapsed, ms / N);
         }
     }
 }

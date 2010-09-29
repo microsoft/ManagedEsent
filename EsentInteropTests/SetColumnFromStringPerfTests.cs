@@ -22,7 +22,12 @@ namespace InteropApiTests
         /// <summary>
         /// How many times to set the record data.
         /// </summary>
-        private const int NumSets = 3000000;
+        private const int NumSets =
+#if DEBUG
+        1000;
+#else
+        3000000;
+#endif
 
         /// <summary>
         /// The instance to use.

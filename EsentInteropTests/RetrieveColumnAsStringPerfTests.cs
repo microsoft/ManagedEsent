@@ -22,7 +22,12 @@ namespace InteropApiTests
         /// <summary>
         /// How many times to retrieve the record data.
         /// </summary>
-        private const int NumRetrieves = 5000000;
+        private const int NumRetrieves = 
+#if DEBUG
+        1000;
+#else
+        5000000;
+#endif
 
         /// <summary>
         /// The instance to use.

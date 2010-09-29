@@ -295,15 +295,38 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// <returns>A string representation of this object.</returns>
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder(128);
-            sb.AppendFormat(CultureInfo.InvariantCulture, "{0:N0} page reference{1}, ", this.cPageReferenced, GetPluralS(this.cPageReferenced));
-            sb.AppendFormat(CultureInfo.InvariantCulture, "{0:N0} page{1} read, ", this.cPageRead, GetPluralS(this.cPageRead));
-            sb.AppendFormat(CultureInfo.InvariantCulture, "{0:N0} page{1} preread, ", this.cPagePreread, GetPluralS(this.cPagePreread));
-            sb.AppendFormat(CultureInfo.InvariantCulture, "{0:N0} page{1} dirtied, ", this.cPageDirtied, GetPluralS(this.cPageDirtied));
-            sb.AppendFormat(CultureInfo.InvariantCulture, "{0:N0} page{1} redirtied, ", this.cPageRedirtied, GetPluralS(this.cPageRedirtied));
-            sb.AppendFormat(CultureInfo.InvariantCulture, "{0:N0} log record{1}, ", this.cLogRecord, GetPluralS(this.cLogRecord));
-            sb.AppendFormat(CultureInfo.InvariantCulture, "{0:N0} byte{1} logged", this.cbLogRecord, GetPluralS(this.cbLogRecord));
-            return sb.ToString();
+            // String.Concat is faster than using a StringBuilder.
+            // use Int32.ToString instead of passing the Int32 to 
+            // String.Format (which requires boxing).
+            return String.Concat(
+                this.cPageReferenced.ToString("N0"),
+                " page reference",
+                GetPluralS(this.cPageReferenced),
+                ", ",
+                this.cPageRead.ToString("N0"),
+                " page",
+                GetPluralS(this.cPageRead),
+                " read, ",
+                this.cPagePreread.ToString("N0"),
+                " page",
+                GetPluralS(this.cPagePreread),
+                " preread, ",
+                this.cPageDirtied.ToString("N0"),
+                " page",
+                GetPluralS(this.cPageDirtied),
+                " dirtied, ",
+                this.cPageRedirtied.ToString("N0"),
+                " page",
+                GetPluralS(this.cPageRedirtied),
+                " redirtied, ",
+                this.cLogRecord.ToString("N0"),
+                " log record",
+                GetPluralS(this.cLogRecord),
+                ", ",
+                this.cbLogRecord.ToString("N0"),
+                " byte",
+                GetPluralS(this.cbLogRecord),
+                " logged");
         }
 
         /// <summary>

@@ -25,7 +25,12 @@ namespace EsentCollectionsTests
         /// <summary>
         /// Number of records to insert during testing.
         /// </summary>
-        private const int N = 1000000;
+        private const int N =
+#if DEBUG
+        100000;
+#else
+        1000000;
+#endif
 
         /// <summary>
         /// The location of the dictionary we use for the tests.
@@ -121,7 +126,7 @@ namespace EsentCollectionsTests
                 ScanEntries(dictionary);
 
                 // Retrieve one record
-                RetrieveOneRecord(dictionary, 1000000, 1234);
+                RetrieveOneRecord(dictionary, 1000000, 3);
 
                 // Now lookup entries
                 keys.Shuffle();
