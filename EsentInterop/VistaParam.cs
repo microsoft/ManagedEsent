@@ -49,5 +49,80 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// (as configured by <see cref="JET_param.DatabasePageSize"/>).
         /// </summary>
         public const JET_param KeyMost = (JET_param)134;
+
+        /// <summary>
+        /// Set the name associated with table class 1.
+        /// </summary>
+        public const JET_param TableClass1Name = (JET_param)137;
+
+        /// <summary>
+        /// Set the name associated with table class 2.
+        /// </summary>
+        public const JET_param TableClass2Name = (JET_param)138;
+
+        /// <summary>
+        /// Set the name associated with table class 3.
+        /// </summary>
+        public const JET_param TableClass3Name = (JET_param)139;
+
+        /// <summary>
+        /// Set the name associated with table class 4.
+        /// </summary>
+        public const JET_param TableClass4Name = (JET_param)140;
+
+        /// <summary>
+        /// Set the name associated with table class 5.
+        /// </summary>
+        public const JET_param TableClass5Name = (JET_param)141;
+
+        /// <summary>
+        /// Set the name associated with table class 6.
+        /// </summary>
+        public const JET_param TableClass6Name = (JET_param)142;
+
+        /// <summary>
+        /// Set the name associated with table class 7.
+        /// </summary>
+        public const JET_param TableClass7Name = (JET_param)143;
+
+        /// <summary>
+        /// Set the name associated with table class 8.
+        /// </summary>
+        public const JET_param TableClass8Name = (JET_param)144;
+
+        /// <summary>
+        /// Set the name associated with table class 9.
+        /// </summary>
+        public const JET_param TableClass9Name = (JET_param)145;
+
+        /// <summary>
+        /// Set the name associated with table class 10.
+        /// </summary>
+        public const JET_param TableClass10Name = (JET_param)146;
+
+        /// <summary>
+        /// Set the name associated with table class 11.
+        /// </summary>
+        public const JET_param TableClass11Name = (JET_param)147;
+
+        /// <summary>
+        /// Set the name associated with table class 12.
+        /// </summary>
+        public const JET_param TableClass12Name = (JET_param)148;
+
+        /// <summary>
+        /// Set the name associated with table class 13.
+        /// </summary>
+        public const JET_param TableClass13Name = (JET_param)149;
+
+        /// <summary>
+        /// Set the name associated with table class 14.
+        /// </summary>
+        public const JET_param TableClass14Name = (JET_param)150;
+
+        /// <summary>
+        /// Set the name associated with table class 15.
+        /// </summary>
+        public const JET_param TableClass15Name = (JET_param)151;
     }
 }

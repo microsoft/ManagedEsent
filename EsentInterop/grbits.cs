@@ -423,7 +423,82 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Assume a sequential access pattern and prefetch database pages.
         /// </summary>
-        Sequential = 0x8000
+        Sequential = 0x8000,
+
+        /// <summary>
+        /// Table belongs to stats class 1.
+        /// </summary>
+        TableClass1 = 0x00010000,
+
+        /// <summary>
+        /// Table belongs to stats class 2.
+        /// </summary>
+        TableClass2 = 0x00020000,
+
+        /// <summary>
+        /// Table belongs to stats class 3.
+        /// </summary>
+        TableClass3 = 0x00030000,
+
+        /// <summary>
+        /// Table belongs to stats class 4.
+        /// </summary>
+        TableClass4 = 0x00040000,
+
+        /// <summary>
+        /// Table belongs to stats class 5.
+        /// </summary>
+        TableClass5 = 0x00050000,
+
+        /// <summary>
+        /// Table belongs to stats class 6.
+        /// </summary>
+        TableClass6 = 0x00060000,
+
+        /// <summary>
+        /// Table belongs to stats class 7.
+        /// </summary>
+        TableClass7 = 0x00070000,
+
+        /// <summary>
+        /// Table belongs to stats class 8.
+        /// </summary>
+        TableClass8 = 0x00080000,
+
+        /// <summary>
+        /// Table belongs to stats class 9.
+        /// </summary>
+        TableClass9 = 0x00090000,
+
+        /// <summary>
+        /// Table belongs to stats class 10.
+        /// </summary>
+        TableClass10 = 0x000A0000,
+
+        /// <summary>
+        /// Table belongs to stats class 11.
+        /// </summary>
+        TableClass11 = 0x000B0000,
+
+        /// <summary>
+        /// Table belongs to stats class 12.
+        /// </summary>
+        TableClass12 = 0x000C0000,
+
+        /// <summary>
+        /// Table belongs to stats class 13.
+        /// </summary>
+        TableClass13 = 0x000D0000,
+
+        /// <summary>
+        /// Table belongs to stats class 14.
+        /// </summary>
+        TableClass14 = 0x000E0000,
+
+        /// <summary>
+        /// Table belongs to stats class 15.
+        /// </summary>
+        TableClass15 = 0x000F0000,
     }
 
     /// <summary>
