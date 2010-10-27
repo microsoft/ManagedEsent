@@ -266,6 +266,19 @@ namespace InteropApiTests
 #pragma warning restore 618,612
         }
 
+        /// <summary>
+        /// JetGetDatabaseInfo should throw an exception when called with a nil sesid.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("JetGetDatabaseInfo should throw an exception when called with a nil sesid.")]
+        [ExpectedException(typeof(EsentInvalidSesidException))]
+        public void TestJetGetDatabaseInfoThrowsExceptionWithNilSession()
+        {
+            // 1 is JET_DbInfoConnect, which is deprecated (and therefore not a valid enum value).
+            int value;
+            Api.JetGetDatabaseInfo(JET_SESID.Nil, JET_DBID.Nil, out value, (JET_DbInfo)1);
+        }
         #endregion Database API
 
         #region Streaming Backup/Restore
@@ -552,6 +565,23 @@ namespace InteropApiTests
         {
             JET_COLUMNLIST columnlist;
             Api.JetGetColumnInfo(this.sesid, this.dbid, null, null, out columnlist);
+        }
+
+        /// <summary>
+        /// Check that an exception is thrown when JetGetColumnInfo gets a 
+        /// null table name.
+        /// </summary>
+        /// <remarks>
+        /// This tests the version of the API that takes a JET_COLUMNBASE.
+        /// </remarks>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetGetColumnInfo gets a null table name")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void JetGetColumnInfoThrowsExceptionWhenTableNameIsNull3()
+        {
+            JET_COLUMNBASE columnbase;
+            Api.JetGetColumnInfo(this.sesid, this.dbid, null, null, out columnbase);
         }
 
         /// <summary>

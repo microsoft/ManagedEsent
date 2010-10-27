@@ -38,7 +38,7 @@ namespace InteropApiTests
         {
             JET_TABLEID tableidTemp = new JET_TABLEID()
             {
-                Value = (IntPtr) 456,
+                Value = (IntPtr)456,
             };
             this.managed = new JET_TABLECREATE()
             {

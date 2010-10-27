@@ -21,6 +21,11 @@ namespace InteropApiTests
         private JET_RECSIZE result;
 
         /// <summary>
+        /// Result of the addition using the named operator.
+        /// </summary>
+        private JET_RECSIZE namedResult;
+
+        /// <summary>
         /// Setup the fixture by subtracting two JET_RECSIZE objects.
         /// </summary>
         [TestInitialize]
@@ -58,6 +63,7 @@ namespace InteropApiTests
             };
 
             this.result = s1 - s2;
+            this.namedResult = JET_RECSIZE.Subtract(s1, s2);
         }
 
         /// <summary>
@@ -179,6 +185,17 @@ namespace InteropApiTests
         public void TestJetRecsizeSubtractionSetsCTaggedColumns()
         {
             Assert.AreEqual(0xb0, this.result.cTaggedColumns);
+        }
+
+        /// <summary>
+        /// Verify that the operator overload is equivalent to the named operation.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that the operator overload is equivalent to the named operation.")]
+        public void TestOperatorOverloadIsEquivalentToSubtract()
+        {
+            Assert.AreEqual(this.namedResult, this.result);
         }
     }
 }

@@ -338,6 +338,66 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         int JetSetDatabaseSize(JET_SESID sesid, string database, int desiredPages, out int actualPages);
 
+        /// <summary>
+        /// Retrieves certain information about the given database.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database identifier.</param>
+        /// <param name="value">The value to be retrieved.</param>
+        /// <param name="infoLevel">The specific data to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetGetDatabaseInfo(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            out int value,
+            JET_DbInfo infoLevel);
+
+        /// <summary>
+        /// Retrieves certain information about the given database.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database identifier.</param>
+        /// <param name="dbinfomisc">The value to be retrieved.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetGetDatabaseInfo(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            out JET_DBINFOMISC dbinfomisc);
+
+        /// <summary>
+        /// Retrieves certain information about the given database.
+        /// </summary>
+        /// <param name="databaseName">The file name of the database.</param>
+        /// <param name="value">The value to be retrieved.</param>
+        /// <param name="infoLevel">The specific data to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetGetDatabaseFileInfo(
+            string databaseName,
+            out int value,
+            JET_DbInfo infoLevel);
+
+        /// <summary>
+        /// Retrieves certain information about the given database.
+        /// </summary>
+        /// <param name="databaseName">The file name of the database.</param>
+        /// <param name="value">The value to be retrieved.</param>
+        /// <param name="infoLevel">The specific data to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetGetDatabaseFileInfo(
+            string databaseName,
+            out long value,
+            JET_DbInfo infoLevel);
+
+        /// <summary>
+        /// Retrieves certain information about the given database.
+        /// </summary>
+        /// <param name="databaseName">The file name of the database.</param>
+        /// <param name="dbinfomisc">The value to be retrieved.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetGetDatabaseFileInfo(
+            string databaseName,
+            out JET_DBINFOMISC dbinfomisc);
+
         #endregion
 
         #region Backup/Restore
@@ -1181,6 +1241,22 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             string tablename,
             string ignored,
             out JET_COLUMNLIST columnlist);
+
+        /// <summary>
+        /// Retrieves information about a column in a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database that contains the table.</param>
+        /// <param name="tablename">The name of the table containing the column.</param>
+        /// <param name="columnName">The name of the column.</param>
+        /// <param name="columnbase">Filled in with information about the columns in the table.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetGetColumnInfo(
+                JET_SESID sesid,
+                JET_DBID dbid,
+                string tablename,
+                string columnName,
+                out JET_COLUMNBASE columnbase);
 
         /// <summary>
         /// Retrieves information about database objects.

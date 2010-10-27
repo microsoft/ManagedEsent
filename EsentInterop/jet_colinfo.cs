@@ -23,6 +23,11 @@ namespace Microsoft.Isam.Esent.Interop
         List = 1,
 
         /// <summary>
+        /// Retrieves a JET_COLUMNBASE structure.
+        /// </summary>
+        Base = 4,
+
+        /// <summary>
         /// Retrieves a JET_COLUMNDEF, the szColumnName argument is interpreted
         /// as a pointer to a columnid.
         /// </summary>

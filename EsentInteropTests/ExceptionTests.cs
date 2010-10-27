@@ -19,7 +19,7 @@ namespace InteropApiTests
     /// Test the exception classes.
     /// </summary>
     [TestClass]
-    public class ExceptionTests
+    public partial class ExceptionTests
     {
         /// <summary>
         /// Verify that the error passed into the constructor is set in the error

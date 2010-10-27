@@ -766,6 +766,137 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return err;            
         }
 
+        /// <summary>
+        /// Retrieves certain information about the given database.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database identifier.</param>
+        /// <param name="value">The value to be retrieved.</param>
+        /// <param name="infoLevel">The specific data to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetDatabaseInfo(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            out int value,
+            JET_DbInfo infoLevel)
+        {
+            TraceFunctionCall("JetGetDatabaseInfo");
+            int err;
+
+            err = Err(NativeMethods.JetGetDatabaseInfo(sesid.Value, dbid.Value, out value, sizeof(int), (uint)infoLevel));
+
+            return err;
+        }
+
+        /// <summary>
+        /// Retrieves certain information about the given database.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database identifier.</param>
+        /// <param name="dbinfomisc">The value to be retrieved.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetDatabaseInfo(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            out JET_DBINFOMISC dbinfomisc)
+        {
+            TraceFunctionCall("JetGetDatabaseInfo");
+            int err;
+
+            NATIVE_DBINFOMISC4 native;
+
+            err = Err(NativeMethods.JetGetDatabaseInfo(sesid.Value, dbid.Value, out native, (uint)Marshal.SizeOf(typeof(NATIVE_DBINFOMISC4)), (uint)JET_DbInfo.Misc));
+
+            dbinfomisc = new JET_DBINFOMISC();
+            dbinfomisc.SetFromNativeDbinfoMisc(ref native);
+
+            return err;
+        }
+
+        /// <summary>
+        /// Retrieves certain information about the given database.
+        /// </summary>
+        /// <param name="databaseName">The file name of the database.</param>
+        /// <param name="value">The value to be retrieved.</param>
+        /// <param name="infoLevel">The specific data to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetDatabaseFileInfo(
+            string databaseName,
+            out int value,
+            JET_DbInfo infoLevel)
+        {
+            TraceFunctionCall("JetGetDatabaseFileInfo");
+            int err;
+
+            if (this.Capabilities.SupportsUnicodePaths)
+            {
+                err = Err(NativeMethods.JetGetDatabaseFileInfoW(databaseName, out value, sizeof(int), (uint)infoLevel));
+            }
+            else
+            {
+                err = Err(NativeMethods.JetGetDatabaseFileInfo(databaseName, out value, sizeof(int), (uint)infoLevel));
+            }
+
+            return err;
+        }
+
+        /// <summary>
+        /// Retrieves certain information about the given database.
+        /// </summary>
+        /// <param name="databaseName">The file name of the database.</param>
+        /// <param name="value">The value to be retrieved.</param>
+        /// <param name="infoLevel">The specific data to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetDatabaseFileInfo(
+            string databaseName,
+            out long value,
+            JET_DbInfo infoLevel)
+        {
+            TraceFunctionCall("JetGetDatabaseFileInfo");
+            int err;
+
+            if (this.Capabilities.SupportsUnicodePaths)
+            {
+                err = Err(NativeMethods.JetGetDatabaseFileInfoW(databaseName, out value, sizeof(long), (uint)infoLevel));
+            }
+            else
+            {
+                err = Err(NativeMethods.JetGetDatabaseFileInfo(databaseName, out value, sizeof(long), (uint)infoLevel));
+            }
+
+            return err;
+        }
+
+        /// <summary>
+        /// Retrieves certain information about the given database.
+        /// </summary>
+        /// <param name="databaseName">The file name of the database.</param>
+        /// <param name="dbinfomisc">The value to be retrieved.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetDatabaseFileInfo(
+            string databaseName,
+            out JET_DBINFOMISC dbinfomisc)
+        {
+            TraceFunctionCall("JetGetDatabaseFileInfo");
+            int err;
+
+            NATIVE_DBINFOMISC4 native;
+
+            if (this.Capabilities.SupportsUnicodePaths)
+            {
+                err = Err(NativeMethods.JetGetDatabaseFileInfoW(databaseName, out native, (uint)Marshal.SizeOf(typeof(NATIVE_DBINFOMISC4)), (uint)JET_DbInfo.Misc));
+            }
+            else
+            {
+                err = Err(NativeMethods.JetGetDatabaseFileInfo(databaseName, out native, (uint)Marshal.SizeOf(typeof(NATIVE_DBINFOMISC4)), (uint)JET_DbInfo.Misc));
+            }
+
+            dbinfomisc = new JET_DBINFOMISC();
+            dbinfomisc.SetFromNativeDbinfoMisc(ref native);
+
+            return err;
+        }
+
         #endregion
 
         #region Backup/Restore
@@ -2266,6 +2397,41 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         }
 
         /// <summary>
+        /// Retrieves information about a column in a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database that contains the table.</param>
+        /// <param name="tablename">The name of the table containing the column.</param>
+        /// <param name="columnName">The name of the column.</param>
+        /// <param name="columnbase">Filled in with information about the columns in the table.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetColumnInfo(
+                JET_SESID sesid,
+                JET_DBID dbid,
+                string tablename,
+                string columnName,
+                out JET_COLUMNBASE columnbase)
+        {
+            TraceFunctionCall("JetGetColumnInfo");
+            CheckNotNull(tablename, "tablename");
+            CheckNotNull(columnName, "columnName");
+
+            var nativeColumnbase = new NATIVE_COLUMNBASE();
+            nativeColumnbase.cbStruct = checked((uint)Marshal.SizeOf(nativeColumnbase));
+            int err = Err(NativeMethods.JetGetColumnInfo(
+               sesid.Value,
+               dbid.Value,
+               tablename,
+               columnName,
+               ref nativeColumnbase,
+               nativeColumnbase.cbStruct,
+               (uint)JET_ColInfo.Base));
+            columnbase = new JET_COLUMNBASE(nativeColumnbase);
+
+            return err;
+        }
+
+        /// <summary>
         /// Retrieves information about database objects.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
@@ -2528,13 +2694,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             TraceFunctionCall("JetGetIndexInfo");
             CheckNotNull(tablename, "tablename");
 
-            result = new JET_INDEXID { CbStruct = JET_INDEXID.SizeOfIndexId };
             int err = Err(NativeMethods.JetGetIndexInfo(
                 sesid.Value,
                 dbid.Value,
                 tablename,
                 indexname,
-                ref result,
+                out result,
                 JET_INDEXID.SizeOfIndexId,
                 (uint)infoLevel));
 
@@ -2661,12 +2826,11 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             TraceFunctionCall("JetGetTableIndexInfo");
 
-            result = new JET_INDEXID { CbStruct = JET_INDEXID.SizeOfIndexId };
             int err = Err(NativeMethods.JetGetTableIndexInfo(
                 sesid.Value,
                 tableid.Value,
                 indexname,
-                ref result,
+                out result,
                 JET_INDEXID.SizeOfIndexId,
                 (uint)infoLevel));
 

@@ -201,7 +201,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="s1">The first JET_RECSIZE.</param>
         /// <param name="s2">The second JET_RECSIZE.</param>
         /// <returns>A JET_RECSIZE containing the result of adding the sizes in s1 and s2.</returns>
-        public static JET_RECSIZE operator +(JET_RECSIZE s1, JET_RECSIZE s2)
+        public static JET_RECSIZE Add(JET_RECSIZE s1, JET_RECSIZE s2)
         {
             checked
             {
@@ -223,12 +223,23 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Add the sizes in two JET_RECSIZE structures.
+        /// </summary>
+        /// <param name="left">The first JET_RECSIZE.</param>
+        /// <param name="right">The second JET_RECSIZE.</param>
+        /// <returns>A JET_RECSIZE containing the result of adding the sizes in left and right.</returns>
+        public static JET_RECSIZE operator +(JET_RECSIZE left, JET_RECSIZE right)
+        {
+            return JET_RECSIZE.Add(left, right);
+        }
+
+        /// <summary>
         /// Calculate the difference in sizes between two JET_RECSIZE structures.
         /// </summary>
         /// <param name="s1">The first JET_RECSIZE.</param>
         /// <param name="s2">The second JET_RECSIZE.</param>
         /// <returns>A JET_RECSIZE containing the difference in sizes between s1 and s2.</returns>
-        public static JET_RECSIZE operator -(JET_RECSIZE s1, JET_RECSIZE s2)
+        public static JET_RECSIZE Subtract(JET_RECSIZE s1, JET_RECSIZE s2)
         {
             checked
             {
@@ -247,6 +258,17 @@ namespace Microsoft.Isam.Esent.Interop
                     cTaggedColumns = s1.cTaggedColumns - s2.cTaggedColumns,
                 };
             }
+        }
+
+        /// <summary>
+        /// Calculate the difference in sizes between two JET_RECSIZE structures.
+        /// </summary>
+        /// <param name="left">The first JET_RECSIZE.</param>
+        /// <param name="right">The second JET_RECSIZE.</param>
+        /// <returns>A JET_RECSIZE containing the difference in sizes between left and right.</returns>
+        public static JET_RECSIZE operator -(JET_RECSIZE left, JET_RECSIZE right)
+        {
+            return JET_RECSIZE.Subtract(left, right);
         }
 
         /// <summary>

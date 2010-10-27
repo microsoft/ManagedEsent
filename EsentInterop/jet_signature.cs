@@ -146,6 +146,21 @@ namespace Microsoft.Isam.Esent.Interop
                    && this.ulRandom == other.ulRandom
                    && this.logtimeCreate == other.logtimeCreate;
         }
+
+        /// <summary>
+        /// Convrts the structure to the native representation.
+        /// </summary>
+        /// <returns>The native representation of the signature.</returns>
+        internal NATIVE_SIGNATURE GetNativeSignature()
+        {
+            var native = new NATIVE_SIGNATURE()
+            {
+                ulRandom = this.ulRandom,
+                szComputerName = this.szComputerName,
+                logtimeCreate = this.logtimeCreate,
+            };
+            return native;
+        }
     }
 
     /// <summary>

@@ -51,6 +51,7 @@ namespace Microsoft.Isam.Esent.Interop
     using System;
     using System.Diagnostics;
     using System.Runtime.InteropServices;
+    using System.Security.Permissions;
     using Microsoft.Isam.Esent.Interop.Implementation;
     using Microsoft.Isam.Esent.Interop.Vista;
 
@@ -430,6 +431,76 @@ namespace Microsoft.Isam.Esent.Interop
         public static void JetSetDatabaseSize(JET_SESID sesid, string database, int desiredPages, out int actualPages)
         {
             Api.Check(Impl.JetSetDatabaseSize(sesid, database, desiredPages, out actualPages));
+        }
+
+        /// <summary>
+        /// Retrieves certain information about the given database.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database identifier.</param>
+        /// <param name="value">The value to be retrieved.</param>
+        /// <param name="infoLevel">The specific data to retrieve.</param>
+        public static void JetGetDatabaseInfo(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            out int value,
+            JET_DbInfo infoLevel)
+        {
+            Api.Check(Impl.JetGetDatabaseInfo(sesid, dbid, out value, infoLevel));
+        }
+
+        /// <summary>
+        /// Retrieves certain information about the given database.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database identifier.</param>
+        /// <param name="dbinfomisc">The value to be retrieved.</param>
+        public static void JetGetDatabaseInfo(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            out JET_DBINFOMISC dbinfomisc)
+        {
+            Api.Check(Impl.JetGetDatabaseInfo(sesid, dbid, out dbinfomisc));
+        }
+
+        /// <summary>
+        /// Retrieves certain information about the given database.
+        /// </summary>
+        /// <param name="databaseName">The file name of the database.</param>
+        /// <param name="value">The value to be retrieved.</param>
+        /// <param name="infoLevel">The specific data to retrieve.</param>
+        public static void JetGetDatabaseFileInfo(
+            string databaseName,
+            out int value,
+            JET_DbInfo infoLevel)
+        {
+            Api.Check(Impl.JetGetDatabaseFileInfo(databaseName, out value, infoLevel));
+        }
+
+        /// <summary>
+        /// Retrieves certain information about the given database.
+        /// </summary>
+        /// <param name="databaseName">The file name of the database.</param>
+        /// <param name="value">The value to be retrieved.</param>
+        /// <param name="infoLevel">The specific data to retrieve.</param>
+        public static void JetGetDatabaseFileInfo(
+            string databaseName,
+            out long value,
+            JET_DbInfo infoLevel)
+        {
+            Api.Check(Impl.JetGetDatabaseFileInfo(databaseName, out value, infoLevel));
+        }
+
+        /// <summary>
+        /// Retrieves certain information about the given database.
+        /// </summary>
+        /// <param name="databaseName">The file name of the database.</param>
+        /// <param name="dbinfomisc">The value to be retrieved.</param>
+        public static void JetGetDatabaseFileInfo(
+            string databaseName,
+            out JET_DBINFOMISC dbinfomisc)
+        {
+            Api.Check(Impl.JetGetDatabaseFileInfo(databaseName, out dbinfomisc));
         }
 
         #endregion
@@ -1300,6 +1371,24 @@ namespace Microsoft.Isam.Esent.Interop
                 out JET_COLUMNLIST columnlist)
         {
             Api.Check(Impl.JetGetColumnInfo(sesid, dbid, tablename, columnName, out columnlist));
+        }
+
+        /// <summary>
+        /// Retrieves information about a column in a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database that contains the table.</param>
+        /// <param name="tablename">The name of the table containing the column.</param>
+        /// <param name="columnName">The name of the column.</param>
+        /// <param name="columnbase">Filled in with information about the columns in the table.</param>
+        public static void JetGetColumnInfo(
+                JET_SESID sesid,
+                JET_DBID dbid,
+                string tablename,
+                string columnName,
+                out JET_COLUMNBASE columnbase)
+        {
+            Api.Check(Impl.JetGetColumnInfo(sesid, dbid, tablename, columnName, out columnbase));
         }
 
         /// <summary>
@@ -2283,9 +2372,10 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="dataSize">The size of data to set.</param>
         /// <param name="grbit">SetColumn options.</param>
         /// <param name="setinfo">Used to specify itag or long-value offset.</param>
-        public static void JetSetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, SetColumnGrbit grbit, JET_SETINFO setinfo)
+        /// <returns>A warning code.</returns>
+        public static JET_wrn JetSetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, SetColumnGrbit grbit, JET_SETINFO setinfo)
         {
-            Api.JetSetColumn(sesid, tableid, columnid, data, dataSize, 0, grbit, setinfo);
+            return Api.JetSetColumn(sesid, tableid, columnid, data, dataSize, 0, grbit, setinfo);
         }
 
         /// <summary>
@@ -2307,6 +2397,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// A warning. If the last column set has a warning, then
         /// this warning will be returned from JetSetColumns itself.
         /// </returns>
+        [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
         public static JET_wrn JetSetColumns(JET_SESID sesid, JET_TABLEID tableid, JET_SETCOLUMN[] setcolumns, int numColumns)
         {
             if (null == setcolumns)
@@ -2572,7 +2663,6 @@ namespace Microsoft.Isam.Esent.Interop
         #endregion
 
         #region Misc
-
         /// <summary>
         /// Frees memory that was allocated by a database engine call.
         /// </summary>

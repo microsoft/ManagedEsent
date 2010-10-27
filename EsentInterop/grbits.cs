@@ -228,6 +228,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for <see cref="Api.JetBackupInstance"/>.
     /// </summary>
+    [Flags]
     public enum BackupGrbit
     {
         /// <summary>

@@ -43,6 +43,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// The name of the instance. This string must be unique within a
         /// given process hosting the database engine.
         /// </param>
+        [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
         public Instance(string name) : this(name, name)
         {
         }
@@ -59,6 +60,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// A display name for the instance. This will be used in eventlog
         /// entries.
         /// </param>
+        [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
         public Instance(string name, string displayName) : base(true)
         {
             this.name = name;
@@ -96,6 +98,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public JET_INSTANCE JetInstance
         {
+            [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
             get
             {
                 this.CheckObjectIsNotDisposed();
@@ -108,6 +111,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public InstanceParameters Parameters
         {
+            [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
             get
             {
                 this.CheckObjectIsNotDisposed();
@@ -122,6 +126,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="instance">The instance to convert.</param>
         /// <returns>The JET_INSTANCE wrapped by the instance.</returns>
+        [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
         public static implicit operator JET_INSTANCE(Instance instance)
         {
             return instance.JetInstance;
@@ -141,6 +146,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Initialize the JET_INSTANCE.
         /// </summary>
+        [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
         public void Init()
         {
             this.Init(InitGrbit.None);
@@ -152,6 +158,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">
         /// Initialization options.
         /// </param>
+        [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
         public void Init(InitGrbit grbit)
         {
             this.CheckObjectIsNotDisposed();
@@ -179,6 +186,7 @@ namespace Microsoft.Isam.Esent.Interop
             "Microsoft.StyleCop.CSharp.MaintainabilityRules",
             "SA1409:RemoveUnnecessaryCode",
             Justification = "CER code belongs in the finally block, so the try clause is empty")]
+        [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
         public void Term()
         {
             // Use a constrained region so that the handle is
@@ -209,7 +217,6 @@ namespace Microsoft.Isam.Esent.Interop
         /// Release the handle for this instance.
         /// </summary>
         /// <returns>True if the handle could be released.</returns>
-        [SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
         protected override bool ReleaseHandle()
         {
             // The object is already marked as invalid so don't check
@@ -229,6 +236,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Check to see if this instance is invalid or closed.
         /// </summary>
+        [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
         private void CheckObjectIsNotDisposed()
         {
             if (this.IsInvalid || this.IsClosed)

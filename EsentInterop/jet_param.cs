@@ -158,6 +158,40 @@ namespace Microsoft.Isam.Esent.Interop
         CheckpointDepthMax = 24,
 
         /// <summary>
+        /// This parameter controls when the database page cache begins evicting pages from the
+        /// cache to make room for pages that are not cached. When the number of page buffers in the cache
+        /// drops below this threshold then a background process will be started to replenish that pool
+        /// of available buffers. This threshold is always relative to the maximum cache size as set by
+        /// JET_paramCacheSizeMax. This threshold must also always be less than the stop threshold as
+        /// set by JET_paramStopFlushThreshold.
+        /// <para>
+        /// The distance height of the start threshold will determine the response time that the database
+        ///  page cache must have to produce available buffers before the application needs them. A high
+        /// start threshold will give the background process more time to react. However, a high start
+        /// threshold implies a higher stop threshold and that will reduce the effective size of the
+        /// database page cache for modified pages (Windows 2000) or for all pages (Windows XP and later).
+        /// </para>
+        /// </summary>
+        StartFlushThreshold = 31,
+
+        /// <summary>
+        /// This parameter controls when the database page cache ends evicting pages from the cache to make
+        /// room for pages that are not cached. When the number of page buffers in the cache rises above
+        /// this threshold then the background process that was started to replenish that pool of available
+        /// buffers is stopped. This threshold is always relative to the maximum cache size as set by
+        /// JET_paramCacheSizeMax. This threshold must also always be greater than the start threshold
+        /// as set by JET_paramStartFlushThreshold.
+        /// <para>
+        /// The distance between the start threshold and the stop threshold affects the efficiency with
+        /// which database pages are flushed by the background process. A larger gap will make it
+        /// more likely that writes to neighboring pages may be combined. However, a high stop
+        /// threshold will reduce the effective size of the database page cache for modified
+        /// pages (Windows 2000) or for all pages (Windows XP and later).
+        /// </para>
+        /// </summary>
+        StopFlushThreshold = 32,
+
+        /// <summary>
         /// This parameter is the master switch that controls crash recovery for an instance.
         /// If this parameter is set to "On" then ARIES style recovery will be used to bring all
         /// databases in the instance to a consistent state in the event of a process or machine
@@ -204,6 +238,13 @@ namespace Microsoft.Isam.Esent.Interop
         /// the database engine will be suppressed.
         /// </summary>
         NoInformationEvent = 50,
+
+        /// <summary>
+        /// Configures the detail level of eventlog messages that are emitted
+        /// to the eventlog by the database engine. Higher numbers will result
+        /// in more detailed eventlog messages.
+        /// </summary>
+        EventLoggingLevel = 51,
 
         /// <summary>
         /// This parameter configures the minimum size of the database page cache. The size is in database pages.
@@ -268,6 +309,13 @@ namespace Microsoft.Isam.Esent.Interop
         /// path will fail with JET_err.InvalidPath.
         /// </summary>
         CreatePathIfNotExist = 100,
+
+        /// <summary>
+        /// When this parameter is true then only one database is allowed to
+        /// be opened using JetOpenDatabase by a given session at one time.
+        /// The temporary database is excluded from this restriction. 
+        /// </summary>
+        OneDatabasePerSession = 102,
 
         /// <summary>
         /// This parameter controls the maximum number of instances that can be created in a single process.

@@ -23,6 +23,10 @@ namespace Microsoft.Isam.Esent.Interop
         /// Object is for internal use only.
         /// </summary>
         System = -2147483648, // 0x80000000
+        // It's possible to use bit shift to avoid triggering fxcop CA2217.
+        // System = (long)0x1L << 31, // 0x80000000;
+        // (http://social.msdn.microsoft.com/Forums/en-US/vstscode/thread/a44aa5c1-c62a-46b7-8009-dc46ba21ba93)
+        // But we don't want to change the type of the enum to a long.
 
         /// <summary>
         /// Table's DDL is fixed.

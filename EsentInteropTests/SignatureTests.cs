@@ -40,5 +40,23 @@ namespace InteropApiTests
             var actual = new JET_SIGNATURE(native);
             Assert.AreEqual(expected, actual);
         }
+
+        /// <summary>
+        /// Test constructing a NATIVE_SIGNATURE from a JET_SIGNATURE.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test constructing a NATIVE_SIGNATURE from a JET_SIGNATURE")]
+        public void CreateNativeSignatureFromJetSignature()
+        {
+            var time = new DateTime(2037, 10, 29, 02, 00, 00, DateTimeKind.Utc);
+
+            var expected = new JET_SIGNATURE(37, time, "retupmoc");
+
+            var native = expected.GetNativeSignature();
+            var actual = new JET_SIGNATURE(native);
+            Assert.AreEqual(expected, actual);
+            Assert.IsTrue(expected.Equals(actual));
+        }
     }
 }

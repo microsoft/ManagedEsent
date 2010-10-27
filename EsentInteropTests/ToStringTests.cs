@@ -16,7 +16,7 @@ namespace InteropApiTests
     /// Testing the ToString methods of the basic types.
     /// </summary>
     [TestClass]
-    public class ToStringTests
+    public partial class ToStringTests
     {
         /// <summary>
         /// Test JET_INSTANCE.ToString().

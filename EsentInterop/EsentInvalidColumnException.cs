@@ -18,7 +18,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Initializes a new instance of the EsentInvalidColumnException class.
         /// </summary>
-        internal EsentInvalidColumnException()
+        public EsentInvalidColumnException()
         {
         }
 

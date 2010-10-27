@@ -27,19 +27,19 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// SysTabCursor is obsolete.
         /// </summary>
-        [Obsolete]
+        [Obsolete("This value is not used, and is provided for completeness to match the published header in the SDK.")]
         SysTabCursor = 2,
 
         /// <summary>
         /// OLC is obsolete.
         /// </summary>
-        [Obsolete]
+        [Obsolete("This value is not used, and is provided for completeness to match the published header in the SDK.")]
         OLC = 3,
 
         /// <summary>
         /// Reset OLC is obsolete.
         /// </summary>
-        [Obsolete]
+        [Obsolete("This value is not used, and is provided for completeness to match the published header in the SDK.")]
         ResetOLC = 4,
 
         /// <summary>

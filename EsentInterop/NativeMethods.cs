@@ -162,6 +162,36 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
         public static extern int JetSetDatabaseSizeW(IntPtr sesid, string szDatabaseName, uint cpg, out uint pcpgReal);
 
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetDatabaseInfo(IntPtr sesid, uint dbid, out int intValue, uint cbMax, uint InfoLevel);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetDatabaseInfo(IntPtr sesid, uint dbid, out NATIVE_DBINFOMISC4 dbinfomisc, uint cbMax, uint InfoLevel);
+
+        // Unicode, int
+        [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
+        public static extern int JetGetDatabaseFileInfoW(string szFilename, out int intValue, uint cbMax, uint InfoLevel);
+
+        // ASCII, int
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetDatabaseFileInfo(string szFilename, out int intValue, uint cbMax, uint InfoLevel);
+
+        // Unicode, long
+        [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
+        public static extern int JetGetDatabaseFileInfoW(string szFilename, out long intValue, uint cbMax, uint InfoLevel);
+
+        // ASCII, long
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetDatabaseFileInfo(string szFilename, out long intValue, uint cbMax, uint InfoLevel);
+
+        // Unicode, MISC
+        [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
+        public static extern int JetGetDatabaseFileInfoW(string szFilename, out NATIVE_DBINFOMISC4 dbinfomisc, uint cbMax, uint InfoLevel);
+
+        // Unicode, MISC
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetDatabaseFileInfo(string szFilename, out NATIVE_DBINFOMISC4 dbinfomisc, uint cbMax, uint InfoLevel);
+
         #endregion
 
         #region Backup/Restore
@@ -455,6 +485,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern int JetGetColumnInfo(IntPtr sesid, uint dbid, string szTableName, string szColumnName, ref NATIVE_COLUMNLIST columnlist, uint cbMax, uint InfoLevel);
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetColumnInfo(IntPtr sesid, uint dbid, string szTableName, string szColumnName, ref NATIVE_COLUMNBASE columnlist, uint cbMax, uint InfoLevel);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetGetObjectInfo(
             IntPtr sesid,
             uint dbid,
@@ -532,7 +565,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             uint dbid,
             string szTableName,
             string szIndexName,
-            [In] [Out] ref JET_INDEXID result,
+            [Out] out JET_INDEXID result,
             uint cbResult,
             uint InfoLevel);
 
@@ -573,7 +606,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             IntPtr sesid,
             IntPtr tableid,
             string szIndexName,
-            [In] [Out] ref JET_INDEXID result,
+            [Out] out JET_INDEXID result,
             uint cbResult,
             uint InfoLevel);
 
@@ -596,7 +629,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetSetColumnDefaultValue(
-            IntPtr sesid, uint tableid, string szTableName, string szColumnName, byte[] pvData, uint cbData, uint grbit);
+            IntPtr sesid, uint tableid, [MarshalAs(UnmanagedType.LPStr)] string szTableName, [MarshalAs(UnmanagedType.LPStr)] string szColumnName, byte[] pvData, uint cbData, uint grbit);
 
         #endregion
 

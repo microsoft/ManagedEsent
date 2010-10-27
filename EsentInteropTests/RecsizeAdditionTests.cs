@@ -16,9 +16,14 @@ namespace InteropApiTests
     public class RecsizeAdditionTests
     {
         /// <summary>
-        /// Result of the addition.
+        /// Result of the addition using operator overloading.
         /// </summary>
         private JET_RECSIZE result;
+
+        /// <summary>
+        /// Result of the addition using the named operator.
+        /// </summary>
+        private JET_RECSIZE namedResult;
 
         /// <summary>
         /// Setup the fixture by adding two JET_RECSIZE objects.
@@ -58,6 +63,7 @@ namespace InteropApiTests
             };
 
             this.result = s1 + s2;
+            this.namedResult = JET_RECSIZE.Add(s1, s2);
         }
 
         /// <summary>
@@ -179,6 +185,17 @@ namespace InteropApiTests
         public void TestJetRecsizeAdditionSetsCTaggedColumns()
         {
             Assert.AreEqual(0xbb, this.result.cTaggedColumns);
+        }
+
+        /// <summary>
+        /// Verify that the operator overload is equivalent to the named operation.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that the operator overload is equivalent to the named operation.")]
+        public void TestOperatorOverloadIsEquivalentToAdd()
+        {
+            Assert.AreEqual(this.namedResult, this.result);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace InteropApiTests
     /// Tests for serialization/deserialization of objects.
     /// </summary>
     [TestClass]
-    public class SerializationTests
+    public partial class SerializationTests
     {
         /// <summary>
         /// Verify that a JET_LOGTIME can be serialized.
