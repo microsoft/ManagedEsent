@@ -17,6 +17,63 @@ namespace InteropApiTests
     public class ColumnValueTests
     {
         /// <summary>
+        /// Test the ValuesAsObject method of a Bool column value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test BoolColumnValue.ValueAsObject")]
+        public void TestBoolValueAsObject()
+        {
+            TestValueAsObjectForStruct(new BoolColumnValue(), true);
+            TestValueAsObjectForStruct(new BoolColumnValue(), false);
+        }
+
+        /// <summary>
+        /// Test the ValuesAsObject method of a Byte column value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test ByteColumnValue.ValueAsObject")]
+        public void TestByteValueAsObject()
+        {
+            var value = new ByteColumnValue();
+            for (byte i = Byte.MinValue; i < Byte.MaxValue; ++i)
+            {
+                TestValueAsObjectForStruct(value, i);
+            }
+        }
+
+        /// <summary>
+        /// Test the ValuesAsObject method of an Int16 column value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test Int16ColumnValue.ValueAsObject")]
+        public void TestInt16ValueAsObject()
+        {
+            var value = new Int16ColumnValue();
+            for (short i = Int16.MinValue; i < Int16.MaxValue; ++i)
+            {
+                TestValueAsObjectForStruct(value, i);
+            }
+        }
+
+        /// <summary>
+        /// Test the ValuesAsObject method of an UInt16 column value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test UInt16ColumnValue.ValueAsObject")]
+        public void TestUInt16ValueAsObject()
+        {
+            var value = new UInt16ColumnValue();
+            for (ushort i = UInt16.MinValue; i < Int16.MaxValue; ++i)
+            {
+                TestValueAsObjectForStruct(value, i);
+            }
+        }
+
+        /// <summary>
         /// Test the ValuesAsObject method of an Int64 column value.
         /// </summary>
         [TestMethod]
@@ -112,6 +169,27 @@ namespace InteropApiTests
         {
             var instance = new BytesColumnValue { Value = BitConverter.GetBytes(0x1122334455667788UL) };
             Assert.AreEqual("88-77-66-55-44-33-22-11", instance.ToString());
+        }
+
+        /// <summary>
+        /// Test the ValueAsObject method for structure types.
+        /// </summary>
+        /// <typeparam name="T">The structure type.</typeparam>
+        /// <param name="columnValue">The column value.</param>
+        /// <param name="value">The value to set.</param>
+        private static void TestValueAsObjectForStruct<T>(ColumnValueOfStruct<T> columnValue, T value) where T : struct
+        {
+            columnValue.Value = value;
+            object o1 = columnValue.ValueAsObject;
+            Assert.AreEqual(o1, value);
+            columnValue.Value = null;
+            Assert.IsNull(columnValue.ValueAsObject);
+            columnValue.Value = default(T);
+            Assert.AreEqual(columnValue.ValueAsObject, default(T));
+            columnValue.Value = value;
+            object o2 = columnValue.ValueAsObject;
+            Assert.AreEqual(o1, o2);
+            Assert.AreSame(o1, o2);
         }
     }
 }

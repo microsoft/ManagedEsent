@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Diagnostics;
+    using System.Threading;
 
     /// <summary>
     /// A <see cref="ushort"/> column value.
@@ -15,6 +16,36 @@ namespace Microsoft.Isam.Esent.Interop
     [CLSCompliant(false)]
     public class UInt16ColumnValue : ColumnValueOfStruct<ushort>
     {
+        /// <summary>
+        /// Cached boxed values. This can hold all possible values.
+        /// </summary>
+        private static readonly object[] boxedValues = new object[65536];
+
+        /// <summary>
+        /// Gets the last set or retrieved value of the column. The
+        /// value is returned as a generic object.
+        /// </summary>
+        public override object ValueAsObject
+        {
+            get
+            {
+                if (!this.Value.HasValue)
+                {
+                    return null;
+                }
+
+                ushort value = this.Value.Value;
+                object boxedValue = Thread.VolatileRead(ref boxedValues[value]);
+                if (null == boxedValue)
+                {
+                    boxedValue = this.Value.Value;
+                    Thread.VolatileWrite(ref boxedValues[value], boxedValue);
+                }
+
+                return boxedValue;
+            }
+        }
+
         /// <summary>
         /// Gets the size of the value in the column. This returns 0 for
         /// variable sized columns (i.e. binary and string).
