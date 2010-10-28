@@ -15,16 +15,6 @@ namespace Microsoft.Isam.Esent.Interop
     public abstract class ColumnValueOfStruct<T> : ColumnValue where T : struct
     {
         /// <summary>
-        /// Gets the last set or retrieved value of the column. The
-        /// value is returned as a generic object.
-        /// </summary>
-        public override object ValueAsObject
-        {
-            [DebuggerStepThrough]
-            get { return this.Value; }
-        }
-
-        /// <summary>
         /// Gets or sets the value in the struct.
         /// </summary>
         public T? Value { get; set; }

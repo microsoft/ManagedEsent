@@ -8,12 +8,25 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Diagnostics;
+    using System.Threading;
 
     /// <summary>
     /// An <see cref="int"/> column value.
     /// </summary>
     public class Int32ColumnValue : ColumnValueOfStruct<int>
     {
+        /// <summary>
+        /// Gets the last set or retrieved value of the column. The
+        /// value is returned as a generic object.
+        /// </summary>
+        public override object ValueAsObject
+        {
+            get
+            {
+                return BoxedValueCache<int>.GetBoxedValue(this.Value);
+            }
+        }
+
         /// <summary>
         /// Gets the size of the value in the column. This returns 0 for
         /// variable sized columns (i.e. binary and string).

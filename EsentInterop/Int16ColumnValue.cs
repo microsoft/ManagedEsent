@@ -8,7 +8,6 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Diagnostics;
-    using System.Threading;
 
     /// <summary>
     /// An <see cref="short"/> column value.
@@ -35,11 +34,11 @@ namespace Microsoft.Isam.Esent.Interop
 
                 short value = this.Value.Value;
                 int index = unchecked((ushort)value);
-                object boxedValue = Thread.VolatileRead(ref boxedValues[index]);
+                object boxedValue = boxedValues[index];
                 if (null == boxedValue)
                 {
                     boxedValue = this.Value.Value;
-                    Thread.VolatileWrite(ref boxedValues[index], boxedValue);
+                    boxedValues[index] = boxedValue;
                 }
 
                 return boxedValue;

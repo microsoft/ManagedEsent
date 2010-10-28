@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="ApiConstants.cs" />
     <Compile Include="BoolColumnValue.cs" />
+    <Compile Include="BoxedValueCache.cs" />
     <Compile Include="ByteColumnValue.cs" />
     <Compile Include="BytesColumnValue.cs" />
     <Compile Include="Caches.cs" />

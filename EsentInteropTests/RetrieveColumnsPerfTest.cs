@@ -179,7 +179,7 @@ namespace InteropApiTests
         [Priority(3)]
         public void TestJetGetBookmarkPerf()
         {
-            DoTest(this.JetGetBookmark);
+            DoTest(this.JetGetBookmark, 1024 * 1024);
         }
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace InteropApiTests
         [Priority(3)]
         public void TestGetBookmarkPerf()
         {
-            DoTest(this.GetBookmark);
+            DoTest(this.GetBookmark, 1024 * 1024);
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace InteropApiTests
         [Priority(3)]
         public void TestJetRetrieveKeyPerf()
         {
-            DoTest(this.JetRetrieveKey);
+            DoTest(this.JetRetrieveKey, 1024 * 1024);
         }
 
         /// <summary>
@@ -212,7 +212,7 @@ namespace InteropApiTests
         [Priority(3)]
         public void TestRetrieveKeyPerf()
         {
-            DoTest(this.RetrieveKey);
+            DoTest(this.RetrieveKey, 1024 * 1024);
         }
 
         /// <summary>
@@ -223,7 +223,7 @@ namespace InteropApiTests
         [Priority(3)]
         public void TestJetRetrieveColumnsPerf()
         {
-            DoTest(this.RetrieveWithJetRetrieveColumns);
+            DoTest(this.RetrieveWithJetRetrieveColumns, 1024 * 1024);
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace InteropApiTests
         [Priority(3)]
         public void TestJetRetrieveColumnsOneBufferPerf()
         {
-            DoTest(this.RetrieveWithJetRetrieveColumnsOneBuffer);
+            DoTest(this.RetrieveWithJetRetrieveColumnsOneBuffer, 1024 * 1024);
         }
 
         /// <summary>
@@ -245,7 +245,7 @@ namespace InteropApiTests
         [Priority(3)]
         public void TestRetrieveColumnPerf()
         {
-            DoTest(this.RetrieveWithRetrieveColumn);
+            DoTest(this.RetrieveWithRetrieveColumn, 1024 * 1024);
         }
 
         /// <summary>
@@ -256,7 +256,7 @@ namespace InteropApiTests
         [Priority(3)]
         public void TestRetrieveColumnAsPerf()
         {
-            DoTest(this.RetrieveWithRetrieveColumnAs);
+            DoTest(this.RetrieveWithRetrieveColumnAs, 1024 * 1024);
         }
 
         /// <summary>
@@ -267,7 +267,18 @@ namespace InteropApiTests
         [Priority(3)]
         public void TestRetrieveColumnsPerf()
         {
-            DoTest(this.RetrieveWithRetrieveColumns);
+            DoTest(this.RetrieveWithRetrieveColumns, 1024 * 1024);
+        }
+
+        /// <summary>
+        /// Measure performance of reading records with RetrieveColumnsAsObject.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the performance of RetrieveColumnsAsObject")]
+        [Priority(3)]
+        public void TestRetrieveColumnsAsObjectPerf()
+        {
+            DoTest(this.RetrieveWithRetrieveColumnsAsObject, 8 * 1024 * 1024);
         }
 
         /// <summary>
@@ -278,7 +289,7 @@ namespace InteropApiTests
         [Priority(3)]
         public void TestRetrieveColumnsSlowPerf()
         {
-            DoTest(this.RetrieveWithRetrieveColumnsSlow);
+            DoTest(this.RetrieveWithRetrieveColumnsSlow, 1024 * 1024);
         }
 
         /// <summary>
@@ -289,7 +300,7 @@ namespace InteropApiTests
         [Priority(3)]
         public void TestJetRetrieveColumnPerf()
         {
-            DoTest(this.RetrieveWithJetRetrieveColumn);
+            DoTest(this.RetrieveWithJetRetrieveColumn, 1024 * 1024);
         }
 
         #region Helper Methods
@@ -298,7 +309,10 @@ namespace InteropApiTests
         /// Perform an action, timing it and checking the system's memory usage before and after.
         /// </summary>
         /// <param name="action">The action to perform.</param>
-        private static void DoTest(Action action)
+        /// <param name="memoryLeakThreshold">
+        /// Number of allocated bytes that will trigger memory leak detection.
+        /// </param>
+        private static void DoTest(Action action, int memoryLeakThreshold)
         {
             RunGarbageCollection();
 
@@ -315,7 +329,7 @@ namespace InteropApiTests
                 "Memory changed by {0} bytes ({1} GC cycles)",
                 memoryDelta,
                 collectionCountAtEnd - collectionCountAtStart);
-            Assert.IsTrue(memoryDelta < 1024 * 1024, "Too much memory used. Memory leak?");
+            Assert.IsTrue(memoryDelta < memoryLeakThreshold, "Too much memory used. Memory leak?");
         }
 
         /// <summary>
@@ -815,6 +829,75 @@ namespace InteropApiTests
                 Guid actualGuid = (Guid)guidColumn.Value;
                 float actualFloat = (float)floatColumn.Value;
                 double actualDouble = (double)doubleColumn.Value;
+                string actualString = stringColumn.Value;
+
+                Assert.AreEqual(this.expectedBool, actualBool, "boolean");
+                Assert.AreEqual(this.expectedByte, actualByte, "byte");
+                Assert.AreEqual(this.expectedInt16, actualInt16, "int16");
+                Assert.AreEqual(this.expectedUInt16, actualUInt16, "uint16");
+                Assert.AreEqual(this.expectedInt32, actualInt32, "int32");
+                Assert.AreEqual(this.expectedUInt32, actualUInt32, "uint32");
+                Assert.AreEqual(this.expectedInt64, actualInt64, "int64");
+                Assert.AreEqual(this.expectedUInt64, actualUInt64, "uint64");
+                Assert.AreEqual(this.expectedGuid, actualGuid, "guid");
+                Assert.AreEqual(this.expectedFloat, actualFloat, "float");
+                Assert.AreEqual(this.expectedDouble, actualDouble, "double");
+                Assert.AreEqual(this.expectedString, actualString, "unicode");
+            }
+
+            Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
+        }
+
+        /// <summary>
+        /// Retrieve columns using the basic RetrieveColumns API.
+        /// </summary>
+        private void RetrieveWithRetrieveColumnsAsObject()
+        {
+            var boolColumn = new BoolColumnValue { Columnid = this.columnidDict["boolean"] };
+            var byteColumn = new ByteColumnValue { Columnid = this.columnidDict["byte"] };
+            var int16Column = new Int16ColumnValue { Columnid = this.columnidDict["int16"] };
+            var uint16Column = new UInt16ColumnValue { Columnid = this.columnidDict["uint16"] };
+            var int32Column = new Int32ColumnValue { Columnid = this.columnidDict["int32"] };
+            var uint32Column = new UInt32ColumnValue { Columnid = this.columnidDict["uint32"] };
+            var int64Column = new Int64ColumnValue { Columnid = this.columnidDict["int64"] };
+            var uint64Column = new UInt64ColumnValue { Columnid = this.columnidDict["uint64"] };
+            var guidColumn = new GuidColumnValue { Columnid = this.columnidDict["guid"] };
+            var floatColumn = new FloatColumnValue { Columnid = this.columnidDict["float"] };
+            var doubleColumn = new DoubleColumnValue { Columnid = this.columnidDict["double"] };
+            var stringColumn = new StringColumnValue { Columnid = this.columnidDict["unicode"] };
+
+            var retrievecolumns = new ColumnValue[]
+            {
+                boolColumn,
+                byteColumn,
+                int16Column,
+                uint16Column,
+                int32Column,
+                uint32Column,
+                int64Column,
+                uint64Column,
+                guidColumn,
+                floatColumn,
+                doubleColumn,
+                stringColumn,
+            };
+
+            Api.JetBeginTransaction(this.session);
+            for (int i = 0; i < NumRetrieves; ++i)
+            {
+                Api.RetrieveColumns(this.session, this.tableid, retrievecolumns);
+
+                bool actualBool = (bool)boolColumn.ValueAsObject;
+                byte actualByte = (byte)byteColumn.ValueAsObject;
+                short actualInt16 = (short)int16Column.ValueAsObject;
+                ushort actualUInt16 = (ushort)uint16Column.ValueAsObject;
+                int actualInt32 = (int)int32Column.ValueAsObject;
+                uint actualUInt32 = (uint)uint32Column.ValueAsObject;
+                long actualInt64 = (long)int64Column.ValueAsObject;
+                ulong actualUInt64 = (ulong)uint64Column.ValueAsObject;
+                Guid actualGuid = (Guid)guidColumn.ValueAsObject;
+                float actualFloat = (float)floatColumn.ValueAsObject;
+                double actualDouble = (double)doubleColumn.ValueAsObject;
                 string actualString = stringColumn.Value;
 
                 Assert.AreEqual(this.expectedBool, actualBool, "boolean");
