@@ -35,9 +35,29 @@ namespace InteropApiTests
         private readonly bool expectedBool = Any.Boolean;
 
         /// <summary>
+        /// The byte value in the record.
+        /// </summary>
+        private readonly byte expectedByte = Any.Byte;
+
+        /// <summary>
+        /// The short value in the record.
+        /// </summary>
+        private readonly short expectedInt16 = Any.Int16;
+
+        /// <summary>
+        /// The ushort value in the record.
+        /// </summary>
+        private readonly ushort expectedUInt16 = Any.UInt16;
+
+        /// <summary>
         /// The int value in the record.
         /// </summary>
         private readonly int expectedInt32 = Any.Int32;
+
+        /// <summary>
+        /// The uint value in the record.
+        /// </summary>
+        private readonly uint expectedUInt32 = Any.UInt32;
 
         /// <summary>
         /// The long value in the record.
@@ -45,9 +65,24 @@ namespace InteropApiTests
         private readonly long expectedInt64 = Any.Int64;
 
         /// <summary>
+        /// The ulong value in the record.
+        /// </summary>
+        private readonly ulong expectedUInt64 = Any.UInt64;
+
+        /// <summary>
         /// The guid value in the record.
         /// </summary>
         private readonly Guid expectedGuid = Any.Guid;
+
+        /// <summary>
+        /// The float value in the record.
+        /// </summary>
+        private readonly float expectedFloat = Any.Float;
+
+        /// <summary>
+        /// The double value in the record.
+        /// </summary>
+        private readonly double expectedDouble = Any.Double;
 
         /// <summary>
         /// The string value in the record.
@@ -99,9 +134,16 @@ namespace InteropApiTests
             using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
             {
                 Api.SetColumn(this.session, this.tableid, this.columnidDict["boolean"], this.expectedBool);
+                Api.SetColumn(this.session, this.tableid, this.columnidDict["byte"], this.expectedByte);
+                Api.SetColumn(this.session, this.tableid, this.columnidDict["int16"], this.expectedInt16);
+                Api.SetColumn(this.session, this.tableid, this.columnidDict["uint16"], this.expectedUInt16);
                 Api.SetColumn(this.session, this.tableid, this.columnidDict["int32"], this.expectedInt32);
+                Api.SetColumn(this.session, this.tableid, this.columnidDict["uint32"], this.expectedUInt32);
                 Api.SetColumn(this.session, this.tableid, this.columnidDict["int64"], this.expectedInt64);
+                Api.SetColumn(this.session, this.tableid, this.columnidDict["uint64"], this.expectedUInt64);
                 Api.SetColumn(this.session, this.tableid, this.columnidDict["guid"], this.expectedGuid);
+                Api.SetColumn(this.session, this.tableid, this.columnidDict["float"], this.expectedFloat);
+                Api.SetColumn(this.session, this.tableid, this.columnidDict["double"], this.expectedDouble);
                 Api.SetColumn(this.session, this.tableid, this.columnidDict["unicode"], this.expectedString, Encoding.Unicode);
 
                 update.Save();
@@ -226,6 +268,17 @@ namespace InteropApiTests
         public void TestRetrieveColumnsPerf()
         {
             DoTest(this.RetrieveWithRetrieveColumns);
+        }
+
+        /// <summary>
+        /// Measure performance of reading records with RetrieveColumns and lots of allocations.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the performance of RetrieveColumns (slow)")]
+        [Priority(3)]
+        public void TestRetrieveColumnsSlowPerf()
+        {
+            DoTest(this.RetrieveWithRetrieveColumnsSlow);
         }
 
         /// <summary>
@@ -382,15 +435,29 @@ namespace InteropApiTests
         private void RetrieveWithJetRetrieveColumn()
         {
             var boolBuffer = new byte[sizeof(bool)];
+            var byteBuffer = new byte[sizeof(byte)];
+            var int16Buffer = new byte[sizeof(short)];
+            var uint16Buffer = new byte[sizeof(ushort)];
             var int32Buffer = new byte[sizeof(int)];
+            var uint32Buffer = new byte[sizeof(uint)];
             var int64Buffer = new byte[sizeof(long)];
+            var uint64Buffer = new byte[sizeof(ulong)];
             var guidBuffer = new byte[16];
+            var floatBuffer = new byte[sizeof(float)];
+            var doubleBuffer = new byte[sizeof(double)];
             var stringBuffer = new byte[512];
 
             JET_COLUMNID boolColumn = this.columnidDict["boolean"];
+            JET_COLUMNID byteColumn = this.columnidDict["byte"];
+            JET_COLUMNID int16Column = this.columnidDict["int16"];
+            JET_COLUMNID uint16Column = this.columnidDict["uint16"];
             JET_COLUMNID int32Column = this.columnidDict["int32"];
+            JET_COLUMNID uint32Column = this.columnidDict["uint32"];
             JET_COLUMNID int64Column = this.columnidDict["int64"];
+            JET_COLUMNID uint64Column = this.columnidDict["uint64"];
             JET_COLUMNID guidColumn = this.columnidDict["guid"];
+            JET_COLUMNID floatColumn = this.columnidDict["float"];
+            JET_COLUMNID doubleColumn = this.columnidDict["double"];
             JET_COLUMNID stringColumn = this.columnidDict["unicode"];
 
             Api.JetBeginTransaction(this.session);
@@ -398,24 +465,45 @@ namespace InteropApiTests
             {                
                 int actualSize;
                 Api.JetRetrieveColumn(this.session, this.tableid, boolColumn, boolBuffer, boolBuffer.Length, out actualSize, RetrieveColumnGrbit.None, null);
+                Api.JetRetrieveColumn(this.session, this.tableid, byteColumn, byteBuffer, byteBuffer.Length, out actualSize, RetrieveColumnGrbit.None, null);
+                Api.JetRetrieveColumn(this.session, this.tableid, int16Column, int16Buffer, int16Buffer.Length, out actualSize, RetrieveColumnGrbit.None, null);
+                Api.JetRetrieveColumn(this.session, this.tableid, uint16Column, uint16Buffer, uint16Buffer.Length, out actualSize, RetrieveColumnGrbit.None, null);
                 Api.JetRetrieveColumn(this.session, this.tableid, int32Column, int32Buffer, int32Buffer.Length, out actualSize, RetrieveColumnGrbit.None, null);
+                Api.JetRetrieveColumn(this.session, this.tableid, uint32Column, uint32Buffer, uint32Buffer.Length, out actualSize, RetrieveColumnGrbit.None, null);
                 Api.JetRetrieveColumn(this.session, this.tableid, int64Column, int64Buffer, int64Buffer.Length, out actualSize, RetrieveColumnGrbit.None, null);
+                Api.JetRetrieveColumn(this.session, this.tableid, uint64Column, uint64Buffer, uint64Buffer.Length, out actualSize, RetrieveColumnGrbit.None, null);
                 Api.JetRetrieveColumn(this.session, this.tableid, guidColumn, guidBuffer, guidBuffer.Length, out actualSize, RetrieveColumnGrbit.None, null);
+                Api.JetRetrieveColumn(this.session, this.tableid, floatColumn, floatBuffer, floatBuffer.Length, out actualSize, RetrieveColumnGrbit.None, null);
+                Api.JetRetrieveColumn(this.session, this.tableid, doubleColumn, doubleBuffer, doubleBuffer.Length, out actualSize, RetrieveColumnGrbit.None, null);
 
                 int stringSize;
                 Api.JetRetrieveColumn(this.session, this.tableid, stringColumn, stringBuffer, stringBuffer.Length, out stringSize, RetrieveColumnGrbit.None, null);
 
                 bool actualBool = BitConverter.ToBoolean(boolBuffer, 0);
+                byte actualByte = byteBuffer[0];
+                short actualInt16 = BitConverter.ToInt16(int16Buffer, 0);
+                ushort actualUInt16 = BitConverter.ToUInt16(uint16Buffer, 0);
                 int actualInt32 = BitConverter.ToInt32(int32Buffer, 0);
+                uint actualUInt32 = BitConverter.ToUInt32(uint32Buffer, 0);
                 long actualInt64 = BitConverter.ToInt64(int64Buffer, 0);
+                ulong actualUInt64 = BitConverter.ToUInt64(uint64Buffer, 0);
                 Guid actualGuid = new Guid(guidBuffer);
+                float actualFloat = BitConverter.ToSingle(floatBuffer, 0);
+                double actualDouble = BitConverter.ToDouble(doubleBuffer, 0);
                 string actualString = Encoding.Unicode.GetString(stringBuffer, 0, stringSize);
 
-                Assert.AreEqual(this.expectedBool, actualBool);
-                Assert.AreEqual(this.expectedInt32, actualInt32);
-                Assert.AreEqual(this.expectedInt64, actualInt64);
-                Assert.AreEqual(this.expectedGuid, actualGuid);
-                Assert.AreEqual(this.expectedString, actualString);
+                Assert.AreEqual(this.expectedBool, actualBool, "boolean");
+                Assert.AreEqual(this.expectedByte, actualByte, "byte");
+                Assert.AreEqual(this.expectedInt16, actualInt16, "int16");
+                Assert.AreEqual(this.expectedUInt16, actualUInt16, "uint16");
+                Assert.AreEqual(this.expectedInt32, actualInt32, "int32");
+                Assert.AreEqual(this.expectedUInt32, actualUInt32, "uint32");
+                Assert.AreEqual(this.expectedInt64, actualInt64, "int64");
+                Assert.AreEqual(this.expectedUInt64, actualUInt64, "uint64");
+                Assert.AreEqual(this.expectedGuid, actualGuid, "guid");
+                Assert.AreEqual(this.expectedFloat, actualFloat, "float");
+                Assert.AreEqual(this.expectedDouble, actualDouble, "double");
+                Assert.AreEqual(this.expectedString, actualString, "unicode");
             }
 
             Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
@@ -427,17 +515,31 @@ namespace InteropApiTests
         private void RetrieveWithJetRetrieveColumns()
         {
             var boolBuffer = new byte[sizeof(bool)];
+            var byteBuffer = new byte[sizeof(byte)];
+            var int16Buffer = new byte[sizeof(short)];
+            var uint16Buffer = new byte[sizeof(ushort)];
             var int32Buffer = new byte[sizeof(int)];
+            var uint32Buffer = new byte[sizeof(uint)];
             var int64Buffer = new byte[sizeof(long)];
+            var uint64Buffer = new byte[sizeof(ulong)];
             var guidBuffer = new byte[16];
+            var floatBuffer = new byte[sizeof(float)];
+            var doubleBuffer = new byte[sizeof(double)];
             var stringBuffer = new byte[512];
 
             var retrievecolumns = new[]
             {
                 new JET_RETRIEVECOLUMN { columnid = this.columnidDict["boolean"], pvData = boolBuffer, cbData = boolBuffer.Length, itagSequence = 1 },
+                new JET_RETRIEVECOLUMN { columnid = this.columnidDict["byte"], pvData = byteBuffer, cbData = byteBuffer.Length, itagSequence = 1 },
+                new JET_RETRIEVECOLUMN { columnid = this.columnidDict["int16"], pvData = int16Buffer, cbData = int16Buffer.Length, itagSequence = 1 },
+                new JET_RETRIEVECOLUMN { columnid = this.columnidDict["uint16"], pvData = uint16Buffer, cbData = uint16Buffer.Length, itagSequence = 1 },
                 new JET_RETRIEVECOLUMN { columnid = this.columnidDict["int32"], pvData = int32Buffer, cbData = int32Buffer.Length, itagSequence = 1 },
+                new JET_RETRIEVECOLUMN { columnid = this.columnidDict["uint32"], pvData = uint32Buffer, cbData = uint32Buffer.Length, itagSequence = 1 },
                 new JET_RETRIEVECOLUMN { columnid = this.columnidDict["int64"], pvData = int64Buffer, cbData = int64Buffer.Length, itagSequence = 1 },
+                new JET_RETRIEVECOLUMN { columnid = this.columnidDict["uint64"], pvData = uint64Buffer, cbData = uint64Buffer.Length, itagSequence = 1 },
                 new JET_RETRIEVECOLUMN { columnid = this.columnidDict["guid"], pvData = guidBuffer, cbData = guidBuffer.Length, itagSequence = 1 },
+                new JET_RETRIEVECOLUMN { columnid = this.columnidDict["float"], pvData = floatBuffer, cbData = floatBuffer.Length, itagSequence = 1 },
+                new JET_RETRIEVECOLUMN { columnid = this.columnidDict["double"], pvData = doubleBuffer, cbData = doubleBuffer.Length, itagSequence = 1 },
                 new JET_RETRIEVECOLUMN { columnid = this.columnidDict["unicode"], pvData = stringBuffer, cbData = stringBuffer.Length, itagSequence = 1 },
             };
 
@@ -447,16 +549,30 @@ namespace InteropApiTests
                 Api.JetRetrieveColumns(this.session, this.tableid, retrievecolumns, retrievecolumns.Length);
 
                 bool actualBool = BitConverter.ToBoolean(boolBuffer, 0);
+                byte actualByte = byteBuffer[0];
+                short actualInt16 = BitConverter.ToInt16(int16Buffer, 0);
+                ushort actualUInt16 = BitConverter.ToUInt16(uint16Buffer, 0);
                 int actualInt32 = BitConverter.ToInt32(int32Buffer, 0);
+                uint actualUInt32 = BitConverter.ToUInt32(uint32Buffer, 0);
                 long actualInt64 = BitConverter.ToInt64(int64Buffer, 0);
+                ulong actualUInt64 = BitConverter.ToUInt64(uint64Buffer, 0);
                 Guid actualGuid = new Guid(guidBuffer);
-                string actualString = Encoding.Unicode.GetString(stringBuffer, 0, retrievecolumns[4].cbActual);
+                float actualFloat = BitConverter.ToSingle(floatBuffer, 0);
+                double actualDouble = BitConverter.ToDouble(doubleBuffer, 0);
+                string actualString = Encoding.Unicode.GetString(stringBuffer, 0, retrievecolumns[11].cbActual);
 
-                Assert.AreEqual(this.expectedBool, actualBool);
-                Assert.AreEqual(this.expectedInt32, actualInt32);
-                Assert.AreEqual(this.expectedInt64, actualInt64);
-                Assert.AreEqual(this.expectedGuid, actualGuid);
-                Assert.AreEqual(this.expectedString, actualString);
+                Assert.AreEqual(this.expectedBool, actualBool, "boolean");
+                Assert.AreEqual(this.expectedByte, actualByte, "byte");
+                Assert.AreEqual(this.expectedInt16, actualInt16, "int16");
+                Assert.AreEqual(this.expectedUInt16, actualUInt16, "uint16");
+                Assert.AreEqual(this.expectedInt32, actualInt32, "int32");
+                Assert.AreEqual(this.expectedUInt32, actualUInt32, "uint32");
+                Assert.AreEqual(this.expectedInt64, actualInt64, "int64");
+                Assert.AreEqual(this.expectedUInt64, actualUInt64, "uint64");
+                Assert.AreEqual(this.expectedGuid, actualGuid, "guid");
+                Assert.AreEqual(this.expectedFloat, actualFloat, "float");
+                Assert.AreEqual(this.expectedDouble, actualDouble, "double");
+                Assert.AreEqual(this.expectedString, actualString, "unicode");
             }
 
             Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
@@ -468,19 +584,26 @@ namespace InteropApiTests
         private void RetrieveWithJetRetrieveColumnsOneBuffer()
         {
             // Calculate the buffer size and allocate it
-            const int BufferSize = sizeof(bool) + sizeof(int) + sizeof(long) + 16 + 512;
+            const int BufferSize = 1024;
             var buffer = new byte[BufferSize];
 
             // Create the JET_RETRIEVECOLUMN array without any buffers
-            // The boolean column is retrieved last because its size is 1 and we don't want the other members
+            // The boolean and byte columns are retrieved last because their size is 1 and we don't want the other members
             // to be located at odd offsets (that makes conversion slower).
             var retrievecolumns = new[]
             {
+                new JET_RETRIEVECOLUMN { columnid = this.columnidDict["int16"], cbData = sizeof(short), itagSequence = 1 },
+                new JET_RETRIEVECOLUMN { columnid = this.columnidDict["uint16"], cbData = sizeof(ushort), itagSequence = 1 },
                 new JET_RETRIEVECOLUMN { columnid = this.columnidDict["int32"], cbData = sizeof(int), itagSequence = 1 },
+                new JET_RETRIEVECOLUMN { columnid = this.columnidDict["uint32"], cbData = sizeof(uint), itagSequence = 1 },
                 new JET_RETRIEVECOLUMN { columnid = this.columnidDict["int64"], cbData = sizeof(long), itagSequence = 1 },
+                new JET_RETRIEVECOLUMN { columnid = this.columnidDict["uint64"], cbData = sizeof(ulong), itagSequence = 1 },
                 new JET_RETRIEVECOLUMN { columnid = this.columnidDict["guid"], cbData = 16, itagSequence = 1 },
+                new JET_RETRIEVECOLUMN { columnid = this.columnidDict["double"], cbData = sizeof(double), itagSequence = 1 },
+                new JET_RETRIEVECOLUMN { columnid = this.columnidDict["float"], cbData = sizeof(float), itagSequence = 1 },
                 new JET_RETRIEVECOLUMN { columnid = this.columnidDict["unicode"], cbData = 512, itagSequence = 1 },
                 new JET_RETRIEVECOLUMN { columnid = this.columnidDict["boolean"], cbData = sizeof(bool), itagSequence = 1 },
+                new JET_RETRIEVECOLUMN { columnid = this.columnidDict["byte"], cbData = sizeof(byte), itagSequence = 1 },
             };
 
             // Set the pvData/ibData members of the JET_RETRIEVECOLUMN objects
@@ -497,17 +620,31 @@ namespace InteropApiTests
             {
                 Api.JetRetrieveColumns(this.session, this.tableid, retrievecolumns, retrievecolumns.Length);
 
-                int actualInt32 = BitConverter.ToInt32(retrievecolumns[0].pvData, retrievecolumns[0].ibData);
-                long actualInt64 = BitConverter.ToInt64(retrievecolumns[1].pvData, retrievecolumns[1].ibData);
-                Guid actualGuid = ToGuid(retrievecolumns[2].pvData, retrievecolumns[2].ibData);
-                string actualString = Encoding.Unicode.GetString(retrievecolumns[3].pvData, retrievecolumns[3].ibData, retrievecolumns[3].cbActual);
-                bool actualBool = BitConverter.ToBoolean(retrievecolumns[4].pvData, retrievecolumns[4].ibData);
+                short actualInt16 = BitConverter.ToInt16(retrievecolumns[0].pvData, retrievecolumns[0].ibData);
+                ushort actualUInt16 = BitConverter.ToUInt16(retrievecolumns[1].pvData, retrievecolumns[1].ibData);
+                int actualInt32 = BitConverter.ToInt32(retrievecolumns[2].pvData, retrievecolumns[2].ibData);
+                uint actualUInt32 = BitConverter.ToUInt32(retrievecolumns[3].pvData, retrievecolumns[3].ibData);
+                long actualInt64 = BitConverter.ToInt64(retrievecolumns[4].pvData, retrievecolumns[4].ibData);
+                ulong actualUInt64 = BitConverter.ToUInt64(retrievecolumns[5].pvData, retrievecolumns[5].ibData);
+                Guid actualGuid = ToGuid(retrievecolumns[6].pvData, retrievecolumns[6].ibData);
+                double actualDouble = BitConverter.ToDouble(retrievecolumns[7].pvData, retrievecolumns[7].ibData);
+                float actualFloat = BitConverter.ToSingle(retrievecolumns[8].pvData, retrievecolumns[8].ibData);
+                string actualString = Encoding.Unicode.GetString(retrievecolumns[9].pvData, retrievecolumns[9].ibData, retrievecolumns[9].cbActual);
+                bool actualBool = BitConverter.ToBoolean(retrievecolumns[10].pvData, retrievecolumns[10].ibData);
+                byte actualByte = retrievecolumns[11].pvData[retrievecolumns[11].ibData];
 
-                Assert.AreEqual(this.expectedBool, actualBool);
-                Assert.AreEqual(this.expectedInt32, actualInt32);
-                Assert.AreEqual(this.expectedInt64, actualInt64);
-                Assert.AreEqual(this.expectedGuid, actualGuid);
-                Assert.AreEqual(this.expectedString, actualString);
+                Assert.AreEqual(this.expectedBool, actualBool, "boolean");
+                Assert.AreEqual(this.expectedByte, actualByte, "byte");
+                Assert.AreEqual(this.expectedInt16, actualInt16, "int16");
+                Assert.AreEqual(this.expectedUInt16, actualUInt16, "uint16");
+                Assert.AreEqual(this.expectedInt32, actualInt32, "int32");
+                Assert.AreEqual(this.expectedUInt32, actualUInt32, "uint32");
+                Assert.AreEqual(this.expectedInt64, actualInt64, "int64");
+                Assert.AreEqual(this.expectedUInt64, actualUInt64, "uint64");
+                Assert.AreEqual(this.expectedGuid, actualGuid, "guid");
+                Assert.AreEqual(this.expectedFloat, actualFloat, "float");
+                Assert.AreEqual(this.expectedDouble, actualDouble, "double");
+                Assert.AreEqual(this.expectedString, actualString, "unicode");
             }
 
             Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
@@ -519,31 +656,59 @@ namespace InteropApiTests
         private void RetrieveWithRetrieveColumn()
         {
             JET_COLUMNID boolColumn = this.columnidDict["boolean"];
+            JET_COLUMNID byteColumn = this.columnidDict["byte"];
+            JET_COLUMNID int16Column = this.columnidDict["int16"];
+            JET_COLUMNID uint16Column = this.columnidDict["uint16"];
             JET_COLUMNID int32Column = this.columnidDict["int32"];
+            JET_COLUMNID uint32Column = this.columnidDict["uint32"];
             JET_COLUMNID int64Column = this.columnidDict["int64"];
+            JET_COLUMNID uint64Column = this.columnidDict["uint64"];
             JET_COLUMNID guidColumn = this.columnidDict["guid"];
+            JET_COLUMNID floatColumn = this.columnidDict["float"];
+            JET_COLUMNID doubleColumn = this.columnidDict["double"];
             JET_COLUMNID stringColumn = this.columnidDict["unicode"];
 
             Api.JetBeginTransaction(this.session);
             for (int i = 0; i < NumRetrieves; ++i)
             {
                 byte[] boolBuffer = Api.RetrieveColumn(this.session, this.tableid, boolColumn);
+                byte[] byteBuffer = Api.RetrieveColumn(this.session, this.tableid, byteColumn);
+                byte[] int16Buffer = Api.RetrieveColumn(this.session, this.tableid, int16Column);
+                byte[] uint16Buffer = Api.RetrieveColumn(this.session, this.tableid, uint16Column);
                 byte[] int32Buffer = Api.RetrieveColumn(this.session, this.tableid, int32Column);
+                byte[] uint32Buffer = Api.RetrieveColumn(this.session, this.tableid, uint32Column);
                 byte[] int64Buffer = Api.RetrieveColumn(this.session, this.tableid, int64Column);
+                byte[] uint64Buffer = Api.RetrieveColumn(this.session, this.tableid, uint64Column);
                 byte[] guidBuffer = Api.RetrieveColumn(this.session, this.tableid, guidColumn);
+                byte[] floatBuffer = Api.RetrieveColumn(this.session, this.tableid, floatColumn);
+                byte[] doubleBuffer = Api.RetrieveColumn(this.session, this.tableid, doubleColumn);
                 byte[] stringBuffer = Api.RetrieveColumn(this.session, this.tableid, stringColumn);
 
                 bool actualBool = BitConverter.ToBoolean(boolBuffer, 0);
+                byte actualByte = byteBuffer[0];
+                short actualInt16 = BitConverter.ToInt16(int16Buffer, 0);
+                ushort actualUInt16 = BitConverter.ToUInt16(uint16Buffer, 0);
                 int actualInt32 = BitConverter.ToInt32(int32Buffer, 0);
+                uint actualUInt32 = BitConverter.ToUInt32(uint32Buffer, 0);
                 long actualInt64 = BitConverter.ToInt64(int64Buffer, 0);
+                ulong actualUInt64 = BitConverter.ToUInt64(uint64Buffer, 0);
                 Guid actualGuid = new Guid(guidBuffer);
-                string actualString = Encoding.Unicode.GetString(stringBuffer);
+                float actualFloat = BitConverter.ToSingle(floatBuffer, 0);
+                double actualDouble = BitConverter.ToDouble(doubleBuffer, 0);
+                string actualString = Encoding.Unicode.GetString(stringBuffer, 0, stringBuffer.Length);
 
-                Assert.AreEqual(this.expectedBool, actualBool);
-                Assert.AreEqual(this.expectedInt32, actualInt32);
-                Assert.AreEqual(this.expectedInt64, actualInt64);
-                Assert.AreEqual(this.expectedGuid, actualGuid);
-                Assert.AreEqual(this.expectedString, actualString);
+                Assert.AreEqual(this.expectedBool, actualBool, "boolean");
+                Assert.AreEqual(this.expectedByte, actualByte, "byte");
+                Assert.AreEqual(this.expectedInt16, actualInt16, "int16");
+                Assert.AreEqual(this.expectedUInt16, actualUInt16, "uint16");
+                Assert.AreEqual(this.expectedInt32, actualInt32, "int32");
+                Assert.AreEqual(this.expectedUInt32, actualUInt32, "uint32");
+                Assert.AreEqual(this.expectedInt64, actualInt64, "int64");
+                Assert.AreEqual(this.expectedUInt64, actualUInt64, "uint64");
+                Assert.AreEqual(this.expectedGuid, actualGuid, "guid");
+                Assert.AreEqual(this.expectedFloat, actualFloat, "float");
+                Assert.AreEqual(this.expectedDouble, actualDouble, "double");
+                Assert.AreEqual(this.expectedString, actualString, "unicode");
             }
 
             Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
@@ -555,25 +720,46 @@ namespace InteropApiTests
         private void RetrieveWithRetrieveColumnAs()
         {
             JET_COLUMNID boolColumn = this.columnidDict["boolean"];
+            JET_COLUMNID byteColumn = this.columnidDict["byte"];
+            JET_COLUMNID int16Column = this.columnidDict["int16"];
+            JET_COLUMNID uint16Column = this.columnidDict["uint16"];
             JET_COLUMNID int32Column = this.columnidDict["int32"];
+            JET_COLUMNID uint32Column = this.columnidDict["uint32"];
             JET_COLUMNID int64Column = this.columnidDict["int64"];
+            JET_COLUMNID uint64Column = this.columnidDict["uint64"];
             JET_COLUMNID guidColumn = this.columnidDict["guid"];
+            JET_COLUMNID floatColumn = this.columnidDict["float"];
+            JET_COLUMNID doubleColumn = this.columnidDict["double"];
             JET_COLUMNID stringColumn = this.columnidDict["unicode"];
 
             Api.JetBeginTransaction(this.session);
             for (int i = 0; i < NumRetrieves; ++i)
             {
                 bool actualBool = (bool)Api.RetrieveColumnAsBoolean(this.session, this.tableid, boolColumn);
+                byte actualByte = (byte)Api.RetrieveColumnAsByte(this.session, this.tableid, byteColumn);
+                short actualInt16 = (short)Api.RetrieveColumnAsInt16(this.session, this.tableid, int16Column);
+                ushort actualUInt16 = (ushort)Api.RetrieveColumnAsUInt16(this.session, this.tableid, uint16Column);
                 int actualInt32 = (int)Api.RetrieveColumnAsInt32(this.session, this.tableid, int32Column);
+                uint actualUInt32 = (uint)Api.RetrieveColumnAsUInt32(this.session, this.tableid, uint32Column);
                 long actualInt64 = (long)Api.RetrieveColumnAsInt64(this.session, this.tableid, int64Column);
+                ulong actualUInt64 = (ulong)Api.RetrieveColumnAsUInt64(this.session, this.tableid, uint64Column);
                 Guid actualGuid = (Guid)Api.RetrieveColumnAsGuid(this.session, this.tableid, guidColumn);
+                float actualFloat = (float)Api.RetrieveColumnAsFloat(this.session, this.tableid, floatColumn);
+                double actualDouble = (double)Api.RetrieveColumnAsDouble(this.session, this.tableid, doubleColumn);
                 string actualString = Api.RetrieveColumnAsString(this.session, this.tableid, stringColumn);
 
-                Assert.AreEqual(this.expectedBool, actualBool);
-                Assert.AreEqual(this.expectedInt32, actualInt32);
-                Assert.AreEqual(this.expectedInt64, actualInt64);
-                Assert.AreEqual(this.expectedGuid, actualGuid);
-                Assert.AreEqual(this.expectedString, actualString);
+                Assert.AreEqual(this.expectedBool, actualBool, "boolean");
+                Assert.AreEqual(this.expectedByte, actualByte, "byte");
+                Assert.AreEqual(this.expectedInt16, actualInt16, "int16");
+                Assert.AreEqual(this.expectedUInt16, actualUInt16, "uint16");
+                Assert.AreEqual(this.expectedInt32, actualInt32, "int32");
+                Assert.AreEqual(this.expectedUInt32, actualUInt32, "uint32");
+                Assert.AreEqual(this.expectedInt64, actualInt64, "int64");
+                Assert.AreEqual(this.expectedUInt64, actualUInt64, "uint64");
+                Assert.AreEqual(this.expectedGuid, actualGuid, "guid");
+                Assert.AreEqual(this.expectedFloat, actualFloat, "float");
+                Assert.AreEqual(this.expectedDouble, actualDouble, "double");
+                Assert.AreEqual(this.expectedString, actualString, "unicode");
             }
 
             Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
@@ -585,17 +771,31 @@ namespace InteropApiTests
         private void RetrieveWithRetrieveColumns()
         {
             var boolColumn = new BoolColumnValue { Columnid = this.columnidDict["boolean"] };
+            var byteColumn = new ByteColumnValue { Columnid = this.columnidDict["byte"] };
+            var int16Column = new Int16ColumnValue { Columnid = this.columnidDict["int16"] };
+            var uint16Column = new UInt16ColumnValue { Columnid = this.columnidDict["uint16"] };
             var int32Column = new Int32ColumnValue { Columnid = this.columnidDict["int32"] };
+            var uint32Column = new UInt32ColumnValue { Columnid = this.columnidDict["uint32"] };
             var int64Column = new Int64ColumnValue { Columnid = this.columnidDict["int64"] };
+            var uint64Column = new UInt64ColumnValue { Columnid = this.columnidDict["uint64"] };
             var guidColumn = new GuidColumnValue { Columnid = this.columnidDict["guid"] };
+            var floatColumn = new FloatColumnValue { Columnid = this.columnidDict["float"] };
+            var doubleColumn = new DoubleColumnValue { Columnid = this.columnidDict["double"] };
             var stringColumn = new StringColumnValue { Columnid = this.columnidDict["unicode"] };
 
             var retrievecolumns = new ColumnValue[]
             {
                 boolColumn,
+                byteColumn,
+                int16Column,
+                uint16Column,
                 int32Column,
+                uint32Column,
                 int64Column,
+                uint64Column,
                 guidColumn,
+                floatColumn,
+                doubleColumn,
                 stringColumn,
             };
 
@@ -605,16 +805,98 @@ namespace InteropApiTests
                 Api.RetrieveColumns(this.session, this.tableid, retrievecolumns);
 
                 bool actualBool = (bool)boolColumn.Value;
+                byte actualByte = (byte)byteColumn.Value;
+                short actualInt16 = (short)int16Column.Value;
+                ushort actualUInt16 = (ushort)uint16Column.Value;
                 int actualInt32 = (int)int32Column.Value;
+                uint actualUInt32 = (uint)uint32Column.Value;
                 long actualInt64 = (long)int64Column.Value;
+                ulong actualUInt64 = (ulong)uint64Column.Value;
                 Guid actualGuid = (Guid)guidColumn.Value;
+                float actualFloat = (float)floatColumn.Value;
+                double actualDouble = (double)doubleColumn.Value;
                 string actualString = stringColumn.Value;
 
-                Assert.AreEqual(this.expectedBool, actualBool);
-                Assert.AreEqual(this.expectedInt32, actualInt32);
-                Assert.AreEqual(this.expectedInt64, actualInt64);
-                Assert.AreEqual(this.expectedGuid, actualGuid);
-                Assert.AreEqual(this.expectedString, actualString);
+                Assert.AreEqual(this.expectedBool, actualBool, "boolean");
+                Assert.AreEqual(this.expectedByte, actualByte, "byte");
+                Assert.AreEqual(this.expectedInt16, actualInt16, "int16");
+                Assert.AreEqual(this.expectedUInt16, actualUInt16, "uint16");
+                Assert.AreEqual(this.expectedInt32, actualInt32, "int32");
+                Assert.AreEqual(this.expectedUInt32, actualUInt32, "uint32");
+                Assert.AreEqual(this.expectedInt64, actualInt64, "int64");
+                Assert.AreEqual(this.expectedUInt64, actualUInt64, "uint64");
+                Assert.AreEqual(this.expectedGuid, actualGuid, "guid");
+                Assert.AreEqual(this.expectedFloat, actualFloat, "float");
+                Assert.AreEqual(this.expectedDouble, actualDouble, "double");
+                Assert.AreEqual(this.expectedString, actualString, "unicode");
+            }
+
+            Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
+        }
+
+        /// <summary>
+        /// Retrieve columns using the basic RetrieveColumns API, but with the
+        /// ColumnValue objects allocated inside of the loop.
+        /// </summary>
+        private void RetrieveWithRetrieveColumnsSlow()
+        {
+            Api.JetBeginTransaction(this.session);
+            for (int i = 0; i < NumRetrieves; ++i)
+            {
+                var boolColumn = new BoolColumnValue { Columnid = this.columnidDict["boolean"] };
+                var byteColumn = new ByteColumnValue { Columnid = this.columnidDict["byte"] };
+                var int16Column = new Int16ColumnValue { Columnid = this.columnidDict["int16"] };
+                var uint16Column = new UInt16ColumnValue { Columnid = this.columnidDict["uint16"] };
+                var int32Column = new Int32ColumnValue { Columnid = this.columnidDict["int32"] };
+                var uint32Column = new UInt32ColumnValue { Columnid = this.columnidDict["uint32"] };
+                var int64Column = new Int64ColumnValue { Columnid = this.columnidDict["int64"] };
+                var uint64Column = new UInt64ColumnValue { Columnid = this.columnidDict["uint64"] };
+                var guidColumn = new GuidColumnValue { Columnid = this.columnidDict["guid"] };
+                var floatColumn = new FloatColumnValue { Columnid = this.columnidDict["float"] };
+                var doubleColumn = new DoubleColumnValue { Columnid = this.columnidDict["double"] };
+                var stringColumn = new StringColumnValue { Columnid = this.columnidDict["unicode"] };
+
+                Api.RetrieveColumns(
+                    this.session,
+                    this.tableid,
+                    boolColumn,
+                    byteColumn,
+                    int16Column,
+                    uint16Column,
+                    int32Column,
+                    uint32Column,
+                    int64Column,
+                    uint64Column,
+                    guidColumn,
+                    floatColumn,
+                    doubleColumn,
+                    stringColumn);
+
+                bool actualBool = (bool)boolColumn.Value;
+                byte actualByte = (byte)byteColumn.Value;
+                short actualInt16 = (short)int16Column.Value;
+                ushort actualUInt16 = (ushort)uint16Column.Value;
+                int actualInt32 = (int)int32Column.Value;
+                uint actualUInt32 = (uint)uint32Column.Value;
+                long actualInt64 = (long)int64Column.Value;
+                ulong actualUInt64 = (ulong)uint64Column.Value;
+                Guid actualGuid = (Guid)guidColumn.Value;
+                float actualFloat = (float)floatColumn.Value;
+                double actualDouble = (double)doubleColumn.Value;
+                string actualString = stringColumn.Value;
+
+                Assert.AreEqual(this.expectedBool, actualBool, "boolean");
+                Assert.AreEqual(this.expectedByte, actualByte, "byte");
+                Assert.AreEqual(this.expectedInt16, actualInt16, "int16");
+                Assert.AreEqual(this.expectedUInt16, actualUInt16, "uint16");
+                Assert.AreEqual(this.expectedInt32, actualInt32, "int32");
+                Assert.AreEqual(this.expectedUInt32, actualUInt32, "uint32");
+                Assert.AreEqual(this.expectedInt64, actualInt64, "int64");
+                Assert.AreEqual(this.expectedUInt64, actualUInt64, "uint64");
+                Assert.AreEqual(this.expectedGuid, actualGuid, "guid");
+                Assert.AreEqual(this.expectedFloat, actualFloat, "float");
+                Assert.AreEqual(this.expectedDouble, actualDouble, "double");
+                Assert.AreEqual(this.expectedString, actualString, "unicode");
             }
 
             Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
