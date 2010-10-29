@@ -8,7 +8,6 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Diagnostics;
-    using System.Threading;
 
     /// <summary>
     /// A <see cref="ulong"/> column value.
