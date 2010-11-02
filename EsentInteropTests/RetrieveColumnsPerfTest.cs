@@ -506,6 +506,7 @@ namespace InteropApiTests
                 double actualDouble = BitConverter.ToDouble(doubleBuffer, 0);
                 string actualString = Encoding.Unicode.GetString(stringBuffer, 0, stringSize);
 
+#if DEBUG
                 Assert.AreEqual(this.expectedBool, actualBool, "boolean");
                 Assert.AreEqual(this.expectedByte, actualByte, "byte");
                 Assert.AreEqual(this.expectedInt16, actualInt16, "int16");
@@ -518,6 +519,7 @@ namespace InteropApiTests
                 Assert.AreEqual(this.expectedFloat, actualFloat, "float");
                 Assert.AreEqual(this.expectedDouble, actualDouble, "double");
                 Assert.AreEqual(this.expectedString, actualString, "unicode");
+#endif
             }
 
             Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
@@ -575,6 +577,7 @@ namespace InteropApiTests
                 double actualDouble = BitConverter.ToDouble(doubleBuffer, 0);
                 string actualString = Encoding.Unicode.GetString(stringBuffer, 0, retrievecolumns[11].cbActual);
 
+#if DEBUG
                 Assert.AreEqual(this.expectedBool, actualBool, "boolean");
                 Assert.AreEqual(this.expectedByte, actualByte, "byte");
                 Assert.AreEqual(this.expectedInt16, actualInt16, "int16");
@@ -587,6 +590,7 @@ namespace InteropApiTests
                 Assert.AreEqual(this.expectedFloat, actualFloat, "float");
                 Assert.AreEqual(this.expectedDouble, actualDouble, "double");
                 Assert.AreEqual(this.expectedString, actualString, "unicode");
+#endif
             }
 
             Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
@@ -647,6 +651,7 @@ namespace InteropApiTests
                 bool actualBool = BitConverter.ToBoolean(retrievecolumns[10].pvData, retrievecolumns[10].ibData);
                 byte actualByte = retrievecolumns[11].pvData[retrievecolumns[11].ibData];
 
+#if DEBUG
                 Assert.AreEqual(this.expectedBool, actualBool, "boolean");
                 Assert.AreEqual(this.expectedByte, actualByte, "byte");
                 Assert.AreEqual(this.expectedInt16, actualInt16, "int16");
@@ -659,6 +664,7 @@ namespace InteropApiTests
                 Assert.AreEqual(this.expectedFloat, actualFloat, "float");
                 Assert.AreEqual(this.expectedDouble, actualDouble, "double");
                 Assert.AreEqual(this.expectedString, actualString, "unicode");
+#endif
             }
 
             Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
@@ -711,6 +717,7 @@ namespace InteropApiTests
                 double actualDouble = BitConverter.ToDouble(doubleBuffer, 0);
                 string actualString = Encoding.Unicode.GetString(stringBuffer, 0, stringBuffer.Length);
 
+#if DEBUG
                 Assert.AreEqual(this.expectedBool, actualBool, "boolean");
                 Assert.AreEqual(this.expectedByte, actualByte, "byte");
                 Assert.AreEqual(this.expectedInt16, actualInt16, "int16");
@@ -723,6 +730,7 @@ namespace InteropApiTests
                 Assert.AreEqual(this.expectedFloat, actualFloat, "float");
                 Assert.AreEqual(this.expectedDouble, actualDouble, "double");
                 Assert.AreEqual(this.expectedString, actualString, "unicode");
+#endif
             }
 
             Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
@@ -762,6 +770,7 @@ namespace InteropApiTests
                 double actualDouble = (double)Api.RetrieveColumnAsDouble(this.session, this.tableid, doubleColumn);
                 string actualString = Api.RetrieveColumnAsString(this.session, this.tableid, stringColumn);
 
+#if DEBUG
                 Assert.AreEqual(this.expectedBool, actualBool, "boolean");
                 Assert.AreEqual(this.expectedByte, actualByte, "byte");
                 Assert.AreEqual(this.expectedInt16, actualInt16, "int16");
@@ -774,6 +783,7 @@ namespace InteropApiTests
                 Assert.AreEqual(this.expectedFloat, actualFloat, "float");
                 Assert.AreEqual(this.expectedDouble, actualDouble, "double");
                 Assert.AreEqual(this.expectedString, actualString, "unicode");
+#endif
             }
 
             Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
@@ -831,6 +841,7 @@ namespace InteropApiTests
                 double actualDouble = (double)doubleColumn.Value;
                 string actualString = stringColumn.Value;
 
+#if DEBUG
                 Assert.AreEqual(this.expectedBool, actualBool, "boolean");
                 Assert.AreEqual(this.expectedByte, actualByte, "byte");
                 Assert.AreEqual(this.expectedInt16, actualInt16, "int16");
@@ -843,6 +854,7 @@ namespace InteropApiTests
                 Assert.AreEqual(this.expectedFloat, actualFloat, "float");
                 Assert.AreEqual(this.expectedDouble, actualDouble, "double");
                 Assert.AreEqual(this.expectedString, actualString, "unicode");
+#endif
             }
 
             Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
@@ -900,6 +912,7 @@ namespace InteropApiTests
                 double actualDouble = (double)doubleColumn.ValueAsObject;
                 string actualString = stringColumn.Value;
 
+#if DEBUG
                 Assert.AreEqual(this.expectedBool, actualBool, "boolean");
                 Assert.AreEqual(this.expectedByte, actualByte, "byte");
                 Assert.AreEqual(this.expectedInt16, actualInt16, "int16");
@@ -912,6 +925,7 @@ namespace InteropApiTests
                 Assert.AreEqual(this.expectedFloat, actualFloat, "float");
                 Assert.AreEqual(this.expectedDouble, actualDouble, "double");
                 Assert.AreEqual(this.expectedString, actualString, "unicode");
+#endif
             }
 
             Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
@@ -968,6 +982,7 @@ namespace InteropApiTests
                 double actualDouble = (double)doubleColumn.Value;
                 string actualString = stringColumn.Value;
 
+#if DEBUG
                 Assert.AreEqual(this.expectedBool, actualBool, "boolean");
                 Assert.AreEqual(this.expectedByte, actualByte, "byte");
                 Assert.AreEqual(this.expectedInt16, actualInt16, "int16");
@@ -980,6 +995,7 @@ namespace InteropApiTests
                 Assert.AreEqual(this.expectedFloat, actualFloat, "float");
                 Assert.AreEqual(this.expectedDouble, actualDouble, "double");
                 Assert.AreEqual(this.expectedString, actualString, "unicode");
+#endif
             }
 
             Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);

@@ -14,11 +14,6 @@ namespace Microsoft.Isam.Esent.Interop
     public class ByteColumnValue : ColumnValueOfStruct<byte>
     {
         /// <summary>
-        /// Cached boxed values. This can hold all possible values.
-        /// </summary>
-        private static readonly object[] boxedValues = new object[256];
-
-        /// <summary>
         /// Gets the last set or retrieved value of the column. The
         /// value is returned as a generic object.
         /// </summary>
@@ -26,20 +21,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                if (!this.Value.HasValue)
-                {
-                    return null;
-                }
-
-                byte value = this.Value.Value;
-                object boxedValue = boxedValues[value];
-                if (null == boxedValue)
-                {
-                    boxedValue = this.Value.Value;
-                    boxedValues[value] = boxedValue;
-                }
-
-                return boxedValue;
+                return BoxedValueCache<byte>.GetBoxedValue(this.Value);
             }
         }
 

@@ -64,5 +64,90 @@ namespace InteropApiTests
             byte[] buffer = Encoding.Unicode.GetBytes("Hello");
             Assert.AreEqual("Hello", StringCache.GetString(buffer, 0, buffer.Length));
         }
+
+        /// <summary>
+        /// Get a string twice to make sure it is cached.
+        /// </summary>
+        [TestMethod]
+        [Description("Test StringCache.GetString caching")]
+        [Priority(0)]
+        public void GetStringCaching()
+        {
+            byte[] buffer = Encoding.Unicode.GetBytes("Hello");
+            string s1 = StringCache.GetString(buffer, 0, buffer.Length);
+            string s2 = StringCache.GetString(buffer, 0, buffer.Length);
+            Assert.AreSame(s1, s2);
+        }
+
+        /// <summary>
+        /// Get a string twice to make sure it is cached.
+        /// </summary>
+        [TestMethod]
+        [Description("Test StringCache.GetString caching with a long string")]
+        [Priority(0)]
+        public void VerifyLongStringIsNotCached()
+        {
+            string expected = Any.StringOfLength(8192);
+            byte[] buffer = Encoding.Unicode.GetBytes(expected);
+            string actual = StringCache.GetString(buffer, 0, buffer.Length);
+            Assert.AreEqual(expected, actual);
+            Assert.AreNotSame(actual, StringCache.GetString(buffer, 0, buffer.Length));
+        }
+
+        /// <summary>
+        /// Get severals strings twice to make sure they are cached.
+        /// </summary>
+        [TestMethod]
+        [Description("Test StringCache.GetString caching with multiple strings")]
+        [Priority(0)]
+        public void GetStringCachingMultipleStrings()
+        {
+            string[] expected = new[]
+            {
+                "Hello",
+                "hello",
+                "World",
+                "World ",
+                "foo",
+                "bar",
+                "baz",
+                "1",
+                String.Empty,
+            };
+            string[] actual = new string[expected.Length];
+
+            for (int i = 0; i < expected.Length; ++i)
+            {
+                byte[] buffer = Encoding.Unicode.GetBytes(expected[i]);
+                actual[i] = StringCache.GetString(buffer, 0, buffer.Length);
+                Assert.AreEqual(expected[i], actual[i], "First conversion is incorrect");
+            }
+
+            for (int i = 0; i < expected.Length; ++i)
+            {
+                byte[] buffer = Encoding.Unicode.GetBytes(expected[i]);
+                string cached = StringCache.GetString(buffer, 0, buffer.Length);
+                Assert.AreEqual(expected[i], cached, "Cached value is incorrect");
+                Assert.AreSame(actual[i], cached, "Value {0} was not cached", expected[i]);
+            }
+        }
+
+        /// <summary>
+        /// Convert multiple random strings.
+        /// </summary>
+        [TestMethod]
+        [Description("Test StringCache.GetString caching random strings")]
+        [Priority(2)]
+        public void GetStringCachingRandomStrings()
+        {
+            for (int i = 0; i < 250000; ++i)
+            {
+                string expected = Any.String;
+                byte[] buffer = Encoding.Unicode.GetBytes(expected);
+                string actual = StringCache.GetString(buffer, 0, buffer.Length);
+                Assert.AreEqual(expected, actual);
+                Assert.AreSame(actual, StringCache.GetString(buffer, 0, buffer.Length));
+            }
+        }
     }
 }

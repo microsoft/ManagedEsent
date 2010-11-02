@@ -16,11 +16,6 @@ namespace Microsoft.Isam.Esent.Interop
     public class UInt16ColumnValue : ColumnValueOfStruct<ushort>
     {
         /// <summary>
-        /// Cached boxed values. This can hold all possible values.
-        /// </summary>
-        private static readonly object[] boxedValues = new object[65536];
-
-        /// <summary>
         /// Gets the last set or retrieved value of the column. The
         /// value is returned as a generic object.
         /// </summary>
@@ -28,20 +23,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                if (!this.Value.HasValue)
-                {
-                    return null;
-                }
-
-                ushort value = this.Value.Value;
-                object boxedValue = boxedValues[value];
-                if (null == boxedValue)
-                {
-                    boxedValue = this.Value.Value;
-                    boxedValues[value] = boxedValue;
-                }
-
-                return boxedValue;
+                return BoxedValueCache<ushort>.GetBoxedValue(this.Value);
             }
         }
 
