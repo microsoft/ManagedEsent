@@ -6,14 +6,26 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System.Diagnostics;
+    using System;
 
     /// <summary>
     /// Set a column of a struct type (e.g. Int32/Guid).
     /// </summary>
     /// <typeparam name="T">Type to set.</typeparam>
-    public abstract class ColumnValueOfStruct<T> : ColumnValue where T : struct
+    public abstract class ColumnValueOfStruct<T> : ColumnValue where T : struct, IEquatable<T>
     {
+        /// <summary>
+        /// Gets the last set or retrieved value of the column. The
+        /// value is returned as a generic object.
+        /// </summary>
+        public override object ValueAsObject
+        {
+            get
+            {
+                return BoxedValueCache<T>.GetBoxedValue(this.Value);
+            }
+        }
+
         /// <summary>
         /// Gets or sets the value in the struct.
         /// </summary>

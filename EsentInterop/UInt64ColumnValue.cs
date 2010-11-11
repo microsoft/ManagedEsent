@@ -16,18 +16,6 @@ namespace Microsoft.Isam.Esent.Interop
     public class UInt64ColumnValue : ColumnValueOfStruct<ulong>
     {
         /// <summary>
-        /// Gets the last set or retrieved value of the column. The
-        /// value is returned as a generic object.
-        /// </summary>
-        public override object ValueAsObject
-        {
-            get
-            {
-                return BoxedValueCache<ulong>.GetBoxedValue(this.Value);
-            }
-        }
-
-        /// <summary>
         /// Gets the size of the value in the column. This returns 0 for
         /// variable sized columns (i.e. binary and string).
         /// </summary>

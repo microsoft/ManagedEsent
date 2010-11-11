@@ -80,7 +80,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Get a string twice to make sure it is cached.
+        /// Make sure a long string isn't cached.
         /// </summary>
         [TestMethod]
         [Description("Test StringCache.GetString caching with a long string")]
@@ -111,7 +111,10 @@ namespace InteropApiTests
                 "foo",
                 "bar",
                 "baz",
+                "qux",
+                "0",
                 "1",
+                " ",
                 String.Empty,
             };
             string[] actual = new string[expected.Length];

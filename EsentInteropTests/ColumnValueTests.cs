@@ -69,7 +69,7 @@ namespace InteropApiTests
         public void TestUInt16ValueAsObject()
         {
             var value = new UInt16ColumnValue();
-            for (ushort i = UInt16.MinValue; i < Int16.MaxValue; ++i)
+            for (ushort i = UInt16.MinValue; i < UInt16.MaxValue; ++i)
             {
                 TestValueAsObjectForStruct(value, i);
             }
@@ -300,7 +300,7 @@ namespace InteropApiTests
         /// <typeparam name="T">The structure type.</typeparam>
         /// <param name="columnValue">The column value.</param>
         /// <param name="value">The value to set.</param>
-        private static void TestValueAsObjectForStruct<T>(ColumnValueOfStruct<T> columnValue, T value) where T : struct
+        private static void TestValueAsObjectForStruct<T>(ColumnValueOfStruct<T> columnValue, T value) where T : struct, IEquatable<T>
         {
             columnValue.Value = value;
             object o1 = columnValue.ValueAsObject;

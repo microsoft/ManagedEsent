@@ -15,18 +15,6 @@ namespace Microsoft.Isam.Esent.Interop
     public class DoubleColumnValue : ColumnValueOfStruct<double>
     {
         /// <summary>
-        /// Gets the last set or retrieved value of the column. The
-        /// value is returned as a generic object.
-        /// </summary>
-        public override object ValueAsObject
-        {
-            get
-            {
-                return BoxedValueCache<double>.GetBoxedValue(this.Value);
-            }
-        }
-
-        /// <summary>
         /// Gets the size of the value in the column. This returns 0 for
         /// variable sized columns (i.e. binary and string).
         /// </summary>
