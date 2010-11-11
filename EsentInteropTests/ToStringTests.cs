@@ -739,8 +739,10 @@ namespace InteropApiTests
         [Description("Test Instance.ToString()")]
         public void InstanceToString()
         {
-            var value = new Instance("name", "display");
-            Assert.AreEqual("display (name)", value.ToString());
+            using (var value = new Instance("name", "display"))
+            {
+                Assert.AreEqual("display (name)", value.ToString());
+            }
         }
 
         /// <summary>
