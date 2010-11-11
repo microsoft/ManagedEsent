@@ -770,7 +770,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test IndexSegment.ToString() with an ascending segment.
+        /// Test IndexSegment.ToString() with a descending segment.
         /// </summary>
         [TestMethod]
         [Priority(0)]
