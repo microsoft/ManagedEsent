@@ -444,7 +444,107 @@ namespace EsentCollectionsTests
 
         #endregion
 
+        #region Min/Max
+
+        /// <summary>
+        /// Test the LINQ Min operator on the keys.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ Min operator on the keys")]
+        [Priority(2)]
+        public void TestLinqMinKey()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = this.testDictionary1.Keys.Min();
+                var actual = persistentDictionary.Keys.Min();
+                Assert.AreEqual(expected, actual);
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ Max operator on the keys.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ Max operator on the keys")]
+        [Priority(2)]
+        public void TestLinqMaxKey()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = this.testDictionary1.Keys.Max();
+                var actual = persistentDictionary.Keys.Max();
+                Assert.AreEqual(expected, actual);
+            }
+        }
+
+        #endregion
+
         #region First/FirstOrDefault
+
+        /// <summary>
+        /// Test the LINQ First operator.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ First operator")]
+        [Priority(2)]
+        public void TestLinqFirst()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = this.testDictionary1.First();
+                var actual = persistentDictionary.First();
+                Assert.AreEqual(expected, actual);
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ First operator on the keys.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ First operator on the keys")]
+        [Priority(2)]
+        public void TestLinqFirstKey()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = this.testDictionary1.Keys.First();
+                var actual = persistentDictionary.Keys.First();
+                Assert.AreEqual(expected, actual);
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ FirstOrDefault operator.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ FirstOrDefault operator")]
+        [Priority(2)]
+        public void TestLinqFirstOrDefault()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = this.testDictionary1.FirstOrDefault();
+                var actual = persistentDictionary.FirstOrDefault();
+                Assert.AreEqual(expected, actual);
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ FirstOrDefault operator on the keys.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ FirstOrDefault operator on the keys")]
+        [Priority(2)]
+        public void TestLinqFirstOrDefaultKey()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = this.testDictionary1.Keys.FirstOrDefault();
+                var actual = persistentDictionary.Keys.FirstOrDefault();
+                Assert.AreEqual(expected, actual);
+            }
+        }
 
         /// <summary>
         /// Test the LINQ First operator when records are found.
@@ -765,6 +865,70 @@ namespace EsentCollectionsTests
         #endregion
 
         #region Last/LastOrDefault
+
+        /// <summary>
+        /// Test the LINQ Last operator.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ Last operator")]
+        [Priority(2)]
+        public void TestLinqLast()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = this.testDictionary1.Last();
+                var actual = persistentDictionary.Last();
+                Assert.AreEqual(expected, actual);
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ Last operator on the keys.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ Last operator on the keys")]
+        [Priority(2)]
+        public void TestLinqLastKey()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = this.testDictionary1.Keys.Last();
+                var actual = persistentDictionary.Keys.Last();
+                Assert.AreEqual(expected, actual);
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ LastOrDefault operator.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ LastOrDefault operator")]
+        [Priority(2)]
+        public void TestLinqLastOrDefault()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = this.testDictionary1.LastOrDefault();
+                var actual = persistentDictionary.LastOrDefault();
+                Assert.AreEqual(expected, actual);
+            }
+        }
+
+        /// <summary>
+        /// Test the LINQ LastOrDefault operator on the keys.
+        /// </summary>
+        [TestMethod]
+        [Description("Test the LINQ LastOrDefault operator on the keys")]
+        [Priority(2)]
+        public void TestLinqLastOrDefaultKey()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = this.testDictionary1.Keys.LastOrDefault();
+                var actual = persistentDictionary.Keys.LastOrDefault();
+                Assert.AreEqual(expected, actual);
+            }
+        }
 
         /// <summary>
         /// Test the LINQ Last operator when records are found.

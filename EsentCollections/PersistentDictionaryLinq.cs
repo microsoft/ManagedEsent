@@ -170,7 +170,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </exception>
         public KeyValuePair<TKey, TValue> Last()
         {
-            return this.Reverse().Last();
+            return this.Reverse().First();
         }
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>The last element.</returns>
         public KeyValuePair<TKey, TValue> LastOrDefault()
         {
-            return this.Reverse().LastOrDefault();
+            return this.Reverse().FirstOrDefault();
         }
     }
 }

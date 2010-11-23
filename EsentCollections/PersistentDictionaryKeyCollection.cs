@@ -197,7 +197,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </exception>
         public TKey Last()
         {
-            return this.Reverse().Last();
+            return this.Reverse().First();
         }
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>The last element.</returns>
         public TKey LastOrDefault()
         {
-            return this.Reverse().LastOrDefault();
+            return this.Reverse().FirstOrDefault();
         }
 
         /// <summary>
