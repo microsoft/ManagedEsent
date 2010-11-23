@@ -332,6 +332,18 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test JetGetDatabaseFileInfo with an ASCII path.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test JetGetDatabaseFileInfo with an ASCII path.")]
+        public void TestJetGetDatabaseFileInfoWithAsciiPath()
+        {
+            var test = new DatabaseFileTestHelper("database");
+            test.TestGetDatabaseFileInfo();
+        }
+
+        /// <summary>
         /// Test JetGetDatabaseInfo with an ASCII path.
         /// </summary>
         [TestMethod]

@@ -429,6 +429,64 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Use JetGetDatabaseFileInfo on XP to test the compatability path for JET_DBINFOMISC.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Use JetGetDatabaseFileInfo on XP to test the compatability path")]
+        public void GetDatabaseFileInfoOnXp()
+        {
+            string directory = SetupHelper.CreateRandomDirectory();
+            string database = Path.Combine(directory, "test.db");
+
+            using (var instance = new Instance("XPJetGetDatabaseFileInfo"))
+            {
+                SetupHelper.SetLightweightConfiguration(instance);
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    JET_DBID dbid;
+                    Api.JetCreateDatabase(session, database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                }
+            }
+
+            JET_DBINFOMISC dbinfomisc;
+            Api.JetGetDatabaseFileInfo(database, out dbinfomisc, JET_DbInfo.Misc);
+            Assert.AreEqual(SystemParameters.DatabasePageSize, dbinfomisc.cbPageSize);
+
+            Cleanup.DeleteDirectoryWithRetry(directory);
+        }
+
+        /// <summary>
+        /// Use JetGetDatabaseInfo on XP to test the compatability path for JET_DBINFOMISC.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Use JetGetDatabaseInfo on XP to test the compatability path")]
+        public void GetDatabaseInfoOnXp()
+        {
+            string directory = SetupHelper.CreateRandomDirectory();
+            string database = Path.Combine(directory, "test.db");
+
+            using (var instance = new Instance("XPJetGetDatabaseInfo"))
+            {
+                SetupHelper.SetLightweightConfiguration(instance);
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    JET_DBID dbid;
+                    Api.JetCreateDatabase(session, database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+
+                    JET_DBINFOMISC dbinfomisc;
+                    Api.JetGetDatabaseInfo(session, dbid, out dbinfomisc, JET_DbInfo.Misc);
+                    Assert.AreEqual(SystemParameters.DatabasePageSize, dbinfomisc.cbPageSize);
+                }
+            }
+
+            Cleanup.DeleteDirectoryWithRetry(directory);
+        }
+
+        /// <summary>
         /// Use JetGetRecordSize on XP to test the compatability path. This also tests
         /// the handling of the running total option.
         /// </summary>

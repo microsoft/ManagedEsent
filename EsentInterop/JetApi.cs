@@ -781,9 +781,52 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_DbInfo infoLevel)
         {
             TraceFunctionCall("JetGetDatabaseInfo");
+            return Err(NativeMethods.JetGetDatabaseInfo(sesid.Value, dbid.Value, out value, sizeof(int), (uint)infoLevel));
+        }
+
+        /// <summary>
+        /// Retrieves certain information about the given database.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database identifier.</param>
+        /// <param name="dbinfomisc">The value to be retrieved.</param>
+        /// <param name="infoLevel">The specific data to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetDatabaseInfo(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            out JET_DBINFOMISC dbinfomisc,
+            JET_DbInfo infoLevel)
+        {
+            TraceFunctionCall("JetGetDatabaseInfo");
             int err;
 
-            err = Err(NativeMethods.JetGetDatabaseInfo(sesid.Value, dbid.Value, out value, sizeof(int), (uint)infoLevel));
+            if (this.Capabilities.SupportsWindows7Features)
+            {
+                NATIVE_DBINFOMISC4 native;
+                err = Err(NativeMethods.JetGetDatabaseInfo(
+                    sesid.Value,
+                    dbid.Value,
+                    out native,
+                    (uint)Marshal.SizeOf(typeof(NATIVE_DBINFOMISC4)),
+                    (uint)infoLevel));
+
+                dbinfomisc = new JET_DBINFOMISC();
+                dbinfomisc.SetFromNativeDbinfoMisc(ref native);
+            }
+            else
+            {
+                NATIVE_DBINFOMISC native;
+                err = Err(NativeMethods.JetGetDatabaseInfo(
+                    sesid.Value,
+                    dbid.Value,
+                    out native,
+                    (uint)Marshal.SizeOf(typeof(NATIVE_DBINFOMISC)),
+                    (uint)infoLevel));
+
+                dbinfomisc = new JET_DBINFOMISC();
+                dbinfomisc.SetFromNativeDbinfoMisc(ref native);
+            }
 
             return err;
         }
@@ -793,23 +836,30 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="dbid">The database identifier.</param>
-        /// <param name="dbinfomisc">The value to be retrieved.</param>
+        /// <param name="value">The value to be retrieved.</param>
+        /// <param name="infoLevel">The specific data to retrieve.</param>
         /// <returns>An error if the call fails.</returns>
         public int JetGetDatabaseInfo(
             JET_SESID sesid,
             JET_DBID dbid,
-            out JET_DBINFOMISC dbinfomisc)
+            out string value,
+            JET_DbInfo infoLevel)
         {
             TraceFunctionCall("JetGetDatabaseInfo");
             int err;
 
-            NATIVE_DBINFOMISC4 native;
+            const int MaxCharacters = 1024;
+            StringBuilder sb = new StringBuilder(MaxCharacters);
+            if (this.Capabilities.SupportsUnicodePaths)
+            {
+                err = Err(NativeMethods.JetGetDatabaseInfoW(sesid.Value, dbid.Value, sb, MaxCharacters, (uint)infoLevel));
+            }
+            else
+            {
+                err = Err(NativeMethods.JetGetDatabaseInfo(sesid.Value, dbid.Value, sb, MaxCharacters, (uint)infoLevel));
+            }
 
-            err = Err(NativeMethods.JetGetDatabaseInfo(sesid.Value, dbid.Value, out native, (uint)Marshal.SizeOf(typeof(NATIVE_DBINFOMISC4)), (uint)JET_DbInfo.Misc));
-
-            dbinfomisc = new JET_DBINFOMISC();
-            dbinfomisc.SetFromNativeDbinfoMisc(ref native);
-
+            value = sb.ToString();
             return err;
         }
 
@@ -872,27 +922,40 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </summary>
         /// <param name="databaseName">The file name of the database.</param>
         /// <param name="dbinfomisc">The value to be retrieved.</param>
+        /// <param name="infoLevel">The specific data to retrieve.</param>
         /// <returns>An error if the call fails.</returns>
         public int JetGetDatabaseFileInfo(
             string databaseName,
-            out JET_DBINFOMISC dbinfomisc)
+            out JET_DBINFOMISC dbinfomisc,
+            JET_DbInfo infoLevel)
         {
             TraceFunctionCall("JetGetDatabaseFileInfo");
             int err;
 
-            NATIVE_DBINFOMISC4 native;
-
-            if (this.Capabilities.SupportsUnicodePaths)
+            if (this.Capabilities.SupportsWindows7Features)
             {
-                err = Err(NativeMethods.JetGetDatabaseFileInfoW(databaseName, out native, (uint)Marshal.SizeOf(typeof(NATIVE_DBINFOMISC4)), (uint)JET_DbInfo.Misc));
+                // Windows7 -> Unicode path support
+                NATIVE_DBINFOMISC4 native;
+                err = Err(NativeMethods.JetGetDatabaseFileInfoW(databaseName, out native, (uint)Marshal.SizeOf(typeof(NATIVE_DBINFOMISC4)), (uint)infoLevel));
+
+                dbinfomisc = new JET_DBINFOMISC();
+                dbinfomisc.SetFromNativeDbinfoMisc(ref native);
             }
             else
             {
-                err = Err(NativeMethods.JetGetDatabaseFileInfo(databaseName, out native, (uint)Marshal.SizeOf(typeof(NATIVE_DBINFOMISC4)), (uint)JET_DbInfo.Misc));
-            }
+                NATIVE_DBINFOMISC native;
+                if (this.Capabilities.SupportsUnicodePaths)
+                {
+                    err = Err(NativeMethods.JetGetDatabaseFileInfo(databaseName, out native, (uint)Marshal.SizeOf(typeof(NATIVE_DBINFOMISC)), (uint)infoLevel));                    
+                }
+                else
+                {
+                    err = Err(NativeMethods.JetGetDatabaseFileInfo(databaseName, out native, (uint)Marshal.SizeOf(typeof(NATIVE_DBINFOMISC)), (uint)infoLevel));                    
+                }
 
-            dbinfomisc = new JET_DBINFOMISC();
-            dbinfomisc.SetFromNativeDbinfoMisc(ref native);
+                dbinfomisc = new JET_DBINFOMISC();
+                dbinfomisc.SetFromNativeDbinfoMisc(ref native);
+            }
 
             return err;
         }

@@ -455,12 +455,30 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="sesid">The session to use.</param>
         /// <param name="dbid">The database identifier.</param>
         /// <param name="dbinfomisc">The value to be retrieved.</param>
+        /// <param name="infoLevel">The specific data to retrieve.</param>
         public static void JetGetDatabaseInfo(
             JET_SESID sesid,
             JET_DBID dbid,
-            out JET_DBINFOMISC dbinfomisc)
+            out JET_DBINFOMISC dbinfomisc,
+            JET_DbInfo infoLevel)
         {
-            Api.Check(Impl.JetGetDatabaseInfo(sesid, dbid, out dbinfomisc));
+            Api.Check(Impl.JetGetDatabaseInfo(sesid, dbid, out dbinfomisc, infoLevel));
+        }
+
+        /// <summary>
+        /// Retrieves certain information about the given database.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database identifier.</param>
+        /// <param name="value">The value to be retrieved.</param>
+        /// <param name="infoLevel">The specific data to retrieve.</param>
+        public static void JetGetDatabaseInfo(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            out string value,
+            JET_DbInfo infoLevel)
+        {
+            Api.Check(Impl.JetGetDatabaseInfo(sesid, dbid, out value, infoLevel));
         }
 
         /// <summary>
@@ -496,11 +514,13 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="databaseName">The file name of the database.</param>
         /// <param name="dbinfomisc">The value to be retrieved.</param>
+        /// <param name="infoLevel">The specific data to retrieve.</param>
         public static void JetGetDatabaseFileInfo(
             string databaseName,
-            out JET_DBINFOMISC dbinfomisc)
+            out JET_DBINFOMISC dbinfomisc,
+            JET_DbInfo infoLevel)
         {
-            Api.Check(Impl.JetGetDatabaseFileInfo(databaseName, out dbinfomisc));
+            Api.Check(Impl.JetGetDatabaseFileInfo(databaseName, out dbinfomisc, infoLevel));
         }
 
         #endregion

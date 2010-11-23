@@ -357,12 +357,28 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="dbid">The database identifier.</param>
-        /// <param name="dbinfomisc">The value to be retrieved.</param>
+        /// <param name="value">The value to be retrieved.</param>
+        /// <param name="infoLevel">The specific data to retrieve.</param>
         /// <returns>An error if the call fails.</returns>
         int JetGetDatabaseInfo(
             JET_SESID sesid,
             JET_DBID dbid,
-            out JET_DBINFOMISC dbinfomisc);
+            out string value,
+            JET_DbInfo infoLevel);
+
+        /// <summary>
+        /// Retrieves certain information about the given database.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database identifier.</param>
+        /// <param name="dbinfomisc">The value to be retrieved.</param>
+        /// <param name="infoLevel">The specific data to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetGetDatabaseInfo(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            out JET_DBINFOMISC dbinfomisc,
+            JET_DbInfo infoLevel);
 
         /// <summary>
         /// Retrieves certain information about the given database.
@@ -393,10 +409,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </summary>
         /// <param name="databaseName">The file name of the database.</param>
         /// <param name="dbinfomisc">The value to be retrieved.</param>
+        /// <param name="infoLevel">The specific data to retrieve.</param>
         /// <returns>An error if the call fails.</returns>
         int JetGetDatabaseFileInfo(
             string databaseName,
-            out JET_DBINFOMISC dbinfomisc);
+            out JET_DBINFOMISC dbinfomisc,
+            JET_DbInfo infoLevel);
 
         #endregion
 

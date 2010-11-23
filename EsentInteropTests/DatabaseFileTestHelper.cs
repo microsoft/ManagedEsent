@@ -358,8 +358,23 @@ namespace InteropApiTests
             try
             {
                 this.CreateDatabase();
-                this.GetInformation();
-                this.CheckDatabase();
+                this.TestJetGetDatabaseInfo();
+            }
+            finally
+            {
+                Cleanup.DeleteDirectoryWithRetry(this.databaseDirectory);
+            }
+        }
+
+        /// <summary>
+        /// Create a database and call JetGetDatabaseFileInfo.
+        /// </summary>
+        public void TestGetDatabaseFileInfo()
+        {
+            try
+            {
+                this.CreateDatabase();
+                this.TestJetGetDatabaseFileInfo();
             }
             finally
             {
@@ -819,94 +834,45 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Check to see if the DBINFOMISC information gets populated correctly using JetGetDatabaseFileInfo.
+        /// Retrieves various pieces of information with JetGetDatabaseFileInfo.
         /// </summary>
-        private void GetDatabaseMiscFileInfo()
+        private void TestJetGetDatabaseFileInfo()
         {
+            long databaseFileSizeBytes;
+            Api.JetGetDatabaseFileInfo(this.database, out databaseFileSizeBytes, JET_DbInfo.Filesize);
+            Assert.AreNotEqual(0, databaseFileSizeBytes);
+
+            int databaseFileInUse;
+            Api.JetGetDatabaseFileInfo(this.database, out databaseFileInUse, JET_DbInfo.DBInUse);
+            Assert.AreEqual(0, databaseFileInUse);
+
+            int databaseFilePageSize;
+            Api.JetGetDatabaseFileInfo(this.database, out databaseFilePageSize, JET_DbInfo.PageSize);
+            Assert.AreEqual(SystemParameters.DatabasePageSize, databaseFilePageSize);
+
             JET_DBINFOMISC dbinfomisc;
-            Api.JetGetDatabaseFileInfo(this.database, out dbinfomisc);
-
-            Console.WriteLine("dbinfomisc.signLog is {0}", dbinfomisc.signLog);
-            Console.WriteLine("dbinfomisc.genMinRequired is {0}", dbinfomisc.genMinRequired);
-            Console.WriteLine("dbinfomisc.logtimeRepair is {0}", dbinfomisc.logtimeRepair);
-            Console.WriteLine("dbinfomisc.cbPageSize is {0}", dbinfomisc.cbPageSize);
-            Assert.AreNotEqual(0, dbinfomisc.cbPageSize);
-
-            Console.WriteLine("dbinfomisc.bkinfoFullPrev is {0}", dbinfomisc.bkinfoFullPrev);
-            Console.WriteLine("dbinfomisc.logtimeAttach is {0} (DateTime={1})", dbinfomisc.logtimeAttach, dbinfomisc.logtimeAttach.ToDateTime());
-        }
-
-        /// <summary>
-        /// Check to see if the DBINFOMISC information gets populated correctly using JetGetDatabaseInfo.
-        /// </summary>
-        /// <param name="sesid">The session to use.</param>
-        /// <param name="dbid">The database identifier.</param>
-        private void GetDatabaseMiscInfo(
-            JET_SESID sesid,
-            JET_DBID dbid)
-        {
-            JET_DBINFOMISC dbinfomisc;
-            Api.JetGetDatabaseInfo(sesid, dbid, out dbinfomisc);
-
-            Console.WriteLine("dbinfomisc.signLog is {0}", dbinfomisc.signLog);
-            Console.WriteLine("dbinfomisc.genMinRequired is {0}", dbinfomisc.genMinRequired);
-            Console.WriteLine("dbinfomisc.logtimeRepair is {0}", dbinfomisc.logtimeRepair);
-            Console.WriteLine("dbinfomisc.cbPageSize is {0}", dbinfomisc.cbPageSize);
-            Assert.AreNotEqual(0, dbinfomisc.cbPageSize);
-
-            Console.WriteLine("dbinfomisc.bkinfoFullPrev is {0}", dbinfomisc.bkinfoFullPrev);
-            Console.WriteLine("dbinfomisc.logtimeAttach is {0} (DateTime={1})", dbinfomisc.logtimeAttach, dbinfomisc.logtimeAttach.ToDateTime());
+            Api.JetGetDatabaseFileInfo(this.database, out dbinfomisc, JET_DbInfo.Misc);
+            Assert.AreEqual(SystemParameters.DatabasePageSize, dbinfomisc.cbPageSize);
         }
 
         /// <summary>
         /// Retrieves various pieces of information with JetGetDatabaseInfo.
         /// </summary>
-        private void GetInformation()
+        private void TestJetGetDatabaseInfo()
         {
             using (var instance = this.CreateInstance())
             {
                 instance.Init();
                 using (var session = new Session(instance))
                 {
-                    // Retrieve the information with JetGetDatabaseFileInfo.
-                    long databaseFileSizeBytes;
-                    Api.JetGetDatabaseFileInfo(this.database, out databaseFileSizeBytes, JET_DbInfo.Filesize);
-                    Assert.AreNotEqual(0, databaseFileSizeBytes);
-
-                    // JET_DbInfo.LCID doesn't work for FileInfo.
-                    // JET_DbInfo.Options not supported for FileInfo.
-                    // JET_DbInfo.Transactions not supported for FileInfo.
-                    // JET_DbInfo.Version not supported for FileInfo.
-                    // SpaceOwned
-                    // SpaceAvailable
-                    //
-                    // DBInUse is not applicable to JetGetDatabaseFileInfo, only JetGetDatabaseFileInfo
-                    int databaseFileInUse;
-                    Api.JetGetDatabaseFileInfo(this.database, out databaseFileInUse, JET_DbInfo.DBInUse);
-                    Console.WriteLine("databaseFileInUse is {0}", databaseFileInUse);
-                    Assert.AreEqual(0, databaseFileInUse);
-
-                    int databaseFilePageSize;
-                    Api.JetGetDatabaseFileInfo(this.database, out databaseFilePageSize, JET_DbInfo.PageSize);
-                    Console.WriteLine("databaseFilePageSize is {0}", databaseFilePageSize);
-                    Assert.AreNotEqual(0, databaseFilePageSize);
-
-                    // JET_DbInfo.Misc:
-                    this.GetDatabaseMiscFileInfo();
-
-                    // UNDONE:
-                    // FileType
-                    // Upgrade
-
                     // Attach the database.
                     Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
                     JET_DBID dbid;
                     Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
 
-                    // Now retrieve the information with JetGetDatabaseInfo.
                     int databaseSizePages;
                     Api.JetGetDatabaseInfo(session, dbid, out databaseSizePages, JET_DbInfo.Filesize);
-                    Assert.AreEqual(258, databaseSizePages);
+                    Assert.AreNotEqual(0, databaseSizePages);
 
                     int databaseLcid;
                     Api.JetGetDatabaseInfo(session, dbid, out databaseLcid, JET_DbInfo.LCID);
@@ -926,31 +892,29 @@ namespace InteropApiTests
                     int databaseVersion;
                     Api.JetGetDatabaseInfo(session, dbid, out databaseVersion, JET_DbInfo.Version);
                     Console.WriteLine("databaseVersion is {0}", databaseVersion);
-                    Assert.AreEqual(1568, databaseVersion);
+                    Assert.AreNotEqual(0, databaseVersion);
 
                     int databaseSpaceOwned;
                     Api.JetGetDatabaseInfo(session, dbid, out databaseSpaceOwned, JET_DbInfo.SpaceOwned);
                     Console.WriteLine("databaseSpaceOwned is {0}", databaseSpaceOwned);
-                    Assert.AreEqual(256, databaseSpaceOwned);
+                    Assert.AreNotEqual(0, databaseSpaceOwned);
 
                     int databaseSpaceAvailable;
                     Api.JetGetDatabaseInfo(session, dbid, out databaseSpaceAvailable, JET_DbInfo.SpaceAvailable);
                     Console.WriteLine("databaseSpaceAvailable is {0}", databaseSpaceAvailable);
                     Assert.AreNotEqual(0, databaseSpaceAvailable);
 
-                    // DBInUse is not applicable to JetGetDatabaseInfo, only JetGetDatabaseFileInfo
                     int databasePageSize;
                     Api.JetGetDatabaseInfo(session, dbid, out databasePageSize, JET_DbInfo.PageSize);
-                    Console.WriteLine("databasePageSize is {0}", databasePageSize);
-                    Assert.AreEqual(4096, databasePageSize);
+                    Assert.AreEqual(SystemParameters.DatabasePageSize, databasePageSize);
 
-                    this.GetDatabaseMiscInfo(session, dbid);
+                    JET_DBINFOMISC dbinfomisc;
+                    Api.JetGetDatabaseInfo(session, dbid, out dbinfomisc, JET_DbInfo.Misc);
+                    Assert.AreEqual(SystemParameters.DatabasePageSize, dbinfomisc.cbPageSize);
 
-                    // UNDONE:
-                    // FileType
-                    // Misc
-                    // Upgrade
-                    // Filename
+                    string path;
+                    Api.JetGetDatabaseInfo(session, dbid, out path, JET_DbInfo.Filename);
+                    Assert.AreEqual(Path.GetFullPath(this.database), path);
                 }
             }
         }

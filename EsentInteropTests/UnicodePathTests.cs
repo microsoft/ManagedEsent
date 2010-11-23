@@ -452,6 +452,23 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test JetGetDatabaseFileInfo with a Unicode path.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test JetGetDatabaseFileInfo with a Unicode path.")]
+        public void TestJetGetDatabaseFileInfoWithUnicodePath()
+        {
+            if (!EsentVersion.SupportsUnicodePaths)
+            {
+                return;
+            }
+
+            var test = new DatabaseFileTestHelper(this.directory);
+            test.TestGetDatabaseFileInfo();
+        }
+
+        /// <summary>
         /// Test JetGetDatabaseInfo with a Unicode path.
         /// </summary>
         [TestMethod]

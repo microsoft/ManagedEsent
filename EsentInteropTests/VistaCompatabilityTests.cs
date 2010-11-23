@@ -105,6 +105,35 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Use JetGetDatabaseFileInfo on Vista to test the compatability path for JET_DBINFOMISC.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Use JetGetDatabaseFileInfo on Vista to test the compatability path")]
+        public void GetDatabaseFileInfoOnVista()
+        {
+            string directory = SetupHelper.CreateRandomDirectory();
+            string database = Path.Combine(directory, "test.db");
+
+            using (var instance = new Instance("VistaJetGetDatabaseFileInfo"))
+            {
+                SetupHelper.SetLightweightConfiguration(instance);
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    JET_DBID dbid;
+                    Api.JetCreateDatabase(session, database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                }
+            }
+
+            JET_DBINFOMISC dbinfomisc;
+            Api.JetGetDatabaseFileInfo(database, out dbinfomisc, JET_DbInfo.Misc);
+            Assert.AreEqual(SystemParameters.DatabasePageSize, dbinfomisc.cbPageSize);
+
+            Cleanup.DeleteDirectoryWithRetry(directory);
+        }
+
+        /// <summary>
         /// Use JetCreateIndex2 on Vista to test the compatability path.
         /// </summary>
         [TestMethod]

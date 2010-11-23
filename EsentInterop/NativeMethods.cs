@@ -162,11 +162,26 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
         public static extern int JetSetDatabaseSizeW(IntPtr sesid, string szDatabaseName, uint cpg, out uint pcpgReal);
 
+        #region JetGetDatabaseInfo
+
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetGetDatabaseInfo(IntPtr sesid, uint dbid, out int intValue, uint cbMax, uint InfoLevel);
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetDatabaseInfo(IntPtr sesid, uint dbid, out NATIVE_DBINFOMISC dbinfomisc, uint cbMax, uint InfoLevel);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetGetDatabaseInfo(IntPtr sesid, uint dbid, out NATIVE_DBINFOMISC4 dbinfomisc, uint cbMax, uint InfoLevel);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetDatabaseInfo(IntPtr sesid, uint dbid, [Out] StringBuilder stringValue, uint cbMax, uint InfoLevel);
+
+        [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
+        public static extern int JetGetDatabaseInfoW(IntPtr sesid, uint dbid, [Out] StringBuilder stringValue, uint cbMax, uint InfoLevel);
+
+        #endregion
+
+        #region JetGetDatabaseFileInfo
 
         // Unicode, int
         [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
@@ -184,13 +199,19 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetGetDatabaseFileInfo(string szFilename, out long intValue, uint cbMax, uint InfoLevel);
 
-        // Unicode, MISC
+        // Unicode, JET_DBINFOMISC4
         [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
         public static extern int JetGetDatabaseFileInfoW(string szFilename, out NATIVE_DBINFOMISC4 dbinfomisc, uint cbMax, uint InfoLevel);
 
-        // Unicode, MISC
+        // ASCII, JET_DBINFOMISC
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
-        public static extern int JetGetDatabaseFileInfo(string szFilename, out NATIVE_DBINFOMISC4 dbinfomisc, uint cbMax, uint InfoLevel);
+        public static extern int JetGetDatabaseFileInfo(string szFilename, out NATIVE_DBINFOMISC dbinfomisc, uint cbMax, uint InfoLevel);
+
+        // Unicode, JET_DBINFOMISC
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetDatabaseFileInfoW(string szFilename, out NATIVE_DBINFOMISC dbinfomisc, uint cbMax, uint InfoLevel);
+
+        #endregion
 
         #endregion
 
