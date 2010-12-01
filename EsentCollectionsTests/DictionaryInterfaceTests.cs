@@ -3,7 +3,7 @@
 //   Copyright (c) Microsoft Corporation.
 // </copyright>
 // <summary>
-//   Test IDictionary compatability.
+//   Test IDictionary compatibility.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 

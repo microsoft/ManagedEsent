@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="VistaCompatabilityTests.cs" company="Microsoft Corporation">
+// <copyright file="VistaCompatibilityTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
 //-----------------------------------------------------------------------
@@ -16,7 +16,7 @@ namespace InteropApiTests
     /// Test the Api class functionality when we have an Vista version of Esent.
     /// </summary>
     [TestClass]
-    public class VistaCompatabilityTests
+    public class VistaCompatibilityTests
     {
         /// <summary>
         /// The saved API, replaced when finished.
@@ -27,7 +27,7 @@ namespace InteropApiTests
         /// Setup the mock object repository.
         /// </summary>
         [TestInitialize]
-        [Description("Setup the VistaCompatabilityTests fixture")]
+        [Description("Setup the VistaCompatibilityTests fixture")]
         public void Setup()
         {
             this.savedImpl = Api.Impl;
@@ -38,7 +38,7 @@ namespace InteropApiTests
         /// Cleanup after the test.
         /// </summary>
         [TestCleanup]
-        [Description("Cleanup the VistaCompatabilityTests fixture")]
+        [Description("Cleanup the VistaCompatibilityTests fixture")]
         public void Teardown()
         {
             Api.Impl = this.savedImpl;
@@ -105,11 +105,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Use JetGetDatabaseFileInfo on Vista to test the compatability path for JET_DBINFOMISC.
+        /// Use JetGetDatabaseFileInfo on Vista to test the compatibility path for JET_DBINFOMISC.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Use JetGetDatabaseFileInfo on Vista to test the compatability path")]
+        [Description("Use JetGetDatabaseFileInfo on Vista to test the compatibility path")]
         public void GetDatabaseFileInfoOnVista()
         {
             string directory = SetupHelper.CreateRandomDirectory();
@@ -134,11 +134,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Use JetCreateIndex2 on Vista to test the compatability path.
+        /// Use JetCreateIndex2 on Vista to test the compatibility path.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Use JetCreateIndex2 on Vista to test the compatability path")]
+        [Description("Use JetCreateIndex2 on Vista to test the compatibility path")]
         public void CreateIndexesOnVista()
         {
             string directory = SetupHelper.CreateRandomDirectory();

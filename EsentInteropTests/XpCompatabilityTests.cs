@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="XpCompatabilityTests.cs" company="Microsoft Corporation">
+// <copyright file="XpCompatibilityTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
 //-----------------------------------------------------------------------
@@ -20,7 +20,7 @@ namespace InteropApiTests
     /// Test the Api class functionality when we have an XP version of Esent.
     /// </summary>
     [TestClass]
-    public class XpCompatabilityTests
+    public class XpCompatibilityTests
     {
         /// <summary>
         /// The saved API, replaced when finished.
@@ -31,7 +31,7 @@ namespace InteropApiTests
         /// Create an implementation with a fixed version.
         /// </summary>
         [TestInitialize]
-        [Description("Setup the XpCompatabilityTests fixture")]
+        [Description("Setup the XpCompatibilityTests fixture")]
         public void Setup()
         {
             this.savedImpl = Api.Impl;
@@ -42,7 +42,7 @@ namespace InteropApiTests
         /// Cleanup after the test.
         /// </summary>
         [TestCleanup]
-        [Description("Cleanup the XpCompatabilityTests fixture")]
+        [Description("Cleanup the XpCompatibilityTests fixture")]
         public void Teardown()
         {
             Api.Impl = this.savedImpl;
@@ -373,11 +373,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Use JetCreateIndex2 on XP to test the compatability path.
+        /// Use JetCreateIndex2 on XP to test the compatibility path.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Use JetCreateIndex2 on XP to test the compatability path")]
+        [Description("Use JetCreateIndex2 on XP to test the compatibility path")]
         public void CreateIndexesOnXp()
         {
             string directory = SetupHelper.CreateRandomDirectory();
@@ -429,11 +429,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Use JetGetDatabaseFileInfo on XP to test the compatability path for JET_DBINFOMISC.
+        /// Use JetGetDatabaseFileInfo on XP to test the compatibility path for JET_DBINFOMISC.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Use JetGetDatabaseFileInfo on XP to test the compatability path")]
+        [Description("Use JetGetDatabaseFileInfo on XP to test the compatibility path")]
         public void GetDatabaseFileInfoOnXp()
         {
             string directory = SetupHelper.CreateRandomDirectory();
@@ -458,11 +458,11 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Use JetGetDatabaseInfo on XP to test the compatability path for JET_DBINFOMISC.
+        /// Use JetGetDatabaseInfo on XP to test the compatibility path for JET_DBINFOMISC.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Use JetGetDatabaseInfo on XP to test the compatability path")]
+        [Description("Use JetGetDatabaseInfo on XP to test the compatibility path")]
         public void GetDatabaseInfoOnXp()
         {
             string directory = SetupHelper.CreateRandomDirectory();
@@ -487,12 +487,12 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Use JetGetRecordSize on XP to test the compatability path. This also tests
+        /// Use JetGetRecordSize on XP to test the compatibility path. This also tests
         /// the handling of the running total option.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Use JetGetRecordSize on XP to test the compatability path")]
+        [Description("Use JetGetRecordSize on XP to test the compatibility path")]
         public void GetRecordSizeOnXp()
         {
             string directory = SetupHelper.CreateRandomDirectory();

@@ -1076,7 +1076,8 @@ namespace InteropApiTests
         /// <returns>A new instance.</returns>
         private Instance CreateInstance()
         {
-            var instance = new Instance(Guid.NewGuid().ToString());
+            Guid guid = Guid.NewGuid();
+            var instance = new Instance(guid.ToString(), "DatabaseFileTests_" + guid.ToString()); 
             instance.Parameters.LogFileSize = 128;
             instance.Parameters.LogFileDirectory = this.databaseDirectory;
             instance.Parameters.TempDirectory = this.databaseDirectory;
