@@ -77,6 +77,8 @@ namespace InteropApiTests
         {
             this.testInstance.Term();
             Cleanup.DeleteDirectoryWithRetry(TestDirectory);
+
+            SetupHelper.CheckProcessForInstanceLeaks();
         }
 
         #endregion

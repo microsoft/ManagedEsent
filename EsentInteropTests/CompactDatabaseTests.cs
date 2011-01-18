@@ -16,6 +16,19 @@ namespace InteropApiTests
     [TestClass]
     public class CompactDatabaseTests
     {
+        #region Setup/Teardown
+
+        /// <summary>
+        /// Verifies no instances are leaked.
+        /// </summary>
+        [TestCleanup]
+        public void Teardown()
+        {
+            SetupHelper.CheckProcessForInstanceLeaks();
+        }
+
+        #endregion
+
         /// <summary>
         /// Test <see cref="Api.JetCompact"/>.
         /// </summary>

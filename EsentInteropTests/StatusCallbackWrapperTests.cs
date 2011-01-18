@@ -22,6 +22,17 @@ namespace InteropApiTests
         /// </summary>
         private readonly JET_SESID sesid = new JET_SESID { Value = (IntPtr)0x1 };
 
+        #region Setup/Teardown
+        /// <summary>
+        /// Verifies no instances are leaked.
+        /// </summary>
+        [TestCleanup]
+        public void Teardown()
+        {
+            SetupHelper.CheckProcessForInstanceLeaks();
+        }
+        #endregion
+
         /// <summary>
         /// The wrapper should convert the arguments passed to it.
         /// </summary>
@@ -36,7 +47,7 @@ namespace InteropApiTests
                     Assert.IsInstanceOfType(obj, typeof(JET_SNPROG));
                     var snprog = obj as JET_SNPROG;
                     Assert.AreEqual(this.sesid, session);
-                    Assert.AreEqual(JET_SNP.Backup, snp);
+                    Assert.AreEqual(JET_SNP.Restore, snp);
                     Assert.AreEqual(JET_SNT.Progress, snt);
                     Assert.IsNotNull(snprog);
                     Assert.AreEqual(1, snprog.cunitDone);
@@ -55,7 +66,7 @@ namespace InteropApiTests
             {
                 wrapper.NativeCallback(
                     this.sesid.Value,
-                    (uint)JET_SNP.Backup,
+                    (uint)JET_SNP.Restore,
                     (uint)JET_SNT.Progress,
                     new IntPtr(&native));
             }

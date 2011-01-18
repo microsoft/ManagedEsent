@@ -16,6 +16,17 @@ namespace InteropApiTests
     [TestClass]
     public class BackupRestoreTests
     {
+        #region Setup/Teardown
+        /// <summary>
+        /// Verifies no instances are leaked.
+        /// </summary>
+        [TestCleanup]
+        public void Teardown()
+        {
+            SetupHelper.CheckProcessForInstanceLeaks();
+        }
+        #endregion
+
         /// <summary>
         /// Verify JetRestoreInstance throws an exception when the source database is null.
         /// </summary>

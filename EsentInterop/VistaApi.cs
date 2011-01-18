@@ -12,6 +12,24 @@ namespace Microsoft.Isam.Esent.Interop.Vista
     public static class VistaApi
     {
         /// <summary>
+        /// Retrieves information about a column in a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database that contains the table.</param>
+        /// <param name="tablename">The name of the table containing the column.</param>
+        /// <param name="columnid">The ID of the column.</param>
+        /// <param name="columnbase">Filled in with information about the columns in the table.</param>
+        public static void JetGetColumnInfo(
+                JET_SESID sesid,
+                JET_DBID dbid,
+                string tablename,
+                JET_COLUMNID columnid,
+                out JET_COLUMNBASE columnbase)
+        {
+            Api.Check(Api.Impl.JetGetColumnInfo(sesid, dbid, tablename, columnid, out columnbase));
+        }
+
+        /// <summary>
         /// Creates a temporary table with a single index. A temporary table
         /// stores and retrieves records just like an ordinary table created
         /// using JetCreateTableColumnIndex. However, temporary tables are

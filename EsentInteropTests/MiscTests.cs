@@ -12,7 +12,6 @@ namespace InteropApiTests
     using System.Linq;
     using System.Reflection;
     using Microsoft.Isam.Esent.Interop;
-    using Microsoft.Isam.Esent.Interop.Windows7;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>

@@ -11,6 +11,7 @@ namespace InteropApiTests
     using System.IO;
     using System.Threading;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
     /// Create a directory and an instance pointed at the directory.
@@ -136,6 +137,36 @@ namespace InteropApiTests
             }
 
             return columnidDict;
+        }
+
+        /// <summary>
+        /// Verifies no instances are leaked.
+        /// </summary>
+        public static void CheckProcessForInstanceLeaks()
+        {
+            int numInstances;
+            JET_INSTANCE_INFO[] instances;
+            Api.JetGetInstanceInfo(out numInstances, out instances);
+
+            if (numInstances != 0)
+            {
+                Console.WriteLine("There are {0} instances remaining! They are:", numInstances);
+                foreach (var instanceInfo in instances)
+                {
+                    string databaseName = string.Empty;
+                    if (instanceInfo.szDatabaseFileName != null && instanceInfo.szDatabaseFileName.Count > 0)
+                    {
+                        databaseName = instanceInfo.szDatabaseFileName[0];
+                    }
+
+                    Console.WriteLine(
+                        "   szInstanceName={0}, szDatabaseName={1}",
+                        instanceInfo.szInstanceName,
+                        databaseName);
+                }
+            }
+
+            Assert.AreEqual(0, numInstances);
         }
 
         /// <summary>

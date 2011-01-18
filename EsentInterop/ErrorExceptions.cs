@@ -25,7 +25,7 @@ namespace Microsoft.Isam.Esent.Interop
     //    |           |-- EsentDiskException    // out of disk space (all variants)
     //    |-- EsentDataException
     //    |     |-- EsentCorruptionException
-    //    |     |-- EsentMishandlingException
+    //    |     |-- EsentInconsistentException
     //    |     |-- EsentFragmentationException
     //    |-- EsentApiException
     //          |-- EsentUsageException
@@ -353,32 +353,32 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Base class for Mishandling exceptions.
+    /// Base class for Inconsistent exceptions.
     /// </summary>
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.MaintainabilityRules",
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public abstract class EsentMishandlingException : EsentDataException
+    public abstract class EsentInconsistentException : EsentDataException
     {
         /// <summary>
-        /// Initializes a new instance of the EsentMishandlingException class.
+        /// Initializes a new instance of the EsentInconsistentException class.
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        protected EsentMishandlingException(string description, JET_err err) :
+        protected EsentInconsistentException(string description, JET_err err) :
             base(description, err)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the EsentMishandlingException class. This constructor
+        /// Initializes a new instance of the EsentInconsistentException class. This constructor
         /// is used to deserialize a serialized exception.
         /// </summary>
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
-        protected EsentMishandlingException(SerializationInfo info, StreamingContext context) :
+        protected EsentInconsistentException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
         }
@@ -1263,6 +1263,36 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Base class for JET_err.SeparatedLongValue exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentSeparatedLongValueException : EsentErrorException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentSeparatedLongValueException class.
+        /// </summary>
+        public EsentSeparatedLongValueException() :
+            base("Operation not supported on separated long-value", JET_err.SeparatedLongValue)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSeparatedLongValueException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentSeparatedLongValueException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+    }
+
+    /// <summary>
     /// Base class for JET_err.InvalidLoggedOperation exceptions.
     /// </summary>
     [SuppressMessage(
@@ -1570,7 +1600,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentLogGenerationMismatchException : EsentMishandlingException
+    public sealed class EsentLogGenerationMismatchException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentLogGenerationMismatchException class.
@@ -1600,7 +1630,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentBadLogVersionException : EsentMishandlingException
+    public sealed class EsentBadLogVersionException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentBadLogVersionException class.
@@ -2020,7 +2050,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentBadLogSignatureException : EsentMishandlingException
+    public sealed class EsentBadLogSignatureException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentBadLogSignatureException class.
@@ -2080,7 +2110,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentBadCheckpointSignatureException : EsentMishandlingException
+    public sealed class EsentBadCheckpointSignatureException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentBadCheckpointSignatureException class.
@@ -2290,7 +2320,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentDatabaseLogSetMismatchException : EsentMishandlingException
+    public sealed class EsentDatabaseLogSetMismatchException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseLogSetMismatchException class.
@@ -2380,7 +2410,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentCheckpointFileNotFoundException : EsentMishandlingException
+    public sealed class EsentCheckpointFileNotFoundException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentCheckpointFileNotFoundException class.
@@ -2410,7 +2440,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentRequiredLogFilesMissingException : EsentMishandlingException
+    public sealed class EsentRequiredLogFilesMissingException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentRequiredLogFilesMissingException class.
@@ -2620,7 +2650,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentDatabaseDirtyShutdownException : EsentMishandlingException
+    public sealed class EsentDatabaseDirtyShutdownException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseDirtyShutdownException class.
@@ -2650,7 +2680,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentConsistentTimeMismatchException : EsentMishandlingException
+    public sealed class EsentConsistentTimeMismatchException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentConsistentTimeMismatchException class.
@@ -2710,7 +2740,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentEndingRestoreLogTooLowException : EsentMishandlingException
+    public sealed class EsentEndingRestoreLogTooLowException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentEndingRestoreLogTooLowException class.
@@ -2740,7 +2770,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentStartingRestoreLogTooHighException : EsentMishandlingException
+    public sealed class EsentStartingRestoreLogTooHighException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentStartingRestoreLogTooHighException class.
@@ -2770,7 +2800,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentGivenLogFileHasBadSignatureException : EsentMishandlingException
+    public sealed class EsentGivenLogFileHasBadSignatureException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentGivenLogFileHasBadSignatureException class.
@@ -2800,7 +2830,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentGivenLogFileIsNotContiguousException : EsentMishandlingException
+    public sealed class EsentGivenLogFileIsNotContiguousException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentGivenLogFileIsNotContiguousException class.
@@ -2830,7 +2860,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentMissingRestoreLogFilesException : EsentMishandlingException
+    public sealed class EsentMissingRestoreLogFilesException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentMissingRestoreLogFilesException class.
@@ -2980,7 +3010,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentMissingCurrentLogFilesException : EsentMishandlingException
+    public sealed class EsentMissingCurrentLogFilesException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentMissingCurrentLogFilesException class.
@@ -3010,7 +3040,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentDbTimeTooOldException : EsentMishandlingException
+    public sealed class EsentDbTimeTooOldException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentDbTimeTooOldException class.
@@ -3040,7 +3070,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentDbTimeTooNewException : EsentMishandlingException
+    public sealed class EsentDbTimeTooNewException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentDbTimeTooNewException class.
@@ -3070,7 +3100,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentMissingFileToBackupException : EsentMishandlingException
+    public sealed class EsentMissingFileToBackupException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentMissingFileToBackupException class.
@@ -3573,6 +3603,36 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Base class for JET_err.UnicodeLanguageValidationFailure exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentUnicodeLanguageValidationFailureException : EsentOperationException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentUnicodeLanguageValidationFailureException class.
+        /// </summary>
+        public EsentUnicodeLanguageValidationFailureException() :
+            base("Can not validate the language", JET_err.UnicodeLanguageValidationFailure)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentUnicodeLanguageValidationFailureException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentUnicodeLanguageValidationFailureException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+    }
+
+    /// <summary>
     /// Base class for JET_err.ExistingLogFileHasBadSignature exceptions.
     /// </summary>
     [SuppressMessage(
@@ -3580,7 +3640,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentExistingLogFileHasBadSignatureException : EsentMishandlingException
+    public sealed class EsentExistingLogFileHasBadSignatureException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentExistingLogFileHasBadSignatureException class.
@@ -3610,7 +3670,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentExistingLogFileIsNotContiguousException : EsentMishandlingException
+    public sealed class EsentExistingLogFileIsNotContiguousException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentExistingLogFileIsNotContiguousException class.
@@ -6940,7 +7000,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentInvalidDatabaseVersionException : EsentMishandlingException
+    public sealed class EsentInvalidDatabaseVersionException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentInvalidDatabaseVersionException class.
@@ -7060,7 +7120,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentPageSizeMismatchException : EsentMishandlingException
+    public sealed class EsentPageSizeMismatchException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentPageSizeMismatchException class.
@@ -7150,7 +7210,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentAttachedDatabaseMismatchException : EsentMishandlingException
+    public sealed class EsentAttachedDatabaseMismatchException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentAttachedDatabaseMismatchException class.
@@ -7390,7 +7450,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentInvalidCreateDbVersionException : EsentMishandlingException
+    public sealed class EsentInvalidCreateDbVersionException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentInvalidCreateDbVersionException class.
@@ -7420,7 +7480,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentDatabaseIncompleteIncrementalReseedException : EsentMishandlingException
+    public sealed class EsentDatabaseIncompleteIncrementalReseedException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseIncompleteIncrementalReseedException class.
@@ -10180,7 +10240,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentFileInvalidTypeException : EsentMishandlingException
+    public sealed class EsentFileInvalidTypeException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentFileInvalidTypeException class.
@@ -12396,6 +12456,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentKeyTooBigException();
             case JET_err.CannotSeparateIntrinsicLV:
                 return new EsentCannotSeparateIntrinsicLVException();
+            case JET_err.SeparatedLongValue:
+                return new EsentSeparatedLongValueException();
             case JET_err.InvalidLoggedOperation:
                 return new EsentInvalidLoggedOperationException();
             case JET_err.LogFileCorrupt:
@@ -12550,6 +12612,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentUnicodeTranslationFailException();
             case JET_err.UnicodeNormalizationNotSupported:
                 return new EsentUnicodeNormalizationNotSupportedException();
+            case JET_err.UnicodeLanguageValidationFailure:
+                return new EsentUnicodeLanguageValidationFailureException();
             case JET_err.ExistingLogFileHasBadSignature:
                 return new EsentExistingLogFileHasBadSignatureException();
             case JET_err.ExistingLogFileIsNotContiguous:
@@ -13136,9 +13200,10 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentFileCompressedException();
             default:
                 // This could be a new error introduced in a newer version of Esent. Try to look up the description.
-                int errNum = (int)err;
+                IntPtr errNum = new IntPtr((int)err);
                 string description;
                 int wrn = Api.Impl.JetGetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.ErrorToString, ref errNum, out description, 1024);
+                err = (JET_err)errNum.ToInt32();
                 if ((int)JET_wrn.Success != wrn)
                 {
                     description = "Unknown error";

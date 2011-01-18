@@ -17,8 +17,10 @@ namespace InteropApiTests
     /// Jet{Get,Set}SystemParameter tests
     /// </summary>
     [TestClass]
-    public class SetGetSystemParameterTests
+    public partial class SetGetSystemParameterTests
     {
+        #region Setup/Teardown
+
         /// <summary>
         /// Setup the SetGetSystemParameterTests fixture.
         /// </summary>
@@ -31,6 +33,17 @@ namespace InteropApiTests
                 Api.JetSetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.EnableAdvanced, 1, null);
             }
         }
+
+        /// <summary>
+        /// Verifies no instances are leaked.
+        /// </summary>
+        [TestCleanup]
+        public void Teardown()
+        {
+            SetupHelper.CheckProcessForInstanceLeaks();
+        }
+        
+        #endregion
 
         /// <summary>
         /// Verify that retrieving a string parameter tries to intern the string.
@@ -673,8 +686,8 @@ namespace InteropApiTests
             try
             {
                 SystemParameters.Configuration = 0;
-                ////Assert.AreEqual(0, SystemParameters.Configuration);
                 Assert.Inconclusive("ESENT bug prevents retrieving the configuration");
+                Assert.AreEqual(0, SystemParameters.Configuration);
             }
             finally
             {

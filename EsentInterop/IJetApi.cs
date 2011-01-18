@@ -160,7 +160,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="paramValue">The value of the parameter to set, if the parameter is an integer type.</param>
         /// <param name="paramString">The value of the parameter to set, if the parameter is a string type.</param>
         /// <returns>An error or warning.</returns>
-        int JetSetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, int paramValue, string paramString);
+        int JetSetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, IntPtr paramValue, string paramString);
 
         /// <summary>
         /// Sets database configuration options. This overload is used when the
@@ -191,7 +191,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// a ref parameter and not an out parameter.
         /// </remarks>
         /// <returns>An error or warning.</returns>
-        int JetGetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, ref int paramValue, out string paramString, int maxParam);
+        int JetGetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, ref IntPtr paramValue, out string paramString, int maxParam);
 
         /// <summary>
         /// Retrieves the version of the database engine.
@@ -1186,6 +1186,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_DBID dbid,
             JET_TABLECREATE tablecreate);
 
+        #region JetGetTableColumnInfo overloads
+
         /// <summary>
         /// Retrieves information about a table column.
         /// </summary>
@@ -1227,6 +1229,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_TABLEID tableid,
             string ignored,
             out JET_COLUMNLIST columnlist);
+
+        #endregion
+
+        #region JetGetColumnInfo overloads
 
         /// <summary>
         /// Retrieves information about a table column.
@@ -1277,6 +1283,26 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 out JET_COLUMNBASE columnbase);
 
         /// <summary>
+        /// Retrieves information about a column in a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database that contains the table.</param>
+        /// <param name="szColumnName">The name of the column.</param>
+        /// <param name="columnid">The ID of the column.</param>
+        /// <param name="columnbase">Filled in with information about the columns in the table.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetGetColumnInfo(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            string szColumnName,
+            JET_COLUMNID columnid,
+            out JET_COLUMNBASE columnbase);
+
+        #endregion
+
+        #region JetGetObjectInfo overloads
+
+        /// <summary>
         /// Retrieves information about database objects.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
@@ -1284,6 +1310,24 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="objectlist">Filled in with information about the objects in the database.</param>
         /// <returns>An error if the call fails.</returns>
         int JetGetObjectInfo(JET_SESID sesid, JET_DBID dbid, out JET_OBJECTLIST objectlist);
+
+        /// <summary>
+        /// Retrieves information about database objects.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database to use.</param>
+        /// <param name="objtyp">The type of the object.</param>
+        /// <param name="szObjectName">The object name about which to retrieve information.</param>
+        /// <param name="objectinfo">Filled in with information about the objects in the database.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetGetObjectInfo(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            JET_objtyp objtyp,
+            string szObjectName,
+            out JET_OBJECTINFO objectinfo);
+
+        #endregion
 
         /// <summary>
         /// JetGetCurrentIndex function determines the name of the current

@@ -26,7 +26,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         private void DetermineCapabilities()
         {
             const int Server2003BuildNumber = 2700;
-            const int VisaBuildNumber = 6000;
+            const int VistaBuildNumber = 6000;
             const int Windows7BuildNumber = 7000; // includes beta as well as RTM
 
             // Create new capabilities, set as all false. This will allow
@@ -46,7 +46,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 this.Capabilities.SupportsServer2003Features = true;
             }
 
-            if (buildNumber >= VisaBuildNumber)
+            if (buildNumber >= VistaBuildNumber)
             {
                 Trace.WriteLineIf(TraceSwitch.TraceVerbose, "Supports Vista features");
                 this.Capabilities.SupportsVistaFeatures = true;
@@ -79,13 +79,13 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             try
             {
                 this.JetCreateInstance(out instance, instanceName);
-                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
-                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.NoInformationEvent, 1, null);
-                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
-                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxCursors, 16, null);
-                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxOpenTables, 16, null);
-                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxVerPages, 4, null);
-                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxSessions, 1, null);
+                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.Recovery, new IntPtr(0), "off");
+                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.NoInformationEvent, new IntPtr(1), null);
+                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, new IntPtr(0), null);
+                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxCursors, new IntPtr(16), null);
+                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxOpenTables, new IntPtr(16), null);
+                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxVerPages, new IntPtr(4), null);
+                this.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxSessions, new IntPtr(1), null);
                 this.JetInit(ref instance);
 
                 JET_SESID sesid;

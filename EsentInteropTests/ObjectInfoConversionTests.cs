@@ -44,7 +44,7 @@ namespace InteropApiTests
             };
 
             this.managed = new JET_OBJECTINFO();
-            this.managed.SetFromNativeObjectinfo(this.native);
+            this.managed.SetFromNativeObjectinfo(ref this.native);
         }
 
         /// <summary>

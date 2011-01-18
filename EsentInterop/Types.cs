@@ -942,7 +942,12 @@ namespace Microsoft.Isam.Esent.Interop
     /// useful when there is a very large number of indexes over a table. The
     /// index ID can be retrieved using JetGetIndexInfo or JetGetTableIndexInfo.
     /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
+    /// <remarks>
+    /// The Pack attribute is necessary because the C++ version is defined as
+    /// a byte array. If the C# compiler inserts the usual padding between the IntPtr
+    /// and uint, then the structure ends up too large.
+    /// </remarks>
+    [StructLayout(LayoutKind.Sequential, Pack = 4)]
     public struct JET_INDEXID : IEquatable<JET_INDEXID>
     {
         /// <summary>

@@ -48,6 +48,7 @@ namespace InteropApiTests
         {
             Api.JetTerm(this.instance);
             Cleanup.DeleteDirectoryWithRetry(this.directory);
+            SetupHelper.CheckProcessForInstanceLeaks();
         }
 
         /// <summary>

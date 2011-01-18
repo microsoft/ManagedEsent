@@ -220,7 +220,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>An ESENT warning code.</returns>
         public static JET_wrn JetSetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, int paramValue, string paramString)
         {
-            return Api.Check(Impl.JetSetSystemParameter(instance, sesid, paramid, paramValue, paramString));
+            return Api.Check(Impl.JetSetSystemParameter(instance, sesid, paramid, new IntPtr(paramValue), paramString));
         }
 
         /// <summary>
@@ -232,7 +232,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         /// <param name="sesid">The session to use.</param>
         /// <param name="paramid">The parameter to set.</param>
-        /// <param name="paramValue">The value of the parameter to set, if the parameter is an integer type.</param>
+        /// <param name="paramValue">The value of the parameter to set, if the parameter is a JET_CALLBACK.</param>
         /// <param name="paramString">The value of the parameter to set, if the parameter is a string type.</param>
         /// <returns>An ESENT warning code.</returns>
         public static JET_wrn JetSetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, JET_CALLBACK paramValue, string paramString)
@@ -256,7 +256,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// </remarks>
         public static JET_wrn JetGetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, ref int paramValue, out string paramString, int maxParam)
         {
-            return Api.Check(Impl.JetGetSystemParameter(instance, sesid, paramid, ref paramValue, out paramString, maxParam));
+            var intValue = new IntPtr(paramValue);
+            JET_wrn wrn = Api.Check(Impl.JetGetSystemParameter(instance, sesid, paramid, ref intValue, out paramString, maxParam));
+            paramValue = intValue.ToInt32();
+
+            return wrn;
         }
 
         /// <summary>
@@ -1309,6 +1313,8 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetCreateTableColumnIndex3(sesid, dbid, tablecreate));
         }
 
+        #region JetGetTableColumnInfo overloads
+
         /// <summary>
         /// Retrieves information about a table column.
         /// </summary>
@@ -1356,6 +1362,10 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetGetTableColumnInfo(sesid, tableid, columnName, out columnlist));
         }
+
+        #endregion
+
+        #region JetGetColumnInfo overloads
 
         /// <summary>
         /// Retrieves information about a table column.
@@ -1411,6 +1421,10 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetGetColumnInfo(sesid, dbid, tablename, columnName, out columnbase));
         }
 
+        #endregion
+
+        #region JetGetObjectInfo overloads
+
         /// <summary>
         /// Retrieves information about database objects.
         /// </summary>
@@ -1421,6 +1435,26 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetGetObjectInfo(sesid, dbid, out objectlist));
         }
+
+        /// <summary>
+        /// Retrieves information about database objects.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database to use.</param>
+        /// <param name="objtyp">The type of the object.</param>
+        /// <param name="szObjectName">The object name about which to retrieve information.</param>
+        /// <param name="objectinfo">Filled in with information about the objects in the database.</param>
+        public static void JetGetObjectInfo(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            JET_objtyp objtyp,
+            string szObjectName,
+            out JET_OBJECTINFO objectinfo)
+        {
+            Api.Check(Impl.JetGetObjectInfo(sesid, dbid, objtyp, szObjectName, out objectinfo));
+        }
+
+        #endregion
 
         /// <summary>
         /// Ddetermines the name of the current
@@ -2683,6 +2717,7 @@ namespace Microsoft.Isam.Esent.Interop
         #endregion
 
         #region Misc
+
         /// <summary>
         /// Frees memory that was allocated by a database engine call.
         /// </summary>

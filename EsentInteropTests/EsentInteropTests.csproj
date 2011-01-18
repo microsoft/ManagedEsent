@@ -62,6 +62,7 @@
     <Compile Include="CallbackWrappersTests.cs" />
     <Compile Include="ColumnbaseConversionTests.cs" />
     <Compile Include="ColumnCreateValidationTests.cs" />
+    <Compile Include="ColumnInfoTests.cs" />
     <Compile Include="ColumnValueTests.cs" />
     <Compile Include="ComparableTests.cs" />
     <Compile Include="ConditionalIndexFixture.cs" />

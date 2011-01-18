@@ -357,7 +357,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="paramValue">The value of the parameter to set, if the parameter is an integer type.</param>
         /// <param name="paramString">The value of the parameter to set, if the parameter is a string type.</param>
         /// <returns>An error or warning.</returns>
-        public int JetSetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, int paramValue, string paramString)
+        public int JetSetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, IntPtr paramValue, string paramString)
         {
             TraceFunctionCall("JetSetSystemParameter");
             unsafe
@@ -365,10 +365,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 IntPtr* pinstance = (IntPtr.Zero == instance.Value) ? null : &instance.Value;
                 if (this.Capabilities.SupportsUnicodePaths)
                 {
-                    return Err(NativeMethods.JetSetSystemParameterW(pinstance, sesid.Value, (uint)paramid, new IntPtr(paramValue), paramString));
+                    return Err(NativeMethods.JetSetSystemParameterW(pinstance, sesid.Value, (uint)paramid, paramValue, paramString));
                 }
 
-                return Err(NativeMethods.JetSetSystemParameter(pinstance, sesid.Value, (uint)paramid, new IntPtr(paramValue), paramString));                
+                return Err(NativeMethods.JetSetSystemParameter(pinstance, sesid.Value, (uint)paramid, paramValue, paramString));
             }
         }
 
@@ -437,28 +437,26 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// a ref parameter and not an out parameter.
         /// </remarks>
         /// <returns>An error or warning.</returns>
-        public int JetGetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, ref int paramValue, out string paramString, int maxParam)
+        public int JetGetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, ref IntPtr paramValue, out string paramString, int maxParam)
         {
             TraceFunctionCall("JetGetSystemParameter");
             CheckNotNegative(maxParam, "maxParam");
 
             uint cbMax = checked((uint)(this.Capabilities.SupportsUnicodePaths ? maxParam * sizeof(char) : maxParam));
 
-            var intValue = new IntPtr(paramValue);
             var sb = new StringBuilder(maxParam);
             int err;
             if (this.Capabilities.SupportsUnicodePaths)
             {
-                err = Err(NativeMethods.JetGetSystemParameterW(instance.Value, sesid.Value, (uint)paramid, ref intValue, sb, cbMax));
+                err = Err(NativeMethods.JetGetSystemParameterW(instance.Value, sesid.Value, (uint)paramid, ref paramValue, sb, cbMax));
             }
             else
             {
-                err = Err(NativeMethods.JetGetSystemParameter(instance.Value, sesid.Value, (uint)paramid, ref intValue, sb, cbMax));      
+                err = Err(NativeMethods.JetGetSystemParameter(instance.Value, sesid.Value, (uint)paramid, ref paramValue, sb, cbMax));
             }
 
             paramString = sb.ToString();
             paramString = StringCache.TryToIntern(paramString);
-            paramValue = intValue.ToInt32();
             return err;
         }
 
@@ -2294,6 +2292,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             // return this.CreateTableColumnIndex2(sesid, dbid, tablecreate);
         }
 
+        #region JetGetTableColumnInfo overloads
+
         /// <summary>
         /// Retrieves information about a table column.
         /// </summary>
@@ -2387,6 +2387,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             return err;
         }
+
+        #endregion
+
+        #region JetGetColumnInfo overloads
 
         /// <summary>
         /// Retrieves information about a table column.
@@ -2495,6 +2499,47 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         }
 
         /// <summary>
+        /// Retrieves information about a column.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database that contains the table.</param>
+        /// <param name="tablename">The name of the table containing the column.</param>
+        /// <param name="columnid">The columnid of the column.</param>
+        /// <param name="columnbase">Filled in with information about the columns in the table.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetColumnInfo(
+                JET_SESID sesid,
+                JET_DBID dbid,
+                string tablename,
+                JET_COLUMNID columnid,
+                out JET_COLUMNBASE columnbase)
+        {
+            TraceFunctionCall("JetGetColumnInfo");
+            this.CheckSupportsVistaFeatures("JetGetColumnInfo");
+            CheckNotNull(tablename, "tablename");
+
+            columnbase = new JET_COLUMNBASE();
+
+            var nativeColumnbase = new NATIVE_COLUMNBASE();
+            nativeColumnbase.cbStruct = checked((uint)Marshal.SizeOf(nativeColumnbase));
+            int err = Err(NativeMethods.JetGetColumnInfo(
+                sesid.Value,
+                dbid.Value,
+                tablename,
+                ref columnid.Value,
+                ref nativeColumnbase,
+                nativeColumnbase.cbStruct,
+                (uint)VistaColInfo.BaseByColid));
+            columnbase = new JET_COLUMNBASE(nativeColumnbase);
+
+            return err;
+        }
+
+        #endregion
+
+        #region JetGetObjectInfo overloads
+
+        /// <summary>
         /// Retrieves information about database objects.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
@@ -2521,6 +2566,43 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             return err;
         }
+
+        /// <summary>
+        /// Retrieves information about database objects.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database to use.</param>
+        /// <param name="objtyp">The type of the object.</param>
+        /// <param name="szObjectName">The object name about which to retrieve information.</param>
+        /// <param name="objectinfo">Filled in with information about the objects in the database.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetObjectInfo(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            JET_objtyp objtyp,
+            string szObjectName,
+            out JET_OBJECTINFO objectinfo)
+        {
+            TraceFunctionCall("JetGetObjectInfo");
+            objectinfo = new JET_OBJECTINFO();
+
+            var nativeObjectinfo = new NATIVE_OBJECTINFO();
+            nativeObjectinfo.cbStruct = checked((uint)Marshal.SizeOf(nativeObjectinfo));
+            int err = Err(NativeMethods.JetGetObjectInfo(
+                sesid.Value,
+                dbid.Value,
+                (uint)objtyp,
+                null,
+                szObjectName,
+                ref nativeObjectinfo,
+                nativeObjectinfo.cbStruct,
+                (uint)JET_ObjInfo.NoStats));
+            objectinfo.SetFromNativeObjectinfo(ref nativeObjectinfo);
+
+            return err;
+        }
+
+        #endregion
 
         /// <summary>
         /// JetGetCurrentIndex function determines the name of the current
@@ -2576,7 +2658,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     (uint)infoLevel));
 
             result = new JET_OBJECTINFO();
-            result.SetFromNativeObjectinfo(nativeResult);
+            result.SetFromNativeObjectinfo(ref nativeResult);
             return err;
         }
 

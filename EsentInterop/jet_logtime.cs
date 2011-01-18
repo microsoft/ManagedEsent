@@ -20,7 +20,7 @@ namespace Microsoft.Isam.Esent.Interop
         Justification = "This should match the name of the unmanaged structure.")]
     [StructLayout(LayoutKind.Sequential)]
     [Serializable]
-    public struct JET_LOGTIME : IEquatable<JET_LOGTIME>, IJET_LOGTIME
+    public partial struct JET_LOGTIME : IEquatable<JET_LOGTIME>, IJET_LOGTIME
     {
         /// <summary>
         /// The time in seconds. This value can be 0 to 59.

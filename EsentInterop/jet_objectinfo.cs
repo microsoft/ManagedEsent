@@ -118,7 +118,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="value">
         /// The native objectlist to set the values from.
         /// </param>
-        internal void SetFromNativeObjectinfo(NATIVE_OBJECTINFO value)
+        internal void SetFromNativeObjectinfo(ref NATIVE_OBJECTINFO value)
         {
             unchecked
             {

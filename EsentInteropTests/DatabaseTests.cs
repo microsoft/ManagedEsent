@@ -17,6 +17,19 @@ namespace InteropApiTests
     [TestClass]
     public class DatabaseTests
     {
+        #region Setup/Teardown
+
+        /// <summary>
+        /// Verifies no instances are leaked.
+        /// </summary>
+        [TestCleanup]
+        public void Teardown()
+        {
+            SetupHelper.CheckProcessForInstanceLeaks();
+        }
+
+        #endregion
+
         /// <summary>
         /// Create a database, attach, open, close and detach
         /// </summary>

@@ -138,9 +138,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the two instances are equal.</returns>
         public bool Equals(JET_SIGNATURE other)
         {
-            bool namesAreEqual = (null == this.szComputerName && null == other.szComputerName)
+            bool namesAreEqual = (string.IsNullOrEmpty(this.szComputerName) && string.IsNullOrEmpty(other.szComputerName))
                                  ||
-                                 (null != this.szComputerName && null != other.szComputerName &&
+                                 (!string.IsNullOrEmpty(this.szComputerName) && !string.IsNullOrEmpty(other.szComputerName) &&
                                   this.szComputerName == other.szComputerName);
             return namesAreEqual
                    && this.ulRandom == other.ulRandom

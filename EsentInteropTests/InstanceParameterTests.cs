@@ -16,7 +16,7 @@ namespace InteropApiTests
     /// Test the InstanceParameters class.
     /// </summary>
     [TestClass]
-    public class InstanceParameterTests
+    public partial class InstanceParameterTests
     {
         /// <summary>
         /// Instance to use.
@@ -129,6 +129,19 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test setting the EventSource property sets the parameter on the instance.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting the EventSource property sets the parameter on the instance")]
+        public void VerifySetInstanceParametersEventSource()
+        {
+            string expected = Any.String;
+            this.instanceParameters.EventSource = expected;
+            Assert.AreEqual(expected, this.GetStringParameter(JET_param.EventSource));
+        }
+
+        /// <summary>
         /// Test the event source key property.
         /// </summary>
         [TestMethod]
@@ -142,16 +155,16 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test setting the EventSource property sets the parameter on the instance.
+        /// Test setting the EventSourceKey property sets the parameter on the instance.
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Test setting the EventSource property sets the parameter on the instance")]
-        public void VerifySetInstanceParametersEventSource()
+        [Description("Test setting the EventSourceKey property sets the parameter on the instance")]
+        public void VerifySetInstanceParametersEventSourceKey()
         {
             string expected = Any.String;
-            this.instanceParameters.EventSource = expected;
-            Assert.AreEqual(expected, this.GetStringParameter(JET_param.EventSource));
+            this.instanceParameters.EventSourceKey = expected;
+            Assert.AreEqual(expected, this.GetStringParameter(JET_param.EventSourceKey));
         }
 
         /// <summary>
@@ -708,6 +721,44 @@ namespace InteropApiTests
             bool expected = Any.Boolean;
             this.instanceParameters.NoInformationEvent = expected;
             Assert.AreEqual(expected, this.GetBooleanParameter(JET_param.NoInformationEvent));
+        }
+
+        /// <summary>
+        /// Test setting the one database per session property to true.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting the one database per session property to true")]
+        public void SetAndRetrieveInstanceParametersOneDatabasePerSessionOn()
+        {
+            this.instanceParameters.OneDatabasePerSession = true;
+            Assert.IsTrue(this.instanceParameters.OneDatabasePerSession);
+        }
+
+        /// <summary>
+        /// Test setting the one database per session property to false.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting the one database per session property to false")]
+        public void SetAndRetrieveInstanceParametersOneDatabasePerSessionOff()
+        {
+            this.instanceParameters.OneDatabasePerSession = false;
+            Assert.IsFalse(this.instanceParameters.OneDatabasePerSession);
+        }
+
+        /// <summary>
+        /// Setting the OneDatabasePerSession property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Setting the OneDatabasePerSession property should set the parameter on the instance")]
+        public void VerifySetInstanceParametersOneDatabasePerSession()
+        {
+            bool expected = Any.Boolean;
+            this.instanceParameters.OneDatabasePerSession = expected;
+            Assert.AreEqual(expected, this.GetBooleanParameter(JET_param.OneDatabasePerSession));
         }
 
         /// <summary>

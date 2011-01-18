@@ -6,6 +6,7 @@
 
 namespace InteropApiTests
 {
+    using System;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Implementation;
     using Microsoft.Isam.Esent.Interop.Vista;
@@ -17,7 +18,7 @@ namespace InteropApiTests
     /// this is tested with a mock IJetApi.
     /// </summary>
     [TestClass]
-    public class SystemParameterTests
+    public partial class SystemParameterTests
     {
         /// <summary>
         /// Mock object repository.
@@ -77,7 +78,7 @@ namespace InteropApiTests
         {
             Expect.Call(
                 this.mockApi.JetSetSystemParameter(
-                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.CacheSizeMax, 64, null)).Return(1);
+                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.CacheSizeMax, new IntPtr(64), null)).Return(1);
             this.repository.ReplayAll();
             SystemParameters.CacheSizeMax = 64;
             this.repository.VerifyAll();
@@ -93,7 +94,7 @@ namespace InteropApiTests
         {
             Expect.Call(
                 this.mockApi.JetSetSystemParameter(
-                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.CacheSize, 64, null)).Return(1);
+                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.CacheSize, new IntPtr(64), null)).Return(1);
             this.repository.ReplayAll();
             SystemParameters.CacheSize = 64;
             this.repository.VerifyAll();
@@ -109,9 +110,41 @@ namespace InteropApiTests
         {
             Expect.Call(
                 this.mockApi.JetSetSystemParameter(
-                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.CacheSizeMin, 64, null)).Return(1);
+                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.CacheSizeMin, new IntPtr(64), null)).Return(1);
             this.repository.ReplayAll();
             SystemParameters.CacheSizeMin = 64;
+            this.repository.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verify that setting the property sets the system parameter
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify that setting SystemParameters.StartFlushThreshold sets JET_param.StartFlushThreshold")]
+        public void VerifySettingStartFlushThreshold()
+        {
+            Expect.Call(
+                this.mockApi.JetSetSystemParameter(
+                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.StartFlushThreshold, new IntPtr(65), null)).Return(1);
+            this.repository.ReplayAll();
+            SystemParameters.StartFlushThreshold = 65;
+            this.repository.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verify that setting the property sets the system parameter
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify that setting SystemParameters.StopFlushThreshold sets JET_param.StopFlushThreshold")]
+        public void VerifySettingStopFlushThreshold()
+        {
+            Expect.Call(
+                this.mockApi.JetSetSystemParameter(
+                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.StopFlushThreshold, new IntPtr(66), null)).Return(1);
+            this.repository.ReplayAll();
+            SystemParameters.StopFlushThreshold = 66;
             this.repository.VerifyAll();
         }
 
@@ -125,7 +158,7 @@ namespace InteropApiTests
         {
             Expect.Call(
                 this.mockApi.JetSetSystemParameter(
-                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.DatabasePageSize, 4096, null)).Return(1);
+                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.DatabasePageSize, new IntPtr(4096), null)).Return(1);
             this.repository.ReplayAll();
             SystemParameters.DatabasePageSize = 4096;
             this.repository.VerifyAll();
@@ -141,9 +174,25 @@ namespace InteropApiTests
         {
             Expect.Call(
                 this.mockApi.JetSetSystemParameter(
-                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.MaxInstances, 12, null)).Return(1);
+                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.MaxInstances, new IntPtr(12), null)).Return(1);
             this.repository.ReplayAll();
             SystemParameters.MaxInstances = 12;
+            this.repository.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verify that setting the property sets the system parameter
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify that setting SystemParameters.EventLoggingLevel sets JET_param.EventLoggingLevel")]
+        public void VerifySettingEventLoggingLevel()
+        {
+            Expect.Call(
+                this.mockApi.JetSetSystemParameter(
+                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.EventLoggingLevel, new IntPtr(13), null)).Return(1);
+            this.repository.ReplayAll();
+            SystemParameters.EventLoggingLevel = 13;
             this.repository.VerifyAll();
         }
 
@@ -157,7 +206,7 @@ namespace InteropApiTests
         {
             Expect.Call(
                 this.mockApi.JetSetSystemParameter(
-                    JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.Configuration, 0, null)).Return(1);
+                    JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.Configuration, new IntPtr(0), null)).Return(1);
             this.repository.ReplayAll();
             SystemParameters.Configuration = 0;
             this.repository.VerifyAll();
@@ -173,7 +222,7 @@ namespace InteropApiTests
         {
             Expect.Call(
                 this.mockApi.JetSetSystemParameter(
-                    JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.EnableAdvanced, 1, null)).Return(1);
+                    JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.EnableAdvanced, new IntPtr(1), null)).Return(1);
             this.repository.ReplayAll();
             SystemParameters.EnableAdvanced = true;
             this.repository.VerifyAll();
@@ -189,7 +238,7 @@ namespace InteropApiTests
         {
             Expect.Call(
                 this.mockApi.JetSetSystemParameter(
-                    JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.EnableAdvanced, 0, null)).Return(1);
+                    JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.EnableAdvanced, new IntPtr(0), null)).Return(1);
             this.repository.ReplayAll();
             SystemParameters.EnableAdvanced = false;
             this.repository.VerifyAll();

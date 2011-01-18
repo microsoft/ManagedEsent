@@ -16,5 +16,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// about all object in the table.
         /// </summary>
         ListNoStats = 1,
+
+        /// <summary>
+        /// Retrieve a JET_OBJINFO containing information
+        /// about all object in the table.
+        /// </summary>
+        NoStats = 5,
     }
 }

@@ -54,6 +54,7 @@ namespace InteropApiTests
         public void Teardown()
         {
             this.instance.Term();
+            SetupHelper.CheckProcessForInstanceLeaks();
         }
 
         #region Sort data with a temporary table

@@ -1049,5 +1049,76 @@ namespace Microsoft.Isam.Esent.Interop
                 this._bkinfoDiffPrev = native.bkinfoDiffPrev;
             }
         }
+
+        /// <summary>
+        /// Calculates the native version of the structure.
+        /// </summary>
+        /// <returns>The native version of the structure.</returns>
+        internal NATIVE_DBINFOMISC GetNativeDbinfomisc()
+        {
+            NATIVE_DBINFOMISC native = new NATIVE_DBINFOMISC();
+
+            unchecked
+            {
+                native.ulVersion = (uint)this._ulVersion;
+                native.ulUpdate = (uint)this._ulUpdate;
+                native.signDb = this._signDb.GetNativeSignature();
+                native.dbstate = (uint)this._dbstate;
+                native.lgposConsistent = this._lgposConsistent;
+                native.logtimeConsistent = this._logtimeConsistent;
+                native.logtimeAttach = this._logtimeAttach;
+                native.lgposAttach = this._lgposAttach;
+                native.logtimeDetach = this._logtimeDetach;
+                native.lgposDetach = this._lgposDetach;
+                native.signLog = this._signLog.GetNativeSignature();
+                native.bkinfoFullPrev = this._bkinfoFullPrev;
+                native.bkinfoIncPrev = this._bkinfoIncPrev;
+                native.bkinfoFullCur = this._bkinfoFullCur;
+                native.fShadowingDisabled = this._fShadowingDisabled ? 1u : 0u;
+                native.fUpgradeDb = this._fUpgradeDb ? 1u : 0u;
+                native.dwMajorVersion = (uint)this._dwMajorVersion;
+                native.dwMinorVersion = (uint)this._dwMinorVersion;
+                native.dwBuildNumber = (uint)this._dwBuildNumber;
+                native.lSPNumber = (uint)this._lSPNumber;
+                native.cbPageSize = (uint)this._cbPageSize;
+            }
+
+            return native;
+        }
+
+        /// <summary>
+        /// Calculates the native version of the structure.
+        /// </summary>
+        /// <returns>The native version of the structure.</returns>
+        internal NATIVE_DBINFOMISC4 GetNativeDbinfomisc4()
+        {
+            NATIVE_DBINFOMISC4 native = new NATIVE_DBINFOMISC4();
+
+            native.dbinfo = this.GetNativeDbinfomisc();
+
+            unchecked
+            {
+                native.genMinRequired = (uint)this._genMinRequired;
+                native.genMaxRequired = (uint)this._genMaxRequired;
+                native.logtimeGenMaxCreate = this._logtimeGenMaxCreate;
+                native.ulRepairCount = (uint)this._ulRepairCount;
+                native.logtimeRepair = this._logtimeRepair;
+                native.ulRepairCountOld = (uint)this._ulRepairCountOld;
+                native.ulECCFixSuccess = (uint)this._ulECCFixSuccess;
+                native.logtimeECCFixSuccess = this._logtimeECCFixSuccess;
+                native.ulECCFixSuccessOld = (uint)this._ulECCFixSuccessOld;
+                native.ulECCFixFail = (uint)this._ulECCFixFail;
+                native.logtimeECCFixFail = this._logtimeECCFixFail;
+                native.ulECCFixFailOld = (uint)this._ulECCFixFailOld;
+                native.ulBadChecksum = (uint)this._ulBadChecksum;
+                native.logtimeBadChecksum = this._logtimeBadChecksum;
+                native.ulBadChecksumOld = (uint)this._ulBadChecksumOld;
+                native.genCommitted = (uint)this._genCommitted;
+                native.bkinfoCopyPrev = this._bkinfoCopyPrev;
+                native.bkinfoDiffPrev = this._bkinfoDiffPrev;
+            }
+
+            return native;
+        }
     }
 }

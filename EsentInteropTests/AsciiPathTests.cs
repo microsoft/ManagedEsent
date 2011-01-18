@@ -33,6 +33,8 @@ namespace InteropApiTests
         /// </summary>
         private IJetApi savedImpl;
 
+        #region Setup/Teardown
+
         /// <summary>
         /// Test setup
         /// </summary>
@@ -57,7 +59,10 @@ namespace InteropApiTests
         {
             Api.Impl = this.savedImpl;
             Cleanup.DeleteDirectoryWithRetry(this.directory);
+            SetupHelper.CheckProcessForInstanceLeaks();
         }
+
+        #endregion
 
         /// <summary>
         /// Set and retrieve an ASCII system path.
@@ -279,6 +284,7 @@ namespace InteropApiTests
         [Description("Test snapshot backups with an ASCII path")]
         public void SnapshotBackupWithAsciiPath()
         {
+            Assert.Inconclusive("ESE adds ContinueAfterThaw option, but OSSnapshotEnd isn't called here because of versioning");
             var test = new DatabaseFileTestHelper("database");
             test.TestSnapshotBackup();
         }
@@ -329,18 +335,6 @@ namespace InteropApiTests
         {
             var test = new DatabaseFileTestHelper("database");
             test.TestSetDatabaseSize();
-        }
-
-        /// <summary>
-        /// Test JetGetDatabaseFileInfo with an ASCII path.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        [Description("Test JetGetDatabaseFileInfo with an ASCII path.")]
-        public void TestJetGetDatabaseFileInfoWithAsciiPath()
-        {
-            var test = new DatabaseFileTestHelper("database");
-            test.TestGetDatabaseFileInfo();
         }
 
         /// <summary>

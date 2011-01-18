@@ -162,8 +162,6 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
         public static extern int JetSetDatabaseSizeW(IntPtr sesid, string szDatabaseName, uint cpg, out uint pcpgReal);
 
-        #region JetGetDatabaseInfo
-
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetGetDatabaseInfo(IntPtr sesid, uint dbid, out int intValue, uint cbMax, uint InfoLevel);
 
@@ -210,8 +208,6 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         // Unicode, JET_DBINFOMISC
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetGetDatabaseFileInfoW(string szFilename, out NATIVE_DBINFOMISC dbinfomisc, uint cbMax, uint InfoLevel);
-
-        #endregion
 
         #endregion
 
@@ -506,7 +502,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern int JetGetColumnInfo(IntPtr sesid, uint dbid, string szTableName, string szColumnName, ref NATIVE_COLUMNLIST columnlist, uint cbMax, uint InfoLevel);
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
-        public static extern int JetGetColumnInfo(IntPtr sesid, uint dbid, string szTableName, string szColumnName, ref NATIVE_COLUMNBASE columnlist, uint cbMax, uint InfoLevel);
+        public static extern int JetGetColumnInfo(IntPtr sesid, uint dbid, string szTableName, string szColumnName, ref NATIVE_COLUMNBASE columnbase, uint cbMax, uint InfoLevel);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetGetColumnInfo(IntPtr sesid, uint dbid, string szTableName, ref uint pcolumnid, ref NATIVE_COLUMNBASE columnbase, uint cbMax, uint InfoLevel);
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetGetObjectInfo(
@@ -516,6 +515,17 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             string szContainerName,
             string szObjectName,
             [In] [Out] ref NATIVE_OBJECTLIST objectlist,
+            uint cbMax,
+            uint InfoLevel);
+
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        public static extern int JetGetObjectInfo(
+            IntPtr sesid,
+            uint dbid,
+            uint objtyp,
+            string szContainerName,
+            string szObjectName,
+            [In] [Out] ref NATIVE_OBJECTINFO objectinfo,
             uint cbMax,
             uint InfoLevel);
 

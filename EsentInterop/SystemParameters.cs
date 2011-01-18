@@ -86,6 +86,61 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Gets or sets the threshold at which the database page cache begins evicting pages from the
+        /// cache to make room for pages that are not cached. When the number of page buffers in the cache
+        /// drops below this threshold then a background process will be started to replenish that pool
+        /// of available buffers. This threshold is always relative to the maximum cache size as set by
+        /// JET_paramCacheSizeMax. This threshold must also always be less than the stop threshold as
+        /// set by JET_paramStopFlushThreshold.
+        /// <para>
+        /// The distance height of the start threshold will determine the response time that the database
+        ///  page cache must have to produce available buffers before the application needs them. A high
+        /// start threshold will give the background process more time to react. However, a high start
+        /// threshold implies a higher stop threshold and that will reduce the effective size of the
+        /// database page cache.
+        /// </para>
+        /// </summary>
+        public static int StartFlushThreshold
+        {
+            get
+            {
+                return GetIntegerParameter(JET_param.StartFlushThreshold);
+            }
+
+            set
+            {
+                SetIntegerParameter(JET_param.StartFlushThreshold, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the threshold at which the database page cache ends evicting pages from the cache to make
+        /// room for pages that are not cached. When the number of page buffers in the cache rises above
+        /// this threshold then the background process that was started to replenish that pool of available
+        /// buffers is stopped. This threshold is always relative to the maximum cache size as set by
+        /// JET_paramCacheSizeMax. This threshold must also always be greater than the start threshold
+        /// as set by JET_paramStartFlushThreshold.
+        /// <para>
+        /// The distance between the start threshold and the stop threshold affects the efficiency with
+        /// which database pages are flushed by the background process. A larger gap will make it
+        /// more likely that writes to neighboring pages may be combined. However, a high stop
+        /// threshold will reduce the effective size of the database page cache.
+        /// </para>
+        /// </summary>
+        public static int StopFlushThreshold
+        {
+            get
+            {
+                return GetIntegerParameter(JET_param.StopFlushThreshold);
+            }
+
+            set
+            {
+                SetIntegerParameter(JET_param.StopFlushThreshold, value);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the maximum number of instances that can be created.
         /// </summary>
         public static int MaxInstances
@@ -98,6 +153,24 @@ namespace Microsoft.Isam.Esent.Interop
             set
             {
                 SetIntegerParameter(JET_param.MaxInstances, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the detail level of eventlog messages that are emitted
+        /// to the eventlog by the database engine. Higher numbers will result
+        /// in more detailed eventlog messages.
+        /// </summary>
+        public static int EventLoggingLevel
+        {
+            get
+            {
+                return GetIntegerParameter(JET_param.EventLoggingLevel);
+            }
+
+            set
+            {
+                SetIntegerParameter(JET_param.EventLoggingLevel, value);
             }
         }
 

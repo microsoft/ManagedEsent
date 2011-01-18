@@ -104,6 +104,7 @@ namespace InteropApiTests
             Api.JetEndSession(this.sesid, EndSessionGrbit.None);
             Api.JetTerm(this.instance);
             Cleanup.DeleteDirectoryWithRetry(this.directory);
+            SetupHelper.CheckProcessForInstanceLeaks();
         }
 
         /// <summary>

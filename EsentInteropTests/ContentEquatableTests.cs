@@ -17,7 +17,7 @@ namespace InteropApiTests
     /// Tests for classes that implement IContentEquals and IDeepCloneable
     /// </summary>
     [TestClass]
-    public class ContentEquatableTests
+    public partial class ContentEquatableTests
     {
         /// <summary>
         /// Check that JET_CONDITIONALCOLUMN objects can be

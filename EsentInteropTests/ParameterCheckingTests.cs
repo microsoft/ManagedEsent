@@ -45,6 +45,18 @@ namespace InteropApiTests
         /// </summary>
         private readonly JET_DBID dbid = JET_DBID.Nil;
 
+        #region Setup/Teardown
+        /// <summary>
+        /// Verifies no instances are leaked.
+        /// </summary>
+        [TestCleanup]
+        public void Teardown()
+        {
+            SetupHelper.CheckProcessForInstanceLeaks();
+        }
+
+        #endregion
+
         #region System Parameter tests
 
         /// <summary>

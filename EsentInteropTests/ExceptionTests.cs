@@ -115,6 +115,7 @@ namespace InteropApiTests
         {
             var mocks = new MockRepository();
             var mockApi = mocks.StrictMock<IJetApi>();
+            var rawErrorValue = new IntPtr(-9999);
             using (new ApiTestHook(mockApi))
             {
                 const string ExpectedDescription = "Error Description";
@@ -123,7 +124,7 @@ namespace InteropApiTests
                         Arg<JET_INSTANCE>.Is.Anything,
                         Arg<JET_SESID>.Is.Anything,
                         Arg<JET_param>.Is.Equal(JET_param.ErrorToString),
-                        ref Arg<int>.Ref(Is.Equal(-9999), -9999).Dummy,
+                        ref Arg<IntPtr>.Ref(Is.Equal(rawErrorValue), rawErrorValue).Dummy,
                         out Arg<string>.Out(ExpectedDescription).Dummy,
                         Arg<int>.Is.Anything))                
                     .Return((int)JET_err.Success);
@@ -145,6 +146,7 @@ namespace InteropApiTests
         {
             var mocks = new MockRepository();
             var mockApi = mocks.StrictMock<IJetApi>();
+            var rawErrorValue = new IntPtr(-9999);
             using (new ApiTestHook(mockApi))
             {
                 Expect.Call(
@@ -152,7 +154,7 @@ namespace InteropApiTests
                         Arg<JET_INSTANCE>.Is.Anything,
                         Arg<JET_SESID>.Is.Anything,
                         Arg<JET_param>.Is.Equal(JET_param.ErrorToString),
-                        ref Arg<int>.Ref(Is.Equal(-9999), -9999).Dummy,
+                        ref Arg<IntPtr>.Ref(Is.Equal(rawErrorValue), rawErrorValue).Dummy,
                         out Arg<string>.Out(null).Dummy,
                         Arg<int>.Is.Anything))
                     .Return((int)JET_err.InvalidParameter);

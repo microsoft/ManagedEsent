@@ -21,6 +21,19 @@ namespace InteropApiTests
     [TestClass]
     public class InstanceTests
     {
+        #region Setup/Teardown
+
+        /// <summary>
+        /// Verifies no instances are leaked.
+        /// </summary>
+        [TestCleanup]
+        public void Teardown()
+        {
+            SetupHelper.CheckProcessForInstanceLeaks();
+        }
+
+        #endregion
+
         /// <summary>
         /// Allocate an instance, but don't initialize it.
         /// </summary>
@@ -197,6 +210,108 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// When JetInit3 fails the instance isn't initialized
+        /// so it shouldn't be terminated.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify JetTerm is not called when JetInit3 fails")]
+        public void VerifyInstanceDoesNotCallJetTermWhenJetInit3Fails()
+        {
+            var mocks = new MockRepository();
+            var mockApi = mocks.StrictMock<IJetApi>();
+            using (new ApiTestHook(mockApi))
+            {
+                var jetInstance = new JET_INSTANCE { Value = (IntPtr)0x1 };
+
+                Expect.Call(
+                    mockApi.JetCreateInstance2(
+                        out Arg<JET_INSTANCE>.Out(jetInstance).Dummy,
+                        Arg<string>.Is.Anything,
+                        Arg<string>.Is.Anything,
+                        Arg<CreateInstanceGrbit>.Is.Anything))
+                    .Return((int)JET_err.Success);
+                Expect.Call(
+                    mockApi.JetInit3(
+                        ref Arg<JET_INSTANCE>.Ref(Is.Equal(jetInstance), JET_INSTANCE.Nil).Dummy,
+                        Arg<JET_RSTINFO>.Is.Anything,
+                        Arg<InitGrbit>.Is.Anything))
+                    .Return((int)JET_err.OutOfMemory);
+                mocks.ReplayAll();
+
+                try
+                {
+                    using (var instance = new Instance("testfail4"))
+                    {
+                        instance.Init(null, InitGrbit.None);
+                        Assert.Fail("Expected an EsentErrorException");
+                    }
+                }
+                catch (EsentErrorException)
+                {
+                    // expected
+                }
+
+                mocks.VerifyAll();
+            }
+        }
+
+        /// <summary>
+        /// When JetInit3 fails the instance isn't initialized
+        /// so we shouldn't be able to use it.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify JetTerm is not called when JetInit3 fails")]
+        public void VerifyInitThrowsExceptionAfterJetInit3Fails()
+        {
+            var mocks = new MockRepository();
+            var mockApi = mocks.StrictMock<IJetApi>();
+            using (new ApiTestHook(mockApi))
+            {
+                var jetInstance = new JET_INSTANCE { Value = (IntPtr)0x1 };
+
+                Expect.Call(
+                    mockApi.JetCreateInstance2(
+                        out Arg<JET_INSTANCE>.Out(jetInstance).Dummy,
+                        Arg<string>.Is.Anything,
+                        Arg<string>.Is.Anything,
+                        Arg<CreateInstanceGrbit>.Is.Anything))
+                    .Return((int)JET_err.Success);
+                Expect.Call(
+                    mockApi.JetInit3(
+                        ref Arg<JET_INSTANCE>.Ref(Is.Equal(jetInstance), JET_INSTANCE.Nil).Dummy,
+                        Arg<JET_RSTINFO>.Is.Anything,
+                        Arg<InitGrbit>.Is.Anything))
+                    .Return((int)JET_err.OutOfMemory);
+                mocks.ReplayAll();
+
+                Instance instance = new Instance("testfail5");
+                try
+                {
+                    instance.Init(null, InitGrbit.None);
+                    Assert.Fail("Expected an EsentErrorException");
+                }
+                catch (EsentErrorException)
+                {
+                    // expected
+                }
+
+                mocks.VerifyAll();
+
+                try
+                {
+                    instance.Init();
+                    Assert.Fail("Expected an ObjectDisposedException");
+                }
+                catch (ObjectDisposedException)
+                {
+                    // Expected
+                }
+            }
+        }
+
+        /// <summary>
         /// Allocate an instance and initialize it.
         /// </summary>
         [TestMethod]
@@ -253,6 +368,23 @@ namespace InteropApiTests
                 instance.Init();
                 instance.Term();
                 Cleanup.DeleteDirectoryWithRetry(dir);    // only works if the instance is terminated
+            }
+        }
+
+        /// <summary>
+        /// Initialize an instance with recovery options.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Initialize an instance with recovery options")]
+        public void InitWithRecoveryOptions()
+        {
+            using (var instance = new Instance("initwithrecoveryoptions"))
+            {
+                instance.Parameters.MaxTemporaryTables = 0;
+                instance.Parameters.Recovery = false;
+                instance.Parameters.NoInformationEvent = true;
+                instance.Init(null, InitGrbit.None);
             }
         }
 
@@ -338,6 +470,21 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Make sure that calling Init3 on a disposed object throws an
+        /// exception.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that calling Init3 on a disposed Instance throws an exception")]
+        [ExpectedException(typeof(ObjectDisposedException))]
+        public void Init3ThrowsExceptionWhenInstanceIsDisposed()
+        {
+            var instance = new Instance("disposed3");
+            instance.Dispose();
+            instance.Init(null, InitGrbit.None);
+        }
+
+        /// <summary>
         /// Make sure that calling Term on a disposed object throws an
         /// exception.
         /// </summary>
@@ -374,7 +521,8 @@ namespace InteropApiTests
 
             // If unloading the AppDomain didn't terminate the instance
             // this will fail with an InstanceNameInUse error.
-            new InstanceWrapper();
+            var instanceWrapper = new InstanceWrapper();
+            instanceWrapper.Cleanup();
         }
 
         /// <summary>
@@ -524,6 +672,16 @@ namespace InteropApiTests
             {
                 this.instance = new Instance("InstanceWrapper");
                 SetupHelper.SetLightweightConfiguration(this.instance);
+            }
+
+            /// <summary>
+            /// Cleans up resources.
+            /// </summary>
+            public void Cleanup()
+            {
+                using (this.instance)
+                {
+                }
             }
         }
     }

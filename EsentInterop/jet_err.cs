@@ -154,6 +154,11 @@ namespace Microsoft.Isam.Esent.Interop
         CannotSeparateIntrinsicLV = -416,
 
         /// <summary>
+        /// Operation not supported on separated long-value
+        /// </summary>
+        SeparatedLongValue = -421,
+
+        /// <summary>
         /// Logged operation cannot be redone
         /// </summary>
         InvalidLoggedOperation = -500,
@@ -537,6 +542,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// OS does not provide support for Unicode normalisation (and no normalisation callback was specified)
         /// </summary>
         UnicodeNormalizationNotSupported = -603,
+
+        /// <summary>
+        /// Can not validate the language
+        /// </summary>
+        UnicodeLanguageValidationFailure = -604,
 
         /// <summary>
         /// Existing log file has bad signature

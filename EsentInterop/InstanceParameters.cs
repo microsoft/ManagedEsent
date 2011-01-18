@@ -32,7 +32,10 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Initializes a new instance of the InstanceParameters class.
         /// </summary>
-        /// <param name="instance">The instance to set parameters on.</param>
+        /// <param name="instance">
+        /// The instance to set parameters on. If this is JET_INSTANCE.Nil,
+        /// then the settings affect the default settings of future instances.
+        /// </param>
         public InstanceParameters(JET_INSTANCE instance)
         {
             this.instance = instance;
@@ -514,6 +517,24 @@ namespace Microsoft.Isam.Esent.Interop
             set
             {
                 this.SetBoolParameter(JET_param.NoInformationEvent, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether only one database is allowed to
+        /// be opened using JetOpenDatabase by a given session at one time.
+        /// The temporary database is excluded from this restriction. 
+        /// </summary>
+        public bool OneDatabasePerSession
+        {
+            get
+            {
+                return this.GetBoolParameter(JET_param.OneDatabasePerSession);
+            }
+
+            set
+            {
+                this.SetBoolParameter(JET_param.OneDatabasePerSession, value);
             }
         }
 

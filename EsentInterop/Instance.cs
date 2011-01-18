@@ -11,6 +11,8 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Globalization;
     using System.Runtime.CompilerServices;
     using System.Security.Permissions;
+
+    using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Win32.SafeHandles;
 
     /// <summary>
@@ -172,6 +174,38 @@ namespace Microsoft.Isam.Esent.Interop
                 // Remember that a failure in JetInit can zero the handle
                 // and that JetTerm should not be called in that case.
                 Api.JetInit2(ref instance, grbit);
+            }
+            finally
+            {
+                this.SetHandle(instance.Value);
+            }
+        }
+
+        /// <summary>
+        /// Initialize the JET_INSTANCE. This API requires at least the
+        /// Vista version of ESENT.
+        /// </summary>
+        /// <param name="recoveryOptions">
+        /// Additional recovery parameters for remapping databases during
+        /// recovery, position where to stop recovery at, or recovery status.
+        /// </param>
+        /// <param name="grbit">
+        /// Initialization options.
+        /// </param>
+        [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
+        public void Init(JET_RSTINFO recoveryOptions, InitGrbit grbit)
+        {
+            this.CheckObjectIsNotDisposed();
+            JET_INSTANCE instance = this.JetInstance;
+
+            // Use a constrained region so that the handle is
+            // always set after JetInit3 is called.
+            RuntimeHelpers.PrepareConstrainedRegions();
+            try
+            {
+                // Remember that a failure in JetInit can zero the handle
+                // and that JetTerm should not be called in that case.
+                VistaApi.JetInit3(ref instance, recoveryOptions, grbit);
             }
             finally
             {

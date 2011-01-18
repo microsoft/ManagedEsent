@@ -67,6 +67,7 @@ namespace InteropApiTests
         public void Teardown()
         {
             this.instance.Term();
+            SetupHelper.CheckProcessForInstanceLeaks();
         }
 
         #endregion Setup/Teardown

@@ -519,5 +519,45 @@ namespace InteropApiTests
         {
             Assert.AreEqual(this.native.bkinfoDiffPrev, this.managed.bkinfoDiffPrev);
         }
+
+        /// <summary>
+        /// Verify that GetNativeDbinfomisc4 works.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that GetNativeDbinfomisc4 works.")]
+        public void VerifyGetNativeDbInfoMisc()
+        {
+            // We need to test GetNativeDbinfomisc4
+            var nativeDbinfoMisc4 = this.managed.GetNativeDbinfomisc4();
+            var reconstituted = new JET_DBINFOMISC();
+            reconstituted.SetFromNativeDbinfoMisc(ref nativeDbinfoMisc4);
+            Assert.IsTrue(reconstituted.Equals(this.managed));
+        }
+
+        /// <summary>
+        /// Verify that GetNativeDbinfomisc4 works with some variables complemented.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that GetNativeDbinfomisc4 works with some variables complemented.")]
+        public void VerifyGetNativeDbInfoMiscWithaLthernate()
+        {
+            // We need to test GetNativeDbinfomisc4 with some alternate values.
+            // In order to do that, we need to change some variables around,
+            // but this is an easy (if convoluted!) way of duplicating the object.
+            var nativeDbinfoMisc4 = this.managed.GetNativeDbinfomisc4();
+            var reconstituted = new JET_DBINFOMISC();
+            reconstituted.SetFromNativeDbinfoMisc(ref nativeDbinfoMisc4);
+            Assert.IsTrue(reconstituted.Equals(this.managed));
+
+            // Now change some variables to exercise other code paths.
+            reconstituted.fUpgradeDb = !reconstituted.fUpgradeDb;
+            reconstituted.fShadowingDisabled = !reconstituted.fShadowingDisabled;
+            var nativeOpposite = reconstituted.GetNativeDbinfomisc4();
+            var managedOpposite = new JET_DBINFOMISC();
+            managedOpposite.SetFromNativeDbinfoMisc(ref nativeOpposite);
+            Assert.IsTrue(reconstituted.Equals(managedOpposite));
+        }
     }
 }

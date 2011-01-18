@@ -25,6 +25,8 @@ namespace InteropApiTests
         /// </summary>
         private JET_RECSIZE managed;
 
+        #region Setup/Teardown
+
         /// <summary>
         /// Initialize the native and managed objects.
         /// </summary>
@@ -45,6 +47,17 @@ namespace InteropApiTests
             };
             this.native = this.managed.GetNativeRecsize();
         }
+
+        /// <summary>
+        /// Verifies no instances are leaked.
+        /// </summary>
+        [TestCleanup]
+        public void Teardown()
+        {
+            SetupHelper.CheckProcessForInstanceLeaks();
+        }
+
+        #endregion
 
         /// <summary>
         /// Test conversion to the native struct.

@@ -769,159 +769,6 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Creates a template and derived table for JetGetColumnInfo.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        [Description("Creates a template and derived table for JetGetColumnInfo.")]
-        public void JetGetTemplateColumnInfo()
-        {
-            var columncreatesBase = new JET_COLUMNCREATE[]
-            {
-                new JET_COLUMNCREATE()
-                {
-                    szColumnName = "col1_short",
-                    coltyp = JET_coltyp.Short,
-                    grbit = ColumndefGrbit.ColumnFixed,
-                    cbMax = 2,
-                },
-                new JET_COLUMNCREATE()
-                {
-                    szColumnName = "col2_longtext",
-                    coltyp = JET_coltyp.LongText,
-                    cp = JET_CP.Unicode,
-                },
-            };
-
-            var columncreatesChild = new JET_COLUMNCREATE[]
-            {
-                new JET_COLUMNCREATE()
-                {
-                    szColumnName = "col1_short_child",
-                    coltyp = JET_coltyp.Short,
-                    cbMax = 2,
-                },
-                new JET_COLUMNCREATE()
-                {
-                    szColumnName = "col2_longtext_child",
-                    coltyp = JET_coltyp.LongText,
-                    grbit = ColumndefGrbit.ColumnTagged,
-                    cp = JET_CP.Unicode,
-                },
-            };
-
-            const string Index1Name = "firstIndex";
-            const string Index1Description = "+col1_short\0-col2_longtext\0";
-
-            const string Index2Name = "secondIndex";
-            const string Index2Description = "+col2_longtext\0-col1_short\0";
-
-            var indexcreates = new JET_INDEXCREATE[]
-            {
-                  new JET_INDEXCREATE
-                {
-                    szIndexName = Index1Name,
-                    szKey = Index1Description,
-                    cbKey = Index1Description.Length + 1,
-                    grbit = CreateIndexGrbit.None,
-                    ulDensity = 99,
-                },
-                new JET_INDEXCREATE
-                {
-                    szIndexName = Index2Name,
-                    szKey = Index2Description,
-                    cbKey = Index2Description.Length + 1,
-                    grbit = CreateIndexGrbit.None,
-                    ulDensity = 79,
-                },
-            };
-
-            var tablecreateTemplate = new JET_TABLECREATE()
-            {
-                szTableName = "tableBase",
-                ulPages = 23,
-                ulDensity = 75,
-                cColumns = columncreatesBase.Length,
-                rgcolumncreate = columncreatesBase,
-                rgindexcreate = indexcreates,
-                cIndexes = indexcreates.Length,
-                cbSeparateLV = 100,
-                cbtyp = JET_cbtyp.Null,
-                grbit = CreateTableColumnIndexGrbit.TemplateTable,
-            };
-
-            Api.JetBeginTransaction(this.sesid);
-            Api.JetCreateTableColumnIndex3(this.sesid, this.dbid, tablecreateTemplate);
-
-            var tableCreated = new JET_TABLEID()
-            {
-                Value = tablecreateTemplate.tableid.Value
-            };
-
-            Assert.AreNotEqual<JET_TABLEID>(JET_TABLEID.Nil, tableCreated);
-
-            // 1 table, 2 columns, 2 indices = 5 objects.
-            Assert.AreEqual<int>(tablecreateTemplate.cCreated, 5);
-
-            Assert.AreNotEqual(tablecreateTemplate.rgcolumncreate[0].columnid, JET_COLUMNID.Nil);
-            Assert.AreNotEqual(tablecreateTemplate.rgcolumncreate[1].columnid, JET_COLUMNID.Nil);
-
-            var tablecreateChild = new JET_TABLECREATE()
-            {
-                szTableName = "tableChild",
-                szTemplateTableName = "tableBase",
-                ulPages = 23,
-                ulDensity = 75,
-                rgcolumncreate = columncreatesChild,
-                cColumns = columncreatesChild.Length,
-                rgindexcreate = null,
-                cIndexes = 0,
-                cbSeparateLV = 100,
-                cbtyp = JET_cbtyp.Null,
-                grbit = CreateTableColumnIndexGrbit.None,
-            };
-
-            Api.JetCreateTableColumnIndex3(this.sesid, this.dbid, tablecreateChild);
-
-            var tableidChild = new JET_TABLEID()
-            {
-                Value = tablecreateChild.tableid.Value
-            };
-
-            Assert.AreNotEqual<JET_TABLEID>(JET_TABLEID.Nil, tableidChild);
-
-            // 1 table + 2 columns = 3 objects
-            Assert.AreEqual<int>(tablecreateChild.cCreated, 3);
-
-            // Get columninfo on a column from the base table.
-            JET_COLUMNBASE columnbase;
-            Api.JetGetColumnInfo(this.sesid, this.dbid, "tableChild", columncreatesBase[0].szColumnName, out columnbase);
-
-            Assert.AreEqual(columnbase.coltyp, columncreatesBase[0].coltyp);
-            Assert.AreEqual(columnbase.szBaseColumnName, columncreatesBase[0].szColumnName);
-
-            // REVIEW: This returns the name of the current table, not the base table!
-            Assert.AreEqual(columnbase.szBaseTableName, tablecreateChild.szTableName);
-            Assert.AreEqual(columnbase.cp, columncreatesBase[0].cp);
-            Assert.AreEqual(columnbase.cbMax, columncreatesBase[0].cbMax);
-            Assert.AreEqual(columnbase.grbit, columncreatesBase[0].grbit);
-
-            // Get column info on a child column.
-            Api.JetGetColumnInfo(this.sesid, this.dbid, "tableChild", columncreatesChild[1].szColumnName, out columnbase);
-
-            Assert.AreEqual(columnbase.coltyp, columncreatesChild[1].coltyp);
-            Assert.AreEqual(columnbase.szBaseColumnName, columncreatesChild[1].szColumnName);
-            Assert.AreEqual(columnbase.szBaseTableName, tablecreateChild.szTableName);
-            Assert.AreEqual(columnbase.cp, columncreatesChild[1].cp);
-            Assert.AreEqual(columnbase.cbMax, columncreatesChild[1].cbMax);
-            Assert.AreEqual(columnbase.grbit, columncreatesChild[1].grbit);
-
-            Api.JetCloseTable(this.sesid, tableCreated);
-            Api.JetCloseTable(this.sesid, tableidChild);
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-        }
-
-        /// <summary>
         /// Verify that JetGetCurrentIndex returns the name of the index.
         /// </summary>
         [TestMethod]
@@ -1103,6 +950,19 @@ namespace InteropApiTests
         {
             JET_OBJECTINFO objectinfo;
             Api.JetGetTableInfo(this.sesid, this.tableid, out objectinfo, JET_TblInfo.Default);
+            Assert.AreEqual(ObjectInfoFlags.None, objectinfo.flags);
+        }
+
+        /// <summary>
+        /// Test the version of JetGetObjectInfo that returns a JET_OBJECTINFO.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test the version of JetGetObjetInfo that returns a JET_OBJECTINFO")]
+        public void TestGetObjectInfoObjectinfo()
+        {
+            JET_OBJECTINFO objectinfo;
+            Api.JetGetObjectInfo(this.sesid, this.dbid, JET_objtyp.Table, this.table, out objectinfo);
             Assert.AreEqual(ObjectInfoFlags.None, objectinfo.flags);
         }
 
