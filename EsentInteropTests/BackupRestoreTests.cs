@@ -14,7 +14,7 @@ namespace InteropApiTests
     /// Tests for JetBackupInstance and JetRestoreInstance.
     /// </summary>
     [TestClass]
-    public class BackupRestoreTests
+    public partial class BackupRestoreTests
     {
         #region Setup/Teardown
         /// <summary>
@@ -68,22 +68,6 @@ namespace InteropApiTests
             var ex = new ArgumentNullException();
             var test = new DatabaseFileTestHelper("database", "backup", true);
             test.TestBackupCallbackExceptionHandling(ex);
-        }
-
-        /// <summary>
-        /// Test exception handling for exceptions thrown from
-        /// the status callback during JetRestore.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        [Description("Test exception handling for exceptions thrown from the status callback during JetRestore")]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void TestBackupRestoreCallbackExceptionHandling()
-        {
-            var ex = new ArgumentNullException();
-            var test = new DatabaseFileTestHelper("database", "backup", true);
-            Assert.Inconclusive("ESENT bug means instance isn't torn down correctly");
-            test.TestRestoreCallbackExceptionHandling(ex);
         }
     }
 }

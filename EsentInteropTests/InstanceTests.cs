@@ -379,6 +379,11 @@ namespace InteropApiTests
         [Description("Initialize an instance with recovery options")]
         public void InitWithRecoveryOptions()
         {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
             using (var instance = new Instance("initwithrecoveryoptions"))
             {
                 instance.Parameters.MaxTemporaryTables = 0;

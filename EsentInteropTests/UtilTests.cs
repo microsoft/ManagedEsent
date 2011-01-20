@@ -277,5 +277,50 @@ namespace InteropApiTests
                 }
             }
         }
+
+        /// <summary>
+        /// Check that ArrayStructEquals compares null arrays correctly.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that ArrayStructEquals compares null arrays correctly")]
+        public void TestArrayStructEqualsNullArrays()
+        {
+            Assert.IsTrue(Util.ArrayStructEquals<byte>(null, null, 0));
+        }
+
+        /// <summary>
+        /// Check that ArrayStructEquals compares the same array correctly.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that ArrayStructEquals compares the same array correctly")]
+        public void TestArrayStructEqualsSameArrays()
+        {
+            var x = new long[] { 0x1, 0x2, 0x3, 0x4 };
+            Assert.IsTrue(Util.ArrayStructEquals(x, x, x.Length));
+        }
+
+        /// <summary>
+        /// Check that ArrayStructEquals compares equal arrays correctly.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that ArrayStructEquals compares equal arrays correctly")]
+        public void TestArrayStructEqualsEqualArrays()
+        {
+            Assert.IsTrue(Util.ArrayStructEquals(new byte[] { 0x1, 0x2 }, new byte[] { 0x1, 0x2, 0x3 }, 2));
+        }
+
+        /// <summary>
+        /// Check that ArrayStructEquals comparesun equal arrays correctly.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that ArrayStructEquals compares unequal arrays correctly")]
+        public void TestArrayStructEqualsUnequalArrays()
+        {
+            Assert.IsFalse(Util.ArrayStructEquals(new byte[] { 0x1, 0x3 }, new byte[] { 0x1, 0x2 }, 2));
+        }
     }
 }

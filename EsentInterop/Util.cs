@@ -127,16 +127,16 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Compares two objects with ContentEquals.
-        /// If both are null, there are considered equal.
+        /// Compares items in two arrays using Equals.
+        /// If both arrays are null, there are considered equal.
         /// </summary>
-        /// <typeparam name="T">A type that implements IContentEquatable.</typeparam>
-        /// <param name="left">First object to compare.</param>
-        /// <param name="right">Second object to compare.</param>
+        /// <typeparam name="T">A value type.</typeparam>
+        /// <param name="left">First array to compare.</param>
+        /// <param name="right">Second array to compare.</param>
         /// <param name="length">The number of entries to compare.</param>
-        /// <returns>Whether the two objects are equal.</returns>
+        /// <returns>Whether the two arrays are equal.</returns>
         public static bool ArrayStructEquals<T>(T[] left, T[] right, int length)
-            where T : struct, IComparable
+            where T : struct
         {
             if (null == left || null == right)
             {

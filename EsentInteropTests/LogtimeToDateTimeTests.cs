@@ -14,7 +14,7 @@ namespace InteropApiTests
     /// Test converting a JET_LOGTIME to a DateTime.
     /// </summary>
     [TestClass]
-    public class LogtimeToDateTimeTests
+    public partial class LogtimeToDateTimeTests
     {
         /// <summary>
         /// Verify ToDateTime returns null when the JET_LOGTIME is null.

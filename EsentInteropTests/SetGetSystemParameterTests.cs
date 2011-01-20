@@ -616,6 +616,48 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test that SystemParameters.StartFlushThreshold can be set and retrieved.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test that SystemParameters.StartFlushThreshold can be set and retrieved")]
+        public void VerifyGetAndSetStartFlushThreshold()
+        {
+            int startFlushThresholdOld = SystemParameters.StartFlushThreshold;
+            SystemParameters.StartFlushThreshold = 13;
+            Assert.AreEqual(13, SystemParameters.StartFlushThreshold);
+            SystemParameters.StartFlushThreshold = startFlushThresholdOld;
+        }
+
+        /// <summary>
+        /// Test that SystemParameters.StopFlushThreshold can be set and retrieved.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test that SystemParameters.StopFlushThreshold can be set and retrieved")]
+        public void VerifyGetAndSetStopFlushThreshold()
+        {
+            int stopFlushThresholdOld = SystemParameters.StopFlushThreshold;
+            SystemParameters.StopFlushThreshold = 17;
+            Assert.AreEqual(17, SystemParameters.StopFlushThreshold);
+            SystemParameters.StopFlushThreshold = stopFlushThresholdOld;
+        }
+
+        /// <summary>
+        /// Test that SystemParameters.EventLoggingLevel can be set and retrieved.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test that SystemParameters.EventLoggingLevel can be set and retrieved")]
+        public void VerifyGetAndSetEventLoggingLevel()
+        {
+            int eventLoggingLevelOld = SystemParameters.EventLoggingLevel;
+            SystemParameters.EventLoggingLevel = 80;
+            Assert.AreEqual(80, SystemParameters.EventLoggingLevel);
+            SystemParameters.EventLoggingLevel = eventLoggingLevelOld;
+        }
+
+        /// <summary>
         /// Test that SystemParameters.DatabasePageSize can be set and retrieved.
         /// </summary>
         [TestMethod]
@@ -670,12 +712,13 @@ namespace InteropApiTests
 
         /// <summary>
         /// Test that SystemParameters.Configuration can be set and retrieved.
-        /// This test only works on Windows Vista and up.
+        /// This test only works on Windows Vista and up. An ESENT bug stops
+        /// the configuration from being retrieved properly.
         /// </summary>
         [TestMethod]
         [Priority(0)]
         [Description("Test that SystemParameters.Configuration can be set and retrieved")]
-        public void VerifyGetAndSetConfiguration()
+        public void VerifySetConfiguration()
         {
             if (!EsentVersion.SupportsVistaFeatures)
             {
@@ -683,16 +726,8 @@ namespace InteropApiTests
             }
 
             int configurationOld = SystemParameters.Configuration;
-            try
-            {
-                SystemParameters.Configuration = 0;
-                Assert.Inconclusive("ESENT bug prevents retrieving the configuration");
-                Assert.AreEqual(0, SystemParameters.Configuration);
-            }
-            finally
-            {
-                SystemParameters.Configuration = configurationOld;
-            }
+            SystemParameters.Configuration = 0;
+            SystemParameters.Configuration = configurationOld;
         }
 
         /// <summary>
