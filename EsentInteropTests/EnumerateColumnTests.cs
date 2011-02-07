@@ -161,6 +161,46 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Enumerate one zero-length column.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Enumerate one zero-length column with JetEnumerateColumns")]
+        public void TestEnumerateZeroLengthColumn()
+        {
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+
+            Api.SetColumn(this.sesid, this.tableid, this.columnidDict["binary"], new byte[0]);
+
+            Api.JetUpdate(this.sesid, this.tableid);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            Api.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
+
+            int numValues;
+            JET_ENUMCOLUMN[] values;
+            JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero == pv ? Marshal.AllocHGlobal(new IntPtr(cb)) : Marshal.ReAllocHGlobal(pv, new IntPtr(cb));
+            Api.JetEnumerateColumns(
+                this.sesid,
+                this.tableid,
+                0,
+                null,
+                out numValues,
+                out values,
+                allocator,
+                IntPtr.Zero,
+                0,
+                EnumerateColumnsGrbit.EnumerateCompressOutput);
+
+            Assert.AreEqual(1, numValues);
+            Assert.IsNotNull(values);
+            Assert.AreEqual(this.columnidDict["binary"], values[0].columnid);
+            Assert.AreEqual(JET_wrn.ColumnSingleValue, values[0].err);
+            Assert.AreEqual(0, values[0].cbData);
+            allocator(IntPtr.Zero, values[0].pvData, 0);    // free the memory
+        }
+
+        /// <summary>
         /// Enumerate one column with multivalues.
         /// </summary>
         [TestMethod]
