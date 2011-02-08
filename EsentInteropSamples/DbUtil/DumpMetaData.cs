@@ -45,7 +45,7 @@ namespace Microsoft.Isam.Esent.Utilities
                         {
                             Console.WriteLine("\t{0}", column.Name);
                             Console.WriteLine("\t\tColtyp:     {0}", column.Coltyp);
-                            Console.WriteLine("\t\tColumnid:   {0}", column.Columnid);
+                            Console.WriteLine("\t\tColumnid:   {0:N0}", column.Columnid);
                             if (JET_coltyp.LongText == column.Coltyp || JET_coltyp.Text == column.Coltyp)
                             {
                                 Console.WriteLine("\t\tCode page:  {0}", column.Cp);

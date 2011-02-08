@@ -813,6 +813,7 @@ namespace InteropApiTests
         private static void VerifyIFormattableGeneralEqualsToString(IFormattable obj)
         {
             Assert.AreEqual(obj.ToString(), obj.ToString("G", CultureInfo.InvariantCulture));
+            Assert.AreEqual(obj.ToString(), String.Format("{0}", obj));
         }
     }
 }

@@ -79,7 +79,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
+            return String.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
+            return String.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
         }
 
         /// <summary>
@@ -296,7 +296,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
+            return String.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
         }
 
         /// <summary>
@@ -407,7 +407,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return "G" == format ? this.ToString() : this.Value.ToString(format, formatProvider);
+            return String.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToString(format, formatProvider);
         }
 
         /// <summary>
@@ -561,7 +561,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return "G" == format ? this.ToString() : this.Value.ToString(format, formatProvider);
+            return String.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToString(format, formatProvider);
         }
 
         /// <summary>
@@ -683,7 +683,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
+            return String.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
         }
 
         /// <summary>
@@ -791,7 +791,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
+            return String.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
         }
 
         /// <summary>
@@ -896,7 +896,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
+            return String.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
         }
 
         /// <summary>

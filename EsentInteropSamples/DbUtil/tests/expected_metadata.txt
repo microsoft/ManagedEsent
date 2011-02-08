@@ -1,58 +1,58 @@
 table
 	ascii
 		Coltyp:     LongText
-		Columnid:   JET_COLUMNID(0x101)
+		Columnid:   257
 		Code page:  ASCII
 		Max length: 0
 		Grbit:      ColumnTagged
 	binary
 		Coltyp:     LongBinary
-		Columnid:   JET_COLUMNID(0x100)
+		Columnid:   256
 		Max length: 0
 		Grbit:      ColumnTagged
 	bit
 		Coltyp:     Bit
-		Columnid:   JET_COLUMNID(0x2)
+		Columnid:   2
 		Max length: 1
 		Grbit:      ColumnFixed
 	byte
 		Coltyp:     UnsignedByte
-		Columnid:   JET_COLUMNID(0x3)
+		Columnid:   3
 		Max length: 1
 		Grbit:      ColumnFixed
 	currency
 		Coltyp:     Currency
-		Columnid:   JET_COLUMNID(0x6)
+		Columnid:   6
 		Max length: 8
 		Grbit:      ColumnFixed
 	double
 		Coltyp:     IEEEDouble
-		Columnid:   JET_COLUMNID(0x8)
+		Columnid:   8
 		Max length: 8
 		Grbit:      ColumnFixed
 	key
 		Coltyp:     Long
-		Columnid:   JET_COLUMNID(0x1)
+		Columnid:   1
 		Max length: 4
 		Grbit:      ColumnFixed, ColumnAutoincrement
 	long
 		Coltyp:     Long
-		Columnid:   JET_COLUMNID(0x5)
+		Columnid:   5
 		Max length: 4
 		Grbit:      ColumnFixed
 	short
 		Coltyp:     Short
-		Columnid:   JET_COLUMNID(0x4)
+		Columnid:   4
 		Max length: 2
 		Grbit:      ColumnFixed
 	single
 		Coltyp:     IEEESingle
-		Columnid:   JET_COLUMNID(0x7)
+		Columnid:   7
 		Max length: 4
 		Grbit:      ColumnFixed
 	unicode
 		Coltyp:     LongText
-		Columnid:   JET_COLUMNID(0x102)
+		Columnid:   258
 		Code page:  Unicode
 		Max length: 0
 		Grbit:      ColumnTagged
