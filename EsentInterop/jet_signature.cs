@@ -153,7 +153,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The native representation of the signature.</returns>
         internal NATIVE_SIGNATURE GetNativeSignature()
         {
-            var native = new NATIVE_SIGNATURE()
+            var native = new NATIVE_SIGNATURE
             {
                 ulRandom = this.ulRandom,
                 szComputerName = this.szComputerName,

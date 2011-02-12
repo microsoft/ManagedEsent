@@ -88,7 +88,7 @@ namespace InteropApiTests
             // to multiply maxParam by sizeof(char))
             if (!EsentVersion.SupportsUnicodePaths)
             {
-                return;
+                throw new OverflowException();
             }
 
             int ignored = 0;
@@ -278,19 +278,6 @@ namespace InteropApiTests
 #pragma warning restore 618,612
         }
 
-        /// <summary>
-        /// JetGetDatabaseInfo should throw an exception when called with a nil sesid.
-        /// </summary>
-        [TestMethod]
-        [Priority(0)]
-        [Description("JetGetDatabaseInfo should throw an exception when called with a nil sesid.")]
-        [ExpectedException(typeof(EsentInvalidSesidException))]
-        public void TestJetGetDatabaseInfoThrowsExceptionWithNilSession()
-        {
-            // 1 is JET_DbInfoConnect, which is deprecated (and therefore not a valid enum value).
-            int value;
-            Api.JetGetDatabaseInfo(JET_SESID.Nil, JET_DBID.Nil, out value, (JET_DbInfo)1);
-        }
         #endregion Database API
 
         #region Streaming Backup/Restore
@@ -381,7 +368,7 @@ namespace InteropApiTests
             // to multiply maxParam by sizeof(char))
             if (!EsentVersion.SupportsUnicodePaths)
             {
-                return;
+                throw new OverflowException();
             }
 
             string ignored;
@@ -417,7 +404,7 @@ namespace InteropApiTests
             // to multiply maxParam by sizeof(char))
             if (!EsentVersion.SupportsUnicodePaths)
             {
-                return;
+                throw new OverflowException();
             }
 
             string ignored;
@@ -453,7 +440,7 @@ namespace InteropApiTests
             // to multiply maxParam by sizeof(char))
             if (!EsentVersion.SupportsUnicodePaths)
             {
-                return;
+                throw new OverflowException();
             }
 
             string ignored;
@@ -1723,7 +1710,7 @@ namespace InteropApiTests
         {
             if (!EsentVersion.SupportsWindows7Features)
             {
-                throw new ArgumentException();
+                throw new ArgumentOutOfRangeException();
             }
 
             int ignored;
@@ -1777,7 +1764,7 @@ namespace InteropApiTests
         {
             if (!EsentVersion.SupportsWindows7Features)
             {
-                throw new ArgumentException();
+                throw new ArgumentOutOfRangeException();
             }
 
             int ignored;
@@ -1795,7 +1782,7 @@ namespace InteropApiTests
         {
             if (!EsentVersion.SupportsWindows7Features)
             {
-                throw new ArgumentException();
+                throw new ArgumentOutOfRangeException();
             }
 
             int ignored;
@@ -1813,7 +1800,7 @@ namespace InteropApiTests
         {
             if (!EsentVersion.SupportsWindows7Features)
             {
-                throw new ArgumentException();
+                throw new ArgumentOutOfRangeException();
             }
 
             int ignored;
@@ -1831,7 +1818,7 @@ namespace InteropApiTests
         {
             if (!EsentVersion.SupportsWindows7Features)
             {
-                throw new ArgumentException();
+                throw new ArgumentOutOfRangeException();
             }
 
             int ignored;
@@ -1849,7 +1836,7 @@ namespace InteropApiTests
         {
             if (!EsentVersion.SupportsWindows7Features)
             {
-                throw new ArgumentException();
+                throw new ArgumentOutOfRangeException();
             }
 
             int ignored;
@@ -1867,7 +1854,7 @@ namespace InteropApiTests
         {
             if (!EsentVersion.SupportsWindows7Features)
             {
-                throw new ArgumentException();
+                throw new ArgumentOutOfRangeException();
             }
 
             int ignored;
@@ -1885,7 +1872,7 @@ namespace InteropApiTests
         {
             if (!EsentVersion.SupportsWindows7Features)
             {
-                throw new ArgumentException();
+                throw new ArgumentOutOfRangeException();
             }
 
             int ignored;
@@ -1903,7 +1890,7 @@ namespace InteropApiTests
         {
             if (!EsentVersion.SupportsWindows7Features)
             {
-                throw new ArgumentException();
+                throw new ArgumentOutOfRangeException();
             }
 
             int ignored;
@@ -1921,7 +1908,7 @@ namespace InteropApiTests
         {
             if (!EsentVersion.SupportsWindows7Features)
             {
-                throw new ArgumentException();
+                throw new ArgumentOutOfRangeException();
             }
 
             int ignored;

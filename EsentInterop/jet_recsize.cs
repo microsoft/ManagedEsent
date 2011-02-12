@@ -4,15 +4,17 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace Microsoft.Isam.Esent.Interop
+namespace Microsoft.Isam.Esent.Interop.Vista
 {
     using System;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
 
+    using Microsoft.Isam.Esent.Interop.Vista;
+
     /// <summary>
-    /// Used by <see cref="Api.JetGetRecordSize"/> to return information about a record's usage
+    /// Used by <see cref="VistaApi.JetGetRecordSize"/> to return information about a record's usage
     /// requirements in user data space, number of set columns, number of
     /// values, and ESENT record structure overhead space.
     /// </summary>

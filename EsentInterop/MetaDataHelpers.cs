@@ -75,7 +75,7 @@ namespace Microsoft.Isam.Esent.Interop
                             var columnidValue =
                                 (uint)RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcolumnid);
 
-                            var columnid = new JET_COLUMNID() { Value = columnidValue };
+                            var columnid = new JET_COLUMNID { Value = columnidValue };
                             dict.Add(name, columnid);
                         }
                         while (TryMoveNext(sesid, columnlist.tableid));

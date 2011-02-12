@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
@@ -326,7 +327,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="buffer">The buffer.</param>
         /// <param name="offset">The offset in the buffer to read/write to.</param>
         /// <param name="count">The number of bytes to read/write.</param>
-        private static void CheckBufferArguments(byte[] buffer, int offset, int count)
+        private static void CheckBufferArguments(ICollection<byte> buffer, int offset, int count)
         {
             if (null == buffer)
             {
@@ -343,7 +344,7 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentOutOfRangeException("count", count, "cannot be negative");
             }
 
-            if (checked(buffer.Length - offset) < count)
+            if (checked(buffer.Count - offset) < count)
             {
                 throw new ArgumentOutOfRangeException("count", count, "cannot be larger than the size of the buffer");
             }

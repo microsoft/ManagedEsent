@@ -938,13 +938,13 @@ namespace InteropApiTests
                 if (this.useStatusCallback)
                 {
                     this.statusCallbackWasCalled = false;
-                    Api.JetRestoreInstance(instance, this.backupDirectory, this.databaseDirectory, this.StatusCallback);
+                    Api.JetRestoreInstance(instance, this.backupDirectory, null, this.StatusCallback);
                     Assert.IsTrue(
                         this.statusCallbackWasCalled, "expected the status callback to be called during restore");
                 }
                 else
                 {
-                    Api.JetRestoreInstance(instance, this.backupDirectory, this.databaseDirectory, null);                    
+                    Api.JetRestoreInstance(instance, this.backupDirectory, null, null);
                 }
             }
         }

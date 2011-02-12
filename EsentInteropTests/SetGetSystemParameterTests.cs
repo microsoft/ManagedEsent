@@ -367,6 +367,11 @@ namespace InteropApiTests
         [Description("Test setting the runtime callback to null")]
         public void SetRuntimeCallbackToNull()
         {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                Assert.Inconclusive("Cannot set runtime callback to null on this version of ESENT");
+            }
+
             JET_INSTANCE instance;
             Api.JetCreateInstance(out instance, "ResetRuntimeCallbackTest");
             try
@@ -387,6 +392,11 @@ namespace InteropApiTests
         [Description("Test setting the global runtime callback to null")]
         public void SetGlobalRuntimeCallbackToNull()
         {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                Assert.Inconclusive("Cannot set runtime callback to null on this version of ESENT");
+            }
+
             JET_INSTANCE instance;
             Api.JetCreateInstance(out instance, "RuntimeCallbackTest");
             try

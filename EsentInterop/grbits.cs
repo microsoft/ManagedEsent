@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using Microsoft.Isam.Esent.Interop.Server2003;
+    using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Isam.Esent.Interop.Windows7;
 
     /// <summary>
@@ -761,7 +762,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for <see cref="Api.JetGetRecordSize"/>.
+    /// Options for <see cref="VistaApi.JetGetRecordSize"/>.
     /// </summary>
     [Flags]
     public enum GetRecordSizeGrbit

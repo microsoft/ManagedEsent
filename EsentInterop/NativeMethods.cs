@@ -206,7 +206,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern int JetGetDatabaseFileInfo(string szFilename, out NATIVE_DBINFOMISC dbinfomisc, uint cbMax, uint InfoLevel);
 
         // Unicode, JET_DBINFOMISC
-        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
         public static extern int JetGetDatabaseFileInfoW(string szFilename, out NATIVE_DBINFOMISC dbinfomisc, uint cbMax, uint InfoLevel);
 
         #endregion
@@ -477,13 +477,11 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out IntPtr ptableid,
             [Out] uint[] rgcolumnid);
 
-#if TODO
-        // Introduced in Windows Vista
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetCreateTableColumnIndex2(IntPtr sesid, uint dbid, ref NATIVE_TABLECREATE2 tablecreate3);
-#endif
+
         // Introduced in Windows 7
-        [DllImport(EsentDll, CharSet = CharSet.Ansi, ExactSpelling = true)]
+        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetCreateTableColumnIndex3A(IntPtr sesid, uint dbid, ref NATIVE_TABLECREATE3 tablecreate3);
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]

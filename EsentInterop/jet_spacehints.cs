@@ -74,15 +74,6 @@ namespace Microsoft.Isam.Esent.Interop
     public sealed class JET_SPACEHINTS : IContentEquatable<JET_SPACEHINTS>, IDeepCloneable<JET_SPACEHINTS>
     {
         /// <summary>
-        /// This is the size to grow, at most.
-        /// </summary>
-        [SuppressMessage(
-            "Microsoft.StyleCop.CSharp.NamingRules",
-            "SA1303:ConstFieldNamesMustBeginWithUpperCaseLetter",
-            Justification = "This should match the unmanaged API, which isn't capitalized.")]
-        private const int cbSecondaryExtentMost = 100 * 1024 * 1024;
-
-        /// <summary>
         /// Density at (append) layout.
         /// </summary>
         private int initialDensity;

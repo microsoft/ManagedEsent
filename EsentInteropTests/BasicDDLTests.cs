@@ -987,6 +987,11 @@ namespace InteropApiTests
         [Description("Test the version of JetGetTableInfo that returns a JET_DBID")]
         public void TestGetTableInfoDbid()
         {
+            if (!EsentVersion.SupportsWindows7Features)
+            {
+                Assert.Inconclusive("Pre Windows7 versions of ESENT incorrectly return JET_err.FeatureNotAvailable");
+            }
+
             JET_DBID actualDbid;
             Api.JetGetTableInfo(this.sesid, this.tableid, out actualDbid, JET_TblInfo.Dbid);
             Assert.AreEqual(this.dbid, actualDbid);

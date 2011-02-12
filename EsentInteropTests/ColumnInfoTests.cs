@@ -307,6 +307,11 @@ namespace InteropApiTests
         [Description("Calls JetGetColumnInfo using a columnnid.")]
         public void JetGetTemplateColumnInfoByColumnId()
         {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
             // Get columninfo on a column from the base table using the column id.
             JET_COLUMNBASE columnbase;
             VistaApi.JetGetColumnInfo(this.sesid, this.dbid, "tableChild", this.columncreatesBase[0].columnid, out columnbase);
@@ -327,6 +332,11 @@ namespace InteropApiTests
         [Description("Calls JetGetColumnInfo using a columnn id that's defined in the child table.")]
         public void JetGetTemplateColumnInfoByColumIdOnChildColumn()
         {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
             // Get column info on a child column.
             JET_COLUMNBASE columnbase;
             VistaApi.JetGetColumnInfo(this.sesid, this.dbid, "tableChild", this.columncreatesChild[1].columnid, out columnbase);

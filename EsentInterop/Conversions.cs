@@ -33,7 +33,7 @@ namespace Microsoft.Isam.Esent.Interop
         static Conversions()
         {
             // Rather than creating both dictionaries, define one as the inverse of the other.
-            compareOptionsToLcmapFlags = new Dictionary<CompareOptions, uint>()
+            compareOptionsToLcmapFlags = new Dictionary<CompareOptions, uint>
             {
                 { CompareOptions.IgnoreCase, NativeMethods.NORM_IGNORECASE },
                 { CompareOptions.IgnoreKanaType, NativeMethods.NORM_IGNOREKANATYPE },
@@ -116,7 +116,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <typeparam name="TKey">The new key type (the value if the current dictionary).</typeparam>
         /// <param name="dict">The dictionary to invert.</param>
         /// <returns>An inverted dictionary.</returns>
-        private static IDictionary<TKey, TValue> InvertDictionary<TValue, TKey>(IDictionary<TValue, TKey> dict)
+        private static IDictionary<TKey, TValue> InvertDictionary<TValue, TKey>(ICollection<KeyValuePair<TValue, TKey>> dict)
         {
             var invertedDict = new Dictionary<TKey, TValue>(dict.Count);
             foreach (KeyValuePair<TValue, TKey> entry in dict)

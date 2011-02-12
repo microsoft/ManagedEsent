@@ -104,6 +104,20 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify that JetGetColumnInfo throws an exception when using the
+        /// XP version of ESENT.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that JetGetColumnInfo throws an exception when using the XP version of ESENT")]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void VerifyXpThrowsExceptionOnJetGetColumnInfo()
+        {
+            JET_COLUMNBASE columnbase;
+            VistaApi.JetGetColumnInfo(JET_SESID.Nil, JET_DBID.Nil, Any.String, JET_COLUMNID.Nil, out columnbase);
+        }
+
+        /// <summary>
         /// Verify that JetGetThreadStats throws an exception when using the
         /// XP version of ESENT.
         /// </summary>
@@ -279,6 +293,20 @@ namespace InteropApiTests
         {
             JET_INSTANCE instance = JET_INSTANCE.Nil;
             VistaApi.JetInit3(ref instance, null, InitGrbit.None);
+        }
+
+        /// <summary>
+        /// Verify that JetGetRecordSize throws an exception when using the
+        /// XP version of ESENT.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that JetGetRecordSize throws an exception when using the XP version of ESENT")]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void VerifyXpThrowsExceptionOnJetGetRecordSize()
+        {
+            JET_RECSIZE recsize = new JET_RECSIZE();
+            VistaApi.JetGetRecordSize(JET_SESID.Nil, JET_TABLEID.Nil, ref recsize, GetRecordSizeGrbit.None);
         }
 
         /// <summary>
@@ -487,18 +515,74 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Use JetGetRecordSize on XP to test the compatibility path. This also tests
-        /// the handling of the running total option.
+        /// Creates a table with JetCreateTableColumnIndex3 to test the
+        /// compatability path.
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Use JetGetRecordSize on XP to test the compatibility path")]
-        public void GetRecordSizeOnXp()
+        [Description("Create a table with JetCreateTableColumnIndex3")]
+        public void CreateTableColumnIndex3OnXp()
         {
+            var columncreates = new JET_COLUMNCREATE[]
+            {
+                new JET_COLUMNCREATE()
+                {
+                    szColumnName = "col1_short",
+                    coltyp = JET_coltyp.Short,
+                    cbMax = 2,
+                },
+                new JET_COLUMNCREATE()
+                {
+                    szColumnName = "col2_longtext",
+                    coltyp = JET_coltyp.LongText,
+                    cp = JET_CP.Unicode,
+                },
+            };
+
+            const string Index1Name = "firstIndex";
+            const string Index1Description = "+col1_short\0-col2_longtext\0";
+
+            const string Index2Name = "secondIndex";
+            const string Index2Description = "+col2_longtext\0-col1_short\0";
+
+            var indexcreates = new JET_INDEXCREATE[]
+            {
+                  new JET_INDEXCREATE
+                {
+                    szIndexName = Index1Name,
+                    szKey = Index1Description,
+                    cbKey = Index1Description.Length + 1,
+                    grbit = CreateIndexGrbit.None,
+                    ulDensity = 99,
+                },
+                new JET_INDEXCREATE
+                {
+                    szIndexName = Index2Name,
+                    szKey = Index2Description,
+                    cbKey = Index2Description.Length + 1,
+                    grbit = CreateIndexGrbit.None,
+                    ulDensity = 79,
+                },
+            };
+
+            var tablecreate = new JET_TABLECREATE()
+            {
+                szTableName = "tableBigBang",
+                ulPages = 23,
+                ulDensity = 75,
+                cColumns = columncreates.Length,
+                rgcolumncreate = columncreates,
+                rgindexcreate = indexcreates,
+                cIndexes = indexcreates.Length,
+                cbSeparateLV = 100,
+                cbtyp = JET_cbtyp.Null,
+                grbit = CreateTableColumnIndexGrbit.None,
+            };
+
             string directory = SetupHelper.CreateRandomDirectory();
             string database = Path.Combine(directory, "test.db");
 
-            using (var instance = new Instance("XPgetrecordsize"))
+            using (var instance = new Instance("XpCreateTableColumnIndex3"))
             {
                 instance.Parameters.Recovery = false;
                 instance.Parameters.NoInformationEvent = true;
@@ -510,48 +594,55 @@ namespace InteropApiTests
                     Api.JetCreateDatabase(session, database, String.Empty, out dbid, CreateDatabaseGrbit.None);
                     using (var transaction = new Transaction(session))
                     {
-                        JET_TABLEID tableid;
-                        Api.JetCreateTable(session, dbid, "table", 0, 100, out tableid);
-                        JET_COLUMNID columnid;
-                        Api.JetAddColumn(
-                            session,
-                            tableid,
-                            "column1",
-                            new JET_COLUMNDEF { coltyp = JET_coltyp.LongBinary },
-                            null,
-                            0,
-                            out columnid);
+                        Api.JetCreateTableColumnIndex3(session, dbid, tablecreate);
+                        Assert.AreNotEqual(JET_TABLEID.Nil, tablecreate.tableid);
 
-                        var size = new JET_RECSIZE();
-                        byte[] data = Any.Bytes;
+                        // 1 table, 2 columns, 2 indices = 5 objects.
+                        Assert.AreEqual(tablecreate.cCreated, 5);
+                        Assert.AreNotEqual(tablecreate.rgcolumncreate[0].columnid, JET_COLUMNID.Nil);
+                        Assert.AreNotEqual(tablecreate.rgcolumncreate[1].columnid, JET_COLUMNID.Nil);
 
-                        using (var update = new Update(session, tableid, JET_prep.Insert))
-                        {
-                            Api.SetColumn(session, tableid, columnid, data);
-                            Api.JetGetRecordSize(session, tableid, ref size, GetRecordSizeGrbit.Local | GetRecordSizeGrbit.InCopyBuffer);
-                            update.SaveAndGotoBookmark();
-                        }
-
-                        Api.JetGetRecordSize(session, tableid, ref size, GetRecordSizeGrbit.RunningTotal);
-
-                        Assert.AreEqual(data.Length * 2, size.cbData, "cbData");
-                        Assert.AreEqual(data.Length * 2, size.cbDataCompressed, "cbDataCompressed");
-                        Assert.AreEqual(0, size.cbLongValueData, "cbLongValueData");
-                        Assert.AreEqual(0, size.cbLongValueDataCompressed, "cbLongValueDataCompressed");
-                        Assert.AreEqual(0, size.cbLongValueOverhead, "cbLongValueOverhead");
-                        Assert.AreNotEqual(0, size.cbOverhead, "cbOverhead");
-                        Assert.AreEqual(0, size.cCompressedColumns, "cCompressedColumns");
-                        Assert.AreEqual(0, size.cLongValues, "cLongValues");
-                        Assert.AreEqual(0, size.cMultiValues, "cMultiValues");
-                        Assert.AreEqual(0, size.cNonTaggedColumns, "cTaggedColumns");
-                        Assert.AreEqual(2, size.cTaggedColumns, "cTaggedColumns");
-
+                        Api.JetCloseTable(session, tablecreate.tableid);
                         transaction.Commit(CommitTransactionGrbit.LazyFlush);
                     }
                 }
             }
+        }
 
-            Cleanup.DeleteDirectoryWithRetry(directory);
+        /// <summary>
+        /// Creates a basic table with JetCreateTableColumnIndex3 to test the
+        /// compatability path.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Create a basic table with JetCreateTableColumnIndex3")]
+        public void CreateBasicTableColumnIndex3OnXp()
+        {
+            var tablecreate = new JET_TABLECREATE { szTableName = "table" };
+
+            string directory = SetupHelper.CreateRandomDirectory();
+            string database = Path.Combine(directory, "test.db");
+
+            using (var instance = new Instance("XpCreateBasicTableColumnIndex3"))
+            {
+                instance.Parameters.Recovery = false;
+                instance.Parameters.NoInformationEvent = true;
+                instance.Parameters.MaxTemporaryTables = 0;
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    JET_DBID dbid;
+                    Api.JetCreateDatabase(session, database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    using (var transaction = new Transaction(session))
+                    {
+                        Api.JetCreateTableColumnIndex3(session, dbid, tablecreate);
+                        Assert.AreNotEqual(JET_TABLEID.Nil, tablecreate.tableid);
+                        Assert.AreEqual(tablecreate.cCreated, 1);
+                        Api.JetCloseTable(session, tablecreate.tableid);
+                        transaction.Commit(CommitTransactionGrbit.LazyFlush);
+                    }
+                }
+            }
         }
     }
 }

@@ -322,5 +322,53 @@ namespace InteropApiTests
         {
             Assert.IsFalse(Util.ArrayStructEquals(new byte[] { 0x1, 0x3 }, new byte[] { 0x1, 0x2 }, 2));
         }
+
+        /// <summary>
+        /// Check that AddTrailingDirectorySeparator returns null when given
+        /// a null string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test AddTrailingDirectorySeparator with null")]
+        public void TestAddTrailingDirectorySeparatorNullString()
+        {
+            Assert.IsNull(Util.AddTrailingDirectorySeparator(null));
+        }
+
+        /// <summary>
+        /// Check that AddTrailingDirectorySeparator returns an empty string when given
+        /// an empty string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test AddTrailingDirectorySeparator with an empty string")]
+        public void TestAddTrailingDirectorySeparatorEmptyString()
+        {
+            Assert.AreEqual(String.Empty, Util.AddTrailingDirectorySeparator(String.Empty));
+        }
+
+        /// <summary>
+        /// Check that AddTrailingDirectorySeparator returns a terminated string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test AddTrailingDirectorySeparator with a string that has the separator")]
+        public void TestAddTrailingDirectorySeparatorTerminatedString()
+        {
+            string expected = @"foo\";
+            Assert.AreEqual(expected, Util.AddTrailingDirectorySeparator(expected));
+        }
+
+        /// <summary>
+        /// Check that AddTrailingDirectorySeparator returns a terminated string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test AddTrailingDirectorySeparator with a string that does not have the separator")]
+        public void TestAddTrailingDirectorySeparatorNonTerminatedString()
+        {
+            string expected = @"foo\bar\";
+            Assert.AreEqual(expected, Util.AddTrailingDirectorySeparator(@"foo\bar"));
+        }
     }
 }

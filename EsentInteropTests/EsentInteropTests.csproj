@@ -69,6 +69,7 @@
     <Compile Include="ContentEquatableTests.cs" />
     <Compile Include="ColumnCreateConversionTests.cs" />
     <Compile Include="ColumnCreateConvertFromNativeTests.cs" />
+    <Compile Include="TableCreate2Tests.cs" />
     <Compile Include="DbinfoMiscConversionTests.cs" />
     <Compile Include="EnumerableTests.cs" />
     <Compile Include="HowDoI.cs" />

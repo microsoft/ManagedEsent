@@ -6,7 +6,7 @@
 
 namespace InteropApiTests
 {
-    using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>

@@ -15,6 +15,88 @@ namespace Microsoft.Isam.Esent.Interop
 
     /// <summary>
     /// The native version of the <see cref="JET_TABLECREATE"/> structure. This includes callbacks,
+    /// space hints, and uses NATIVE_INDEXCREATE.
+    /// </summary>
+    [StructLayout(LayoutKind.Sequential)]
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
+    internal unsafe struct NATIVE_TABLECREATE2
+    {
+        /// <summary>
+        /// Size of the structure.
+        /// </summary>
+        public uint cbStruct;
+
+        /// <summary>
+        /// Name of the table to create.
+        /// </summary>
+        public string szTableName;
+
+        /// <summary>
+        /// Name of the table from which to inherit base DDL.
+        /// </summary>
+        public string szTemplateTableName;
+
+        /// <summary>
+        /// Initial pages to allocate for table.
+        /// </summary>
+        public uint ulPages;
+
+        /// <summary>
+        /// Table density.
+        /// </summary>
+        public uint ulDensity;
+
+        /// <summary>
+        /// Array of column creation info.
+        /// </summary>
+        public NATIVE_COLUMNCREATE* rgcolumncreate;
+
+        /// <summary>
+        /// Number of columns to create.
+        /// </summary>
+        public uint cColumns;
+
+        /// <summary>
+        /// Array of indices to create, pointer to <see cref="NATIVE_INDEXCREATE"/>.
+        /// </summary>
+        public IntPtr rgindexcreate;
+
+        /// <summary>
+        /// Number of indices to create.
+        /// </summary>
+        public uint cIndexes;
+
+        /// <summary>
+        /// Callback function to use for the table.
+        /// </summary>
+        public string szCallback;
+
+        /// <summary>
+        /// Type of the callback function.
+        /// </summary>
+        public JET_cbtyp cbtyp;
+
+        /// <summary>
+        /// Table options.
+        /// </summary>
+        public uint grbit;
+
+        /// <summary>
+        /// Returned tabledid.
+        /// </summary>
+        public IntPtr tableid;
+
+        /// <summary>
+        /// Count of objects created (columns+table+indexes+callbacks).
+        /// </summary>
+        public uint cCreated;
+    }
+
+    /// <summary>
+    /// The native version of the <see cref="JET_TABLECREATE"/> structure. This includes callbacks,
     /// space hints, and uses NATIvE_INDEXCREATE2.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
@@ -464,6 +546,37 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 throw new ArgumentOutOfRangeException("cIndexes", this.cIndexes, "must be zero when rgindexcreate is null");
             }
+        }
+
+        /// <summary>
+        /// Gets the native (interop) version of this object. The following members are
+        /// NOT converted: <see cref="rgcolumncreate"/>, <see cref="rgindexcreate"/>,
+        /// <see cref="pSeqSpacehints"/>, and <see cref="pLVSpacehints"/>.
+        /// </summary>
+        /// <returns>The native (interop) version of this object.</returns>
+        internal NATIVE_TABLECREATE2 GetNativeTableCreate2()
+        {
+            this.CheckMembersAreValid();
+
+            var native = new NATIVE_TABLECREATE2();
+            native.cbStruct = checked((uint)Marshal.SizeOf(native));
+            native.szTableName = this.szTableName;
+            native.szTemplateTableName = this.szTemplateTableName;
+            native.ulPages = checked((uint)this.ulPages);
+            native.ulDensity = checked((uint)this.ulDensity);
+
+            // native.rgcolumncreate is done at pinvoke time.
+            native.cColumns = checked((uint)this.cColumns);
+
+            // native.rgindexcreate is done at pinvoke time.
+            native.cIndexes = checked((uint)this.cIndexes);
+            native.szCallback = this.szCallback;
+            native.cbtyp = this.cbtyp;
+            native.grbit = checked((uint)this.grbit);
+            native.tableid = this.tableid.Value;
+            native.cCreated = checked((uint)this.cCreated);
+
+            return native;
         }
 
         /// <summary>

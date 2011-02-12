@@ -1753,6 +1753,11 @@ namespace InteropApiTests
         [Description("Test setting a binary column from a zero-length array using a grbit")]
         public void SetZeroLengthBytesWithGrbit()
         {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                Assert.Inconclusive("Incorrectly returns null");
+            }
+
             JET_COLUMNID columnid = this.columnidDict["binary"];
 
             Api.JetBeginTransaction(this.sesid);

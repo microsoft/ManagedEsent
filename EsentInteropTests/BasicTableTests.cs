@@ -11,6 +11,7 @@ namespace InteropApiTests
     using System.Text;
     using System.Threading;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Isam.Esent.Interop.Windows7;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -552,6 +553,11 @@ namespace InteropApiTests
         [Description("Call JetGetRecordSize with intrinsic data")]
         public void JetGetRecordSizeIntrinsic()
         {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
             var size = new JET_RECSIZE();
 
             byte[] data = Any.Bytes;
@@ -559,7 +565,7 @@ namespace InteropApiTests
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
             Api.JetSetColumn(this.sesid, this.tableid, this.columnidLongText, data, data.Length, SetColumnGrbit.None, null);
             this.UpdateAndGotoBookmark();
-            Api.JetGetRecordSize(this.sesid, this.tableid, ref size, GetRecordSizeGrbit.None);
+            VistaApi.JetGetRecordSize(this.sesid, this.tableid, ref size, GetRecordSizeGrbit.None);
 
             Assert.AreEqual(data.Length, size.cbData, "cbData");
             Assert.AreEqual(data.Length, size.cbDataCompressed, "cbDataCompressed");
@@ -582,15 +588,20 @@ namespace InteropApiTests
         [Description("Call JetGetRecordSize with separated data")]
         public void JetGetRecordSizeSeparated()
         {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
             var size = new JET_RECSIZE();
 
             byte[] data = Any.BytesOfLength(64);
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
             Api.JetSetColumn(this.sesid, this.tableid, this.columnidLongText, data, data.Length, SetColumnGrbit.SeparateLV, null);
-            Api.JetGetRecordSize(this.sesid, this.tableid, ref size, GetRecordSizeGrbit.InCopyBuffer);
+            VistaApi.JetGetRecordSize(this.sesid, this.tableid, ref size, GetRecordSizeGrbit.InCopyBuffer);
             this.UpdateAndGotoBookmark();
-            Api.JetGetRecordSize(this.sesid, this.tableid, ref size, GetRecordSizeGrbit.RunningTotal);
+            VistaApi.JetGetRecordSize(this.sesid, this.tableid, ref size, GetRecordSizeGrbit.RunningTotal);
 
             Assert.AreEqual(0, size.cbData, "cbData");
             Assert.AreEqual(0, size.cbDataCompressed, "cbDataCompressed");

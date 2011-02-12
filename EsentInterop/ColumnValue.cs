@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
 
     /// <summary>
@@ -257,9 +258,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="nativeRetrievecolumns">
         /// The native retrieve columns that match the column values.
         /// </param>
-        private static unsafe void RetrieveTruncatedBuffers(JET_SESID sesid, JET_TABLEID tableid, ColumnValue[] columnValues, NATIVE_RETRIEVECOLUMN* nativeRetrievecolumns)
+        private static unsafe void RetrieveTruncatedBuffers(JET_SESID sesid, JET_TABLEID tableid, IList<ColumnValue> columnValues, NATIVE_RETRIEVECOLUMN* nativeRetrievecolumns)
         {
-            for (int i = 0; i < columnValues.Length; ++i)
+            for (int i = 0; i < columnValues.Count; ++i)
             {
                 if (nativeRetrievecolumns[i].err == (int)JET_wrn.BufferTruncated)
                 {

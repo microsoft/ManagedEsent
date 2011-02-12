@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Text;
 
     /// <summary>
@@ -27,7 +28,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             if (null == a || null == b)
             {
-                return Object.ReferenceEquals(a, b);
+                return ReferenceEquals(a, b);
             }
 
             for (int i = 0; i < count; ++i)
@@ -90,7 +91,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             if (null == left || null == right)
             {
-                return Object.ReferenceEquals(left, right);
+                return ReferenceEquals(left, right);
             }
 
             return left.ContentEquals(right);
@@ -110,7 +111,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             if (null == left || null == right)
             {
-                return Object.ReferenceEquals(left, right);
+                return ReferenceEquals(left, right);
             }
 
             for (int i = 0; i < length; ++i)
@@ -140,7 +141,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             if (null == left || null == right)
             {
-                return Object.ReferenceEquals(left, right);
+                return ReferenceEquals(left, right);
             }
 
             for (int i = 0; i < length; ++i)
@@ -195,6 +196,22 @@ namespace Microsoft.Isam.Esent.Interop
             }
 
             return hash;
+        }
+
+        /// <summary>
+        /// Add a trailing directory separator character to the string.
+        /// </summary>
+        /// <param name="dir">The directory.</param>
+        /// <returns>The directory with a separator character added (if necesary).</returns>
+        public static string AddTrailingDirectorySeparator(string dir)
+        {
+            if (!String.IsNullOrEmpty(dir))
+            {
+                var sepChars = new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar };
+                return String.Concat(dir.TrimEnd(sepChars), Path.DirectorySeparatorChar);                
+            }
+
+            return dir;
         }
     }
 }

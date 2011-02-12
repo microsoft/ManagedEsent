@@ -283,7 +283,7 @@ namespace InteropApiTests
         [Description("Test the PreferredVerPages property")]
         public void SetAndRetrieveInstanceParametersPreferredVerPages()
         {
-            int expected = 11;
+            int expected = 4;
             this.instanceParameters.PreferredVerPages = expected;
             Assert.AreEqual(expected, this.instanceParameters.PreferredVerPages);
         }
@@ -297,7 +297,7 @@ namespace InteropApiTests
         [Description("Setting the PreferredVerPages property should set the parameter on the instance")]
         public void VerifySetInstanceParametersPreferredVerPages()
         {
-            int expected = 13;
+            int expected = 4;
             this.instanceParameters.PreferredVerPages = expected;
             Assert.AreEqual(expected, this.GetIntegerParameter(JET_param.PreferredVerPages));
         }
@@ -731,6 +731,12 @@ namespace InteropApiTests
         [Description("Test setting the one database per session property to true")]
         public void SetAndRetrieveInstanceParametersOneDatabasePerSessionOn()
         {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                // Setting this instance per-parameter isn't supported.
+                return;
+            }
+
             this.instanceParameters.OneDatabasePerSession = true;
             Assert.IsTrue(this.instanceParameters.OneDatabasePerSession);
         }
@@ -743,6 +749,12 @@ namespace InteropApiTests
         [Description("Test setting the one database per session property to false")]
         public void SetAndRetrieveInstanceParametersOneDatabasePerSessionOff()
         {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                // Setting this instance per-parameter isn't supported.
+                return;
+            }
+
             this.instanceParameters.OneDatabasePerSession = false;
             Assert.IsFalse(this.instanceParameters.OneDatabasePerSession);
         }
@@ -756,6 +768,12 @@ namespace InteropApiTests
         [Description("Setting the OneDatabasePerSession property should set the parameter on the instance")]
         public void VerifySetInstanceParametersOneDatabasePerSession()
         {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                // Setting this instance per-parameter isn't supported.
+                return;
+            }
+
             bool expected = Any.Boolean;
             this.instanceParameters.OneDatabasePerSession = expected;
             Assert.AreEqual(expected, this.GetBooleanParameter(JET_param.OneDatabasePerSession));

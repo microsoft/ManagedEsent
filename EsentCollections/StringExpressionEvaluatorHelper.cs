@@ -10,7 +10,6 @@
 
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
-    using System;
     using System.Reflection;
 
     /// <summary>

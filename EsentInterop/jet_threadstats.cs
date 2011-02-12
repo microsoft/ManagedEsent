@@ -11,7 +11,6 @@ namespace Microsoft.Isam.Esent.Interop.Vista
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Runtime.InteropServices;
-    using System.Text;
 
     /// <summary>
     /// Contains cumulative statistics on the work performed by the database

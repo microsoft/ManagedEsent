@@ -2327,21 +2327,6 @@ namespace Microsoft.Isam.Esent.Interop
                     grbit));
         }
 
-        /// <summary>
-        /// Retrieves record size information from the desired location.
-        /// </summary>
-        /// <param name="sesid">The session to use.</param>
-        /// <param name="tableid">
-        /// The cursor that will be used for the API call. The cursor must be
-        /// positioned on a record, or have an update prepared.
-        /// </param>
-        /// <param name="recsize">Returns the size of the record.</param>
-        /// <param name="grbit">Call options.</param>
-        public static void JetGetRecordSize(JET_SESID sesid, JET_TABLEID tableid, ref JET_RECSIZE recsize, GetRecordSizeGrbit grbit)
-        {
-            Api.Check(Impl.JetGetRecordSize(sesid, tableid, ref recsize, grbit));
-        }
-
         #endregion
 
         #region DML

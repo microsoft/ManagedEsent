@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
     using System.Runtime.Serialization.Formatters.Binary;
@@ -230,8 +231,6 @@ namespace Microsoft.Isam.Esent.Interop
         public static string RetrieveColumnAsString(
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, Encoding encoding, RetrieveColumnGrbit grbit)
         {
-            JET_wrn wrn;
-
             // This is an optimization for retrieving Unicode strings
             if (Encoding.Unicode == encoding)
             {
@@ -245,7 +244,7 @@ namespace Microsoft.Isam.Esent.Interop
             byte[] data = cachedBuffer;
 
             int dataSize;
-            wrn = JetRetrieveColumn(sesid, tableid, columnid, data, data.Length, out dataSize, grbit, null);
+            JET_wrn wrn = JetRetrieveColumn(sesid, tableid, columnid, data, data.Length, out dataSize, grbit, null);
             if (JET_wrn.ColumnNull == wrn)
             {
                 return null;
@@ -843,7 +842,7 @@ namespace Microsoft.Isam.Esent.Interop
             JET_SESID sesid,
             JET_TABLEID tableid,
             NATIVE_RETRIEVECOLUMN* nativeretrievecolumns,
-            JET_RETRIEVECOLUMN[] retrievecolumns,
+            IList<JET_RETRIEVECOLUMN> retrievecolumns,
             int numColumns,
             int i)
         {

@@ -299,7 +299,7 @@ namespace BasicTest
 
             // BUGBUG: need to investigate why this gives a value which is larger than the sum of the column sizes
             var recsize = new JET_RECSIZE();
-            Api.JetGetRecordSize(sesid, tableid, ref recsize, GetRecordSizeGrbit.None);
+            VistaApi.JetGetRecordSize(sesid, tableid, ref recsize, GetRecordSizeGrbit.None);
             BasicClass.Assert(
                 recsize.cbData + recsize.cbLongValueData >= totalsize,
                 String.Format("JetGetRecordSize returned {0} bytes, expected {1}", recsize.cbData + recsize.cbLongValueData, totalsize));

@@ -50,12 +50,12 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                return AddTrailingDirectorySeparator(this.GetStringParameter(JET_param.SystemPath));
+                return Util.AddTrailingDirectorySeparator(this.GetStringParameter(JET_param.SystemPath));
             }
 
             set
             {
-                this.SetStringParameter(JET_param.SystemPath, AddTrailingDirectorySeparator(value));
+                this.SetStringParameter(JET_param.SystemPath, Util.AddTrailingDirectorySeparator(value));
             }
         }
 
@@ -71,12 +71,12 @@ namespace Microsoft.Isam.Esent.Interop
                 // full path of the temporary database. Extract the directory name.
                 string path = this.GetStringParameter(JET_param.TempPath);
                 string dir = Path.GetDirectoryName(path);
-                return AddTrailingDirectorySeparator(dir);
+                return Util.AddTrailingDirectorySeparator(dir);
             }
 
             set
             {
-                this.SetStringParameter(JET_param.TempPath, AddTrailingDirectorySeparator(value));
+                this.SetStringParameter(JET_param.TempPath, Util.AddTrailingDirectorySeparator(value));
             }
         }
 
@@ -88,12 +88,12 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                return AddTrailingDirectorySeparator(this.GetStringParameter(JET_param.LogFilePath));
+                return Util.AddTrailingDirectorySeparator(this.GetStringParameter(JET_param.LogFilePath));
             }
 
             set
             {
-                this.SetStringParameter(JET_param.LogFilePath, AddTrailingDirectorySeparator(value));
+                this.SetStringParameter(JET_param.LogFilePath, Util.AddTrailingDirectorySeparator(value));
             }
         }
 
@@ -113,7 +113,7 @@ namespace Microsoft.Isam.Esent.Interop
                 if (EsentVersion.SupportsServer2003Features)
                 {
                     return
-                        AddTrailingDirectorySeparator(
+                        Util.AddTrailingDirectorySeparator(
                             this.GetStringParameter(Server2003Param.AlternateDatabaseRecoveryPath));
                 }
 
@@ -125,7 +125,7 @@ namespace Microsoft.Isam.Esent.Interop
                 if (EsentVersion.SupportsServer2003Features)
                 {
                     this.SetStringParameter(
-                        Server2003Param.AlternateDatabaseRecoveryPath, AddTrailingDirectorySeparator(value));
+                        Server2003Param.AlternateDatabaseRecoveryPath, Util.AddTrailingDirectorySeparator(value));
                 }
             }
         }
@@ -629,17 +629,6 @@ namespace Microsoft.Isam.Esent.Interop
         public override string ToString()
         {
             return String.Format(CultureInfo.InvariantCulture, "InstanceParameters (0x{0:x})", this.instance.Value);
-        }
-
-        /// <summary>
-        /// Add a trailing directory separator character to the string.
-        /// </summary>
-        /// <param name="dir">The directory.</param>
-        /// <returns>The directory with a separator character added (if necesary).</returns>
-        private static string AddTrailingDirectorySeparator(string dir)
-        {
-            var sepChars = new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar };
-            return string.Concat(dir.TrimEnd(sepChars), Path.DirectorySeparatorChar);
         }
 
         /// <summary>

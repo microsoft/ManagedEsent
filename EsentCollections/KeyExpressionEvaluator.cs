@@ -11,9 +11,7 @@
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq.Expressions;
-    using System.Reflection;
 
     /// <summary>
     /// Contains methods to evaluate a predicate Expression which operates

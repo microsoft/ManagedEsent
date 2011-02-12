@@ -226,6 +226,89 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Demonstrate how to seek by string wildcards.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Demonstrate how to seek by string wildcard")]
+        public void HowDoISeekByStringWildcard()
+        {
+            JET_SESID sesid = this.testSession;
+            JET_DBID dbid = this.testDbid;
+
+            JET_TABLEID tableid;
+            JET_COLUMNDEF columndef = new JET_COLUMNDEF();
+            JET_COLUMNID keyColumn;
+
+            // First create the table with a string key.
+            Api.JetCreateTable(sesid, dbid, "table", 0, 100, out tableid);
+            columndef.coltyp = JET_coltyp.LongText;
+            columndef.cp = JET_CP.Unicode;
+            Api.JetAddColumn(sesid, tableid, "key", columndef, null, 0, out keyColumn);
+
+            const string KeyDescription = "+key\0\0";
+            Api.JetCreateIndex(
+                sesid,
+                tableid,
+                "index",
+                CreateIndexGrbit.IndexPrimary,
+                KeyDescription,
+                KeyDescription.Length,
+                100);
+
+            // Insert some records
+            using (var transaction = new Transaction(sesid))
+            {
+                foreach (string k in new[] { "A", "ANT", "B", "BAT", "C", "CAT", "D", "DOG" })
+                {
+                    using (var update = new Update(sesid, tableid, JET_prep.Insert))
+                    {
+                        Api.SetColumn(sesid, tableid, keyColumn, k, Encoding.Unicode);
+                        update.Save();
+                    }
+                }
+
+                transaction.Commit(CommitTransactionGrbit.LazyFlush);
+            }
+
+            // We have an index over a string column, which contains 8 records:
+            //  [A, ANT, B, BAT, C, CAT, D, DOG]
+            // The following code demonstrates how to create index ranges over
+            // all string prefix combinations. The three things that are varied are:
+            //  1. The use of PartialColumnEndLimit
+            //  2. The use of SeekGE or SeekGT
+            //  3. The used of RangeInclusive
+
+            // "A*" <= key <= "C*" -> ["A", "ANT", "B", "BAT", "C", "CAT"]
+            Api.MakeKey(sesid, tableid, "A", Encoding.Unicode, MakeKeyGrbit.NewKey);
+            Api.JetSeek(sesid, tableid, SeekGrbit.SeekGE);
+            Api.MakeKey(sesid, tableid, "C", Encoding.Unicode, MakeKeyGrbit.NewKey | MakeKeyGrbit.PartialColumnEndLimit);
+            Api.JetSetIndexRange(sesid, tableid, SetIndexRangeGrbit.RangeUpperLimit | SetIndexRangeGrbit.RangeInclusive);
+            CheckIndexRange(sesid, tableid, keyColumn, new[] { "A", "ANT", "B", "BAT", "C", "CAT" });
+
+            // "A*" < key <= "C*" -> ["B", "BAT", "C", "CAT"]
+            Api.MakeKey(sesid, tableid, "A", Encoding.Unicode, MakeKeyGrbit.NewKey | MakeKeyGrbit.PartialColumnEndLimit);
+            Api.JetSeek(sesid, tableid, SeekGrbit.SeekGT);
+            Api.MakeKey(sesid, tableid, "C", Encoding.Unicode, MakeKeyGrbit.NewKey | MakeKeyGrbit.PartialColumnEndLimit);
+            Api.JetSetIndexRange(sesid, tableid, SetIndexRangeGrbit.RangeUpperLimit | SetIndexRangeGrbit.RangeInclusive);
+            CheckIndexRange(sesid, tableid, keyColumn, new[] { "B", "BAT", "C", "CAT" });
+
+            // "A*" <= key < "C*" -> ["A", "ANT", "B", "BAT"]
+            Api.MakeKey(sesid, tableid, "A", Encoding.Unicode, MakeKeyGrbit.NewKey);
+            Api.JetSeek(sesid, tableid, SeekGrbit.SeekGE);
+            Api.MakeKey(sesid, tableid, "C", Encoding.Unicode, MakeKeyGrbit.NewKey);
+            Api.JetSetIndexRange(sesid, tableid, SetIndexRangeGrbit.RangeUpperLimit);
+            CheckIndexRange(sesid, tableid, keyColumn, new[] { "A", "ANT", "B", "BAT" });
+
+            // "A*" < key < "C*" -> ["B", "BAT"]
+            Api.MakeKey(sesid, tableid, "A", Encoding.Unicode, MakeKeyGrbit.NewKey | MakeKeyGrbit.PartialColumnEndLimit);
+            Api.JetSeek(sesid, tableid, SeekGrbit.SeekGT);
+            Api.MakeKey(sesid, tableid, "C", Encoding.Unicode, MakeKeyGrbit.NewKey);
+            Api.JetSetIndexRange(sesid, tableid, SetIndexRangeGrbit.RangeUpperLimit);
+            CheckIndexRange(sesid, tableid, keyColumn, new[] { "B", "BAT" });
+        }
+
+        /// <summary>
         /// Demonstrate how to iterate over records.
         /// </summary>
         [TestMethod]
@@ -671,6 +754,26 @@ namespace InteropApiTests
             Guid[] binaryOrder = GetGuids(sesid, tableid, guidColumn).ToArray();
 
             CollectionAssert.AreEqual(guidOrder, binaryOrder);
+        }
+
+        /// <summary>
+        /// Check that records in an index range have the expected values.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor with the index range setup.</param>
+        /// <param name="columnid">The column to retrieve.</param>
+        /// <param name="expected">The values we expect.</param>
+        private static void CheckIndexRange(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, ICollection<string> expected)
+        {
+            ICollection<string> actual = new List<string>();
+            do
+            {
+                actual.Add(Api.RetrieveColumnAsString(sesid, tableid, columnid));
+            }
+            while (Api.TryMoveNext(sesid, tableid));
+
+            Assert.AreEqual(expected.Count, actual.Count, "Wrong number of records returned");
+            Assert.AreEqual(expected.Except(actual).Count(), 0, "Wrong elements returned");
         }
 
         /// <summary>

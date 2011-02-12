@@ -72,6 +72,45 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// When the instance is closed JetTerm should be called.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify that JetTerm is called when the instance is closed")]
+        public void VerifyInstanceCallsJetTerm()
+        {
+            var mocks = new MockRepository();
+            var mockApi = mocks.StrictMock<IJetApi>();
+            using (new ApiTestHook(mockApi))
+            {
+                var jetInstance = new JET_INSTANCE { Value = (IntPtr)0x1 };
+
+                Expect.Call(
+                    mockApi.JetCreateInstance2(
+                        out Arg<JET_INSTANCE>.Out(jetInstance).Dummy,
+                        Arg<string>.Is.Anything,
+                        Arg<string>.Is.Anything,
+                        Arg<CreateInstanceGrbit>.Is.Anything))
+                    .Return((int)JET_err.Success);
+                Expect.Call(
+                    mockApi.JetInit2(
+                        ref Arg<JET_INSTANCE>.Ref(Is.Equal(jetInstance), jetInstance).Dummy,
+                        Arg<InitGrbit>.Is.Anything))
+                    .Return((int)JET_err.Success);
+                Expect.Call(mockApi.JetTerm(Arg<JET_INSTANCE>.Is.Equal(jetInstance))).Return((int)JET_err.Success);
+                mocks.ReplayAll();
+
+                using (var instance = new Instance("testterm"))
+                {
+                    instance.Init();
+                    instance.Close();
+                }
+
+                mocks.VerifyAll();
+            }
+        }
+
+        /// <summary>
         /// When JetCreateInstance2 fails the instance isn't initialized
         /// so it shouldn't be freed.
         /// </summary>
