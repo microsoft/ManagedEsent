@@ -22,6 +22,17 @@ namespace EsentCollectionsTests
     public class DictionaryCreationTests
     {
         /// <summary>
+        /// A PersistentDictionary is read-write.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void VerifyKeyColumnConverterThrowsExceptionOnUnsupportedType()
+        {
+            var k = new KeyColumnConverter<decimal>();
+        }
+
+        /// <summary>
         /// Creating a dictionary without a directory fails.
         /// </summary>
         [TestMethod]
@@ -189,6 +200,29 @@ namespace EsentCollectionsTests
             const string DictionaryLocation = "DictionaryToDelete";
             var dict = new PersistentDictionary<ulong, bool>(DictionaryLocation);
             dict.Dispose();
+            Assert.IsTrue(PersistentDictionaryFile.Exists(DictionaryLocation));
+            PersistentDictionaryFile.DeleteFiles(DictionaryLocation);
+            Assert.IsFalse(PersistentDictionaryFile.Exists(DictionaryLocation));
+            Directory.Delete(DictionaryLocation, false);
+        }
+
+        /// <summary>
+        /// PersistentDictionaryFile.DeleteFiles removes reserved logs (created 
+        /// on older versions of Windows).
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void VerifyDeleteRemovesReservedLogs()
+        {
+            const string DictionaryLocation = "DictionaryToDelete";
+            const string ReservedLog = @"DictionaryToDelete\res1.log";
+            var dict = new PersistentDictionary<ulong, bool>(DictionaryLocation);
+            dict.Dispose();
+            if (!File.Exists(ReservedLog))
+            {
+                File.WriteAllText(ReservedLog, "VerifyDeleteRemovesDatabaseFiles");
+            }
+
             Assert.IsTrue(PersistentDictionaryFile.Exists(DictionaryLocation));
             PersistentDictionaryFile.DeleteFiles(DictionaryLocation);
             Assert.IsFalse(PersistentDictionaryFile.Exists(DictionaryLocation));

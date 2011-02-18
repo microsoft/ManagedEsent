@@ -1458,6 +1458,133 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// Linq test 12.
+        /// </summary>
+        [TestMethod]
+        [Description("Linq test 12")]
+        [Priority(2)]
+        public void LinqTest12()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary3))
+            {
+                var expected = from x in this.testDictionary3 where String.Equals(x.Key, "b") || String.Equals("c", x.Key) select x.Value;
+                var actual = from x in persistentDictionary where String.Equals(x.Key, "b") || String.Equals("c", x.Key) select x.Value;
+                EnumerableAssert.AreEqual(expected, actual, null);
+            }
+        }
+
+        /// <summary>
+        /// Linq test 13.
+        /// </summary>
+        [TestMethod]
+        [Description("Linq test 13")]
+        [Priority(2)]
+        public void LinqTest13()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary3))
+            {
+                var expected = from x in this.testDictionary3 where x.Key.Equals("b") || x.Key.Equals("c") select x.Value;
+                var actual = from x in persistentDictionary where x.Key.Equals("b") || x.Key.Equals("c") select x.Value;
+                EnumerableAssert.AreEqual(expected, actual, null);
+            }
+        }
+
+        /// <summary>
+        /// Linq test 14.
+        /// </summary>
+        [TestMethod]
+        [Description("Linq test 14")]
+        [Priority(2)]
+        public void LinqTest14()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary3))
+            {
+                var expected = from x in this.testDictionary3 where String.Compare(x.Key, "d") < 0 && String.Compare("b", x.Key) <= 0 select x.Value;
+                var actual = from x in persistentDictionary where String.Compare(x.Key, "d") < 0 && String.Compare("b", x.Key) <= 0 select x.Value;
+                EnumerableAssert.AreEqual(expected, actual, null);
+            }
+        }
+
+        /// <summary>
+        /// Linq test 15.
+        /// </summary>
+        [TestMethod]
+        [Description("Linq test 15")]
+        [Priority(2)]
+        public void LinqTest15()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = from x in this.testDictionary1 where x.Key.Equals(6 / 2) select x.Value;
+                var actual = from x in persistentDictionary where x.Key.Equals(6 / 2) select x.Value;
+                EnumerableAssert.AreEqual(expected, actual, null);
+            }
+        }
+
+        /// <summary>
+        /// Linq test 16.
+        /// </summary>
+        [TestMethod]
+        [Description("Linq test 16")]
+        [Priority(2)]
+        public void LinqTest16()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary2))
+            {
+                Assert.AreEqual(this.testDictionary2.Reverse().Last(), persistentDictionary.Reverse().Last(), null);
+            }
+        }
+
+        /// <summary>
+        /// Linq test 17.
+        /// </summary>
+        [TestMethod]
+        [Description("Linq test 17")]
+        [Priority(2)]
+        public void LinqTest17()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = from x in this.testDictionary1.Keys where x.Equals(5 - 3) || x == 6 / 2 || 2 * 2 == x select x;
+                var actual = from x in persistentDictionary.Keys where x.Equals(5 - 3) || x == 6 / 2 || 2 * 2 == x select x;
+                EnumerableAssert.AreEqual(expected, actual, null);
+            }
+        }
+
+        /// <summary>
+        /// Linq test 18.
+        /// </summary>
+        [TestMethod]
+        [Description("Linq test 18")]
+        [Priority(2)]
+        public void LinqTest18()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary1))
+            {
+                var expected = from x in this.testDictionary1 where x.Key.Equals("not a number") select x.Value;
+                var actual = from x in persistentDictionary where x.Key.Equals("not a number") select x.Value;
+                EnumerableAssert.AreEqual(expected, actual, null);
+            }
+        }
+
+        /// <summary>
+        /// Linq test 19.
+        /// </summary>
+        [TestMethod]
+        [Description("Linq test 19")]
+        [Priority(2)]
+        public void LinqTest19()
+        {
+            using (var persistentDictionary = CloneDictionary(this.testDictionary2))
+            {
+                Guid g = Guid.NewGuid();
+                var expected = this.testDictionary2.Where(x => x.Value == g).Reverse();
+                var actual = persistentDictionary.Where(x => x.Value == g).Reverse();
+                EnumerableAssert.AreEqual(expected, actual, null);
+            }
+        }
+
+        /// <summary>
         /// Create a PersistentDictionary that is a copy of another dictionary.
         /// </summary>
         /// <typeparam name="TKey">The type of the dictionary key.</typeparam>

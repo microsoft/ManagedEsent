@@ -114,6 +114,7 @@ namespace InteropApiTests
 
             Api.JetSetLS(this.sesid, this.tableid, expected, LsGrbit.Cursor);
             Api.JetGetLS(this.sesid, this.tableid, out actual, LsGrbit.Cursor);
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>

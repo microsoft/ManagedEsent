@@ -36,13 +36,25 @@ namespace EsentCollectionsTests
         #region KeyRangeIsExact
 
         /// <summary>
-        /// Verify that KeyRangeIsExact throws an exception when its argument is null.
+        /// Verify that KeyExpressionEvaluator.KeyRangeIsExact throws an exception when its argument is null.
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Verify that KeyRangeIsExact throws an exception when its argument is null")]
+        [Description("Verify that KeyExpressionEvaluator.KeyRangeIsExact throws an exception when its argument is null")]
         [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyKeyRangeIsExactThrowsExceptionWhenArgumentIsNull()
+        {
+            bool ignored = KeyExpressionEvaluator<short>.KeyRangeIsExact(null);
+        }
+
+        /// <summary>
+        /// Verify that KeyValueExpressionEvaluator.KeyRangeIsExact throws an exception when its argument is null.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that .KeyValueExpressionEvaluatorKeyRangeIsExact throws an exception when its argument is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyKeyValueRangeIsExactThrowsExceptionWhenArgumentIsNull()
         {
             bool ignored = KeyValueExpressionEvaluator<short, decimal>.KeyRangeIsExact(null);
         }
@@ -150,13 +162,25 @@ namespace EsentCollectionsTests
         #endregion
 
         /// <summary>
-        /// Verify that GetKeyRange throws an exception when its argument is null.
+        /// Verify that KeyExpressionEvaluator.GetKeyRange throws an exception when its argument is null.
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Verify that GetKeyRange throws an exception when its argument is null")]
+        [Description("Verify that KeyExpressionEvaluator.GetKeyRange throws an exception when its argument is null")]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void VerifyGetKeyRangeThrowsExceptionWhenArgumentIsNull()
+        public void VerifyKeyExpressionEvaluatorThrowsExceptionWhenArgumentIsNull()
+        {
+            KeyRange<DateTime> keyRange = KeyExpressionEvaluator<DateTime>.GetKeyRange(null);
+        }
+
+        /// <summary>
+        /// Verify that KeyValueExpressionEvaluator.GetKeyRange throws an exception when its argument is null.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that KeyValueExpressionEvaluator.GetKeyRange throws an exception when its argument is null")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyKeyValueExpressionEvaluatorThrowsExceptionWhenArgumentIsNull()
         {
             KeyRange<short> keyRange = KeyValueExpressionEvaluator<short, decimal>.GetKeyRange(null);
         }
@@ -1105,6 +1129,83 @@ namespace EsentCollectionsTests
         {
             int i = ~32;
             ConstantFoldingHelper(x => x.Key <= ~i);
+        }
+
+        /// <summary>
+        /// Verify constant folding with invalid types.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding with an invalid type")]
+        public void VerifyConstantFoldingInvalidType()
+        {
+            KeyRange<double> keyRange = KeyExpressionEvaluator<double>.GetKeyRange(x => x.Equals("foo"));
+            Assert.AreEqual(keyRange, KeyRange<double>.OpenRange);
+        }
+
+        /// <summary>
+        /// Verify constant folding with invalid calculation.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding with an invalid calculation")]
+        public void VerifyConstantFoldingInvalidCalculation()
+        {
+            long l = 7;
+            KeyRange<string> keyRange = KeyExpressionEvaluator<string>.GetKeyRange(x => x.Equals(l + 5.6));
+            Assert.AreEqual(keyRange, KeyRange<string>.OpenRange);
+        }
+
+        /// <summary>
+        /// Verify constant folding with a function returning an invalid type returned from a method.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding with an invalid type returned from a method")]
+        public void VerifyConstantFoldingInvalidReturnType()
+        {
+            KeyRange<double> keyRange = KeyExpressionEvaluator<double>.GetKeyRange(x => x.Equals(int.MaxValue.ToString()));
+            Assert.AreEqual(keyRange, KeyRange<double>.OpenRange);
+        }
+
+        /// <summary>
+        /// Verify constant folding with a cast.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding with a cast")]
+        public void VerifyConstantFoldingCast()
+        {
+            object o = Math.PI;
+            KeyRange<double> keyRange = KeyExpressionEvaluator<double>.GetKeyRange(x => x == (double)o);
+            var key = Key<double>.CreateKey(Math.PI, true);
+            Assert.AreEqual(keyRange, new KeyRange<double>(key, key));
+        }
+
+        /// <summary>
+        /// Verify constant folding with a cast of a null value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding with a cast of a null value")]
+        public void VerifyConstantFoldingNullCast()
+        {
+            Func<object> f = () => null;
+            KeyRange<double> keyRange = KeyExpressionEvaluator<double>.GetKeyRange(x => x == (double)f());
+            Assert.AreEqual(keyRange, KeyRange<double>.OpenRange);
+        }
+
+        /// <summary>
+        /// Verify constant folding with an invalid cast.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify constant folding with an invalid cast")]
+        public void VerifyConstantFoldingInvalidCast()
+        {
+            object o = Guid.NewGuid();
+            KeyRange<double> keyRange = KeyExpressionEvaluator<double>.GetKeyRange(x => x == (double)o);
+            Assert.AreEqual(keyRange, KeyRange<double>.OpenRange);
         }
 
         #endregion

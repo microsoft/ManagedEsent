@@ -46,8 +46,7 @@ namespace EsentCollectionsTests
         [Description("Test a bool dictionary")]
         public void TestGenericBooleanDictionary()
         {
-            TestGenericDictionary<bool, bool>();
-            TestGenericDictionary<bool, bool?>();
+            TestNullableGenericDictionary<bool, bool>();
         } 
 
         /// <summary>
@@ -58,8 +57,7 @@ namespace EsentCollectionsTests
         [Description("Test a byte dictionary")]
         public void TestGenericByteDictionary()
         {
-            TestGenericDictionary<byte, byte>();
-            TestGenericDictionary<byte, byte?>();
+            TestNullableGenericDictionary<byte, byte>();
         }
 
         /// <summary>
@@ -70,8 +68,7 @@ namespace EsentCollectionsTests
         [Description("Test an Int16 dictionary")]
         public void TestGenericInt16Dictionary()
         {
-            TestGenericDictionary<short, short>();
-            TestGenericDictionary<short, short?>();
+            TestNullableGenericDictionary<short, short>();
         }
 
         /// <summary>
@@ -82,8 +79,7 @@ namespace EsentCollectionsTests
         [Description("Test an UInt16 dictionary")]
         public void TestGenericUInt16Dictionary()
         {
-            TestGenericDictionary<ushort, ushort>();
-            TestGenericDictionary<ushort, ushort?>();
+            TestNullableGenericDictionary<ushort, ushort>();
         }
 
         /// <summary>
@@ -94,8 +90,7 @@ namespace EsentCollectionsTests
         [Description("Test an Int32 dictionary")]
         public void TestGenericInt32Dictionary()
         {
-            TestGenericDictionary<int, int>();
-            TestGenericDictionary<int, int?>();
+            TestNullableGenericDictionary<int, int>();
         }
 
         /// <summary>
@@ -106,8 +101,7 @@ namespace EsentCollectionsTests
         [Description("Test an UInt32 dictionary")]
         public void TestGenericUInt32Dictionary()
         {
-            TestGenericDictionary<uint, uint>();
-            TestGenericDictionary<uint, uint?>();
+            TestNullableGenericDictionary<uint, uint>();
         }
 
         /// <summary>
@@ -118,8 +112,7 @@ namespace EsentCollectionsTests
         [Description("Test an Int64 dictionary")]
         public void TestGenericInt64Dictionary()
         {
-            TestGenericDictionary<long, long>();
-            TestGenericDictionary<long, long?>();
+            TestNullableGenericDictionary<long, long>();
         }
 
         /// <summary>
@@ -130,8 +123,7 @@ namespace EsentCollectionsTests
         [Description("Test an UInt64 dictionary")]
         public void TestGenericUInt64Dictionary()
         {
-            TestGenericDictionary<ulong, ulong>();
-            TestGenericDictionary<ulong, ulong?>();
+            TestNullableGenericDictionary<ulong, ulong>();
         }
 
         /// <summary>
@@ -142,8 +134,7 @@ namespace EsentCollectionsTests
         [Description("Test a float dictionary")]
         public void TestGenericFloatDictionary()
         {
-            TestGenericDictionary<float, float>();
-            TestGenericDictionary<float, float?>();
+            TestNullableGenericDictionary<float, float>();
         }
 
         /// <summary>
@@ -154,8 +145,7 @@ namespace EsentCollectionsTests
         [Description("Test a double dictionary")]
         public void TestGenericDoubleDictionary()
         {
-            TestGenericDictionary<double, double>();
-            TestGenericDictionary<double, double?>();
+            TestNullableGenericDictionary<double, double>();
         }
 
         /// <summary>
@@ -166,8 +156,7 @@ namespace EsentCollectionsTests
         [Description("Test a DateTime dictionary")]
         public void TestGenericDateTimeDictionary()
         {
-            TestGenericDictionary<DateTime, DateTime>();
-            TestGenericDictionary<DateTime, DateTime?>();
+            TestNullableGenericDictionary<DateTime, DateTime>();
         }
 
         /// <summary>
@@ -178,8 +167,7 @@ namespace EsentCollectionsTests
         [Description("Test a TimeSpan dictionary")]
         public void TestGenericTimeSpanDictionary()
         {
-            TestGenericDictionary<TimeSpan, TimeSpan>();
-            TestGenericDictionary<TimeSpan, TimeSpan?>();
+            TestNullableGenericDictionary<TimeSpan, TimeSpan>();
         }
 
         /// <summary>
@@ -190,8 +178,7 @@ namespace EsentCollectionsTests
         [Description("Test a Guid dictionary")]
         public void TestGenericGuidDictionary()
         {
-            TestGenericDictionary<Guid, Guid>();
-            TestGenericDictionary<Guid, Guid?>();
+            TestNullableGenericDictionary<Guid, Guid>();
         }
 
         /// <summary>
@@ -455,6 +442,12 @@ namespace EsentCollectionsTests
                 Assert.AreEqual(o, kvp, "Dictionary query enumeration");
             }
 
+            enumerator = dictionary.Keys.Where(x => true);
+            foreach (object o in enumerator)
+            {
+                Assert.AreEqual(o, kvp.Key, "Dictionary query enumeration");
+            }
+
             foreach (KeyValuePair<TKey, TValue> o in dictionary.Where(x => true).Reverse())
             {
                 Assert.AreEqual(o, kvp, "Dictionary query enumeration");
@@ -526,10 +519,20 @@ namespace EsentCollectionsTests
         /// </summary>
         /// <typeparam name="TKey">The key type for the dictionary.</typeparam>
         /// <typeparam name="TValue">The value type for the dictionary.</typeparam>
-        private static void TestGenericDictionary<TKey, TValue>() where TKey : IComparable<TKey>
+        private static void TestNullableGenericDictionary<TKey, TValue>() where TKey : IComparable<TKey> where TValue : struct
         {
+            // Test the version with a nullable value. Use both null and non-null values.
+            using (var dictionary = new PersistentDictionary<TKey, TValue?>(DictionaryPath))
+            {
+                RunDictionaryTests(dictionary, default(TKey), default(TValue));
+                dictionary.Clear();
+                RunDictionaryTests(dictionary, default(TKey), default(TValue?));
+            }
+
+            PersistentDictionaryFile.DeleteFiles(DictionaryPath);
+
             using (var dictionary = new PersistentDictionary<TKey, TValue>(DictionaryPath))
-            {                
+            {
                 TKey key = default(TKey);
                 TValue value = default(TValue);
                 RunDictionaryTests(dictionary, key, value);
@@ -539,7 +542,7 @@ namespace EsentCollectionsTests
             Dictionary<TKey, TValue> temp;
             using (var dictionary = new PersistentDictionary<TKey, TValue>(DictionaryPath))
             {
-                 temp = new Dictionary<TKey, TValue>(dictionary);
+                temp = new Dictionary<TKey, TValue>(dictionary);
             }
 
             // Delete the database

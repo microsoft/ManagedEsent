@@ -7,7 +7,7 @@
 // </summary>
 //-----------------------------------------------------------------------
 
-namespace SampleApp
+namespace StockSample
 {
     using System;
     using System.Collections.Generic;
@@ -126,6 +126,11 @@ namespace SampleApp
                         // shares_owned column is non null.
                         Console.WriteLine("** Owned shares");
                         DumpByIndex(session, table, "shares");
+
+                        // The noshares index is sparse; it only contains records where the
+                        // shares_owned column is null.
+                        Console.WriteLine("** Companies with no owned shares");
+                        DumpByIndex(session, table, "noshares");
 
                         // Use the price index to find stocks sorted by price.
                         Console.WriteLine("** Sorted by price");
@@ -538,6 +543,8 @@ namespace SampleApp
                         // a primary index to the table (a primary index can only be added if the table
                         // is empty and opened exclusively). Columns and indexes can be added to a 
                         // table which is opened normally.
+                        // The other way to create a table is to use JetCreateTableColumnIndex to
+                        // add all columns and indexes with one call.
                         JET_TABLEID tableid;
                         Api.JetCreateTable(session, dbid, TableName, 16, 100, out tableid);
                         CreateColumnsAndIndexes(session, tableid);
@@ -617,12 +624,44 @@ namespace SampleApp
                 indexDef = "+price\0\0";
                 Api.JetCreateIndex(sesid, tableid, "price", CreateIndexGrbit.None, indexDef, indexDef.Length, 100);
 
-                // An index on the number of shares owned. This index is sparse.
-                // We only want this index to contain entries for stocks that are actually owned so we use the IndexIgnoreAnyNull
-                // option to prevent entries from being generated for any record where any of the columns in the index are null.
-                // By setting the 'shares_owned' column to null we can hide records from this index.
-                indexDef = "+name\0+shares_owned\0\0";
-                Api.JetCreateIndex(sesid, tableid, "shares", CreateIndexGrbit.IndexIgnoreAnyNull, indexDef, indexDef.Length, 100);
+                // Create 2 indexes that contain either companies where we own shares or companies
+                // where we don't own shares. To do this we make the indexes conditional on the
+                // 'shares_owned' column being null or non-null. When the 'shares_owned' column
+                // is null entries will only appear in the 'noshares' index. When the 'shares_owned'
+                // column is non-null (i.e. it has a value) entries will only appear in the 'shares'
+                // index. Here we don't index the 'shares_owned' column (that would be valid too),
+                // we just use it to determine membership in the index.
+                const string IndexKey = "+name\0\0";
+                JET_INDEXCREATE[] indexcreates = new[]
+                {
+                    new JET_INDEXCREATE
+                    {
+                        szIndexName = "shares",
+                        szKey = IndexKey,
+                        cbKey = IndexKey.Length,
+                        rgconditionalcolumn = new[]
+                        {
+                            new JET_CONDITIONALCOLUMN
+                            {
+                                szColumnName = "shares_owned",
+                                grbit = ConditionalColumnGrbit.ColumnMustBeNonNull
+                            }
+                        },
+                        cConditionalColumn = 1
+                    },
+                };
+
+                // This is important: only create one index at a time with JetCreateIndex2!
+                // The API takes an array of JET_INDEXCREATE objects, but if more than one
+                // index is passed in then the API operates in batch mode, which requires
+                // the caller NOT be in a transaction.
+                Api.JetCreateIndex2(sesid, tableid, indexcreates, indexcreates.Length);
+
+                // Now the first index has been created we change the name and invert the
+                // condition and create a second index.
+                indexcreates[0].szIndexName = "noshares";
+                indexcreates[0].rgconditionalcolumn[0].grbit = ConditionalColumnGrbit.ColumnMustBeNull;
+                Api.JetCreateIndex2(sesid, tableid, indexcreates, indexcreates.Length);
 
                 transaction.Commit(CommitTransactionGrbit.LazyFlush);
             }

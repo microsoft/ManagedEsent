@@ -532,6 +532,8 @@ namespace EsentCollectionsTests
             EqualityAsserts.TestEqualsAndHashCode(keyrange1, keyrange2, false);
         }
 
+        #region Invert tests
+
         /// <summary>
         /// KeyRange.Invert test 1
         /// </summary>
@@ -614,6 +616,10 @@ namespace EsentCollectionsTests
         {
             Assert.AreEqual(KeyRange<string>.EmptyRange, KeyRange<string>.EmptyRange.Invert());
         }
+
+        #endregion
+
+        #region Intersect tests
 
         /// <summary>
         /// KeyRange intersect test 1
@@ -849,7 +855,7 @@ namespace EsentCollectionsTests
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("KeyRange.Intersect test 18 (string range with prefix/non-prefix)")]
+        [Description("KeyRange.Intersect test 18 (string range with prefix/prefix)")]
         public void TestKeyRangeIntersect18()
         {
             // The longer prefix is more restrictive, so we want it
@@ -857,6 +863,63 @@ namespace EsentCollectionsTests
             var range2 = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("bb"));
             KeyRangeIntersectionHelper(range1, range2, range1);
         }
+
+        /// <summary>
+        /// KeyRange intersect test 19
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Intersect test 19 (string range with prefix/non-prefix)")]
+        public void TestKeyRangeIntersect19()
+        {
+            var range1 = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("y"));
+            var range2 = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreateKey("x", true));
+            KeyRangeIntersectionHelper(range1, range2, range2);
+        }
+
+        /// <summary>
+        /// KeyRange intersect test 20
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Intersect test 20 (string range with prefix/prefix)")]
+        public void TestKeyRangeIntersect20()
+        {
+            // The longer prefix is more restrictive, so we want it
+            var range1 = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("abc"));
+            var range2 = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("wxyz"));
+            KeyRangeIntersectionHelper(range1, range2, range1);
+        }
+
+        /// <summary>
+        /// KeyRange intersect test 21
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Intersect test 21 (empty range and non-empty range)")]
+        public void TestKeyRangeIntersect21()
+        {
+            var range1 = KeyRange<int>.EmptyRange;
+            var range2 = new KeyRange<int>(null, Key<int>.CreateKey(7, true));
+            KeyRangeIntersectionHelper(range1, range2, KeyRange<int>.EmptyRange);
+        }
+
+        /// <summary>
+        /// KeyRange intersect test 22
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Intersect test 22 (string range with prefix/non-prefix)")]
+        public void TestKeyRangeIntersect22()
+        {
+            var range1 = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("b"));
+            var range2 = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreateKey("x", true));
+            KeyRangeIntersectionHelper(range1, range2, range1);
+        }
+
+        #endregion
+
+        #region Union tests
 
         /// <summary>
         /// KeyRange union test 1
@@ -1041,6 +1104,38 @@ namespace EsentCollectionsTests
             var expected = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("c"));
             KeyRangeUnionHelper(range1, range2, expected);
         }
+
+        /// <summary>
+        /// KeyRange union test 15
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Union test 15 (two prefixes)")]
+        public void TestKeyRangeUnion15()
+        {
+            // The shorter prefix matches more records so we want to use it
+            var range1 = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("abcd"));
+            var range2 = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("xyz"));
+            var expected = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("xyz"));
+            KeyRangeUnionHelper(range1, range2, expected);
+        }
+
+        /// <summary>
+        /// KeyRange union test 16
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("KeyRange.Union test 16 (non-prefix/prefix)")]
+        public void TestKeyRangeUnion16()
+        {
+            // The prefix matches more records so we want to use it
+            var range1 = new KeyRange<string>(Key<string>.CreateKey("m", false), Key<string>.CreateKey("z", false));
+            var range2 = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreatePrefixKey("n"));
+            var expected = new KeyRange<string>(Key<string>.CreateKey("a", false), Key<string>.CreateKey("z", false));
+            KeyRangeUnionHelper(range1, range2, expected);
+        }
+
+        #endregion
 
         /// <summary>
         /// Helper function to check KeyRange intersection.

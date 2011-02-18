@@ -198,9 +198,6 @@
     <Compile Include="CallbackWrappers.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ToDo.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
