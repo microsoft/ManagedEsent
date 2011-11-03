@@ -1163,7 +1163,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// removal on record sets when accessed in a purely sequential manner.
         /// </summary>
         /// <remarks>
-        /// Introduced in Windows Vista;
+        /// Introduced in Windows Vista.
         /// </remarks>
         /// <param name="sesid">The session to use.</param>
         /// <param name="temporarytable">

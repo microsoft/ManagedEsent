@@ -215,7 +215,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Converts a unicode string to a null-terminated Ascii byte array
+        /// Converts a unicode string to a null-terminated Ascii byte array.
         /// </summary>
         /// <param name="value">The unicode string to be converted.</param>
         /// <returns>The byte array with a null-terminated Ascii representation of the given string.</returns>
@@ -225,7 +225,7 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 return null;
             }
-            
+
             byte[] output = new byte[value.Length + 1];
 
             Encoding.ASCII.GetBytes(value, 0, value.Length, output, 0);
@@ -235,7 +235,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Converts a unicode string to a null-terminated Unicode byte array
+        /// Converts a unicode string to a null-terminated Unicode byte array.
         /// </summary>
         /// <param name="value">The unicode string to be converted.</param>
         /// <returns>The byte array with a null-terminated Unicode representation of the given string.</returns>
@@ -247,7 +247,7 @@ namespace Microsoft.Isam.Esent.Interop
             }
 
             int byteArrayLength = Encoding.Unicode.GetByteCount(value); 
-            
+
             byte[] output = new byte[byteArrayLength + 2];
 
             Encoding.Unicode.GetBytes(value, 0, value.Length, output, 0);

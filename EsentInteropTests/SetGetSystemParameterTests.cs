@@ -871,7 +871,7 @@ namespace InteropApiTests
         /// </summary>
         /// <param name="param">The parameter to set.</param>
         /// <param name="expected">The string to expect when reading the parameter.</param>
-        /// <param name="ignoreCase">if set to <c>true</c> [ignore case].</param>
+        /// <param name="ignoreCase">If set to <c>true</c> [ignore case].</param>
         private static void StringParameterTest(JET_param param, string expected, bool ignoreCase)
         {
             JET_INSTANCE instance;
@@ -892,7 +892,7 @@ namespace InteropApiTests
         /// <param name="instance">The ESE instance.</param>
         /// <param name="param">The parameter to set.</param>
         /// <param name="expected">The string to expect when reading the parameter.</param>
-        /// <param name="ignoreCase">if set to <c>true</c> [ignore case].</param>
+        /// <param name="ignoreCase">If set to <c>true</c> [ignore case].</param>
         private static void StringParameterTest(JET_INSTANCE instance, JET_param param, string expected, bool ignoreCase)
         {
             Api.JetSetSystemParameter(instance, JET_SESID.Nil, param, 0, expected);

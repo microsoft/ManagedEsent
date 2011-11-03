@@ -72,7 +72,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Save is the final step in performing an insert or an update. The update is begun by
         /// calling creating an Update object and then by calling JetSetColumn or JetSetColumns one or more times
         /// to set the record state. Finally, Update is called to complete the update operation.
-        /// Indexes are updated only by Update or and not during JetSetColumn or JetSetColumns
+        /// Indexes are updated only by Update or and not during JetSetColumn or JetSetColumns.
         /// </remarks>
         public void Save(byte[] bookmark, int bookmarkSize, out int actualBookmarkSize)
         {
@@ -93,7 +93,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Save is the final step in performing an insert or an update. The update is begun by
         /// calling creating an Update object and then by calling JetSetColumn or JetSetColumns one or more times
         /// to set the record state. Finally, Update is called to complete the update operation.
-        /// Indexes are updated only by Update or and not during JetSetColumn or JetSetColumns
+        /// Indexes are updated only by Update or and not during JetSetColumn or JetSetColumns.
         /// </remarks>
         public void Save()
         {
@@ -110,7 +110,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Save is the final step in performing an insert or an update. The update is begun by
         /// calling creating an Update object and then by calling JetSetColumn or JetSetColumns one or more times
         /// to set the record state. Finally, Update is called to complete the update operation.
-        /// Indexes are updated only by Update or and not during JetSetColumn or JetSetColumns
+        /// Indexes are updated only by Update or and not during JetSetColumn or JetSetColumns.
         /// </remarks>
         public void SaveAndGotoBookmark()
         {
