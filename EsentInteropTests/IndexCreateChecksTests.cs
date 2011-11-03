@@ -14,7 +14,7 @@ namespace InteropApiTests
     /// Test the checking of the JET_INDEXCREATE members
     /// </summary>
     [TestClass]
-    public class IndexcreateCheckTests
+    public class IndexcreateChecksTests
     {
         /// <summary>
         /// Index key.

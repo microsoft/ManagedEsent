@@ -42,7 +42,7 @@ namespace InteropApiTests
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
             Api.JetInit(ref this.instance);
-            Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
+            Api.JetBeginSession(this.instance, out this.sesid, string.Empty, string.Empty);
         }
 
         /// <summary>

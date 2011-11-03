@@ -753,6 +753,36 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Base class for JET_err.UnloadableOSFunctionality exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentUnloadableOSFunctionalityException : EsentFatalException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentUnloadableOSFunctionalityException class.
+        /// </summary>
+        public EsentUnloadableOSFunctionalityException() :
+            base("The desired OS functionality could not be located and loaded / linked.", JET_err.UnloadableOSFunctionality)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentUnloadableOSFunctionalityException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentUnloadableOSFunctionalityException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+    }
+
+    /// <summary>
     /// Base class for JET_err.DatabaseBufferDependenciesCorrupted exceptions.
     /// </summary>
     [SuppressMessage(
@@ -1270,7 +1300,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentSeparatedLongValueException : EsentErrorException
+    public sealed class EsentSeparatedLongValueException : EsentStateException
     {
         /// <summary>
         /// Initializes a new instance of the EsentSeparatedLongValueException class.
@@ -5200,7 +5230,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentMustRollbackException : EsentErrorException
+    public sealed class EsentMustRollbackException : EsentUsageException
     {
         /// <summary>
         /// Initializes a new instance of the EsentMustRollbackException class.
@@ -6507,6 +6537,96 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
         private EsentReadLostFlushVerifyFailureException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+    }
+
+    /// <summary>
+    /// Base class for JET_err.FileSystemCorruption exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentFileSystemCorruptionException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentFileSystemCorruptionException class.
+        /// </summary>
+        public EsentFileSystemCorruptionException() :
+            base("File system operation failed with an error indicating the file system is corrupt.", JET_err.FileSystemCorruption)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentFileSystemCorruptionException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentFileSystemCorruptionException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RecoveryVerifyFailure exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRecoveryVerifyFailureException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRecoveryVerifyFailureException class.
+        /// </summary>
+        public EsentRecoveryVerifyFailureException() :
+            base("One or more database pages read from disk during recovery do not match the expected state.", JET_err.RecoveryVerifyFailure)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRecoveryVerifyFailureException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRecoveryVerifyFailureException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+    }
+
+    /// <summary>
+    /// Base class for JET_err.FilteredMoveNotSupported exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentFilteredMoveNotSupportedException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentFilteredMoveNotSupportedException class.
+        /// </summary>
+        public EsentFilteredMoveNotSupportedException() :
+            base("Attempted to provide a filter to JetMove() in an unsupported scenario.", JET_err.FilteredMoveNotSupported)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentFilteredMoveNotSupportedException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentFilteredMoveNotSupportedException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
         }
@@ -8530,7 +8650,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentMultiValuedIndexViolationException : EsentErrorException
+    public sealed class EsentMultiValuedIndexViolationException : EsentUsageException
     {
         /// <summary>
         /// Initializes a new instance of the EsentMultiValuedIndexViolationException class.
@@ -10000,7 +10120,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentUpdateMustVersionException : EsentErrorException
+    public sealed class EsentUpdateMustVersionException : EsentUsageException
     {
         /// <summary>
         /// Initializes a new instance of the EsentUpdateMustVersionException class.
@@ -12422,6 +12542,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentInternalErrorException();
             case JET_err.DisabledFunctionality:
                 return new EsentDisabledFunctionalityException();
+            case JET_err.UnloadableOSFunctionality:
+                return new EsentUnloadableOSFunctionalityException();
             case JET_err.DatabaseBufferDependenciesCorrupted:
                 return new EsentDatabaseBufferDependenciesCorruptedException();
             case JET_err.PreviousVersion:
@@ -12806,6 +12928,12 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentReadPgnoVerifyFailureException();
             case JET_err.ReadLostFlushVerifyFailure:
                 return new EsentReadLostFlushVerifyFailureException();
+            case JET_err.FileSystemCorruption:
+                return new EsentFileSystemCorruptionException();
+            case JET_err.RecoveryVerifyFailure:
+                return new EsentRecoveryVerifyFailureException();
+            case JET_err.FilteredMoveNotSupported:
+                return new EsentFilteredMoveNotSupportedException();
             case JET_err.MustCommitDistributedTransactionToLevel0:
                 return new EsentMustCommitDistributedTransactionToLevel0Exception();
             case JET_err.DistributedTransactionAlreadyPreparedToCommit:

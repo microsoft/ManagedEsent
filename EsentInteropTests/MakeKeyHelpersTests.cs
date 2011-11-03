@@ -58,7 +58,7 @@ namespace InteropApiTests
             // turn off logging so initialization is faster
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetInit(ref this.instance);
-            Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
+            Api.JetBeginSession(this.instance, out this.sesid, string.Empty, string.Empty);
             this.tableid = JET_TABLEID.Nil;
         }
 
@@ -373,7 +373,7 @@ namespace InteropApiTests
         [Description("Test making a key from an empty string.")]
         public void MakeKeyEmptyString()
         {
-            var expected = String.Empty;
+            var expected = string.Empty;
             var expectedData = Encoding.Unicode.GetBytes(expected);
             this.CreateTempTableOnColumn("unicode");
             this.InsertZeroLengthData();

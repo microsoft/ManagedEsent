@@ -17,7 +17,15 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1304:NonPrivateReadonlyFieldsMustBeginWithUpperCaseLetter",
+        Justification = "This should match the name of the unmanaged structure.")]
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
+        Justification = "This should match the name of the unmanaged structure.")]
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
         Justification = "This should match the name of the unmanaged structure.")]
     [StructLayout(LayoutKind.Auto)]
     [Serializable]
@@ -26,13 +34,13 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// A randomly assigned number.
         /// </summary>
-        private readonly uint ulRandom;
+        internal readonly uint ulRandom;
 
         /// <summary>
         /// The time that the database or first logfile in the sequence was
         /// created.
         /// </summary>
-        private readonly JET_LOGTIME logtimeCreate;
+        internal readonly JET_LOGTIME logtimeCreate;
 
         /// <summary>
         /// NetBIOS name of the computer. This may be null.
@@ -93,7 +101,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
-            return String.Format(
+            return string.Format(
                 CultureInfo.InvariantCulture,
                 "JET_SIGNATURE({0}:{1}:{2})",
                 this.ulRandom,

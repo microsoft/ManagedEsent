@@ -15,6 +15,9 @@ namespace Microsoft.Isam.Esent.Interop.Vista
     /// The native version of the JET_OPENTEMPORARYTABLE structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
+    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1305:FieldNamesMustNotUseHungarianNotation",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
@@ -75,7 +78,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
-    public class JET_OPENTEMPORARYTABLE
+    public partial class JET_OPENTEMPORARYTABLE
     {
         /// <summary>
         /// Gets or sets the column definitions for the columns created in
@@ -153,7 +156,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// </returns>
         public override string ToString()
         {
-            return String.Format(
+            return string.Format(
                 CultureInfo.InvariantCulture,
                 "JET_OPENTEMPORARYTABLE({0}, {1} columns)",
                 this.grbit,

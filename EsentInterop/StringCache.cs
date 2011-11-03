@@ -36,7 +36,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>An interned copy of the string or the original string.</returns>
         public static string TryToIntern(string s)
         {
-            return String.IsInterned(s) ?? s;
+            return string.IsInterned(s) ?? s;
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace Microsoft.Isam.Esent.Interop
 
             if (0 == count)
             {
-                s = String.Empty;
+                s = string.Empty;
             }
             else if (count < MaxLengthToCache)
             {

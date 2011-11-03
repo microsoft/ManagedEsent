@@ -16,6 +16,9 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native version of the JET_UNICODEINDEX structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
+    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1305:FieldNamesMustNotUseHungarianNotation",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
@@ -41,12 +44,17 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [Serializable]
-    public sealed class JET_UNICODEINDEX : IContentEquatable<JET_UNICODEINDEX>, IDeepCloneable<JET_UNICODEINDEX>
+    public sealed partial class JET_UNICODEINDEX : IContentEquatable<JET_UNICODEINDEX>, IDeepCloneable<JET_UNICODEINDEX>
     {
         /// <summary>
         /// The LCID to be used when normalizing unicode data.
         /// </summary>
         private int localeId;
+
+        /// <summary>
+        /// The LocaleName to be used when normalizing unicode data.
+        /// </summary>
+        private string localeName;
 
         /// <summary>
         /// Sets the flags to be used with LCMapString when normalizing unicode data.
@@ -61,6 +69,16 @@ namespace Microsoft.Isam.Esent.Interop
             [DebuggerStepThrough]
             get { return this.localeId; }
             set { this.localeId = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the LocaleName to be used when normalizing unicode data.
+        /// </summary>
+        public string szLocaleName
+        {
+            [DebuggerStepThrough]
+            get { return this.localeName; }
+            set { this.localeName = value; }
         }
 
         /// <summary>
@@ -89,10 +107,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
-            return String.Format(
+            return string.Format(
                 CultureInfo.InvariantCulture,
-                "JET_UNICODEINDEX({0}:0x{1:X})",
+                "JET_UNICODEINDEX({0}:{1}:0x{2:X})",
                 this.localeId,
+                this.localeName,
                 this.mapStringFlags);
         }
 
@@ -109,7 +128,7 @@ namespace Microsoft.Isam.Esent.Interop
                 return false;
             }
 
-            return this.localeId == other.localeId && this.mapStringFlags == other.mapStringFlags;
+            return this.localeId == other.localeId && this.mapStringFlags == other.mapStringFlags && string.Compare(this.localeName, other.localeName, StringComparison.Ordinal) == 0;
         }
 
         /// <summary>
@@ -124,6 +143,6 @@ namespace Microsoft.Isam.Esent.Interop
                 dwMapFlags = this.dwMapFlags,
             };
             return native;
-        }        
+        }
     }
 }

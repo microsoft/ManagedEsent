@@ -68,7 +68,7 @@ namespace InteropApiTests
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.PageTempDBMin, SystemParameters.PageTempDBSmallest, null);
             Api.JetInit(ref this.instance);
-            Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
+            Api.JetBeginSession(this.instance, out this.sesid, string.Empty, string.Empty);
 
             var columndefs = new[]
             {
@@ -725,7 +725,7 @@ namespace InteropApiTests
                 stream.Seek(10, SeekOrigin.Begin);
                 try
                 {
-                    stream.Seek(Int64.MaxValue, SeekOrigin.Current);
+                    stream.Seek(long.MaxValue, SeekOrigin.Current);
                     Assert.Fail("Expected OverflowException");
                 }
                 catch (OverflowException)
@@ -750,7 +750,7 @@ namespace InteropApiTests
                 stream.Write(new byte[10], 0, 10);
                 try
                 {
-                    stream.Seek(Int64.MaxValue, SeekOrigin.End);
+                    stream.Seek(long.MaxValue, SeekOrigin.End);
                     Assert.Fail("Expected OverflowException");
                 }
                 catch (OverflowException)
@@ -1026,7 +1026,7 @@ namespace InteropApiTests
             using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
             using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
             {
-                stream.Seek(Int32.MaxValue - 10, SeekOrigin.Begin);
+                stream.Seek(int.MaxValue - 10, SeekOrigin.Begin);
                 try
                 {
                     stream.Write(data, 0, data.Length);

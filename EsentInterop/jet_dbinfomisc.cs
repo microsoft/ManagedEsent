@@ -16,6 +16,9 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native version of the JET_DBINFOMISC structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
+    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1305:FieldNamesMustNotUseHungarianNotation",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
@@ -134,6 +137,9 @@ namespace Microsoft.Isam.Esent.Interop
     /// Adds support for fields that we added in Windows 7.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
+    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1305:FieldNamesMustNotUseHungarianNotation",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
@@ -251,6 +257,9 @@ namespace Microsoft.Isam.Esent.Interop
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1300:ElementMustBeginWithUpperCaseLetter",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
+    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
@@ -860,7 +869,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>A string representation of this object.</returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "JET_DBINFOMISC({0})", this._signDb);
+            return string.Format(CultureInfo.InvariantCulture, "JET_DBINFOMISC({0})", this._signDb);
         }
 
         /// <summary>

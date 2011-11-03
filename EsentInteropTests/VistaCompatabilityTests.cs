@@ -6,7 +6,6 @@
 
 namespace InteropApiTests
 {
-    using System;
     using System.IO;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Implementation;
@@ -17,6 +16,10 @@ namespace InteropApiTests
     /// Test the Api class functionality when we have an Vista version of Esent.
     /// </summary>
     [TestClass]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage(
+        "Microsoft.StyleCop.CSharp.DocumentationRules",
+        "SA1649:FileHeaderFileNameDocumentationMustMatchTypeName",
+        Justification = "The file name is misspelled, and correcting it will negatively affect source history.")]
     public class VistaCompatibilityTests
     {
         /// <summary>
@@ -154,7 +157,7 @@ namespace InteropApiTests
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, database, string.Empty, out dbid, CreateDatabaseGrbit.None);
                 }
             }
 
@@ -191,7 +194,7 @@ namespace InteropApiTests
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, database, string.Empty, out dbid, CreateDatabaseGrbit.None);
                     using (var transaction = new Transaction(session))
                     {
                         JET_TABLEID tableid;
@@ -252,7 +255,7 @@ namespace InteropApiTests
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, database, string.Empty, out dbid, CreateDatabaseGrbit.None);
                     using (var transaction = new Transaction(session))
                     {
                         JET_TABLEID tableid;
@@ -381,7 +384,7 @@ namespace InteropApiTests
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, database, string.Empty, out dbid, CreateDatabaseGrbit.None);
                     using (var transaction = new Transaction(session))
                     {
                         Api.JetCreateTableColumnIndex3(session, dbid, tablecreate);
@@ -427,7 +430,7 @@ namespace InteropApiTests
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, database, string.Empty, out dbid, CreateDatabaseGrbit.None);
                     using (var transaction = new Transaction(session))
                     {
                         Api.JetCreateTableColumnIndex3(session, dbid, tablecreate);

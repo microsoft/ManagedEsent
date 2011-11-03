@@ -78,18 +78,28 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 // The encoding output will fix in a cached buffer. Get one to avoid 
                 // more memory allocations.
-                byte[] buffer = Caches.ColumnCache.Allocate();
-                unsafe
-                {
-                    fixed (char* chars = data)
-                    fixed (byte* bytes = buffer)
-                    {
-                        int dataSize = encoding.GetBytes(chars, data.Length, bytes, buffer.Length);
-                        JetSetColumn(sesid, tableid, columnid, new IntPtr(bytes), dataSize, grbit, null);
-                    }                    
-                }
+                byte[] buffer = null;
 
-                Caches.ColumnCache.Free(ref buffer);
+                try
+                {
+                    buffer = Caches.ColumnCache.Allocate();
+                    unsafe
+                    {
+                        fixed (char* chars = data)
+                        fixed (byte* bytes = buffer)
+                        {
+                            int dataSize = encoding.GetBytes(chars, data.Length, bytes, buffer.Length);
+                            JetSetColumn(sesid, tableid, columnid, new IntPtr(bytes), dataSize, grbit, null);
+                        }                    
+                    }
+                }
+                finally
+                {
+                    if (buffer != null)
+                    {
+                        Caches.ColumnCache.Free(ref buffer);
+                    }
+                }
             }
             else
             {

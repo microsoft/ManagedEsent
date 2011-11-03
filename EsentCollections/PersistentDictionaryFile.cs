@@ -58,18 +58,18 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 var config = new PersistentDictionaryConfig();
                 var databasePath = Path.Combine(directory, config.Database);
                 File.Delete(databasePath);
-                File.Delete(Path.Combine(directory, String.Format(CultureInfo.InvariantCulture, "{0}.chk", config.BaseName)));
-                foreach (string file in Directory.GetFiles(directory, String.Format(CultureInfo.InvariantCulture, "{0}*.log", config.BaseName)))
+                File.Delete(Path.Combine(directory, string.Format(CultureInfo.InvariantCulture, "{0}.chk", config.BaseName)));
+                foreach (string file in Directory.GetFiles(directory, string.Format(CultureInfo.InvariantCulture, "{0}*.log", config.BaseName)))
                 {
                     File.Delete(file);
                 }
 
-                foreach (string file in Directory.GetFiles(directory, String.Format(CultureInfo.InvariantCulture, "res*.log", config.BaseName)))
+                foreach (string file in Directory.GetFiles(directory, string.Format(CultureInfo.InvariantCulture, "res*.log", config.BaseName)))
                 {
                     File.Delete(file);
                 }
 
-                foreach (string file in Directory.GetFiles(directory, String.Format(CultureInfo.InvariantCulture, "{0}*.jrs", config.BaseName)))
+                foreach (string file in Directory.GetFiles(directory, string.Format(CultureInfo.InvariantCulture, "{0}*.jrs", config.BaseName)))
                 {
                     File.Delete(file);
                 }

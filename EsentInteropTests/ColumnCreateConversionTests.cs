@@ -15,7 +15,7 @@ namespace InteropApiTests
     /// Test conversion to NATIVE_COLUMNCREATE
     /// </summary>
     [TestClass]
-    public class ColumnCreateConversationTests
+    public class ColumnCreateConversionTests
     {
         /// <summary>
         /// Managed version of the indexcreate structure.

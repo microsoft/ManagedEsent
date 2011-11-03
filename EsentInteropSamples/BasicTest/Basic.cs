@@ -61,7 +61,7 @@ namespace BasicTest
             {
                 if (null != args)
                 {
-                    message = String.Format(message, args);
+                    message = string.Format(message, args);
                 }
 
                 throw new Exception(message);

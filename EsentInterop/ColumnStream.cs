@@ -9,6 +9,7 @@ namespace Microsoft.Isam.Esent.Interop
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.IO;
 
@@ -17,6 +18,9 @@ namespace Microsoft.Isam.Esent.Interop
     /// (i.e. a column of type <see cref="JET_coltyp.LongBinary"/> or
     /// <see cref="JET_coltyp.LongText"/>).
     /// </summary>
+    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1305:FieldNamesMustNotUseHungarianNotation",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     public class ColumnStream : Stream
     {
         /// <summary>
@@ -54,7 +58,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             // In some cases we rely on Int32 arithmetic overflow checking to catch
             // errors, which assumes that a long-value can store Int32.MaxValue bytes.
-            Debug.Assert(MaxLongValueSize == Int32.MaxValue, "Expected maximum long value size to be Int32.MaxValue");
+            Debug.Assert(MaxLongValueSize == int.MaxValue, "Expected maximum long value size to be Int32.MaxValue");
 
             this.sesid = sesid;
             this.tableid = tableid;
@@ -153,7 +157,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "ColumnStream(0x{0:x}:{1})", this.columnid.Value, this.Itag);
+            return string.Format(CultureInfo.InvariantCulture, "ColumnStream(0x{0:x}:{1})", this.columnid.Value, this.Itag);
         }
 
         /// <summary>

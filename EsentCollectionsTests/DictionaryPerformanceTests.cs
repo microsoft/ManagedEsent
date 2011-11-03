@@ -406,7 +406,7 @@ namespace EsentCollectionsTests
 
             // Create the Enumerable outside of the loop.
             int key = 0;
-            var query = from x in dictionary where x.Key == key && !String.IsNullOrEmpty(x.Value) select x;
+            var query = from x in dictionary where x.Key == key && !string.IsNullOrEmpty(x.Value) select x;
 
             int total = 0;
             for (int i = 0; i < numQueries; ++i)
@@ -443,7 +443,7 @@ namespace EsentCollectionsTests
             // Create the Enumerable outside of the loop. This means the expression
             // tree only has to be compiled once.
             int key = 0;
-            var query = from x in dictionary where x.Key == key && !String.IsNullOrEmpty(x.Value) select x;
+            var query = from x in dictionary where x.Key == key && !string.IsNullOrEmpty(x.Value) select x;
 
             int total = 0;
             for (int i = 0; i < numQueries; ++i)
@@ -596,4 +596,3 @@ namespace EsentCollectionsTests
         }
     }
 }
-

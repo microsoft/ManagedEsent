@@ -52,7 +52,7 @@ namespace InteropApiTests
             // turn off logging so initialization is faster
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetInit(ref this.instance);
-            Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
+            Api.JetBeginSession(this.instance, out this.sesid, string.Empty, string.Empty);
 
             var columns = new[] { new JET_COLUMNDEF { coltyp = JET_coltyp.Long, grbit = ColumndefGrbit.TTKey } };
             var columnids = new JET_COLUMNID[columns.Length];

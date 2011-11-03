@@ -49,6 +49,23 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Adding the same object twice returns the same pointer.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Adding the same object twice returns the same pointer")]
+        public void AddingSameObjectTwiceReturnsSamePointer()
+        {
+            using (var handles = new GCHandleCollection())
+            {
+                string obj = "foo";
+                IntPtr p1 = handles.Add(obj);
+                IntPtr p2 = handles.Add(obj);
+                Assert.AreEqual(p1, p2);
+            }
+        }
+
+        /// <summary>
         /// Add should give a pointer to the added object.
         /// </summary>
         [TestMethod]

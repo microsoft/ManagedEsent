@@ -58,7 +58,7 @@ namespace Microsoft.Isam.Esent.Interop
 
             if (0 == count)
             {
-                return String.Empty;
+                return string.Empty;
             }
 
             if (offset < 0 || count < 0 || offset >= data.Length || offset + count > data.Length)
@@ -146,7 +146,7 @@ namespace Microsoft.Isam.Esent.Interop
 
             for (int i = 0; i < length; ++i)
             {
-                if (! left[i].Equals(right[i]))
+                if (!left[i].Equals(right[i]))
                 {
                     return false;
                 }
@@ -205,13 +205,56 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The directory with a separator character added (if necesary).</returns>
         public static string AddTrailingDirectorySeparator(string dir)
         {
-            if (!String.IsNullOrEmpty(dir))
+            if (!string.IsNullOrEmpty(dir))
             {
                 var sepChars = new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar };
-                return String.Concat(dir.TrimEnd(sepChars), Path.DirectorySeparatorChar);                
+                return string.Concat(dir.TrimEnd(sepChars), Path.DirectorySeparatorChar);                
             }
 
             return dir;
+        }
+
+        /// <summary>
+        /// Converts a unicode string to a null-terminated Ascii byte array
+        /// </summary>
+        /// <param name="value">The unicode string to be converted.</param>
+        /// <returns>The byte array with a null-terminated Ascii representation of the given string.</returns>
+        public static byte[] ConvertToNullTerminatedAsciiByteArray(string value)
+        {
+            if (value == null)
+            {
+                return null;
+            }
+            
+            byte[] output = new byte[value.Length + 1];
+
+            Encoding.ASCII.GetBytes(value, 0, value.Length, output, 0);
+            output[output.Length - 1] = (byte)0;
+
+            return output;
+        }
+
+        /// <summary>
+        /// Converts a unicode string to a null-terminated Unicode byte array
+        /// </summary>
+        /// <param name="value">The unicode string to be converted.</param>
+        /// <returns>The byte array with a null-terminated Unicode representation of the given string.</returns>
+        public static byte[] ConvertToNullTerminatedUnicodeByteArray(string value)
+        {
+            if (value == null)
+            {
+                return null;
+            }
+
+            int byteArrayLength = Encoding.Unicode.GetByteCount(value); 
+            
+            byte[] output = new byte[byteArrayLength + 2];
+
+            Encoding.Unicode.GetBytes(value, 0, value.Length, output, 0);
+            output[output.Length - 2] = (byte)0;
+            output[output.Length - 1] = (byte)0;
+
+            return output;
         }
     }
 }

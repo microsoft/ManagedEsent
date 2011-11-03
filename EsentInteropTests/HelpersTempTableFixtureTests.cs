@@ -61,7 +61,7 @@ namespace InteropApiTests
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.PageTempDBMin, SystemParameters.PageTempDBSmallest, null);
             Api.JetInit(ref this.instance);
-            Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
+            Api.JetBeginSession(this.instance, out this.sesid, string.Empty, string.Empty);
 
             this.columnidDict = SetupHelper.CreateTempTableWithAllColumns(this.sesid, TempTableGrbit.Indexed, out this.tableid);
         }
@@ -864,7 +864,7 @@ namespace InteropApiTests
         public void RetrieveEmptyStringAsAscii()
         {
             JET_COLUMNID columnid = this.columnidDict["ASCII"];
-            string value = String.Empty;
+            string value = string.Empty;
             byte[] data = Encoding.ASCII.GetBytes(value);
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
@@ -898,7 +898,7 @@ namespace InteropApiTests
         {
             JET_COLUMNID columnid = this.columnidDict["Unicode"];
 
-            // These characters include surrogate pairs. String.Length counts the
+            // These characters include surrogate pairs. string.Length counts the
             // surrogate pairs.
             const string Expected = "☺ś𐐂𐐉𐐯𐑉𝓐𐒀";   
             byte[] data = Encoding.Unicode.GetBytes(Expected);
@@ -929,7 +929,7 @@ namespace InteropApiTests
         public void RetrieveEmptyStringAsUnicode()
         {
             JET_COLUMNID columnid = this.columnidDict["Unicode"];
-            string value = String.Empty;
+            string value = string.Empty;
             byte[] data = Encoding.Unicode.GetBytes(value);
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
@@ -1338,7 +1338,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test setting a ColumnValue with an Int16.
+        /// Test setting a ColumnValue with an short.
         /// </summary>
         [TestMethod]
         [Priority(1)]
@@ -1373,7 +1373,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test setting a ColumnValue with an Int32.
+        /// Test setting a ColumnValue with an int.
         /// </summary>
         [TestMethod]
         [Priority(1)]
@@ -1443,7 +1443,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test setting a ColumnValue with a UInt16.
+        /// Test setting a ColumnValue with a ushort.
         /// </summary>
         [TestMethod]
         [Priority(1)]
@@ -1478,7 +1478,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test setting a ColumnValue with a UInt32.
+        /// Test setting a ColumnValue with a uint.
         /// </summary>
         [TestMethod]
         [Priority(1)]
@@ -1797,7 +1797,7 @@ namespace InteropApiTests
         public void SetAndRetrieveByteMin()
         {
             var columnid = this.columnidDict["Byte"];
-            const byte Expected = Byte.MinValue;
+            const byte Expected = byte.MinValue;
 
             using (var trx = new Transaction(this.sesid))
             using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
@@ -1819,7 +1819,7 @@ namespace InteropApiTests
         public void SetAndRetrieveByteMax()
         {
             var columnid = this.columnidDict["Byte"];
-            const byte Expected = Byte.MaxValue;
+            const byte Expected = byte.MaxValue;
 
             using (var trx = new Transaction(this.sesid))
             using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
@@ -1833,7 +1833,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test setting and retrieving the min value of an Int16.
+        /// Test setting and retrieving the min value of an short.
         /// </summary>
         [TestMethod]
         [Priority(1)]
@@ -1841,7 +1841,7 @@ namespace InteropApiTests
         public void SetAndRetrieveInt16Min()
         {
             var columnid = this.columnidDict["Int16"];
-            const short Expected = Int16.MinValue;
+            const short Expected = short.MinValue;
 
             using (var trx = new Transaction(this.sesid))
             using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
@@ -1855,7 +1855,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test setting and retrieving the max value of an Int16.
+        /// Test setting and retrieving the max value of an short.
         /// </summary>
         [TestMethod]
         [Priority(1)]
@@ -1863,7 +1863,7 @@ namespace InteropApiTests
         public void SetAndRetrieveInt16Max()
         {
             var columnid = this.columnidDict["Int16"];
-            const short Expected = Int16.MaxValue;
+            const short Expected = short.MaxValue;
 
             using (var trx = new Transaction(this.sesid))
             using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
@@ -1877,7 +1877,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test setting and retrieving the min value of a UInt16.
+        /// Test setting and retrieving the min value of a ushort.
         /// </summary>
         [TestMethod]
         [Priority(1)]
@@ -1885,7 +1885,7 @@ namespace InteropApiTests
         public void SetAndRetrieveUInt16Min()
         {
             var columnid = this.columnidDict["Binary"];
-            const ushort Expected = UInt16.MinValue;
+            const ushort Expected = ushort.MinValue;
 
             using (var trx = new Transaction(this.sesid))
             using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
@@ -1899,7 +1899,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test setting and retrieving the max value of a UInt16.
+        /// Test setting and retrieving the max value of a ushort.
         /// </summary>
         [TestMethod]
         [Priority(1)]
@@ -1907,7 +1907,7 @@ namespace InteropApiTests
         public void SetAndRetrieveUInt16Max()
         {
             var columnid = this.columnidDict["Binary"];
-            const ushort Expected = UInt16.MaxValue;
+            const ushort Expected = ushort.MaxValue;
 
             using (var trx = new Transaction(this.sesid))
             using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
@@ -1921,7 +1921,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test setting and retrieving the min value of an Int32.
+        /// Test setting and retrieving the min value of an int.
         /// </summary>
         [TestMethod]
         [Priority(1)]
@@ -1929,7 +1929,7 @@ namespace InteropApiTests
         public void SetAndRetrieveInt32Min()
         {
             var columnid = this.columnidDict["Int32"];
-            const int Expected = Int32.MinValue;
+            const int Expected = int.MinValue;
 
             using (var trx = new Transaction(this.sesid))
             using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
@@ -1943,7 +1943,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test setting and retrieving the max value of an Int32.
+        /// Test setting and retrieving the max value of an int.
         /// </summary>
         [TestMethod]
         [Priority(1)]
@@ -1951,7 +1951,7 @@ namespace InteropApiTests
         public void SetAndRetrieveInt32Max()
         {
             var columnid = this.columnidDict["Int32"];
-            const int Expected = Int32.MaxValue;
+            const int Expected = int.MaxValue;
 
             using (var trx = new Transaction(this.sesid))
             using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
@@ -1965,7 +1965,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test setting and retrieving the min value of a UInt32.
+        /// Test setting and retrieving the min value of a uint.
         /// </summary>
         [TestMethod]
         [Priority(1)]
@@ -1973,7 +1973,7 @@ namespace InteropApiTests
         public void SetAndRetrieveUInt32Min()
         {
             var columnid = this.columnidDict["Binary"];
-            const uint Expected = UInt32.MinValue;
+            const uint Expected = uint.MinValue;
 
             using (var trx = new Transaction(this.sesid))
             using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
@@ -1987,7 +1987,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test setting and retrieving the max value of a UInt32.
+        /// Test setting and retrieving the max value of a uint.
         /// </summary>
         [TestMethod]
         [Priority(1)]
@@ -1995,7 +1995,7 @@ namespace InteropApiTests
         public void SetAndRetrieveUInt32Max()
         {
             var columnid = this.columnidDict["Binary"];
-            const uint Expected = UInt32.MaxValue;
+            const uint Expected = uint.MaxValue;
 
             using (var trx = new Transaction(this.sesid))
             using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
@@ -2017,7 +2017,7 @@ namespace InteropApiTests
         public void SetAndRetrieveInt64Min()
         {
             var columnid = this.columnidDict["Int64"];
-            const long Expected = Int64.MinValue;
+            const long Expected = long.MinValue;
 
             using (var trx = new Transaction(this.sesid))
             using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
@@ -2039,7 +2039,7 @@ namespace InteropApiTests
         public void SetAndRetrieveInt64Max()
         {
             var columnid = this.columnidDict["Int64"];
-            const long Expected = Int64.MaxValue;
+            const long Expected = long.MaxValue;
 
             using (var trx = new Transaction(this.sesid))
             using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
@@ -2061,7 +2061,7 @@ namespace InteropApiTests
         public void SetAndRetrieveUInt64Min()
         {
             var columnid = this.columnidDict["Binary"];
-            const ulong Expected = UInt64.MinValue;
+            const ulong Expected = ulong.MinValue;
 
             using (var trx = new Transaction(this.sesid))
             using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
@@ -2083,7 +2083,7 @@ namespace InteropApiTests
         public void SetAndRetrieveUInt64Max()
         {
             var columnid = this.columnidDict["Binary"];
-            const ulong Expected = UInt64.MaxValue;
+            const ulong Expected = ulong.MaxValue;
 
             using (var trx = new Transaction(this.sesid))
             using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
@@ -2105,7 +2105,7 @@ namespace InteropApiTests
         public void SetAndRetrieveFloatMin()
         {
             var columnid = this.columnidDict["Float"];
-            const float Expected = Single.MinValue;
+            const float Expected = float.MinValue;
 
             using (var trx = new Transaction(this.sesid))
             using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
@@ -2127,7 +2127,7 @@ namespace InteropApiTests
         public void SetAndRetrieveFloatMax()
         {
             var columnid = this.columnidDict["Float"];
-            const float Expected = Single.MaxValue;
+            const float Expected = float.MaxValue;
 
             using (var trx = new Transaction(this.sesid))
             using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
@@ -2149,7 +2149,7 @@ namespace InteropApiTests
         public void SetAndRetrieveDoubleMin()
         {
             var columnid = this.columnidDict["Double"];
-            const double Expected = Double.MinValue;
+            const double Expected = double.MinValue;
 
             using (var trx = new Transaction(this.sesid))
             using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
@@ -2171,7 +2171,7 @@ namespace InteropApiTests
         public void SetAndRetrieveDoubleMax()
         {
             var columnid = this.columnidDict["Double"];
-            const double Expected = Double.MaxValue;
+            const double Expected = double.MaxValue;
 
             using (var trx = new Transaction(this.sesid))
             using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
@@ -2316,7 +2316,7 @@ namespace InteropApiTests
         public void SerializeAndDeserializeObject()
         {
             var columnid = this.columnidDict["Binary"];
-            var expected = new List<double> { Math.PI, Math.E, Double.PositiveInfinity, Double.NegativeInfinity, Double.Epsilon };
+            var expected = new List<double> { Math.PI, Math.E, double.PositiveInfinity, double.NegativeInfinity, double.Epsilon };
 
             using (var trx = new Transaction(this.sesid))
             using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))

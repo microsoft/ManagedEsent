@@ -81,8 +81,8 @@ namespace InteropApiTests
             // turn off logging so initialization is faster
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetInit(ref this.instance);
-            Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
-            Api.JetCreateDatabase(this.sesid, this.database, String.Empty, out this.dbid, CreateDatabaseGrbit.None);
+            Api.JetBeginSession(this.instance, out this.sesid, string.Empty, string.Empty);
+            Api.JetCreateDatabase(this.sesid, this.database, string.Empty, out this.dbid, CreateDatabaseGrbit.None);
             Api.JetBeginTransaction(this.sesid);
             Api.JetCreateTable(this.sesid, this.dbid, this.table, 0, 100, out this.tableid);
 
@@ -222,9 +222,9 @@ namespace InteropApiTests
         [Description(" Verify that keys in the columnid dictionary are interned if possible")]
         public void VerifyColumnDictionaryKeysAreInterned()
         {
-            String.Intern("Boolean");
+            string.Intern("Boolean");
             string s = this.columnidDict.Keys.Where(x => x.Equals("boolean", StringComparison.OrdinalIgnoreCase)).Single();
-            Assert.IsNotNull(String.IsInterned(s), "{0} is not interned", s);
+            Assert.IsNotNull(string.IsInterned(s), "{0} is not interned", s);
             Assert.AreSame(s, "Boolean", "Interning failed");
         }
 
@@ -276,7 +276,7 @@ namespace InteropApiTests
         public void VerifyGetTableNamesInternsNames()
         {
             string name = Api.GetTableNames(this.sesid, this.dbid).Single();
-            Assert.IsNotNull(String.IsInterned(name), "{0} is not interned", name);
+            Assert.IsNotNull(string.IsInterned(name), "{0} is not interned", name);
             Assert.AreSame(name, this.table, "Interning failed");
         }
 

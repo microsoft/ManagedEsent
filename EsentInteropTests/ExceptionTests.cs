@@ -30,7 +30,7 @@ namespace InteropApiTests
         [Description("Verify that the error passed into the constructor is set in the error property")]
         public void VerifyEsentErrorExceptionConstructorSetsError()
         {
-            var ex = new EsentErrorException(String.Empty, JET_err.AccessDenied);
+            var ex = new EsentErrorException(string.Empty, JET_err.AccessDenied);
 
             Assert.AreEqual(JET_err.AccessDenied, ex.Error);
         }
@@ -93,7 +93,7 @@ namespace InteropApiTests
                     Assert.IsNotNull(ex);
                     Assert.AreEqual(err, ex.Error);
                     Assert.IsNotNull(ex.Message);
-                    Assert.AreNotEqual(String.Empty, ex.Message);
+                    Assert.AreNotEqual(string.Empty, ex.Message);
 
                     EsentErrorException deserialized = SerializeDeserialize(ex);
                     Assert.AreEqual(err, deserialized.Error);
@@ -161,7 +161,7 @@ namespace InteropApiTests
                 mocks.ReplayAll();
 
                 var ex = EsentExceptionHelper.JetErrToException((JET_err)(-9999));
-                Assert.IsTrue(!String.IsNullOrEmpty(ex.Message));
+                Assert.IsTrue(!string.IsNullOrEmpty(ex.Message));
             }
         }
 

@@ -54,7 +54,7 @@ namespace InteropApiTests
         [Description("Test conversion of JET_SETINFO to NATIVE_SETINFO when itagSequence is negative")]
         public void ConvertSetinfoToNativeWhenItagSequenceIsNegative()
         {
-            var setinfo = new JET_SETINFO { ibLongValue = 0, itagSequence = Int32.MinValue };
+            var setinfo = new JET_SETINFO { ibLongValue = 0, itagSequence = int.MinValue };
 
             NATIVE_SETINFO native = setinfo.GetNativeSetinfo();
         }

@@ -192,7 +192,7 @@ namespace EsentCollectionsTests
             using (var dictionary = new PersistentDictionary<string, string>(DictionaryPath))
             {
                 RunDictionaryTests(dictionary, "foo", "bar");
-                RunDictionaryTests(dictionary, String.Empty, String.Empty);
+                RunDictionaryTests(dictionary, string.Empty, string.Empty);
             }
         }
 
@@ -206,7 +206,7 @@ namespace EsentCollectionsTests
         {
             using (var dictionary = new PersistentDictionary<string, decimal?>(DictionaryPath))
             {
-                RunDictionaryTests(dictionary, "one", Decimal.One);
+                RunDictionaryTests(dictionary, "one", decimal.One);
             }
         }
 

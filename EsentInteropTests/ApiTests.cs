@@ -74,7 +74,7 @@ namespace InteropApiTests
             Api.Impl = jetApi;
 
             Expect.Call(
-                jetApi.JetSetCurrentIndex(JET_SESID.Nil, JET_TABLEID.Nil, String.Empty))
+                jetApi.JetSetCurrentIndex(JET_SESID.Nil, JET_TABLEID.Nil, string.Empty))
                 .IgnoreArguments()
                 .Return(1);
             this.mocks.ReplayAll();
@@ -98,7 +98,7 @@ namespace InteropApiTests
             Api.Impl = jetApi;
 
             SetupResult.For(
-                jetApi.JetSetCurrentIndex(JET_SESID.Nil, JET_TABLEID.Nil, String.Empty))
+                jetApi.JetSetCurrentIndex(JET_SESID.Nil, JET_TABLEID.Nil, string.Empty))
                 .IgnoreArguments()
                 .Return((int)JET_err.OutOfMemory);
             this.mocks.ReplayAll();

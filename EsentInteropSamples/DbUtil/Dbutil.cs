@@ -50,7 +50,7 @@ namespace Microsoft.Isam.Esent.Utilities
             }
 
             IEnumerable<Action<string[]>> methods = from x in this.actions
-                                      where 0 == String.Compare(x.Key, args[0], true)
+                                      where 0 == string.Compare(x.Key, args[0], true)
                                       select x.Value;
             if (methods.Count() != 1)
             {

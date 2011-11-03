@@ -13,7 +13,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// A class that encapsulates a transaction on a JET_SESID.
     /// </summary>
-    public class Transaction : EsentResource
+    public partial class Transaction : EsentResource
     {
         /// <summary>
         /// The underlying JET_SESID.
@@ -53,7 +53,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "Transaction (0x{0:x})", this.sesid.Value);
+            return string.Format(CultureInfo.InvariantCulture, "Transaction (0x{0:x})", this.sesid.Value);
         }
 
         /// <summary>

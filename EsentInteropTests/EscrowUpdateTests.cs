@@ -75,8 +75,8 @@ namespace InteropApiTests
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetInit(ref this.instance);
-            Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
-            Api.JetCreateDatabase(this.sesid, this.database, String.Empty, out this.dbid, CreateDatabaseGrbit.None);
+            Api.JetBeginSession(this.instance, out this.sesid, string.Empty, string.Empty);
+            Api.JetCreateDatabase(this.sesid, this.database, string.Empty, out this.dbid, CreateDatabaseGrbit.None);
             Api.JetBeginTransaction(this.sesid);
             Api.JetCreateTable(this.sesid, this.dbid, this.table, 0, 100, out this.tableid);
 

@@ -39,7 +39,7 @@ namespace InteropApiTests
         public void TestByteValueAsObject()
         {
             var value = new ByteColumnValue();
-            for (byte i = Byte.MinValue; i < Byte.MaxValue; ++i)
+            for (byte i = byte.MinValue; i < byte.MaxValue; ++i)
             {
                 TestValueAsObjectForStruct(value, i);
             }
@@ -54,7 +54,7 @@ namespace InteropApiTests
         public void TestInt16ValueAsObject()
         {
             var value = new Int16ColumnValue();
-            for (short i = Int16.MinValue; i < Int16.MaxValue; ++i)
+            for (short i = short.MinValue; i < short.MaxValue; ++i)
             {
                 TestValueAsObjectForStruct(value, i);
             }
@@ -69,7 +69,7 @@ namespace InteropApiTests
         public void TestUInt16ValueAsObject()
         {
             var value = new UInt16ColumnValue();
-            for (ushort i = UInt16.MinValue; i < UInt16.MaxValue; ++i)
+            for (ushort i = ushort.MinValue; i < ushort.MaxValue; ++i)
             {
                 TestValueAsObjectForStruct(value, i);
             }
@@ -84,7 +84,7 @@ namespace InteropApiTests
         public void TestInt32ValueAsObject()
         {
             var value = new Int32ColumnValue();
-            foreach (int i in new[] { Int32.MinValue, Int32.MinValue + 1, -1, 0, 1, Any.Int32, 65521, Int32.MaxValue - 1, Int32.MaxValue })
+            foreach (int i in new[] { int.MinValue, int.MinValue + 1, -1, 0, 1, Any.Int32, 65521, int.MaxValue - 1, int.MaxValue })
             {
                 TestValueAsObjectForStruct(value, i);
             }
@@ -99,7 +99,7 @@ namespace InteropApiTests
         public void TestUInt32ValueAsObject()
         {
             var value = new UInt32ColumnValue();
-            foreach (uint i in new[] { UInt32.MinValue, 1U, 2U, Any.UInt32, 65521U, UInt32.MaxValue - 1, UInt32.MaxValue })
+            foreach (uint i in new[] { uint.MinValue, 1U, 2U, Any.UInt32, 65521U, uint.MaxValue - 1, uint.MaxValue })
             {
                 TestValueAsObjectForStruct(value, i);
             }
@@ -114,7 +114,7 @@ namespace InteropApiTests
         public void TestInt64ValueAsObject()
         {
             var value = new Int64ColumnValue();
-            foreach (int i in new[] { Int64.MinValue, Int64.MinValue + 1, -1, 0, 1, Any.Int64, 65521, Int64.MaxValue - 1, Int64.MaxValue })
+            foreach (int i in new[] { long.MinValue, long.MinValue + 1, -1, 0, 1, Any.Int64, 65521, long.MaxValue - 1, long.MaxValue })
             {
                 TestValueAsObjectForStruct(value, i);
             }
@@ -129,7 +129,7 @@ namespace InteropApiTests
         public void TestUInt64ValueAsObject()
         {
             var value = new UInt64ColumnValue();
-            foreach (uint i in new[] { UInt64.MinValue, 1U, 2U, Any.UInt64, 65521U, UInt64.MaxValue - 1, UInt64.MaxValue })
+            foreach (uint i in new[] { ulong.MinValue, 1U, 2U, Any.UInt64, 65521U, ulong.MaxValue - 1, ulong.MaxValue })
             {
                 TestValueAsObjectForStruct(value, i);
             }
@@ -144,7 +144,7 @@ namespace InteropApiTests
         public void TestFloatValueAsObject()
         {
             var value = new FloatColumnValue();
-            foreach (float i in new[] { Single.MinValue, Single.MaxValue, -1, 0, 1, Any.Float, Single.Epsilon, Single.NegativeInfinity, Single.PositiveInfinity, Single.NaN })
+            foreach (float i in new[] { float.MinValue, float.MaxValue, -1, 0, 1, Any.Float, float.Epsilon, float.NegativeInfinity, float.PositiveInfinity, float.NaN })
             {
                 TestValueAsObjectForStruct(value, i);
             }
@@ -160,7 +160,7 @@ namespace InteropApiTests
         {
             var value = new DoubleColumnValue();
             foreach (double i in
-                new[] { Double.MinValue, Double.MaxValue, -1, 0, 1, Any.Double, Double.Epsilon, Double.NegativeInfinity, Double.PositiveInfinity, Double.NaN, Math.PI, Math.E })
+                new[] { double.MinValue, double.MaxValue, -1, 0, 1, Any.Double, double.Epsilon, double.NegativeInfinity, double.PositiveInfinity, double.NaN, Math.PI, Math.E })
             {
                 TestValueAsObjectForStruct(value, i);
             }
@@ -267,7 +267,7 @@ namespace InteropApiTests
         public void TestNullBytesColumnValueToString()
         {
             var instance = new BytesColumnValue { Value = null };
-            Assert.AreEqual(String.Empty, instance.ToString());
+            Assert.AreEqual(string.Empty, instance.ToString());
         }
 
         /// <summary>

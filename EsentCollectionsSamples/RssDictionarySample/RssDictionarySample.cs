@@ -84,7 +84,7 @@ namespace RssDictionarySample
                     dictionary[url] = new RssFeedData
                     {
                         LastRetrieved = null,
-                        Data = String.Empty,
+                        Data = string.Empty,
                     };
                 }
             }

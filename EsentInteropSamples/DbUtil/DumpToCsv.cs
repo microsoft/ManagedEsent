@@ -28,7 +28,7 @@ namespace Microsoft.Isam.Esent.Utilities
         /// </returns>
         internal static string QuoteForCsv(string s)
         {
-            if (String.IsNullOrEmpty(s))
+            if (string.IsNullOrEmpty(s))
             {
                 return s;
             }
@@ -49,13 +49,13 @@ namespace Microsoft.Isam.Esent.Utilities
             //  3. Value contains a comma
             //  4. Value contains a quote
             //  5. Value contains a newline
-            if (Char.IsWhiteSpace(s[0])
-                || Char.IsWhiteSpace(s[s.Length - 1])
+            if (char.IsWhiteSpace(s[0])
+                || char.IsWhiteSpace(s[s.Length - 1])
                 || s.Contains(Comma)
                 || s.Contains(Quote)
                 || s.Contains(Environment.NewLine))
             {
-                s = String.Format("\"{0}\"", s);
+                s = string.Format("\"{0}\"", s);
             }
 
             return s;
@@ -123,43 +123,43 @@ namespace Microsoft.Isam.Esent.Utilities
                         switch (column.Coltyp)
                         {
                             case JET_coltyp.Bit:
-                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsBoolean(s, t, columnid)));
+                                columnFormatters.Add((s, t) => string.Format("{0}", Api.RetrieveColumnAsBoolean(s, t, columnid)));
                                 break;
                             case VistaColtyp.LongLong:
                             case JET_coltyp.Currency:
-                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsInt64(s, t, columnid)));
+                                columnFormatters.Add((s, t) => string.Format("{0}", Api.RetrieveColumnAsInt64(s, t, columnid)));
                                 break;
                             case JET_coltyp.IEEEDouble:
-                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsDouble(s, t, columnid)));
+                                columnFormatters.Add((s, t) => string.Format("{0}", Api.RetrieveColumnAsDouble(s, t, columnid)));
                                 break;
                             case JET_coltyp.IEEESingle:
-                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsFloat(s, t, columnid)));
+                                columnFormatters.Add((s, t) => string.Format("{0}", Api.RetrieveColumnAsFloat(s, t, columnid)));
                                 break;
                             case JET_coltyp.Long:
-                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsInt32(s, t, columnid)));
+                                columnFormatters.Add((s, t) => string.Format("{0}", Api.RetrieveColumnAsInt32(s, t, columnid)));
                                 break;
                             case JET_coltyp.Text:
                             case JET_coltyp.LongText:
                                 Encoding encoding = (column.Cp == JET_CP.Unicode) ? Encoding.Unicode : Encoding.ASCII;
-                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsString(s, t, columnid, encoding)));
+                                columnFormatters.Add((s, t) => string.Format("{0}", Api.RetrieveColumnAsString(s, t, columnid, encoding)));
                                 break;
                             case JET_coltyp.Short:
-                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsInt16(s, t, columnid)));
+                                columnFormatters.Add((s, t) => string.Format("{0}", Api.RetrieveColumnAsInt16(s, t, columnid)));
                                 break;
                             case JET_coltyp.UnsignedByte:
-                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsByte(s, t, columnid)));
+                                columnFormatters.Add((s, t) => string.Format("{0}", Api.RetrieveColumnAsByte(s, t, columnid)));
                                 break;
                             case JET_coltyp.DateTime:
-                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsDateTime(s, t, columnid)));
+                                columnFormatters.Add((s, t) => string.Format("{0}", Api.RetrieveColumnAsDateTime(s, t, columnid)));
                                 break;
                             case VistaColtyp.UnsignedShort:
-                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsUInt16(s, t, columnid)));
+                                columnFormatters.Add((s, t) => string.Format("{0}", Api.RetrieveColumnAsUInt16(s, t, columnid)));
                                 break;
                             case VistaColtyp.UnsignedLong:
-                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsUInt32(s, t, columnid)));
+                                columnFormatters.Add((s, t) => string.Format("{0}", Api.RetrieveColumnAsUInt32(s, t, columnid)));
                                 break;
                             case VistaColtyp.GUID:
-                                columnFormatters.Add((s, t) => String.Format("{0}", Api.RetrieveColumnAsGuid(s, t, columnid)));
+                                columnFormatters.Add((s, t) => string.Format("{0}", Api.RetrieveColumnAsGuid(s, t, columnid)));
                                 break;
                             case JET_coltyp.Binary:
                             case JET_coltyp.LongBinary:
@@ -169,7 +169,7 @@ namespace Microsoft.Isam.Esent.Utilities
                         }
                     }
 
-                    Console.WriteLine(String.Join(Comma, columnNames.ToArray()));
+                    Console.WriteLine(string.Join(Comma, columnNames.ToArray()));
 
                     using (var table = new Table(session, dbid, tableName, OpenTableGrbit.ReadOnly))
                     {
@@ -180,7 +180,7 @@ namespace Microsoft.Isam.Esent.Utilities
                         {
                             IEnumerable<string> columnData = from formatter in columnFormatters
                                              select Dbutil.QuoteForCsv(formatter(session, table));
-                            Console.WriteLine(String.Join(Comma, columnData.ToArray()));
+                            Console.WriteLine(string.Join(Comma, columnData.ToArray()));
                         }
 
                         Api.JetResetTableSequential(session, table, ResetTableSequentialGrbit.None);

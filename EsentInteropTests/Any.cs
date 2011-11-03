@@ -13,7 +13,7 @@ namespace InteropApiTests
     /// <summary>
     /// Generate arbitrary (random) values
     /// </summary>
-    internal static class Any
+    internal static partial class Any
     {
         /// <summary>
         /// Random object used to generate the values.
@@ -98,7 +98,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Gets a random long.
+        /// Gets a random Int64 (long).
         /// </summary>
         public static long Int64
         {
@@ -111,7 +111,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Gets a random ulong.
+        /// Gets a random UInt64 (ulong).
         /// </summary>
         public static ulong UInt64
         {
@@ -120,6 +120,17 @@ namespace InteropApiTests
                 var data = new byte[8];
                 Any.random.NextBytes(data);
                 return BitConverter.ToUInt64(data, 0);
+            }
+        }
+
+        /// <summary>
+        /// Gets a random IntPtr.
+        /// </summary>
+        public static IntPtr IntPtr
+        {
+            get
+            {
+                return new IntPtr(Any.Int32);
             }
         }
 
@@ -170,6 +181,21 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Gets a random DateTime than fits in the range 1900 to 2155 (Stored as a byte offset from 1900).
+        /// </summary>
+        public static DateTime DateTimeLimited
+        {
+            get
+            {
+                const int MaximumDays = 255 * 365;
+                double d = Any.random.Next(2, MaximumDays);
+
+                // FromOADate takes the number of days from 30 Dec 1899.
+                return DateTime.FromOADate(d);
+            }
+        }
+
+        /// <summary>
         /// Gets a random string. The string will only
         /// contain ASCII characters and will be 1 to
         /// 120 characters long.
@@ -204,6 +230,17 @@ namespace InteropApiTests
             get
             {
                 return new JET_LOGTIME(DateTime.Now - TimeSpan.FromSeconds(Any.Int16));
+            }
+        }
+
+        /// <summary>
+        /// Gets a random JET_SIGNATURE.
+        /// </summary>
+        public static Microsoft.Isam.Esent.Interop.JET_SIGNATURE Signature
+        {
+            get
+            {
+                return new Microsoft.Isam.Esent.Interop.JET_SIGNATURE(Any.Int32, Any.DateTimeLimited, Any.String);
             }
         }
 

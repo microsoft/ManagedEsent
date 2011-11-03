@@ -64,7 +64,6 @@ namespace InteropApiTests
 
         /// <summary>
         /// Initialization method. Called once when the tests are started.
-        /// All DDL should be done in this method.
         /// </summary>
         [TestInitialize]
         [Description("Setup for BasicDDLTests")]
@@ -77,8 +76,8 @@ namespace InteropApiTests
 
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetInit(ref this.instance);
-            Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
-            Api.JetCreateDatabase(this.sesid, this.database, String.Empty, out this.dbid, CreateDatabaseGrbit.None);
+            Api.JetBeginSession(this.instance, out this.sesid, string.Empty, string.Empty);
+            Api.JetCreateDatabase(this.sesid, this.database, string.Empty, out this.dbid, CreateDatabaseGrbit.None);
             Api.JetBeginTransaction(this.sesid);
             Api.JetCreateTable(this.sesid, this.dbid, this.table, 0, 100, out this.tableid);
 
@@ -766,6 +765,108 @@ namespace InteropApiTests
 
             Api.JetCloseTable(this.sesid, tableCreated);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+        }
+
+        /// <summary>
+        /// Creates a table, two columns, and three indexes (one with an invalid name)  using JetCreateTableColumnIndex3.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Creates a table, two columns, and three indexes (one with an invalid name) using JetCreateTableColumnIndex3")]
+        public void JetCreateTableColumnIndexWithInvalidIndexName()
+        {
+            var columncreates = new JET_COLUMNCREATE[]
+            {
+                new JET_COLUMNCREATE()
+                {
+                    szColumnName = "col1_short",
+                    coltyp = JET_coltyp.Short,
+                    cbMax = 2,
+                },
+                new JET_COLUMNCREATE()
+                {
+                    szColumnName = "col2_longtext",
+                    coltyp = JET_coltyp.LongText,
+                    cp = JET_CP.Unicode,
+                },
+                new JET_COLUMNCREATE()
+                {
+                    szColumnName = "col1_short2",
+                    coltyp = JET_coltyp.Short,
+                    cbMax = 2,
+                },
+            };
+
+            const string Index1Name = "firstIndex";
+            const string Index1Description = "+col1_short\0-col2_longtext\0";
+
+            const string Index2Name = "secondIndex";
+            const string Index2Description = "+col2_longtext\0-col1_short\0";
+
+            const string Index3Name = "[BAD!NAME]";
+            const string Index3Description = "+col1_short2\0-col2_longtext\0";
+
+            var indexcreates = new JET_INDEXCREATE[]
+            {
+                new JET_INDEXCREATE
+                {
+                    szIndexName = Index1Name,
+                    szKey = Index1Description,
+                    cbKey = Index1Description.Length + 1,
+                    grbit = CreateIndexGrbit.None,
+                    ulDensity = 99,
+                },
+                new JET_INDEXCREATE
+                {
+                    szIndexName = Index2Name,
+                    szKey = Index2Description,
+                    cbKey = Index2Description.Length + 1,
+                    grbit = CreateIndexGrbit.None,
+                    ulDensity = 99,
+                },
+                new JET_INDEXCREATE
+                {
+                    szIndexName = Index3Name,
+                    szKey = Index3Description,
+                    cbKey = Index3Description.Length + 1,
+                    grbit = CreateIndexGrbit.None,
+                    ulDensity = 99,
+                },
+            };
+
+            var tablecreate = new JET_TABLECREATE()
+            {
+                szTableName = "tableBigBang",
+                ulPages = 23,
+                ulDensity = 75,
+                cColumns = columncreates.Length,
+                rgcolumncreate = columncreates,
+                rgindexcreate = indexcreates,
+                cIndexes = indexcreates.Length,
+                cbSeparateLV = 100,
+                cbtyp = JET_cbtyp.Null,
+                grbit = CreateTableColumnIndexGrbit.None,
+            };
+
+            Api.JetBeginTransaction(this.sesid);
+
+            bool hitException = false;
+
+            try
+            {
+                Api.JetCreateTableColumnIndex3(this.sesid, this.dbid, tablecreate);
+            }
+            catch (EsentInvalidNameException)
+            {
+                hitException = true;
+            }
+            
+            Assert.IsTrue(hitException);
+            Assert.AreEqual(JET_err.Success, tablecreate.rgindexcreate[0].err);
+            Assert.AreEqual(JET_err.Success, tablecreate.rgindexcreate[1].err);
+            Assert.AreEqual(JET_err.InvalidName, tablecreate.rgindexcreate[2].err);
+
+            Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
         }
 
         /// <summary>

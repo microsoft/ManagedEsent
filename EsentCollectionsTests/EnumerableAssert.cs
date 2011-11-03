@@ -28,7 +28,7 @@ namespace EsentCollectionsTests
         /// <param name="parameters">Parameters for the error message.</param>
         public static void AreEqual<T>(IEnumerable<T> expected, IEnumerable<T> actual, string format, params object[] parameters)
         {
-            string message = (null == format) ? String.Empty : String.Format(format, parameters);
+            string message = (null == format) ? string.Empty : string.Format(format, parameters);
             using (IEnumerator<T> expectedEnumerator = expected.GetEnumerator())
             using (IEnumerator<T> actualEnumerator = actual.GetEnumerator())
             {

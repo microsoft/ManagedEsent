@@ -79,8 +79,8 @@ namespace InteropApiTests
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
             Api.JetInit(ref this.instance);
-            Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
-            Api.JetCreateDatabase(this.sesid, this.database, String.Empty, out this.dbid, CreateDatabaseGrbit.None);
+            Api.JetBeginSession(this.instance, out this.sesid, string.Empty, string.Empty);
+            Api.JetCreateDatabase(this.sesid, this.database, string.Empty, out this.dbid, CreateDatabaseGrbit.None);
             Api.JetBeginTransaction(this.sesid);
             Api.JetCreateTable(this.sesid, this.dbid, this.table, 0, 100, out this.tableid);
 
@@ -648,8 +648,8 @@ namespace InteropApiTests
             JET_SESID sesid2;
             JET_DBID dbid2;
             JET_TABLEID tableid2;
-            Api.JetBeginSession(this.instance, out sesid2, String.Empty, String.Empty);
-            Api.JetOpenDatabase(sesid2, this.database, String.Empty, out dbid2, OpenDatabaseGrbit.None);
+            Api.JetBeginSession(this.instance, out sesid2, string.Empty, string.Empty);
+            Api.JetOpenDatabase(sesid2, this.database, string.Empty, out dbid2, OpenDatabaseGrbit.None);
             Api.JetOpenTable(sesid2, dbid2, this.table, null, 0, OpenTableGrbit.None, out tableid2);
 
             Api.JetBeginTransaction(this.sesid);
@@ -807,29 +807,87 @@ namespace InteropApiTests
 
             // We need enough records to force a vertical split. ESENT returns
             // 0 for keysPreread when we have a single-level tree.
-            const int NumRecords = 128;
+            const int NumRecords = 1024;
             byte[][] keys = new byte[NumRecords][];
             int[] keyLengths = new int[NumRecords];
 
-            Api.JetBeginTransaction(this.sesid);
+            // Setting a fixed cache size improves reliability of this test case because,
+            // due to optimization reasons, we may drop pre-reads with a small cache size.
+            int cacheSizeMinOriginal = SystemParameters.CacheSizeMin;
+            int cacheSizeMaxOriginal = SystemParameters.CacheSizeMax;
+            SystemParameters.CacheSizeMin = 1024;
+            SystemParameters.CacheSizeMax = 1024;
 
-            // This table uses a sequential index so the records will
-            // be in key order.
-            for (int i = 0; i < NumRecords; ++i)
+            try
             {
-                Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
-                this.SetColumnFromString(Any.StringOfLength(255));
-                this.UpdateAndGotoBookmark();
+                Api.JetBeginTransaction(this.sesid);
 
-                keys[i] = Api.RetrieveKey(this.sesid, this.tableid, RetrieveKeyGrbit.None);
-                keyLengths[i] = keys[i].Length;
+                // This table uses a sequential index so the records will
+                // be in key order.
+                for (int i = 0; i < NumRecords; ++i)
+                {
+                    Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+                    this.SetColumnFromString(Any.StringOfLength(1024));
+                    this.UpdateAndGotoBookmark();
+
+                    keys[i] = Api.RetrieveKey(this.sesid, this.tableid, RetrieveKeyGrbit.None);
+                    keyLengths[i] = keys[i].Length;
+                }
+
+                Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.None);
+
+                int keysPreread;
+                Windows7Api.JetPrereadKeys(this.sesid, this.tableid, keys, keyLengths, NumRecords, out keysPreread, PrereadKeysGrbit.Forward);
+                Assert.AreNotEqual(0, keysPreread, "No keys were preread?!");
             }
+            finally
+            {
+                SystemParameters.CacheSizeMin = cacheSizeMinOriginal;
+                SystemParameters.CacheSizeMax = cacheSizeMaxOriginal;
+            }
+        }
 
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.None);
+        /// <summary>
+        ///  JetGetBookmark throws exception when no currency is set.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("JetGetBookmark throws exception when no currency is set")]
+        [ExpectedException(typeof(EsentNoCurrentRecordException))]
+        public void JetGetBookmarkThrowsExceptionWhenNoCurrencyIsSet()
+        {
+            var actualBookmark = new byte[1];
+            int actualBookmarkSize;
+            Api.JetGetBookmark(this.sesid, this.tableid, actualBookmark, actualBookmark.Length, out actualBookmarkSize);
+        }
 
-            int keysPreread;
-            Windows7Api.JetPrereadKeys(this.sesid, this.tableid, keys, keyLengths, NumRecords, out keysPreread, PrereadKeysGrbit.Forward);
-            Assert.AreNotEqual(0, keysPreread, "No keys were preread?!");
+        /// <summary>
+        ///  JetRetrieveKey throws exception when no currency is set.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("JetRetrieveKey throws exception when no currency is set")]
+        [ExpectedException(typeof(EsentNoCurrentRecordException))]
+        public void JetRetrieveKeyThrowsExceptionWhenNoCurrencyIsSet()
+        {
+            var key = new byte[1];
+
+            int keyLength;
+            Api.JetRetrieveKey(this.sesid, this.tableid, key, key.Length, out keyLength, RetrieveKeyGrbit.None);
+        }
+
+        /// <summary>
+        /// JetRetrieveColumn throws exception when no currency is set.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("JetRetrieveColumn throws exception when no currency is set")]
+        [ExpectedException(typeof(EsentNoCurrentRecordException))]
+        public void JetRetrieveColumnThrowsExceptionWhenNoCurrencyIsSet()
+        {
+            int actualSize;
+            var data = new byte[1];
+            Api.JetRetrieveColumn(this.sesid, this.tableid, this.columnidLongText, data, 0, out actualSize, RetrieveColumnGrbit.None, null);
         }
 
         #endregion Navigation Tests
@@ -883,7 +941,7 @@ namespace InteropApiTests
             int seconds = 1;
             Api.JetDefragment2(this.sesid, this.dbid, null, ref passes, ref seconds, callback, DefragGrbit.BatchStart);
             Assert.IsTrue(
-                oldFinishedEvent.WaitOne(TimeSpan.FromSeconds(10)),
+                oldFinishedEvent.WaitOne(TimeSpan.FromSeconds(10), false),
                 "Online Defragmentation Callback not called");
             Api.JetDefragment2(this.sesid, this.dbid, null, ref passes, ref seconds, null, DefragGrbit.BatchStop);
 
@@ -976,7 +1034,7 @@ namespace InteropApiTests
         private void SetColumnFromString(string s)
         {
             byte[] data = Encoding.Unicode.GetBytes(s);
-            Api.JetSetColumn(this.sesid, this.tableid, this.columnidLongText, data, data.Length, SetColumnGrbit.None, null);
+            Api.JetSetColumn(this.sesid, this.tableid, this.columnidLongText, data, data.Length, SetColumnGrbit.IntrinsicLV | Windows7Grbits.Uncompressed, null);
         }
 
         /// <summary>

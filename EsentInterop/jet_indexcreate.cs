@@ -17,6 +17,9 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native version of the JET_INDEXCREATE structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
+    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1305:FieldNamesMustNotUseHungarianNotation",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
@@ -86,6 +89,9 @@ namespace Microsoft.Isam.Esent.Interop
     /// was not changed for Vista.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
+    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1305:FieldNamesMustNotUseHungarianNotation",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
@@ -108,6 +114,9 @@ namespace Microsoft.Isam.Esent.Interop
     /// this includes a <see cref="JET_SPACEHINTS"/> member.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
+    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1305:FieldNamesMustNotUseHungarianNotation",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
@@ -133,7 +142,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [Serializable]
-    public sealed class JET_INDEXCREATE : IContentEquatable<JET_INDEXCREATE>, IDeepCloneable<JET_INDEXCREATE>
+    public sealed partial class JET_INDEXCREATE : IContentEquatable<JET_INDEXCREATE>, IDeepCloneable<JET_INDEXCREATE>
     {
         /// <summary>
         /// Name of the index.
@@ -350,7 +359,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "JET_INDEXCREATE({0}:{1})", this.szIndexName, this.szKey);
+            return string.Format(CultureInfo.InvariantCulture, "JET_INDEXCREATE({0}:{1})", this.szIndexName, this.szKey);
         }
 
         /// <summary>
@@ -495,6 +504,42 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Sets only the output fields of the object from a NATIVE_INDEXCREATE2 struct,
+        /// specifically <see cref="err"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The native indexcreate to set the values from.
+        /// </param>
+        internal void SetFromNativeIndexCreate(NATIVE_INDEXCREATE2 value)
+        {
+            this.SetFromNativeIndexCreate(value.indexcreate1);
+        }
+
+        /// <summary>
+        /// Sets only the output fields of the object from a NATIVE_INDEXCREATE1 struct,
+        /// specifically <see cref="err"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The native indexcreate to set the values from.
+        /// </param>
+        internal void SetFromNativeIndexCreate(NATIVE_INDEXCREATE1 value)
+        {
+            this.SetFromNativeIndexCreate(value.indexcreate);
+        }
+
+        /// <summary>
+        /// Sets only the output fields of the object from a native NATIVE_INDEXCREATE struct,
+        /// specifically <see cref="err"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The native indexcreate to set the values from.
+        /// </param>
+        internal void SetFromNativeIndexCreate(NATIVE_INDEXCREATE value)
+        {
+            this.err = (JET_err)value.err;
+        }
+
+        /// <summary>
         /// Returns a value indicating whether the pidxUnicode member of this
         /// instance is equal to another instance.
         /// </summary>
@@ -532,4 +577,3 @@ namespace Microsoft.Isam.Esent.Interop
         }
     }
 }
-

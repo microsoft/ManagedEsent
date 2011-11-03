@@ -129,5 +129,25 @@ namespace Microsoft.Isam.Esent.Interop.Windows7
         /// No instances will be prepared by default. Instances must be added explicitly.
         /// </summary>
         public const SnapshotPrepareGrbit ExplicitPrepare = (SnapshotPrepareGrbit)0x8;
+
+        /// <summary>
+        /// Hint that the sequential traversal will be in the forward direction.
+        /// </summary>
+        public const SetTableSequentialGrbit Forward = (SetTableSequentialGrbit)0x1;
+
+        /// <summary>
+        /// Hint that the sequential traversal will be in the backward direction.
+        /// </summary>
+        public const SetTableSequentialGrbit Backward = (SetTableSequentialGrbit)0x2;
+
+        /// <summary>
+        /// The database engine will initiate automatic background database maintenance upon database attachment.
+        /// </summary>
+        public const AttachDatabaseGrbit EnableAttachDbBackgroundMaintenance = (AttachDatabaseGrbit)0x800;
+
+        /// <summary>
+        /// The database engine will initiate automatic background database maintenance upon database creation.
+        /// </summary>
+        public const CreateDatabaseGrbit EnableCreateDbBackgroundMaintenance = (CreateDatabaseGrbit)0x800;
     }
 }

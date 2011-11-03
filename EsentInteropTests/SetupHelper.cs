@@ -175,7 +175,7 @@ namespace InteropApiTests
         /// <returns>An index name.</returns>
         private static string InstanceName()
         {
-            return String.Format("Instance_{0}", Interlocked.Increment(ref instanceNum));
+            return string.Format("Instance_{0}", Interlocked.Increment(ref instanceNum));
         }
     }
 }

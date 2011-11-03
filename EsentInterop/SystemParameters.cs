@@ -303,6 +303,29 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Set a system parameter which is a string.
+        /// </summary>
+        /// <param name="param">The parameter to set.</param>
+        /// <param name="value">The value to set.</param>
+        private static void SetStringParameter(JET_param param, string value)
+        {
+            Api.JetSetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, param, 0, value);
+        }
+
+        /// <summary>
+        /// Get a system parameter which is a string.
+        /// </summary>
+        /// <param name="param">The parameter to get.</param>
+        /// <returns>The value of the parameter.</returns>
+        private static string GetStringParameter(JET_param param)
+        {
+            int ignored = 0;
+            string value;
+            Api.JetGetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, param, ref ignored, out value, 1024);
+            return value;
+        }
+
+        /// <summary>
         /// Set a system parameter which is an integer.
         /// </summary>
         /// <param name="param">The parameter to set.</param>

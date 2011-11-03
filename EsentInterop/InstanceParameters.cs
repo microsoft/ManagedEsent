@@ -450,7 +450,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                return 0 == String.Compare(this.GetStringParameter(JET_param.Recovery), "on", StringComparison.OrdinalIgnoreCase);
+                return 0 == string.Compare(this.GetStringParameter(JET_param.Recovery), "on", StringComparison.OrdinalIgnoreCase);
             }
 
             set
@@ -628,7 +628,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "InstanceParameters (0x{0:x})", this.instance.Value);
+            return string.Format(CultureInfo.InvariantCulture, "InstanceParameters (0x{0:x})", this.instance.Value);
         }
 
         /// <summary>

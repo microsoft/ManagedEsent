@@ -89,7 +89,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 throw new ArgumentNullException("directory");
             }
 
-            Globals.Init();
+            CollectionsSystemParameters.Init();
             this.converters = new PersistentDictionaryConverters<TKey, TValue>();
             this.config = new PersistentDictionaryConfig();
             this.databaseDirectory = directory;
@@ -743,7 +743,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 JET_TABLEID tableid;
 
                 Api.JetAttachDatabase(session, database, AttachDatabaseGrbit.None);
-                Api.JetOpenDatabase(session, database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+                Api.JetOpenDatabase(session, database, string.Empty, out dbid, OpenDatabaseGrbit.None);
 
                 // Globals table
                 Api.JetOpenTable(session, dbid, this.config.GlobalsTableName, null, 0, OpenTableGrbit.None, out tableid);
@@ -756,11 +756,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                     throw new InvalidDataException("globals table is empty");
                 }
 
-                var keyType = Api.DeserializeObjectFromColumn(session, tableid, keyTypeColumnid);
-                var valueType = Api.DeserializeObjectFromColumn(session, tableid, valueTypeColumnid);
+                Type keyType = (Type)Api.DeserializeObjectFromColumn(session, tableid, keyTypeColumnid);
+                Type valueType = (Type)Api.DeserializeObjectFromColumn(session, tableid, valueTypeColumnid);
                 if (keyType != typeof(TKey) || valueType != typeof(TValue))
                 {
-                    var error = String.Format(
+                    var error = string.Format(
                         CultureInfo.InvariantCulture,
                         "Database is of type <{0}, {1}>, not <{2}, {3}>",
                         keyType,
@@ -789,7 +789,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             using (var session = new Session(this.instance))
             {
                 JET_DBID dbid;
-                Api.JetCreateDatabase(session, database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                Api.JetCreateDatabase(session, database, string.Empty, out dbid, CreateDatabaseGrbit.None);
                 try
                 {
                     using (var transaction = new Transaction(session))
@@ -926,7 +926,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 0,
                 out valueColumnid);
 
-            string indexKey = String.Format(CultureInfo.InvariantCulture, "+{0}\0\0", this.config.KeyColumnName);
+            string indexKey = string.Format(CultureInfo.InvariantCulture, "+{0}\0\0", this.config.KeyColumnName);
             var indexcreates = new[]
             {
                 new JET_INDEXCREATE

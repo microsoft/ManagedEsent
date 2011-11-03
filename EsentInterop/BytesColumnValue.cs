@@ -50,7 +50,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             if (null == this.Value)
             {
-                return String.Empty;
+                return string.Empty;
             }
 
             return BitConverter.ToString(this.Value, 0, Math.Min(this.Value.Length, 16));

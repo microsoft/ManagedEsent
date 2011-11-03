@@ -61,7 +61,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "Session (0x{0:x})", this.sesid.Value);
+            return string.Format(CultureInfo.InvariantCulture, "Session (0x{0:x})", this.sesid.Value);
         }
 
         /// <summary>

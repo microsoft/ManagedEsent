@@ -41,6 +41,7 @@ namespace InteropApiTests
         public void Teardown()
         {
             SetupHelper.CheckProcessForInstanceLeaks();
+            SystemParameters.Configuration = 1;
         }
         
         #endregion
@@ -53,7 +54,7 @@ namespace InteropApiTests
         [Description("Verify that retrieving a string parameter tries to intern the string")]
         public void VerifyGetSystemParameterTriesToInternStrings()
         {
-            string expected = String.Intern("edb");
+            string expected = string.Intern("edb");
 
             JET_INSTANCE instance;
             Api.JetCreateInstance(out instance, "StringParameterTest");
@@ -493,11 +494,67 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test setting and retrieving the MaxCoalesceReadSize parameter (if esent supports it)
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting and retrieving the MaxCoalesceReadSize parameter (if esent supports it)")]
+        public void MaxCoalesceReadSizeWin7Parameter()
+        {
+            if (EsentVersion.SupportsWindows7Features)
+            {
+                IntegerParameterTest(JET_INSTANCE.Nil, Windows7Param.MaxCoalesceReadSize, 32 * 1024);
+            }
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the MaxCoalesceWriteSize parameter (if esent supports it)
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting and retrieving the MaxCoalesceWriteSize parameter (if esent supports it)")]
+        public void MaxCoalesceWriteSizeWin7Parameter()
+        {
+            if (EsentVersion.SupportsWindows7Features)
+            {
+                IntegerParameterTest(JET_INSTANCE.Nil, Windows7Param.MaxCoalesceWriteSize, 32 * 1024);
+            }
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the MaxCoalesceReadGapSize parameter (if esent supports it)
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting and retrieving the MaxCoalesceReadGapSize parameter (if esent supports it)")]
+        public void MaxCoalesceReadGapSizeWin7Parameter()
+        {
+            if (EsentVersion.SupportsWindows7Features)
+            {
+                IntegerParameterTest(JET_INSTANCE.Nil, Windows7Param.MaxCoalesceReadGapSize, 32 * 1024);
+            }
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the MaxCoalesceWriteGapSize parameter (if esent supports it)
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting and retrieving the MaxCoalesceWriteGapSize parameter (if esent supports it)")]
+        public void MaxCoalesceWriteGapSizeWin7Parameter()
+        {
+            if (EsentVersion.SupportsWindows7Features)
+            {
+                IntegerParameterTest(JET_INSTANCE.Nil, Windows7Param.MaxCoalesceWriteGapSize, 32 * 1024);
+            }
+        }
+        
+        /// <summary>
         /// Test setting and retrieving the DbScanThrottle parameter (if esent supports it)
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Test setting and retrieving the WaypointLatency parameter (if esent supports it)")]
+        [Description("Test setting and retrieving the DbScanThrottle parameter (if esent supports it)")]
         public void DbScanThrottleWin7Parameter()
         {
             if (EsentVersion.SupportsWindows7Features)
@@ -662,8 +719,8 @@ namespace InteropApiTests
         public void VerifyGetAndSetEventLoggingLevel()
         {
             int eventLoggingLevelOld = SystemParameters.EventLoggingLevel;
-            SystemParameters.EventLoggingLevel = 80;
-            Assert.AreEqual(80, SystemParameters.EventLoggingLevel);
+            SystemParameters.EventLoggingLevel = (int)EventLoggingLevels.High;
+            Assert.AreEqual((int)EventLoggingLevels.High, SystemParameters.EventLoggingLevel);
             SystemParameters.EventLoggingLevel = eventLoggingLevelOld;
         }
 
@@ -795,22 +852,73 @@ namespace InteropApiTests
         /// <param name="expected">The string to set it to.</param>
         private static void StringParameterTest(JET_param param, string expected)
         {
+            SetGetSystemParameterTests.StringParameterTest(param, expected, false);
+        }
+
+        /// <summary>
+        /// Test setting and retrieving a system parameter that uses a string.
+        /// </summary>
+        /// <param name="instance">The ESE instance.</param>
+        /// <param name="param">The parameter to set.</param>
+        /// <param name="expected">The string to set it to.</param>
+        private static void StringParameterTest(JET_INSTANCE instance, JET_param param, string expected)
+        {
+            SetGetSystemParameterTests.StringParameterTest(instance, param, expected, false);
+        }
+
+        /// <summary>
+        /// Test setting and retrieving a system parameter that uses a string.
+        /// </summary>
+        /// <param name="param">The parameter to set.</param>
+        /// <param name="expected">The string to expect when reading the parameter.</param>
+        /// <param name="ignoreCase">if set to <c>true</c> [ignore case].</param>
+        private static void StringParameterTest(JET_param param, string expected, bool ignoreCase)
+        {
             JET_INSTANCE instance;
             Api.JetCreateInstance(out instance, "StringParameterTest");
             try
             {
-                Api.JetSetSystemParameter(instance, JET_SESID.Nil, param, 0, expected);
-
-                int ignored = 0;
-                string actual;
-                Api.JetGetSystemParameter(instance, JET_SESID.Nil, param, ref ignored, out actual, 256);
-
-                Assert.AreEqual(expected, actual);
+                SetGetSystemParameterTests.StringParameterTest(instance, param, expected, ignoreCase);
             }
             finally
             {
                 Api.JetTerm(instance);
             }
+        }
+
+        /// <summary>
+        /// Test setting and retrieving a system parameter that uses a string.
+        /// </summary>
+        /// <param name="instance">The ESE instance.</param>
+        /// <param name="param">The parameter to set.</param>
+        /// <param name="expected">The string to expect when reading the parameter.</param>
+        /// <param name="ignoreCase">if set to <c>true</c> [ignore case].</param>
+        private static void StringParameterTest(JET_INSTANCE instance, JET_param param, string expected, bool ignoreCase)
+        {
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, param, 0, expected);
+
+            int ignored = 0;
+            string actual;
+            Api.JetGetSystemParameter(instance, JET_SESID.Nil, param, ref ignored, out actual, 256);
+
+            Assert.AreEqual(expected, actual, ignoreCase);
+        }
+
+        /// <summary>
+        /// Test setting and retrieving an integer system parameter.
+        /// </summary>
+        /// <param name="instance">The ESE instance.</param>
+        /// <param name="param">The parameter to set.</param>
+        /// <param name="expected">The string to set it to.</param>
+        private static void IntegerParameterTest(JET_INSTANCE instance, JET_param param, int expected)
+        {
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, param, expected, null);
+
+            int actual = 0;
+            string ignored;
+            Api.JetGetSystemParameter(instance, JET_SESID.Nil, param, ref actual, out ignored, 0);
+
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -824,13 +932,7 @@ namespace InteropApiTests
             Api.JetCreateInstance(out instance, "IntParameterTest");
             try
             {
-                Api.JetSetSystemParameter(instance, JET_SESID.Nil, param, expected, null);
-
-                int actual = 0;
-                string ignored;
-                Api.JetGetSystemParameter(instance, JET_SESID.Nil, param, ref actual, out ignored, 0);
-
-                Assert.AreEqual(expected, actual);
+                SetGetSystemParameterTests.IntegerParameterTest(instance, param, expected);
             }
             finally
             {

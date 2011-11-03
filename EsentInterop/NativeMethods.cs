@@ -481,7 +481,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern int JetCreateTableColumnIndex2(IntPtr sesid, uint dbid, ref NATIVE_TABLECREATE2 tablecreate3);
 
         // Introduced in Windows 7
-        [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
+        [DllImport(EsentDll, CharSet = CharSet.Ansi, ExactSpelling = true)]
         public static extern int JetCreateTableColumnIndex3A(IntPtr sesid, uint dbid, ref NATIVE_TABLECREATE3 tablecreate3);
 
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]

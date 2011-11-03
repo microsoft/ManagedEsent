@@ -111,7 +111,7 @@ namespace EsentCollectionsTests
         [Description("Verify that a call to the static String.Equals is exact")]
         public void VerifyStringEqualsWithIsExact()
         {
-            Assert.IsTrue(KeyValueExpressionEvaluator<string, int>.KeyRangeIsExact(x => String.Equals(x.Key, "foo")));
+            Assert.IsTrue(KeyValueExpressionEvaluator<string, int>.KeyRangeIsExact(x => string.Equals(x.Key, "foo")));
         }
 
         /// <summary>
@@ -682,7 +682,7 @@ namespace EsentCollectionsTests
         {
             KeyRange<int> keyRange =
                 KeyValueExpressionEvaluator<int, string>.GetKeyRange(
-                    x => x.Key < (String.IsNullOrEmpty("foo") ? 0 : 1));
+                    x => x.Key < (string.IsNullOrEmpty("foo") ? 0 : 1));
             Assert.IsNull(keyRange.Min);
             Assert.AreEqual(1, keyRange.Max.Value);
             Assert.IsFalse(keyRange.Max.IsInclusive);
@@ -714,7 +714,7 @@ namespace EsentCollectionsTests
             Func<KeyValuePair<int, string>, int> f = x => x.Key;
             KeyRange<int> keyRange =
                 KeyValueExpressionEvaluator<int, string>.GetKeyRange(
-                    x => x.Key < (String.IsNullOrEmpty(x.Value) ? 0 : 1));
+                    x => x.Key < (string.IsNullOrEmpty(x.Value) ? 0 : 1));
             Assert.AreEqual(KeyRange<int>.OpenRange, keyRange);
         }
 
@@ -1548,7 +1548,7 @@ namespace EsentCollectionsTests
         public void TestIntNullableLongExpressionOverflow()
         {
             long? min = 1;
-            Func<long?> fmax = () => Int64.MaxValue - 3;
+            Func<long?> fmax = () => long.MaxValue - 3;
             var actual = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => min <= x.Key && x.Key < fmax());
         }
 
@@ -1561,7 +1561,7 @@ namespace EsentCollectionsTests
         [ExpectedException(typeof(OverflowException))]
         public void TestIntNullableLongExpressionUnderflow()
         {
-            long? min = Int64.MinValue + 2;
+            long? min = long.MinValue + 2;
             Func<long?> fmax = () => 1;
             var actual = KeyValueExpressionEvaluator<int, string>.GetKeyRange(x => min <= x.Key && x.Key < fmax());
         }
@@ -1936,7 +1936,7 @@ namespace EsentCollectionsTests
         public void TestStringCompare()
         {
             KeyRange<string> keyRange =
-                KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => String.Compare(x.Key, "foo") > 0);
+                KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => string.Compare(x.Key, "foo") > 0);
             Assert.AreEqual("foo", keyRange.Min.Value);
             Assert.IsFalse(keyRange.Min.IsInclusive);
             Assert.IsNull(keyRange.Max);
@@ -1951,7 +1951,7 @@ namespace EsentCollectionsTests
         public void TestStringCompare2()
         {
             KeyRange<string> keyRange =
-                KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => String.Compare("foo", x.Key) <= 0);
+                KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => string.Compare("foo", x.Key) <= 0);
             Assert.AreEqual("foo", keyRange.Min.Value);
             Assert.IsTrue(keyRange.Min.IsInclusive);
             Assert.IsNull(keyRange.Max);
@@ -1966,7 +1966,7 @@ namespace EsentCollectionsTests
         public void TestStringCompare3()
         {
             KeyRange<string> keyRange =
-                KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => 0 == String.Compare(x.Key, "b" + "ar"));
+                KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => 0 == string.Compare(x.Key, "b" + "ar"));
             Assert.AreEqual("bar", keyRange.Min.Value);
             Assert.IsTrue(keyRange.Min.IsInclusive);
             Assert.AreEqual("bar", keyRange.Max.Value);
@@ -1982,7 +1982,7 @@ namespace EsentCollectionsTests
         public void TestStringCompare4()
         {
             KeyRange<string> keyRange =
-                KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => 0 > String.Compare(5.ToString(), x.Key));
+                KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => 0 > string.Compare(5.ToString(), x.Key));
             Assert.AreEqual("5", keyRange.Min.Value);
             Assert.IsFalse(keyRange.Min.IsInclusive);
             Assert.IsNull(keyRange.Max);
@@ -1997,7 +1997,7 @@ namespace EsentCollectionsTests
         public void TestStringCompareWithoutParameterAccess()
         {
             KeyRange<string> keyRange =
-                KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => 0 > String.Compare("a", "b"));
+                KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => 0 > string.Compare("a", "b"));
             Assert.AreEqual(keyRange, KeyRange<string>.OpenRange);
         }
 
@@ -2010,7 +2010,7 @@ namespace EsentCollectionsTests
         public void TestStringCompareNonZeroComparand1()
         {
             var expected = KeyRange<string>.OpenRange;
-            var actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => String.Compare(x.Key, "foo") > 1);
+            var actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => string.Compare(x.Key, "foo") > 1);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2023,7 +2023,7 @@ namespace EsentCollectionsTests
         public void TestStringCompareNonZeroComparand2()
         {
             var expected = KeyRange<string>.OpenRange;
-            var actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => String.Compare("foo", x.Key) < 1);
+            var actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => string.Compare("foo", x.Key) < 1);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2036,7 +2036,7 @@ namespace EsentCollectionsTests
         public void TestStringCompareNonZeroComparand3()
         {
             var expected = KeyRange<string>.OpenRange;
-            var actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => 1 >= String.Compare(x.Key, "foo"));
+            var actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => 1 >= string.Compare(x.Key, "foo"));
             Assert.AreEqual(expected, actual);
         }
 
@@ -2049,7 +2049,7 @@ namespace EsentCollectionsTests
         public void TestStringCompareNonZeroComparand4()
         {
             var expected = KeyRange<string>.OpenRange;
-            var actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => 2 == String.Compare("foo", x.Key));
+            var actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => 2 == string.Compare("foo", x.Key));
             Assert.AreEqual(expected, actual);
         }
 
@@ -2062,7 +2062,7 @@ namespace EsentCollectionsTests
         public void TestStringCompareNonConstantComparand1()
         {
             var expected = KeyRange<string>.OpenRange;
-            var actual = KeyValueExpressionEvaluator<string, int>.GetKeyRange(x => String.Compare(x.Key, "foo") > x.Value);
+            var actual = KeyValueExpressionEvaluator<string, int>.GetKeyRange(x => string.Compare(x.Key, "foo") > x.Value);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2075,7 +2075,7 @@ namespace EsentCollectionsTests
         public void TestStringCompareNonConstantComparand2()
         {
             var expected = KeyRange<string>.OpenRange;
-            var actual = KeyValueExpressionEvaluator<string, int>.GetKeyRange(x => String.Compare("foo", x.Key) < x.Value);
+            var actual = KeyValueExpressionEvaluator<string, int>.GetKeyRange(x => string.Compare("foo", x.Key) < x.Value);
             Assert.AreEqual(expected, actual);
         }
 
@@ -2088,7 +2088,7 @@ namespace EsentCollectionsTests
         public void TestStringCompareNonConstantComparand3()
         {
             var expected = KeyRange<string>.OpenRange;
-            var actual = KeyValueExpressionEvaluator<string, int>.GetKeyRange(x => x.Value >= String.Compare(x.Key, "foo"));
+            var actual = KeyValueExpressionEvaluator<string, int>.GetKeyRange(x => x.Value >= string.Compare(x.Key, "foo"));
             Assert.AreEqual(expected, actual);
         }
 
@@ -2101,7 +2101,7 @@ namespace EsentCollectionsTests
         public void TestStringCompareNonConstantComparand4()
         {
             var expected = KeyRange<string>.OpenRange;
-            var actual = KeyValueExpressionEvaluator<string, int>.GetKeyRange(x => x.Value == String.Compare("foo", x.Key));
+            var actual = KeyValueExpressionEvaluator<string, int>.GetKeyRange(x => x.Value == string.Compare("foo", x.Key));
             Assert.AreEqual(expected, actual);
         }
 
@@ -2115,7 +2115,7 @@ namespace EsentCollectionsTests
         {
             // Not handled (the index is case sensitive)
             var expected = KeyRange<string>.OpenRange;
-            var actual = KeyValueExpressionEvaluator<string, int>.GetKeyRange(x => x.Value == String.Compare(x.Key, "foo", true));
+            var actual = KeyValueExpressionEvaluator<string, int>.GetKeyRange(x => x.Value == string.Compare(x.Key, "foo", true));
             Assert.AreEqual(expected, actual);
         }
 
@@ -2127,7 +2127,7 @@ namespace EsentCollectionsTests
         [Description("Test String.Equals")]
         public void TestStringStaticEquals()
         {
-            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => String.Equals(x.Key, "baz"));
+            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => string.Equals(x.Key, "baz"));
             var expected = new KeyRange<string>(Key<string>.CreateKey("baz", true), Key<string>.CreateKey("baz", true));
             Assert.AreEqual(expected, actual);
         }
@@ -2140,7 +2140,7 @@ namespace EsentCollectionsTests
         [Description("Test String.Equals reversed")]
         public void TestStringStaticEqualsReversed()
         {
-            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => String.Equals("baz", x.Key));
+            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => string.Equals("baz", x.Key));
             var expected = new KeyRange<string>(Key<string>.CreateKey("baz", true), Key<string>.CreateKey("baz", true));
             Assert.AreEqual(expected, actual);
         }
@@ -2153,7 +2153,7 @@ namespace EsentCollectionsTests
         [Description("Test String.Equals without key access")]
         public void TestStringStaticEqualsNoKeyAcess()
         {
-            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => String.Equals("baz", x.Value));
+            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => string.Equals("baz", x.Value));
             Assert.AreEqual(KeyRange<string>.OpenRange, actual);
         }
 
@@ -2165,7 +2165,7 @@ namespace EsentCollectionsTests
         [Description("Test String.Equals without parameter access")]
         public void TestStringStaticEqualsNoParameterAccess()
         {
-            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => String.Equals("baz", "foo"));
+            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => string.Equals("baz", "foo"));
             Assert.AreEqual(KeyRange<string>.OpenRange, actual);
         }
 
@@ -2177,31 +2177,31 @@ namespace EsentCollectionsTests
         [Description("Test String.Equals with non constant")]
         public void TestStringStaticEqualsNonConstant()
         {
-            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => String.Equals(x.Key, x.Value));
+            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => string.Equals(x.Key, x.Value));
             Assert.AreEqual(KeyRange<string>.OpenRange, actual);
         }
 
         /// <summary>
-        /// Test the static String.Equals expression with non constant (reversed)
+        /// Test the static string.Equals expression with non constant (reversed)
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Test String.Equals with non constant (reversed)")]
+        [Description("Test string.Equals with non constant (reversed)")]
         public void TestStringStaticEqualsNonConstantReversed()
         {
-            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => String.Equals(x.Value, x.Key));
+            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => string.Equals(x.Value, x.Key));
             Assert.AreEqual(KeyRange<string>.OpenRange, actual);
         }
 
         /// <summary>
-        /// Test the static String.Equals expression with case flag
+        /// Test the static string.Equals expression with case flag
         /// </summary>
         [TestMethod]
         [Priority(0)]
-        [Description("Test String.Equals with non constant with case flag")]
+        [Description("Test string.Equals with non constant with case flag")]
         public void TestStringStaticEqualsWithCaseFlag()
         {
-            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => String.Equals("X", x.Key, StringComparison.OrdinalIgnoreCase));
+            KeyRange<string> actual = KeyValueExpressionEvaluator<string, string>.GetKeyRange(x => string.Equals("X", x.Key, StringComparison.OrdinalIgnoreCase));
             Assert.AreEqual(KeyRange<string>.OpenRange, actual);
         }
 
@@ -2534,7 +2534,7 @@ namespace EsentCollectionsTests
             //    expression = x => ((Compare("ggi", x.Key) <= 0) && (x.Key.Equals("fag") || x.Key.StartsWith("g")))
             KeyRange<string> actual =
                 KeyValueExpressionEvaluator<string, string>.GetKeyRange(
-                    x => ((String.Compare("ggi", x.Key) <= 0) && (x.Key.Equals("fag") || x.Key.StartsWith("g"))));
+                    x => ((string.Compare("ggi", x.Key) <= 0) && (x.Key.Equals("fag") || x.Key.StartsWith("g"))));
             KeyRange<string> expected = new KeyRange<string>(
                 Key<string>.CreateKey("ggi", true),
                 Key<string>.CreatePrefixKey("g"));

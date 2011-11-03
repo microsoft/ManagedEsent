@@ -15,6 +15,9 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native version of the JET_OBJECTINFO structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
+    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1305:FieldNamesMustNotUseHungarianNotation",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
@@ -109,7 +112,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "JET_OBJECTINFO({0})", this.flags);
+            return string.Format(CultureInfo.InvariantCulture, "JET_OBJECTINFO({0})", this.flags);
         }
 
         /// <summary>

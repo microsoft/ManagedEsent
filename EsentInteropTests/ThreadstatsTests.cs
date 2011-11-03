@@ -15,7 +15,7 @@ namespace InteropApiTests
     /// JET_THREADSTATS tests
     /// </summary>
     [TestClass]
-    public class ThreadstatTests
+    public class ThreadstatsTests
     {
         /// <summary>
         /// Test the Create method.

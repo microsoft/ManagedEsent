@@ -35,11 +35,24 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The bookmark of the record.</returns>
         public static byte[] GetBookmark(JET_SESID sesid, JET_TABLEID tableid)
         {
-            byte[] buffer = Caches.BookmarkCache.Allocate();
-            int bookmarkSize;
-            Api.JetGetBookmark(sesid, tableid, buffer, buffer.Length, out bookmarkSize);
-            byte[] bookmark = MemoryCache.Duplicate(buffer, bookmarkSize);
-            Caches.BookmarkCache.Free(ref buffer);
+            byte[] buffer = null;
+            byte[] bookmark;
+
+            try
+            {
+                buffer = Caches.BookmarkCache.Allocate();
+                int bookmarkSize;
+                Api.JetGetBookmark(sesid, tableid, buffer, buffer.Length, out bookmarkSize);
+                bookmark = MemoryCache.Duplicate(buffer, bookmarkSize);
+            }
+            finally
+            {
+                if (buffer != null)
+                {
+                    Caches.BookmarkCache.Free(ref buffer);
+                }
+            }
+            
             return bookmark;
         }
 
@@ -52,11 +65,24 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The retrieved key.</returns>
         public static byte[] RetrieveKey(JET_SESID sesid, JET_TABLEID tableid, RetrieveKeyGrbit grbit)
         {
-            byte[] buffer = Caches.BookmarkCache.Allocate();
-            int keySize;
-            Api.JetRetrieveKey(sesid, tableid, buffer, buffer.Length, out keySize, grbit);
-            byte[] key = MemoryCache.Duplicate(buffer, keySize);
-            Caches.BookmarkCache.Free(ref buffer);
+            byte[] buffer = null;
+            byte[] key;
+
+            try
+            {
+                buffer = Caches.BookmarkCache.Allocate();
+                int keySize;
+                Api.JetRetrieveKey(sesid, tableid, buffer, buffer.Length, out keySize, grbit);
+                key = MemoryCache.Duplicate(buffer, keySize);
+            }
+            finally
+            {
+                if (buffer != null)
+                {
+                    Caches.BookmarkCache.Free(ref buffer);
+                }
+            }
+            
             return key;
         }
 
@@ -138,41 +164,53 @@ namespace Microsoft.Isam.Esent.Interop
             // We expect most column values retrieved this way to be small (retrieving a 1GB LV as one
             // chunk is a bit extreme!). Allocate a cached buffer and use that, allocating a larger one
             // if needed.
-            byte[] cache = Caches.ColumnCache.Allocate();
-            byte[] data = cache;
-            int dataSize;
-            JET_wrn wrn = JetRetrieveColumn(
-                sesid, tableid, columnid, data, data.Length, out dataSize, grbit, retinfo);
+            byte[] cache = null;
+            byte[] data;
 
-            if (JET_wrn.ColumnNull == wrn)
+            try
             {
-                // null column
-                data = null;
-            }
-            else if (JET_wrn.Success == wrn)
-            {
-                data = MemoryCache.Duplicate(data, dataSize);
-            }
-            else
-            {
-                // there is more data to retrieve
-                Debug.Assert(JET_wrn.BufferTruncated == wrn, "Unexpected warning", wrn.ToString());
-                data = new byte[dataSize];
-                wrn = JetRetrieveColumn(
+                cache = Caches.ColumnCache.Allocate();
+                data = cache;
+                int dataSize;
+                JET_wrn wrn = JetRetrieveColumn(
                     sesid, tableid, columnid, data, data.Length, out dataSize, grbit, retinfo);
-                if (JET_wrn.Success != wrn)
+
+                if (JET_wrn.ColumnNull == wrn)
                 {
-                    string error = String.Format(
-                        CultureInfo.CurrentCulture,
-                        "Column size changed from {0} to {1}. The record was probably updated by another thread.",
-                        data.Length,
-                        dataSize);
-                    Trace.TraceError(error);
-                    throw new InvalidOperationException(error);
+                    // null column
+                    data = null;
+                }
+                else if (JET_wrn.Success == wrn)
+                {
+                    data = MemoryCache.Duplicate(data, dataSize);
+                }
+                else
+                {
+                    // there is more data to retrieve
+                    Debug.Assert(JET_wrn.BufferTruncated == wrn, "Unexpected warning", wrn.ToString());
+                    data = new byte[dataSize];
+                    wrn = JetRetrieveColumn(
+                        sesid, tableid, columnid, data, data.Length, out dataSize, grbit, retinfo);
+                    if (JET_wrn.Success != wrn)
+                    {
+                        string error = string.Format(
+                            CultureInfo.CurrentCulture,
+                            "Column size changed from {0} to {1}. The record was probably updated by another thread.",
+                            data.Length,
+                            dataSize);
+                        Trace.TraceError(error);
+                        throw new InvalidOperationException(error);
+                    }
                 }
             }
-
-            Caches.ColumnCache.Free(ref cache);
+            finally
+            {
+                if (cache != null)
+                {
+                    Caches.ColumnCache.Free(ref cache);
+                }
+            }
+            
             return data;
         }
 
@@ -240,42 +278,53 @@ namespace Microsoft.Isam.Esent.Interop
             // Retrieving a string happens in two stages: first the data is retrieved into a data
             // buffer and then the buffer is converted to a string. The buffer isn't needed for
             // very long so we try to use a cached buffer.
-            byte[] cachedBuffer = Caches.ColumnCache.Allocate();
-            byte[] data = cachedBuffer;
+            byte[] cachedBuffer = null;
+            string s;
 
-            int dataSize;
-            JET_wrn wrn = JetRetrieveColumn(sesid, tableid, columnid, data, data.Length, out dataSize, grbit, null);
-            if (JET_wrn.ColumnNull == wrn)
+            try
             {
-                return null;
-            }
+                cachedBuffer = Caches.ColumnCache.Allocate();
+                byte[] data = cachedBuffer;
 
-            if (JET_wrn.BufferTruncated == wrn)
-            {
-                Debug.Assert(dataSize > data.Length, "Expected column to be bigger than buffer");
-                data = new byte[dataSize];
-                wrn = JetRetrieveColumn(sesid, tableid, columnid, data, data.Length, out dataSize, grbit, null);
+                int dataSize;
+                JET_wrn wrn = JetRetrieveColumn(sesid, tableid, columnid, data, data.Length, out dataSize, grbit, null);
+                if (JET_wrn.ColumnNull == wrn)
+                {
+                    return null;
+                }
+
                 if (JET_wrn.BufferTruncated == wrn)
                 {
-                    string error = String.Format(
-                        CultureInfo.CurrentCulture,
-                        "Column size changed from {0} to {1}. The record was probably updated by another thread.",
-                        data.Length,
-                        dataSize);
-                    Trace.TraceError(error);
-                    throw new InvalidOperationException(error);
+                    Debug.Assert(dataSize > data.Length, "Expected column to be bigger than buffer");
+                    data = new byte[dataSize];
+                    wrn = JetRetrieveColumn(sesid, tableid, columnid, data, data.Length, out dataSize, grbit, null);
+                    if (JET_wrn.BufferTruncated == wrn)
+                    {
+                        string error = string.Format(
+                            CultureInfo.CurrentCulture,
+                            "Column size changed from {0} to {1}. The record was probably updated by another thread.",
+                            data.Length,
+                            dataSize);
+                        Trace.TraceError(error);
+                        throw new InvalidOperationException(error);
+                    }
+                }
+
+                // If we are about to decode ASCII data then use the UTF8 decoder instead. This
+                // is done because the UTF8 decoder is faster and will produce the same results
+                // on ASCII data. Different results will be produced on invalid data, but that
+                // behaviour can be considered undefined.
+                Encoding decoder = (encoding is ASCIIEncoding) ? asciiDecoder : encoding;
+                s = decoder.GetString(data, 0, dataSize);
+            }
+            finally
+            {
+                if (cachedBuffer != null)
+                {
+                    // Now we have extracted the string from the buffer we can free (cache) the buffer.
+                    Caches.ColumnCache.Free(ref cachedBuffer);
                 }
             }
-
-            // If we are about to decode ASCII data then use the UTF8 decoder instead. This
-            // is done because the UTF8 decoder is faster and will produce the same results
-            // on ASCII data. Different results will be produced on invalid data, but that
-            // behaviour can be considered undefined.
-            Encoding decoder = (encoding is ASCIIEncoding) ? asciiDecoder : encoding;
-            string s = decoder.GetString(data, 0, dataSize);
-
-            // Now we have extracted the string from the buffer we can free (cache) the buffer.
-            Caches.ColumnCache.Free(ref cachedBuffer);
 
             return s;
         }
@@ -901,7 +950,7 @@ namespace Microsoft.Isam.Esent.Interop
                 wrn = JetRetrieveColumn(sesid, tableid, columnid, new IntPtr(p), actualDataSize, out newDataSize, grbit, null);
                 if (JET_wrn.BufferTruncated == wrn)
                 {
-                    string error = String.Format(
+                    string error = string.Format(
                         CultureInfo.CurrentCulture,
                         "Column size changed from {0} to {1}. The record was probably updated by another thread.",
                         actualDataSize,

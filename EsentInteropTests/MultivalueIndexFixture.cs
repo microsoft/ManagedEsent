@@ -81,8 +81,8 @@ namespace InteropApiTests
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
             Api.JetInit(ref this.instance);
-            Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
-            Api.JetCreateDatabase(this.sesid, this.database, String.Empty, out this.dbid, CreateDatabaseGrbit.None);
+            Api.JetBeginSession(this.instance, out this.sesid, string.Empty, string.Empty);
+            Api.JetCreateDatabase(this.sesid, this.database, string.Empty, out this.dbid, CreateDatabaseGrbit.None);
             Api.JetBeginTransaction(this.sesid);
             Api.JetCreateTable(this.sesid, this.dbid, this.table, 0, 100, out this.tableid);
 
@@ -176,6 +176,31 @@ namespace InteropApiTests
 
             Assert.AreNotEqual(0, actualPrimaryKeySize);
             Assert.AreNotEqual(0, actualSecondaryKeySize);
+        }
+
+        /// <summary>
+        /// JetGetSecondaryIndexBookmark throws exception when no current index is set.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("JetGetSecondaryIndexBookmark throws exception when no current index is set")]
+        [ExpectedException(typeof(EsentNoCurrentIndexException))]
+        public void JetGetSecondaryIndexBookmarkThrowsExceptionWhenNoCurrentIndexIsSet()
+        {
+            var primaryKey = new byte[SystemParameters.KeyMost];
+            int actualPrimaryKeySize;
+            var secondaryKey = new byte[SystemParameters.KeyMost];
+            int actualSecondaryKeySize;
+            Api.JetGetSecondaryIndexBookmark(
+                this.sesid,
+                this.tableid,
+                secondaryKey,
+                secondaryKey.Length,
+                out actualSecondaryKeySize,
+                primaryKey,
+                primaryKey.Length,
+                out actualPrimaryKeySize,
+                GetSecondaryIndexBookmarkGrbit.None);
         }
 
         /// <summary>

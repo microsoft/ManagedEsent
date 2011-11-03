@@ -14,7 +14,7 @@ namespace InteropApiTests
     /// Tests for classes that implement IComparable
     /// </summary>
     [TestClass]
-    public class ComparableTests
+    public partial class ComparableTests
     {
         /// <summary>
         /// Check that JET_LGPOS structures can be compared.

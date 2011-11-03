@@ -496,7 +496,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             //   nonPrefix = "LE", prefix = "LEAD"
             //   nonPrefix = "LEAD", prefix = "LE"
             // In both cases the non-prefix is more restrictive
-            if (String.Compare(nonPrefixValue, prefixValue, StringComparison.InvariantCulture) <= 0
+            if (string.Compare(nonPrefixValue, prefixValue, StringComparison.InvariantCulture) <= 0
                 || nonPrefixValue.StartsWith(prefixValue, StringComparison.InvariantCulture))
             {
                 return -1;
@@ -524,7 +524,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             {
                 // Same length: return the lower string
                 // e.g.: a = "AB", b = "CD"
-                return String.Compare(valueA, valueB, StringComparison.InvariantCulture);
+                return string.Compare(valueA, valueB, StringComparison.InvariantCulture);
             }
 
             if (valueA.StartsWith(valueB, StringComparison.InvariantCulture))
@@ -543,7 +543,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 
             // Take the lower string
             // e.g.: a = "ABC", b = "XYZ"
-            return String.Compare(valueA, valueB, StringComparison.InvariantCulture);
+            return string.Compare(valueA, valueB, StringComparison.InvariantCulture);
         }
 
         /// <summary>
@@ -562,7 +562,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </remarks>
         private static int CompareKeys(Key<T> a, Key<T> b)
         {
-            if (Object.Equals(a.Value, b.Value))
+            if (object.Equals(a.Value, b.Value))
             {
                 return 0;
             }

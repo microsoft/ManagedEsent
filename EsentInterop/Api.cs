@@ -1442,16 +1442,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="sesid">The session to use.</param>
         /// <param name="dbid">The database to use.</param>
         /// <param name="objtyp">The type of the object.</param>
-        /// <param name="szObjectName">The object name about which to retrieve information.</param>
+        /// <param name="objectName">The object name about which to retrieve information.</param>
         /// <param name="objectinfo">Filled in with information about the objects in the database.</param>
         public static void JetGetObjectInfo(
             JET_SESID sesid,
             JET_DBID dbid,
             JET_objtyp objtyp,
-            string szObjectName,
+            string objectName,
             out JET_OBJECTINFO objectinfo)
         {
-            Api.Check(Impl.JetGetObjectInfo(sesid, dbid, objtyp, szObjectName, out objectinfo));
+            Api.Check(Impl.JetGetObjectInfo(sesid, dbid, objtyp, objectName, out objectinfo));
         }
 
         #endregion

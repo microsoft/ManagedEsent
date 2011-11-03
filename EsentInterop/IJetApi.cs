@@ -1287,14 +1287,14 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="dbid">The database that contains the table.</param>
-        /// <param name="szColumnName">The name of the column.</param>
+        /// <param name="columnName">The name of the column.</param>
         /// <param name="columnid">The ID of the column.</param>
         /// <param name="columnbase">Filled in with information about the columns in the table.</param>
         /// <returns>An error if the call fails.</returns>
         int JetGetColumnInfo(
             JET_SESID sesid,
             JET_DBID dbid,
-            string szColumnName,
+            string columnName,
             JET_COLUMNID columnid,
             out JET_COLUMNBASE columnbase);
 
@@ -1317,14 +1317,14 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="sesid">The session to use.</param>
         /// <param name="dbid">The database to use.</param>
         /// <param name="objtyp">The type of the object.</param>
-        /// <param name="szObjectName">The object name about which to retrieve information.</param>
+        /// <param name="objectName">The object name about which to retrieve information.</param>
         /// <param name="objectinfo">Filled in with information about the objects in the database.</param>
         /// <returns>An error if the call fails.</returns>
         int JetGetObjectInfo(
             JET_SESID sesid,
             JET_DBID dbid,
             JET_objtyp objtyp,
-            string szObjectName,
+            string objectName,
             out JET_OBJECTINFO objectinfo);
 
         #endregion

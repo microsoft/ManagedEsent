@@ -89,82 +89,92 @@ namespace Microsoft.Isam.Esent.Interop
 
             unsafe
             {
+                byte[] buffer = null;
                 NATIVE_RETRIEVECOLUMN* nativeRetrievecolumns = stackalloc NATIVE_RETRIEVECOLUMN[columnValues.Length];
-                byte[] buffer = Caches.ColumnCache.Allocate();
-                Debug.Assert(MaxColumnValues * 16 < buffer.Length, "Maximum size of fixed columns could exceed buffer size");
 
-                fixed (byte* pinnedBuffer = buffer)
+                try
                 {
-                    byte* currentBuffer = pinnedBuffer;
-                    int numVariableLengthColumns = columnValues.Length;
+                    buffer = Caches.ColumnCache.Allocate();
+                    Debug.Assert(MaxColumnValues * 16 < buffer.Length, "Maximum size of fixed columns could exceed buffer size");
 
-                    // First the fixed-size columns
-                    for (int i = 0; i < columnValues.Length; ++i)
+                    fixed (byte* pinnedBuffer = buffer)
                     {
-                        if (0 != columnValues[i].Size)
-                        {
-                            columnValues[i].MakeNativeRetrieveColumn(ref nativeRetrievecolumns[i]);
-                            nativeRetrievecolumns[i].pvData = new IntPtr(currentBuffer);
-                            nativeRetrievecolumns[i].cbData = checked((uint)columnValues[i].Size);
+                        byte* currentBuffer = pinnedBuffer;
+                        int numVariableLengthColumns = columnValues.Length;
 
-                            currentBuffer += nativeRetrievecolumns[i].cbData;
-                            Debug.Assert(currentBuffer <= pinnedBuffer + buffer.Length, "Moved past end of pinned buffer");
-
-                            numVariableLengthColumns--;
-                        }
-                    }
-
-                    // Now the variable-length columns
-                    if (numVariableLengthColumns > 0)
-                    {
-                        int bufferUsed = checked((int)(currentBuffer - pinnedBuffer));
-                        int bufferRemaining = checked(buffer.Length - bufferUsed);
-                        int bufferPerColumn = bufferRemaining / numVariableLengthColumns;
-                        Debug.Assert(bufferPerColumn > 0, "Not enough buffer left to retrieve variable length columns");
-
-                        // Now the variable-size columns
+                        // First the fixed-size columns
                         for (int i = 0; i < columnValues.Length; ++i)
                         {
-                            if (0 == columnValues[i].Size)
+                            if (0 != columnValues[i].Size)
                             {
                                 columnValues[i].MakeNativeRetrieveColumn(ref nativeRetrievecolumns[i]);
                                 nativeRetrievecolumns[i].pvData = new IntPtr(currentBuffer);
-                                nativeRetrievecolumns[i].cbData = checked((uint)bufferPerColumn);
+                                nativeRetrievecolumns[i].cbData = checked((uint)columnValues[i].Size);
+
                                 currentBuffer += nativeRetrievecolumns[i].cbData;
                                 Debug.Assert(currentBuffer <= pinnedBuffer + buffer.Length, "Moved past end of pinned buffer");
+
+                                numVariableLengthColumns--;
+                            }
+                        }
+
+                        // Now the variable-length columns
+                        if (numVariableLengthColumns > 0)
+                        {
+                            int bufferUsed = checked((int)(currentBuffer - pinnedBuffer));
+                            int bufferRemaining = checked(buffer.Length - bufferUsed);
+                            int bufferPerColumn = bufferRemaining / numVariableLengthColumns;
+                            Debug.Assert(bufferPerColumn > 0, "Not enough buffer left to retrieve variable length columns");
+
+                            // Now the variable-size columns
+                            for (int i = 0; i < columnValues.Length; ++i)
+                            {
+                                if (0 == columnValues[i].Size)
+                                {
+                                    columnValues[i].MakeNativeRetrieveColumn(ref nativeRetrievecolumns[i]);
+                                    nativeRetrievecolumns[i].pvData = new IntPtr(currentBuffer);
+                                    nativeRetrievecolumns[i].cbData = checked((uint)bufferPerColumn);
+                                    currentBuffer += nativeRetrievecolumns[i].cbData;
+                                    Debug.Assert(currentBuffer <= pinnedBuffer + buffer.Length, "Moved past end of pinned buffer");
+                                }
+                            }
+                        }
+
+                        // Retrieve the columns
+                        Api.Check(Api.Impl.JetRetrieveColumns(sesid, tableid, nativeRetrievecolumns, columnValues.Length));
+
+                        // Propagate the warnings.
+                        for (int i = 0; i < columnValues.Length; ++i)
+                        {
+                            columnValues[i].Error = (JET_wrn)nativeRetrievecolumns[i].err;
+                        }
+
+                        // Now parse out the columns that were retrieved successfully
+                        for (int i = 0; i < columnValues.Length; ++i)
+                        {
+                            if (nativeRetrievecolumns[i].err != (int)JET_wrn.BufferTruncated)
+                            {
+                                byte* columnBuffer = (byte*)nativeRetrievecolumns[i].pvData;
+                                int startIndex = checked((int)(columnBuffer - pinnedBuffer));
+                                columnValues[i].GetValueFromBytes(
+                                    buffer,
+                                    startIndex,
+                                    checked((int)nativeRetrievecolumns[i].cbActual),
+                                    nativeRetrievecolumns[i].err);
                             }
                         }
                     }
 
-                    // Retrieve the columns
-                    Api.Check(Api.Impl.JetRetrieveColumns(sesid, tableid, nativeRetrievecolumns, columnValues.Length));
-
-                    // Propagate the warnings.
-                    for (int i = 0; i < columnValues.Length; ++i)
+                    // Finally retrieve the buffers where the columns weren't large enough.
+                    RetrieveTruncatedBuffers(sesid, tableid, columnValues, nativeRetrievecolumns);
+                }
+                finally
+                {
+                    if (buffer != null)
                     {
-                        columnValues[i].Error = (JET_wrn)nativeRetrievecolumns[i].err;
-                    }
-
-                    // Now parse out the columns that were retrieved successfully
-                    for (int i = 0; i < columnValues.Length; ++i)
-                    {
-                        if (nativeRetrievecolumns[i].err != (int)JET_wrn.BufferTruncated)
-                        {
-                            byte* columnBuffer = (byte*)nativeRetrievecolumns[i].pvData;
-                            int startIndex = checked((int)(columnBuffer - pinnedBuffer));
-                            columnValues[i].GetValueFromBytes(
-                                buffer,
-                                startIndex,
-                                checked((int)nativeRetrievecolumns[i].cbActual),
-                                nativeRetrievecolumns[i].err);
-                        }
+                        Caches.ColumnCache.Free(ref buffer);
                     }
                 }
-
-                Caches.ColumnCache.Free(ref buffer);
-
-                // Finally retrieve the buffers where the columns weren't large enough.
-                RetrieveTruncatedBuffers(sesid, tableid, columnValues, nativeRetrievecolumns);
             }
         }
 

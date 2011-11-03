@@ -68,9 +68,9 @@ namespace EsentCollectionsTests
                 Y = Guid.NewGuid(),
                 Z = new Foo
                 {
-                    A = SByte.MinValue,
+                    A = sbyte.MinValue,
                     B = "InsertAndRetrieveSerializableObject",
-                    C = Decimal.MinusOne,
+                    C = decimal.MinusOne,
                 }
             };
 
@@ -95,18 +95,18 @@ namespace EsentCollectionsTests
                 Y = Guid.NewGuid(),
                 Z = new Foo
                 {
-                    A = SByte.MaxValue,
+                    A = sbyte.MaxValue,
                     B = "UpdateSerializableObject",
-                    C = Decimal.One,
+                    C = decimal.One,
                 }
             };
 
-            this.dictionary[Int32.MaxValue] = expected;
+            this.dictionary[int.MaxValue] = expected;
             expected.X = DateTime.UtcNow;
             expected.Y = null;
-            this.dictionary[Int32.MaxValue] = expected;
+            this.dictionary[int.MaxValue] = expected;
 
-            Bar actual = this.dictionary[Int32.MaxValue];
+            Bar actual = this.dictionary[int.MaxValue];
             Assert.AreNotSame(expected, actual);
             Assert.AreEqual(expected, actual);
         }
@@ -116,7 +116,7 @@ namespace EsentCollectionsTests
         /// </summary>
         [Serializable]
         internal struct Foo : IEquatable<Foo>
-        {         
+        {
             /// <summary>
             /// Dummy SByte field.
             /// </summary>
@@ -126,7 +126,7 @@ namespace EsentCollectionsTests
             /// Dummy string.
             /// </summary>
             public string B;
-   
+
             /// <summary>
             /// Gets or sets the dummy decimal property.
             /// </summary>

@@ -75,8 +75,7 @@ namespace BasicTest
             var tt = new JET_OPENTEMPORARYTABLE
             {
                 prgcolumndef =
-                    (from coltyp in this.coltyps select new JET_COLUMNDEF { coltyp = coltyp, cp = JET_CP.Unicode }).
-                    ToArray(),
+                    (from coltyp in this.coltyps select new JET_COLUMNDEF { coltyp = coltyp, cp = JET_CP.Unicode }).ToArray(),
                 pidxunicode = new JET_UNICODEINDEX
                 {
                     lcid = ci.LCID,
@@ -245,7 +244,7 @@ namespace BasicTest
 
             Api.JetSeek(sesid, tableid, seekOption);
             int actual = Api.RetrieveColumnAsInt32(sesid, tableid, columnid).Value;
-            BasicClass.Assert(expected == actual, String.Format("Expected {0}, got {1}. Seek is broken", expected, actual));
+            BasicClass.Assert(expected == actual, string.Format("Expected {0}, got {1}. Seek is broken", expected, actual));
         }
 
         /// <summary>

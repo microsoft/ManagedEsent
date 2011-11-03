@@ -76,7 +76,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>A string representation of the key.</returns>
         public override string ToString()
         {
-            return String.Format(
+            return string.Format(
                 CultureInfo.InvariantCulture,
                 "{0} ({1})",
                 this.Value,
@@ -135,11 +135,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 return false;
             }
 
-            if (Object.Equals(this.Value, other.Value))
+            if (object.Equals(this.Value, other.Value))
             {
                 return true;
             }
-            
+
             return 0 == this.Value.CompareTo(other.Value);
         }
     }

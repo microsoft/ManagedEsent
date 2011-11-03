@@ -51,7 +51,7 @@ namespace InteropApiTests
         public void JetInstanceToStringFormat()
         {
             var value = new JET_INSTANCE { Value = (IntPtr)0x123ABC };
-            Assert.AreEqual("123ABC", String.Format("{0:X}", value));
+            Assert.AreEqual("123ABC", string.Format("{0:X}", value));
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace InteropApiTests
         public void JetSesidToStringFormat()
         {
             var value = new JET_SESID { Value = (IntPtr)0x123ABC };
-            Assert.AreEqual("123ABC", String.Format("{0:X}", value));
+            Assert.AreEqual("123ABC", string.Format("{0:X}", value));
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace InteropApiTests
         public void JetDbidToStringFormat()
         {
             var value = new JET_DBID { Value = 23 };
-            Assert.AreEqual("17", String.Format("{0:x}", value));
+            Assert.AreEqual("17", string.Format("{0:x}", value));
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace InteropApiTests
         public void JetTableidToStringFormat()
         {
             var value = new JET_TABLEID() { Value = (IntPtr)0x123ABC };
-            Assert.AreEqual("123ABC", String.Format("{0:X}", value));
+            Assert.AreEqual("123ABC", string.Format("{0:X}", value));
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace InteropApiTests
         public void JetColumnidToStringFormat()
         {
             var value = new JET_COLUMNID() { Value = 0x12EC };
-            Assert.AreEqual("12EC", String.Format("{0:X}", value));
+            Assert.AreEqual("12EC", string.Format("{0:X}", value));
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace InteropApiTests
         public void JetOssnapidToStringFormat()
         {
             var value = new JET_OSSNAPID { Value = (IntPtr)0x123ABC };
-            Assert.AreEqual("123ABC", String.Format("{0:X}", value));
+            Assert.AreEqual("123ABC", string.Format("{0:X}", value));
         }
 
         /// <summary>
@@ -267,7 +267,7 @@ namespace InteropApiTests
         public void JetHandleToStringFormat()
         {
             var value = new JET_HANDLE { Value = (IntPtr)0x123ABC };
-            Assert.AreEqual("123ABC", String.Format("{0:X}", value));
+            Assert.AreEqual("123ABC", string.Format("{0:X}", value));
         }
 
         /// <summary>
@@ -303,7 +303,7 @@ namespace InteropApiTests
         public void JetLsToStringFormat()
         {
             var value = new JET_LS { Value = (IntPtr)0x123ABC };
-            Assert.AreEqual("123ABC", String.Format("{0:X}", value));
+            Assert.AreEqual("123ABC", string.Format("{0:X}", value));
         }
 
         /// <summary>
@@ -327,7 +327,7 @@ namespace InteropApiTests
         public void JetLogtimeToString()
         {
             var logtime = new JET_LOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Utc));
-            Assert.AreEqual("JET_LOGTIME(17:44:4:31:5:110:0x80:0x0)", logtime.ToString());
+            Assert.AreEqual("JET_LOGTIME(17:44:4:31:5:110:0x1:0x0)", logtime.ToString());
         }
 
         /// <summary>
@@ -339,7 +339,7 @@ namespace InteropApiTests
         public void JetBklogtimeToString()
         {
             var bklogtime = new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Utc), true);
-            Assert.AreEqual("JET_BKLOGTIME(17:44:4:31:5:110:0x80:0x80)", bklogtime.ToString());
+            Assert.AreEqual("JET_BKLOGTIME(17:44:4:31:5:110:0x1:0x1)", bklogtime.ToString());
         }
 
         /// <summary>
@@ -378,7 +378,7 @@ namespace InteropApiTests
             var bklogtime = new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Utc), true);
             var lgpos = new JET_LGPOS { lGeneration = 1, isec = 2, ib = 3 };
             var bkinfo = new JET_BKINFO { bklogtimeMark = bklogtime, genHigh = 57, genLow = 36, lgposMark = lgpos };
-            Assert.AreEqual("JET_BKINFO(36-57:JET_LGPOS(0x1,2,3):JET_BKLOGTIME(17:44:4:31:5:110:0x80:0x80))", bkinfo.ToString());
+            Assert.AreEqual("JET_BKINFO(36-57:JET_LGPOS(0x1,2,3):JET_BKLOGTIME(17:44:4:31:5:110:0x1:0x1))", bkinfo.ToString());
         }
 
         /// <summary>
@@ -425,8 +425,8 @@ namespace InteropApiTests
         [Description("Test JET_UNICODEINDEX.ToString()")]
         public void JetUnicodeIndexToString()
         {
-            var unicodeindex = new JET_UNICODEINDEX { lcid = 1033, dwMapFlags = 0x12f };
-            Assert.AreEqual("JET_UNICODEINDEX(1033:0x12F)", unicodeindex.ToString());
+            var unicodeindex = new JET_UNICODEINDEX { lcid = 1033, szLocaleName = "en-US", dwMapFlags = 0x12f };
+            Assert.AreEqual("JET_UNICODEINDEX(1033:en-US:0x12F)", unicodeindex.ToString());
         }
 
         /// <summary>
@@ -813,7 +813,7 @@ namespace InteropApiTests
         private static void VerifyIFormattableGeneralEqualsToString(IFormattable obj)
         {
             Assert.AreEqual(obj.ToString(), obj.ToString("G", CultureInfo.InvariantCulture));
-            Assert.AreEqual(obj.ToString(), String.Format("{0}", obj));
+            Assert.AreEqual(obj.ToString(), string.Format("{0}", obj));
         }
     }
 }

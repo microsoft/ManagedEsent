@@ -190,9 +190,9 @@ namespace InteropApiTests
         {
             Expect.Call(
                 this.mockApi.JetSetSystemParameter(
-                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.EventLoggingLevel, new IntPtr(13), null)).Return(1);
+                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.EventLoggingLevel, new IntPtr((int)EventLoggingLevels.Low), null)).Return(1);
             this.repository.ReplayAll();
-            SystemParameters.EventLoggingLevel = 13;
+            SystemParameters.EventLoggingLevel = (int)EventLoggingLevels.Low;
             this.repository.VerifyAll();
         }
 

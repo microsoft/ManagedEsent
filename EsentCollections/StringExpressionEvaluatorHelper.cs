@@ -31,7 +31,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// A MethodInfo describing String.StartsWith(string).
         /// </summary>
         private static readonly MethodInfo stringStartsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) }); 
-       
+
         /// <summary>
         /// Gets a MethodInfo describing the static String.Compare(string, string).
         /// </summary>

@@ -69,6 +69,11 @@ namespace Microsoft.Isam.Esent.Interop
         DisabledFunctionality = -112,
 
         /// <summary>
+        /// The desired OS functionality could not be located and loaded / linked.
+        /// </summary>
+        UnloadableOSFunctionality = -113,
+
+        /// <summary>
         /// Buffer dependencies improperly set. Recovery failure
         /// </summary>
         DatabaseBufferDependenciesCorrupted = -255,
@@ -1027,6 +1032,21 @@ namespace Microsoft.Isam.Esent.Interop
         /// The database page read from disk had a previous write not represented on the page.
         /// </summary>
         ReadLostFlushVerifyFailure = -1119,
+
+        /// <summary>
+        /// File system operation failed with an error indicating the file system is corrupt.
+        /// </summary>
+        FileSystemCorruption = -1121,
+
+        /// <summary>
+        /// One or more database pages read from disk during recovery do not match the expected state.
+        /// </summary>
+        RecoveryVerifyFailure = -1123,
+
+        /// <summary>
+        /// Attempted to provide a filter to JetMove in an unsupported scenario
+        /// </summary>
+        FilteredMoveNotSupported = -1124,
 
         /// <summary>
         /// Attempted to PrepareToCommit a distributed transaction to non-zero level

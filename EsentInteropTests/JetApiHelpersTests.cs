@@ -17,48 +17,48 @@ namespace InteropApiTests
     public class JetApiHelpersTests
     {
         /// <summary>
-        /// Verify GetActualBookmarkSize returns 0 when passed 0.
+        /// Verify GetActualSize returns 0 when passed 0.
         /// </summary>
         [TestMethod]
-        [Description("Verify GetActualBookmarkSize returns 0 when passed 0")]
+        [Description("Verify GetActualSize returns 0 when passed 0")]
         [Priority(0)]
-        public void VerifyGetActualBookmarkSizeReturnsZeroForZero()
+        public void VerifyGetActualSizeReturnsZeroForZero()
         {
-            Assert.AreEqual(0, JetApi.GetActualBookmarkSize(0U));
+            Assert.AreEqual(0, JetApi.GetActualSize(0U));
         }
 
         /// <summary>
-        /// Verify GetActualBookmarkSize returns a positive number passed to it.
+        /// Verify GetActualSize returns a positive number passed to it.
         /// </summary>
         [TestMethod]
-        [Description("Verify GetActualBookmarkSize returns a positive number passed to it")]
+        [Description("Verify GetActualSize returns a positive number passed to it")]
         [Priority(0)]
-        public void VerifyGetActualBookmarkSizeReturnsPositiveNumber()
+        public void VerifyGetActualSizeReturnsPositiveNumber()
         {
-            Assert.AreEqual(17, JetApi.GetActualBookmarkSize(17U));
+            Assert.AreEqual(17, JetApi.GetActualSize(17U));
         }
 
         /// <summary>
-        /// Verify GetActualBookmarkSize throws exception on overflow.
+        /// Verify GetActualSize throws exception on overflow.
         /// </summary>
         [TestMethod]
-        [Description("Verify GetActualBookmarkSize throws an exception on overflow")]
+        [Description("Verify GetActualSize throws an exception on overflow")]
         [Priority(0)]
         [ExpectedException(typeof(OverflowException))]
-        public void VerifyGetActualBookmarkSizeThrowsExceptionOnOverflow()
+        public void VerifyGetActualSizeThrowsExceptionOnOverflow()
         {
-            int ignored = JetApi.GetActualBookmarkSize(UInt32.MaxValue);
+            int ignored = JetApi.GetActualSize(uint.MaxValue);
         }
 
         /// <summary>
-        /// Verify GetActualBookmarkSize returns 0 for debug fill.
+        /// Verify GetActualSize returns 0 for debug fill.
         /// </summary>
         [TestMethod]
-        [Description("Verify GetActualBookmarkSize returns 0 for debug fill")]
+        [Description("Verify GetActualSize returns 0 for debug fill")]
         [Priority(0)]
-        public void VerifyGetActualBookmarkSizeReturnsZeroForDebugFill()
+        public void VerifyGetActualSizeReturnsZeroForDebugFill()
         {
-            Assert.AreEqual(0, JetApi.GetActualBookmarkSize(0xDDDDDDDD));
+            Assert.AreEqual(0, JetApi.GetActualSize(0xDDDDDDDD));
         }
     }
 }

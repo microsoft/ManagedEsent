@@ -17,8 +17,33 @@ namespace InteropApiTests
     /// Init/Term tests
     /// </summary>
     [TestClass]
-    public class InitTermTests
+    public partial class InitTermTests
     {
+        /// <summary>
+        /// The directory being used for the database and its files.
+        /// </summary>
+        private string directory;
+
+        /// <summary>
+        /// Initialization method. Called once when the tests are started.
+        /// </summary>
+        [TestInitialize]
+        [Description("Setup for BasicDDLTests")]
+        public void Setup()
+        {
+            this.directory = SetupHelper.CreateRandomDirectory();
+        }
+
+        /// <summary>
+        /// Cleanup after all tests have run.
+        /// </summary>
+        [TestCleanup]
+        [Description("Cleanup for BasicDDLTests")]
+        public void Teardown()
+        {
+            Cleanup.DeleteDirectoryWithRetry(this.directory);
+        }
+
         /// <summary>
         /// Verify that the version returned by JetGetVersion is not zero.
         /// </summary>
@@ -136,6 +161,35 @@ namespace InteropApiTests
             systemParameters.MaxTemporaryTables = 0;
             systemParameters.Recovery = false;
             systemParameters.NoInformationEvent = true;
+
+            VistaApi.JetInit3(ref instance, new JET_RSTINFO(), InitGrbit.None);
+            Api.JetTerm(instance);
+        }
+
+        /// <summary>
+        /// Initialize and terminate one instance. The instance is initialized
+        /// with JetInit3 and a JET_RSTINFO, with recovery on.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Initialize and terminate one instance with JetInit3 and a JET_RSTINFO with recovery on.")]
+        public void InitializeInstanceWithJetInit3AndRstinfoRecoveryOn()
+        {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
+            JET_INSTANCE instance;
+            Api.JetCreateInstance2(out instance, Guid.NewGuid().ToString(), "Instance Display Name", CreateInstanceGrbit.None);
+
+            var systemParameters = new InstanceParameters(instance);
+            systemParameters.MaxTemporaryTables = 0;
+            systemParameters.Recovery = true;
+            systemParameters.NoInformationEvent = true;
+            systemParameters.LogFileDirectory = this.directory;
+            systemParameters.SystemDirectory = this.directory;
+            systemParameters.TempDirectory = this.directory;
 
             VistaApi.JetInit3(ref instance, new JET_RSTINFO(), InitGrbit.None);
             Api.JetTerm(instance);

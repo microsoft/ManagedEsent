@@ -297,6 +297,7 @@ namespace EsentCollectionsTests
         [Serializable]
         private struct NonSerializableComparable : IComparable<NonSerializableComparable>
         {
+#pragma warning disable 649
             /// <summary>
             /// This dictionary stops the structure from being serializable.
             /// </summary>
@@ -306,6 +307,7 @@ namespace EsentCollectionsTests
             /// dictionary and that is what we want to test.
             /// </remarks>
             private Dictionary<int, int> dict;
+#pragma warning restore 649
 
             /// <summary>
             /// Dummy CompareTo method.
@@ -324,10 +326,12 @@ namespace EsentCollectionsTests
         [Serializable]
         private struct NonSerializableStruct 
         {
+#pragma warning disable 649
             /// <summary>
             /// Dummy object.
             /// </summary>
             public object Obj;
+#pragma warning restore 649
         }
 
         /// <summary>

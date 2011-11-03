@@ -43,7 +43,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         [Conditional("TRACE")]
         internal void TraceWhere(KeyRange<TKey> range, bool isReversed)
         {
-            Trace.WriteLineIf(this.traceSwitch.TraceVerbose, String.Format(CultureInfo.InvariantCulture, "WHERE: {0} {1}", range, isReversed ? "(reversed)" : String.Empty));
+            Trace.WriteLineIf(this.traceSwitch.TraceVerbose, string.Format(CultureInfo.InvariantCulture, "WHERE: {0} {1}", range, isReversed ? "(reversed)" : string.Empty));
         }
     }
 }

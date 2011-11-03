@@ -61,7 +61,7 @@ namespace InteropApiTests
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.PageTempDBMin, SystemParameters.PageTempDBSmallest, null);
             Api.JetInit(ref this.instance);
-            Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
+            Api.JetBeginSession(this.instance, out this.sesid, string.Empty, string.Empty);
 
             this.columnidDict = SetupHelper.CreateTempTableWithAllColumns(this.sesid, TempTableGrbit.None, out this.tableid);
         }
@@ -326,14 +326,14 @@ namespace InteropApiTests
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
 
-            this.SetColumn(this.columnidDict["int16"], BitConverter.GetBytes(Int16.MinValue), 0);   // itag 1
+            this.SetColumn(this.columnidDict["int16"], BitConverter.GetBytes(short.MinValue), 0);   // itag 1
             this.SetColumn(this.columnidDict["int16"], BitConverter.GetBytes(Expected16), 0);       // itag 2
-            this.SetColumn(this.columnidDict["int16"], BitConverter.GetBytes(Int16.MaxValue), 0);   // itag 3
+            this.SetColumn(this.columnidDict["int16"], BitConverter.GetBytes(short.MaxValue), 0);   // itag 3
 
             this.SetColumn(this.columnidDict["int32"], BitConverter.GetBytes(Expected32), 0);
 
-            this.SetColumn(this.columnidDict["int64"], BitConverter.GetBytes(Int64.MinValue), 0);   // itag 1
-            this.SetColumn(this.columnidDict["int64"], BitConverter.GetBytes(Int64.MaxValue), 0);   // itag 2
+            this.SetColumn(this.columnidDict["int64"], BitConverter.GetBytes(long.MinValue), 0);   // itag 1
+            this.SetColumn(this.columnidDict["int64"], BitConverter.GetBytes(long.MaxValue), 0);   // itag 2
             this.SetColumn(this.columnidDict["int64"], BitConverter.GetBytes(Expected64), 0);       // itag 3
 
             this.SetColumn(this.columnidDict["unicode"], Encoding.Unicode.GetBytes("test"), 0);

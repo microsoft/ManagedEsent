@@ -78,7 +78,7 @@ namespace Microsoft.Isam.Esent.Interop
             this.bDays = checked((byte)time.Day);
             this.bMonth = checked((byte)time.Month);
             this.bYear = checked((byte)(time.Year - 1900));
-            this.bFiller1 = (time.Kind == DateTimeKind.Utc) ? (byte)0x80 : (byte)0;
+            this.bFiller1 = (time.Kind == DateTimeKind.Utc) ? (byte)0x1 : (byte)0;
             this.bFiller2 = 0;
         }
 
@@ -95,7 +95,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public bool IsUtc
         {
-            get { return 0 != (this.bFiller1 & 0x80); }
+            get { return 0 != (this.bFiller1 & 0x1); }
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
-            return String.Format(
+            return string.Format(
                 CultureInfo.InvariantCulture,
                 "JET_LOGTIME({0}:{1}:{2}:{3}:{4}:{5}:0x{6:x}:0x{7:x})",
                 this.bSeconds,

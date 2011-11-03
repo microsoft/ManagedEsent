@@ -26,6 +26,31 @@ namespace Microsoft.Isam.Esent.Interop.Windows7
         public const JET_param LVChunkSizeMost = (JET_param)163;
 
         /// <summary>
+        /// Maximum number of bytes that can be grouped for a coalesced read operation.
+        /// </summary>
+        public const JET_param MaxCoalesceReadSize = (JET_param)164;
+
+        /// <summary>
+        /// Maximum number of bytes that can be grouped for a coalesced write operation.
+        /// </summary>
+        public const JET_param MaxCoalesceWriteSize = (JET_param)165;
+
+        /// <summary>
+        /// Maximum number of bytes that can be gapped for a coalesced read IO operation.
+        /// </summary>
+        public const JET_param MaxCoalesceReadGapSize = (JET_param)166;
+
+        /// <summary>
+        /// Maximum number of bytes that can be gapped for a coalesced write IO operation.
+        /// </summary>
+        public const JET_param MaxCoalesceWriteGapSize = (JET_param)167;
+
+        /// <summary>
+        /// Enable Database Maintenance during recovery.
+        /// </summary>
+        public const JET_param EnableDbScanInRecovery = (JET_param)169;
+
+        /// <summary>
         /// Throttling of the database scan, in milliseconds.
         /// </summary>
         public const JET_param DbScanThrottle = (JET_param)170;

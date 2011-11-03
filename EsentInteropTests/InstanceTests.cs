@@ -97,7 +97,11 @@ namespace InteropApiTests
                         ref Arg<JET_INSTANCE>.Ref(Is.Equal(jetInstance), jetInstance).Dummy,
                         Arg<InitGrbit>.Is.Anything))
                     .Return((int)JET_err.Success);
-                Expect.Call(mockApi.JetTerm(Arg<JET_INSTANCE>.Is.Equal(jetInstance))).Return((int)JET_err.Success);
+                Expect.Call(
+                    mockApi.JetTerm2(
+                        Arg<JET_INSTANCE>.Is.Anything,
+                        Arg<TermGrbit>.Is.Anything))
+                    .Return((int)JET_err.Success);
                 mocks.ReplayAll();
 
                 using (var instance = new Instance("testterm"))
@@ -570,70 +574,95 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test thread aborts during init and term.
+        /// Verify JetTerm is is called with specified TermGrbit.
         /// </summary>
         [TestMethod]
-        [Priority(3)]
-        [Description("Test thread aborts during Instance Init/Term")]
-        public void TestThreadAbortDuringInstanceInitTerm()
+        [Priority(1)]
+        [Description("Verify JetTerm is is called with specified TermGrbit")]
+        public void VerifyInstanceJetTermWithTermGrbit()
         {
-            var rand = new Random();
-            var timeToRun = TimeSpan.FromSeconds(19);
-            var startTime = DateTime.UtcNow;
-
-            const string InstanceNameTemplate = "ThreadAbortTest{0}";
-            int numThreads = 1; // Should be Environment.ProcessorCount (see assert at end)
-
-            int iteration = 0;
-
-            // Supressing execution context flow speeds up thread creation.
-            ExecutionContext.SuppressFlow();
-
-            while (DateTime.UtcNow < (startTime + timeToRun))
+            var mocks = new MockRepository();
+            var mockApi = mocks.StrictMock<IJetApi>();
+            using (new ApiTestHook(mockApi))
             {
-                var threads = new Thread[numThreads];
+                var jetInstance = new JET_INSTANCE { Value = (IntPtr)0x1 };
 
-                for (int i = 0; i < numThreads; ++i)
+                Expect.Call(
+                    mockApi.JetCreateInstance2(
+                        out Arg<JET_INSTANCE>.Out(jetInstance).Dummy,
+                        Arg<string>.Is.Anything,
+                        Arg<string>.Is.Anything,
+                        Arg<CreateInstanceGrbit>.Is.Anything))
+                    .Return((int)JET_err.Success);
+                Expect.Call(
+                    mockApi.JetInit2(
+                        ref Arg<JET_INSTANCE>.Ref(Is.Equal(jetInstance), jetInstance).Dummy,
+                        Arg<InitGrbit>.Is.Anything))
+                    .Return((int)JET_err.Success);
+                Expect.Call(
+                    mockApi.JetTerm2(
+                        Arg<JET_INSTANCE>.Is.Anything,
+                        Arg<TermGrbit>.Is.Equal(TermGrbit.Abrupt)))
+                    .Return((int)JET_err.Success);
+
+                mocks.ReplayAll();
+
+                using (var instance = new Instance("VerifyInstanceJetTermWithTermGrbit"))
                 {
-                    string instanceName = String.Format(InstanceNameTemplate, i);
-                    threads[i] = new Thread(() => InstanceInitTermThread(instanceName));
-                    threads[i].Start();
+                    instance.TermGrbit = TermGrbit.Abrupt;
+                    instance.Init();
+                    instance.Close();
                 }
 
-                Thread.Sleep(TimeSpan.FromMilliseconds(rand.Next(0, 200)));
-
-                foreach (Thread thread in threads)
-                {
-                    thread.Abort();
-                }
-
-                foreach (Thread thread in threads)
-                {
-                    thread.Join();
-                }
-
-                iteration++;
-            }
-
-            ExecutionContext.RestoreFlow();
-
-            // Make sure the instance name is still available
-            for (int i = 0; i < numThreads; ++i)
-            {
-                string instanceName = String.Format(InstanceNameTemplate, i);
-                using (new Instance(instanceName))
-                {
-                }
-            }
-
-            Console.WriteLine("{0} iterations", iteration);
-
-            if (Environment.ProcessorCount > 1)
-            {
-                Assert.Inconclusive("ESENT crashes during Init/Term prevent this test from running reliably with multiple threads");
+                mocks.VerifyAll();
             }
         }
 
+        /// <summary>
+        /// Verify JetTerm is is called with specified TermGrbit from 
+        /// the Instance contructor.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify JetTerm is is called with specified TermGrbit from the Instance contructor")]
+        public void VerifyInstanceJetTermWithTermGrbitFromConstructor()
+        {
+            var mocks = new MockRepository();
+            var mockApi = mocks.StrictMock<IJetApi>();
+            using (new ApiTestHook(mockApi))
+            {
+                var jetInstance = new JET_INSTANCE { Value = (IntPtr)0x1 };
+
+                Expect.Call(
+                    mockApi.JetCreateInstance2(
+                        out Arg<JET_INSTANCE>.Out(jetInstance).Dummy,
+                        Arg<string>.Is.Anything,
+                        Arg<string>.Is.Anything,
+                        Arg<CreateInstanceGrbit>.Is.Anything))
+                    .Return((int)JET_err.Success);
+                Expect.Call(
+                    mockApi.JetInit2(
+                        ref Arg<JET_INSTANCE>.Ref(Is.Equal(jetInstance), jetInstance).Dummy,
+                        Arg<InitGrbit>.Is.Anything))
+                    .Return((int)JET_err.Success);
+                Expect.Call(
+                    mockApi.JetTerm2(
+                        Arg<JET_INSTANCE>.Is.Anything,
+                        Arg<TermGrbit>.Is.Equal(TermGrbit.Abrupt)))
+                    .Return((int)JET_err.Success);
+
+                mocks.ReplayAll();
+
+                using (var instance = new Instance("VerifyInstanceJetTermWithTermGrbit", "VerifyInstanceJetTermWithTermGrbit", TermGrbit.Abrupt))
+                {
+                    instance.Init();
+                    instance.Close();
+                }
+
+                mocks.VerifyAll();
+            }
+        }
+        
         /// <summary>
         /// Create an instance of the specified type in the given AppDomain.
         /// </summary>

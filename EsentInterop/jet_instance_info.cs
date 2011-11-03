@@ -17,6 +17,9 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native version of the JET_INSTANCE_INFO structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
+    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1305:FieldNamesMustNotUseHungarianNotation",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
@@ -165,7 +168,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "JET_INSTANCE_INFO({0})", this.szInstanceName);
+            return string.Format(CultureInfo.InvariantCulture, "JET_INSTANCE_INFO({0})", this.szInstanceName);
         }
 
         /// <summary>
@@ -175,7 +178,7 @@ namespace Microsoft.Isam.Esent.Interop
         public override int GetHashCode()
         {
             int hash = this.hInstanceId.GetHashCode()
-                   ^ (this.szInstanceName ?? String.Empty).GetHashCode()
+                   ^ (this.szInstanceName ?? string.Empty).GetHashCode()
                    ^ this.cDatabases << 20;
 
             for (int i = 0; i < this.cDatabases; ++i)

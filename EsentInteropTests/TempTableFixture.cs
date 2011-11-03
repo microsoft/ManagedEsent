@@ -464,7 +464,7 @@ namespace InteropApiTests
         {
             var columnValues = new ColumnValue[]
             {
-                new StringColumnValue { Columnid = this.columnDict["Unicode"], Value = String.Empty },
+                new StringColumnValue { Columnid = this.columnDict["Unicode"], Value = string.Empty },
                 new BytesColumnValue { Columnid = this.columnDict["Binary"], Value = new byte[0] },
             };
 
@@ -478,7 +478,7 @@ namespace InteropApiTests
 
             Api.TryMoveFirst(this.session, this.tableid);
 
-            Assert.AreEqual(String.Empty, Api.RetrieveColumnAsString(this.session, this.tableid, this.columnDict["Unicode"]));
+            Assert.AreEqual(string.Empty, Api.RetrieveColumnAsString(this.session, this.tableid, this.columnDict["Unicode"]));
             CollectionAssert.AreEqual(new byte[0], Api.RetrieveColumn(this.session, this.tableid, this.columnDict["Binary"]));
         }
 
@@ -644,7 +644,7 @@ namespace InteropApiTests
             using (var trx = new Transaction(this.session))
             using (var update = new Update(this.session, this.tableid, JET_prep.Insert))
             {
-                Api.SetColumn(this.session, this.tableid, this.columnDict["Unicode"], String.Empty, Encoding.Unicode);
+                Api.SetColumn(this.session, this.tableid, this.columnDict["Unicode"], string.Empty, Encoding.Unicode);
                 Api.SetColumn(this.session, this.tableid, this.columnDict["Binary"], new byte[0]);
                 update.SaveAndGotoBookmark();
                 trx.Commit(CommitTransactionGrbit.None);
@@ -658,7 +658,7 @@ namespace InteropApiTests
 
             Api.RetrieveColumns(this.session, this.tableid, columnValues);
 
-            Assert.AreEqual(String.Empty, columnValues[0].ValueAsObject);
+            Assert.AreEqual(string.Empty, columnValues[0].ValueAsObject);
             CollectionAssert.AreEqual(new byte[0], columnValues[1].ValueAsObject as byte[]);
         }
 

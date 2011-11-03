@@ -181,7 +181,7 @@ namespace InteropApiTests
                     t => from method in t.GetMethods()
                          where method.GetCustomAttributes(true).Any(attribute => attribute is TestMethodAttribute)
                                && !method.GetCustomAttributes(true).Any(attribute => attribute is T)
-                         select String.Format("{0}.{1}", method.DeclaringType, method.Name))
+                         select string.Format("{0}.{1}", method.DeclaringType, method.Name))
                 .OrderBy(x => x)
                 .ToArray();
         }
@@ -222,7 +222,7 @@ namespace InteropApiTests
                                && !method.GetCustomAttributes(true).Any(attribute => attribute is TestInitializeAttribute)
                                && !method.GetCustomAttributes(true).Any(attribute => attribute is TestCleanupAttribute)
                                && !method.GetCustomAttributes(true).Any(attribute => attribute is TestMethodAttribute)
-                     select String.Format("{0}.{1}", method.DeclaringType, method.Name))
+                     select string.Format("{0}.{1}", method.DeclaringType, method.Name))
                 .OrderBy(x => x)
                 .ToArray();
         }

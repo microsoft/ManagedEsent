@@ -16,6 +16,9 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native version of the JET_RSTMAP structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
+    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1305:FieldNamesMustNotUseHungarianNotation",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
@@ -90,7 +93,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </returns>
         public override string ToString()
         {
-            return String.Format(
+            return string.Format(
                 CultureInfo.InvariantCulture,
                 "JET_RSTINFO(szDatabaseName={0},szNewDatabaseName={1})",
                 this.szDatabaseName,
@@ -110,8 +113,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return false;
             }
 
-            return String.Equals(this.szDatabaseName, other.szDatabaseName, StringComparison.OrdinalIgnoreCase)
-                   && String.Equals(this.szNewDatabaseName, other.szNewDatabaseName, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(this.szDatabaseName, other.szDatabaseName, StringComparison.OrdinalIgnoreCase)
+                   && string.Equals(this.szNewDatabaseName, other.szNewDatabaseName, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>

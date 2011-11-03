@@ -425,7 +425,7 @@ namespace InteropApiTests
         {
             JET_TABLEID tableid;
             SetupResult.For(
-                this.jetApi.JetOpenTable(JET_SESID.Nil, JET_DBID.Nil, String.Empty, null, 0, OpenTableGrbit.None, out tableid))
+                this.jetApi.JetOpenTable(JET_SESID.Nil, JET_DBID.Nil, string.Empty, null, 0, OpenTableGrbit.None, out tableid))
                 .IgnoreArguments()
                 .OutRef(JET_TABLEID.Nil)
                 .Return((int)JET_err.ReadVerifyFailure);

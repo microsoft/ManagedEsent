@@ -1467,8 +1467,8 @@ namespace EsentCollectionsTests
         {
             using (var persistentDictionary = CloneDictionary(this.testDictionary3))
             {
-                var expected = from x in this.testDictionary3 where String.Equals(x.Key, "b") || String.Equals("c", x.Key) select x.Value;
-                var actual = from x in persistentDictionary where String.Equals(x.Key, "b") || String.Equals("c", x.Key) select x.Value;
+                var expected = from x in this.testDictionary3 where string.Equals(x.Key, "b") || string.Equals("c", x.Key) select x.Value;
+                var actual = from x in persistentDictionary where string.Equals(x.Key, "b") || string.Equals("c", x.Key) select x.Value;
                 EnumerableAssert.AreEqual(expected, actual, null);
             }
         }
@@ -1499,8 +1499,8 @@ namespace EsentCollectionsTests
         {
             using (var persistentDictionary = CloneDictionary(this.testDictionary3))
             {
-                var expected = from x in this.testDictionary3 where String.Compare(x.Key, "d") < 0 && String.Compare("b", x.Key) <= 0 select x.Value;
-                var actual = from x in persistentDictionary where String.Compare(x.Key, "d") < 0 && String.Compare("b", x.Key) <= 0 select x.Value;
+                var expected = from x in this.testDictionary3 where string.Compare(x.Key, "d") < 0 && string.Compare("b", x.Key) <= 0 select x.Value;
+                var actual = from x in persistentDictionary where string.Compare(x.Key, "d") < 0 && string.Compare("b", x.Key) <= 0 select x.Value;
                 EnumerableAssert.AreEqual(expected, actual, null);
             }
         }

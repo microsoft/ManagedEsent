@@ -142,7 +142,7 @@ namespace BasicTest
                     // don't overwrite autoinc columns
                     data[i] = null;
                 }
-                else if (String.Equals(
+                else if (string.Equals(
                     this.columnInfos[i].Name, "recordID", StringComparison.InvariantCultureIgnoreCase))
                 {
                     // this is the primary index column, set it to the recordID
@@ -302,7 +302,7 @@ namespace BasicTest
             VistaApi.JetGetRecordSize(sesid, tableid, ref recsize, GetRecordSizeGrbit.None);
             BasicClass.Assert(
                 recsize.cbData + recsize.cbLongValueData >= totalsize,
-                String.Format("JetGetRecordSize returned {0} bytes, expected {1}", recsize.cbData + recsize.cbLongValueData, totalsize));
+                string.Format("JetGetRecordSize returned {0} bytes, expected {1}", recsize.cbData + recsize.cbLongValueData, totalsize));
         }
 
         // find a record with the given recordID
@@ -461,7 +461,7 @@ namespace BasicTest
                 for (int i = 0; i < this.columnInfos.Length; ++i)
                 {
                     int recordID = NumRecords + 13;
-                    if (String.Equals(
+                    if (string.Equals(
                         this.columnInfos[i].Name, "recordID", StringComparison.InvariantCultureIgnoreCase))
                     {
                         // this is the primary index column, set it to the new recordID
@@ -498,7 +498,7 @@ namespace BasicTest
                 for (int i = 0; i < this.columnInfos.Length; ++i)
                 {
                     data[i] = null;
-                    if (String.Equals(
+                    if (string.Equals(
                         this.columnInfos[i].Name, "recordID", StringComparison.InvariantCultureIgnoreCase))
                     {
                         // this is the primary index column, set it to the recordID
@@ -614,7 +614,7 @@ namespace BasicTest
             for (int i = 0; i <= 5; ++i)
             {
                 int key = 5 - i;
-                string s = String.Format("Record {0}", i);
+                string s = string.Format("Record {0}", i);
 
                 Api.JetPrepareUpdate(this.sesid, tableid, JET_prep.Insert);
                 Api.SetColumn(this.sesid, tableid, tt.prgcolumnid[0], key);
@@ -629,7 +629,7 @@ namespace BasicTest
                 int actualKey = Api.RetrieveColumnAsInt32(this.sesid, tableid, tt.prgcolumnid[0]).Value;
                 BasicClass.Assert(
                     expectedKey == actualKey,
-                    String.Format("Temp table isn't sorted correctly (expected = {0}, actual = {1})", expectedKey, actualKey));
+                    string.Format("Temp table isn't sorted correctly (expected = {0}, actual = {1})", expectedKey, actualKey));
                 expectedKey++;
             }
 
@@ -776,14 +776,14 @@ namespace BasicTest
             byte[] bookmark = Api.GetBookmark(sesid, tableid);
             for (int i = 0; i < this.columnInfos.Length; ++i)
             {
-                string index = String.Format("index_{0}", this.columnInfos[i].Name);
+                string index = string.Format("index_{0}", this.columnInfos[i].Name);
 
                 Api.JetSetCurrentIndex(sesid, tableid, index);
                 string actualindex;
                 Api.JetGetCurrentIndex(sesid, tableid, out actualindex, SystemParameters.NameMost);
                 BasicClass.Assert(
-                    String.Equals(actualindex, index, StringComparison.InvariantCultureIgnoreCase),
-                    String.Format("Set index to {0}, JetGetCurrentIndex returns {1}", index, actualindex));
+                    string.Equals(actualindex, index, StringComparison.InvariantCultureIgnoreCase),
+                    string.Format("Set index to {0}, JetGetCurrentIndex returns {1}", index, actualindex));
 
                 // create an index range that will contain the record we want
                 Api.MakeKey(sesid, tableid, data[i], MakeKeyGrbit.NewKey);
@@ -940,7 +940,7 @@ namespace BasicTest
             int actualRecordID = BitConverter.ToInt32(columndata, 0);
             BasicClass.Assert(
                 expectedRecordID == actualRecordID,
-                String.Format("RetrieveFromPrimaryBookmark: got {0}, expected {1}", actualRecordID, expectedRecordID));
+                string.Format("RetrieveFromPrimaryBookmark: got {0}, expected {1}", actualRecordID, expectedRecordID));
 
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
             Api.JetCloseTable(this.sesid, tableid);

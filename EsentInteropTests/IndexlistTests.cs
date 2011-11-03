@@ -14,8 +14,8 @@ namespace InteropApiTests
     /// Tests for the JET_INDEXLIST class
     /// </summary>
     [TestClass]
-    public class IndexlistConversionsTests
-    {       
+    public class IndexlistTests
+    {
         /// <summary>
         /// The native index list that will be converted into a managed object.
         /// </summary>
@@ -31,7 +31,7 @@ namespace InteropApiTests
         /// it to a managed object.
         /// </summary>
         [TestInitialize]
-        [Description("Setup the IndexlistConversionsTests fixture")]
+        [Description("Setup the IndexlistTests fixture")]
         public void Setup()
         {
             this.native = new NATIVE_INDEXLIST()
@@ -213,7 +213,7 @@ namespace InteropApiTests
         {
             Assert.AreEqual(new JET_COLUMNID { Value = this.native.columnidgrbitColumn }, this.converted.columnidgrbitColumn);
         }
- 
+
         /// <summary>
         /// Check the conversion of columnidcolumnname.
         /// </summary>

@@ -15,7 +15,7 @@ namespace InteropApiTests
     /// Test files with Unicode paths (if ESENT supports them)
     /// </summary>
     [TestClass]
-    public class UnicodePathTests
+    public partial class UnicodePathTests
     {
         /// <summary>
         /// Unicode directory to contain files.
@@ -146,7 +146,7 @@ namespace InteropApiTests
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, this.database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, this.database, string.Empty, out dbid, CreateDatabaseGrbit.None);
                     Assert.IsTrue(File.Exists(this.database));
                 }
             }
@@ -200,7 +200,7 @@ namespace InteropApiTests
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, this.database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, this.database, string.Empty, out dbid, CreateDatabaseGrbit.None);
                     Api.JetCloseDatabase(session, dbid, CloseDatabaseGrbit.None);
                     Api.JetDetachDatabase(session, this.database);
                 }
@@ -228,7 +228,7 @@ namespace InteropApiTests
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, this.database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, this.database, string.Empty, out dbid, CreateDatabaseGrbit.None);
                     Api.JetCloseDatabase(session, dbid, CloseDatabaseGrbit.None);
                     Api.JetDetachDatabase(session, this.database);
 
@@ -258,7 +258,7 @@ namespace InteropApiTests
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, this.database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, this.database, string.Empty, out dbid, CreateDatabaseGrbit.None);
                     Api.JetCloseDatabase(session, dbid, CloseDatabaseGrbit.None);
                     Api.JetDetachDatabase(session, this.database);
 
@@ -288,12 +288,12 @@ namespace InteropApiTests
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, this.database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, this.database, string.Empty, out dbid, CreateDatabaseGrbit.None);
                     Api.JetCloseDatabase(session, dbid, CloseDatabaseGrbit.None);
                     Api.JetDetachDatabase(session, this.database);
 
                     Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
-                    Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+                    Api.JetOpenDatabase(session, this.database, string.Empty, out dbid, OpenDatabaseGrbit.None);
                 }
             }
         }
@@ -513,7 +513,7 @@ namespace InteropApiTests
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, this.database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, this.database, string.Empty, out dbid, CreateDatabaseGrbit.None);
                     int numInstances;
                     JET_INSTANCE_INFO[] instances;
                     Api.JetGetInstanceInfo(out numInstances, out instances);

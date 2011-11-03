@@ -114,7 +114,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
-            return String.Format(
+            return string.Format(
                 CultureInfo.InvariantCulture, "{0}{1}({2})", this.isAscending ? "+" : "-", this.columnName, this.coltyp);
         }
 

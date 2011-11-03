@@ -92,7 +92,7 @@ namespace Microsoft.Isam.Esent.Interop
         public StatusCallbackWrapper(JET_PFNSTATUS wrappedCallback)
         {
             this.wrappedCallback = wrappedCallback;
-            this.nativeCallback = this.CallbackImpl;
+            this.nativeCallback = wrappedCallback != null ? this.CallbackImpl : (NATIVE_PFNSTATUS)null;
         }
 
         /// <summary>
@@ -172,7 +172,7 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 Trace.WriteLineIf(
                     TraceSwitch.TraceWarning,
-                    String.Format(CultureInfo.InvariantCulture, "Caught Exception {0}", ex));
+                    string.Format(CultureInfo.InvariantCulture, "Caught Exception {0}", ex));
                 this.SavedException = ex;
                 return JET_err.CallbackFailed;
             }

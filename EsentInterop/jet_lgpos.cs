@@ -39,34 +39,34 @@ namespace Microsoft.Isam.Esent.Interop
         private int generation;
 
         /// <summary>
-        /// Gets the byte offset represented by this log position. This
+        /// Gets or sets the byte offset represented by this log position. This
         /// offset is inside of the sector.
         /// </summary>
         public int ib
         {
             [DebuggerStepThrough]
             get { return this.offset; }
-            internal set { this.offset = checked((ushort)value); }
+            set { this.offset = checked((ushort)value); }
         }
 
         /// <summary>
-        /// Gets the sector number represented by this log position.
+        /// Gets or sets the sector number represented by this log position.
         /// </summary>
         public int isec
         {
             [DebuggerStepThrough]
             get { return this.sector; }
-            internal set { this.sector = checked((ushort)value); }
+            set { this.sector = checked((ushort)value); }
         }
 
         /// <summary>
-        /// Gets the generation of this log position.
+        /// Gets or sets the generation of this log position.
         /// </summary>
         public int lGeneration
         {
             [DebuggerStepThrough]
             get { return this.generation; }
-            internal set { this.generation = value; }
+            set { this.generation = value; }
         }
 
         /// <summary>
@@ -156,7 +156,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
-            return String.Format(
+            return string.Format(
                 CultureInfo.InvariantCulture,
                 "JET_LGPOS(0x{0:X},{1:X},{2:X})",
                 this.lGeneration,

@@ -10,13 +10,12 @@
 
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
-    using System;
     using Microsoft.Isam.Esent.Interop;
 
     /// <summary>
     /// Global parameters for all collections.
     /// </summary>
-    internal static class Globals
+    internal static class CollectionsSystemParameters
     {
         /// <summary>
         /// Used to make sure only one thread can perform the global initialization.
@@ -59,8 +58,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             SystemParameters.MaxInstances = 1024;
             SystemParameters.DatabasePageSize = 8192;
             SystemParameters.CacheSizeMin = 8192; // 64MB
-            SystemParameters.CacheSizeMax = Int32.MaxValue;
+            SystemParameters.CacheSizeMax = int.MaxValue;
         }
     }
 }
-

@@ -134,8 +134,8 @@ namespace BasicTest
                 Api.JetBeginTransaction(this.sesid);
                 foreach (JET_coltyp coltyp in this.coltyps)
                 {
-                    string name = String.Format("index_{0}", coltyp);
-                    string definition = String.Format("+{0}\0\0", coltyp);
+                    string name = string.Format("index_{0}", coltyp);
+                    string definition = string.Format("+{0}\0\0", coltyp);
                     Api.JetCreateIndex(
                         this.sesid, tableid, name, CreateIndexGrbit.None, definition, definition.Length, 100);
                 }
@@ -296,7 +296,7 @@ namespace BasicTest
 
             foreach (JET_coltyp coltyp in this.coltyps)
             {
-                string name = String.Format("index_{0}", coltyp);
+                string name = string.Format("index_{0}", coltyp);
                 Api.JetSetCurrentIndex(this.sesid, tableid, name);
             }
 
@@ -316,8 +316,8 @@ namespace BasicTest
         {
             var indexcreate = new JET_INDEXCREATE
             {
-                szIndexName = String.Format("index_{0}", column),
-                szKey = String.Format("-{0}\0\0", column),
+                szIndexName = string.Format("index_{0}", column),
+                szKey = string.Format("-{0}\0\0", column),
             };
             indexcreate.cbKey = indexcreate.szKey.Length;
             return indexcreate;

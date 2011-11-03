@@ -38,6 +38,11 @@ namespace Microsoft.Isam.Esent.Interop
         private readonly string displayName;
 
         /// <summary>
+        /// The TermGrbit to be used at JetTerm time.
+        /// </summary>
+        private TermGrbit termGrbit;
+
+        /// <summary>
         /// Initializes a new instance of the Instance class. The underlying
         /// JET_INSTANCE is allocated, but not initialized.
         /// </summary>
@@ -46,7 +51,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// given process hosting the database engine.
         /// </param>
         [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
-        public Instance(string name) : this(name, name)
+        public Instance(string name) : this(name, name, TermGrbit.None)
         {
         }
 
@@ -63,10 +68,31 @@ namespace Microsoft.Isam.Esent.Interop
         /// entries.
         /// </param>
         [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
-        public Instance(string name, string displayName) : base(true)
+        public Instance(string name, string displayName) : this(name, displayName, TermGrbit.None)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Instance class. The underlying
+        /// JET_INSTANCE is allocated, but not initialized.
+        /// </summary>
+        /// <param name="name">
+        /// The name of the instance. This string must be unique within a
+        /// given process hosting the database engine.
+        /// </param>
+        /// <param name="displayName">
+        /// A display name for the instance. This will be used in eventlog
+        /// entries.
+        /// </param>
+        /// <param name="termGrbit">
+        /// The TermGrbit to be used at JetTerm time.
+        /// </param>
+        [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
+        public Instance(string name, string displayName, TermGrbit termGrbit) : base(true)
         {
             this.name = name;
             this.displayName = displayName;
+            this.termGrbit = termGrbit;
 
             JET_INSTANCE instance;
             RuntimeHelpers.PrepareConstrainedRegions();
@@ -122,6 +148,26 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Gets or sets the TermGrbit for this instance. 
+        /// </summary>
+        public TermGrbit TermGrbit
+        {
+            [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
+            get
+            {
+                this.CheckObjectIsNotDisposed();
+                return this.termGrbit;
+            }
+
+            [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
+            set
+            {
+                this.CheckObjectIsNotDisposed();
+                this.termGrbit = value;
+            }
+        }
+
+        /// <summary>
         /// Provide implicit conversion of an Instance object to a JET_INSTANCE
         /// structure. This is done so that an Instance can be used anywhere a
         /// JET_INSTANCE is required.
@@ -142,7 +188,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "{0} ({1})", this.displayName, this.name);
+            return string.Format(CultureInfo.InvariantCulture, "{0} ({1})", this.displayName, this.name);
         }
 
         /// <summary>
@@ -242,7 +288,7 @@ namespace Microsoft.Isam.Esent.Interop
                 // because the instance isn't necessarily terminated. On the other hand if a 
                 // different exception (out of memory or thread abort) is generated we still need
                 // to invalidate the handle.
-                Api.JetTerm(this.JetInstance);
+                Api.JetTerm2(this.JetInstance, this.termGrbit);
                 this.SetHandleAsInvalid();                
             }
         }
@@ -255,7 +301,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             // The object is already marked as invalid so don't check
             var instance = this.CreateInstanceFromHandle();
-            return (int)JET_err.Success == Api.Impl.JetTerm(instance);
+            return (int)JET_err.Success == Api.Impl.JetTerm2(instance, this.termGrbit);
         }
 
         /// <summary>

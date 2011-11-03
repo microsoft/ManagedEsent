@@ -44,4 +44,3 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.7.0.0")]
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("EsentCollectionsTests")]
-

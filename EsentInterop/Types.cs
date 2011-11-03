@@ -60,7 +60,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "JET_INSTANCE(0x{0:x})", this.Value.ToInt64());
+            return string.Format(CultureInfo.InvariantCulture, "JET_INSTANCE(0x{0:x})", this.Value.ToInt64());
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return String.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
+            return string.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "JET_SESID(0x{0:x})", this.Value.ToInt64());
+            return string.Format(CultureInfo.InvariantCulture, "JET_SESID(0x{0:x})", this.Value.ToInt64());
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return String.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
+            return string.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
         }
 
         /// <summary>
@@ -277,7 +277,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "JET_TABLEID(0x{0:x})", this.Value.ToInt64());
+            return string.Format(CultureInfo.InvariantCulture, "JET_TABLEID(0x{0:x})", this.Value.ToInt64());
         }
 
         /// <summary>
@@ -296,7 +296,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return String.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
+            return string.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
         }
 
         /// <summary>
@@ -388,7 +388,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "JET_DBID({0})", this.Value);
+            return string.Format(CultureInfo.InvariantCulture, "JET_DBID({0})", this.Value);
         }
 
         /// <summary>
@@ -407,7 +407,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return String.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToString(format, formatProvider);
+            return string.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToString(format, formatProvider);
         }
 
         /// <summary>
@@ -542,7 +542,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "JET_COLUMNID(0x{0:x})", this.Value);
+            return string.Format(CultureInfo.InvariantCulture, "JET_COLUMNID(0x{0:x})", this.Value);
         }
 
         /// <summary>
@@ -561,7 +561,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return String.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToString(format, formatProvider);
+            return string.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToString(format, formatProvider);
         }
 
         /// <summary>
@@ -664,7 +664,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "JET_OSSNAPID(0x{0:x})", this.Value.ToInt64());
+            return string.Format(CultureInfo.InvariantCulture, "JET_OSSNAPID(0x{0:x})", this.Value.ToInt64());
         }
 
         /// <summary>
@@ -683,7 +683,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return String.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
+            return string.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
         }
 
         /// <summary>
@@ -772,7 +772,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "JET_HANDLE(0x{0:x})", this.Value.ToInt64());
+            return string.Format(CultureInfo.InvariantCulture, "JET_HANDLE(0x{0:x})", this.Value.ToInt64());
         }
 
         /// <summary>
@@ -791,7 +791,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return String.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
+            return string.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
         }
 
         /// <summary>
@@ -877,7 +877,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "JET_LS(0x{0:x})", this.Value.ToInt64());
+            return string.Format(CultureInfo.InvariantCulture, "JET_LS(0x{0:x})", this.Value.ToInt64());
         }
 
         /// <summary>
@@ -896,7 +896,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </param>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            return String.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
+            return string.IsNullOrEmpty(format) || "G" == format ? this.ToString() : this.Value.ToInt64().ToString(format, formatProvider);
         }
 
         /// <summary>
@@ -1030,7 +1030,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
-            return String.Format(
+            return string.Format(
                 CultureInfo.InvariantCulture,
                 "JET_INDEXID(0x{0:x}:0x{1:x}:0x{2:x})",
                 this.IndexId1,

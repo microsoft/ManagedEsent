@@ -7,6 +7,7 @@
 namespace InteropApiTests
 {
     using System;
+    using System.Text;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -35,7 +36,7 @@ namespace InteropApiTests
         [Description("Test DumpBytes with a zero-length array")]
         public void TestDumpBytesZeroLength()
         {
-            Assert.AreEqual(String.Empty, Util.DumpBytes(new byte[0], 0, 0));
+            Assert.AreEqual(string.Empty, Util.DumpBytes(new byte[0], 0, 0));
         }
 
         /// <summary>
@@ -344,7 +345,7 @@ namespace InteropApiTests
         [Description("Test AddTrailingDirectorySeparator with an empty string")]
         public void TestAddTrailingDirectorySeparatorEmptyString()
         {
-            Assert.AreEqual(String.Empty, Util.AddTrailingDirectorySeparator(String.Empty));
+            Assert.AreEqual(string.Empty, Util.AddTrailingDirectorySeparator(string.Empty));
         }
 
         /// <summary>
@@ -369,6 +370,112 @@ namespace InteropApiTests
         {
             string expected = @"foo\bar\";
             Assert.AreEqual(expected, Util.AddTrailingDirectorySeparator(@"foo\bar"));
+        }
+
+        /// <summary>
+        /// Test ConvertToNullTerminatedAsciiByteArray with a unicode string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test ConvertToNullTerminatedAsciiByteArray with a unicode string")]
+        public void TestConvertStringToNullTerminatedAsciiByteArray()
+        {
+            string test = "SampleStringThatILike";
+            
+            byte[] byteArray = Util.ConvertToNullTerminatedAsciiByteArray(test);
+            Assert.AreEqual(test.Length + 1, byteArray.Length);
+            Assert.IsTrue(Util.ArrayStructEquals(byteArray, Encoding.ASCII.GetBytes(test + char.MinValue), byteArray.Length));
+        }
+
+        /// <summary>
+        /// Test ConvertToNullTerminatedAsciiByteArray with an empty string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test ConvertToNullTerminatedAsciiByteArray with an empty string")]
+        public void TestConvertEmptyStringToNullTerminatedAsciiByteArray()
+        {
+            string test = string.Empty;
+            
+            byte[] byteArray = Util.ConvertToNullTerminatedAsciiByteArray(test);
+            Assert.AreEqual(test.Length + 1, byteArray.Length);
+            Assert.IsTrue(Util.ArrayStructEquals(byteArray, Encoding.ASCII.GetBytes(test + char.MinValue), byteArray.Length));
+        }
+
+        /// <summary>
+        /// Test ConvertToNullTerminatedAsciiByteArray with a null string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test ConvertToNullTerminatedAsciiByteArray with a null string")]
+        public void TestConvertNullStringToNullTerminatedAsciiByteArray()
+        {
+            byte[] byteArray = Util.ConvertToNullTerminatedAsciiByteArray(null);
+            Assert.AreEqual(null, byteArray);
+        }
+
+        /// <summary>
+        /// Test ConvertToNullTerminatedAsciiByteArray with a japanese unicode string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test ConvertToNullTerminatedAsciiByteArray with a japanese unicode string")]
+        public void TestConvertJapaneseUnicodeStringToNullTerminatedAsciiByteArray()
+        {
+            // This japanese string should get converted to "??" in ASCII.
+            string japanese = new string(new char[] { '\u70B9', '\u83DC' });
+
+            byte[] byteArray = Util.ConvertToNullTerminatedAsciiByteArray(japanese);
+
+            Assert.AreEqual(3, byteArray.Length);
+            Assert.AreEqual((byte)'?', byteArray[0]);
+            Assert.AreEqual((byte)'?', byteArray[1]);
+            
+            Assert.AreEqual(japanese.Length + 1, byteArray.Length);
+            Assert.IsTrue(Util.ArrayStructEquals(byteArray, Encoding.ASCII.GetBytes(japanese + char.MinValue), byteArray.Length));
+        }
+
+        /// <summary>
+        /// Test ConvertToNullTerminatedAsciiByteArray with a key string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test ConvertToNullTerminatedAsciiByteArray with a key string")]
+        public void TestConvertKeyStringToNullTerminatedAsciiByteArray()
+        {
+            string key = "+col1\0-col2\0";
+        
+            byte[] byteArray = Util.ConvertToNullTerminatedAsciiByteArray(key);
+        
+            Assert.AreEqual(key.Length + 1, byteArray.Length);
+
+            // We expect the byte array to be double-null terminated.
+            Assert.AreEqual((byte)0, byteArray[byteArray.Length - 2]);
+            Assert.AreEqual((byte)0, byteArray[byteArray.Length - 1]);
+            Assert.IsTrue(Util.ArrayStructEquals(byteArray, Encoding.ASCII.GetBytes(key + char.MinValue), byteArray.Length));
+        }
+
+        /// <summary>
+        /// Test ConvertToNullTerminatedUnicodeByteArray with a key string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test ConvertToNullTerminatedUnicodeByteArray with a key string")]
+        public void TestConvertToNullTerminatedUnicodeByteArray()
+        {
+            string key = "+col1\0-col2\0";
+
+            byte[] byteArray = Util.ConvertToNullTerminatedUnicodeByteArray(key);
+
+            Assert.AreEqual(sizeof(char) * (key.Length + 1), byteArray.Length);
+
+            // We expect the byte array to be double-null terminated.
+            Assert.AreEqual((byte)0, byteArray[byteArray.Length - 4]);
+            Assert.AreEqual((byte)0, byteArray[byteArray.Length - 3]);
+            Assert.AreEqual((byte)0, byteArray[byteArray.Length - 2]);
+            Assert.AreEqual((byte)0, byteArray[byteArray.Length - 1]);
+
+            Assert.IsTrue(Util.ArrayStructEquals(byteArray, Encoding.Unicode.GetBytes(key + char.MinValue), byteArray.Length));
         }
     }
 }

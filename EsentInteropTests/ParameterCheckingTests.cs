@@ -18,7 +18,7 @@ namespace InteropApiTests
     /// Test for API parameter validation code
     /// </summary>
     [TestClass]
-    public class ParameterCheckingTests
+    public partial class ParameterCheckingTests
     {
         /// <summary>
         /// The instance used by the test.
@@ -93,7 +93,7 @@ namespace InteropApiTests
 
             int ignored = 0;
             string value;
-            Api.JetGetSystemParameter(this.instance, this.sesid, JET_param.SystemPath, ref ignored, out value, Int32.MaxValue);
+            Api.JetGetSystemParameter(this.instance, this.sesid, JET_param.SystemPath, ref ignored, out value, int.MaxValue);
         }
 
         #endregion
@@ -373,7 +373,7 @@ namespace InteropApiTests
 
             string ignored;
             int ignored2;
-            Api.JetGetAttachInfoInstance(this.instance, out ignored, Int32.MaxValue, out ignored2);
+            Api.JetGetAttachInfoInstance(this.instance, out ignored, int.MaxValue, out ignored2);
         }
 
         /// <summary>
@@ -409,7 +409,7 @@ namespace InteropApiTests
 
             string ignored;
             int ignored2;
-            Api.JetGetLogInfoInstance(this.instance, out ignored, Int32.MaxValue, out ignored2);
+            Api.JetGetLogInfoInstance(this.instance, out ignored, int.MaxValue, out ignored2);
         }
 
         /// <summary>
@@ -445,7 +445,7 @@ namespace InteropApiTests
 
             string ignored;
             int ignored2;
-            Api.JetGetTruncateLogInfoInstance(this.instance, out ignored, Int32.MaxValue, out ignored2);
+            Api.JetGetTruncateLogInfoInstance(this.instance, out ignored, int.MaxValue, out ignored2);
         }
 
         #endregion
@@ -609,7 +609,7 @@ namespace InteropApiTests
         {
             JET_INDEXLIST indexlist;
 #pragma warning disable 612,618 // Obsolete
-            Api.JetGetIndexInfo(this.sesid, this.dbid, null, String.Empty, out indexlist);
+            Api.JetGetIndexInfo(this.sesid, this.dbid, null, string.Empty, out indexlist);
 #pragma warning restore 612,618
         }
 
@@ -624,7 +624,7 @@ namespace InteropApiTests
         public void JetGetIndexInfoUshortThrowsExceptionWhenTableNameIsNull()
         {
             ushort result;
-            Api.JetGetIndexInfo(this.sesid, this.dbid, null, String.Empty, out result, JET_IdxInfo.Default);
+            Api.JetGetIndexInfo(this.sesid, this.dbid, null, string.Empty, out result, JET_IdxInfo.Default);
         }
 
         /// <summary>
@@ -638,7 +638,7 @@ namespace InteropApiTests
         public void JetGetIndexInfoIntThrowsExceptionWhenTableNameIsNull()
         {
             int result;
-            Api.JetGetIndexInfo(this.sesid, this.dbid, null, String.Empty, out result, JET_IdxInfo.Default);
+            Api.JetGetIndexInfo(this.sesid, this.dbid, null, string.Empty, out result, JET_IdxInfo.Default);
         }
 
         /// <summary>
@@ -652,7 +652,7 @@ namespace InteropApiTests
         public void JetGetIndexInfoIndexidThrowsExceptionWhenTableNameIsNull()
         {
             JET_INDEXID result;
-            Api.JetGetIndexInfo(this.sesid, this.dbid, null, String.Empty, out result, JET_IdxInfo.Default);
+            Api.JetGetIndexInfo(this.sesid, this.dbid, null, string.Empty, out result, JET_IdxInfo.Default);
         }
 
         /// <summary>
@@ -666,7 +666,7 @@ namespace InteropApiTests
         public void JetGetIndexInfoIndexListThrowsExceptionWhenTableNameIsNull()
         {
             JET_INDEXLIST result;
-            Api.JetGetIndexInfo(this.sesid, this.dbid, null, String.Empty, out result, JET_IdxInfo.Default);
+            Api.JetGetIndexInfo(this.sesid, this.dbid, null, string.Empty, out result, JET_IdxInfo.Default);
         }
 
         /// <summary>

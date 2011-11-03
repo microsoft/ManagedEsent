@@ -13,7 +13,7 @@ namespace InteropApiTests
     /// Test setting a JET_RECSIZE from a NATIVE_RECSIZE.
     /// </summary>
     [TestClass]
-    public class RecsizeConversationTests
+    public class RecsizeConversionTests
     {
         /// <summary>
         /// Native version of the recsize.

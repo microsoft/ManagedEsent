@@ -400,7 +400,7 @@ namespace InteropApiTests
                 this.instance = instance;
                 this.database = database;
                 this.session = new Session(this.instance);
-                Api.JetOpenDatabase(this.session, this.database, String.Empty, out this.dbid, OpenDatabaseGrbit.None);
+                Api.JetOpenDatabase(this.session, this.database, string.Empty, out this.dbid, OpenDatabaseGrbit.None);
                 this.table = new Table(this.session, this.dbid, SimplePerfTest.TableName, OpenTableGrbit.None);
                 this.columnidKey = Api.GetTableColumnid(this.session, this.table, SimplePerfTest.KeyColumnName);
                 this.columnidData = Api.GetTableColumnid(this.session, this.table, SimplePerfTest.DataColumnName);

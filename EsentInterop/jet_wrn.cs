@@ -129,6 +129,11 @@ namespace Microsoft.Isam.Esent.Interop
         ColumnSetNull = 1068,
 
         /// <summary>
+        /// Database file could not be shrunk because there is not enough internal free space available or there is unmovable data present.
+        /// </summary>
+        ShrinkNotPossible = 1122,
+
+        /// <summary>
         /// Warning code DTC callback should return if the specified transaction is to be committed
         /// </summary>
         DTCCommitTransaction = 1163,

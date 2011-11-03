@@ -85,7 +85,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "JET_ENUMCOLUMNID(0x{0:x})", this.columnid);
+            return string.Format(CultureInfo.InvariantCulture, "JET_ENUMCOLUMNID(0x{0:x})", this.columnid);
         }
 
         /// <summary>

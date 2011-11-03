@@ -13,10 +13,10 @@ namespace InteropApiTests
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
-    /// Test files with ASCII paths (forcing the version to the XP version)
+    /// Test files with ASCII paths
     /// </summary>
     [TestClass]
-    public class AsciiPathTests
+    public partial class AsciiPathTests
     {
         /// <summary>
         /// The directory used for the database and logfiles.
@@ -29,9 +29,9 @@ namespace InteropApiTests
         private string database;
 
         /// <summary>
-        /// The saved API, restored after the test.
+        /// Holds whether unicode is supported on the current engine so it can be overridden and restored later.
         /// </summary>
-        private IJetApi savedImpl;
+        private bool engineSupportsUnicode;
 
         #region Setup/Teardown
 
@@ -42,24 +42,23 @@ namespace InteropApiTests
         [Description("Initialization for AsciiPathTests")]
         public void Setup()
         {
+            this.engineSupportsUnicode = Api.Impl.Capabilities.SupportsUnicodePaths;
+            Api.Impl.Capabilities.SupportsUnicodePaths = false;
             this.directory = "ascii_directory";
             Cleanup.DeleteDirectoryWithRetry(this.directory);
             this.database = Path.Combine(this.directory, "ascii.edb");
-            this.savedImpl = Api.Impl;
-            Api.Impl = new JetApi(Constants.XpVersion);
         }
 
         /// <summary>
-        /// Restore the default implementation and delete the test
-        /// directory, if it was created.
+        /// Delete the test directory, if it was created.
         /// </summary>
         [TestCleanup]
         [Description("Cleanup for AsciiPathTests")]
         public void Teardown()
         {
-            Api.Impl = this.savedImpl;
             Cleanup.DeleteDirectoryWithRetry(this.directory);
             SetupHelper.CheckProcessForInstanceLeaks();
+            Api.Impl.Capabilities.SupportsUnicodePaths = this.engineSupportsUnicode;
         }
 
         #endregion
@@ -125,7 +124,7 @@ namespace InteropApiTests
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, this.database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, this.database, string.Empty, out dbid, CreateDatabaseGrbit.None);
                     Assert.IsTrue(File.Exists(this.database));
                 }
             }
@@ -169,7 +168,7 @@ namespace InteropApiTests
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, this.database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, this.database, string.Empty, out dbid, CreateDatabaseGrbit.None);
                     Api.JetCloseDatabase(session, dbid, CloseDatabaseGrbit.None);
                     Api.JetDetachDatabase(session, this.database);
                 }
@@ -192,7 +191,7 @@ namespace InteropApiTests
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, this.database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, this.database, string.Empty, out dbid, CreateDatabaseGrbit.None);
                     Api.JetCloseDatabase(session, dbid, CloseDatabaseGrbit.None);
                     Api.JetDetachDatabase(session, this.database);
 
@@ -217,7 +216,7 @@ namespace InteropApiTests
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, this.database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, this.database, string.Empty, out dbid, CreateDatabaseGrbit.None);
                     Api.JetCloseDatabase(session, dbid, CloseDatabaseGrbit.None);
                     Api.JetDetachDatabase(session, this.database);
 
@@ -242,12 +241,12 @@ namespace InteropApiTests
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, this.database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, this.database, string.Empty, out dbid, CreateDatabaseGrbit.None);
                     Api.JetCloseDatabase(session, dbid, CloseDatabaseGrbit.None);
                     Api.JetDetachDatabase(session, this.database);
 
                     Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
-                    Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+                    Api.JetOpenDatabase(session, this.database, string.Empty, out dbid, OpenDatabaseGrbit.None);
                 }
             }
         }
@@ -385,8 +384,8 @@ namespace InteropApiTests
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, database1, String.Empty, out dbid, CreateDatabaseGrbit.None);
-                    Api.JetCreateDatabase(session, database2, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, database1, string.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, database2, string.Empty, out dbid, CreateDatabaseGrbit.None);
                     int numInstances;
                     JET_INSTANCE_INFO[] instances;
                     Api.JetGetInstanceInfo(out numInstances, out instances);

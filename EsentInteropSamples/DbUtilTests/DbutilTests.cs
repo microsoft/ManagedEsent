@@ -13,7 +13,7 @@ namespace InteropApiTests
     /// <summary>
     /// Test Dbutil methods.
     /// </summary>
-    [TestClass()]
+    [TestClass]
     public class DbutilTests
     {
         /// <summary>
@@ -47,7 +47,7 @@ namespace InteropApiTests
         public void FormatBytesWithZeroLengthData()
         {
             var data = new byte[0];
-            string expected = String.Empty;
+            string expected = string.Empty;
             string actual = Dbutil.FormatBytes(data);
             Assert.AreEqual(expected, actual);
         }
@@ -69,7 +69,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void QuoteForCsvEmptyText()
         {
-            Assert.AreEqual(String.Empty, Dbutil.QuoteForCsv(String.Empty));
+            Assert.AreEqual(string.Empty, Dbutil.QuoteForCsv(string.Empty));
         }
 
         /// <summary>

@@ -247,6 +247,11 @@ namespace Microsoft.Isam.Esent.Interop
         EventLoggingLevel = 51,
 
         /// <summary>
+        /// Delete the log files that are not matching (generation wise) during soft recovery.
+        /// </summary>
+        DeleteOutOfRangeLogs = 52,
+
+        /// <summary>
         /// This parameter configures the minimum size of the database page cache. The size is in database pages.
         /// </summary>
         CacheSizeMin = 60,

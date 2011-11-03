@@ -15,7 +15,7 @@ namespace InteropApiTests
     /// Test creating, opening and closing databases. 
     /// </summary>
     [TestClass]
-    public class DatabaseTests
+    public partial class DatabaseTests
     {
         #region Setup/Teardown
 
@@ -48,8 +48,8 @@ namespace InteropApiTests
 
                 JET_SESID sesid;
                 JET_DBID dbid;
-                Api.JetBeginSession(instance, out sesid, String.Empty, String.Empty);
-                Api.JetCreateDatabase(sesid, database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                Api.JetBeginSession(instance, out sesid, string.Empty, string.Empty);
+                Api.JetCreateDatabase(sesid, database, string.Empty, out dbid, CreateDatabaseGrbit.None);
 
                 // BUG: ESENT requires that JetGrowDatabase be in a transaction (Win7 and below)
                 Api.JetBeginTransaction(sesid);
@@ -57,6 +57,84 @@ namespace InteropApiTests
                 Api.JetGrowDatabase(sesid, dbid, 512, out actualPages);
                 Api.JetCommitTransaction(sesid, CommitTransactionGrbit.None);
                 Assert.IsTrue(actualPages >= 512, "Database didn't grow");
+            }
+            finally
+            {
+                Api.JetTerm(instance);
+                Cleanup.DeleteDirectoryWithRetry(dir);
+            }
+        }
+
+        /// <summary>
+        /// JetGrowDatabase throws exception when desired pages is negative.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("JetGrowDatabase throws exception when desired pages is negative")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetGrowDatabaseThrowsExceptionWhenDesiredPagesIsNegative()
+        {
+            bool transactionStarted = false;
+            string dir = SetupHelper.CreateRandomDirectory();
+            JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
+            Api.JetInit(ref instance);
+            string database = Path.Combine(dir, "test.db");
+            
+            JET_SESID sesid;
+            JET_DBID dbid;
+            Api.JetBeginSession(instance, out sesid, string.Empty, string.Empty);
+
+            try
+            {
+                Api.JetCreateDatabase(sesid, database, string.Empty, out dbid, CreateDatabaseGrbit.None);
+
+                // BUG: ESENT requires that JetGrowDatabase be in a transaction (Win7 and below)
+                Api.JetBeginTransaction(sesid);
+                transactionStarted = true;
+
+                int actualPages;
+                Api.JetGrowDatabase(sesid, dbid, -10, out actualPages);
+                Api.JetCommitTransaction(sesid, CommitTransactionGrbit.None);
+            }
+            finally
+            {
+                if (transactionStarted)
+                {
+                    Api.JetRollback(sesid, RollbackTransactionGrbit.None);
+                }
+
+                Api.JetTerm(instance);
+                Cleanup.DeleteDirectoryWithRetry(dir);
+            }
+        }
+
+        /// <summary>
+        /// JetSetDatabaseSize throws exception when desired pages is negative.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("JetSetDatabaseSize throws exception when desired pages is negative")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetSetDatabaseSizeThrowsExceptionWhenDesiredPagesIsNegative()
+        {
+            string dir = SetupHelper.CreateRandomDirectory();
+            JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
+            Api.JetInit(ref instance);
+            string database = Path.Combine(dir, "test.db");
+            
+            JET_SESID sesid;
+            JET_DBID dbid;
+            Api.JetBeginSession(instance, out sesid, string.Empty, string.Empty);
+
+            try
+            {
+                 Api.JetCreateDatabase(sesid, database, string.Empty, out dbid, CreateDatabaseGrbit.None);
+
+                 int actualPages;
+             
+                 Api.JetSetDatabaseSize(sesid, database, -1, out actualPages);
             }
             finally
             {
@@ -96,13 +174,13 @@ namespace InteropApiTests
 
                 JET_SESID sesid;
                 JET_DBID dbid;
-                Api.JetBeginSession(instance, out sesid, String.Empty, String.Empty);
-                Api.JetCreateDatabase(sesid, database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                Api.JetBeginSession(instance, out sesid, string.Empty, string.Empty);
+                Api.JetCreateDatabase(sesid, database, string.Empty, out dbid, CreateDatabaseGrbit.None);
                 Api.JetCloseDatabase(sesid, dbid, CloseDatabaseGrbit.None);
                 Api.JetDetachDatabase(sesid, database);
 
                 Api.JetAttachDatabase(sesid, database, AttachDatabaseGrbit.None);
-                Api.JetOpenDatabase(sesid, database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+                Api.JetOpenDatabase(sesid, database, string.Empty, out dbid, OpenDatabaseGrbit.None);
                 Api.JetCloseDatabase(sesid, dbid, CloseDatabaseGrbit.None);
                 Api.JetDetachDatabase(sesid, database);
             }
@@ -132,13 +210,13 @@ namespace InteropApiTests
 
                 JET_SESID sesid;
                 JET_DBID dbid;
-                Api.JetBeginSession(instance, out sesid, String.Empty, String.Empty);
-                Api.JetCreateDatabase(sesid, database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                Api.JetBeginSession(instance, out sesid, string.Empty, string.Empty);
+                Api.JetCreateDatabase(sesid, database, string.Empty, out dbid, CreateDatabaseGrbit.None);
                 Api.JetCloseDatabase(sesid, dbid, CloseDatabaseGrbit.None);
                 Api.JetDetachDatabase(sesid, database);
 
                 Api.JetAttachDatabase(sesid, database, AttachDatabaseGrbit.ReadOnly);
-                Api.JetOpenDatabase(sesid, database, String.Empty, out dbid, OpenDatabaseGrbit.ReadOnly);
+                Api.JetOpenDatabase(sesid, database, string.Empty, out dbid, OpenDatabaseGrbit.ReadOnly);
                 Api.JetCloseDatabase(sesid, dbid, CloseDatabaseGrbit.None);
                 Api.JetDetachDatabase(sesid, database);
             }
@@ -168,8 +246,8 @@ namespace InteropApiTests
 
                 JET_SESID sesid;
                 JET_DBID dbid;
-                Api.JetBeginSession(instance, out sesid, String.Empty, String.Empty);
-                Api.JetCreateDatabase(sesid, database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                Api.JetBeginSession(instance, out sesid, string.Empty, string.Empty);
+                Api.JetCreateDatabase(sesid, database, string.Empty, out dbid, CreateDatabaseGrbit.None);
                 Api.JetCloseDatabase(sesid, dbid, CloseDatabaseGrbit.None);
                 Api.JetDetachDatabase(sesid, database);
 

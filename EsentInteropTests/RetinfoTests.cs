@@ -54,7 +54,7 @@ namespace InteropApiTests
         [Description("Test conversion of JET_RETINFO to NATIVE_RETINFO when itagSequence is negative")]
         public void ConvertRetinfoToNativeWhenItagSequenceIsNegative()
         {
-            var retinfo = new JET_RETINFO { ibLongValue = 0, itagSequence = Int32.MinValue };
+            var retinfo = new JET_RETINFO { ibLongValue = 0, itagSequence = int.MinValue };
 
             NATIVE_RETINFO native = retinfo.GetNativeRetinfo();
         }

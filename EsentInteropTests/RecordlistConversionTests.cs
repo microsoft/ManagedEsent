@@ -14,8 +14,8 @@ namespace InteropApiTests
     /// Tests for the JET_RECORDLIST creation from NATIVE_RECORDLIST.
     /// </summary>
     [TestClass]
-    public class RecordlistConversionsTests
-    {       
+    public class RecordlistConversionTests
+    {
         /// <summary>
         /// The native recordlist that will be converted into a managed object.
         /// </summary>
@@ -31,7 +31,7 @@ namespace InteropApiTests
         /// it to a managed object.
         /// </summary>
         [TestInitialize]
-        [Description("Setup the RecordlistConversionsTests test fixture")]
+        [Description("Setup the RecordlistConversionTests test fixture")]
         public void Setup()
         {
             this.native = new NATIVE_RECORDLIST

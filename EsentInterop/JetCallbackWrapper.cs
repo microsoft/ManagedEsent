@@ -165,7 +165,7 @@ namespace Microsoft.Isam.Esent.Interop
                 // internal ESENT threads so it isn't clear what should be done on an abort.
                 Trace.WriteLineIf(
                     traceSwitch.TraceWarning,
-                    String.Format(CultureInfo.InvariantCulture, "Caught Exception {0}", ex));
+                    string.Format(CultureInfo.InvariantCulture, "Caught Exception {0}", ex));
                 return JET_err.CallbackFailed;
             }
         }

@@ -17,7 +17,7 @@ namespace InteropApiTests
     /// <summary>
     /// Implementation of a backup/restore/compact/setsize test.
     /// </summary>
-    internal class DatabaseFileTestHelper
+    internal partial class DatabaseFileTestHelper
     {
         /// <summary>
         /// The directory containing the database.
@@ -468,7 +468,7 @@ namespace InteropApiTests
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, this.database, String.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, this.database, string.Empty, out dbid, CreateDatabaseGrbit.None);
                     using (var transaction = new Transaction(session))
                     {
                         JET_TABLEID tableid;
@@ -499,7 +499,7 @@ namespace InteropApiTests
                 {
                     Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
                     JET_DBID dbid;
-                    Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+                    Api.JetOpenDatabase(session, this.database, string.Empty, out dbid, OpenDatabaseGrbit.None);
                     if (this.useStatusCallback)
                     {
                         this.statusCallbackWasCalled = false;
@@ -530,7 +530,7 @@ namespace InteropApiTests
                 {
                     Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
                     JET_DBID dbid;
-                    Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+                    Api.JetOpenDatabase(session, this.database, string.Empty, out dbid, OpenDatabaseGrbit.None);
                     Api.JetBackupInstance(
                         instance,
                         this.backupDirectory,
@@ -555,7 +555,7 @@ namespace InteropApiTests
                 {
                     Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
                     JET_DBID dbid;
-                    Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+                    Api.JetOpenDatabase(session, this.database, string.Empty, out dbid, OpenDatabaseGrbit.None);
 
                     JET_OSSNAPID snapshot;
                     SnapshotPrepareGrbit grbit = EsentVersion.SupportsVistaFeatures
@@ -591,7 +591,7 @@ namespace InteropApiTests
                 {
                     Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
                     JET_DBID dbid;
-                    Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+                    Api.JetOpenDatabase(session, this.database, string.Empty, out dbid, OpenDatabaseGrbit.None);
 
                     JET_OSSNAPID snapshot;
                     Api.JetOSSnapshotPrepare(out snapshot, SnapshotPrepareGrbit.CopySnapshot);
@@ -616,7 +616,7 @@ namespace InteropApiTests
                 {
                     Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
                     JET_DBID dbid;
-                    Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+                    Api.JetOpenDatabase(session, this.database, string.Empty, out dbid, OpenDatabaseGrbit.None);
                 }
             }
 
@@ -662,7 +662,7 @@ namespace InteropApiTests
                 {
                     Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
                     JET_DBID dbid;
-                    Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+                    Api.JetOpenDatabase(session, this.database, string.Empty, out dbid, OpenDatabaseGrbit.None);
 
                     // Prepare
                     JET_OSSNAPID snapshot;
@@ -707,7 +707,7 @@ namespace InteropApiTests
                 {
                     Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
                     JET_DBID dbid;
-                    Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+                    Api.JetOpenDatabase(session, this.database, string.Empty, out dbid, OpenDatabaseGrbit.None);
 
                     // Prepare
                     JET_OSSNAPID snapshot;
@@ -755,7 +755,7 @@ namespace InteropApiTests
                 {
                     Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
                     JET_DBID dbid;
-                    Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+                    Api.JetOpenDatabase(session, this.database, string.Empty, out dbid, OpenDatabaseGrbit.None);
 
                     // Roll some logs so that we get back strings with embedded nulls.
                     GenerateSomeLogs(session, dbid);
@@ -817,7 +817,7 @@ namespace InteropApiTests
                 {
                     Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
                     JET_DBID dbid;
-                    Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+                    Api.JetOpenDatabase(session, this.database, string.Empty, out dbid, OpenDatabaseGrbit.None);
 
                     Api.JetBeginExternalBackupInstance(instance, BeginExternalBackupGrbit.None);
                     JET_HANDLE handle;
@@ -868,7 +868,7 @@ namespace InteropApiTests
                     // Attach the database.
                     Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
                     JET_DBID dbid;
-                    Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.None);
+                    Api.JetOpenDatabase(session, this.database, string.Empty, out dbid, OpenDatabaseGrbit.None);
 
                     int databaseSizePages;
                     Api.JetGetDatabaseInfo(session, dbid, out databaseSizePages, JET_DbInfo.Filesize);
@@ -1059,7 +1059,7 @@ namespace InteropApiTests
                 {
                     Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.ReadOnly);
                     JET_DBID dbid;
-                    Api.JetOpenDatabase(session, this.database, String.Empty, out dbid, OpenDatabaseGrbit.ReadOnly);
+                    Api.JetOpenDatabase(session, this.database, string.Empty, out dbid, OpenDatabaseGrbit.ReadOnly);
 
                     JET_TABLEID tableid;
                     Api.JetOpenTable(session, dbid, "table", null, 0, OpenTableGrbit.ReadOnly, out tableid);

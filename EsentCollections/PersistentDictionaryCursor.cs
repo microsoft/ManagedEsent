@@ -104,7 +104,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             this.converters = converters;
             this.config = config;
             this.database = database;
-            Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
+            Api.JetBeginSession(this.instance, out this.sesid, string.Empty, string.Empty);
             this.AttachDatabase();
         }
 
@@ -164,7 +164,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             if (!this.TrySeek(key))
             {
-                throw new KeyNotFoundException(String.Format(CultureInfo.InvariantCulture, "{0} was not found", key));
+                throw new KeyNotFoundException(string.Format(CultureInfo.InvariantCulture, "{0} was not found", key));
             }
         }
 
@@ -466,7 +466,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         private void AttachDatabase()
         {
             Api.JetAttachDatabase(this.sesid, this.database, AttachDatabaseGrbit.None);
-            Api.JetOpenDatabase(this.sesid, this.database, String.Empty, out this.dbid, OpenDatabaseGrbit.None);
+            Api.JetOpenDatabase(this.sesid, this.database, string.Empty, out this.dbid, OpenDatabaseGrbit.None);
             Api.JetOpenTable(
                 this.sesid, this.dbid, this.config.GlobalsTableName, null, 0, OpenTableGrbit.None, out this.globalsTable);
             this.countColumn = Api.GetTableColumnid(this.sesid, this.globalsTable, this.config.CountColumnName);

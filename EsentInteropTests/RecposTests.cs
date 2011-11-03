@@ -60,7 +60,7 @@ namespace InteropApiTests
         {
             var recpos = new JET_RECPOS();
             recpos.centriesLT = 1;
-            recpos.centriesTotal = Int64.MinValue;
+            recpos.centriesTotal = long.MinValue;
 
             NATIVE_RECPOS native = recpos.GetNativeRecpos();
         }

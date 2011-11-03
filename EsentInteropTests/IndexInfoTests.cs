@@ -69,8 +69,8 @@ namespace InteropApiTests
 
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetInit(ref this.instance);
-            Api.JetBeginSession(this.instance, out this.sesid, String.Empty, String.Empty);
-            Api.JetCreateDatabase(this.sesid, this.database, String.Empty, out this.dbid, CreateDatabaseGrbit.None);
+            Api.JetBeginSession(this.instance, out this.sesid, string.Empty, string.Empty);
+            Api.JetCreateDatabase(this.sesid, this.database, string.Empty, out this.dbid, CreateDatabaseGrbit.None);
             Api.JetBeginTransaction(this.sesid);
             Api.JetCreateTable(this.sesid, this.dbid, this.table, 0, 100, out this.tableid);
 
@@ -123,6 +123,19 @@ namespace InteropApiTests
             ushort result;
             Api.JetGetIndexInfo(this.sesid, this.dbid, this.table, "Index3", out result, JET_IdxInfo.VarSegMac);
             Assert.AreEqual((ushort)100, result);
+        }
+
+        /// <summary>
+        /// Test that JetGetIndexInfo throws exception when index name is invalid.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test that JetGetIndexInfo throws exception when index name is invalid")]
+        [ExpectedException(typeof(EsentIndexNotFoundException))]
+        public void TestJetGetIndexInfoThrowsExceptionWhenIndexNameIsInvalid()
+        {
+            ushort result;
+            Api.JetGetIndexInfo(this.sesid, this.dbid, this.table, "NoSuchIndex", out result, JET_IdxInfo.VarSegMac);
         }
 
         /// <summary>

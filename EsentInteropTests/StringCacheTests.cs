@@ -26,7 +26,7 @@ namespace InteropApiTests
         public void TryToInternRandomString()
         {
             string s = StringCache.TryToIntern(Any.String);
-            Assert.IsNull(String.IsInterned(s), "Should not have been interned");
+            Assert.IsNull(string.IsInterned(s), "Should not have been interned");
         }
 
         /// <summary>
@@ -37,8 +37,8 @@ namespace InteropApiTests
         [Priority(0)]
         public void TryToInternInternedString()
         {
-            string s = String.Intern(StringCache.TryToIntern(Any.String));
-            Assert.IsNotNull(String.IsInterned(s), "Should not have been interned");
+            string s = string.Intern(StringCache.TryToIntern(Any.String));
+            Assert.IsNotNull(string.IsInterned(s), "Should not have been interned");
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace InteropApiTests
         public void GetStringWithNull()
         {
             byte[] buffer = null;
-            Assert.AreEqual(String.Empty, StringCache.GetString(buffer, 0, 0));
+            Assert.AreEqual(string.Empty, StringCache.GetString(buffer, 0, 0));
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace InteropApiTests
                 "0",
                 "1",
                 " ",
-                String.Empty,
+                string.Empty,
             };
             string[] actual = new string[expected.Length];
 

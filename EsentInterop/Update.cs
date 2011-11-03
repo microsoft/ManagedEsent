@@ -59,7 +59,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "Update ({0})", this.prep);
+            return string.Format(CultureInfo.InvariantCulture, "Update ({0})", this.prep);
         }
 
         /// <summary>
@@ -114,11 +114,22 @@ namespace Microsoft.Isam.Esent.Interop
         /// </remarks>
         public void SaveAndGotoBookmark()
         {
-            var bookmark = Caches.BookmarkCache.Allocate();
-            int actualBookmarkSize;
-            this.Save(bookmark, bookmark.Length, out actualBookmarkSize);
-            Api.JetGotoBookmark(this.sesid, this.tableid, bookmark, actualBookmarkSize);
-            Caches.BookmarkCache.Free(ref bookmark);
+            byte[] bookmark = null;
+
+            try
+            {
+                bookmark = Caches.BookmarkCache.Allocate();
+                int actualBookmarkSize;
+                this.Save(bookmark, bookmark.Length, out actualBookmarkSize);
+                Api.JetGotoBookmark(this.sesid, this.tableid, bookmark, actualBookmarkSize);
+            }
+            finally
+            {
+                if (bookmark != null)
+                {
+                    Caches.BookmarkCache.Free(ref bookmark);
+                }
+            }
         }
 
         /// <summary>

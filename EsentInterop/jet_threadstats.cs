@@ -23,6 +23,9 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [Serializable]
+    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1305:FieldNamesMustNotUseHungarianNotation",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     public struct JET_THREADSTATS : IEquatable<JET_THREADSTATS>
     {
         /// <summary>
@@ -297,7 +300,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
             // String.Concat is faster than using a StringBuilder.
             // use Int32.ToString instead of passing the Int32 to 
             // String.Format (which requires boxing).
-            return String.Concat(
+            return string.Concat(
                 this.cPageReferenced.ToString("N0", CultureInfo.InvariantCulture),
                 " page reference",
                 GetPluralS(this.cPageReferenced),
@@ -383,7 +386,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// <returns>The letter 's' if n is greater than 1.</returns>
         private static string GetPluralS(int n)
         {
-            return n == 1 ? String.Empty : "s";
+            return n == 1 ? string.Empty : "s";
         }
     }
 }

@@ -43,7 +43,7 @@ namespace EsentCollectionsTests
             var keyrange = KeyRange<int>.OpenRange;
             string s = keyrange.ToString();
             Assert.IsNotNull(s);
-            Assert.AreNotEqual(s, String.Empty);
+            Assert.AreNotEqual(s, string.Empty);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace EsentCollectionsTests
             var keyrange = new KeyRange<int>(Key<int>.CreateKey(1, false), Key<int>.CreateKey(2, false));
             string s = keyrange.ToString();
             Assert.IsNotNull(s);
-            Assert.AreNotEqual(s, String.Empty);
+            Assert.AreNotEqual(s, string.Empty);
             StringAssert.Contains(s, "1");
             StringAssert.Contains(s, "2");
             StringAssert.Contains(s, "exclusive");
@@ -74,7 +74,7 @@ namespace EsentCollectionsTests
             var keyrange = new KeyRange<int>(Key<int>.CreateKey(3, true), Key<int>.CreateKey(4, true));
             string s = keyrange.ToString();
             Assert.IsNotNull(s);
-            Assert.AreNotEqual(s, String.Empty);
+            Assert.AreNotEqual(s, string.Empty);
             StringAssert.Contains(s, "3");
             StringAssert.Contains(s, "4");
             StringAssert.Contains(s, "inclusive");
@@ -91,7 +91,7 @@ namespace EsentCollectionsTests
             var keyrange = new KeyRange<string>(Key<string>.CreateKey("3", true), Key<string>.CreatePrefixKey("4"));
             string s = keyrange.ToString();
             Assert.IsNotNull(s);
-            Assert.AreNotEqual(s, String.Empty);
+            Assert.AreNotEqual(s, string.Empty);
             StringAssert.Contains(s, "3");
             StringAssert.Contains(s, "4");
             StringAssert.Contains(s, "prefix");
@@ -107,7 +107,7 @@ namespace EsentCollectionsTests
         {
             string s = KeyRange<Guid>.EmptyRange.ToString();
             Assert.IsNotNull(s);
-            Assert.AreNotEqual(s, String.Empty);
+            Assert.AreNotEqual(s, string.Empty);
             StringAssert.Contains(s, "empty");
         }
 

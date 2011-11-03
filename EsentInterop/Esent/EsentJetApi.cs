@@ -38,7 +38,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             Trace.WriteLineIf(
                 TraceSwitch.TraceVerbose,
-                String.Format(CultureInfo.InvariantCulture, "Version = {0}, BuildNumber = {1}", version, buildNumber));
+                string.Format(CultureInfo.InvariantCulture, "Version = {0}, BuildNumber = {1}", version, buildNumber));
 
             if (buildNumber >= Server2003BuildNumber)
             {
@@ -73,7 +73,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             // Create a unique name so that multiple threads can call this simultaneously.
             // This can happen if there are multiple AppDomains.
-            string instanceName = String.Format(CultureInfo.InvariantCulture, "GettingEsentVersion{0}", Thread.CurrentThread.ManagedThreadId);
+            string instanceName = string.Format(CultureInfo.InvariantCulture, "GettingEsentVersion{0}", Thread.CurrentThread.ManagedThreadId);
             JET_INSTANCE instance = JET_INSTANCE.Nil;
             RuntimeHelpers.PrepareConstrainedRegions();            
             try
@@ -89,7 +89,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 this.JetInit(ref instance);
 
                 JET_SESID sesid;
-                this.JetBeginSession(instance, out sesid, String.Empty, String.Empty);
+                this.JetBeginSession(instance, out sesid, string.Empty, string.Empty);
                 try
                 {
                     uint version;

@@ -130,7 +130,7 @@ namespace Microsoft.Isam.Esent.Utilities
                                 Api.SetColumn(session, table, columnids["byte"], (byte)0x1e);
                                 Api.SetColumn(session, table, columnids["short"], (short)0);
                                 Api.SetColumn(session, table, columnids["long"], 1);
-                                Api.SetColumn(session, table, columnids["currency"], Int64.MinValue);
+                                Api.SetColumn(session, table, columnids["currency"], long.MinValue);
                                 Api.SetColumn(session, table, columnids["single"], (float)Math.E);
                                 Api.SetColumn(session, table, columnids["double"], Math.PI);
                                 Api.SetColumn(session, table, columnids["binary"], new byte[] { 0x1, 0x2, 0xea, 0x4f, 0x0 });
@@ -144,7 +144,7 @@ namespace Microsoft.Isam.Esent.Utilities
                             {
                                 using (var update = new Update(session, table, JET_prep.Insert))
                                 {
-                                    Api.SetColumn(session, table, columnids["unicode"], String.Format("Record {0}", i), Encoding.Unicode);
+                                    Api.SetColumn(session, table, columnids["unicode"], string.Format("Record {0}", i), Encoding.Unicode);
                                     Api.SetColumn(session, table, columnids["double"], i * 1.1);
                                     Api.SetColumn(session, table, columnids["long"], i);
 

@@ -37,7 +37,7 @@ namespace InteropApiTests
         [Description("Test converting Double.MinValue to a DateTime")]
         public void TestConvertMinValueToDateTime()
         {
-            Assert.AreEqual(DateTime.MinValue, Conversions.ConvertDoubleToDateTime(Double.MinValue));
+            Assert.AreEqual(DateTime.MinValue, Conversions.ConvertDoubleToDateTime(double.MinValue));
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace InteropApiTests
         [Description("Test converting Double.MaxValue to a DateTime")]
         public void TestConvertMaxValueToDateTime()
         {
-            Assert.AreEqual(DateTime.MaxValue, Conversions.ConvertDoubleToDateTime(Double.MaxValue));
+            Assert.AreEqual(DateTime.MaxValue, Conversions.ConvertDoubleToDateTime(double.MaxValue));
         }
 
         /// <summary>

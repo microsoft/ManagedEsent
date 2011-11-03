@@ -15,6 +15,9 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native version of the JET_COLUMNBASE structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1305:FieldNamesMustNotUseHungarianNotation",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
@@ -166,7 +169,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </returns>
         public override string ToString()
         {
-            return String.Format(CultureInfo.InvariantCulture, "JET_COLUMNBASE({0},{1})", this.coltyp, this.grbit);
+            return string.Format(CultureInfo.InvariantCulture, "JET_COLUMNBASE({0},{1})", this.coltyp, this.grbit);
         }
 
         /// <summary>
@@ -223,8 +226,8 @@ namespace Microsoft.Isam.Esent.Interop
                    && this.cbMax == other.cbMax
                    && this.columnid == other.columnid
                    && this.grbit == other.grbit
-                   && String.Equals(this.szBaseTableName, other.szBaseTableName, StringComparison.Ordinal)
-                   && String.Equals(this.szBaseColumnName, other.szBaseColumnName, StringComparison.Ordinal);
+                   && string.Equals(this.szBaseTableName, other.szBaseTableName, StringComparison.Ordinal)
+                   && string.Equals(this.szBaseColumnName, other.szBaseColumnName, StringComparison.Ordinal);
         }
     }
 }
