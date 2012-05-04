@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="MakeKeyHelpersTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -338,10 +338,10 @@ namespace InteropApiTests
         public void MakeKeyASCII()
         {
             var expected = Any.String;
-            var expectedData = Encoding.ASCII.GetBytes(expected);
+            var expectedData = LibraryHelpers.EncodingASCII.GetBytes(expected);
             this.CreateTempTableOnColumn("ascii");
             this.InsertRecord(expectedData);
-            Api.MakeKey(this.sesid, this.tableid, expected, Encoding.ASCII, MakeKeyGrbit.NewKey);
+            Api.MakeKey(this.sesid, this.tableid, expected, LibraryHelpers.EncodingASCII, MakeKeyGrbit.NewKey);
             this.TestSeek(expectedData);
         }
 
@@ -351,18 +351,13 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(1)]
         [Description("Verify making a key with an invalid encoding throws an exception.")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyMakeKeyWithInvalidEncodingThrowsException()
         {
             this.CreateTempTableOnColumn("unicode");
 
-            try
-            {
-                Api.MakeKey(this.sesid, this.tableid, Any.String, Encoding.UTF32, MakeKeyGrbit.NewKey);
-                Assert.Fail("Expected an EsentException");
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-            }
+            Api.MakeKey(this.sesid, this.tableid, Any.String, Encoding.BigEndianUnicode, MakeKeyGrbit.NewKey);
+            Assert.Fail("Expected an EsentException");
         }
 
         /// <summary>

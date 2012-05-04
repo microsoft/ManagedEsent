@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="InstanceTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -12,8 +12,10 @@ namespace InteropApiTests
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Implementation;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+#if !MANAGEDESENT_ON_CORECLR
     using Rhino.Mocks;
     using Rhino.Mocks.Constraints;
+#endif
 
     /// <summary>
     /// Test the disposable Instance class, which wraps a JET_INSTANCE.
@@ -57,6 +59,44 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Create an instance and verify that the get/set properties function.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Create an instance and verify that the get/set properties function.")]
+        public void VerifyInstanceGetSetPropertiesWork()
+        {
+            string dir = SetupHelper.CreateRandomDirectory();
+#if !MANAGEDESENT_ON_METRO
+            string dirFull = Path.GetFullPath(dir);
+#endif
+            using (var instance = new Instance("createnoinit"))
+            {
+                Assert.AreNotEqual(JET_INSTANCE.Nil, instance.JetInstance);
+                Assert.IsNotNull(instance.Parameters);
+
+                instance.Parameters.LogFileDirectory = dir;
+                instance.Parameters.SystemDirectory = dir;
+                instance.Parameters.TempDirectory = dir;
+                instance.TermGrbit = TermGrbit.Complete;
+
+#if MANAGEDESENT_ON_METRO
+                // We can't get the full path in Metro, so we'll just confirm that
+                // everything was set to the same value.
+                string dirFull = instance.Parameters.LogFileDirectory;
+                Assert.AreNotEqual(".\\", dirFull);
+#else
+                Assert.AreEqual(dirFull, instance.Parameters.LogFileDirectory);
+#endif
+                Assert.AreEqual(dirFull, instance.Parameters.SystemDirectory);
+                Assert.AreEqual(dirFull, instance.Parameters.TempDirectory);
+                Assert.AreEqual(TermGrbit.Complete, instance.TermGrbit);
+            }
+
+            Cleanup.DeleteDirectoryWithRetry(dir);
+        }
+
+        /// <summary>
         /// Test implicit conversion to a JET_INSTANCE
         /// </summary>
         [TestMethod]
@@ -71,6 +111,7 @@ namespace InteropApiTests
             }
         }
 
+#if !MANAGEDESENT_ON_CORECLR
         /// <summary>
         /// When the instance is closed JetTerm should be called.
         /// </summary>
@@ -353,6 +394,7 @@ namespace InteropApiTests
                 }
             }
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Allocate an instance and initialize it.
@@ -547,6 +589,7 @@ namespace InteropApiTests
             instance.Term();
         }
 
+#if !MANAGEDESENT_ON_CORECLR
         /// <summary>
         /// Verify AppDomain unload terminates the Instance.
         /// </summary>
@@ -716,6 +759,7 @@ namespace InteropApiTests
                 Assert.Fail("Got exception {0}", ex);
             }
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Create an instance and abandon it. Garbage collection should
@@ -728,11 +772,12 @@ namespace InteropApiTests
             instance.Init();
         }
 
+#if !MANAGEDESENT_ON_CORECLR
         /// <summary>
         /// A wrapper object used to initialize an instance in another appdomain.
         /// </summary>
         private class InstanceWrapper : MarshalByRefObject
-        {
+            {
             /// <summary>
             /// The instance.
             /// </summary>
@@ -757,5 +802,6 @@ namespace InteropApiTests
                 }
             }
         }
+#endif // !MANAGEDESENT_ON_METRO
     }
 }

@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="EsentVersionTests.cs" company="Microsoft Corporation">
 // Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -14,6 +14,7 @@ namespace InteropApiTests
     using Microsoft.Isam.Esent.Interop.Server2003;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Isam.Esent.Interop.Windows7;
+    using Microsoft.Isam.Esent.Interop.Windows8;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -32,27 +33,46 @@ namespace InteropApiTests
         {
             if (EsentVersion.SupportsServer2003Features)
             {
-                Console.WriteLine("SupportsServer2003Features");    
+                EseInteropTestHelper.ConsoleWriteLine("SupportsServer2003Features");    
             }
 
             if (EsentVersion.SupportsVistaFeatures)
             {
-                Console.WriteLine("SupportsVistaFeatures");
+                EseInteropTestHelper.ConsoleWriteLine("SupportsVistaFeatures");
             }
 
             if (EsentVersion.SupportsWindows7Features)
             {
-                Console.WriteLine("SupportsWindows7Features");
+                EseInteropTestHelper.ConsoleWriteLine("SupportsWindows7Features");
             }
 
             if (EsentVersion.SupportsUnicodePaths)
             {
-                Console.WriteLine("SupportsUnicodePaths");
+                EseInteropTestHelper.ConsoleWriteLine("SupportsUnicodePaths");
             }
 
             if (EsentVersion.SupportsLargeKeys)
             {
-                Console.WriteLine("SupportsLargeKeys");
+                EseInteropTestHelper.ConsoleWriteLine("SupportsLargeKeys");
+            }
+        }
+
+        /// <summary>
+        /// If Windows 8 is supported then older features must be 
+        /// supported too.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("If Windows 8 is supported then older features must be supported too")]
+        public void VerifyWindows8FeaturesIncludesOlderFeatures()
+        {
+            if (EsentVersion.SupportsWindows8Features)
+            {
+                Assert.IsTrue(EsentVersion.SupportsWindows7Features);
+                Assert.IsTrue(EsentVersion.SupportsServer2003Features);
+                Assert.IsTrue(EsentVersion.SupportsVistaFeatures);
+                Assert.IsTrue(EsentVersion.SupportsUnicodePaths);
+                Assert.IsTrue(EsentVersion.SupportsLargeKeys);
             }
         }
 
@@ -98,16 +118,18 @@ namespace InteropApiTests
         [Priority(0)]
         [Description("Prints a list of all the Jet APIs")]
         public void ListAllApis()
-        {            
-            Console.WriteLine("Api");
+        {
+            EseInteropTestHelper.ConsoleWriteLine("Api");
             int totalApis = PrintJetApiNames(typeof(Api));
-            Console.WriteLine("Server2003Api");
+            EseInteropTestHelper.ConsoleWriteLine("Server2003Api");
             totalApis += PrintJetApiNames(typeof(Server2003Api));
-            Console.WriteLine("VistaApi");
+            EseInteropTestHelper.ConsoleWriteLine("VistaApi");
             totalApis += PrintJetApiNames(typeof(VistaApi));
-            Console.WriteLine("Windows7Api");
+            EseInteropTestHelper.ConsoleWriteLine("Windows7Api");
             totalApis += PrintJetApiNames(typeof(Windows7Api));
-            Console.WriteLine("Total APIs: {0}", totalApis);
+            EseInteropTestHelper.ConsoleWriteLine("Windows8Api");
+            totalApis += PrintJetApiNames(typeof(Windows8Api));
+            EseInteropTestHelper.ConsoleWriteLine("Total APIs: {0}", totalApis);
         }
 
         /// <summary>
@@ -120,7 +142,7 @@ namespace InteropApiTests
             int numApisFound = 0;
             foreach (string method in GetJetApiNames(type).OrderBy(x => x).Distinct())
             {
-                Console.WriteLine("\t{0}", method);
+                EseInteropTestHelper.ConsoleWriteLine("\t{0}", method);
                 numApisFound++;
             }
 
@@ -138,13 +160,23 @@ namespace InteropApiTests
         /// </returns>
         private static IEnumerable<string> GetJetApiNames(Type type)
         {
+#if MANAGEDESENT_ON_METRO
+            foreach (MemberInfo member in type.GetTypeInfo().DeclaredMethods)
+            {
+                if (member.Name.StartsWith("Jet"))
+                {
+                    yield return member.Name;
+                }
+            }
+#else
             foreach (MemberInfo member in type.GetMembers(BindingFlags.Public | BindingFlags.Static))
             {
                 if (member.Name.StartsWith("Jet") && (member.MemberType == MemberTypes.Method))
                 {
                     yield return member.Name;
                 }
-            }            
+            }
+#endif
         }
     }
 }

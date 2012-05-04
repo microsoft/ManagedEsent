@@ -4,6 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
 namespace InteropApiTests
 {
     using System;
@@ -37,7 +38,7 @@ namespace InteropApiTests
         [Description("Test JetCompact")]
         public void TestJetCompact()
         {
-            var test = new DatabaseFileTestHelper("database", true);
+            var test = new DatabaseFileTestHelper(EseInteropTestHelper.PathGetRandomFileName() + "-compactdatabase", true);
             test.TestCompactDatabase();
         }
 
@@ -51,8 +52,9 @@ namespace InteropApiTests
         public void TestJetCompactExceptionHandling()
         {
             var ex = new ArgumentNullException();
-            var test = new DatabaseFileTestHelper("database", true);
+            var test = new DatabaseFileTestHelper(EseInteropTestHelper.PathGetRandomFileName() + "-compactdatabase", true);
             test.TestCompactDatabaseCallbackExceptionHandling(ex);
         }
     }
 }
+#endif // !MANAGEDESENT_ON_METRO

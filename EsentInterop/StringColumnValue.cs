@@ -30,6 +30,16 @@ namespace Microsoft.Isam.Esent.Interop
         public string Value { get; set; }
 
         /// <summary>
+        /// Gets the byte length of a column value, which is zero if column is null, otherwise
+        /// it matches the byte length of the string value. The byte length is determined in
+        /// assumption of two bytes per character.
+        /// </summary>
+        public override int Length
+        {
+            get { return this.Value != null ? this.Value.Length * sizeof(char) : 0; }
+        }
+
+        /// <summary>
         /// Gets the size of the value in the column. This returns 0 for
         /// variable sized columns (i.e. binary and string).
         /// </summary>

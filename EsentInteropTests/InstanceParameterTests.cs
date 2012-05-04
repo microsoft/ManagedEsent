@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="InstanceParameterTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -656,6 +656,33 @@ namespace InteropApiTests
             const bool Expected = false;
             this.instanceParameters.Recovery = Expected;
             Assert.AreEqual(Expected, this.instanceParameters.Recovery);
+        }
+
+        /// <summary>
+        /// Test the EnableOnlineDefrag property.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test the EnableOnlineDefrag property")]
+        public void SetAndRetrieveInstanceParametersEnableOnlineDefrag()
+        {
+            var expected = Any.Boolean;
+            this.instanceParameters.EnableOnlineDefrag = expected;
+            Assert.AreEqual(expected, this.instanceParameters.EnableOnlineDefrag);
+        }
+
+        /// <summary>
+        /// Setting the EnableOnlineDefrag property should set the parameter
+        /// on the instance.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Setting the EnableOnlineDefrag property should set the parameter on the instance")]
+        public void VerifySetInstanceParametersEnableOnlineDefrag()
+        {
+            bool expected = Any.Boolean;
+            this.instanceParameters.EnableOnlineDefrag = expected;
+            Assert.AreEqual(expected, this.GetBooleanParameter(JET_param.EnableOnlineDefrag));
         }
 
         /// <summary>

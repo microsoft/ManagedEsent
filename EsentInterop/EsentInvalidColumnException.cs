@@ -22,6 +22,8 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if MANAGEDESENT_ON_CORECLR
+#else
         /// <summary>
         /// Initializes a new instance of the EsentInvalidColumnException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -32,6 +34,7 @@ namespace Microsoft.Isam.Esent.Interop
                 base(info, context)
         {
         }
+#endif
 
         /// <summary>
         /// Gets a text message describing the exception.

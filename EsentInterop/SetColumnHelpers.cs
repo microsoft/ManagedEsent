@@ -9,7 +9,9 @@ namespace Microsoft.Isam.Esent.Interop
     using System;
     using System.Diagnostics;
     using System.Runtime.Serialization;
+#if MANAGEDESENT_SUPPORTS_SERIALIZATION
     using System.Runtime.Serialization.Formatters.Binary;
+#endif
     using System.Text;
 
     /// <summary>
@@ -76,6 +78,18 @@ namespace Microsoft.Isam.Esent.Interop
             }
             else if (encoding.GetMaxByteCount(data.Length) <= Caches.ColumnCache.BufferSize)
             {
+#if MANAGEDESENT_ON_METRO
+                // Encoding.GetBytes(char*, int, byte*, int) overload is missing in metro.
+                // So we can't use the ColumnCache. We'll just use a different GetBytes() overload.
+                byte[] buffer = encoding.GetBytes(data);
+                unsafe
+                {
+                    fixed (byte* bytes = buffer)
+                    {
+                        JetSetColumn(sesid, tableid, columnid, new IntPtr(bytes), buffer.Length, grbit, null);
+                    }
+                }
+#else
                 // The encoding output will fix in a cached buffer. Get one to avoid 
                 // more memory allocations.
                 byte[] buffer = null;
@@ -100,6 +114,7 @@ namespace Microsoft.Isam.Esent.Interop
                         Caches.ColumnCache.Free(ref buffer);
                     }
                 }
+#endif
             }
             else
             {
@@ -384,6 +399,7 @@ namespace Microsoft.Isam.Esent.Interop
             }
         }
 
+#if MANAGEDESENT_SUPPORTS_SERIALIZATION
         /// <summary>
         /// Write a serialized form of an object to a column.
         /// </summary>
@@ -409,6 +425,7 @@ namespace Microsoft.Isam.Esent.Interop
                 }
             }
         }
+#endif
 
         /// <summary>
         /// Sets columns from ColumnValue objects.
@@ -443,6 +460,14 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="encoding">The encoding to check.</param>
         private static void CheckEncodingIsValid(Encoding encoding)
         {
+#if MANAGEDESENT_ON_CORECLR
+            string webName = encoding.WebName;
+            if (webName != "utf-8" && webName != "utf-16")
+            {
+                throw new ArgumentOutOfRangeException(
+                    "encoding", webName, "Invalid Encoding type. Only Unicode (utf-8 and utf-16) encodings are allowed.");
+            }
+#else
             const int AsciiCodePage = 20127;    // from MSDN
             const int UnicodeCodePage = 1200;   // from MSDN
             int codePage = encoding.CodePage;
@@ -451,6 +476,7 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentOutOfRangeException(
                     "encoding", codePage, "Invalid Encoding type. Only ASCII and Unicode encodings are allowed");
             }
+#endif
         }
     }
 }

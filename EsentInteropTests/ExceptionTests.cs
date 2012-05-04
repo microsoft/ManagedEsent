@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="ExceptionTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -8,12 +8,18 @@ namespace InteropApiTests
 {
     using System;
     using System.IO;
+#if MANAGEDESENT_ON_CORECLR
+#else
     using System.Runtime.Serialization.Formatters.Binary;
+#endif
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Implementation;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+#if MANAGEDESENT_ON_CORECLR
+#else
     using Rhino.Mocks;
     using Rhino.Mocks.Constraints;
+#endif
 
     /// <summary>
     /// Test the exception classes.
@@ -49,6 +55,8 @@ namespace InteropApiTests
             Assert.AreEqual(expected, ex.Message);
         }
 
+#if MANAGEDESENT_ON_CORECLR
+#else
         /// <summary>
         /// Verify that an EsentErrorException can be serialized and deserialized.
         /// </summary>
@@ -75,6 +83,7 @@ namespace InteropApiTests
             var deserializedException = SerializeDeserialize(originalException);
             Assert.AreEqual(originalException.Message, deserializedException.Message);
         }
+#endif
 
         /// <summary>
         /// Create every error exception.
@@ -95,16 +104,21 @@ namespace InteropApiTests
                     Assert.IsNotNull(ex.Message);
                     Assert.AreNotEqual(string.Empty, ex.Message);
 
+#if MANAGEDESENT_ON_CORECLR
+#else
                     EsentErrorException deserialized = SerializeDeserialize(ex);
                     Assert.AreEqual(err, deserialized.Error);
                     Assert.AreEqual(ex.Message, deserialized.Message);
+#endif
                     i++;
                 }
             }
 
-            Console.WriteLine("Created {0} different error exceptions", i);
+            EseInteropTestHelper.ConsoleWriteLine("Created {0} different error exceptions", i);
         }
 
+#if MANAGEDESENT_ON_CORECLR
+#else
         /// <summary>
         /// Verify that the exception gets the correct error description from ESENT when the eror is unknown
         /// </summary>
@@ -164,6 +178,7 @@ namespace InteropApiTests
                 Assert.IsTrue(!string.IsNullOrEmpty(ex.Message));
             }
         }
+#endif
 
         /// <summary>
         /// Check that an exception is thrown when an API call fails and
@@ -195,6 +210,8 @@ namespace InteropApiTests
             }
         }
 
+#if MANAGEDESENT_ON_CORECLR
+#else
         /// <summary>
         /// Serialize an object to an in-memory stream then deserialize it.
         /// </summary>
@@ -212,5 +229,6 @@ namespace InteropApiTests
                 return (T)formatter.Deserialize(stream);
             }
         }
+#endif
     }
 }

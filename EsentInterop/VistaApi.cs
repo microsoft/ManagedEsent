@@ -38,7 +38,6 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// removal on record sets when accessed in a purely sequential manner.
         /// Also see
         /// <seealso cref="Api.JetOpenTempTable"/>,
-        /// <seealso cref="Api.JetOpenTempTable2"/>,
         /// <seealso cref="Api.JetOpenTempTable3"/>.
         /// </summary>
         /// <remarks>
@@ -69,6 +68,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
             Api.Check(Api.Impl.JetGetThreadStats(out threadstats));
         }
 
+#if !MANAGEDESENT_ON_METRO
         /// <summary>
         /// Selects a specific instance to be part of the snapshot session.
         /// </summary>
@@ -148,6 +148,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         {
             Api.Check(Api.Impl.JetGetInstanceMiscInfo(instance, out signature, infoLevel));
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Initialize the ESENT database engine.
@@ -169,9 +170,10 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// </returns>
         public static JET_wrn JetInit3(ref JET_INSTANCE instance, JET_RSTINFO recoveryOptions, InitGrbit grbit)
         {
-            return Api.Check(Api.Impl.JetInit3(ref instance, recoveryOptions, grbit));            
+            return Api.Check(Api.Impl.JetInit3(ref instance, recoveryOptions, grbit));
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Retrieves record size information from the desired location.
         /// </summary>
@@ -186,5 +188,6 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         {
             Api.Check(Api.Impl.JetGetRecordSize(sesid, tableid, ref recsize, grbit));
         }
+#endif // !MANAGEDESENT_ON_METRO
     }
 }

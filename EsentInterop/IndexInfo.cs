@@ -84,7 +84,7 @@ namespace Microsoft.Isam.Esent.Interop
             this.name = name;
             this.cultureInfo = cultureInfo;
             this.compareOptions = compareOptions;
-            this.indexSegments = Array.AsReadOnly(indexSegments);
+            this.indexSegments = new ReadOnlyCollection<IndexSegment>(indexSegments);
             this.grbit = grbit;
             this.keys = keys;
             this.entries = entries;
@@ -138,7 +138,7 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// Gets the number of unique keys in the index.
-        /// This value is not current and is only is updated by <see cref="Api.JetComputeStats"/>.
+        /// This value is not current and is only is updated by Api.JetComputeStats.
         /// </summary>
         public int Keys
         {
@@ -148,7 +148,7 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// Gets the number of entries in the index.
-        /// This value is not current and is only is updated by <see cref="Api.JetComputeStats"/>.
+        /// This value is not current and is only is updated by Api.JetComputeStats.
         /// </summary>
         public int Entries
         {
@@ -158,7 +158,7 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// Gets the number of pages in the index.
-        /// This value is not current and is only is updated by <see cref="Api.JetComputeStats"/>.
+        /// This value is not current and is only is updated by Api.JetComputeStats.
         /// </summary>
         public int Pages
         {

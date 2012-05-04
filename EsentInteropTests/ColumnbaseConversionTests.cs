@@ -16,14 +16,24 @@ namespace InteropApiTests
     public class ColumnbaseConversionTests
     {
         /// <summary>
-        /// The native version of the structure.
+        /// The native ANSI version of the structure.
         /// </summary>
         private NATIVE_COLUMNBASE native;
 
         /// <summary>
-        /// The managed version created from the native.
+        /// The native Unicode version of the structure.
+        /// </summary>
+        private NATIVE_COLUMNBASE_WIDE nativeWide;
+
+        /// <summary>
+        /// The managed ANSI version created from the native.
         /// </summary>
         private JET_COLUMNBASE managed;
+
+        /// <summary>
+        /// The managed Unicode version created from the native.
+        /// </summary>
+        private JET_COLUMNBASE managedWide;
 
         /// <summary>
         /// Initialize the ColumnbaseConversionTests fixture.
@@ -43,7 +53,19 @@ namespace InteropApiTests
                 szBaseTableName = "basetable",
             };
 
+            this.nativeWide = new NATIVE_COLUMNBASE_WIDE
+            {
+                cbMax = 1,
+                coltyp = unchecked((uint)JET_coltyp.Text),
+                columnid = 2,
+                cp = unchecked((ushort)JET_CP.Unicode),
+                grbit = unchecked((uint)ColumndefGrbit.ColumnNotNULL),
+                szBaseColumnName = "basecolumn",
+                szBaseTableName = "basetable",
+            };
+
             this.managed = new JET_COLUMNBASE(this.native);
+            this.managedWide = new JET_COLUMNBASE(this.native);
         }
 
         /// <summary>
@@ -54,7 +76,8 @@ namespace InteropApiTests
         [Description("Verify cbMax is converted")]
         public void VerifyCbMaxIsConverted()
         {
-            Assert.AreEqual(1, this.managed.cbMax);           
+            Assert.AreEqual(1, this.managed.cbMax);
+            Assert.AreEqual(1, this.managedWide.cbMax);
         }
 
         /// <summary>
@@ -66,6 +89,7 @@ namespace InteropApiTests
         public void VerifyColtypIsConverted()
         {
             Assert.AreEqual(JET_coltyp.Text, this.managed.coltyp);
+            Assert.AreEqual(JET_coltyp.Text, this.managedWide.coltyp);
         }
 
         /// <summary>
@@ -77,6 +101,7 @@ namespace InteropApiTests
         public void VerifyColumnidIsConverted()
         {
             Assert.AreEqual(new JET_COLUMNID { Value = 2 }, this.managed.columnid);
+            Assert.AreEqual(new JET_COLUMNID { Value = 2 }, this.managedWide.columnid);
         }
 
         /// <summary>
@@ -88,6 +113,7 @@ namespace InteropApiTests
         public void VerifyCpIsConverted()
         {
             Assert.AreEqual(JET_CP.Unicode, this.managed.cp);
+            Assert.AreEqual(JET_CP.Unicode, this.managedWide.cp);
         }
 
         /// <summary>
@@ -99,6 +125,7 @@ namespace InteropApiTests
         public void VerifyGrbitIsConverted()
         {
             Assert.AreEqual(ColumndefGrbit.ColumnNotNULL, this.managed.grbit);
+            Assert.AreEqual(ColumndefGrbit.ColumnNotNULL, this.managedWide.grbit);
         }
 
         /// <summary>
@@ -110,6 +137,7 @@ namespace InteropApiTests
         public void VerifyBaseColumnNameIsConverted()
         {
             Assert.AreEqual("basecolumn", this.managed.szBaseColumnName);
+            Assert.AreEqual("basecolumn", this.managedWide.szBaseColumnName);
         }
 
         /// <summary>
@@ -121,6 +149,7 @@ namespace InteropApiTests
         public void VerifyBaseTableNameIsConverted()
         {
             Assert.AreEqual("basetable", this.managed.szBaseTableName);
+            Assert.AreEqual("basetable", this.managedWide.szBaseTableName);
         }
     }
 }

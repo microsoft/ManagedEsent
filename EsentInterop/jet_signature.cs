@@ -183,6 +183,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
         Justification = "This should match the name of the unmanaged structure.")]
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+    [Serializable]
     internal struct NATIVE_SIGNATURE
     {
         /// <summary>

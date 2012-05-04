@@ -41,7 +41,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// used to catch exceptions and provide argument conversion.
     /// </summary>
     internal sealed class JetCallbackWrapper
-    {        
+    {
         /// <summary>
         /// API call tracing.
         /// </summary>
@@ -59,6 +59,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         private readonly NATIVE_CALLBACK nativeCallback;
 
+#if !MANAGEDESENT_ON_METRO
         /// <summary>
         /// Initializes static members of the <see cref="JetCallbackWrapper"/> class. 
         /// </summary>
@@ -70,8 +71,9 @@ namespace Microsoft.Isam.Esent.Interop
             // will catch the exception and deal with it.
             RuntimeHelpers.PrepareMethod(typeof(StatusCallbackWrapper).GetMethod(
                 "CallbackImpl",
-                BindingFlags.NonPublic | BindingFlags.Instance).MethodHandle);    
+                BindingFlags.NonPublic | BindingFlags.Instance).MethodHandle);
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Initializes a new instance of the JetCallbackWrapper class.

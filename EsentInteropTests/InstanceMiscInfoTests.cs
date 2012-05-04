@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="InstanceMiscInfoTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -51,6 +51,7 @@ namespace InteropApiTests
             SetupHelper.CheckProcessForInstanceLeaks();
         }
 
+#if !MANAGEDESENT_ON_METRO
         /// <summary>
         /// Verify that JetGetInstanceMiscInfo does not return null.
         /// </summary>
@@ -68,5 +69,6 @@ namespace InteropApiTests
             VistaApi.JetGetInstanceMiscInfo(this.instance, out signature, JET_InstanceMiscInfo.LogSignature);
             Assert.AreNotEqual(default(JET_SIGNATURE), signature);
         }
+#endif
     }
 }

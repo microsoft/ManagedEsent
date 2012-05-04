@@ -176,7 +176,7 @@ namespace InteropApiTests
             {
                 // MSDN says: d must be a value between -657435.0 through positive 2958466.0.
                 double d = Any.random.Next(-657435, 2958466);
-                return DateTime.FromOADate(d);
+                return LibraryHelpers.FromOADate(d);
             }
         }
 
@@ -191,7 +191,7 @@ namespace InteropApiTests
                 double d = Any.random.Next(2, MaximumDays);
 
                 // FromOADate takes the number of days from 30 Dec 1899.
-                return DateTime.FromOADate(d);
+                return LibraryHelpers.FromOADate(d);
             }
         }
 

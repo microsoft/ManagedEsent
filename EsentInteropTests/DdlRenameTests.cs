@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="DdlRenameTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -108,6 +108,7 @@ namespace InteropApiTests
             Api.JetCloseTable(this.sesid, tableid);
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Test JetSetColumnDefaultValue.
         /// </summary>
@@ -126,7 +127,7 @@ namespace InteropApiTests
                 coltyp = JET_coltyp.LongText,
                 cp = JET_CP.Unicode,
                 };
-            byte[] defaultValue = Encoding.ASCII.GetBytes("default");
+            byte[] defaultValue = LibraryHelpers.EncodingASCII.GetBytes("default");
             JET_COLUMNID columnid;
             Api.JetAddColumn(this.sesid, tableid, "column", columndef, defaultValue, defaultValue.Length, out columnid);
             Api.JetPrepareUpdate(this.sesid, tableid, JET_prep.Insert);
@@ -134,13 +135,14 @@ namespace InteropApiTests
             Assert.AreEqual("default", this.RetrieveAsciiColumnFromFirstRecord(tableid, columnid));
             Api.JetCloseTable(this.sesid, tableid);
 
-            byte[] newDefaultValue = Encoding.ASCII.GetBytes("newfault");
+            byte[] newDefaultValue = LibraryHelpers.EncodingASCII.GetBytes("newfault");
             Api.JetSetColumnDefaultValue(
                 this.sesid, this.dbid, "table", "column", newDefaultValue, newDefaultValue.Length, SetColumnDefaultValueGrbit.None);
 
             Api.JetOpenTable(this.sesid, this.dbid, "table", null, 0, OpenTableGrbit.None, out tableid);
             Assert.AreEqual("newfault", this.RetrieveAsciiColumnFromFirstRecord(tableid, columnid));
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Go to the first record in the table and retrieve the specified column as a string.
@@ -151,7 +153,7 @@ namespace InteropApiTests
         private string RetrieveAsciiColumnFromFirstRecord(JET_TABLEID tableid, JET_COLUMNID columnid)
         {
             Api.JetMove(this.sesid, tableid, JET_Move.First, MoveGrbit.None);
-            return Api.RetrieveColumnAsString(this.sesid, tableid, columnid, Encoding.ASCII);
+            return Api.RetrieveColumnAsString(this.sesid, tableid, columnid, LibraryHelpers.EncodingASCII);
         }
     }
 }

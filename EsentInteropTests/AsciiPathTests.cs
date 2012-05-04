@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="AsciiPathTests.cs" company="Microsoft Corporation">
 // Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -6,6 +6,7 @@
 
 namespace InteropApiTests
 {
+#if !MANAGEDESENT_ON_METRO // No File or Path APIs are exposed in Metro.
     using System;
     using System.IO;
     using Microsoft.Isam.Esent.Interop;
@@ -402,4 +403,5 @@ namespace InteropApiTests
             }
         }
     }
+#endif // !MANAGEDESENT_ON_METRO
 }

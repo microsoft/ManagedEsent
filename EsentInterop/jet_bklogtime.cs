@@ -55,12 +55,12 @@ namespace Microsoft.Isam.Esent.Interop
         private readonly byte bYear;
 
         /// <summary>
-        /// This field is ignored.
+        /// IsUTC flag at the first bit. Starting from win8, milliseconds (low part) is filled at left 7 bits.
         /// </summary>
         private readonly byte bFiller1;
 
         /// <summary>
-        /// This field is ignored.
+        /// OSSnapshot flag at the first bit, Starting from win8, milliseconds (high part) is filled at following 3 bits. Other bits are reserved.
         /// </summary>
         private readonly byte bFiller2;
 
@@ -81,8 +81,14 @@ namespace Microsoft.Isam.Esent.Interop
             this.bDays = checked((byte)time.Day);
             this.bMonth = checked((byte)time.Month);
             this.bYear = checked((byte)(time.Year - 1900));
+            
+            // bFiller1: fTimeIsUTC at the first bit, bMillisecondsLow at left 7 bits
             this.bFiller1 = (time.Kind == DateTimeKind.Utc) ? (byte)0x1 : (byte)0;
+            this.bFiller1 |= checked((byte)((time.Millisecond & 0x7F) << 1));
+            
+            // bFiller2: fOSSnapshot at the first bit, bMillisecondsHigh at following 3 bits
             this.bFiller2 = isSnapshot ? (byte)0x1 : (byte)0;
+            this.bFiller2 |= checked((byte)((time.Millisecond & 0x380) >> 6));
         }
 
         /// <summary>
@@ -154,6 +160,7 @@ namespace Microsoft.Isam.Esent.Interop
                 this.bHours,
                 this.bMinutes,
                 this.bSeconds,
+                checked((int)((((uint)this.bFiller2 & 0xE) << 6) | (((uint)this.bFiller1 & 0xFE) >> 1))),
                 this.IsUtc ? DateTimeKind.Utc : DateTimeKind.Local);
         }
 
@@ -227,8 +234,8 @@ namespace Microsoft.Isam.Esent.Interop
                    && this.bDays == other.bDays
                    && this.bMonth == other.bMonth
                    && this.bYear == other.bYear
-                   && this.IsUtc == other.IsUtc
-                   && this.IsSnapshot == other.IsSnapshot;
+                   && this.bFiller1 == other.bFiller1
+                   && this.bFiller2 == other.bFiller2;
         }
     }
 }

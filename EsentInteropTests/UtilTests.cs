@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="UtilTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -384,7 +384,7 @@ namespace InteropApiTests
             
             byte[] byteArray = Util.ConvertToNullTerminatedAsciiByteArray(test);
             Assert.AreEqual(test.Length + 1, byteArray.Length);
-            Assert.IsTrue(Util.ArrayStructEquals(byteArray, Encoding.ASCII.GetBytes(test + char.MinValue), byteArray.Length));
+            Assert.IsTrue(Util.ArrayStructEquals(byteArray, LibraryHelpers.EncodingASCII.GetBytes(test + char.MinValue), byteArray.Length));
         }
 
         /// <summary>
@@ -399,7 +399,7 @@ namespace InteropApiTests
             
             byte[] byteArray = Util.ConvertToNullTerminatedAsciiByteArray(test);
             Assert.AreEqual(test.Length + 1, byteArray.Length);
-            Assert.IsTrue(Util.ArrayStructEquals(byteArray, Encoding.ASCII.GetBytes(test + char.MinValue), byteArray.Length));
+            Assert.IsTrue(Util.ArrayStructEquals(byteArray, LibraryHelpers.EncodingASCII.GetBytes(test + char.MinValue), byteArray.Length));
         }
 
         /// <summary>
@@ -432,7 +432,7 @@ namespace InteropApiTests
             Assert.AreEqual((byte)'?', byteArray[1]);
             
             Assert.AreEqual(japanese.Length + 1, byteArray.Length);
-            Assert.IsTrue(Util.ArrayStructEquals(byteArray, Encoding.ASCII.GetBytes(japanese + char.MinValue), byteArray.Length));
+            Assert.IsTrue(Util.ArrayStructEquals(byteArray, LibraryHelpers.EncodingASCII.GetBytes(japanese + char.MinValue), byteArray.Length));
         }
 
         /// <summary>
@@ -452,7 +452,7 @@ namespace InteropApiTests
             // We expect the byte array to be double-null terminated.
             Assert.AreEqual((byte)0, byteArray[byteArray.Length - 2]);
             Assert.AreEqual((byte)0, byteArray[byteArray.Length - 1]);
-            Assert.IsTrue(Util.ArrayStructEquals(byteArray, Encoding.ASCII.GetBytes(key + char.MinValue), byteArray.Length));
+            Assert.IsTrue(Util.ArrayStructEquals(byteArray, LibraryHelpers.EncodingASCII.GetBytes(key + char.MinValue), byteArray.Length));
         }
 
         /// <summary>

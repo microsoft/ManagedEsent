@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="StatusCallbackWrapperTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -102,6 +102,9 @@ namespace InteropApiTests
             }
         }
 
+#if MANAGEDESENT_ON_CORECLR
+        // CoreCLR does not have Thread.ResetAbort().
+#else
         /// <summary>
         /// The wrapper should catch and stop a thread abort.
         /// </summary>
@@ -127,9 +130,10 @@ namespace InteropApiTests
             catch (ThreadAbortException)
             {
                 // expected
-                Thread.ResetAbort();
+                LibraryHelpers.ThreadResetAbort();
             }
         }
+#endif
 
         /// <summary>
         /// Verify that the NativeCallback isn't garbage collected.

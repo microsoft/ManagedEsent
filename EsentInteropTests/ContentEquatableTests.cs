@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="ContentEquatableTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -1087,7 +1087,7 @@ namespace InteropApiTests
             values[j++].pfnStatus = (sesid, snp, snt, data) => JET_err.OutOfMemory;
             values[j++].rgrstmap = new[] { new JET_RSTMAP { szDatabaseName = "foo", szNewDatabaseName = "baz" } };
             values[j++] = new JET_RSTINFO();
-            Debug.Assert(j == values.Length, "Didn't fill in all entries of values", values.Length.ToString());
+            Assert.AreEqual(j, values.Length, "Didn't fill in all entries of values");
             VerifyAll(values);
         }
 
@@ -1100,6 +1100,20 @@ namespace InteropApiTests
         {
             T clone = obj.DeepClone();
             Assert.AreNotSame(obj, clone);
+#if MANAGEDESENT_ON_METRO // Reflection
+            foreach (FieldInfo field in typeof(T).GetTypeInfo().DeclaredFields)
+            {
+                if (!field.IsStatic && field.FieldType != typeof(string) && !field.FieldType.GetTypeInfo().IsSubclassOf(typeof(System.Delegate)))
+                {
+                    object value = field.GetValue(obj);
+                    object clonedValue = field.GetValue(clone);
+                    if (null != value)
+                    {
+                        Assert.AreNotSame(value, clonedValue, "Field {0} was not cloned", field);
+                    }
+                }
+            }
+#else
             foreach (FieldInfo field in typeof(T).GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
             {
                 if (field.FieldType != typeof(string) && !field.FieldType.IsSubclassOf(typeof(System.Delegate)))
@@ -1112,6 +1126,7 @@ namespace InteropApiTests
                     }
                 }
             }
+#endif // MANAGEDESENT_ON_METRO
         }
 
         /// <summary>

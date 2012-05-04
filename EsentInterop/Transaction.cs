@@ -9,11 +9,12 @@ namespace Microsoft.Isam.Esent.Interop
     using System;
     using System.Diagnostics;
     using System.Globalization;
+    using Microsoft.Isam.Esent.Interop.Windows8;
 
     /// <summary>
     /// A class that encapsulates a transaction on a JET_SESID.
     /// </summary>
-    public partial class Transaction : EsentResource
+    public class Transaction : EsentResource
     {
         /// <summary>
         /// The underlying JET_SESID.
@@ -86,6 +87,25 @@ namespace Microsoft.Isam.Esent.Interop
             }
 
             Api.JetCommitTransaction(this.sesid, grbit);
+            this.ResourceWasReleased();
+            Debug.Assert(!this.IsInTransaction, "Commit finished, but object is still in a transaction");
+        }
+
+        /// <summary>
+        /// Commit a transaction. This object should be in a transaction.
+        /// </summary>
+        /// <param name="grbit">JetCommitTransaction options.</param>
+        /// <param name="durableCommit">Duration for committing lazy transactions.</param>
+        /// <param name="commitId">Commit-id for this commit record.</param>
+        public void Commit(CommitTransactionGrbit grbit, TimeSpan durableCommit, out JET_COMMIT_ID commitId)
+        {
+            this.CheckObjectIsNotDisposed();
+            if (!this.IsInTransaction)
+            {
+                throw new InvalidOperationException("Not in a transaction");
+            }
+
+            Windows8.Windows8Api.JetCommitTransaction2(this.sesid, grbit, durableCommit, out commitId);
             this.ResourceWasReleased();
             Debug.Assert(!this.IsInTransaction, "Commit finished, but object is still in a transaction");
         }

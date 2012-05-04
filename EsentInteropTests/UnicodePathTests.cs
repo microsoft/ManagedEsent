@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="UnicodePathTests.cs" company="Microsoft Corporation">
 // Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -34,7 +34,7 @@ namespace InteropApiTests
         [Description("Setup the UnicodePathsTests fixture")]
         public void Setup()
         {
-            this.directory = "字会意";
+            this.directory = Path.Combine(EseInteropTestHelper.PathGetRandomFileName(), "字会意");
             Cleanup.DeleteDirectoryWithRetry(this.directory);
             this.database = Path.Combine(this.directory, "한글.edb");
         }
@@ -58,11 +58,16 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(0)]
         [Description("Check that ArgumentException is thrown for unmappable characters")]
+#if MANAGEDESENT_SUPPORTS_ANSI
         [ExpectedException(typeof(ArgumentException))]
+#else
+        //// The ArgumentException is thrown by the marshalling layer.
+#endif
         public void ApiThrowsArgumentExceptionOnUnmappableChar()
         {
             JET_INSTANCE instance;
             Api.JetCreateInstance(out instance, "한글");
+            Api.JetTerm(instance);
         }
 
         /// <summary>
@@ -147,7 +152,7 @@ namespace InteropApiTests
                 {
                     JET_DBID dbid;
                     Api.JetCreateDatabase(session, this.database, string.Empty, out dbid, CreateDatabaseGrbit.None);
-                    Assert.IsTrue(File.Exists(this.database));
+                    Assert.IsTrue(EseInteropTestHelper.FileExists(this.database));
                 }
             }
         }
@@ -174,7 +179,8 @@ namespace InteropApiTests
                 {
                     JET_DBID dbid;
                     Api.JetCreateDatabase2(session, this.database, 512, out dbid, CreateDatabaseGrbit.None);
-                    Assert.IsTrue(File.Exists(this.database));
+                    Assert.IsTrue(EseInteropTestHelper.FileExists(this.database));
+                    Assert.IsTrue(EseInteropTestHelper.FileExists(this.database));
                 }
             }
         }
@@ -258,7 +264,7 @@ namespace InteropApiTests
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, this.database, string.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, this.database, string.Empty, out dbid, CreateDatabaseGrbit.OverwriteExisting);
                     Api.JetCloseDatabase(session, dbid, CloseDatabaseGrbit.None);
                     Api.JetDetachDatabase(session, this.database);
 
@@ -288,7 +294,7 @@ namespace InteropApiTests
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, this.database, string.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, this.database, string.Empty, out dbid, CreateDatabaseGrbit.OverwriteExisting);
                     Api.JetCloseDatabase(session, dbid, CloseDatabaseGrbit.None);
                     Api.JetDetachDatabase(session, this.database);
 
@@ -298,6 +304,7 @@ namespace InteropApiTests
             }
         }
 
+#if !MANAGEDESENT_ON_METRO
         /// <summary>
         /// Backup and restore a database using unicode paths.
         /// </summary>
@@ -382,9 +389,10 @@ namespace InteropApiTests
             var test = new DatabaseFileTestHelper(this.directory);
             test.TestSnapshotBackupVista();
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
-        /// Tests for snapshot backup using unicode paths and Vista APIs.
+        /// Tests for JetInit3 using unicode paths.
         /// </summary>
         [TestMethod]
         [Priority(2)]
@@ -396,10 +404,11 @@ namespace InteropApiTests
                 return;
             }
 
-            var test = new DatabaseFileTestHelper(this.directory);
+            var test = new DatabaseFileTestHelper(Path.Combine(this.directory, EseInteropTestHelper.PathGetRandomFileName()));
             test.TestJetInit3();
         }
 
+#if !MANAGEDESENT_ON_METRO
         /// <summary>
         /// Tests for snapshot backup using unicode paths and Win7 APIs.
         /// </summary>
@@ -430,7 +439,7 @@ namespace InteropApiTests
                 return;
             }
 
-            var test = new DatabaseFileTestHelper(this.directory);
+            var test = new DatabaseFileTestHelper(Path.Combine(this.directory, EseInteropTestHelper.PathGetRandomFileName()));
             test.TestCompactDatabase();
         }
 
@@ -447,9 +456,10 @@ namespace InteropApiTests
                 return;
             }
 
-            var test = new DatabaseFileTestHelper(this.directory);
+            var test = new DatabaseFileTestHelper(Path.Combine(this.directory, EseInteropTestHelper.PathGetRandomFileName()));
             test.TestSetDatabaseSize();
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Test JetGetDatabaseFileInfo with a Unicode path.
@@ -464,7 +474,7 @@ namespace InteropApiTests
                 return;
             }
 
-            var test = new DatabaseFileTestHelper(this.directory);
+            var test = new DatabaseFileTestHelper(Path.Combine(this.directory, EseInteropTestHelper.PathGetRandomFileName()));
             test.TestGetDatabaseFileInfo();
         }
 
@@ -481,10 +491,11 @@ namespace InteropApiTests
                 return;
             }
 
-            var test = new DatabaseFileTestHelper(this.directory);
+            var test = new DatabaseFileTestHelper(Path.Combine(this.directory, EseInteropTestHelper.PathGetRandomFileName()));
             test.TestGetDatabaseInfo();
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Test JetGetInstanceInfo with a unicode path.
         /// </summary>
@@ -513,7 +524,7 @@ namespace InteropApiTests
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, this.database, string.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, this.database, string.Empty, out dbid, CreateDatabaseGrbit.OverwriteExisting);
                     int numInstances;
                     JET_INSTANCE_INFO[] instances;
                     Api.JetGetInstanceInfo(out numInstances, out instances);
@@ -528,5 +539,6 @@ namespace InteropApiTests
                 }
             }
         }
+#endif // !MANAGEDESENT_ON_METRO
     }
 }

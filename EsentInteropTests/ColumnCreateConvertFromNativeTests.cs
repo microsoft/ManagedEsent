@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="ColumnCreateConvertFromNativeTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -38,7 +38,7 @@ namespace InteropApiTests
         {
             this.nativeSource = new NATIVE_COLUMNCREATE()
             {
-                szColumnName = Marshal.StringToHGlobalAnsi("column9"),
+                szColumnName = EseInteropTestHelper.MarshalStringToHGlobalAnsi("column9"),
                 coltyp = (uint)JET_coltyp.Binary,
                 cbMax = 0x42,
                 grbit = (uint)ColumndefGrbit.ColumnAutoincrement,

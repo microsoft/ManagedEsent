@@ -13,6 +13,7 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Runtime.InteropServices;
     using Microsoft.Isam.Esent.Interop.Implementation;
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
     /// <summary>
     /// The native version of the <see cref="JET_TABLECREATE"/> structure. This includes callbacks,
     /// space hints, and uses NATIVE_INDEXCREATE.
@@ -35,11 +36,13 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Name of the table to create.
         /// </summary>
+        [MarshalAs(UnmanagedType.LPTStr)]
         public string szTableName;
 
         /// <summary>
         /// Name of the table from which to inherit base DDL.
         /// </summary>
+        [MarshalAs(UnmanagedType.LPTStr)]
         public string szTemplateTableName;
 
         /// <summary>
@@ -75,6 +78,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Callback function to use for the table.
         /// </summary>
+        [MarshalAs(UnmanagedType.LPTStr)]
         public string szCallback;
 
         /// <summary>
@@ -120,11 +124,13 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Name of the table to create.
         /// </summary>
+        [MarshalAs(UnmanagedType.LPWStr)]
         public string szTableName;
 
         /// <summary>
         /// Name of the table from which to inherit base DDL.
         /// </summary>
+        [MarshalAs(UnmanagedType.LPWStr)]
         public string szTemplateTableName;
 
         /// <summary>
@@ -160,6 +166,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Callback function to use for the table.
         /// </summary>
+        [MarshalAs(UnmanagedType.LPWStr)]
         public string szCallback;
 
         /// <summary>
@@ -197,6 +204,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public uint cCreated;
     }
+#endif // !MANAGEDESENT_ON_METRO
 
     /// <summary>
     /// Contains the information needed to create a table in an ESE database.
@@ -239,7 +247,7 @@ namespace Microsoft.Isam.Esent.Interop
         private int columnCreateCount;
 
         /// <summary>
-        /// Array of indices to create, pointer to <see cref="NATIVE_INDEXCREATE2"/>.
+        /// Array of indices to create, pointer to <see cref="NATIVE_INDEXCREATE3"/>.
         /// </summary>
         private JET_INDEXCREATE[] indexCreates;
 
@@ -554,6 +562,7 @@ namespace Microsoft.Isam.Esent.Interop
             }
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Gets the native (interop) version of this object. The following members are
         /// NOT converted: <see cref="rgcolumncreate"/>, <see cref="rgindexcreate"/>,
@@ -619,5 +628,6 @@ namespace Microsoft.Isam.Esent.Interop
 
             return native;
         }
+#endif // !MANAGEDESENT_ON_METRO
     }
 }

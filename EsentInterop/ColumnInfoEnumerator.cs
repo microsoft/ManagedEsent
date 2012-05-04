@@ -6,6 +6,7 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System.Text;
     using Microsoft.Isam.Esent.Interop.Implementation;
 
     /// <summary>
@@ -46,11 +47,14 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>A ColumnInfo object containing the information from that record.</returns>
         private static ColumnInfo GetColumnInfoFromColumnlist(JET_SESID sesid, JET_COLUMNLIST columnlist)
         {
+            // If we use the wide API (Vista+), then the temp table will be in UTF-16.
+            Encoding encodingOfTextColumns = EsentVersion.SupportsVistaFeatures ? Encoding.Unicode : LibraryHelpers.EncodingASCII;
+
             string name = Api.RetrieveColumnAsString(
                 sesid,
                 columnlist.tableid,
                 columnlist.columnidcolumnname,
-                NativeMethods.Encoding,
+                encodingOfTextColumns,
                 RetrieveColumnGrbit.None);
             name = StringCache.TryToIntern(name);
             var columnidValue = (uint)Api.RetrieveColumnAsUInt32(sesid, columnlist.tableid, columnlist.columnidcolumnid);
@@ -65,7 +69,7 @@ namespace Microsoft.Isam.Esent.Interop
                 new JET_COLUMNID { Value = columnidValue },
                 (JET_coltyp)coltypValue,
                 (JET_CP)codepageValue,
-                checked((int)maxLength),
+                unchecked((int)maxLength),
                 defaultValue,
                 (ColumndefGrbit)grbitValue);
         }

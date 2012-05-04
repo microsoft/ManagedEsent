@@ -4,6 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
@@ -17,3 +18,4 @@ namespace Microsoft.Isam.Esent.Interop
     {
     }
 }
+#endif // !MANAGEDESENT_ON_METRO

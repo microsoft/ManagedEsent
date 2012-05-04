@@ -32,6 +32,15 @@ namespace Microsoft.Isam.Esent.Interop
         public T? Value { get; set; }
 
         /// <summary>
+        /// Gets the byte length of a column value, which is zero if column is null, otherwise
+        /// it matches the Size for this fixed-size column.
+        /// </summary>
+        public override int Length
+        {
+            get { return this.Value.HasValue ? this.Size : 0; }
+        }
+
+        /// <summary>
         /// Gets a string representation of this object.
         /// </summary>
         /// <returns>A string representation of this object.</returns>

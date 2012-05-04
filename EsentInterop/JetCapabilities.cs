@@ -30,6 +30,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public bool SupportsWindows7Features { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether Win8 features (in the
+        /// Interop.Windows8 namespace) are supported.
+        /// </summary>
+        public bool SupportsWindows8Features { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether unicode file paths are supported.
         /// </summary>
         public bool SupportsUnicodePaths { get; set; }

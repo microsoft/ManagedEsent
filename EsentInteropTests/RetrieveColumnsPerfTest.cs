@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="RetrieveColumnsPerfTest.cs" company="Microsoft Corporation">
 // Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -151,8 +151,8 @@ namespace InteropApiTests
             }
 
             Api.TryMoveFirst(this.session, this.tableid);
-            Thread.CurrentThread.Priority = ThreadPriority.Highest;
-            Thread.BeginThreadAffinity();
+            EseInteropTestHelper.CurrentThreadPriority = ThreadPriority.Highest;
+            EseInteropTestHelper.ThreadBeginThreadAffinity();
         }
 
         /// <summary>
@@ -162,8 +162,8 @@ namespace InteropApiTests
         [Description("Fixture cleanup for RetrieveColumnsPerfTest")]
         public void Teardown()
         {
-            Thread.EndThreadAffinity();
-            Thread.CurrentThread.Priority = ThreadPriority.Normal;
+            EseInteropTestHelper.ThreadEndThreadAffinity();
+            EseInteropTestHelper.CurrentThreadPriority = ThreadPriority.Normal;
             Api.JetCloseTable(this.session, this.tableid);
             this.session.End();
             this.instance.Term();
@@ -316,16 +316,16 @@ namespace InteropApiTests
         {
             RunGarbageCollection();
 
-            long memoryAtStart = GC.GetTotalMemory(true);
-            int collectionCountAtStart = GC.CollectionCount(0);
+            long memoryAtStart = EseInteropTestHelper.GCGetTotalMemory(true);
+            int collectionCountAtStart = EseInteropTestHelper.GCCollectionCount(0);
 
             TimeAction(action);
 
-            int collectionCountAtEnd = GC.CollectionCount(0);
+            int collectionCountAtEnd = EseInteropTestHelper.GCCollectionCount(0);
             RunGarbageCollection();
-            long memoryAtEnd = GC.GetTotalMemory(true);
+            long memoryAtEnd = EseInteropTestHelper.GCGetTotalMemory(true);
             long memoryDelta = memoryAtEnd - memoryAtStart;
-            Console.WriteLine(
+            EseInteropTestHelper.ConsoleWriteLine(
                 "Memory changed by {0} bytes ({1} GC cycles)",
                 memoryDelta,
                 collectionCountAtEnd - collectionCountAtStart);
@@ -339,11 +339,11 @@ namespace InteropApiTests
         private static void TimeAction(Action action)
         {
             // Let other threads run before we start our test
-            Thread.Sleep(1);
+            EseInteropTestHelper.ThreadSleep(1);
             var stopwatch = EsentStopwatch.StartNew();
             action();
             stopwatch.Stop();
-            Console.WriteLine("{0} ({1})", stopwatch.Elapsed, stopwatch.ThreadStats);
+            EseInteropTestHelper.ConsoleWriteLine("{0} ({1})", stopwatch.Elapsed, stopwatch.ThreadStats);
         }
 
         /// <summary>

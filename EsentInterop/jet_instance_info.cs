@@ -4,6 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
@@ -113,7 +114,7 @@ namespace Microsoft.Isam.Esent.Interop
             else
             {
                 this.cDatabases = databases.Length;
-                this.databases = Array.AsReadOnly(databases);                
+                this.databases = new ReadOnlyCollection<string>(databases);
             }
         }
 
@@ -239,7 +240,7 @@ namespace Microsoft.Isam.Esent.Interop
                 }
             }
 
-            this.databases = Array.AsReadOnly(files);
+            this.databases = new ReadOnlyCollection<string>(files);
         }
 
         /// <summary>
@@ -261,7 +262,8 @@ namespace Microsoft.Isam.Esent.Interop
                 }
             }
 
-            this.databases = Array.AsReadOnly(files);
+            this.databases = new ReadOnlyCollection<string>(files);
         }
     }
 }
+#endif // !MANAGEDESENT_ON_METRO

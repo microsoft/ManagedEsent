@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="XpCompatabilityTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -6,6 +6,7 @@
 
 namespace InteropApiTests
 {
+#if !MANAGEDESENT_ON_METRO // The Metro version of the DLL always exposes all features.
     using System;
     using System.IO;
     using Microsoft.Isam.Esent.Interop;
@@ -99,6 +100,17 @@ namespace InteropApiTests
         [Priority(0)]
         [Description("Verify the XP version of ESENT doesn't support Windows 7 features")]
         public void VerifyXpDoesNotSupportWindows7Features()
+        {
+            Assert.IsFalse(EsentVersion.SupportsWindows7Features);
+        }
+
+        /// <summary>
+        /// Verify the XP version of ESENT doesn't support Windows 8 features.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify the XP version of ESENT doesn't support Windows 8 features")]
+        public void VerifyXpDoesNotSupportWindows8Features()
         {
             Assert.IsFalse(EsentVersion.SupportsWindows7Features);
         }
@@ -515,6 +527,37 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Use JetGetIndexInfo on XP to test the compatibility path.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Use JetGetIndexInfo on XP to test the compatibility path")]
+        public void GetIndexInfoOnXp()
+        {
+            var indexInfoTests = new IndexInfoTests();
+
+            indexInfoTests.Setup();
+            try
+            {
+                indexInfoTests.TestJetGetTableIndexInfoInt();
+                indexInfoTests.TestJetGetIndexInfoInt();
+                indexInfoTests.TestJetGetIndexInfoIndexListObsolete();
+                indexInfoTests.TestJetGetTableIndexInfoIndexList();
+                indexInfoTests.TestJetGetTableIndexInfoIndexListObsolete();
+                indexInfoTests.TestJetGetIndexInfoIndexId();
+                indexInfoTests.TestJetGetIndexInfoThrowsExceptionWhenIndexNameIsInvalid();
+                indexInfoTests.TestJetGetTableIndexInfoIndexId();
+                indexInfoTests.TestJetGetIndexInfoIndexList();
+                indexInfoTests.TestJetGetTableIndexInfoUshort();
+                indexInfoTests.TestJetGetIndexInfoUshort();
+            }
+            finally
+            {
+                indexInfoTests.Teardown();
+            }
+        }
+
+        /// <summary>
         /// Creates a table with JetCreateTableColumnIndex3 to test the
         /// compatability path.
         /// </summary>
@@ -645,4 +688,5 @@ namespace InteropApiTests
             }
         }
     }
+#endif // !MANAGEDESENT_ON_METRO
 }

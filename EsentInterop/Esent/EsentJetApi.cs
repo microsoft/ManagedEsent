@@ -21,6 +21,17 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
     internal sealed partial class JetApi
     {
         /// <summary>
+        /// Reports the exception to a central authority.
+        /// </summary>
+        /// <param name="exception">An unhandled exception.</param>
+        /// <param name="description">A string description of the scenario.</param>
+        internal static void ReportUnhandledException(
+            Exception exception,
+            string description)
+        {
+        }
+
+        /// <summary>
         /// Calculates the capabilities of the current Esent version.
         /// </summary>
         private void DetermineCapabilities()
@@ -28,12 +39,18 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             const int Server2003BuildNumber = 2700;
             const int VistaBuildNumber = 6000;
             const int Windows7BuildNumber = 7000; // includes beta as well as RTM
+            const int Windows8BuildNumber = 8000; // includes beta as well as RTM
 
             // Create new capabilities, set as all false. This will allow
             // us to call into Esent.
             this.Capabilities = new JetCapabilities { ColumnsKeyMost = 12 };
 
-            var version = this.GetVersionFromEsent();
+            var version = this.versionOverride;
+            if (version == 0)
+            {
+                version = this.GetVersionFromEsent();
+            }
+
             var buildNumber = (int)((version & 0xFFFFFF) >> 8);
 
             Trace.WriteLineIf(
@@ -50,8 +67,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             {
                 Trace.WriteLineIf(TraceSwitch.TraceVerbose, "Supports Vista features");
                 this.Capabilities.SupportsVistaFeatures = true;
+
                 Trace.WriteLineIf(TraceSwitch.TraceVerbose, "Supports Unicode paths");
                 this.Capabilities.SupportsUnicodePaths = true;
+
                 Trace.WriteLineIf(TraceSwitch.TraceVerbose, "Supports large keys");
                 this.Capabilities.SupportsLargeKeys = true;
                 Trace.WriteLineIf(TraceSwitch.TraceVerbose, "Supports 16-column keys");
@@ -63,6 +82,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 Trace.WriteLineIf(TraceSwitch.TraceVerbose, "Supports Windows 7 features");
                 this.Capabilities.SupportsWindows7Features = true;
             }
+
+            if (buildNumber >= Windows8BuildNumber)
+            {
+                Trace.WriteLineIf(TraceSwitch.TraceVerbose, "Supports Windows 8 features");
+                this.Capabilities.SupportsWindows8Features = true;
+            }
         }
 
         /// <summary>
@@ -71,9 +96,13 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>The current version of Esent.</returns>
         private uint GetVersionFromEsent()
         {
+#if MANAGEDESENT_ON_METRO
+            // JetGetVersion isn't available in Metro, so we'll pretend it's always Win8:
+            return 8250 << 8;
+#else
             // Create a unique name so that multiple threads can call this simultaneously.
             // This can happen if there are multiple AppDomains.
-            string instanceName = string.Format(CultureInfo.InvariantCulture, "GettingEsentVersion{0}", Thread.CurrentThread.ManagedThreadId);
+            string instanceName = string.Format(CultureInfo.InvariantCulture, "GettingEsentVersion{0}", LibraryHelpers.GetCurrentManagedThreadId());
             JET_INSTANCE instance = JET_INSTANCE.Nil;
             RuntimeHelpers.PrepareConstrainedRegions();            
             try
@@ -108,6 +137,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     this.JetTerm(instance);
                 }
             }
+#endif
         }
     }
 }

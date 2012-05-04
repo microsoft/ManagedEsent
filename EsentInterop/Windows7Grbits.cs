@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows7
 {
     using System;
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
     /// <summary>
     /// Options for JetConfigureProcessForCrashDump.
     /// </summary>
@@ -57,10 +58,12 @@ namespace Microsoft.Isam.Esent.Interop.Windows7
         /// </summary>
         CacheIncludeCorruptedPages = 0x40,
     }
+#endif // !MANAGEDESENT_ON_METRO
 
     /// <summary>
     /// Options for JetPrereadKeys.
     /// </summary>
+    [Flags]
     public enum PrereadKeysGrbit
     {
         /// <summary>
@@ -125,10 +128,12 @@ namespace Microsoft.Isam.Esent.Interop.Windows7
         /// </summary>
         public const CommitTransactionGrbit ForceNewLog = (CommitTransactionGrbit)0x10;
 
+#if !MANAGEDESENT_ON_METRO
         /// <summary>
         /// No instances will be prepared by default. Instances must be added explicitly.
         /// </summary>
         public const SnapshotPrepareGrbit ExplicitPrepare = (SnapshotPrepareGrbit)0x8;
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Hint that the sequential traversal will be in the forward direction.

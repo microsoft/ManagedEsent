@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="MetaDataHelpersTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -215,7 +215,7 @@ namespace InteropApiTests
                 iteration++;
             }
 
-            Console.WriteLine("{0:N0} iterations", iteration);
+            EseInteropTestHelper.ConsoleWriteLine("{0:N0} iterations", iteration);
         }
     }
 }

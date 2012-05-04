@@ -1,9 +1,10 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="Win32NativeMethodsTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
 //-----------------------------------------------------------------------
 
+#if !MANAGEDESENT_ON_METRO // Win32Exception is not supported in Metro.
 namespace InteropApiTests
 {
     using System;
@@ -63,3 +64,4 @@ namespace InteropApiTests
         }
     }
 }
+#endif // !MANAGEDESENT_ON_METRO

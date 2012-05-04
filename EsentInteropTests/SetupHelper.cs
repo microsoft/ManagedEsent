@@ -60,8 +60,8 @@ namespace InteropApiTests
         /// <returns>The name of the directory.</returns>
         public static string CreateRandomDirectory()
         {
-            string myDir = Path.GetRandomFileName() + @"\";
-            Directory.CreateDirectory(myDir);
+            string myDir = EseInteropTestHelper.PathGetRandomFileName() + @"\";
+            EseInteropTestHelper.DirectoryCreateDirectory(myDir);
             return myDir;
         }
 
@@ -144,13 +144,14 @@ namespace InteropApiTests
         /// </summary>
         public static void CheckProcessForInstanceLeaks()
         {
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
             int numInstances;
             JET_INSTANCE_INFO[] instances;
             Api.JetGetInstanceInfo(out numInstances, out instances);
 
             if (numInstances != 0)
             {
-                Console.WriteLine("There are {0} instances remaining! They are:", numInstances);
+                EseInteropTestHelper.ConsoleWriteLine("There are {0} instances remaining! They are:", numInstances);
                 foreach (var instanceInfo in instances)
                 {
                     string databaseName = string.Empty;
@@ -159,7 +160,7 @@ namespace InteropApiTests
                         databaseName = instanceInfo.szDatabaseFileName[0];
                     }
 
-                    Console.WriteLine(
+                    EseInteropTestHelper.ConsoleWriteLine(
                         "   szInstanceName={0}, szDatabaseName={1}",
                         instanceInfo.szInstanceName,
                         databaseName);
@@ -167,6 +168,7 @@ namespace InteropApiTests
             }
 
             Assert.AreEqual(0, numInstances);
+#endif // !MANAGEDESENT_ON_METRO
         }
 
         /// <summary>

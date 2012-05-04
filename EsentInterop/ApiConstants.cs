@@ -55,5 +55,10 @@ namespace Microsoft.Isam.Esent.Interop
         /// temporary database.
         /// </summary>
         public const int PageTempDBSmallest = 14;
+
+        /// <summary>
+        /// The maximum length of a locale name (LOCALE_NAME_MAX_LENGTH from winnt.h).
+        /// </summary>
+        public const int LocaleNameMaxLength = 85;
     }
 }

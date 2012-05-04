@@ -8,6 +8,7 @@ namespace InteropApiTests
 {
     using System;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Windows8;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -90,6 +91,69 @@ namespace InteropApiTests
                 }
             }
         }
+
+        #region structures new to Windows 8.
+        
+        /// <summary>
+        /// Check that two equal JET_COMMIT_ID structure can be compared
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that two equal JET_COMMIT_ID structure can be compared")]
+        public void VerifyJetCommitIdEquality()
+        {
+            DateTime d = DateTime.Now;
+            JET_COMMIT_ID commitId1 = InteropApiTests.DurableCommitTests.CreateJetCommitId(1, d, "computer", 2);
+            JET_COMMIT_ID commitId2 = InteropApiTests.DurableCommitTests.CreateJetCommitId(1, d, "computer", 2);
+            Assert.IsTrue(commitId1 == commitId2);
+            Assert.IsTrue(commitId1.GetHashCode() == commitId2.GetHashCode());
+            Assert.IsTrue(commitId1.Equals(commitId2));
+            Assert.IsFalse(commitId1 != commitId2);
+            Assert.IsTrue(commitId1 <= commitId2);
+            Assert.IsFalse(commitId1 < commitId2);
+            Assert.IsTrue(commitId1 >= commitId2);
+            Assert.IsFalse(commitId1 > commitId2);
+        }
+
+        /// <summary>
+        /// Check that two unequal JET_COMMIT_ID structures can be compared.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that two unequal JET_COMMIT_ID structures can be compared")]
+        public void VerifyJetCommitIdInequality()
+        {
+            DateTime d = DateTime.Now;
+            JET_COMMIT_ID commitId1 = InteropApiTests.DurableCommitTests.CreateJetCommitId(1, d, "computer", 2);
+            JET_COMMIT_ID commitId2 = InteropApiTests.DurableCommitTests.CreateJetCommitId(1, d, "computer", 3);
+            Assert.IsFalse(commitId1 == commitId2);
+            Assert.IsTrue(commitId1.GetHashCode() != commitId2.GetHashCode());
+            Assert.IsFalse(commitId1.Equals(commitId2));
+            Assert.IsTrue(commitId1 != commitId2);
+            Assert.IsTrue(commitId1 <= commitId2);
+            Assert.IsTrue(commitId1 < commitId2);
+            Assert.IsFalse(commitId1 >= commitId2);
+            Assert.IsFalse(commitId1 > commitId2);
+        }
+
+        /// <summary>
+        /// Check that JET_COMMIT_ID structures with different signature cannot be
+        /// compared
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentException))]
+        [Description("Check that JET_COMMIT_ID structures with different signature cannot be compared")]
+        public void VerifyJetCommitIdIncomparable()
+        {
+            DateTime d = DateTime.Now;
+            JET_COMMIT_ID commitId1 = InteropApiTests.DurableCommitTests.CreateJetCommitId(1, d, "computer", 3);
+            JET_COMMIT_ID commitId2 = InteropApiTests.DurableCommitTests.CreateJetCommitId(2, d, "computer", 3);
+            Assert.IsTrue(commitId1.GetHashCode() != commitId2.GetHashCode());
+            Assert.IsFalse(commitId1 == commitId2);
+        }
+
+        #endregion
 
         /// <summary>
         /// Helper method to compare two equal objects.

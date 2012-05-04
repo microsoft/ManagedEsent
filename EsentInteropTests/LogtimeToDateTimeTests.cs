@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="LogtimeToDateTimeTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -48,7 +48,7 @@ namespace InteropApiTests
         [Description("Test converting a local logtime to a DateTime")]
         public void TestDateTimeFromLocalLogtime()
         {
-            var expected = new DateTime(1972, 11, 5, 1, 23, 45, DateTimeKind.Local);
+            var expected = new DateTime(1972, 11, 5, 1, 23, 45, 678, DateTimeKind.Local);
             var logtime = new JET_LOGTIME(expected);
             DateTime? actual = logtime.ToDateTime();
             Assert.AreEqual(expected, actual.Value);
@@ -63,7 +63,7 @@ namespace InteropApiTests
         [Description("Test converting a local bklogtime to a DateTime")]
         public void TestDateTimeFromLocalBklogtime()
         {
-            var expected = new DateTime(1972, 11, 5, 1, 23, 45, DateTimeKind.Local);
+            var expected = new DateTime(1972, 11, 5, 1, 23, 45, 678, DateTimeKind.Local);
             var logtime = new JET_BKLOGTIME(expected, false);
             DateTime? actual = logtime.ToDateTime();
             Assert.AreEqual(expected, actual.Value);
@@ -78,7 +78,7 @@ namespace InteropApiTests
         [Description("Test converting a UTC logtime to a DateTime")]
         public void TestDateTimeFromUtcLogtime()
         {
-            var expected = new DateTime(1972, 11, 5, 1, 23, 45, DateTimeKind.Utc);
+            var expected = new DateTime(1972, 11, 5, 1, 23, 45, 678, DateTimeKind.Utc);
             var logtime = new JET_LOGTIME(expected);
             DateTime? actual = logtime.ToDateTime();
             Assert.AreEqual(expected, actual.Value);
@@ -93,7 +93,7 @@ namespace InteropApiTests
         [Description("Test converting a UTC bklogtime to a DateTime")]
         public void TestDateTimeFromUtcBklogtime()
         {
-            var expected = new DateTime(1972, 11, 5, 1, 23, 45, DateTimeKind.Utc);
+            var expected = new DateTime(1972, 11, 5, 1, 23, 45, 678, DateTimeKind.Utc);
             var logtime = new JET_BKLOGTIME(expected, false);
             DateTime? actual = logtime.ToDateTime();
             Assert.AreEqual(expected, actual.Value);

@@ -55,6 +55,14 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_wrn Error { get; internal set; }
 
         /// <summary>
+        /// Gets the byte length of a column value, which is zero if column is null, otherwise
+        /// it matches the Size for fixed-size columns and represent the actual value byte
+        /// length for variable sized columns (i.e. binary and string). For strings the length
+        /// is determined in assumption two bytes per character.
+        /// </summary>
+        public abstract int Length { get; }
+
+        /// <summary>
         /// Gets the size of the value in the column. This returns 0 for
         /// variable sized columns (i.e. binary and string).
         /// </summary>

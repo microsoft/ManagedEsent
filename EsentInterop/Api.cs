@@ -150,6 +150,7 @@ namespace Microsoft.Isam.Esent.Interop
             return Api.Check(Impl.JetInit2(ref instance, grbit));
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Retrieves information about the instances that are running.
         /// </summary>
@@ -184,6 +185,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetStopServiceInstance(instance));            
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Terminate an instance that was created with <see cref="JetInit"/> or
@@ -241,6 +243,53 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Sets database configuration options.
+        /// </summary>
+        /// <param name="instance">
+        /// The instance to set the option on or <see cref="JET_INSTANCE.Nil"/>
+        /// to set the option on all instances.
+        /// </param>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="paramid">The parameter to set.</param>
+        /// <param name="paramValue">The value of the parameter to set, if the parameter is an integer type.</param>
+        /// <param name="paramString">The value of the parameter to set, if the parameter is a string type.</param>
+        /// <returns>An ESENT warning code.</returns>
+        public static JET_wrn JetSetSystemParameter(
+            JET_INSTANCE instance,
+            JET_SESID sesid,
+            JET_param paramid,
+            IntPtr paramValue,
+            string paramString)
+        {
+            return Api.Check(Impl.JetSetSystemParameter(instance, sesid, paramid, paramValue, paramString));
+        }
+
+        /// <summary>
+        /// Gets database configuration options.
+        /// </summary>
+        /// <param name="instance">The instance to retrieve the options from.</param>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="paramid">The parameter to get.</param>
+        /// <param name="paramValue">Returns the value of the parameter, if the value is an integer.</param>
+        /// <param name="paramString">Returns the value of the parameter, if the value is a string.</param>
+        /// <param name="maxParam">The maximum size of the parameter string.</param>
+        /// <returns>An ESENT warning code.</returns>
+        /// <remarks>
+        /// <see cref="JET_param.ErrorToString"/> passes in the error number in the paramValue, which is why it is
+        /// a ref parameter and not an out parameter.
+        /// </remarks>
+        public static JET_wrn JetGetSystemParameter(
+            JET_INSTANCE instance,
+            JET_SESID sesid,
+            JET_param paramid,
+            ref IntPtr paramValue,
+            out string paramString,
+            int maxParam)
+        {
+            return Api.Check(Impl.JetGetSystemParameter(instance, sesid, paramid, ref paramValue, out paramString, maxParam));
+        }
+
+        /// <summary>
         /// Gets database configuration options.
         /// </summary>
         /// <param name="instance">The instance to retrieve the options from.</param>
@@ -263,6 +312,7 @@ namespace Microsoft.Isam.Esent.Interop
             return wrn;
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Retrieves the version of the database engine.
         /// </summary>
@@ -273,6 +323,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetGetVersion(sesid, out version));
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         #endregion
 
@@ -376,6 +427,18 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetDetachDatabase(sesid, database));
         }
 
+        /// <summary>
+        /// Releases a database file that was previously attached to a database session.
+        /// </summary>
+        /// <param name="sesid">The database session to use.</param>
+        /// <param name="database">The database to detach.</param>
+        /// <param name="grbit">Detach options.</param>
+        public static void JetDetachDatabase2(JET_SESID sesid, string database, DetachDatabaseGrbit grbit)
+        {
+            Api.Check(Impl.JetDetachDatabase2(sesid, database, grbit));
+        }
+
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
 #pragma warning disable 618,612 // Disable warning that JET_CONVERT is obsolete
         /// <summary>
         /// Makes a copy of an existing database. The copy is compacted to a
@@ -436,6 +499,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetSetDatabaseSize(sesid, database, desiredPages, out actualPages));
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Retrieves certain information about the given database.
@@ -531,6 +595,8 @@ namespace Microsoft.Isam.Esent.Interop
 
         #region Backup/Restore
 
+#if !MANAGEDESENT_ON_METRO
+
         /// <summary>
         /// Performs a streaming backup of an instance, including all the attached
         /// databases, to a directory. With multiple backup methods supported by
@@ -576,10 +642,12 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetRestoreInstance(instance, source, destination, statusCallback));
         }
-
+#endif // !MANAGEDESENT_ON_METRO
         #endregion
 
         #region Snapshot Backup
+
+#if !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Starts a snapshot. While the snapshot is in progress, no
@@ -623,10 +691,11 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetOSSnapshotThaw(snapshot, grbit));
         }
-
+#endif // !MANAGEDESENT_ON_METRO
         #endregion
 
         #region Streaming Backup/Restore
+#if !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Initiates an external backup while the engine and database are online and active. 
@@ -805,6 +874,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetTruncateLogInstance(instance));
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         #endregion
 
@@ -856,6 +926,7 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetEndSession(sesid, grbit));
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Initialize a new ESE session in the same instance as the given sesid.
         /// </summary>
@@ -865,6 +936,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetDupSession(sesid, out newSesid));
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         #endregion
 
@@ -895,6 +967,7 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetCloseTable(sesid, tableid));
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Duplicates an open cursor and returns a handle to the duplicated cursor.
         /// If the cursor that was duplicated was a read-only cursor then the
@@ -978,6 +1051,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetGetCursorInfo(sesid, tableid));
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         #endregion
 
@@ -1146,7 +1220,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// When creating multiple indexes (i.e. with numIndexCreates
         /// greater than 1) this method MUST be called
         /// outside of any transactions and with exclusive access to the
-        /// table. The JET_TABLEID returned by <see cref="JetCreateTable"/>
+        /// table. The JET_TABLEID returned by "JetCreateTable"
         /// will have exlusive access or the table can be opened for
         /// exclusive access by passing <see cref="OpenTableGrbit.DenyRead"/>
         /// to <see cref="JetOpenTable"/>.
@@ -1172,7 +1246,6 @@ namespace Microsoft.Isam.Esent.Interop
         /// They can also be used to very quickly sort and perform duplicate
         /// removal on record sets when accessed in a purely sequential manner.
         /// Also see
-        /// <seealso cref="Api.JetOpenTempTable2"/>,
         /// <seealso cref="Api.JetOpenTempTable3"/>.
         /// <seealso cref="VistaApi.JetOpenTemporaryTable"/>.
         /// </summary>
@@ -1205,6 +1278,7 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetOpenTempTable(sesid, columns, numColumns, grbit, out tableid, columnids));            
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Creates a temporary table with a single index. A temporary table
         /// stores and retrieves records just like an ordinary table created
@@ -1251,6 +1325,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetOpenTempTable2(sesid, columns, numColumns, lcid, grbit, out tableid, columnids));
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Creates a temporary table with a single index. A temporary table
@@ -1261,7 +1336,6 @@ namespace Microsoft.Isam.Esent.Interop
         /// removal on record sets when accessed in a purely sequential manner.
         /// Also see
         /// <seealso cref="Api.JetOpenTempTable"/>,
-        /// <seealso cref="Api.JetOpenTempTable2"/>,
         /// <seealso cref="VistaApi.JetOpenTemporaryTable"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
@@ -1640,6 +1714,26 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetGetIndexInfo(sesid, dbid, tablename, indexname, out result, infoLevel));
         }
 
+        /// <summary>
+        /// Retrieves information about indexes on a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="dbid">The database to use.</param>
+        /// <param name="tablename">The name of the table to retrieve index information about.</param>
+        /// <param name="indexname">The name of the index to retrieve information about.</param>
+        /// <param name="result">Filled in with information about indexes on the table.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        public static void JetGetIndexInfo(
+                JET_SESID sesid,
+                JET_DBID dbid,
+                string tablename,
+                string indexname,
+                out string result,
+                JET_IdxInfo infoLevel)
+        {
+            Api.Check(Impl.JetGetIndexInfo(sesid, dbid, tablename, indexname, out result, infoLevel));
+        }
+
         #endregion
 
         #region JetGetTableIndexInfo overloads
@@ -1717,6 +1811,24 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetGetTableIndexInfo(sesid, tableid, indexname, out result, infoLevel));
         }
 
+        /// <summary>
+        /// Retrieves information about indexes on a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to retrieve index information about.</param>
+        /// <param name="indexname">The name of the index.</param>
+        /// <param name="result">Filled in with information about indexes on the table.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        public static void JetGetTableIndexInfo(
+                JET_SESID sesid,
+                JET_TABLEID tableid,
+                string indexname,
+                out string result,
+                JET_IdxInfo infoLevel)
+        {
+            Api.Check(Impl.JetGetTableIndexInfo(sesid, tableid, indexname, out result, infoLevel));
+        }
+
         #endregion
 
         /// <summary>
@@ -1744,6 +1856,7 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetRenameColumn(sesid, tableid, name, newName, grbit));
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Changes the default value of an existing column.
         /// </summary>
@@ -1759,6 +1872,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetSetColumnDefaultValue(sesid, dbid, tableName, columnName, data, dataSize, grbit));
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         #endregion
 
@@ -2495,6 +2609,7 @@ namespace Microsoft.Isam.Esent.Interop
             }
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Explicitly reserve the ability to update a row, write lock, or to explicitly prevent a row from
         /// being updated by any other session, read lock. Normally, row write locks are acquired implicitly as a
@@ -2509,6 +2624,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetGetLock(sesid, tableid, grbit));
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Performs an atomic addition operation on one column. This function allows
@@ -2688,6 +2804,7 @@ namespace Microsoft.Isam.Esent.Interop
             return Api.Check(Impl.JetDefragment2(sesid, dbid, tableName, ref passes, ref seconds, callback, grbit));
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Performs idle cleanup tasks or checks the version store status in ESE.
         /// </summary>
@@ -2698,11 +2815,13 @@ namespace Microsoft.Isam.Esent.Interop
         {
             return Api.Check(Impl.JetIdle(sesid, grbit));
         }
+#endif
 
         #endregion
 
         #region Misc
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Frees memory that was allocated by a database engine call.
         /// </summary>
@@ -2718,6 +2837,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetFreeBuffer(buffer));
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         #endregion
 

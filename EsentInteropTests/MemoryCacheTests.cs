@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="MemoryCacheTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -191,6 +191,7 @@ namespace InteropApiTests
             CollectionAssert.AreEquivalent(buffers, newBuffers);
         }
 
+#if !MANAGEDESENT_ON_METRO // Thread is not available.
         /// <summary>
         /// Have multiple threads allocate and free memory buffers.
         /// </summary>
@@ -228,11 +229,12 @@ namespace InteropApiTests
                     byte[] buffer = this.memoryCache.Allocate();
                     Assert.IsNotNull(buffer);
                     buffer[0] = marker;
-                    Thread.Sleep(0);
+                    EseInteropTestHelper.ThreadSleep(0);
                     Assert.AreEqual(marker, buffer[0]);
                     this.memoryCache.Free(ref buffer);
                 }
             }
         }
+#endif // !MANAGEDESENT_ON_METRO
     }
 }

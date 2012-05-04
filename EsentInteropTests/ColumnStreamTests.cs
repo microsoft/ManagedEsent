@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="ColumnStreamTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -7,11 +7,18 @@
 namespace InteropApiTests
 {
     using System;
+#if MANAGEDESENT_SUPPORTS_SERIALIZATION
     using System.Collections.Generic;
+#endif
     using System.IO;
+#if MANAGEDESENT_SUPPORTS_SERIALIZATION
     using System.Runtime.Serialization;
+#endif
+#if MANAGEDESENT_ON_CORECLR
+#else
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Security.Cryptography;
+#endif
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -530,6 +537,9 @@ namespace InteropApiTests
             }
         }
 
+#if MANAGEDESENT_ON_CORECLR
+        // BufferedStream is not available.
+#else
         /// <summary>
         /// Buffer a ColumnStream.
         /// </summary>
@@ -556,7 +566,7 @@ namespace InteropApiTests
             this.UpdateAndGotoBookmark();
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
-            var hasher = new SHA512Managed();
+            var hasher = new SHA256Managed();
             memoryStream.Position = 0;
             var expected = hasher.ComputeHash(memoryStream);
 
@@ -566,6 +576,7 @@ namespace InteropApiTests
                 CollectionAssert.AreEqual(expected, actual);
             }
         }
+#endif
 
         /// <summary>
         /// Verify that seeking beyond the length of the stream doesn't grow the stream.
@@ -1039,6 +1050,7 @@ namespace InteropApiTests
             }
         }
 
+#if MANAGEDESENT_SUPPORTS_SERIALIZATION
         /// <summary>
         /// Test that a ColumnStream can serialize an object.
         /// </summary>
@@ -1099,6 +1111,7 @@ namespace InteropApiTests
                 CollectionAssert.AreEqual(expected, actual);
             }
         }
+#endif
 
         #endregion ColumnStream Tests
 

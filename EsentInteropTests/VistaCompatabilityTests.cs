@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="VistaCompatabilityTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -6,6 +6,7 @@
 
 namespace InteropApiTests
 {
+#if !MANAGEDESENT_ON_METRO // The Metro version of the DLL always exposes all features.
     using System.IO;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Implementation;
@@ -135,6 +136,18 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify that the Vista version of ESENT doesn't support
+        /// Windows 8 features.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that the Vista version of ESENT doesn't support Windows 8 features")]
+        public void VerifyVistaDoesNotSupportWindows8Features()
+        {
+            Assert.IsFalse(EsentVersion.SupportsWindows8Features);
+        }
+
+        /// <summary>
         /// Use JetGetDatabaseFileInfo on Vista to test the compatibility path for JET_DBINFOMISC.
         /// </summary>
         [TestMethod]
@@ -164,6 +177,35 @@ namespace InteropApiTests
             JET_DBINFOMISC dbinfomisc;
             Api.JetGetDatabaseFileInfo(database, out dbinfomisc, JET_DbInfo.Misc);
             Assert.AreEqual(SystemParameters.DatabasePageSize, dbinfomisc.cbPageSize);
+
+            Cleanup.DeleteDirectoryWithRetry(directory);
+        }
+
+        /// <summary>
+        /// Use JetGetDatabaseInfo on Vista to test the compatibility path for JET_DBINFOMISC.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Use JetGetDatabaseInfo on Vista to test the compatibility path")]
+        public void GetDatabaseInfoOnVista()
+        {
+            string directory = SetupHelper.CreateRandomDirectory();
+            string database = Path.Combine(directory, "test.db");
+
+            using (var instance = new Instance("VistaJetGetDatabaseInfo"))
+            {
+                SetupHelper.SetLightweightConfiguration(instance);
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    JET_DBID dbid;
+                    Api.JetCreateDatabase(session, database, string.Empty, out dbid, CreateDatabaseGrbit.None);
+
+                    JET_DBINFOMISC dbinfomisc;
+                    Api.JetGetDatabaseInfo(session, dbid, out dbinfomisc, JET_DbInfo.Misc);
+                    Assert.AreEqual(SystemParameters.DatabasePageSize, dbinfomisc.cbPageSize);
+                }
+            }
 
             Cleanup.DeleteDirectoryWithRetry(directory);
         }
@@ -443,4 +485,5 @@ namespace InteropApiTests
             }
         }
     }
+#endif // !MANAGEDESENT_ON_METRO
 }

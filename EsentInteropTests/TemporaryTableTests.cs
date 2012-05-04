@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="TemporaryTableTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -92,6 +92,7 @@ namespace InteropApiTests
             Api.JetCloseTable(this.session, tableid);
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Sort data with a temporary table
         /// </summary>
@@ -124,6 +125,7 @@ namespace InteropApiTests
             CollectionAssert.AreEqual(expected, this.RetrieveAllRecordsAsString(tableid, columnids[1]).ToArray());
             Api.JetCloseTable(this.session, tableid);
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Sort data with a temporary table

@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="JetGetThreadStatsTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -155,11 +155,11 @@ namespace InteropApiTests
             for (int i = 0; i < N; ++i)
             {
                 VistaApi.JetGetThreadStats(out threadstats);
-            }                
+            }
 
             stopwatch.Stop();
 
-            Console.WriteLine(
+            EseInteropTestHelper.ConsoleWriteLine(
                 "Made {0:N0} calls to JetGetThreadStats in {1} ({2:N6} milliseconds/call)",
                 N,
                 stopwatch.Elapsed,

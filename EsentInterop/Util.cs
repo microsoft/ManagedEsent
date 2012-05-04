@@ -207,8 +207,8 @@ namespace Microsoft.Isam.Esent.Interop
         {
             if (!string.IsNullOrEmpty(dir))
             {
-                var sepChars = new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar };
-                return string.Concat(dir.TrimEnd(sepChars), Path.DirectorySeparatorChar);                
+                var sepChars = new[] { LibraryHelpers.DirectorySeparatorChar, LibraryHelpers.AltDirectorySeparatorChar };
+                return string.Concat(dir.TrimEnd(sepChars), LibraryHelpers.DirectorySeparatorChar);
             }
 
             return dir;
@@ -228,7 +228,7 @@ namespace Microsoft.Isam.Esent.Interop
 
             byte[] output = new byte[value.Length + 1];
 
-            Encoding.ASCII.GetBytes(value, 0, value.Length, output, 0);
+            LibraryHelpers.EncodingASCII.GetBytes(value, 0, value.Length, output, 0);
             output[output.Length - 1] = (byte)0;
 
             return output;

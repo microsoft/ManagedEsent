@@ -8,9 +8,11 @@ namespace Microsoft.Isam.Esent.Interop.Server2003
 {
     using System;
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
     /// <summary>
     /// Options for <see cref="Server2003Api.JetOSSnapshotAbort"/>.
     /// </summary>
+    [Flags]
     public enum SnapshotAbortGrbit
     {
         /// <summary>
@@ -18,10 +20,12 @@ namespace Microsoft.Isam.Esent.Interop.Server2003
         /// </summary>
         None = 0,    
     }
+#endif // !MANAGEDESENT_ON_METRO
 
     /// <summary>
     /// Options for <see cref="Server2003Api.JetUpdate2"/>.
     /// </summary>
+    [Flags]
     public enum UpdateGrbit
     {
         /// <summary>
@@ -29,6 +33,7 @@ namespace Microsoft.Isam.Esent.Interop.Server2003
         /// </summary>
         None = 0,
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// This flag causes the update to return an error if the update would
         /// not have been possible in the Windows 2000 version of ESE, which
@@ -41,6 +46,7 @@ namespace Microsoft.Isam.Esent.Interop.Server2003
         /// </summary>
         [Obsolete("Only needed for legacy replication applications.")]
         CheckESE97Compatibility = 0x1,
+#endif // !MANAGEDESENT_ON_METRO
     }
 
     /// <summary>

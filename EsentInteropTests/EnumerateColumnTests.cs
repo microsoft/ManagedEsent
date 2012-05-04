@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="EnumerateColumnTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -136,7 +136,7 @@ namespace InteropApiTests
 
             int numValues;
             JET_ENUMCOLUMN[] values;
-            JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero == pv ? Marshal.AllocHGlobal(new IntPtr(cb)) : Marshal.ReAllocHGlobal(pv, new IntPtr(cb));
+            JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero == pv ? EseInteropTestHelper.MarshalAllocHGlobal(new IntPtr(cb)) : EseInteropTestHelper.MarshalReAllocHGlobal(pv, new IntPtr(cb));
             Api.JetEnumerateColumns(
                 this.sesid,
                 this.tableid,
@@ -179,7 +179,7 @@ namespace InteropApiTests
 
             int numValues;
             JET_ENUMCOLUMN[] values;
-            JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero == pv ? Marshal.AllocHGlobal(new IntPtr(cb)) : Marshal.ReAllocHGlobal(pv, new IntPtr(cb));
+            JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero == pv ? EseInteropTestHelper.MarshalAllocHGlobal(new IntPtr(cb)) : EseInteropTestHelper.MarshalReAllocHGlobal(pv, new IntPtr(cb));
             Api.JetEnumerateColumns(
                 this.sesid,
                 this.tableid,
@@ -223,7 +223,7 @@ namespace InteropApiTests
 
             int numValues;
             JET_ENUMCOLUMN[] values;
-            JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero == pv ? Marshal.AllocHGlobal(new IntPtr(cb)) : Marshal.ReAllocHGlobal(pv, new IntPtr(cb));
+            JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero == pv ? EseInteropTestHelper.MarshalAllocHGlobal(new IntPtr(cb)) : EseInteropTestHelper.MarshalReAllocHGlobal(pv, new IntPtr(cb));
             Api.JetEnumerateColumns(
                 this.sesid,
                 this.tableid,
@@ -269,7 +269,7 @@ namespace InteropApiTests
             this.SetColumn(this.columnidDict["int32"], BitConverter.GetBytes(Expected32), 0);
             this.SetColumn(this.columnidDict["int64"], BitConverter.GetBytes(Expected64), 0);
             this.SetColumn(this.columnidDict["unicode"], Encoding.Unicode.GetBytes("test"), 0);
-            this.SetColumn(this.columnidDict["ascii"], Encoding.ASCII.GetBytes("test"), 0);
+            this.SetColumn(this.columnidDict["ascii"], LibraryHelpers.EncodingASCII.GetBytes("test"), 0);
 
             Api.JetUpdate(this.sesid, this.tableid);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
@@ -283,7 +283,7 @@ namespace InteropApiTests
 
             int numValues;
             JET_ENUMCOLUMN[] values;
-            JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero == pv ? Marshal.AllocHGlobal(new IntPtr(cb)) : Marshal.ReAllocHGlobal(pv, new IntPtr(cb));
+            JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero == pv ? EseInteropTestHelper.MarshalAllocHGlobal(new IntPtr(cb)) : EseInteropTestHelper.MarshalReAllocHGlobal(pv, new IntPtr(cb));
             Api.JetEnumerateColumns(
                 this.sesid,
                 this.tableid,
@@ -337,7 +337,7 @@ namespace InteropApiTests
             this.SetColumn(this.columnidDict["int64"], BitConverter.GetBytes(Expected64), 0);       // itag 3
 
             this.SetColumn(this.columnidDict["unicode"], Encoding.Unicode.GetBytes("test"), 0);
-            this.SetColumn(this.columnidDict["ascii"], Encoding.ASCII.GetBytes("test"), 0);
+            this.SetColumn(this.columnidDict["ascii"], LibraryHelpers.EncodingASCII.GetBytes("test"), 0);
 
             Api.JetUpdate(this.sesid, this.tableid);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
@@ -351,7 +351,7 @@ namespace InteropApiTests
 
             int numValues;
             JET_ENUMCOLUMN[] values;
-            JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero == pv ? Marshal.AllocHGlobal(new IntPtr(cb)) : Marshal.ReAllocHGlobal(pv, new IntPtr(cb));
+            JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero == pv ? EseInteropTestHelper.MarshalAllocHGlobal(new IntPtr(cb)) : EseInteropTestHelper.MarshalReAllocHGlobal(pv, new IntPtr(cb));
             Api.JetEnumerateColumns(
                 this.sesid,
                 this.tableid,

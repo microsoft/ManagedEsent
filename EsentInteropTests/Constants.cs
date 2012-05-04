@@ -20,5 +20,10 @@ namespace InteropApiTests
         /// The version number that Esent has on Windows Vista.
         /// </summary>
         public const uint VistaVersion = 0x60177101;
+
+        /// <summary>
+        /// The version number that Esent has on Windows 7.
+        /// </summary>
+        public const uint Windows7Version = 0x601db101;
     }
 }

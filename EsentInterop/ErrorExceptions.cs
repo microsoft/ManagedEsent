@@ -1323,6 +1323,66 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Base class for JET_err.MustBeSeparateLongValue exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentMustBeSeparateLongValueException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentMustBeSeparateLongValueException class.
+        /// </summary>
+        public EsentMustBeSeparateLongValueException() :
+            base("Can only preread long value columns that can be separate, e.g. not size constrained so that they are fixed or variable columns", JET_err.MustBeSeparateLongValue)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentMustBeSeparateLongValueException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentMustBeSeparateLongValueException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+    }
+
+    /// <summary>
+    /// Base class for JET_err.InvalidPreread exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentInvalidPrereadException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidPrereadException class.
+        /// </summary>
+        public EsentInvalidPrereadException() :
+            base("Cannot preread long values when current index secondary", JET_err.InvalidPreread)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidPrereadException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentInvalidPrereadException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+    }
+
+    /// <summary>
     /// Base class for JET_err.InvalidLoggedOperation exceptions.
     /// </summary>
     [SuppressMessage(
@@ -6616,7 +6676,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentFilteredMoveNotSupportedException class.
         /// </summary>
         public EsentFilteredMoveNotSupportedException() :
-            base("Attempted to provide a filter to JetMove() in an unsupported scenario.", JET_err.FilteredMoveNotSupported)
+            base("Attempted to provide a filter to JetSetCursorFilter() in an unsupported scenario.", JET_err.FilteredMoveNotSupported)
         {
         }
 
@@ -12580,6 +12640,10 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentCannotSeparateIntrinsicLVException();
             case JET_err.SeparatedLongValue:
                 return new EsentSeparatedLongValueException();
+            case JET_err.MustBeSeparateLongValue:
+                return new EsentMustBeSeparateLongValueException();
+            case JET_err.InvalidPreread:
+                return new EsentInvalidPrereadException();
             case JET_err.InvalidLoggedOperation:
                 return new EsentInvalidLoggedOperationException();
             case JET_err.LogFileCorrupt:

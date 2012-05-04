@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="CallbackWrappersTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -263,7 +263,7 @@ namespace InteropApiTests
             var callbackWrappers = new CallbackWrappers();
 
             RunFullGarbageCollection();
-            long memoryAtStart = GC.GetTotalMemory(true);
+            long memoryAtStart = EseInteropTestHelper.GCGetTotalMemory(true);
 
             while (DateTime.Now < endTime)
             {
@@ -278,11 +278,11 @@ namespace InteropApiTests
             }
 
             RunFullGarbageCollection();
-            long memoryAtEnd = GC.GetTotalMemory(true);
+            long memoryAtEnd = EseInteropTestHelper.GCGetTotalMemory(true);
             GC.KeepAlive(callbackWrappers);
 
             long memory = memoryAtEnd - memoryAtStart;
-            Console.WriteLine("{0:N0} bytes used", memory);
+            EseInteropTestHelper.ConsoleWriteLine("{0:N0} bytes used", memory);
             Assert.IsTrue(memory < 1024 * 1024, "Test used too much memory. JetCallbackWrapper objects weren't collected.");
         }
 

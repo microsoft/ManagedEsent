@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="DatabaseTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -30,6 +30,7 @@ namespace InteropApiTests
 
         #endregion
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Create a database, attach, open, close and detach
         /// </summary>
@@ -52,12 +53,20 @@ namespace InteropApiTests
                 Api.JetCreateDatabase(sesid, database, string.Empty, out dbid, CreateDatabaseGrbit.None);
 
                 // BUG: ESENT requires that JetGrowDatabase be in a transaction (Win7 and below)
-                Api.JetBeginTransaction(sesid);
-                int actualPages;
-                Api.JetGrowDatabase(sesid, dbid, 512, out actualPages);
-                Api.JetCommitTransaction(sesid, CommitTransactionGrbit.None);
-                Assert.IsTrue(actualPages >= 512, "Database didn't grow");
+                using (Transaction transaction = new Transaction(sesid))
+                {
+                    int actualPages;
+                    Api.JetGrowDatabase(sesid, dbid, 512, out actualPages);
+                    transaction.Commit(CommitTransactionGrbit.None);
+                    Assert.IsTrue(actualPages >= 512, "Database didn't grow");
+                }
             }
+#if MANAGEDESENT_ON_CORECLR
+            catch (EsentFeatureNotAvailableException)
+            {
+                // JetGrowDatabase does not work on CoreClr.
+            }
+#endif
             finally
             {
                 Api.JetTerm(instance);
@@ -151,9 +160,10 @@ namespace InteropApiTests
         [Description("Create a database and set its size")]
         public void CreateDatabaseAndSetSize()
         {
-            var test = new DatabaseFileTestHelper("database");
+            var test = new DatabaseFileTestHelper(Path.Combine(EseInteropTestHelper.PathGetRandomFileName(), "database"));
             test.TestSetDatabaseSize();
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Create a database, attach, open, close and detach
@@ -177,7 +187,7 @@ namespace InteropApiTests
                 Api.JetBeginSession(instance, out sesid, string.Empty, string.Empty);
                 Api.JetCreateDatabase(sesid, database, string.Empty, out dbid, CreateDatabaseGrbit.None);
                 Api.JetCloseDatabase(sesid, dbid, CloseDatabaseGrbit.None);
-                Api.JetDetachDatabase(sesid, database);
+                Api.JetDetachDatabase2(sesid, database, DetachDatabaseGrbit.None);
 
                 Api.JetAttachDatabase(sesid, database, AttachDatabaseGrbit.None);
                 Api.JetOpenDatabase(sesid, database, string.Empty, out dbid, OpenDatabaseGrbit.None);

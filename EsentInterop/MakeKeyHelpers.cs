@@ -73,6 +73,12 @@ namespace Microsoft.Isam.Esent.Interop
             }
             else
             {
+#if MANAGEDESENT_ON_METRO
+                // Encoding.GetBytes(char*, int, byte*, int) overload is missing in metro.
+                // So we can't use the ColumnCache. We'll just use a different GetBytes() overload.
+                byte[] buffer = encoding.GetBytes(data);
+                Api.JetMakeKey(sesid, tableid, buffer, buffer.Length, grbit);
+#else
                 // Convert the string using a cached column buffer. The column buffer is far larger
                 // than the maximum key size, so any data truncation here won't matter.
                 byte[] buffer = null;
@@ -98,6 +104,7 @@ namespace Microsoft.Isam.Esent.Interop
                         Caches.ColumnCache.Free(ref buffer);
                     }
                 }
+#endif
             }
         }
 

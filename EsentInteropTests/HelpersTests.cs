@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="HelpersTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -8,7 +8,6 @@ namespace InteropApiTests
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Linq;
@@ -214,6 +213,7 @@ namespace InteropApiTests
 
         #region MetaData helpers tests
 
+#if !MANAGEDESENT_ON_METRO // String interning is not supported.
         /// <summary>
         /// Verify that keys in the columnid dictionary are interned if possible.
         /// </summary>
@@ -227,6 +227,7 @@ namespace InteropApiTests
             Assert.IsNotNull(string.IsInterned(s), "{0} is not interned", s);
             Assert.AreSame(s, "Boolean", "Interning failed");
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// See how fast we can find columnid entries in the dictionary.
@@ -239,7 +240,7 @@ namespace InteropApiTests
             const int NumIterations = 200000;
             const int LookupsPerIteration = 5;
 
-            var stopwatch = Stopwatch.StartNew();
+            var stopwatch = EsentStopwatch.StartNew();
             for (int i = 0; i < NumIterations; ++i)
             {
                 JET_COLUMNID boolean = this.columnidDict["Boolean"];
@@ -251,8 +252,8 @@ namespace InteropApiTests
 
             stopwatch.Stop();
             const double TotalLookups = NumIterations * LookupsPerIteration;
-            double lookupRate = TotalLookups / stopwatch.ElapsedMilliseconds;
-            Console.WriteLine("{0} lookups/millisecond", lookupRate);
+            double lookupRate = TotalLookups / stopwatch.Elapsed.Milliseconds;
+            EseInteropTestHelper.ConsoleWriteLine("{0} lookups/millisecond", lookupRate);
         }
 
         /// <summary>
@@ -267,6 +268,7 @@ namespace InteropApiTests
             Assert.AreEqual(this.table, actual);
         }
 
+#if !MANAGEDESENT_ON_METRO // String interning is not supported.
         /// <summary>
         /// Verify that the helper method that interns table names.
         /// </summary>
@@ -279,6 +281,7 @@ namespace InteropApiTests
             Assert.IsNotNull(string.IsInterned(name), "{0} is not interned", name);
             Assert.AreSame(name, this.table, "Interning failed");
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Test the table names enumerable.
@@ -503,22 +506,27 @@ namespace InteropApiTests
             // Insert 9 records with 3 of each key value
             for (int i = 0; i < 3; ++i)
             {
-                this.InsertRecordWithString("ascii", "foo", Encoding.ASCII);
-                this.InsertRecordWithString("ascii", "bar", Encoding.ASCII);
-                this.InsertRecordWithString("ascii", "baz", Encoding.ASCII);
+                this.InsertRecordWithString("ascii", "foo", LibraryHelpers.EncodingASCII);
+                this.InsertRecordWithString("ascii", "bar", LibraryHelpers.EncodingASCII);
+                this.InsertRecordWithString("ascii", "baz", LibraryHelpers.EncodingASCII);
             }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
             Api.JetComputeStats(this.sesid, this.tableid);
+#endif
             IEnumerable<IndexInfo> indexes = Api.GetTableIndexes(this.sesid, this.tableid);
 
             // There should be only one index
             IndexInfo info = indexes.Single();
             Assert.AreEqual(indexname, info.Name);
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+            // These tests rely on JetComputeStats(), which isn't present in Metro.
             // The index has 3 unique keys, 9 entries and everything should fit on one page.
             Assert.AreEqual(3, info.Keys);
             Assert.AreEqual(9, info.Entries);
             Assert.AreEqual(1, info.Pages);
+#endif
 
             Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
         }
@@ -583,9 +591,10 @@ namespace InteropApiTests
             const string Indexname = "myindex";
             const string Indexdef = "-unicode\0\0";
 
+            CultureInfo currentCulture = CultureInfo.CurrentCulture;
             var pidxUnicode = new JET_UNICODEINDEX
             {
-                lcid = CultureInfo.CurrentCulture.LCID,
+                lcid = EseInteropTestHelper.CultureInfoGetLcid(currentCulture),
                 dwMapFlags = Conversions.LCMapFlagsFromCompareOptions(CompareOptions.IgnoreSymbols | CompareOptions.IgnoreCase),
             };
 

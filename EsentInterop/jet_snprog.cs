@@ -15,7 +15,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// The native version of the JET_SNPROG structure.
     /// </summary>
-    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    [StructLayout(LayoutKind.Sequential)]
     [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]

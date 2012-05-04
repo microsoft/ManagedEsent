@@ -14,6 +14,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetCreateInstance2.
     /// </summary>
+    [Flags]
     public enum CreateInstanceGrbit
     {
         /// <summary>
@@ -23,7 +24,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetInit2.
+    /// Options for <see cref="Api.JetInit2"/>.
     /// </summary>
     /// <seealso cref="Windows7Grbits.ReplayIgnoreLostLogs"/>
     [Flags]
@@ -36,9 +37,10 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetTerm2.
+    /// Options for <see cref="Api.JetTerm2"/>.
     /// </summary>
     /// <seealso cref="Windows7Grbits.Dirty"/>
+    [Flags]
     public enum TermGrbit
     {
         /// <summary>
@@ -62,7 +64,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetCreateDatabase.
+    /// Options for <see cref="Api.JetCreateDatabase"/>.
     /// </summary>
     [Flags]
     public enum CreateDatabaseGrbit
@@ -85,6 +87,36 @@ namespace Microsoft.Isam.Esent.Interop
         /// and recover the database to a consistent usable state after a crash.
         /// </summary>
         RecoveryOff = 0x8,
+    }
+
+    /// <summary>
+    /// Options for <see cref="Api.JetDetachDatabase2"/>.
+    /// </summary>
+    [Flags]
+    public enum DetachDatabaseGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// If <see cref="ForceDetach"/> is used, <see cref="EsentForceDetachNotAllowedException"/> will be returned.
+        /// </summary>
+        [Obsolete("ForceDetach is no longer used.")]
+        ForceDetach = 1,
+
+        /// <summary>
+        /// <see cref="ForceClose"/> is no longer used.
+        /// </summary>
+        [Obsolete("ForceClose is no longer used.")]
+        ForceClose = 0x2,
+
+        /// <summary>
+        /// If <see cref="ForceCloseAndDetach"/> is used, <see cref="EsentForceDetachNotAllowedException"/> will be returned.
+        /// </summary>
+        [Obsolete("ForceCloseAndDetach is no longer used.")]
+        ForceCloseAndDetach = (0x2 | 0x1 /*ForceDetach*/),
     }
 
     /// <summary>
@@ -111,7 +143,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetOpenDatabase.
+    /// Options for <see cref="Api.JetOpenDatabase"/>.
     /// </summary>
     [Flags]
     public enum OpenDatabaseGrbit
@@ -134,7 +166,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetCloseDatabase.
+    /// Options for <see cref="Api.JetCloseDatabase"/>.
     /// </summary>
     [Flags]
     public enum CloseDatabaseGrbit
@@ -145,6 +177,7 @@ namespace Microsoft.Isam.Esent.Interop
         None = 0,
     }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
     /// <summary>
     /// Options for <see cref="Api.JetCompact"/>.
     /// </summary>
@@ -185,6 +218,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for <see cref="Api.JetOSSnapshotFreeze"/>.
     /// </summary>
+    [Flags]
     public enum SnapshotFreezeGrbit
     {
         /// <summary>
@@ -218,6 +252,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for <see cref="Api.JetOSSnapshotThaw"/>.
     /// </summary>
+    [Flags]
     public enum SnapshotThawGrbit
     {
         /// <summary>
@@ -254,6 +289,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for <see cref="Api.JetBeginExternalBackupInstance"/>.
     /// </summary>
+    [Flags]
     public enum BeginExternalBackupGrbit
     {
         /// <summary>
@@ -272,6 +308,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for <see cref="Api.JetEndExternalBackupInstance"/>.
     /// </summary>
+    [Flags]
     public enum EndExternalBackupGrbit
     {
         /// <summary>
@@ -289,10 +326,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         Abort = 0x2,
     }
+#endif // !MANAGEDESENT_ON_METRO
 
     /// <summary>
     /// Options for <see cref="Api.JetBeginTransaction2"/>.
     /// </summary>
+    [Flags]
     public enum BeginTransactionGrbit
     {
         /// <summary>
@@ -348,6 +387,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetRollbackTransaction.
     /// </summary>
+    [Flags]
     public enum RollbackTransactionGrbit
     {
         /// <summary>
@@ -366,6 +406,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetEndSession.
     /// </summary>
+    [Flags]
     public enum EndSessionGrbit
     {
         /// <summary>
@@ -503,9 +544,11 @@ namespace Microsoft.Isam.Esent.Interop
         TableClass15 = 0x000F0000,
     }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
     /// <summary>
     /// Options for <see cref="Api.JetDupCursor"/>.
     /// </summary>
+    [Flags]
     public enum DupCursorGrbit
     {
         /// <summary>
@@ -542,6 +585,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         Table = 0x4,
     }
+#endif // !MANAGEDESENT_ON_METRO
 
     /// <summary>
     /// Options for JetSetColumn.
@@ -761,6 +805,7 @@ namespace Microsoft.Isam.Esent.Interop
         EnumerateTaggedOnly = 0x00040000, 
     }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
     /// <summary>
     /// Options for <see cref="VistaApi.JetGetRecordSize"/>.
     /// </summary>
@@ -792,10 +837,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         Local = 0x4,
     }
+#endif // !MANAGEDESENT_ON_METRO
 
     /// <summary>
     /// Options for <see cref="Api.JetGetSecondaryIndexBookmark"/>.
     /// </summary>
+    [Flags]
     public enum GetSecondaryIndexBookmarkGrbit
     {
         /// <summary>
@@ -807,6 +854,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for <see cref="Api.JetGotoSecondaryIndexBookmark"/>.
     /// </summary>
+    [Flags]
     public enum GotoSecondaryIndexBookmarkGrbit
     {
         /// <summary>
@@ -827,6 +875,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetMove.
     /// </summary>
+    [Flags]
     public enum MoveGrbit
     {
         /// <summary>
@@ -924,6 +973,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetRetrieveKey.
     /// </summary>
+    [Flags]
     public enum RetrieveKeyGrbit
     {
         /// <summary>
@@ -1023,6 +1073,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for the JET_INDEXRANGE object.
     /// </summary>
+    [Flags]
     public enum IndexRangeGrbit
     {
         /// <summary>
@@ -1034,6 +1085,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetIntersectIndexes.
     /// </summary>
+    [Flags]
     public enum IntersectIndexesGrbit
     {
         /// <summary>
@@ -1046,6 +1098,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// Options for <see cref="Api.JetSetCurrentIndex2"/> and 
     /// <see cref="Api.JetSetCurrentIndex3"/>.
     /// </summary>
+    [Flags]
     public enum SetCurrentIndexGrbit
     {
         /// <summary>
@@ -1071,6 +1124,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetSetTableSequential.
     /// </summary>
+    [Flags]
     public enum SetTableSequentialGrbit
     {
         /// <summary>
@@ -1082,6 +1136,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetResetTableSequential.
     /// </summary>
+    [Flags]
     public enum ResetTableSequentialGrbit
     {
         /// <summary>
@@ -1093,6 +1148,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetGetLock.
     /// </summary>
+    [Flags]
     public enum GetLockGrbit
     {
         /// <summary>
@@ -1113,6 +1169,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetEscrowUpdate.
     /// </summary>
+    [Flags]
     public enum EscrowUpdateGrbit
     {
         /// <summary>
@@ -1350,6 +1407,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Key definition grbits. Used when retrieving information about an index.
     /// </summary>
+    [Flags]
     public enum IndexKeyGrbit
     {
         /// <summary>
@@ -1366,6 +1424,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for the JET_CONDITIONALCOLUMN structure.
     /// </summary>
+    [Flags]
     public enum ConditionalColumnGrbit
     {
         /// <summary>
@@ -1471,6 +1530,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for <see cref="Api.JetDeleteColumn2"/>.
     /// </summary>
+    [Flags]
     public enum DeleteColumnGrbit
     {
         /// <summary>
@@ -1488,6 +1548,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for <see cref="Api.JetRenameColumn"/>.
     /// </summary>
+    [Flags]
     public enum RenameColumnGrbit
     {
         /// <summary>
@@ -1496,9 +1557,11 @@ namespace Microsoft.Isam.Esent.Interop
         None = 0,
     }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
     /// <summary>
     /// Options for <see cref="Api.JetSetColumnDefaultValue"/>.
     /// </summary>
+    [Flags]
     public enum SetColumnDefaultValueGrbit
     {
         /// <summary>
@@ -1531,6 +1594,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         GetStatus = 0x04,
     }
+#endif // !MANAGEDESENT_ON_METRO
 
     /// <summary>
     /// Options for <see cref="Api.JetDefragment"/>.

@@ -21,7 +21,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <summary>
         /// The handles of the objects being pinned.
         /// </summary>
-        private IList<GCHandle> handles;
+        private List<GCHandle> handles;
 
         /// <summary>
         /// Disposes of the object.

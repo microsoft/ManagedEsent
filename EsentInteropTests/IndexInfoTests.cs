@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="IndexInfoTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -6,9 +6,10 @@
 
 namespace InteropApiTests
 {
-    using System;
+    using System.Globalization;
     using System.IO;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Windows8;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -91,6 +92,26 @@ namespace InteropApiTests
             };
             Api.JetCreateIndex2(this.sesid, this.tableid, indexcreates, indexcreates.Length);
 
+            if (EsentVersion.SupportsWindows8Features)
+            {
+                var unicode = new JET_UNICODEINDEX()
+                {
+                    szLocaleName = "pt-br",
+                    dwMapFlags = Conversions.LCMapFlagsFromCompareOptions(CompareOptions.None),
+                };
+
+                var indexcreate = new JET_INDEXCREATE
+                {
+                    szIndexName = "win8BrazilIndex",
+                    szKey = "+C2\0\0",
+                    cbKey = 5,
+                    pidxUnicode = unicode,
+                    grbit = CreateIndexGrbit.IndexIgnoreAnyNull,
+                    ulDensity = 100,
+                };
+                Windows8Api.JetCreateIndex4(this.sesid, this.tableid, new[] { indexcreate }, 1);
+            }
+
             Api.JetCloseTable(this.sesid, this.tableid);
             Api.JetOpenTable(this.sesid, this.dbid, this.table, null, 0, OpenTableGrbit.None, out this.tableid);
         }
@@ -131,11 +152,17 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(2)]
         [Description("Test that JetGetIndexInfo throws exception when index name is invalid")]
-        [ExpectedException(typeof(EsentIndexNotFoundException))]
         public void TestJetGetIndexInfoThrowsExceptionWhenIndexNameIsInvalid()
         {
             ushort result;
-            Api.JetGetIndexInfo(this.sesid, this.dbid, this.table, "NoSuchIndex", out result, JET_IdxInfo.VarSegMac);
+            try
+            {
+                Api.JetGetIndexInfo(this.sesid, this.dbid, this.table, "NoSuchIndex", out result, JET_IdxInfo.VarSegMac);
+                Assert.IsTrue(false, "EsentIndexNotFoundException should have been thrown!");
+            }
+            catch (EsentIndexNotFoundException)
+            {
+            }
         }
 
         /// <summary>
@@ -148,7 +175,8 @@ namespace InteropApiTests
         {
             int result;
             Api.JetGetIndexInfo(this.sesid, this.dbid, this.table, null, out result, JET_IdxInfo.Count);
-            Assert.AreEqual(3, result);
+            int expectedIndexCount = EsentVersion.SupportsWindows8Features ? 4 : 3;
+            Assert.AreEqual(expectedIndexCount, result);
         }
 
         /// <summary>
@@ -164,6 +192,24 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test the overload of JetGetIndexInfo that returns a locale name.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test the overload of JetGetIndexInfo that returns a locale name")]
+        public void TestJetGetIndexInfoLocaleName()
+        {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
+            string result;
+            Api.JetGetIndexInfo(this.sesid, this.dbid, this.table, "win8BrazilIndex", out result, Windows8IdxInfo.LocaleName);
+            Assert.AreEqual("pt-br", result, false);
+        }
+
+        /// <summary>
         /// Test the overload of JetGetIndexInfo that returns a JET_INDEXLIST.
         /// </summary>
         [TestMethod]
@@ -173,7 +219,8 @@ namespace InteropApiTests
         {
             JET_INDEXLIST result;
             Api.JetGetIndexInfo(this.sesid, this.dbid, this.table, null, out result, JET_IdxInfo.List);
-            Assert.AreEqual(3, result.cRecord);
+            int expectedIndexCount = EsentVersion.SupportsWindows8Features ? 4 : 3;
+            Assert.AreEqual(expectedIndexCount, result.cRecord);
             Api.JetCloseTable(this.sesid, result.tableid);
         }
 
@@ -189,8 +236,37 @@ namespace InteropApiTests
 #pragma warning disable 612,618
             Api.JetGetIndexInfo(this.sesid, this.dbid, this.table, null, out result);
 #pragma warning restore 612,618
-            Assert.AreEqual(3, result.cRecord);
+            int expectedIndexCount = EsentVersion.SupportsWindows8Features ? 4 : 3;
+            Assert.AreEqual(expectedIndexCount, result.cRecord);
             Api.JetCloseTable(this.sesid, result.tableid);
+        }
+
+        /// <summary>
+        /// Tests that GetTableIndexes() works when specifying the table name.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Tests that GetTableIndexes() works when specifying the table name.")]
+        public void TestGetTableIndexesWithTableName()
+        {
+            int foundIndices = 0;
+            foreach (IndexInfo indexInfo in Api.GetTableIndexes(this.sesid, this.dbid, this.table))
+            {
+                if (indexInfo.Name.Equals("Primary"))
+                {
+                    Assert.AreEqual((CreateIndexGrbit.IndexPrimary | CreateIndexGrbit.IndexUnique), indexInfo.Grbit);
+                    ++foundIndices;
+                }
+                else if (indexInfo.Name.Equals("win8BrazilIndex"))
+                {
+                    // This index might not be present when running on pre-win8.
+                    Assert.AreEqual("pt-br", indexInfo.CultureInfo.Name, true);
+                    ++foundIndices;
+                }
+            }
+
+            int expectedIndexCount = EsentVersion.SupportsWindows8Features ? 2 : 1;
+            Assert.AreEqual(expectedIndexCount, foundIndices);
         }
 
         #endregion
@@ -220,7 +296,8 @@ namespace InteropApiTests
         {
             int result;
             Api.JetGetTableIndexInfo(this.sesid, this.tableid, null, out result, JET_IdxInfo.Count);
-            Assert.AreEqual(3, result);
+            int expectedIndexCount = EsentVersion.SupportsWindows8Features ? 4 : 3;
+            Assert.AreEqual(expectedIndexCount, result);
         }
 
         /// <summary>
@@ -236,6 +313,24 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test the overload of JetGetTableIndexInfo that returns a locale name.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test the overload of JetGetIndexInfo that returns a locale name")]
+        public void TestJetGetTableIndexInfoLocaleName()
+        {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
+            string result;
+            Api.JetGetTableIndexInfo(this.sesid, this.tableid, "win8BrazilIndex", out result, Windows8IdxInfo.LocaleName);
+            Assert.AreEqual("pt-br", result, false);
+        }
+
+        /// <summary>
         /// Test the overload of JetGetTableIndexInfo that returns a JET_INDEXLIST.
         /// </summary>
         [TestMethod]
@@ -245,7 +340,8 @@ namespace InteropApiTests
         {
             JET_INDEXLIST result;
             Api.JetGetTableIndexInfo(this.sesid, this.tableid, null, out result, JET_IdxInfo.List);
-            Assert.AreEqual(3, result.cRecord);
+            int expectedIndexCount = EsentVersion.SupportsWindows8Features ? 4 : 3;
+            Assert.AreEqual(expectedIndexCount, result.cRecord);
             Api.JetCloseTable(this.sesid, result.tableid);
         }
 
@@ -261,8 +357,37 @@ namespace InteropApiTests
 #pragma warning disable 612,618
             Api.JetGetTableIndexInfo(this.sesid, this.tableid, null, out result);
 #pragma warning restore 612,618
-            Assert.AreEqual(3, result.cRecord);
+            int expectedIndexCount = EsentVersion.SupportsWindows8Features ? 4 : 3;
+            Assert.AreEqual(expectedIndexCount, result.cRecord);
             Api.JetCloseTable(this.sesid, result.tableid);
+        }
+
+        /// <summary>
+        /// Tests that GetTableIndexes() works when specifying the table id.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Tests that GetTableIndexes() works when specifying the table id.")]
+        public void TestGetTableIndexesWithTableId()
+        {
+            int foundIndices = 0;
+            foreach (IndexInfo indexInfo in Api.GetTableIndexes(this.sesid, this.tableid))
+            {
+                if (indexInfo.Name.Equals("Primary"))
+                {
+                    Assert.AreEqual((CreateIndexGrbit.IndexPrimary | CreateIndexGrbit.IndexUnique), indexInfo.Grbit);
+                    ++foundIndices;
+                }
+                else if (indexInfo.Name.Equals("win8BrazilIndex"))
+                {
+                    // This index might not be present when running on pre-win8.
+                    Assert.AreEqual("pt-br", indexInfo.CultureInfo.Name, true);
+                    ++foundIndices;
+                }
+            }
+
+            int expectedIndexCount = EsentVersion.SupportsWindows8Features ? 2 : 1;
+            Assert.AreEqual(expectedIndexCount, foundIndices);
         }
 
         #endregion

@@ -56,7 +56,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             try
             {
-                return DateTime.FromOADate(d);
+                return LibraryHelpers.FromOADate(d);
             }
             catch (ArgumentException)
             {

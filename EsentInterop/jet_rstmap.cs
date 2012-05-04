@@ -40,8 +40,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public void FreeHGlobal()
         {
-            Marshal.FreeHGlobal(this.szDatabaseName);
-            Marshal.FreeHGlobal(this.szNewDatabaseName);
+            LibraryHelpers.MarshalFreeHGlobal(this.szDatabaseName);
+            LibraryHelpers.MarshalFreeHGlobal(this.szNewDatabaseName);
         }
     }
 
@@ -137,8 +137,8 @@ namespace Microsoft.Isam.Esent.Interop
                 // Don't pin this memory -- these structures are used by JetInit3,
                 // which can run for a long time and we don't want to fragment the
                 // heap. We do have to remember to free the memory though.
-                szDatabaseName = Marshal.StringToHGlobalUni(this.szDatabaseName),
-                szNewDatabaseName = Marshal.StringToHGlobalUni(this.szNewDatabaseName),
+                szDatabaseName = LibraryHelpers.MarshalStringToHGlobalUni(this.szDatabaseName),
+                szNewDatabaseName = LibraryHelpers.MarshalStringToHGlobalUni(this.szNewDatabaseName),
             };
         }
     }

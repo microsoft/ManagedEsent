@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="ApiTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -10,7 +10,10 @@ namespace InteropApiTests
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Implementation;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+#if MANAGEDESENT_ON_CORECLR
+#else
     using Rhino.Mocks;
+#endif
 
     /// <summary>
     /// Test the Api class functionality which wraps the IJetApi
@@ -19,6 +22,8 @@ namespace InteropApiTests
     [TestClass]
     public class ApiTests
     {
+#if MANAGEDESENT_ON_CORECLR
+#else
         /// <summary>
         /// Mock object repository.
         /// </summary>
@@ -179,5 +184,6 @@ namespace InteropApiTests
 
             Api.HandleError -= handler;
         }
+#endif
     }
 }

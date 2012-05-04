@@ -9,7 +9,10 @@ namespace InteropApiTests
     using System;
     using System.Globalization;
     using System.IO;
+#if MANAGEDESENT_ON_CORECLR
+#else
     using System.Runtime.Serialization.Formatters.Binary;
+#endif
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -20,6 +23,8 @@ namespace InteropApiTests
     [TestClass]
     public partial class SerializationTests
     {
+#if MANAGEDESENT_ON_CORECLR
+#else
         /// <summary>
         /// Verify that a JET_LOGTIME can be serialized.
         /// </summary>
@@ -474,5 +479,6 @@ namespace InteropApiTests
                 return (T)formatter.Deserialize(stream);
             }
         }
+#endif
     }
 }

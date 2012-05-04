@@ -31,9 +31,9 @@ namespace InteropApiTests
             PerformActionWithRetry(
                 () =>
                 {
-                    if (Directory.Exists(directory))
+                    if (EseInteropTestHelper.DirectoryExists(directory))
                     {
-                        Directory.Delete(directory, true);
+                        EseInteropTestHelper.DirectoryDelete(directory, true);
                     }
                 });
         }
@@ -46,7 +46,7 @@ namespace InteropApiTests
         /// </param>
         public static void DeleteFileWithRetry(string file)
         {
-            PerformActionWithRetry(() => File.Delete(file));
+            PerformActionWithRetry(() => EseInteropTestHelper.FileDelete(file));
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace InteropApiTests
                     }
                 }
 
-                Thread.Sleep(TimeSpan.FromSeconds(1));
+                EseInteropTestHelper.ThreadSleep(TimeSpan.FromSeconds(1));
             }
         }
     }

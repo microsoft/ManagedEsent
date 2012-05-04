@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="MiscTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -66,6 +66,7 @@ namespace InteropApiTests
             Assert.AreNotEqual(0, NATIVE_RSTINFO.SizeOfRstinfo);
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Test calling JetFreeBuffer on a null buffer.
         /// </summary>
@@ -76,6 +77,7 @@ namespace InteropApiTests
         {
             Api.JetFreeBuffer(IntPtr.Zero);
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Verify that all TestMethods in this assembly have priorities.
@@ -85,7 +87,7 @@ namespace InteropApiTests
         [Priority(1)]
         public void VerifyAllTestMethodsHavePriorities()
         {
-            Assembly assembly = this.GetType().Assembly;
+            Assembly assembly = EseInteropTestHelper.GetAssembly(this.GetType());
             VerifyAllTestMethodsHaveAttribute<PriorityAttribute>(assembly);
         }
 
@@ -97,7 +99,7 @@ namespace InteropApiTests
         [Priority(1)]
         public void VerifyAllTestMethodsHaveDescriptions()
         {
-            Assembly assembly = this.GetType().Assembly;
+            Assembly assembly = EseInteropTestHelper.GetAssembly(this.GetType());
             VerifyAllTestMethodsHaveAttribute<DescriptionAttribute>(assembly);
         }
 
@@ -110,14 +112,14 @@ namespace InteropApiTests
         [Priority(1)]
         public void VerifyAllPublicMethodsAreTests()
         {
-            Assembly assembly = this.GetType().Assembly;
+            Assembly assembly = EseInteropTestHelper.GetAssembly(this.GetType());
             var methods = FindPublicNonTestMethods(assembly);
             if (methods.Length > 0)
             {
-                Console.WriteLine("{0} public methods have no [TestMethod] attribute", methods.Length);
+                EseInteropTestHelper.ConsoleWriteLine("{0} public methods have no [TestMethod] attribute", methods.Length);
                 foreach (string m in methods)
                 {
-                    Console.WriteLine("\t{0}", m);
+                    EseInteropTestHelper.ConsoleWriteLine("\t{0}", m);
                 }
 
                 Assert.Fail("A public method is not a test. Missing a [TestMethod] attribute?");
@@ -133,12 +135,12 @@ namespace InteropApiTests
         [Priority(0)]
         public void VerifyAllPublicClassesHaveToString()
         {
-            Assembly assembly = typeof(Api).Assembly;
+            Assembly assembly = EseInteropTestHelper.GetAssembly(typeof(Api));
             var classes = FindPublicClassesWithoutToString(assembly);
             int classesWithoutToString = 0;
             foreach (Type @class in classes)
             {
-                Console.WriteLine("{0} does not override Object.ToString", @class);
+                EseInteropTestHelper.ConsoleWriteLine("{0} does not override Object.ToString", @class);
                 ++classesWithoutToString;
             }
 
@@ -157,10 +159,10 @@ namespace InteropApiTests
             var methods = FindTestMethodsWithoutAttribute<T>(assembly);
             if (methods.Length > 0)
             {
-                Console.WriteLine("{0} methods have no {1} attribute", methods.Length, typeof(T).Name);
+                EseInteropTestHelper.ConsoleWriteLine("{0} methods have no {1} attribute", methods.Length, typeof(T).Name);
                 foreach (string m in methods)
                 {
-                    Console.WriteLine("\t{0}", m);
+                    EseInteropTestHelper.ConsoleWriteLine("\t{0}", m);
                 }
 
                 Assert.Fail("A test method does not have a required attribute");
@@ -176,6 +178,16 @@ namespace InteropApiTests
         /// <returns>An array of method names for test methods without the attribute.</returns>
         private static string[] FindTestMethodsWithoutAttribute<T>(Assembly assembly) where T : Attribute
         {
+#if MANAGEDESENT_ON_METRO
+            return assembly.DefinedTypes
+                .SelectMany(
+                    t => from method in t.DeclaredMethods
+                         where method.GetCustomAttributes(true).Any(attribute => attribute is TestMethodAttribute)
+                               && !method.GetCustomAttributes(true).Any(attribute => attribute is T)
+                         select string.Format("{0}.{1}", method.DeclaringType, method.Name))
+                .OrderBy(x => x)
+                .ToArray();
+#else
             return assembly.GetTypes()
                 .SelectMany(
                     t => from method in t.GetMethods()
@@ -184,6 +196,7 @@ namespace InteropApiTests
                          select string.Format("{0}.{1}", method.DeclaringType, method.Name))
                 .OrderBy(x => x)
                 .ToArray();
+#endif // MANAGEDESENT_ON_METRO
         }
 
         /// <summary>
@@ -194,6 +207,18 @@ namespace InteropApiTests
         /// <returns>An array of method names for methods without the TestMethod attribute.</returns>
         private static IEnumerable<Type> FindPublicClassesWithoutToString(Assembly assembly)
         {
+#if MANAGEDESENT_ON_METRO
+            return assembly.ExportedTypes
+                .Where(type =>
+                       !type.GetTypeInfo().IsAbstract
+                       && !type.GetTypeInfo().IsSubclassOf(typeof(Delegate))
+                       && type.GetTypeInfo().DeclaredMethods
+                           .Any(method =>
+                                  method.Name == "ToString"
+                                  && method.DeclaringType == typeof(object)
+                                  && method.IsPublic
+                                  && !method.IsStatic));
+#else
             return assembly.GetTypes()
                 .Where(type =>
                        type.IsPublic
@@ -203,6 +228,7 @@ namespace InteropApiTests
                            .Any(method =>
                                   method.Name == "ToString"
                                   && method.DeclaringType == typeof(object)));
+#endif // MANAGEDESENT_ON_METRO
         }
 
         /// <summary>
@@ -213,8 +239,23 @@ namespace InteropApiTests
         /// <returns>An array of method names for methods without the TestMethod attribute.</returns>
         private static string[] FindPublicNonTestMethods(Assembly assembly)
         {
-            return assembly.GetTypes()
-                .Where(type => type.IsPublic)
+#if MANAGEDESENT_ON_METRO
+            return assembly.ExportedTypes
+                .Where(type => type.GetTypeInfo().GetCustomAttributes(typeof(TestClassAttribute), true).Any())
+                .SelectMany(
+                    type => from method in type.GetTypeInfo().DeclaredMethods
+                            where method.IsPublic
+                               && !method.GetCustomAttributes(typeof(ClassInitializeAttribute), true).Any()
+                               && !method.GetCustomAttributes(typeof(ClassCleanupAttribute), true).Any()
+                               && !method.GetCustomAttributes(typeof(TestInitializeAttribute), true).Any()
+                               && !method.GetCustomAttributes(typeof(TestCleanupAttribute), true).Any()
+                               && !method.GetCustomAttributes(typeof(TestMethodAttribute), true).Any()
+                     select string.Format("{0}.{1}", method.DeclaringType, method.Name))
+                .OrderBy(x => x)
+                .ToArray();
+#else
+                        return assembly.GetTypes()
+                .Where(type => type.IsPublic && type.GetCustomAttributes(typeof(TestClassAttribute), true).Any())
                 .SelectMany(
                     type => from method in type.GetMethods(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Static)
                          where !method.GetCustomAttributes(true).Any(attribute => attribute is ClassInitializeAttribute)
@@ -225,6 +266,7 @@ namespace InteropApiTests
                      select string.Format("{0}.{1}", method.DeclaringType, method.Name))
                 .OrderBy(x => x)
                 .ToArray();
+#endif // MANAGEDESENT_ON_METRO
         }
     }
 }

@@ -164,6 +164,16 @@ namespace Microsoft.Isam.Esent.Interop
         SeparatedLongValue = -421,
 
         /// <summary>
+        /// Preread operation only supported on separated long-value
+        /// </summary>
+        MustBeSeparateLongValue = -423,
+
+        /// <summary>
+        /// Cannot preread long values when current index secondary
+        /// </summary>
+        InvalidPreread = -424,
+
+        /// <summary>
         /// Logged operation cannot be redone
         /// </summary>
         InvalidLoggedOperation = -500,

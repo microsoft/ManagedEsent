@@ -6,9 +6,13 @@
 
 namespace Microsoft.Isam.Esent.Interop.Vista
 {
+    using System;
+
+#if !MANAGEDESENT_ON_METRO
     /// <summary>
     /// Options for <see cref="VistaApi.JetOSSnapshotEnd"/>.
     /// </summary>
+    [Flags]
     public enum SnapshotEndGrbit
     {
         /// <summary>
@@ -25,6 +29,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
     /// <summary>
     /// Options for <see cref="VistaApi.JetOSSnapshotPrepareInstance"/>.
     /// </summary>
+    [Flags]
     public enum SnapshotPrepareInstanceGrbit
     {
         /// <summary>
@@ -37,6 +42,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
     /// Options for <see cref="VistaApi.JetOSSnapshotTruncateLog"/>
     /// and <see cref="VistaApi.JetOSSnapshotTruncateLogInstance"/>.
     /// </summary>
+    [Flags]
     public enum SnapshotTruncateLogGrbit
     {
         /// <summary>
@@ -54,6 +60,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
     /// <summary>
     /// Options for <see cref="VistaApi.JetOSSnapshotGetFreezeInfo"/>.
     /// </summary>
+    [Flags]
     public enum SnapshotGetFreezeInfoGrbit
     {
         /// <summary>
@@ -65,6 +72,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
     /// <summary>
     /// Information levels for <see cref="VistaApi.JetGetInstanceMiscInfo"/>.
     /// </summary>
+    [Flags]
     public enum JET_InstanceMiscInfo
     {
         /// <summary>
@@ -72,6 +80,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// </summary>
         LogSignature = 0,
     }
+#endif // !MANAGEDESENT_ON_METRO
 
     /// <summary>
     /// Grbits that have been added to the Vista version of ESENT.
@@ -108,11 +117,13 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// </summary>
         public const CreateIndexGrbit IndexNestedTable = (CreateIndexGrbit)0x20000;
 
+#if !MANAGEDESENT_ON_METRO
         /// <summary>
         /// The engine can mark the database headers as appropriate (for example,
         /// a full backup completed), even though the call to truncate was not completed.
         /// </summary>
         public const EndExternalBackupGrbit TruncateDone = (EndExternalBackupGrbit)0x100;
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Perform recovery, but halt at the Undo phase. Allows whatever logs are present to
@@ -136,12 +147,13 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// </summary>
         public const InitGrbit LogStreamMustExist = (InitGrbit)0x40;
 
+#if !MANAGEDESENT_ON_METRO
         /// <summary>
         /// The snapshot session continues after JetOSSnapshotThaw and will
         /// require a JetOSSnapshotEnd function call.
         /// </summary>
         public const SnapshotPrepareGrbit ContinueAfterThaw = (SnapshotPrepareGrbit)0x4;
-
+#endif // !MANAGEDESENT_ON_METRO
         /// <summary>
         /// Specifying this flag will cause the index to use the maximum key size
         /// specified in the cbKeyMost field in the structure. Otherwise, the

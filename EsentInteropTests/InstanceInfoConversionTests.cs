@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="InstanceInfoConversionTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -37,6 +37,7 @@ namespace InteropApiTests
         /// </summary>
         private static readonly IntPtr instance = new IntPtr(0x111);
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Test JET_INSTANCE_INFO.SetFromNativeUnicode.
         /// </summary>
@@ -45,7 +46,7 @@ namespace InteropApiTests
         [Description("Test JET_INSTANCE_INFO.SetFromNativeUnicode")]
         public void TestSetFromNativeUnicode()
         {
-            TestSetFromNative(Marshal.StringToHGlobalUni, (m, n) => m.SetFromNativeUnicode(n));
+            TestSetFromNative(EseInteropTestHelper.MarshalStringToHGlobalUni, (m, n) => m.SetFromNativeUnicode(n));
         }
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace InteropApiTests
         [Description("Test JET_INSTANCE_INFO.SetFromNativeAscii")]
         public void TestSetFromNativeAscii()
         {
-            TestSetFromNative(Marshal.StringToHGlobalAnsi, (m, n) => m.SetFromNativeAscii(n));
+            TestSetFromNative(EseInteropTestHelper.MarshalStringToHGlobalAnsi, (m, n) => m.SetFromNativeAscii(n));
         }
 
         /// <summary>
@@ -110,11 +111,12 @@ namespace InteropApiTests
             };
 
             setter(managed, native);
-            Marshal.FreeHGlobal(native.szInstanceName);
-            Marshal.FreeHGlobal(databases[0]);
-            Marshal.FreeHGlobal(databases[1]);
+            EseInteropTestHelper.MarshalFreeHGlobal(native.szInstanceName);
+            EseInteropTestHelper.MarshalFreeHGlobal(databases[0]);
+            EseInteropTestHelper.MarshalFreeHGlobal(databases[1]);
 
             CheckManaged(managed);
         }
+#endif // !MANAGEDESENT_ON_METRO
     }
 }

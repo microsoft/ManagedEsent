@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="SystemParameterTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -11,7 +11,10 @@ namespace InteropApiTests
     using Microsoft.Isam.Esent.Interop.Implementation;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+#if MANAGEDESENT_ON_CORECLR
+#else
     using Rhino.Mocks;
+#endif
 
     /// <summary>
     /// Test the SystemParameters class. To avoid changing global parameters
@@ -20,6 +23,8 @@ namespace InteropApiTests
     [TestClass]
     public partial class SystemParameterTests
     {
+#if MANAGEDESENT_ON_CORECLR
+#else
         /// <summary>
         /// Mock object repository.
         /// </summary>
@@ -243,5 +248,6 @@ namespace InteropApiTests
             SystemParameters.EnableAdvanced = false;
             this.repository.VerifyAll();
         }
+#endif
     }
 }

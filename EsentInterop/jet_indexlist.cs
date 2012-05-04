@@ -51,19 +51,19 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// Id of the column containing the number of unique keys in the index.
-        /// This is updated by <see cref="Api.JetComputeStats"/>.
+        /// This is updated by "Api.JetComputeStats".
         /// </summary>
         public uint columnidcKey;
 
         /// <summary>
         /// Id of the column containing the number of entries in the index.
-        /// This is updated by <see cref="Api.JetComputeStats"/>.
+        /// This is updated by "Api.JetComputeStats".
         /// </summary>
         public uint columnidcEntry;
 
         /// <summary>
         /// Id of the column containing the number of pages in the index.
-        /// This is updated by <see cref="Api.JetComputeStats"/>.
+        /// This is updated by "Api.JetComputeStats".
         /// </summary>
         public uint columnidcPage;
 
@@ -150,101 +150,101 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets the columnid of the column in the temporary table which
         /// stores the name of the index.
-        /// The column is of type JET_coltyp.Text.
+        /// The column is of type <see cref="JET_coltyp.Text"/>.
         /// </summary>
         public JET_COLUMNID columnidindexname { get; internal set; }
 
         /// <summary>
         /// Gets the columnid of the column in the temporary table which
         /// stores the the grbits used on the index. See <see cref="CreateIndexGrbit"/>.
-        /// The column is of type JET_coltyp.Long.
+        /// The column is of type <see cref="JET_coltyp.Long"/>.
         /// </summary>
         public JET_COLUMNID columnidgrbitIndex { get; internal set; }
 
         /// <summary>
         /// Gets the columnid of the column in the temporary table which
         /// stores the number of unique keys in the index.
-        /// This value is not current and is only is updated by <see cref="Api.JetComputeStats"/>.
-        /// The column is of type JET_coltyp.Long.
+        /// This value is not current and is only is updated by "Api.JetComputeStats".
+        /// The column is of type <see cref="JET_coltyp.Long"/>.
         /// </summary>
         public JET_COLUMNID columnidcKey { get; internal set; }
 
         /// <summary>
         /// Gets the columnid of the column in the temporary table which
         /// stores the number of entries in the index.
-        /// This value is not current and is only is updated by <see cref="Api.JetComputeStats"/>.
-        /// The column is of type JET_coltyp.Long.
+        /// This value is not current and is only is updated by "Api.JetComputeStats".
+        /// The column is of type <see cref="JET_coltyp.Long"/>.
         /// </summary>
         public JET_COLUMNID columnidcEntry { get; internal set; }
 
         /// <summary>
         /// Gets the columnid of the column in the temporary table which
         /// stores the number of pages in the index.
-        /// This value is not current and is only is updated by <see cref="Api.JetComputeStats"/>.
-        /// The column is of type JET_coltyp.Long.
+        /// This value is not current and is only is updated by "Api.JetComputeStats".
+        /// The column is of type <see cref="JET_coltyp.Long"/>.
         /// </summary>
         public JET_COLUMNID columnidcPage { get; internal set; }
 
         /// <summary>
         /// Gets the columnid of the column in the temporary table which
         /// stores the number of columns in the index key.
-        /// The column is of type JET_coltyp.Long.
+        /// The column is of type <see cref="JET_coltyp.Long"/>.
         /// </summary>
         public JET_COLUMNID columnidcColumn { get; internal set; }
 
         /// <summary>
         /// Gets the columnid of the column in the temporary table which
         /// stores the index of of this column in the index key.
-        /// The column is of type JET_coltyp.Long.
+        /// The column is of type <see cref="JET_coltyp.Long"/>.
         /// </summary>
         public JET_COLUMNID columnidiColumn { get; internal set; }
 
         /// <summary>
         /// Gets the columnid of the column in the temporary table which
         /// stores the columnid of the column being indexed.
-        /// The column is of type JET_coltyp.Long.
+        /// The column is of type <see cref="JET_coltyp.Long"/>.
         /// </summary>
         public JET_COLUMNID columnidcolumnid { get; internal set; }
 
         /// <summary>
         /// Gets the columnid of the column in the temporary table which
         /// stores the column type of the column being indexed.
-        /// The column is of type JET_coltyp.Long.
+        /// The column is of type <see cref="JET_coltyp.Long"/>.
         /// </summary>
         public JET_COLUMNID columnidcoltyp { get; internal set; }
 
         /// <summary>
         /// Gets the columnid of the column in the temporary table which
         /// stores the language id (LCID) of the index.
-        /// The column is of type JET_coltyp.Short.
+        /// The column is of type <see cref="JET_coltyp.Short"/>.
         /// </summary>
         public JET_COLUMNID columnidLangid { get; internal set; }
 
         /// <summary>
         /// Gets the columnid of the column in the temporary table which
         /// stores the code page of the indexed column.
-        /// The column is of type JET_coltyp.Short.
+        /// The column is of type <see cref="JET_coltyp.Short"/>.
         /// </summary>
         public JET_COLUMNID columnidCp { get; internal set; }
 
         /// <summary>
         /// Gets the columnid of the column in the temporary table which
         /// stores the grbit that apply to the indexed column. See <see cref="IndexKeyGrbit"/>.
-        /// The column is of type JET_coltyp.Long.
+        /// The column is of type <see cref="JET_coltyp.Long"/>.
         /// </summary>
         public JET_COLUMNID columnidgrbitColumn { get; internal set; }
 
         /// <summary>
         /// Gets the columnid of the column in the temporary table which
         /// stores the grbit that apply to the indexed column. See <see cref="IndexKeyGrbit"/>.
-        /// The column is of type JET_coltyp.Text.
+        /// The column is of type <see cref="JET_coltyp.Text"/>.
         /// </summary>
         public JET_COLUMNID columnidcolumnname { get; internal set; }
 
         /// <summary>
         /// Gets the columnid of the column in the temporary table which
         /// stores the unicode normalization flags for the index.
-        /// The column is of type JET_coltyp.Long.
+        /// The column is of type <see cref="JET_coltyp.Long"/>.
         /// </summary>
         public JET_COLUMNID columnidLCMapFlags { get; internal set; }
 

@@ -10,7 +10,9 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
+#if MANAGEDESENT_SUPPORTS_SERIALIZATION
     using System.Runtime.Serialization.Formatters.Binary;
+#endif
     using System.Text;
 
     /// <summary>
@@ -187,7 +189,7 @@ namespace Microsoft.Isam.Esent.Interop
                 else
                 {
                     // there is more data to retrieve
-                    Debug.Assert(JET_wrn.BufferTruncated == wrn, "Unexpected warning", wrn.ToString());
+                    Debug.Assert(JET_wrn.BufferTruncated == wrn, "Unexpected warning: " + wrn.ToString());
                     data = new byte[dataSize];
                     wrn = JetRetrieveColumn(
                         sesid, tableid, columnid, data, data.Length, out dataSize, grbit, retinfo);
@@ -310,11 +312,15 @@ namespace Microsoft.Isam.Esent.Interop
                     }
                 }
 
+#if MANAGEDESENT_SUPPORTS_ANSI
                 // If we are about to decode ASCII data then use the UTF8 decoder instead. This
                 // is done because the UTF8 decoder is faster and will produce the same results
                 // on ASCII data. Different results will be produced on invalid data, but that
                 // behaviour can be considered undefined.
                 Encoding decoder = (encoding is ASCIIEncoding) ? asciiDecoder : encoding;
+#else
+                Encoding decoder = encoding;
+#endif
                 s = decoder.GetString(data, 0, dataSize);
             }
             finally
@@ -774,6 +780,7 @@ namespace Microsoft.Isam.Esent.Interop
             }
         }
 
+#if MANAGEDESENT_SUPPORTS_SERIALIZATION
         /// <summary>
         /// Deserialize an object from a column.
         /// </summary>
@@ -808,6 +815,7 @@ namespace Microsoft.Isam.Esent.Interop
                 return deseriaizer.Deserialize(stream);
             }
         }
+#endif
 
         /// <summary>
         /// Retrieves columns into ColumnValue objects.

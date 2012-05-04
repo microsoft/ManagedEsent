@@ -88,6 +88,7 @@ namespace InteropApiTests
             this.useStatusCallback = useStatusCallback;
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Create a database, back it up to the backup directory and
         /// then restore it.
@@ -268,6 +269,7 @@ namespace InteropApiTests
                 Cleanup.DeleteDirectoryWithRetry(this.databaseDirectory);
             }
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Create a database and do a recovery to a different
@@ -293,6 +295,7 @@ namespace InteropApiTests
             }
         }
 
+#if !MANAGEDESENT_ON_METRO
         /// <summary>
         /// Create a database and do a snapshot backup using 
         /// functionality available in Windows 7 onwards.
@@ -349,6 +352,7 @@ namespace InteropApiTests
                 Cleanup.DeleteDirectoryWithRetry(this.databaseDirectory);
             }
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Create a database and call JetGetDatabaseInfo.
@@ -382,6 +386,7 @@ namespace InteropApiTests
             }
         }
 
+#if !MANAGEDESENT_ON_METRO
         /// <summary>
         /// Read a file using the JetReadFileInstance API. A backup should be prepared.
         /// </summary>
@@ -404,6 +409,7 @@ namespace InteropApiTests
 
             Api.JetCloseFileInstance(instance, handle);            
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Generate some logs. This is used by tests that do backups.
@@ -468,7 +474,7 @@ namespace InteropApiTests
                 using (var session = new Session(instance))
                 {
                     JET_DBID dbid;
-                    Api.JetCreateDatabase(session, this.database, string.Empty, out dbid, CreateDatabaseGrbit.None);
+                    Api.JetCreateDatabase(session, this.database, string.Empty, out dbid, CreateDatabaseGrbit.OverwriteExisting);
                     using (var transaction = new Transaction(session))
                     {
                         JET_TABLEID tableid;
@@ -487,6 +493,7 @@ namespace InteropApiTests
             }
         }
 
+#if !MANAGEDESENT_ON_METRO
         /// <summary>
         /// Backup the database.
         /// </summary>
@@ -603,6 +610,7 @@ namespace InteropApiTests
                 }
             }
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Recovery to an alternate path with JetInit3.
@@ -620,9 +628,11 @@ namespace InteropApiTests
                 }
             }
 
+#if !MANAGEDESENT_ON_METRO // The File model in Metro has changed.
             // Delete the database and checkpoint
             File.Delete(this.database);
             File.Delete(Path.Combine(this.databaseDirectory, "edb.chk"));
+#endif
 
             // Recovery to a different database
             string newDatabaseName = this.database + ".moved";
@@ -645,11 +655,14 @@ namespace InteropApiTests
             VistaApi.JetInit3(ref recoveryInstance, recoveryOptions, InitGrbit.None);
             Api.JetTerm(recoveryInstance);
 
-            Assert.IsTrue(File.Exists(newDatabaseName), "New database ({0}) doesn't exist", newDatabaseName);
-            Assert.IsFalse(File.Exists(this.database), "Old database ({0}) still exists", this.database);
+#if !MANAGEDESENT_ON_METRO // The File model in Metro has changed.
+            Assert.IsTrue(EseInteropTestHelper.FileExists(newDatabaseName), "New database ({0}) doesn't exist", newDatabaseName);
+            Assert.IsFalse(EseInteropTestHelper.FileExists(this.database), "Old database ({0}) still exists", this.database);
             File.Move(newDatabaseName, this.database);
+#endif
         }
 
+#if !MANAGEDESENT_ON_METRO
         /// <summary>
         /// Perform a snapshot backup using the extra Vista APIs.
         /// </summary>
@@ -832,6 +845,7 @@ namespace InteropApiTests
                 }
             }
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Retrieves various pieces of information with JetGetDatabaseFileInfo.
@@ -876,32 +890,32 @@ namespace InteropApiTests
 
                     int databaseLcid;
                     Api.JetGetDatabaseInfo(session, dbid, out databaseLcid, JET_DbInfo.LCID);
-                    Console.WriteLine("databaseLcid is {0}", databaseLcid);
+                    EseInteropTestHelper.ConsoleWriteLine("databaseLcid is {0}", databaseLcid);
                     Assert.AreEqual(1033, databaseLcid);
 
                     int databaseOptions;
                     Api.JetGetDatabaseInfo(session, dbid, out databaseOptions, JET_DbInfo.Options);
-                    Console.WriteLine("databaseOptions is {0}", databaseOptions);
+                    EseInteropTestHelper.ConsoleWriteLine("databaseOptions is {0}", databaseOptions);
                     Assert.AreEqual(0, databaseOptions);
 
                     int databaseTransactions;
                     Api.JetGetDatabaseInfo(session, dbid, out databaseTransactions, JET_DbInfo.Transactions);
-                    Console.WriteLine("databaseTransactions is {0}", databaseTransactions);
+                    EseInteropTestHelper.ConsoleWriteLine("databaseTransactions is {0}", databaseTransactions);
                     Assert.AreEqual(7, databaseTransactions);
 
                     int databaseVersion;
                     Api.JetGetDatabaseInfo(session, dbid, out databaseVersion, JET_DbInfo.Version);
-                    Console.WriteLine("databaseVersion is {0}", databaseVersion);
+                    EseInteropTestHelper.ConsoleWriteLine("databaseVersion is {0}", databaseVersion);
                     Assert.AreNotEqual(0, databaseVersion);
 
                     int databaseSpaceOwned;
                     Api.JetGetDatabaseInfo(session, dbid, out databaseSpaceOwned, JET_DbInfo.SpaceOwned);
-                    Console.WriteLine("databaseSpaceOwned is {0}", databaseSpaceOwned);
+                    EseInteropTestHelper.ConsoleWriteLine("databaseSpaceOwned is {0}", databaseSpaceOwned);
                     Assert.AreNotEqual(0, databaseSpaceOwned);
 
                     int databaseSpaceAvailable;
                     Api.JetGetDatabaseInfo(session, dbid, out databaseSpaceAvailable, JET_DbInfo.SpaceAvailable);
-                    Console.WriteLine("databaseSpaceAvailable is {0}", databaseSpaceAvailable);
+                    EseInteropTestHelper.ConsoleWriteLine("databaseSpaceAvailable is {0}", databaseSpaceAvailable);
                     Assert.AreNotEqual(0, databaseSpaceAvailable);
 
                     int databasePageSize;
@@ -914,11 +928,16 @@ namespace InteropApiTests
 
                     string path;
                     Api.JetGetDatabaseInfo(session, dbid, out path, JET_DbInfo.Filename);
+#if MANAGEDESENT_ON_METRO
+                    Assert.IsFalse(string.IsNullOrEmpty(path));
+#else
                     Assert.AreEqual(Path.GetFullPath(this.database), path);
+#endif
                 }
             }
         }
 
+#if !MANAGEDESENT_ON_METRO
         /// <summary>
         /// Delete the database files from the database directory.
         /// </summary>
@@ -967,7 +986,10 @@ namespace InteropApiTests
                     });
             }
         }
+#endif // !MANAGEDESENT_ON_METRO
 
+        #region Compact Database.
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Compact the database.
         /// </summary>
@@ -995,7 +1017,7 @@ namespace InteropApiTests
                 }
             }
 
-            Assert.IsTrue(File.Exists(defraggedDatabase));
+            Assert.IsTrue(EseInteropTestHelper.FileExists(defraggedDatabase));
             Cleanup.DeleteFileWithRetry(this.database);
             File.Move(defraggedDatabase, this.database);
         }
@@ -1026,7 +1048,10 @@ namespace InteropApiTests
                 }
             }
         }
+#endif // !MANAGEDESENT_ON_METRO
+        #endregion
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Set the database's size.
         /// </summary>
@@ -1046,20 +1071,30 @@ namespace InteropApiTests
                 }
             }
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Check the database files have been restored.
         /// </summary>
         private void CheckDatabase()
         {
+            this.CheckDatabase(this.database);
+        }
+
+        /// <summary>
+        /// Check the database files have been restored.
+        /// </summary>
+        /// <param name="databaseFile">The database file to verify.</param>
+        private void CheckDatabase(string databaseFile)
+        {
             using (var instance = this.CreateInstance())
             {
                 instance.Init();
                 using (var session = new Session(instance))
                 {
-                    Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.ReadOnly);
+                    Api.JetAttachDatabase(session, databaseFile, AttachDatabaseGrbit.ReadOnly);
                     JET_DBID dbid;
-                    Api.JetOpenDatabase(session, this.database, string.Empty, out dbid, OpenDatabaseGrbit.ReadOnly);
+                    Api.JetOpenDatabase(session, databaseFile, string.Empty, out dbid, OpenDatabaseGrbit.ReadOnly);
 
                     JET_TABLEID tableid;
                     Api.JetOpenTable(session, dbid, "table", null, 0, OpenTableGrbit.ReadOnly, out tableid);
@@ -1114,6 +1149,10 @@ namespace InteropApiTests
                 Assert.IsNotNull(snprog, "Expected an snprog in a progress callback");
                 Assert.IsTrue(snprog.cunitDone <= snprog.cunitTotal, "done > total in the snprog");
             }
+
+            // On Metro, the functions that reference this variable are compiled out, so this
+            // prevents a warning-as-error.
+            Assert.IsTrue(this.statusCallbackWasCalled, "This will always be true.");
 
             return JET_err.Success;
         }

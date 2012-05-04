@@ -203,6 +203,12 @@ namespace Microsoft.Isam.Esent.Interop
         Recovery = 34,
 
         /// <summary>
+        /// This parameter controls the behavior of online defragmentation when initiated using
+        /// <see cref="Api.JetDefragment"/> and <see cref="Api.JetDefragment2"/>.
+        /// </summary>
+        EnableOnlineDefrag = 35,
+
+        /// <summary>
         /// This parameter can be used to control the size of the database page cache at run time.
         /// Ordinarily, the cache will automatically tune its size as a function of database and
         /// machine activity levels. If the application sets this parameter to zero, then the cache
@@ -284,6 +290,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         ErrorToString = 70,
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Configures the engine with a <see cref="JET_CALLBACK"/> delegate.
         /// This callback may be called for the following reasons:
@@ -292,6 +299,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// for more information. This parameter cannot currently be retrieved.
         /// </summary>
         RuntimeCallback = 73,
+#endif
 
         /// <summary>
         /// This parameter controls the outcome of JetInit when the database

@@ -467,6 +467,22 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether online defragmentation is enabled.
+        /// </summary>
+        public bool EnableOnlineDefrag
+        {
+            get
+            {
+                return this.GetBoolParameter(JET_param.EnableOnlineDefrag);
+            }
+
+            set
+            {
+                this.SetBoolParameter(JET_param.EnableOnlineDefrag, value);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether JetAttachDatabase will check for
         /// indexes that were build using an older version of the NLS library in the
         /// operating system.

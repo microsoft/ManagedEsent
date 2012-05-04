@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="BackupRestoreTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -27,6 +27,7 @@ namespace InteropApiTests
         }
         #endregion
 
+#if !MANAGEDESENT_ON_METRO
         /// <summary>
         /// Verify JetRestoreInstance throws an exception when the source database is null.
         /// </summary>
@@ -69,5 +70,6 @@ namespace InteropApiTests
             var test = new DatabaseFileTestHelper("database", "backup", true);
             test.TestBackupCallbackExceptionHandling(ex);
         }
+#endif // !MANAGEDESENT_ON_METRO
     }
 }

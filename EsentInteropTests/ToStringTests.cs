@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="ToStringTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -198,6 +198,7 @@ namespace InteropApiTests
             Assert.AreEqual("12EC", string.Format("{0:X}", value));
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Test JET_OSSNAPID.ToString().
         /// </summary>
@@ -233,6 +234,7 @@ namespace InteropApiTests
             var value = new JET_OSSNAPID { Value = (IntPtr)0x123ABC };
             Assert.AreEqual("123ABC", string.Format("{0:X}", value));
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Test JET_HANDLE.ToString().
@@ -270,6 +272,7 @@ namespace InteropApiTests
             Assert.AreEqual("123ABC", string.Format("{0:X}", value));
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Test JET_LS.ToString().
         /// </summary>
@@ -305,6 +308,7 @@ namespace InteropApiTests
             var value = new JET_LS { Value = (IntPtr)0x123ABC };
             Assert.AreEqual("123ABC", string.Format("{0:X}", value));
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Test JET_INDEXID.ToString().
@@ -326,8 +330,8 @@ namespace InteropApiTests
         [Description("Test JET_LOGTIME.ToString()")]
         public void JetLogtimeToString()
         {
-            var logtime = new JET_LOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Utc));
-            Assert.AreEqual("JET_LOGTIME(17:44:4:31:5:110:0x1:0x0)", logtime.ToString());
+            var logtime = new JET_LOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, 678, DateTimeKind.Utc));
+            Assert.AreEqual("JET_LOGTIME(17:44:4:31:5:110:0x4d:0xa)", logtime.ToString());
         }
 
         /// <summary>
@@ -338,8 +342,8 @@ namespace InteropApiTests
         [Description("Test JET_BKLOGTIME.ToString()")]
         public void JetBklogtimeToString()
         {
-            var bklogtime = new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Utc), true);
-            Assert.AreEqual("JET_BKLOGTIME(17:44:4:31:5:110:0x1:0x1)", bklogtime.ToString());
+            var bklogtime = new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, 678, DateTimeKind.Utc), true);
+            Assert.AreEqual("JET_BKLOGTIME(17:44:4:31:5:110:0x4d:0xb)", bklogtime.ToString());
         }
 
         /// <summary>
@@ -350,7 +354,7 @@ namespace InteropApiTests
         [Description("Test JET_SIGNATURE.ToString()")]
         public void JetSignatureToString()
         {
-            var t = new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Utc);
+            var t = new DateTime(2010, 5, 31, 4, 44, 17, 678, DateTimeKind.Utc);
             var signature = new JET_SIGNATURE(99, t, "COMPUTER");
             Assert.AreEqual("JET_SIGNATURE(99:05/31/2010 04:44:17:COMPUTER)", signature.ToString());
         }
@@ -375,10 +379,10 @@ namespace InteropApiTests
         [Description("Test JET_BKINFO.ToString()")]
         public void JetBkinfoToString()
         {
-            var bklogtime = new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Utc), true);
+            var bklogtime = new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, 678, DateTimeKind.Utc), true);
             var lgpos = new JET_LGPOS { lGeneration = 1, isec = 2, ib = 3 };
             var bkinfo = new JET_BKINFO { bklogtimeMark = bklogtime, genHigh = 57, genLow = 36, lgposMark = lgpos };
-            Assert.AreEqual("JET_BKINFO(36-57:JET_LGPOS(0x1,2,3):JET_BKLOGTIME(17:44:4:31:5:110:0x1:0x1))", bkinfo.ToString());
+            Assert.AreEqual("JET_BKINFO(36-57:JET_LGPOS(0x1,2,3):JET_BKLOGTIME(17:44:4:31:5:110:0x4d:0xb))", bkinfo.ToString());
         }
 
         /// <summary>
@@ -441,6 +445,7 @@ namespace InteropApiTests
             Assert.AreEqual("JET_INDEXCREATE(Index:+C\0\0)", indexcreate.ToString());
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Test JET_INSTANCE_INFO.ToString().
         /// </summary>
@@ -452,6 +457,7 @@ namespace InteropApiTests
             var instanceInfo = new JET_INSTANCE_INFO(JET_INSTANCE.Nil, "name", null);
             Assert.AreEqual("JET_INSTANCE_INFO(name)", instanceInfo.ToString());
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Test JET_COLUMNCREATE.ToString().

@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="SimplePerfTest.cs" company="Microsoft Corporation">
 // Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -156,6 +156,7 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(4)]
         [Description("Run a basic performance test")]
+        [Timeout(30 * 60 * 1000)]
         public void BasicPerfTest()
         {
             CheckMemoryUsage(this.InsertReadSeek);
@@ -167,6 +168,7 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(4)]
         [Description("Run a basic multithreaded stress test")]
+        [Timeout(40 * 60 * 1000)]
         public void BasicMultithreadedStressTest()
         {
             CheckMemoryUsage(this.MultithreadedStress);
@@ -188,15 +190,15 @@ namespace InteropApiTests
         private static void CheckMemoryUsage(Action action)
         {
             RunGarbageCollection();
-            long memoryAtStart = GC.GetTotalMemory(true);
-            int collectionCountAtStart = GC.CollectionCount(0);
+            long memoryAtStart = EseInteropTestHelper.GCGetTotalMemory(true);
+            int collectionCountAtStart = EseInteropTestHelper.GCCollectionCount(0);
 
             action();
 
-            int collectionCountAtEnd = GC.CollectionCount(0);
+            int collectionCountAtEnd = EseInteropTestHelper.GCCollectionCount(0);
             RunGarbageCollection();
-            long memoryAtEnd = GC.GetTotalMemory(true);
-            Console.WriteLine(
+            long memoryAtEnd = EseInteropTestHelper.GCGetTotalMemory(true);
+            EseInteropTestHelper.ConsoleWriteLine(
                 "Memory changed by {0:N} bytes ({1} GC cycles)",
                 memoryAtEnd - memoryAtStart,
                 collectionCountAtEnd - collectionCountAtStart);
@@ -212,7 +214,7 @@ namespace InteropApiTests
             var stopwatch = EsentStopwatch.StartNew();
             action();
             stopwatch.Stop();
-            Console.WriteLine("{0}: {1} ({2})", name, stopwatch.Elapsed, stopwatch.ThreadStats);
+            EseInteropTestHelper.ConsoleWriteLine("{0}: {1} ({2})", name, stopwatch.Elapsed, stopwatch.ThreadStats);
         }
 
         /// <summary>
@@ -267,6 +269,8 @@ namespace InteropApiTests
             return keys;
         }
 
+        // UNDONE: Can this be moved to a Task-model?
+#if !MANAGEDESENT_ON_METRO // Thread model has changed in Metro.
         /// <summary>
         /// Perform a PerfTestWorker action on a separate thread.
         /// </summary>
@@ -284,6 +288,7 @@ namespace InteropApiTests
                 });
             return thread;
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Insert some records and then retrieve them.
@@ -312,6 +317,8 @@ namespace InteropApiTests
         /// </summary>
         private void MultithreadedStress()
         {
+            // UNDONE: Can this be moved to a Task-model?
+#if !MANAGEDESENT_ON_METRO // Thread model has changed in Metro.
             const int NumThreads = 8;
             Thread[] threads = (from i in Enumerable.Repeat(0, NumThreads) select this.StartWorkerThread(StressThread)).ToArray();
             foreach (Thread thread in threads)
@@ -323,6 +330,7 @@ namespace InteropApiTests
             {
                 thread.Join();
             }
+#endif // !MANAGEDESENT_ON_METRO
         }
 
         /// <summary>
@@ -396,7 +404,7 @@ namespace InteropApiTests
             /// </param>
             public PerfTestWorker(JET_INSTANCE instance, string database)
             {
-                Thread.BeginThreadAffinity();
+                EseInteropTestHelper.ThreadBeginThreadAffinity();
                 this.instance = instance;
                 this.database = database;
                 this.session = new Session(this.instance);
@@ -569,7 +577,7 @@ namespace InteropApiTests
                     new JET_ENUMCOLUMNID { columnid = this.columnidKey },
                     new JET_ENUMCOLUMNID { columnid = this.columnidData },
                 };
-                JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero == pv ? Marshal.AllocHGlobal(new IntPtr(cb)) : Marshal.ReAllocHGlobal(pv, new IntPtr(cb));
+                JET_PFNREALLOC allocator = (context, pv, cb) => IntPtr.Zero == pv ? EseInteropTestHelper.MarshalAllocHGlobal(new IntPtr(cb)) : EseInteropTestHelper.MarshalReAllocHGlobal(pv, new IntPtr(cb));
 
                 for (int i = 0; i < numRetrieves; ++i)
                 {
@@ -621,7 +629,7 @@ namespace InteropApiTests
                     this.session.Dispose();
                 }
 
-                Thread.EndThreadAffinity();
+                EseInteropTestHelper.ThreadEndThreadAffinity();
             }
 
             /// <summary>

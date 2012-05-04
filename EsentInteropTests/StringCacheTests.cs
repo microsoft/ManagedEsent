@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="StringCacheTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -17,6 +17,7 @@ namespace InteropApiTests
     [TestClass]
     public class StringCacheTests
     {
+#if !MANAGEDESENT_ON_METRO // String interning is not supported.
         /// <summary>
         /// Try to intern a random string (should not be interned).
         /// </summary>
@@ -40,6 +41,7 @@ namespace InteropApiTests
             string s = string.Intern(StringCache.TryToIntern(Any.String));
             Assert.IsNotNull(string.IsInterned(s), "Should not have been interned");
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Get a string with a null buffer.

@@ -45,7 +45,7 @@ namespace Microsoft.Isam.Esent.Interop
             this.Coltyp = coltyp;
             this.Cp = cp;
             this.MaxLength = maxLength;
-            this.defaultValue = (null == defaultValue) ? null : Array.AsReadOnly(defaultValue);
+            this.defaultValue = (null == defaultValue) ? null : new ReadOnlyCollection<byte>(defaultValue);
             this.Grbit = grbit;
         }
 

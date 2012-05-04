@@ -12,7 +12,7 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Runtime.InteropServices;
 
     /// <summary>
-    /// The native version of the JET_COLUMNBASE structure.
+    /// The native ANSI version of the JET_COLUMNBASE structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
@@ -23,6 +23,85 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     internal struct NATIVE_COLUMNBASE
+    {
+        /// <summary>
+        /// Size of the structure.
+        /// </summary>
+        public uint cbStruct;
+
+        /// <summary>
+        /// Column ID.
+        /// </summary>
+        public uint columnid;
+
+        /// <summary>
+        /// Type of the column.
+        /// </summary>
+        public uint coltyp;
+
+        /// <summary>
+        /// Reserved. Should be 0.
+        /// </summary>
+        [Obsolete("Reserved")]
+        public ushort wCountry;
+
+        /// <summary>
+        /// Obsolete. Should be .
+        /// </summary>
+        [Obsolete("Use cp")]
+        public ushort langid;
+
+        /// <summary>
+        /// Code page for text columns.
+        /// </summary>
+        public ushort cp;
+
+        /// <summary>
+        /// Reserved. Should be 0.
+        /// </summary>
+        [Obsolete("Reserved")]
+        public ushort wFiller;
+
+        /// <summary>
+        /// Maximum length of the column.
+        /// </summary>
+        public uint cbMax;
+
+        /// <summary>
+        /// Column options.
+        /// </summary>
+        public uint grbit;
+
+        /// <summary>
+        /// The table from which the current table inherits its DDL.
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = NameSize)]
+        public string szBaseTableName;
+
+        /// <summary>
+        /// The name of the column in the template table.
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = NameSize)]
+        public string szBaseColumnName;
+
+        /// <summary>
+        /// Max size of the table/column name string.
+        /// </summary>
+        private const int NameSize = 256;
+    }
+
+    /// <summary>
+    /// The native Unicode version of the JET_COLUMNBASE structure.
+    /// </summary>
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1305:FieldNamesMustNotUseHungarianNotation",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
+        "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
+        Justification = "This should match the unmanaged API, which isn't capitalized.")]
+    internal struct NATIVE_COLUMNBASE_WIDE
     {
         /// <summary>
         /// Size of the structure.
@@ -119,6 +198,26 @@ namespace Microsoft.Isam.Esent.Interop
             this.cbMax = checked((int)value.cbMax);
             this.grbit = (ColumndefGrbit)value.grbit;
             this.columnid = new JET_COLUMNID { Value = value.columnid };
+            this.szBaseTableName = StringCache.TryToIntern(value.szBaseTableName);
+            this.szBaseColumnName = StringCache.TryToIntern(value.szBaseColumnName);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JET_COLUMNBASE"/> class.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        internal JET_COLUMNBASE(NATIVE_COLUMNBASE_WIDE value)
+        {
+            this.coltyp = (JET_coltyp)value.coltyp;
+            this.cp = (JET_CP)value.cp;
+            this.cbMax = checked((int)value.cbMax);
+            this.grbit = (ColumndefGrbit)value.grbit;
+            this.columnid = new JET_COLUMNID
+            {
+                Value = value.columnid
+            };
             this.szBaseTableName = StringCache.TryToIntern(value.szBaseTableName);
             this.szBaseColumnName = StringCache.TryToIntern(value.szBaseColumnName);
         }

@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="ThreadstatsTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -7,7 +7,8 @@
 namespace InteropApiTests
 {
     using System;
-    using System.Diagnostics;
+
+    using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -206,7 +207,7 @@ namespace InteropApiTests
             string ignored = t.ToString();
 
             const int N = 100000;
-            Stopwatch s = Stopwatch.StartNew();
+            EsentStopwatch s = EsentStopwatch.StartNew();
             for (int i = 0; i < N; ++i)
             {
                 ignored = t.ToString();
@@ -214,8 +215,8 @@ namespace InteropApiTests
 
             s.Stop();
 
-            double ms = Math.Max(1, s.ElapsedMilliseconds);
-            Console.WriteLine("{0} calls in {1} ({2} ms/call)", N, s.Elapsed, ms / N);
+            double ms = Math.Max(1, s.Elapsed.Milliseconds);
+            EseInteropTestHelper.ConsoleWriteLine("{0} calls in {1} ({2} ms/call)", N, s.Elapsed, ms / N);
         }
     }
 }

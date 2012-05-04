@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="BasicDDLTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -942,7 +942,7 @@ namespace InteropApiTests
                 Api.JetGetTableColumnInfo(this.sesid, this.tableid, ColumnName, out columndef);
                 Assert.Fail("Column is still visible");
             }
-            catch (EsentErrorException)
+            catch (EsentColumnNotFoundException)
             {
             }
         }
@@ -1001,7 +1001,7 @@ namespace InteropApiTests
                 Api.JetOpenTable(this.sesid, this.dbid, TableName, null, 0, OpenTableGrbit.None, out newtable);
                 Assert.Fail("Column is still visible");
             }
-            catch (EsentErrorException)
+            catch (EsentObjectNotFoundException)
             {
             }
         }
@@ -1033,7 +1033,7 @@ namespace InteropApiTests
                 Api.JetUpdate(this.sesid, this.tableid);
                 Assert.Fail("Expected a truncation error");
             }
-            catch (EsentErrorException)
+            catch (EsentKeyTruncatedException)
             {
                 // Expected
             }

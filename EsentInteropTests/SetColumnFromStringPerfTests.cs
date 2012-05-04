@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="SetColumnFromStringPerfTests.cs" company="Microsoft Corporation">
 // Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -11,6 +11,7 @@ namespace InteropApiTests
     using System.Text;
     using System.Threading;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Implementation;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -69,8 +70,8 @@ namespace InteropApiTests
             // turn off logging so initialization is faster
             this.columnidDict = SetupHelper.CreateTempTableWithAllColumns(this.session, TempTableGrbit.ForceMaterialization, out this.tableid);
 
-            Thread.CurrentThread.Priority = ThreadPriority.Highest;
-            Thread.BeginThreadAffinity();
+            EseInteropTestHelper.CurrentThreadPriority = ThreadPriority.Highest;
+            EseInteropTestHelper.ThreadBeginThreadAffinity();
         }
 
         /// <summary>
@@ -80,8 +81,8 @@ namespace InteropApiTests
         [Description("Fixture cleanup for RetrieveColumnAsStringPerfTests")]
         public void Teardown()
         {
-            Thread.EndThreadAffinity();
-            Thread.CurrentThread.Priority = ThreadPriority.Normal;
+            EseInteropTestHelper.ThreadEndThreadAffinity();
+            EseInteropTestHelper.CurrentThreadPriority = ThreadPriority.Normal;
             Api.JetCloseTable(this.session, this.tableid);
             this.session.End();
             this.instance.Term();
@@ -100,7 +101,7 @@ namespace InteropApiTests
         [Priority(3)]
         public void TimeSetColumnFromStringShortCustomAscii()
         {
-            this.TimeSetColumnFromString("ascii", 8, new ASCIIEncoding());
+            this.TimeSetColumnFromString("ascii", 8, LibraryHelpers.NewEncodingASCII);
         }
 
         /// <summary>
@@ -111,7 +112,7 @@ namespace InteropApiTests
         [Priority(3)]
         public void TimeSetColumnFromStringShortAscii()
         {
-            this.TimeSetColumnFromString("ascii", 8, Encoding.ASCII);
+            this.TimeSetColumnFromString("ascii", 8, LibraryHelpers.EncodingASCII);
         }
 
         /// <summary>
@@ -122,7 +123,7 @@ namespace InteropApiTests
         [Priority(3)]
         public void TimeSetColumnFromStringAscii()
         {
-            this.TimeSetColumnFromString("ascii", 512, Encoding.ASCII);
+            this.TimeSetColumnFromString("ascii", 512, LibraryHelpers.EncodingASCII);
         }
 
         /// <summary>
@@ -133,7 +134,7 @@ namespace InteropApiTests
         [Priority(3)]
         public void TimeSetColumnFromStringLongAscii()
         {
-            this.TimeSetColumnFromString("ascii", 513, Encoding.ASCII);
+            this.TimeSetColumnFromString("ascii", 513, LibraryHelpers.EncodingASCII);
         }
 
         /// <summary>
@@ -213,7 +214,7 @@ namespace InteropApiTests
             GC.WaitForPendingFinalizers();
             GC.Collect();
 
-            Thread.Sleep(1);
+            EseInteropTestHelper.ThreadSleep(1);
 
             // Time the SetColumn calls
             var stopwatch = EsentStopwatch.StartNew();
@@ -224,7 +225,7 @@ namespace InteropApiTests
             }
 
             stopwatch.Stop();
-            Console.WriteLine("{0} ({1})", stopwatch.Elapsed, stopwatch.ThreadStats);
+            EseInteropTestHelper.ConsoleWriteLine("{0} ({1})", stopwatch.Elapsed, stopwatch.ThreadStats);
 
             Api.JetCommitTransaction(this.session, CommitTransactionGrbit.None);
         }

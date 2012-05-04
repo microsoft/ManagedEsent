@@ -11,7 +11,10 @@ namespace InteropApiTests
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Implementation;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+#if MANAGEDESENT_ON_CORECLR
+#else
     using Rhino.Mocks;
+#endif
 
     /// <summary>
     /// Test some error handling in helper methods using a
@@ -20,6 +23,8 @@ namespace InteropApiTests
     [TestClass]
     public class HelperMethodErrorHandlingTests
     {
+#if MANAGEDESENT_ON_CORECLR
+#else
         /// <summary>
         /// Mock object repository.
         /// </summary>
@@ -470,5 +475,6 @@ namespace InteropApiTests
                 .Return((int)JET_err.ReadVerifyFailure);
             this.mocks.ReplayAll();
         }
+#endif
     }
 }

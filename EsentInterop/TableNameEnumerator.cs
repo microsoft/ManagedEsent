@@ -6,6 +6,7 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System.Text;
     using Microsoft.Isam.Esent.Interop.Implementation;
 
     /// <summary>
@@ -63,11 +64,14 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The entry the cursor is currently positioned on.</returns>
         protected override string GetCurrent()
         {
+            // If we use the wide API (Vista+), then the temp table will be in UTF-16.
+            Encoding encodingOfTextColumns = EsentVersion.SupportsVistaFeatures ? Encoding.Unicode : LibraryHelpers.EncodingASCII;
+
             string name = Api.RetrieveColumnAsString(
                 this.Sesid,
                 this.TableidToEnumerate,
                 this.objectlist.columnidobjectname,
-                NativeMethods.Encoding,
+                encodingOfTextColumns,
                 RetrieveColumnGrbit.None);
             return StringCache.TryToIntern(name);
         }

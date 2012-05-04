@@ -1,9 +1,10 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="NativeRecsizeConversionTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
 //-----------------------------------------------------------------------
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
 namespace InteropApiTests
 {
     using Microsoft.Isam.Esent.Interop.Vista;
@@ -148,3 +149,4 @@ namespace InteropApiTests
         }
     }
 }
+#endif // !MANAGEDESENT_ON_METRO

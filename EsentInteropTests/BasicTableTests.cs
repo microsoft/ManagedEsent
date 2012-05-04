@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="BasicTableTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -13,6 +13,7 @@ namespace InteropApiTests
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Isam.Esent.Interop.Windows7;
+    using Microsoft.Isam.Esent.Interop.Windows8;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -133,6 +134,7 @@ namespace InteropApiTests
 
         #region Session tests
 
+#if !MANAGEDESENT_ON_METRO // The threading model in Metro has changed.
         /// <summary>
         /// Test moving a transaction between threads.
         /// </summary>
@@ -147,11 +149,11 @@ namespace InteropApiTests
 
             var thread = new Thread(() =>
                 {
-                    Thread.BeginThreadAffinity();
+                    EseInteropTestHelper.ThreadBeginThreadAffinity();
                     Api.JetSetSessionContext(this.sesid, context);
                     Api.JetBeginTransaction(this.sesid);
                     Api.JetResetSessionContext(this.sesid);
-                    Thread.EndThreadAffinity();
+                    EseInteropTestHelper.ThreadEndThreadAffinity();
                 });
             thread.Start();
             thread.Join();
@@ -160,11 +162,13 @@ namespace InteropApiTests
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.None);
             Api.JetResetSessionContext(this.sesid);
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         #endregion
 
         #region JetDupCursor
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Verify JetDupCursor returns a different tableid.
         /// </summary>
@@ -202,6 +206,7 @@ namespace InteropApiTests
             Assert.AreEqual(expected, actual);
             Api.JetCloseTable(this.sesid, newTableid);
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         #endregion JetDupCursor
 
@@ -334,6 +339,37 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Using JetBeginTransaction3, insert a record, update it and rollback the update.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Using JetBeginTransaction3, insert a record, update it and rollback the update")]
+        public void TestJetBeginTransaction3()
+        {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
+            string before = Any.String;
+            string after = Any.String;
+
+            Windows8Api.JetBeginTransaction3(this.sesid, 20120131, BeginTransactionGrbit.None);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            this.SetColumnFromString(before);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Replace);
+            this.SetColumnFromString(after);
+            this.UpdateAndGotoBookmark();
+            Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);
+
+            Assert.AreEqual(before, this.RetrieveColumnAsString());
+        }
+
+        /// <summary>
         /// Insert a record, update it and rollback the transaction.
         /// This uses the Transaction class.
         /// </summary>
@@ -393,6 +429,7 @@ namespace InteropApiTests
             }
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Test JetGetLock.
         /// </summary>
@@ -679,6 +716,7 @@ namespace InteropApiTests
             Api.JetCommitTransaction(sesid2, CommitTransactionGrbit.None);
             Api.JetEndSession(sesid2, EndSessionGrbit.None);
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         #endregion DML Tests
 
@@ -930,6 +968,7 @@ namespace InteropApiTests
         [Description("Verify JetDefragment2 calls the callback")]
         public void TestJetDefragment2Callback()
         {
+#if !MANAGEDESENT_ON_CORECLR // The light ESENT doesn't support callbacks.
             ManualResetEvent oldFinishedEvent = new ManualResetEvent(false);
             JET_CALLBACK callback = (sesid, dbid, tableid, cbtyp, arg1, arg2, context, unused) =>
             {
@@ -941,12 +980,13 @@ namespace InteropApiTests
             int seconds = 1;
             Api.JetDefragment2(this.sesid, this.dbid, null, ref passes, ref seconds, callback, DefragGrbit.BatchStart);
             Assert.IsTrue(
-                oldFinishedEvent.WaitOne(TimeSpan.FromSeconds(10), false),
+                oldFinishedEvent.WaitOne(TimeSpan.FromSeconds(10)),
                 "Online Defragmentation Callback not called");
             Api.JetDefragment2(this.sesid, this.dbid, null, ref passes, ref seconds, null, DefragGrbit.BatchStop);
 
             // Don't let the callback be collected before OLD finishes.
             GC.KeepAlive(callback);
+#endif // !MANAGEDESENT_ON_METRO
         }
 
         #endregion

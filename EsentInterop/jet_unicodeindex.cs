@@ -137,6 +137,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The native version of this object.</returns>
         internal NATIVE_UNICODEINDEX GetNativeUnicodeIndex()
         {
+            if (!string.IsNullOrEmpty(this.localeName))
+            {
+                throw new ArgumentException("localeName was specified, but this version of the API does not accept locale names. Use LCIDs or a different API.");
+            }
+
             var native = new NATIVE_UNICODEINDEX
             {
                 lcid = (uint)this.lcid,

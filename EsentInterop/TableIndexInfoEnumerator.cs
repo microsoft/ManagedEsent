@@ -50,5 +50,21 @@ namespace Microsoft.Isam.Esent.Interop
             this.Indexlist = indexlist;
             this.TableidToEnumerate = this.Indexlist.tableid;
         }
+
+        /// <summary>
+        /// Retrieves information about indexes on a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="indexname">The name of the index.</param>
+        /// <param name="result">Filled in with information about indexes on the table.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        protected override void GetIndexInfo(
+                JET_SESID sesid,
+                string indexname,
+                out string result,
+                JET_IdxInfo infoLevel)
+        {
+            Api.JetGetIndexInfo(sesid, this.dbid, this.tablename, indexname, out result, infoLevel);
+        }
     }
 }

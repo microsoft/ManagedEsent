@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="HelpersTempTableFixtureTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -10,6 +10,7 @@ namespace InteropApiTests
     using System.Collections.Generic;
     using System.Text;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Implementation;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -838,8 +839,8 @@ namespace InteropApiTests
         {
             JET_COLUMNID columnid = this.columnidDict["ASCII"];
             string value = Any.String;
-            this.InsertRecord(columnid, Encoding.ASCII.GetBytes(value));
-            Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, Encoding.ASCII));
+            this.InsertRecord(columnid, LibraryHelpers.EncodingASCII.GetBytes(value));
+            Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, LibraryHelpers.EncodingASCII));
         }
 
         /// <summary>
@@ -852,7 +853,7 @@ namespace InteropApiTests
         {
             JET_COLUMNID columnid = this.columnidDict["ASCII"];
             this.InsertRecord(columnid, null);
-            Assert.IsNull(Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, Encoding.ASCII));
+            Assert.IsNull(Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, LibraryHelpers.EncodingASCII));
         }
 
         /// <summary>
@@ -865,13 +866,13 @@ namespace InteropApiTests
         {
             JET_COLUMNID columnid = this.columnidDict["ASCII"];
             string value = string.Empty;
-            byte[] data = Encoding.ASCII.GetBytes(value);
+            byte[] data = LibraryHelpers.EncodingASCII.GetBytes(value);
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
             Api.JetSetColumn(this.sesid, this.tableid, columnid, data, data.Length, SetColumnGrbit.ZeroLength, null);
             this.UpdateAndGotoBookmark();
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-            Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, Encoding.ASCII));
+            Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, LibraryHelpers.EncodingASCII));
         }
 
         /// <summary>
@@ -884,8 +885,8 @@ namespace InteropApiTests
         {
             JET_COLUMNID columnid = this.columnidDict["Ascii"];
             var value = new string('X', 1024 * 1024);
-            this.InsertRecord(columnid, Encoding.ASCII.GetBytes(value));
-            Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, Encoding.ASCII));
+            this.InsertRecord(columnid, LibraryHelpers.EncodingASCII.GetBytes(value));
+            Assert.AreEqual(value, Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, LibraryHelpers.EncodingASCII));
         }
 
         /// <summary>
@@ -1034,8 +1035,9 @@ namespace InteropApiTests
             Api.SetColumn(this.sesid, this.tableid, columnid, expected, Encoding.Unicode);
             this.UpdateAndGotoBookmark();
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-            
-            string actual = Encoding.Unicode.GetString(Api.RetrieveColumn(this.sesid, this.tableid, columnid));
+
+            byte[] rawBytes = Api.RetrieveColumn(this.sesid, this.tableid, columnid);
+            string actual = Encoding.Unicode.GetString(rawBytes, 0, rawBytes.Length);
             Assert.AreEqual(expected, actual);
         }
 
@@ -1057,7 +1059,8 @@ namespace InteropApiTests
             this.UpdateAndGotoBookmark();
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
-            string actual = Encoding.Unicode.GetString(Api.RetrieveColumn(this.sesid, this.tableid, columnid));
+            byte[] rawBytes = Api.RetrieveColumn(this.sesid, this.tableid, columnid);
+            string actual = Encoding.Unicode.GetString(rawBytes, 0, rawBytes.Length);
             Assert.AreEqual(data + data, actual);
         }
 
@@ -1088,11 +1091,12 @@ namespace InteropApiTests
 
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
-            Api.SetColumn(this.sesid, this.tableid, columnid, expected, Encoding.ASCII);
+            Api.SetColumn(this.sesid, this.tableid, columnid, expected, LibraryHelpers.EncodingASCII);
             this.UpdateAndGotoBookmark();
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
-            string actual = Encoding.ASCII.GetString(Api.RetrieveColumn(this.sesid, this.tableid, columnid));
+            byte[] rawData = Api.RetrieveColumn(this.sesid, this.tableid, columnid);
+            string actual = LibraryHelpers.EncodingASCII.GetString(rawData, 0, rawData.Length);
             Assert.AreEqual(expected, actual);
         }
 
@@ -1109,11 +1113,12 @@ namespace InteropApiTests
 
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
-            Api.SetColumn(this.sesid, this.tableid, columnid, expected, Encoding.ASCII);
+            Api.SetColumn(this.sesid, this.tableid, columnid, expected, LibraryHelpers.EncodingASCII);
             this.UpdateAndGotoBookmark();
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
-            string actual = Encoding.ASCII.GetString(Api.RetrieveColumn(this.sesid, this.tableid, columnid));
+            byte[] rawData = Api.RetrieveColumn(this.sesid, this.tableid, columnid);
+            string actual = LibraryHelpers.EncodingASCII.GetString(rawData, 0, rawData.Length);
             Assert.AreEqual(expected, actual);
         }
 
@@ -1129,9 +1134,9 @@ namespace InteropApiTests
             // set/retrieve. Use this to create boundary condition length strings.
             const int InternalBufferSize = 128 * 1024;
 
-            this.SetAndRetrieveString("ascii", InternalBufferSize - 1, Encoding.ASCII);
-            this.SetAndRetrieveString("ascii", InternalBufferSize, Encoding.ASCII);
-            this.SetAndRetrieveString("ascii", InternalBufferSize + 1, Encoding.ASCII);
+            this.SetAndRetrieveString("ascii", InternalBufferSize - 1, LibraryHelpers.EncodingASCII);
+            this.SetAndRetrieveString("ascii", InternalBufferSize, LibraryHelpers.EncodingASCII);
+            this.SetAndRetrieveString("ascii", InternalBufferSize + 1, LibraryHelpers.EncodingASCII);
 
             this.SetAndRetrieveString("unicode", (InternalBufferSize / sizeof(char)) - 1, Encoding.Unicode);
             this.SetAndRetrieveString("unicode", InternalBufferSize / sizeof(char), Encoding.Unicode);
@@ -1157,7 +1162,7 @@ namespace InteropApiTests
         [Description("Test setting and retrieving strings with custom ASCII encoding")]
         public void SetAndRetrieveStringsCustomAscii()
         {
-            this.SetAndRetrieveString("ASCII", 16, new ASCIIEncoding());
+            this.SetAndRetrieveString("ASCII", 16, LibraryHelpers.NewEncodingASCII);
         }
 
         /// <summary>
@@ -1175,7 +1180,7 @@ namespace InteropApiTests
 
             try
             {
-                Api.SetColumn(this.sesid, this.tableid, columnid, Any.String, Encoding.UTF8);
+                Api.SetColumn(this.sesid, this.tableid, columnid, Any.String, Encoding.BigEndianUnicode);
                 Assert.Fail("Expected an ESENT exception");
             }
             catch (ArgumentOutOfRangeException)
@@ -1200,7 +1205,8 @@ namespace InteropApiTests
             this.UpdateAndGotoBookmark();
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
-            string actual = Encoding.Unicode.GetString(Api.RetrieveColumn(this.sesid, this.tableid, columnid));
+            byte[] rawData = Api.RetrieveColumn(this.sesid, this.tableid, columnid);
+            string actual = Encoding.Unicode.GetString(rawData, 0, rawData.Length);
             Assert.AreEqual(expected, actual);
         }
 
@@ -1648,7 +1654,7 @@ namespace InteropApiTests
             this.UpdateAndGotoBookmark();
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
-            DateTime actual = DateTime.FromOADate(BitConverter.ToDouble(Api.RetrieveColumn(this.sesid, this.tableid, columnid), 0));
+            DateTime actual = LibraryHelpers.FromOADate(BitConverter.ToDouble(Api.RetrieveColumn(this.sesid, this.tableid, columnid), 0));
             Assert.AreEqual(expected, actual);
         }
 
@@ -2286,6 +2292,7 @@ namespace InteropApiTests
             Assert.AreEqual(expected, Api.RetrieveColumnAsDateTime(this.sesid, this.tableid, columnid));
         }
 
+#if MANAGEDESENT_SUPPORTS_SERIALIZATION
         /// <summary>
         /// Serialize and deserialize null.
         /// </summary>
@@ -2329,7 +2336,7 @@ namespace InteropApiTests
             var actual = Api.DeserializeObjectFromColumn(this.sesid, this.tableid, columnid) as List<double>;
             CollectionAssert.AreEqual(expected, actual);
         }
-
+#endif
         #endregion SetColumn Tests
 
         #region Helper methods
@@ -2443,7 +2450,8 @@ namespace InteropApiTests
 
             string actual = Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, encoding);
             Assert.AreEqual(expected, actual, "RetrieveColumnAsString");
-            actual = encoding.GetString(Api.RetrieveColumn(this.sesid, this.tableid, columnid));
+            byte[] rawBytes = Api.RetrieveColumn(this.sesid, this.tableid, columnid);
+            actual = encoding.GetString(rawBytes, 0, rawBytes.Length);
             Assert.AreEqual(expected, actual, "RetrieveColumn");
 
             Api.JetRollback(this.sesid, RollbackTransactionGrbit.None);

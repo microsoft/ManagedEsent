@@ -615,6 +615,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
     }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
     /// <summary>
     /// A JET_OSSNAPID contains a handle to a snapshot of a database.
     /// </summary>
@@ -722,6 +723,7 @@ namespace Microsoft.Isam.Esent.Interop
             return this.Value.Equals(other.Value);
         }
     }
+#endif // !MANAGEDESENT_ON_METRO
 
     /// <summary>
     /// A JET_HANDLE contains a generic handle.
@@ -831,6 +833,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
     }
 
+#if !MANAGEDESENT_ON_METRO
     /// <summary>
     /// Local storage for an ESENT handle. Used by <see cref="Api.JetGetLS"/>
     /// and <see cref="Api.JetSetLS"/>.
@@ -935,6 +938,7 @@ namespace Microsoft.Isam.Esent.Interop
             return this.Value.Equals(other.Value);
         }
     }
+#endif // !MANAGEDESENT_ON_METRO
 
     /// <summary>
     /// Holds an index ID. An index ID is a hint that is used to accelerate the
@@ -944,8 +948,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     /// <remarks>
     /// The Pack attribute is necessary because the C++ version is defined as
-    /// a byte array. If the C# compiler inserts the usual padding between the IntPtr
-    /// and uint, then the structure ends up too large.
+    /// a byte array. If the C# compiler inserts the usual padding between the uint cbStruct
+    ///  and the IntPtr, then the structure ends up too large.
     /// </remarks>
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
     public struct JET_INDEXID : IEquatable<JET_INDEXID>

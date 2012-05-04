@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="ColumnValueTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -295,6 +295,215 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test the Length property of a Bool column value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test BoolColumnValue.Length")]
+        public void TestBoolLength()
+        {
+            TestLengthForStruct(new BoolColumnValue(), true, 1);
+            TestLengthForStruct(new BoolColumnValue(), false, 1);
+        }
+
+        /// <summary>
+        /// Test the Length property of a Byte column value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test ByteColumnValue.Length")]
+        public void TestByteLength()
+        {
+            var value = new ByteColumnValue();
+            for (byte i = byte.MinValue; i < byte.MaxValue; ++i)
+            {
+                TestLengthForStruct(value, i, 1);
+            }
+        }
+
+        /// <summary>
+        /// Test the Length property of an Int16 column value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test Int16ColumnValue.Length")]
+        public void TestInt16Length()
+        {
+            var value = new Int16ColumnValue();
+            for (short i = short.MinValue; i < short.MaxValue; ++i)
+            {
+                TestLengthForStruct(value, i, 2);
+            }
+        }
+
+        /// <summary>
+        /// Test the Length property of an UInt16 column value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test UInt16ColumnValue.Length")]
+        public void TestUInt16Length()
+        {
+            var value = new UInt16ColumnValue();
+            for (ushort i = ushort.MinValue; i < ushort.MaxValue; ++i)
+            {
+                TestLengthForStruct(value, i, 2);
+            }
+        }
+
+        /// <summary>
+        /// Test the Length property of an Int32 column value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test Int32ColumnValue.Length")]
+        public void TestInt32Length()
+        {
+            var value = new Int32ColumnValue();
+            foreach (int i in new[] { int.MinValue, int.MinValue + 1, -1, 0, 1, Any.Int32, 65521, int.MaxValue - 1, int.MaxValue })
+            {
+                TestLengthForStruct(value, i, 4);
+            }
+        }
+
+        /// <summary>
+        /// Test the Length property of an UInt32 column value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test UInt32ColumnValue.Length")]
+        public void TestUInt32Length()
+        {
+            var value = new UInt32ColumnValue();
+            foreach (uint i in new[] { uint.MinValue, 1U, 2U, Any.UInt32, 65521U, uint.MaxValue - 1, uint.MaxValue })
+            {
+                TestLengthForStruct(value, i, 4);
+            }
+        }
+
+        /// <summary>
+        /// Test the Length property of an Int64 column value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test Int64ColumnValue.Length")]
+        public void TestInt64Length()
+        {
+            var value = new Int64ColumnValue();
+            foreach (long i in new[] { long.MinValue, long.MinValue + 1, -1, 0, 1, Any.Int64, 65521, long.MaxValue - 1, long.MaxValue })
+            {
+                TestLengthForStruct(value, i, 8);
+            }
+        }
+
+        /// <summary>
+        /// Test the Length property of an UInt64 column value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test UInt64ColumnValue.Length")]
+        public void TestUInt64Length()
+        {
+            var value = new UInt64ColumnValue();
+            foreach (ulong i in new[] { ulong.MinValue, 1U, 2U, Any.UInt64, 65521U, ulong.MaxValue - 1, ulong.MaxValue })
+            {
+                TestLengthForStruct(value, i, 8);
+            }
+        }
+
+        /// <summary>
+        /// Test the Length property of a float column value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test FloatColumnValue.Length")]
+        public void TestFloatLength()
+        {
+            var value = new FloatColumnValue();
+            foreach (float i in new[] { float.MinValue, float.MaxValue, -1, 0, 1, Any.Float, float.Epsilon, float.NegativeInfinity, float.PositiveInfinity, float.NaN })
+            {
+                TestLengthForStruct(value, i, 4);
+            }
+        }
+
+        /// <summary>
+        /// Test the Length property of a double column value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test DoubleColumnValue.Length")]
+        public void TestDoubleLength()
+        {
+            var value = new DoubleColumnValue();
+            foreach (double i in
+                new[] { double.MinValue, double.MaxValue, -1, 0, 1, Any.Double, double.Epsilon, double.NegativeInfinity, double.PositiveInfinity, double.NaN, Math.PI, Math.E })
+            {
+                TestLengthForStruct(value, i, 8);
+            }
+        }
+
+        /// <summary>
+        /// Test the Length property of a DateTime column value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test DateTimeColumnValue.Length")]
+        public void TestDateTimeLength()
+        {
+            var value = new DateTimeColumnValue();
+            foreach (DateTime i in new[] { DateTime.MinValue, DateTime.MaxValue, Any.DateTime, DateTime.Now, DateTime.UtcNow, DateTime.Today })
+            {
+                TestLengthForStruct(value, i, 8);
+            }
+        }
+
+        /// <summary>
+        /// Test the Length property of a Guid column value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test GuidColumnValue.Length")]
+        public void TestGuidLength()
+        {
+            var value = new GuidColumnValue();
+            foreach (Guid i in new[] { Guid.Empty, Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() })
+            {
+                TestLengthForStruct(value, i, 16);
+            }
+        }
+
+        /// <summary>
+        /// Test the Length property of an string column value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test StringColumnValue.Length")]
+        public void TestStringLength()
+        {
+            var instance = new StringColumnValue { Value = "hello" };
+            Assert.AreEqual("hello".Length * 2, instance.Length);
+
+            instance = new StringColumnValue { Value = null };
+            Assert.AreEqual(0, instance.Length);
+        }
+
+        /// <summary>
+        /// Test the Length property of an bytes column value.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test BytesColumnValue.Length")]
+        public void TestBytesLength()
+        {
+            byte[] data = Any.Bytes;
+            var instance = new BytesColumnValue { Value = data };
+            Assert.AreEqual(data.Length, instance.Length);
+
+            instance = new BytesColumnValue { Value = null };
+            Assert.AreEqual(0, instance.Length);
+        }
+
+        /// <summary>
         /// Test the ValueAsObject method for structure types.
         /// </summary>
         /// <typeparam name="T">The structure type.</typeparam>
@@ -316,6 +525,22 @@ namespace InteropApiTests
 
             columnValue.Value = default(T);
             Assert.AreEqual(columnValue.ValueAsObject, default(T));
+        }
+
+        /// <summary>
+        /// Test the ValueAsObject method for structure types.
+        /// </summary>
+        /// <typeparam name="T">The structure type.</typeparam>
+        /// <param name="columnValue">The column value.</param>
+        /// <param name="value">The value to set.</param>
+        /// <param name="expectedLength">The expected value length.</param>
+        private static void TestLengthForStruct<T>(ColumnValueOfStruct<T> columnValue, T value, int expectedLength) where T : struct, IEquatable<T>
+        {
+            columnValue.Value = value;
+            Assert.AreEqual(expectedLength, columnValue.Length);
+
+            columnValue.Value = null;
+            Assert.AreEqual(0, columnValue.Length);
         }
 
         /// <summary>
@@ -353,6 +578,7 @@ namespace InteropApiTests
             /// </summary>
             public void RunTest()
             {
+#if !MANAGEDESENT_ON_METRO // The threading model in Metro has changed.
                 Int32ColumnValue columnValue = new Int32ColumnValue();
                 columnValue.Value = 0;
                 Assert.AreEqual(0, columnValue.ValueAsObject);
@@ -379,7 +605,8 @@ namespace InteropApiTests
                     t.Join();
                 }
 
-                Console.WriteLine("Performed {0:N0} operations on {1} threads in {2}", N, threads.Length, stopwatch.Elapsed);
+                EseInteropTestHelper.ConsoleWriteLine("Performed {0:N0} operations on {1} threads in {2}", N, threads.Length, stopwatch.Elapsed);
+#endif // !MANAGEDESENT_ON_METRO
             }
 
             /// <summary>

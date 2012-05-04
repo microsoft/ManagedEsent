@@ -69,6 +69,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         private readonly NATIVE_PFNSTATUS nativeCallback;
 
+#if !MANAGEDESENT_ON_METRO
         /// <summary>
         /// Initializes static members of the <see cref="StatusCallbackWrapper"/> class. 
         /// </summary>
@@ -80,8 +81,9 @@ namespace Microsoft.Isam.Esent.Interop
             // will catch the exception and deal with it.
             RuntimeHelpers.PrepareMethod(typeof(StatusCallbackWrapper).GetMethod(
                 "CallbackImpl",
-                BindingFlags.NonPublic | BindingFlags.Instance).MethodHandle);    
+                BindingFlags.NonPublic | BindingFlags.Instance).MethodHandle);
         }
+#endif
 
         /// <summary>
         /// Initializes a new instance of the StatusCallbackWrapper class.
@@ -123,10 +125,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public void ThrowSavedException()
         {
+#if !MANAGEDESENT_ON_METRO // Thread model has changed in Metro.
             if (this.ThreadWasAborted)
             {
                 Thread.CurrentThread.Abort();
             }
+#endif
 
             if (null != this.SavedException)
             {
@@ -158,6 +162,7 @@ namespace Microsoft.Isam.Esent.Interop
                 object data = CallbackDataConverter.GetManagedData(nativeData, snp, snt);
                 return this.wrappedCallback(sesid, snp, snt, data);
             }
+#if !MANAGEDESENT_ON_METRO // Thread model has changed in Metro.
             catch (ThreadAbortException)
             {
                 Trace.WriteLineIf(TraceSwitch.TraceWarning, "Caught ThreadAbortException");
@@ -165,9 +170,10 @@ namespace Microsoft.Isam.Esent.Interop
                 // Stop the thread abort and let the unmanaged ESENT code finish.
                 // ThrowSavedException will call Thread.Abort() again.
                 this.ThreadWasAborted = true;
-                Thread.ResetAbort();
+                LibraryHelpers.ThreadResetAbort();
                 return JET_err.CallbackFailed;
             }
+#endif
             catch (Exception ex)
             {
                 Trace.WriteLineIf(

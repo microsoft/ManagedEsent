@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="EquatableTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -17,7 +17,7 @@ namespace InteropApiTests
     /// Tests for classes that implement IEquatable
     /// </summary>
     [TestClass]
-    public class EquatableTests
+    public partial class EquatableTests
     {
         /// <summary>
         /// Check that JET_INSTANCE structures can be
@@ -179,6 +179,7 @@ namespace InteropApiTests
             Assert.IsFalse(x == y);
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Check that JET_OSSNAPID structures can be
         /// compared for equality.
@@ -210,6 +211,7 @@ namespace InteropApiTests
             Assert.IsTrue(x != y);
             Assert.IsFalse(x == y);
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Check that JET_HANDLE structures can be
@@ -243,6 +245,7 @@ namespace InteropApiTests
             Assert.IsFalse(x == y);
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Check that JET_LS structures can be
         /// compared for equality.
@@ -274,6 +277,7 @@ namespace InteropApiTests
             Assert.IsTrue(x != y);
             Assert.IsFalse(x == y);
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Check that JET_INDEXID structures can be
@@ -358,14 +362,15 @@ namespace InteropApiTests
             // first object. We will compare them all against each other.
             var times = new[]
             {
-                new JET_LOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Utc)),
-                new JET_LOGTIME(new DateTime(2011, 5, 31, 4, 44, 17, DateTimeKind.Utc)),
-                new JET_LOGTIME(new DateTime(2010, 7, 31, 4, 44, 17, DateTimeKind.Utc)),
-                new JET_LOGTIME(new DateTime(2010, 5, 30, 4, 44, 17, DateTimeKind.Utc)),
-                new JET_LOGTIME(new DateTime(2010, 5, 31, 5, 44, 17, DateTimeKind.Utc)),
-                new JET_LOGTIME(new DateTime(2010, 5, 31, 4, 45, 17, DateTimeKind.Utc)),
-                new JET_LOGTIME(new DateTime(2010, 5, 31, 4, 44, 18, DateTimeKind.Utc)),
-                new JET_LOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Local)),
+                new JET_LOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, 679, DateTimeKind.Utc)),
+                new JET_LOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, 678, DateTimeKind.Utc)),
+                new JET_LOGTIME(new DateTime(2011, 5, 31, 4, 44, 17, 678, DateTimeKind.Utc)),
+                new JET_LOGTIME(new DateTime(2010, 7, 31, 4, 44, 17, 678, DateTimeKind.Utc)),
+                new JET_LOGTIME(new DateTime(2010, 5, 30, 4, 44, 17, 678, DateTimeKind.Utc)),
+                new JET_LOGTIME(new DateTime(2010, 5, 31, 5, 44, 17, 678, DateTimeKind.Utc)),
+                new JET_LOGTIME(new DateTime(2010, 5, 31, 4, 45, 17, 678, DateTimeKind.Utc)),
+                new JET_LOGTIME(new DateTime(2010, 5, 31, 4, 44, 18, 678, DateTimeKind.Utc)),
+                new JET_LOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, 678, DateTimeKind.Local)),
                 new JET_LOGTIME(),
             };
 
@@ -413,15 +418,16 @@ namespace InteropApiTests
             // first object. We will compare them all against each other.
             var times = new[]
             {
-                new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Utc), true),
-                new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Utc), false),
-                new JET_BKLOGTIME(new DateTime(2011, 5, 31, 4, 44, 17, DateTimeKind.Utc), true),
-                new JET_BKLOGTIME(new DateTime(2010, 7, 31, 4, 44, 17, DateTimeKind.Utc), true),
-                new JET_BKLOGTIME(new DateTime(2010, 5, 30, 4, 44, 17, DateTimeKind.Utc), true),
-                new JET_BKLOGTIME(new DateTime(2010, 5, 31, 5, 44, 17, DateTimeKind.Utc), true),
-                new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 45, 17, DateTimeKind.Utc), true),
-                new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 18, DateTimeKind.Utc), true),
-                new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, DateTimeKind.Local), true),
+                new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, 679, DateTimeKind.Utc), true),
+                new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, 678, DateTimeKind.Utc), true),
+                new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, 678, DateTimeKind.Utc), false),
+                new JET_BKLOGTIME(new DateTime(2011, 5, 31, 4, 44, 17, 678, DateTimeKind.Utc), true),
+                new JET_BKLOGTIME(new DateTime(2010, 7, 31, 4, 44, 17, 678, DateTimeKind.Utc), true),
+                new JET_BKLOGTIME(new DateTime(2010, 5, 30, 4, 44, 17, 678, DateTimeKind.Utc), true),
+                new JET_BKLOGTIME(new DateTime(2010, 5, 31, 5, 44, 17, 678, DateTimeKind.Utc), true),
+                new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 45, 17, 678, DateTimeKind.Utc), true),
+                new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 18, 678, DateTimeKind.Utc), true),
+                new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, 678, DateTimeKind.Local), true),
                 new JET_BKLOGTIME(),
             };
 
@@ -616,6 +622,7 @@ namespace InteropApiTests
             }
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Check that JET_RECSIZE structures can be
         /// compared for equality.
@@ -854,6 +861,7 @@ namespace InteropApiTests
                 }
             }
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Check that JET_THREADSTATS structures can be
@@ -1035,6 +1043,7 @@ namespace InteropApiTests
             VerifyAll(snprogs);
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Check that JET_INSTANCE_INFO objects can be
         /// compared for equality.
@@ -1075,6 +1084,7 @@ namespace InteropApiTests
 
             VerifyAll(infos);
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Check that JET_DBINFOMISC objects can be
@@ -1148,7 +1158,7 @@ namespace InteropApiTests
             values[j++].bkinfoCopyPrev = new JET_BKINFO();
             values[j++].bkinfoDiffPrev = new JET_BKINFO();
             values[j++] = new JET_DBINFOMISC();
-            Debug.Assert(j == values.Length, "Not all members of values were changed", j.ToString());
+            Assert.AreEqual(j, values.Length, "Not all members of values were changed: Expected");
 
             VerifyAll(values);
         }
@@ -1221,7 +1231,7 @@ namespace InteropApiTests
             infos[j++].grbit |= ColumndefGrbit.ColumnNotNULL;
             infos[j++].szBaseColumnName += "baz";
             infos[j++].szBaseTableName += "baz";
-            Debug.Assert(j == infos.Length, "Didn't fill in all members", infos.Length.ToString());
+            Assert.AreEqual(j, infos.Length, "Didn't fill in all members");
 
             VerifyAll(infos);
         }
@@ -1335,7 +1345,7 @@ namespace InteropApiTests
                     }
                     catch (Exception)
                     {
-                        Console.WriteLine("Error comparing {0} and {1}", i, j);
+                        EseInteropTestHelper.ConsoleWriteLine("Error comparing {0} and {1}", i, j);
                         throw;
                     }
                 }

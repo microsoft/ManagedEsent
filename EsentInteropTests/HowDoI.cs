@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="HowDoI.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -9,6 +9,7 @@
 
 namespace InteropApiTests
 {
+#if !MANAGEDESENT_ON_METRO // The File model in Metro has changed.
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -387,7 +388,7 @@ namespace InteropApiTests
                         tableid,
                         autoincColumn,
                         RetrieveColumnGrbit.RetrieveCopy);
-                    Console.WriteLine("{0}", autoinc);
+                    EseInteropTestHelper.ConsoleWriteLine("{0}", autoinc);
                     update.Save();
                 }
             }
@@ -568,7 +569,7 @@ namespace InteropApiTests
 
             for (int i = 0; i < workers.Length; ++i)
             {
-                Console.WriteLine("Worker {0} processed {1} records", i, workers[i].RecordsProcessed);
+                EseInteropTestHelper.ConsoleWriteLine("Worker {0} processed {1} records", i, workers[i].RecordsProcessed);
             }
         }
 
@@ -650,15 +651,16 @@ namespace InteropApiTests
             retrievecolumn.columnid = tagColumn;
             retrievecolumn.itagSequence = 0;
             Api.JetRetrieveColumns(sesid, tableid, new[] { retrievecolumn }, 1); 
-            Console.WriteLine("{0}", retrievecolumn.itagSequence);
+            EseInteropTestHelper.ConsoleWriteLine("{0}", retrievecolumn.itagSequence);
             Assert.AreEqual(3, retrievecolumn.itagSequence);
 
             // Retrieve all the columns
             for (int itag = 1; itag <= retrievecolumn.itagSequence; ++itag)
             {
                 JET_RETINFO retinfo = new JET_RETINFO { itagSequence = itag };
-                string s = Encoding.Unicode.GetString(Api.RetrieveColumn(sesid, tableid, tagColumn, RetrieveColumnGrbit.None, retinfo));
-                Console.WriteLine("{0}: {1}", itag, s);
+                byte[] rawBytes = Api.RetrieveColumn(sesid, tableid, tagColumn, RetrieveColumnGrbit.None, retinfo);
+                string s = Encoding.Unicode.GetString(rawBytes, 0, rawBytes.Length);
+                EseInteropTestHelper.ConsoleWriteLine("{0}: {1}", itag, s);
             }
 
             // Update the record
@@ -693,8 +695,9 @@ namespace InteropApiTests
             for (int itag = 1; itag <= retrievecolumn.itagSequence; ++itag)
             {
                 JET_RETINFO retinfo = new JET_RETINFO { itagSequence = itag };
-                string s = Encoding.Unicode.GetString(Api.RetrieveColumn(sesid, tableid, tagColumn, RetrieveColumnGrbit.None, retinfo));
-                Console.WriteLine("{0}: {1}", itag, s);
+                byte[] rawBytes = Api.RetrieveColumn(sesid, tableid, tagColumn, RetrieveColumnGrbit.None, retinfo);
+                string s = Encoding.Unicode.GetString(rawBytes, 0, rawBytes.Length);
+                EseInteropTestHelper.ConsoleWriteLine("{0}: {1}", itag, s);
             }
 
             Api.JetCommitTransaction(sesid, CommitTransactionGrbit.LazyFlush);
@@ -863,7 +866,7 @@ namespace InteropApiTests
             /// </summary>
             public void DoWork()
             {
-                Thread.BeginThreadAffinity();
+                EseInteropTestHelper.ThreadBeginThreadAffinity();
 
                 // We must be in a transaction for locking to work.
                 using (var transaction = new Transaction(this.sesid))
@@ -882,7 +885,7 @@ namespace InteropApiTests
                             if (Api.TryGetLock(this.sesid, this.tableid, GetLockGrbit.Write))
                             {
                                 // [Do something]
-                                Thread.Sleep(1);
+                                EseInteropTestHelper.ThreadSleep(1);
                                 Api.JetDelete(this.sesid, this.tableid);
                                 this.RecordsProcessed++;
                             }
@@ -893,8 +896,9 @@ namespace InteropApiTests
                     transaction.Commit(CommitTransactionGrbit.LazyFlush);
                 }
 
-                Thread.EndThreadAffinity();
+                EseInteropTestHelper.ThreadEndThreadAffinity();
             }
         }
     }
+#endif // !MANAGEDESENT_ON_METRO
 }

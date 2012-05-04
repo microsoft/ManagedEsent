@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="InitTermTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -9,8 +9,10 @@ namespace InteropApiTests
     using System;
     using System.Threading;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Implementation;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Isam.Esent.Interop.Windows7;
+    using Microsoft.Isam.Esent.Interop.Windows8;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -57,7 +59,7 @@ namespace InteropApiTests
             uint version;
 
             Api.JetCreateInstance(out instance, "JetGetVersion");
-            
+
             var parameters = new InstanceParameters(instance);
             parameters.Recovery = false;
             parameters.MaxTemporaryTables = 0;
@@ -65,11 +67,57 @@ namespace InteropApiTests
 
             Api.JetInit(ref instance);
             Api.JetBeginSession(instance, out sesid, string.Empty, string.Empty);
+#if MANAGEDESENT_ON_METRO // Not exposed in MSDK
+            version = 0;
+#else
             Api.JetGetVersion(sesid, out version);
+#endif
             Api.JetTerm(instance);
 
             Assert.AreNotEqual(0, version);
-            Console.WriteLine("Version = 0x{0:X}", version);
+            EseInteropTestHelper.ConsoleWriteLine("Version = 0x{0:X}", version);
+        }
+
+        /// <summary>
+        /// Verify that the version returned by JetGetVersion can be overridden.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that the version returned by JetGetVersion can be overridden.")]
+        public void VerifyJetVersionOverride()
+        {
+            JET_INSTANCE instance;
+            JET_SESID sesid;
+            uint version;
+
+            IJetApi savedImpl = Api.Impl;
+            try
+            {
+                Api.Impl = new JetApi(Constants.VistaVersion);
+
+                Api.JetCreateInstance(out instance, "JetGetVersionOverride");
+
+                var parameters = new InstanceParameters(instance);
+                parameters.Recovery = false;
+                parameters.MaxTemporaryTables = 0;
+                parameters.NoInformationEvent = true;
+
+                Api.JetInit(ref instance);
+                Api.JetBeginSession(instance, out sesid, string.Empty, string.Empty);
+#if MANAGEDESENT_ON_METRO // Not exposed in MSDK
+                version = Constants.VistaVersion;
+#else
+                Api.JetGetVersion(sesid, out version);
+#endif
+                Api.JetTerm(instance);
+
+                Assert.AreEqual(Constants.VistaVersion, version);
+                EseInteropTestHelper.ConsoleWriteLine("Version = 0x{0:X}", version);
+            }
+            finally
+            {
+                Api.Impl = savedImpl;
+            }
         }
 
         /// <summary>
@@ -287,6 +335,7 @@ namespace InteropApiTests
             Api.JetTerm(instance2);
         }
 
+#if !MANAGEDESENT_ON_METRO
         /// <summary>
         /// Call JetStopBackupInstance on a running instance.
         /// </summary>
@@ -320,6 +369,99 @@ namespace InteropApiTests
                 instance.Parameters.MaxTemporaryTables = 0;
                 instance.Init();
                 Api.JetStopServiceInstance(instance);
+            }
+        }
+
+        /// <summary>
+        /// Call JetStopServiceInstance on a running instance and try another operation.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Call JetStopServiceInstance on a running instance and try another operation.")]
+        public void TestJetStopServiceInstanceStopsSubsequentOperations()
+        {
+            using (var instance = new Instance("TestJetStopServiceInstance"))
+            {
+                instance.Parameters.Recovery = false;
+                instance.Parameters.NoInformationEvent = true;
+                instance.Parameters.MaxTemporaryTables = 0;
+                instance.Init();
+                Api.JetStopServiceInstance(instance);
+                try
+                {
+                    JET_SESID sesid;
+                    Api.JetBeginSession(instance, out sesid, null, null);
+                    Assert.Fail("JetBeginSession should have thrown an exception when the service is stopped.");
+                }
+                catch (EsentClientRequestToStopJetServiceException)
+                {
+                }
+            }
+        }
+
+        /// <summary>
+        /// Call JetStopServiceInstance2 on a running instance.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Call JetStopServiceInstance2 on a running instance.")]
+        public void TestJetStopServiceInstance2()
+        {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
+            using (var instance = new Instance("TestJetStopServiceInstance"))
+            {
+                instance.Parameters.Recovery = false;
+                instance.Parameters.NoInformationEvent = true;
+                instance.Parameters.MaxTemporaryTables = 0;
+                instance.Init();
+                Windows8Api.JetStopServiceInstance2(instance, StopServiceGrbit.All);
+            }
+        }
+
+        /// <summary>
+        /// Call JetStopServiceInstance2 on a running instance and try another operation.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Call JetStopServiceInstance2 on a running instance and try another operation.")]
+        public void TestJetStopServiceInstance2StopsSubsequentOperations()
+        {
+            using (var instance = new Instance("TestJetStopServiceInstance"))
+            {
+                instance.Parameters.Recovery = false;
+                instance.Parameters.NoInformationEvent = true;
+                instance.Parameters.MaxTemporaryTables = 0;
+                instance.Init();
+
+                StopServiceGrbit[] resumableGrbits = new StopServiceGrbit[]
+                {
+                    StopServiceGrbit.QuiesceCaches,
+                    StopServiceGrbit.BackgroundUserTasks,
+                };
+
+                foreach (StopServiceGrbit grbit in resumableGrbits)
+                {
+                    JET_SESID sesid;
+                    Windows8Api.JetStopServiceInstance2(instance, grbit);
+                    try
+                    {
+                        Api.JetBeginSession(instance, out sesid, null, null);
+                        Api.JetEndSession(sesid, EndSessionGrbit.None);
+                    }
+                    catch (EsentClientRequestToStopJetServiceException)
+                    {
+                        Assert.Fail("JetBeginSession should not have thrown an exception when the service is stopped with {0}.", grbit);
+                    }
+
+                    // Resuming the service should allow BeginSession to work.
+                    Windows8Api.JetStopServiceInstance2(instance, StopServiceGrbit.Resume);
+                    Api.JetBeginSession(instance, out sesid, null, null);
+                    Api.JetEndSession(sesid, EndSessionGrbit.None);
+                }
             }
         }
 
@@ -364,7 +506,9 @@ namespace InteropApiTests
             Assert.AreNotEqual(sesidDup, JET_SESID.Nil);
             Api.JetTerm(instance);
         }
+#endif // !MANAGEDESENT_ON_METRO
 
+#if !MANAGEDESENT_ON_METRO // The threading model in Metro has changed.
         /// <summary>
         /// Test moving a transaction between threads.
         /// </summary>
@@ -385,11 +529,11 @@ namespace InteropApiTests
 
                     var thread = new Thread(() =>
                     {
-                        Thread.BeginThreadAffinity();
+                        EseInteropTestHelper.ThreadBeginThreadAffinity();
                         Api.JetSetSessionContext(session, context);
                         Api.JetBeginTransaction(session);
                         Api.JetResetSessionContext(session);
-                        Thread.EndThreadAffinity();
+                        EseInteropTestHelper.ThreadEndThreadAffinity();
                     });
                     thread.Start();
                     thread.Join();
@@ -400,5 +544,6 @@ namespace InteropApiTests
                 }
             }
         }
+#endif // !MANAGEDESENT_ON_METRO
     }
 }

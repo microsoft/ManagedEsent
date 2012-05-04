@@ -9,7 +9,7 @@ namespace Microsoft.Isam.Esent.Interop
     using System;
 
     /// <summary>
-    /// Info levels for retrieve index information with JetGetIndexInfo
+    /// Info levels for retrieve index information with JetGetIndexInfo.
     /// and JetGetTableIndexInfo.
     /// </summary>
     public enum JET_IdxInfo
@@ -78,17 +78,5 @@ namespace Microsoft.Isam.Esent.Interop
         /// index was created with.
         /// </summary>
         KeyMost = 10,
-
-        /// <summary>
-        /// Introduced in Windows 7. Returns a JET_INDEXCREATE structure suitable
-        /// for use by JetCreateIndex2().
-        /// </summary>
-        InfoCreateIndex = 11,
-
-        /// <summary>
-        /// Introduced in Windows 7. Returns a JET_INDEXCREATE2 structure suitable
-        /// for use by JetCreateIndex2().
-        /// </summary>
-        InfoCreateIndex2 = 11,
     }
 }

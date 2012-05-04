@@ -9,6 +9,7 @@ namespace Microsoft.Isam.Esent.Interop
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Text;
     using Microsoft.Isam.Esent.Interop.Implementation;
 
     /// <summary>
@@ -54,6 +55,10 @@ namespace Microsoft.Isam.Esent.Interop
         {
             JET_COLUMNLIST columnlist;
             JetGetTableColumnInfo(sesid, tableid, string.Empty, out columnlist);
+
+            // If we use the wide API (Vista+), then the temp table will be in UTF-16.
+            Encoding encodingOfTextColumns = EsentVersion.SupportsVistaFeatures ? Encoding.Unicode : LibraryHelpers.EncodingASCII;
+
             try
             {
                 // esent treats column names as case-insensitive, so we want the dictionary to be case insensitive as well
@@ -69,7 +74,7 @@ namespace Microsoft.Isam.Esent.Interop
                                 sesid,
                                 columnlist.tableid,
                                 columnlist.columnidcolumnname,
-                                NativeMethods.Encoding,
+                                encodingOfTextColumns,
                                 RetrieveColumnGrbit.None);
                             name = StringCache.TryToIntern(name);
                             var columnidValue =

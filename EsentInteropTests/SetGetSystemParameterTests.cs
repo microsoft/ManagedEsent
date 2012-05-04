@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="SetGetSystemParameterTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -6,11 +6,11 @@
 
 namespace InteropApiTests
 {
-    using System;
     using System.IO;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Isam.Esent.Interop.Windows7;
+    using Microsoft.Isam.Esent.Interop.Windows8;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -46,6 +46,7 @@ namespace InteropApiTests
         
         #endregion
 
+#if !MANAGEDESENT_ON_METRO // String interning is not supported.
         /// <summary>
         /// Verify that retrieving a string parameter tries to intern the string.
         /// </summary>
@@ -73,6 +74,7 @@ namespace InteropApiTests
                 Api.JetTerm(instance);
             }
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Test setting and retrieving the system path.
@@ -116,12 +118,16 @@ namespace InteropApiTests
                 string actual;
                 Api.JetGetSystemParameter(instance, JET_SESID.Nil, JET_param.TempPath, ref ignored, out actual, 256);
 
+#if MANAGEDESENT_ON_METRO
+                Assert.IsNotNull(actual);
+#else
                 // Older versions of esent (e.g. Windows XP) return the name of the temporary database
                 // even when the temp path is configured as a directory. This means that setting
                 // "temp\" will give back "temp\tmp.edb". Here we just assert that the returned string
                 // starts with the expected value.
-                string expected = Path.Combine(Environment.CurrentDirectory, dir);
+                string expected = Path.GetFullPath(dir);
                 StringAssert.StartsWith(actual, expected);
+#endif
             }
             finally
             {
@@ -306,6 +312,17 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test setting and retrieving the enable online defrag setting.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting and retrieving the enable online defrag setting")]
+        public void EnableOnlineDefragParameter()
+        {
+            BooleanParameterTest(JET_param.EnableOnlineDefrag, Any.Boolean);
+        }
+
+        /// <summary>
         /// Test setting and retrieving the index checking setting.
         /// </summary>
         [TestMethod]
@@ -360,6 +377,7 @@ namespace InteropApiTests
             BooleanParameterTest(JET_param.CleanupMismatchedLogFiles, Any.Boolean);
         }
 
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
         /// Test setting the runtime callback to null.
         /// </summary>
@@ -409,6 +427,7 @@ namespace InteropApiTests
                 Api.JetTerm(instance);
             }
         }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Test setting and retrieving the Configuration parameter (if esent supports it)
@@ -777,6 +796,7 @@ namespace InteropApiTests
             SystemParameters.MaxInstances = maxInstancesOld;
         }
 
+#region Vista parameters
         /// <summary>
         /// Test that SystemParameters.Configuration can be set and retrieved.
         /// This test only works on Windows Vista and up. An ESENT bug stops
@@ -817,6 +837,159 @@ namespace InteropApiTests
             SystemParameters.EnableAdvanced = enableAdvanced;
         }
 
+        /// <summary>
+        /// Test that SystemParameters.Configuration can be set and retrieved.
+        /// This test only works on Windows Vista and up.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test that SystemParameters.Configuration can be set and retrieved")]
+        public void VerifyGetAndSetConfigurationIsFixed()
+        {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
+            int configurationOld = SystemParameters.Configuration;
+            try
+            {
+                SystemParameters.Configuration = 0;
+                Assert.AreEqual(0, SystemParameters.Configuration);
+            }
+            finally
+            {
+                SystemParameters.Configuration = configurationOld;
+            }
+        }
+
+    #endregion
+
+#region Windows 8 Parameters.
+        /// <summary>
+        /// Test setting and retrieving the max transaction size setting.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting and retrieving the max transaction size setting")]
+        public void MaxTransactionSizeParameter()
+        {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
+            IntegerParameterTest(Windows8Param.MaxTransactionSize, 55);
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the cache priority setting.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting and retrieving the cache priority setting")]
+        public void CachePriorityParameter()
+        {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
+            IntegerParameterTest(Windows8Param.CachePriority, 57);
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the max i/o for preread setting.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting and retrieving the max i/o for preread setting")]
+        public void PrereadIOMaxParameter()
+        {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
+            IntegerParameterTest(Windows8Param.PrereadIOMax, 58);
+        }
+
+        /// <summary>
+        /// Test that SystemParameters.MinDataForXpress can be set and retrieved.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test that SystemParameters.MinDataForXpress can be set and retrieved")]
+        public void VerifyGetAndSetMinDataForXpress()
+        {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
+            int minDataForXpressOld = SystemParameters.MinDataForXpress;
+            SystemParameters.MinDataForXpress = 128;
+            Assert.AreEqual(128, SystemParameters.MinDataForXpress);
+            SystemParameters.MinDataForXpress = minDataForXpressOld;
+        }
+
+        /// <summary>
+        /// Test that SystemParameters.HungIOThreshold can be set and retrieved.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test that SystemParameters.HungIOThreshold can be set and retrieved")]
+        public void VerifyGetAndSetHungIOThreshold()
+        {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
+            int hungIOThresholdOld = SystemParameters.HungIOThreshold;
+            SystemParameters.HungIOThreshold = 75 * 1000;
+            Assert.AreEqual(75 * 1000, SystemParameters.HungIOThreshold);
+            SystemParameters.HungIOThreshold = hungIOThresholdOld;
+        } 
+
+        /// <summary>
+        /// Test that SystemParameters.ProcessFriendlyName can be set and retrieved.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test that SystemParameters.ProcessFriendlyName can be set and retrieved")]
+        public void VerifyGetAndSetProcessFriendlyName()
+        {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
+            StringParameterTest(JET_INSTANCE.Nil, Windows8Param.ProcessFriendlyName, "AProcessFriendlyName");
+        }
+
+        /// <summary>
+        /// Test that SystemParameters.ProcessFriendlyName can be set and retrieved using static properties.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test that SystemParameters.ProcessFriendlyName can be set and retrieved using static properties")]
+        public void VerifyGetAndSetProcessFriendlyNameStatic()
+        {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
+            string friendlyNameOld = SystemParameters.ProcessFriendlyName;
+            string friendlyNameNew = friendlyNameOld + "v2";
+            SystemParameters.ProcessFriendlyName = friendlyNameNew;
+            Assert.IsTrue(friendlyNameNew == SystemParameters.ProcessFriendlyName);
+            SystemParameters.ProcessFriendlyName = friendlyNameOld;
+        }
+
+#endregion
+
         #region Helper Methods
 
         /// <summary>
@@ -837,7 +1010,13 @@ namespace InteropApiTests
                 string actual;
                 Api.JetGetSystemParameter(instance, JET_SESID.Nil, param, ref ignored, out actual, 256);
 
-                Assert.AreEqual(Path.Combine(Environment.CurrentDirectory, expected), actual);
+#if MANAGEDESENT_ON_METRO
+                // We can't fetch the full path in Metro, but we can check if the last part of the path is correct.
+                Assert.IsNotNull(actual);
+                Assert.IsTrue(actual.EndsWith(expected));
+#else
+                Assert.AreEqual(Path.GetFullPath(expected), actual);
+#endif
             }
             finally
             {
@@ -852,33 +1031,11 @@ namespace InteropApiTests
         /// <param name="expected">The string to set it to.</param>
         private static void StringParameterTest(JET_param param, string expected)
         {
-            SetGetSystemParameterTests.StringParameterTest(param, expected, false);
-        }
-
-        /// <summary>
-        /// Test setting and retrieving a system parameter that uses a string.
-        /// </summary>
-        /// <param name="instance">The ESE instance.</param>
-        /// <param name="param">The parameter to set.</param>
-        /// <param name="expected">The string to set it to.</param>
-        private static void StringParameterTest(JET_INSTANCE instance, JET_param param, string expected)
-        {
-            SetGetSystemParameterTests.StringParameterTest(instance, param, expected, false);
-        }
-
-        /// <summary>
-        /// Test setting and retrieving a system parameter that uses a string.
-        /// </summary>
-        /// <param name="param">The parameter to set.</param>
-        /// <param name="expected">The string to expect when reading the parameter.</param>
-        /// <param name="ignoreCase">If set to <c>true</c> [ignore case].</param>
-        private static void StringParameterTest(JET_param param, string expected, bool ignoreCase)
-        {
             JET_INSTANCE instance;
             Api.JetCreateInstance(out instance, "StringParameterTest");
             try
             {
-                SetGetSystemParameterTests.StringParameterTest(instance, param, expected, ignoreCase);
+                SetGetSystemParameterTests.StringParameterTest(instance, param, expected);
             }
             finally
             {
@@ -892,8 +1049,7 @@ namespace InteropApiTests
         /// <param name="instance">The ESE instance.</param>
         /// <param name="param">The parameter to set.</param>
         /// <param name="expected">The string to expect when reading the parameter.</param>
-        /// <param name="ignoreCase">If set to <c>true</c> [ignore case].</param>
-        private static void StringParameterTest(JET_INSTANCE instance, JET_param param, string expected, bool ignoreCase)
+        private static void StringParameterTest(JET_INSTANCE instance, JET_param param, string expected)
         {
             Api.JetSetSystemParameter(instance, JET_SESID.Nil, param, 0, expected);
 
@@ -901,7 +1057,7 @@ namespace InteropApiTests
             string actual;
             Api.JetGetSystemParameter(instance, JET_SESID.Nil, param, ref ignored, out actual, 256);
 
-            Assert.AreEqual(expected, actual, ignoreCase);
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
