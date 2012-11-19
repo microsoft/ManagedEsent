@@ -20,7 +20,7 @@ namespace InteropApiTests
         /// <summary>
         /// The name of the instance.
         /// </summary>
-        private const string InstanceName = "Instance";
+        private const string InstanceName = "FakeInstance";
 
         /// <summary>
         /// The name of the first database.
@@ -33,9 +33,9 @@ namespace InteropApiTests
         private const string Database1 = "bar.edb";
 
         /// <summary>
-        /// The instance.
+        /// The fake instance.
         /// </summary>
-        private static readonly IntPtr instance = new IntPtr(0x111);
+        private static readonly IntPtr FakeInstance = new IntPtr(0x111);
 
 #if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
         /// <summary>
@@ -81,7 +81,7 @@ namespace InteropApiTests
         /// </param>
         private static void CheckManaged(JET_INSTANCE_INFO info)
         {
-            Assert.AreEqual(new JET_INSTANCE { Value = instance }, info.hInstanceId);
+            Assert.AreEqual(new JET_INSTANCE { Value = FakeInstance }, info.hInstanceId);
             Assert.AreEqual(InstanceName, info.szInstanceName);
             Assert.AreEqual(2, info.cDatabases);
         }
@@ -104,7 +104,7 @@ namespace InteropApiTests
 
             NATIVE_INSTANCE_INFO native = new NATIVE_INSTANCE_INFO
             {
-                hInstanceId = instance,
+                hInstanceId = FakeInstance,
                 cDatabases = new IntPtr(2),
                 szInstanceName = stringConverter(InstanceName),
                 szDatabaseFileName = databases

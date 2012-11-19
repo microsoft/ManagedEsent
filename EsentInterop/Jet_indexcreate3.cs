@@ -109,7 +109,7 @@ namespace Microsoft.Isam.Esent.Interop
             this.CheckMembersAreValid();
             var native = new NATIVE_INDEXCREATE3();
 
-            native.cbStruct = checked((uint)Marshal.SizeOf(native));
+            native.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_INDEXCREATE3)));
 
             // szIndexName and szKey are converted at pinvoke time.
             //

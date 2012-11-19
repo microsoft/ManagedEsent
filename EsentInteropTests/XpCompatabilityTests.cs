@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------
 // <copyright file="XpCompatabilityTests.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -47,6 +47,7 @@ namespace InteropApiTests
         public void Teardown()
         {
             Api.Impl = this.savedImpl;
+            SystemParameters.Configuration = 1;
         }
 
         /// <summary>
@@ -114,6 +115,48 @@ namespace InteropApiTests
         {
             Assert.IsFalse(EsentVersion.SupportsWindows7Features);
         }
+
+#if !MANAGEDESENT_ON_CORECLR
+        /// <summary>
+        /// Verify the XP version of ESENT throws an exception when a string can't be converted to ASCII for an API call.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify the XP version of ESENT throws an exception when a string can't be converted to ASCII for an API call.")]
+        public void VerifyXpThrowsExceptionOnCreateInstanceWithUnicodeCharacter()
+        {
+            JET_INSTANCE instance;
+            try
+            {
+                Api.JetCreateInstance(out instance, "한글");
+                Assert.Fail("On platforms that don't support Unicode, an ArgumentException should have been thrown.");
+            }
+            catch (ArgumentException)
+            {
+                // The ArgumentException is thrown by the marshalling layer.
+            }
+        }
+
+        /// <summary>
+        /// Verify the XP version of ESENT throws an exception when a string can't be converted to ASCII for an API call.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify the XP version of ESENT throws an exception when a string can't be converted to ASCII for an API call.")]
+        public void VerifyXpThrowsExceptionOnCreateInstance2WithUnicodeCharacter()
+        {
+            JET_INSTANCE instance;
+            try
+            {
+                Api.JetCreateInstance2(out instance, "한글", "한글-display", CreateInstanceGrbit.None);
+                Assert.Fail("On platforms that don't support Unicode, an ArgumentException should have been thrown.");
+            }
+            catch (ArgumentException)
+            {
+                // The ArgumentException is thrown by the marshalling layer.
+            }
+        }
+#endif // !MANAGEDESENT_ON_CORECLR
 
         /// <summary>
         /// Verify that JetGetColumnInfo throws an exception when using the
@@ -345,6 +388,28 @@ namespace InteropApiTests
                 instance.Parameters.CachedClosedTables = 10;
                 Assert.AreEqual(0, instance.Parameters.CachedClosedTables);
             }
+        }
+
+        /// <summary>
+        /// Verify getting enable-file-cache system parameter on XP returns false.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify getting enable-file-cache system parameter on XP returns false")]
+        public void VerifyXpReturnsFalseForEnableFileCache()
+        {
+            Assert.AreEqual(SystemParameters.EnableFileCache, false);
+        }
+
+        /// <summary>
+        /// Verify getting enable-view-cache system parameter on XP returns false.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify getting enable-view-cache system parameter on XP returns false")]
+        public void VerifyXpReturnsFalseForEnableViewCache()
+        {
+            Assert.AreEqual(SystemParameters.EnableViewCache, false);
         }
 
         /// <summary>

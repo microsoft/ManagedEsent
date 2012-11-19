@@ -97,7 +97,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                         Debug.Assert(typeof(string) == typeof(T), "Expected string type");
                         string prefix = this.Max.Value.ToString();
                         string min = this.Min.Value.ToString();
-                        if (min.StartsWith(prefix, StringComparison.InvariantCulture))
+                        if (min.StartsWith(prefix, StringComparison.Ordinal))
                         {
                             return false;
                         }
@@ -496,8 +496,8 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             //   nonPrefix = "LE", prefix = "LEAD"
             //   nonPrefix = "LEAD", prefix = "LE"
             // In both cases the non-prefix is more restrictive
-            if (string.Compare(nonPrefixValue, prefixValue, StringComparison.InvariantCulture) <= 0
-                || nonPrefixValue.StartsWith(prefixValue, StringComparison.InvariantCulture))
+            if (string.Compare(nonPrefixValue, prefixValue, StringComparison.Ordinal) <= 0
+                || nonPrefixValue.StartsWith(prefixValue, StringComparison.Ordinal))
             {
                 return -1;
             }
@@ -524,17 +524,17 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             {
                 // Same length: return the lower string
                 // e.g.: a = "AB", b = "CD"
-                return string.Compare(valueA, valueB, StringComparison.InvariantCulture);
+                return string.Compare(valueA, valueB, StringComparison.Ordinal);
             }
 
-            if (valueA.StartsWith(valueB, StringComparison.InvariantCulture))
+            if (valueA.StartsWith(valueB, StringComparison.Ordinal))
             {
                 // b is a substring of a. a is more restrictive
                 // e.g.: b = "A", a = "AA"
                 return -1;
             }
 
-            if (valueB.StartsWith(valueA, StringComparison.InvariantCulture))
+            if (valueB.StartsWith(valueA, StringComparison.Ordinal))
             {
                 // a is a substring of b. b is more restrictive
                 // e.g.: a = "CA", a = "CAT"
@@ -543,7 +543,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 
             // Take the lower string
             // e.g.: a = "ABC", b = "XYZ"
-            return string.Compare(valueA, valueB, StringComparison.InvariantCulture);
+            return string.Compare(valueA, valueB, StringComparison.Ordinal);
         }
 
         /// <summary>

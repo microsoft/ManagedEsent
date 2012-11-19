@@ -235,7 +235,7 @@ namespace Microsoft.Isam.Esent.Interop
         internal NATIVE_SPACEHINTS GetNativeSpaceHints()
         {
             var native = new NATIVE_SPACEHINTS();
-            native.cbStruct = checked((uint)Marshal.SizeOf(native));
+            native.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_SPACEHINTS)));
 
             native.ulInitialDensity = checked((uint)this.ulInitialDensity);
             native.cbInitial = checked((uint)this.cbInitial);

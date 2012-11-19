@@ -17,12 +17,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// A boxed true value that can be used by ValueAsObject.
         /// </summary>
-        private static readonly object boxedTrue = true;
+        private static readonly object BoxedTrue = true;
 
         /// <summary>
         /// A boxed false value that can be used by ValueAsObject.
         /// </summary>
-        private static readonly object boxedFalse = false;
+        private static readonly object BoxedFalse = false;
 
         /// <summary>
         /// Gets the last set or retrieved value of the column. The
@@ -37,7 +37,7 @@ namespace Microsoft.Isam.Esent.Interop
                     return null;
                 }
 
-                return this.Value.Value ? boxedTrue : boxedFalse;
+                return this.Value.Value ? BoxedTrue : BoxedFalse;
             }
         }
 

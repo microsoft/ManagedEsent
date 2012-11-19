@@ -7,9 +7,6 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
-    using Microsoft.Isam.Esent.Interop.Server2003;
-    using Microsoft.Isam.Esent.Interop.Vista;
-    using Microsoft.Isam.Esent.Interop.Windows7;
 
     /// <summary>
     /// Options for JetCreateInstance2.
@@ -26,7 +23,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for <see cref="Api.JetInit2"/>.
     /// </summary>
-    /// <seealso cref="Windows7Grbits.ReplayIgnoreLostLogs"/>
+    /// <seealso cref="Windows7.Windows7Grbits.ReplayIgnoreLostLogs"/>
     [Flags]
     public enum InitGrbit
     {
@@ -39,7 +36,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for <see cref="Api.JetTerm2"/>.
     /// </summary>
-    /// <seealso cref="Windows7Grbits.Dirty"/>
+    /// <seealso cref="Windows7.Windows7Grbits.Dirty"/>
     [Flags]
     public enum TermGrbit
     {
@@ -590,8 +587,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetSetColumn.
     /// </summary>
-    /// <seealso cref="Windows7Grbits.Compressed"/>
-    /// <seealso cref="Windows7Grbits.Uncompressed"/>
+    /// <seealso cref="Windows7.Windows7Grbits.Compressed"/>
+    /// <seealso cref="Windows7.Windows7Grbits.Uncompressed"/>
     [Flags]
     public enum SetColumnGrbit
     {
@@ -736,8 +733,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetEnumerateColumns.
     /// </summary>
-    /// <seealso cref="Server2003Grbits.EnumerateIgnoreUserDefinedDefault"/>
-    /// <seealso cref="Windows7Grbits.EnumerateInRecordOnly"/>
+    /// <seealso cref="Server2003.Server2003Grbits.EnumerateIgnoreUserDefinedDefault"/>
+    /// <seealso cref="Windows7.Windows7Grbits.EnumerateInRecordOnly"/>
     [Flags]
     public enum EnumerateColumnsGrbit
     {
@@ -807,7 +804,7 @@ namespace Microsoft.Isam.Esent.Interop
 
 #if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
     /// <summary>
-    /// Options for <see cref="VistaApi.JetGetRecordSize"/>.
+    /// Options for <see cref="Vista.VistaApi.JetGetRecordSize"/>.
     /// </summary>
     [Flags]
     public enum GetRecordSizeGrbit
@@ -1188,7 +1185,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for the JET_COLUMNDEF structure.
     /// </summary>
-    /// <seealso cref="Windows7Grbits.ColumnCompressed"/>
+    /// <seealso cref="Windows7.Windows7Grbits.ColumnCompressed"/>
     [Flags]
     public enum ColumndefGrbit
     {
@@ -1441,8 +1438,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for temporary table creation.
     /// </summary>
-    /// <seealso cref="Server2003Grbits.ForwardOnly"/>
-    /// <seealso cref="Windows7Grbits.IntrinsicLVsOnly"/>
+    /// <seealso cref="Server2003.Server2003Grbits.ForwardOnly"/>
+    /// <seealso cref="Windows7.Windows7Grbits.IntrinsicLVsOnly"/>
     [Flags]
     public enum TempTableGrbit
     {
@@ -1468,7 +1465,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// option to be in effect due to the fact that all clustered indexes must 
         /// also be a primary key and thus must be unique. As of Windows Server 
         /// 2003, it is now possible to create a temporary table that does NOT 
-        /// remove duplicates when the <see cref="Server2003Grbits.ForwardOnly"/>
+        /// remove duplicates when the <see cref="Server2003.Server2003Grbits.ForwardOnly"/>
         /// option is also specified. 
         /// It is not possible to know which duplicate will win and which duplicates 
         /// will be discarded in general. However, when the 
@@ -1491,7 +1488,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// This option requests that the temporary table be flexible enough to 
         /// allow records to be scanned in arbitrary order and direction using 
-        /// <see cref="Api.JetMove(Microsoft.Isam.Esent.Interop.JET_SESID,Microsoft.Isam.Esent.Interop.JET_TABLEID,int,Microsoft.Isam.Esent.Interop.MoveGrbit)"/>.
+        /// <see cref="Api.JetMove(JET_SESID,JET_TABLEID,int,MoveGrbit)"/>.
         /// If this functionality it not required then it is best to not 
         /// request it. If this functionality is not requested then the temporary 
         /// table manager may be able to choose a strategy for managing the 

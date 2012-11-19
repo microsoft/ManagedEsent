@@ -25,7 +25,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Encoding to use to decode ASCII text. We use this because
         /// UTF8.GetString is faster than ASCII.GetString.
         /// </summary>
-        private static readonly Encoding asciiDecoder = new UTF8Encoding(false, true);
+        private static readonly Encoding AsciiDecoder = new UTF8Encoding(false, true);
 
         /// <summary>
         /// Retrieves the bookmark for the record that is associated with the index entry
@@ -317,7 +317,7 @@ namespace Microsoft.Isam.Esent.Interop
                 // is done because the UTF8 decoder is faster and will produce the same results
                 // on ASCII data. Different results will be produced on invalid data, but that
                 // behaviour can be considered undefined.
-                Encoding decoder = (encoding is ASCIIEncoding) ? asciiDecoder : encoding;
+                Encoding decoder = (encoding is ASCIIEncoding) ? AsciiDecoder : encoding;
 #else
                 Encoding decoder = encoding;
 #endif

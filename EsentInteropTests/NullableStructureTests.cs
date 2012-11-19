@@ -19,27 +19,27 @@ namespace InteropApiTests
         /// <summary>
         /// Non-empty logtime used for testing.
         /// </summary>
-        private static readonly JET_LOGTIME logtime = new JET_LOGTIME(DateTime.Now);
+        private static readonly JET_LOGTIME Logtime = new JET_LOGTIME(DateTime.Now);
 
         /// <summary>
         /// Non-empty bklogtime used for testing.
         /// </summary>
-        private static readonly JET_BKLOGTIME bklogtime = new JET_BKLOGTIME(DateTime.Now, true);
+        private static readonly JET_BKLOGTIME Bklogtime = new JET_BKLOGTIME(DateTime.Now, true);
 
         /// <summary>
         /// Non-empty lgpos used for testing.
         /// </summary>
-        private static readonly JET_LGPOS lgpos = new JET_LGPOS { lGeneration = 1 };
+        private static readonly JET_LGPOS Lgpos = new JET_LGPOS { lGeneration = 1 };
 
         /// <summary>
         /// Non-empty bkinfo used for testing.
         /// </summary>
-        private static readonly JET_BKINFO bkinfo = new JET_BKINFO
+        private static readonly JET_BKINFO Bkinfo = new JET_BKINFO
                                                         {
-                                                            bklogtimeMark = bklogtime,
+                                                            bklogtimeMark = Bklogtime,
                                                             genHigh = 10,
                                                             genLow = 8,
-                                                            lgposMark = lgpos
+                                                            lgposMark = Lgpos
                                                         };
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void VerifyNonEmptyJetLogtimeHasNoValue()
         {
-            Assert.IsTrue(logtime.HasValue);
+            Assert.IsTrue(Logtime.HasValue);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void VerifyNonEmptyJetBklogtimeHasNoValue()
         {
-            Assert.IsTrue(bklogtime.HasValue);
+            Assert.IsTrue(Bklogtime.HasValue);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void VerifyNonEmptyJetLgposHasNoValue()
         {
-            Assert.IsTrue(lgpos.HasValue);
+            Assert.IsTrue(Lgpos.HasValue);
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void VerifyNonEmptyJetBkinfoHasNoValue()
         {
-            Assert.IsTrue(bkinfo.HasValue);
+            Assert.IsTrue(Bkinfo.HasValue);
         }
 
         /// <summary>

@@ -149,6 +149,11 @@ namespace Microsoft.Isam.Esent.Interop
         DatabaseLeakInSpace = -348,
 
         /// <summary>
+        /// Database corrupted. Searching an unexpectedly empty page.
+        /// </summary>
+        BadEmptyPage = -351,
+
+        /// <summary>
         /// Key is too large
         /// </summary>
         KeyTooBig = -408,
@@ -164,7 +169,7 @@ namespace Microsoft.Isam.Esent.Interop
         SeparatedLongValue = -421,
 
         /// <summary>
-        /// Preread operation only supported on separated long-value
+        /// Can only preread long value columns that can be separate, e.g. not size constrained so that they are fixed or variable columns
         /// </summary>
         MustBeSeparateLongValue = -423,
 
@@ -1054,7 +1059,7 @@ namespace Microsoft.Isam.Esent.Interop
         RecoveryVerifyFailure = -1123,
 
         /// <summary>
-        /// Attempted to provide a filter to JetMove in an unsupported scenario
+        /// Attempted to provide a filter to JetSetCursorFilter() in an unsupported scenario.
         /// </summary>
         FilteredMoveNotSupported = -1124,
 
@@ -1404,12 +1409,12 @@ namespace Microsoft.Isam.Esent.Interop
         IndexBuildCorrupted = -1412,
 
         /// <summary>
-        /// Primary index is corrupt. The database must be defragmented
+        /// Primary index is corrupt. The database must be defragmented or the table deleted.
         /// </summary>
         PrimaryIndexCorrupted = -1413,
 
         /// <summary>
-        /// Secondary index is corrupt. The database must be defragmented
+        /// Secondary index is corrupt. The database must be defragmented or the affected index must be deleted. If the corrupt index is over Unicode text, a likely cause a sort-order change.
         /// </summary>
         SecondaryIndexCorrupted = -1414,
 

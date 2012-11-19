@@ -159,6 +159,16 @@ namespace Microsoft.Isam.Esent.Interop
         CorruptIndexDeleted = 1415,
 
         /// <summary>
+        /// The Primary index is created with an incompatible OS sort version. The table can not be safely modified.
+        /// </summary>
+        PrimaryIndexOutOfDate = 1417,
+
+        /// <summary>
+        /// One or more Secondary index is created with an incompatible OS sort version. Any index over Unicode text should be deleted.
+        /// </summary>
+        SecondaryIndexOutOfDate = 1418,
+
+        /// <summary>
         /// Max length too big, truncated
         /// </summary>
         ColumnMaxTruncated = 1512,

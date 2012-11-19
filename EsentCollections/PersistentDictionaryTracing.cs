@@ -13,6 +13,8 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     using System.Diagnostics;
     using System.Globalization;
 
+    using Microsoft.Isam.Esent.Interop;
+
     /// <content>
     /// PersistentDictionary tracing.
     /// </content>

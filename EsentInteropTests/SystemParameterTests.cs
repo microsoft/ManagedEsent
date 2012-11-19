@@ -71,6 +71,7 @@ namespace InteropApiTests
         public void Teardown()
         {
             Api.Impl = this.savedApi;
+            SystemParameters.Configuration = 1;
         }
 
         /// <summary>
@@ -190,6 +191,22 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
+        [Description("Verify SystemParameters.ExchangeAction sets Windows8Param.ExceptionAction")]
+        public void VerifySettingExceptionAction()
+        {
+            Expect.Call(
+                this.mockApi.JetSetSystemParameter(
+                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.ExceptionAction, new IntPtr(73), null)).Return(1);
+            this.repository.ReplayAll();
+            SystemParameters.ExceptionAction = (JET_ExceptionAction)73;
+            this.repository.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verify that setting the property sets the system parameter
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
         [Description("Verify that setting SystemParameters.EventLoggingLevel sets JET_param.EventLoggingLevel")]
         public void VerifySettingEventLoggingLevel()
         {
@@ -238,7 +255,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("Verify that setting SystemParameters.Configuration to false sets VistaParam.Configuration")]
+        [Description("Verify that setting SystemParameters.EnableAdvanced to false sets VistaParam.EnableAdvanced")]
         public void VerifySettingEnableAdvancedToFalse()
         {
             Expect.Call(
@@ -246,6 +263,102 @@ namespace InteropApiTests
                     JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.EnableAdvanced, new IntPtr(0), null)).Return(1);
             this.repository.ReplayAll();
             SystemParameters.EnableAdvanced = false;
+            this.repository.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verify that setting the property sets the system parameter
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify that setting SystemParameters.LegacyFileNames to 1 sets VistaParam.LegacyFileNames")]
+        public void VerifySettingLegacyFileNamesToESE98FileNames()
+        {
+            Expect.Call(
+                this.mockApi.JetSetSystemParameter(
+                    JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.LegacyFileNames, new IntPtr(1), null)).Return(1);
+            this.repository.ReplayAll();
+            SystemParameters.LegacyFileNames = (int)LegacyFileNames.ESE98FileNames;
+            this.repository.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verify that setting the property sets the system parameter
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify that setting SystemParameters.LegacyFileNames to 2 sets VistaParam.LegacyFileNames")]
+        public void VerifySettingLegacyFileNamesToEightDotThreeSoftCompat()
+        {
+            Expect.Call(
+                this.mockApi.JetSetSystemParameter(
+                    JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.LegacyFileNames, new IntPtr(2), null)).Return(1);
+            this.repository.ReplayAll();
+            SystemParameters.LegacyFileNames = (int)LegacyFileNames.EightDotThreeSoftCompat;
+            this.repository.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verify that setting the property sets the system parameter
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify that setting SystemParameters.EnableFileCache to true sets VistaParam.EnableFileCache")]
+        public void VerifySettingEnableFileCacheToTrue()
+        {
+            Expect.Call(
+                this.mockApi.JetSetSystemParameter(
+                    JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.EnableFileCache, new IntPtr(1), null)).Return(1);
+            this.repository.ReplayAll();
+            SystemParameters.EnableFileCache = true;
+            this.repository.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verify that setting the property sets the system parameter
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify that setting SystemParameters.EnableFileCache to false sets VistaParam.EnableFileCache")]
+        public void VerifySettingEnableFileCacheToFalse()
+        {
+            Expect.Call(
+                this.mockApi.JetSetSystemParameter(
+                    JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.EnableFileCache, new IntPtr(0), null)).Return(1);
+            this.repository.ReplayAll();
+            SystemParameters.EnableFileCache = false;
+            this.repository.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verify that setting the property sets the system parameter
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify that setting SystemParameters.EnableViewCache to true sets VistaParam.EnableViewCache")]
+        public void VerifySettingEnableViewCacheToTrue()
+        {
+            Expect.Call(
+                this.mockApi.JetSetSystemParameter(
+                    JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.EnableViewCache, new IntPtr(1), null)).Return(1);
+            this.repository.ReplayAll();
+            SystemParameters.EnableViewCache = true;
+            this.repository.VerifyAll();
+        }
+
+        /// <summary>
+        /// Verify that setting the property sets the system parameter
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify that setting SystemParameters.EnableViewCache to false sets VistaParam.EnableViewCache")]
+        public void VerifySettingEnableViewCacheToFalse()
+        {
+            Expect.Call(
+                this.mockApi.JetSetSystemParameter(
+                    JET_INSTANCE.Nil, JET_SESID.Nil, VistaParam.EnableViewCache, new IntPtr(0), null)).Return(1);
+            this.repository.ReplayAll();
+            SystemParameters.EnableViewCache = false;
             this.repository.VerifyAll();
         }
 #endif

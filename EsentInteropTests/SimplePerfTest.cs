@@ -337,7 +337,12 @@ namespace InteropApiTests
         /// Worker for the performance test.
         /// </summary>
         internal class PerfTestWorker : IDisposable
-        {
+        {      
+            /// <summary>
+            /// The next key value to be inserted. Used to insert records.
+            /// </summary>
+            private static long nextKey = 0;
+
             /// <summary>
             /// The instance to use.
             /// </summary>
@@ -382,11 +387,6 @@ namespace InteropApiTests
             /// Used to retrieve the data column.
             /// </summary>
             private readonly byte[] dataBuf;
-
-            /// <summary>
-            /// The next key value to be inserted. Used to insert records.
-            /// </summary>
-            private static long nextKey = 0;
 
             /// <summary>
             /// The key of the last record to be inserted.

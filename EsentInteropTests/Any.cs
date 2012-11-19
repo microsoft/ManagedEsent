@@ -18,7 +18,7 @@ namespace InteropApiTests
         /// <summary>
         /// Random object used to generate the values.
         /// </summary>
-        private static readonly Random random = new Random();
+        private static readonly Random MyRandom = new Random();
 
         /// <summary>
         /// Gets a value indicating whether the random boolean value
@@ -28,7 +28,7 @@ namespace InteropApiTests
         {
             get
             {
-                return 0 == Any.random.Next() % 2;
+                return 0 == Any.MyRandom.Next() % 2;
             }
         }
 
@@ -40,7 +40,7 @@ namespace InteropApiTests
             get
             {
                 var data = new byte[1];
-                Any.random.NextBytes(data);
+                Any.MyRandom.NextBytes(data);
                 return data[0];
             }
         }
@@ -53,7 +53,7 @@ namespace InteropApiTests
             get
             {
                 var data = new byte[2];
-                Any.random.NextBytes(data);
+                Any.MyRandom.NextBytes(data);
                 return BitConverter.ToInt16(data, 0);
             }
         }
@@ -66,7 +66,7 @@ namespace InteropApiTests
             get
             {
                 var data = new byte[2];
-                Any.random.NextBytes(data);
+                Any.MyRandom.NextBytes(data);
                 return BitConverter.ToUInt16(data, 0);
             }
         }
@@ -79,7 +79,7 @@ namespace InteropApiTests
             get
             {
                 var data = new byte[4];
-                Any.random.NextBytes(data);
+                Any.MyRandom.NextBytes(data);
                 return BitConverter.ToInt32(data, 0);
             }
         }
@@ -92,7 +92,7 @@ namespace InteropApiTests
             get
             {
                 var data = new byte[4];
-                Any.random.NextBytes(data);
+                Any.MyRandom.NextBytes(data);
                 return BitConverter.ToUInt32(data, 0);
             }
         }
@@ -105,7 +105,7 @@ namespace InteropApiTests
             get
             {
                 var data = new byte[8];
-                Any.random.NextBytes(data);
+                Any.MyRandom.NextBytes(data);
                 return BitConverter.ToInt64(data, 0);
             }
         }
@@ -118,7 +118,7 @@ namespace InteropApiTests
             get
             {
                 var data = new byte[8];
-                Any.random.NextBytes(data);
+                Any.MyRandom.NextBytes(data);
                 return BitConverter.ToUInt64(data, 0);
             }
         }
@@ -141,7 +141,7 @@ namespace InteropApiTests
         {
             get
             {
-                return (float)Any.random.NextDouble();
+                return (float)Any.MyRandom.NextDouble();
             }
         }
 
@@ -152,7 +152,7 @@ namespace InteropApiTests
         {
             get
             {
-                return Any.random.NextDouble();
+                return Any.MyRandom.NextDouble();
             }
         }
 
@@ -175,7 +175,7 @@ namespace InteropApiTests
             get
             {
                 // MSDN says: d must be a value between -657435.0 through positive 2958466.0.
-                double d = Any.random.Next(-657435, 2958466);
+                double d = Any.MyRandom.Next(-657435, 2958466);
                 return LibraryHelpers.FromOADate(d);
             }
         }
@@ -188,7 +188,7 @@ namespace InteropApiTests
             get
             {
                 const int MaximumDays = 255 * 365;
-                double d = Any.random.Next(2, MaximumDays);
+                double d = Any.MyRandom.Next(2, MaximumDays);
 
                 // FromOADate takes the number of days from 30 Dec 1899.
                 return LibraryHelpers.FromOADate(d);
@@ -204,10 +204,31 @@ namespace InteropApiTests
         {
             get
             {
-                int length = Any.random.Next(1, 120);
+                int length = Any.MyRandom.Next(1, 120);
                 return StringOfLength(length);
             }
         }
+
+#if !MANAGEDESENT_ON_METRO // String interning is not supported.
+        /// <summary>
+        /// Gets a random string with the same characteristics of Any.String,
+        /// but the string is guaranteed not to be interned.
+        /// </summary>
+        public static string NonInternedString
+        {
+            get
+            {
+                while (true)
+                {
+                    string s = Any.String;
+                    if (string.IsInterned(s) == null)
+                    {
+                        return s;
+                    }
+                }
+            }
+        }
+#endif // !MANAGEDESENT_ON_METRO
 
         /// <summary>
         /// Gets a random array of bytes. The array will
@@ -217,7 +238,7 @@ namespace InteropApiTests
         {
             get
             {
-                int length = Any.random.Next(1, 255);
+                int length = Any.MyRandom.Next(1, 255);
                 return BytesOfLength(length);
             }
         }
@@ -279,7 +300,7 @@ namespace InteropApiTests
             var sb = new StringBuilder(numChars);
             for (int i = 0; i < numChars; ++i)
             {
-                var c = (char)Any.random.Next(32, 127);
+                var c = (char)Any.MyRandom.Next(32, 127);
                 sb.Append(c);
             }
 
@@ -294,7 +315,7 @@ namespace InteropApiTests
         public static byte[] BytesOfLength(int numBytes)
         {
             var data = new byte[numBytes];
-            Any.random.NextBytes(data);
+            Any.MyRandom.NextBytes(data);
             return data;            
         }
     }

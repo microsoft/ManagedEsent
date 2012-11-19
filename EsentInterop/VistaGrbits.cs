@@ -129,7 +129,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// Perform recovery, but halt at the Undo phase. Allows whatever logs are present to
         /// be replayed, then later additional logs can be copied and replayed.
         /// </summary>
-        public const InitGrbit RecoveryWithoutUndo = (InitGrbit)0x4;
+        public const InitGrbit RecoveryWithoutUndo = (InitGrbit)0x8;
 
         /// <summary>
         /// On successful soft recovery, truncate log files.

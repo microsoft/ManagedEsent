@@ -303,6 +303,99 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Gets or sets backwards compatibility with the file naming conventions of earlier releases of the database engine.
+        /// </summary>
+        public static int LegacyFileNames
+        {
+            get
+            {
+                if (EsentVersion.SupportsVistaFeatures)
+                {
+                    return GetIntegerParameter(VistaParam.LegacyFileNames);
+                }
+
+                // return the legacy LegacyFileNames value
+                return 1;
+            }
+
+            set
+            {
+                if (EsentVersion.SupportsVistaFeatures)
+                {
+                    SetIntegerParameter(VistaParam.LegacyFileNames, value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the value encoding what to do with exceptions generated within JET.
+        /// </summary>
+        public static JET_ExceptionAction ExceptionAction
+        {
+            get
+            {
+                return (JET_ExceptionAction)GetIntegerParameter(JET_param.ExceptionAction);
+            }
+
+            set
+            {
+                SetIntegerParameter(JET_param.ExceptionAction, (int)value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the database engine should
+        /// use the OS file cache for all managed files.
+        /// </summary>
+        public static bool EnableFileCache
+        {
+            get
+            {
+                if (EsentVersion.SupportsVistaFeatures)
+                {
+                    return GetBoolParameter(VistaParam.EnableFileCache);
+                }
+
+                // Pre-Vista versions of do not implement this.
+                return false; 
+            }
+
+            set
+            {
+                if (EsentVersion.SupportsVistaFeatures)
+                {
+                    SetBoolParameter(VistaParam.EnableFileCache, value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the database engine should
+        /// use memory mapped file I/O for database files.
+        /// </summary>
+        public static bool EnableViewCache
+        {
+            get
+            {
+                if (EsentVersion.SupportsVistaFeatures)
+                {
+                    return GetBoolParameter(VistaParam.EnableViewCache);
+                }
+
+                // Pre-Vista versions of do not implement this.
+                return false;
+            }
+
+            set
+            {
+                if (EsentVersion.SupportsVistaFeatures)
+                {
+                    SetBoolParameter(VistaParam.EnableViewCache, value);
+                }
+            }
+        }
+
+        /// <summary>
         /// Set a system parameter which is a string.
         /// </summary>
         /// <param name="param">The parameter to set.</param>

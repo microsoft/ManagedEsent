@@ -43,14 +43,17 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Contains a limited mapping of LCIDs to locale names.
         /// </summary>
-        private static readonly Dictionary<int, string> lcidToLocales = new Dictionary<int, string>(10);
+        private static readonly Dictionary<int, string> LcidToLocales = new Dictionary<int, string>(10);
 
         /// <summary>
         /// Initializes static members of the JET_UNICODEINDEX class.
         /// </summary>
         static JET_UNICODEINDEX()
         {
-            lcidToLocales.Add(1033, "en-us");
+            // Some common LCIDs are listed at http://msdn.microsoft.com/en-us/goglobal/bb964664.aspx.
+            LcidToLocales.Add(1033, "en-us");
+            LcidToLocales.Add(1046, "pt-br");
+            LcidToLocales.Add(3084, "fr-ca");
         }
 
         /// <summary>
@@ -77,7 +80,7 @@ namespace Microsoft.Isam.Esent.Interop
         internal static string LimitedLcidToLocaleNameMapping(int lcid)
         {
             string locale;
-            lcidToLocales.TryGetValue(lcid, out locale);
+            LcidToLocales.TryGetValue(lcid, out locale);
             return locale;
         }
 
@@ -87,7 +90,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The native version of this object.</returns>
         internal NATIVE_UNICODEINDEX2 GetNativeUnicodeIndex2()
         {
-            if (this.lcid != 0 && !lcidToLocales.ContainsKey(this.lcid))
+            if (this.lcid != 0 && !LcidToLocales.ContainsKey(this.lcid))
             {
                 throw new ArgumentException("lcid was specified, but this version of the API does not accept LCIDs. Use a locale name or a different API.");
             }

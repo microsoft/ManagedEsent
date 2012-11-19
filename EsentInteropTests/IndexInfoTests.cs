@@ -254,7 +254,7 @@ namespace InteropApiTests
             {
                 if (indexInfo.Name.Equals("Primary"))
                 {
-                    Assert.AreEqual((CreateIndexGrbit.IndexPrimary | CreateIndexGrbit.IndexUnique), indexInfo.Grbit);
+                    Assert.AreEqual(CreateIndexGrbit.IndexPrimary | CreateIndexGrbit.IndexUnique, indexInfo.Grbit);
                     ++foundIndices;
                 }
                 else if (indexInfo.Name.Equals("win8BrazilIndex"))
@@ -375,7 +375,7 @@ namespace InteropApiTests
             {
                 if (indexInfo.Name.Equals("Primary"))
                 {
-                    Assert.AreEqual((CreateIndexGrbit.IndexPrimary | CreateIndexGrbit.IndexUnique), indexInfo.Grbit);
+                    Assert.AreEqual(CreateIndexGrbit.IndexPrimary | CreateIndexGrbit.IndexUnique, indexInfo.Grbit);
                     ++foundIndices;
                 }
                 else if (indexInfo.Name.Equals("win8BrazilIndex"))

@@ -50,7 +50,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             NATIVE_ERRINFOBASIC nativeErrinfobasic = new NATIVE_ERRINFOBASIC();
             errinfo = new JET_ERRINFOBASIC();
 
-            nativeErrinfobasic.cbStruct = checked((uint)Marshal.SizeOf(nativeErrinfobasic));
+            nativeErrinfobasic.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_ERRINFOBASIC)));
             int nativeErr = (int)error;
 
             int err = Implementation.NativeMethods.JetGetErrorInfoW(
@@ -447,7 +447,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>Pinned native versions of the index creates.</returns>
         private static unsafe NATIVE_INDEXCREATE3[] GetNativeIndexCreate3s(
             IList<JET_INDEXCREATE> managedIndexCreates,
-            GCHandleCollection handles)
+            ref GCHandleCollection handles)
         {
             NATIVE_INDEXCREATE3[] nativeIndices = null;
 
@@ -469,7 +469,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
                     nativeIndices[i].szKey = handles.Add(Util.ConvertToNullTerminatedUnicodeByteArray(managedIndexCreates[i].szKey));
                     nativeIndices[i].szIndexName = handles.Add(Util.ConvertToNullTerminatedUnicodeByteArray(managedIndexCreates[i].szIndexName));
-                    nativeIndices[i].rgconditionalcolumn = GetNativeConditionalColumns(managedIndexCreates[i].rgconditionalcolumn, true, handles);
+                    nativeIndices[i].rgconditionalcolumn = GetNativeConditionalColumns(managedIndexCreates[i].rgconditionalcolumn, true, ref handles);
 
                     // Convert pSpaceHints.
                     if (managedIndexCreates[i].pSpaceHints != null)
@@ -495,10 +495,15 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         private static int CreateIndexes3(JET_SESID sesid, JET_TABLEID tableid, IList<JET_INDEXCREATE> indexcreates, int numIndexCreates)
         {
             // pin the memory
-            using (var handles = new GCHandleCollection())
+            var handles = new GCHandleCollection();
+            try
             {
-                NATIVE_INDEXCREATE3[] nativeIndexcreates = GetNativeIndexCreate3s(indexcreates, handles);
+                NATIVE_INDEXCREATE3[] nativeIndexcreates = GetNativeIndexCreate3s(indexcreates, ref handles);
                 return Err(NativeMethods.JetCreateIndex4W(sesid.Value, tableid.Value, nativeIndexcreates, checked((uint)numIndexCreates)));
+            }
+            finally
+            {
+                handles.Dispose();
             }
         }
         
@@ -518,13 +523,14 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             unsafe
             {
-                using (var handles = new GCHandleCollection())
+                var handles = new GCHandleCollection();
+                try
                 {
                     // Convert/pin the column definitions.
-                    nativeTableCreate.rgcolumncreate = (NATIVE_COLUMNCREATE*)GetNativeColumnCreates(tablecreate.rgcolumncreate, true, handles);
+                    nativeTableCreate.rgcolumncreate = (NATIVE_COLUMNCREATE*)GetNativeColumnCreates(tablecreate.rgcolumncreate, true, ref handles);
 
                     // Convert/pin the index definitions.
-                    NATIVE_INDEXCREATE3[] nativeIndexCreates = GetNativeIndexCreate3s(tablecreate.rgindexcreate, handles);
+                    NATIVE_INDEXCREATE3[] nativeIndexCreates = GetNativeIndexCreate3s(tablecreate.rgindexcreate, ref handles);
                     nativeTableCreate.rgindexcreate = handles.Add(nativeIndexCreates);
 
                     // Convert/pin the space hints.
@@ -568,6 +574,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
                     return Err(err);
                 } 
+                finally
+                {
+                    handles.Dispose();
+                }
             }
         }
 

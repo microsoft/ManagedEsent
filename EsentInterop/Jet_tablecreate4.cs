@@ -132,7 +132,7 @@ namespace Microsoft.Isam.Esent.Interop
             this.CheckMembersAreValid();
         
             var native = new NATIVE_TABLECREATE4();
-            native.cbStruct = checked((uint)Marshal.SizeOf(native));
+            native.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_TABLECREATE4)));
             native.szTableName = this.szTableName;
             native.szTemplateTableName = this.szTemplateTableName;
             native.ulPages = checked((uint)this.ulPages);

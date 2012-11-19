@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------
 // <copyright file="UnicodePathTests.cs" company="Microsoft Corporation">
 // Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -50,24 +50,119 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify that <see cref="Api.JetCreateInstance"/> supports Unicode strings.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that JetCreateInstance supports Unicode strings.")]
+        public void JetCreateInstanceSupportsUnicodeStrings()
+        {
+            JET_INSTANCE instance;
+            if (EsentVersion.SupportsUnicodePaths)
+            {
+                string instanceName = "한글";
+                Api.JetCreateInstance(out instance, instanceName);
+
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+                // Now to verify it worked.
+                int numInstances;
+                JET_INSTANCE_INFO[] instances;
+                Api.JetGetInstanceInfo(out numInstances, out instances);
+                Assert.AreEqual(1, numInstances);
+                Assert.AreEqual(instanceName, instances[0].szInstanceName);
+#endif
+
+                Api.JetTerm(instance);
+            }
+        }
+
+        /// <summary>
+        /// Verify that <see cref="Api.JetCreateInstance2"/> supports Unicode strings.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that JetCreateInstance2 supports Unicode strings.")]
+        public void JetCreateInstance2SupportsUnicodeStrings()
+        {
+            JET_INSTANCE instance;
+            if (EsentVersion.SupportsUnicodePaths)
+            {
+                string instanceName = "한글";
+                Api.JetCreateInstance2(out instance, instanceName, "한글-display", CreateInstanceGrbit.None);
+
+#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+                int numInstances;
+                JET_INSTANCE_INFO[] instances;
+                Api.JetGetInstanceInfo(out numInstances, out instances);
+                Assert.AreEqual(1, numInstances);
+                Assert.AreEqual(instanceName, instances[0].szInstanceName);
+#endif
+
+                Api.JetTerm(instance);
+            }
+        }
+
+        /// <summary>
         /// When a string can't be converted to ASCII for an API call
         /// an exception should be generated. If this code is converted
         /// to use the Unicode version of all APIs this test should
         /// start failing.
         /// </summary>
         [TestMethod]
-        [Priority(0)]
+        [Priority(2)]
         [Description("Check that ArgumentException is thrown for unmappable characters")]
-#if MANAGEDESENT_SUPPORTS_ANSI
-        [ExpectedException(typeof(ArgumentException))]
-#else
-        //// The ArgumentException is thrown by the marshalling layer.
-#endif
         public void ApiThrowsArgumentExceptionOnUnmappableChar()
         {
-            JET_INSTANCE instance;
-            Api.JetCreateInstance(out instance, "한글");
-            Api.JetTerm(instance);
+            string directory = SetupHelper.CreateRandomDirectory();
+            string database = Path.Combine(directory, "test.db");
+
+            using (var instance = new Instance("Windows7Createindexes"))
+            {
+                instance.Parameters.Recovery = false;
+                instance.Parameters.NoInformationEvent = true;
+                instance.Parameters.MaxTemporaryTables = 0;
+                instance.Parameters.TempDirectory = directory;
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    JET_DBID dbid;
+                    Api.JetCreateDatabase(session, database, string.Empty, out dbid, CreateDatabaseGrbit.None);
+                    using (var transaction = new Transaction(session))
+                    {
+                        JET_TABLEID tableid;
+                        Api.JetCreateTable(session, dbid, "table", 0, 100, out tableid);
+                        JET_COLUMNID columnid;
+
+                        try
+                        {
+                            Api.JetAddColumn(
+                                session,
+                                tableid,
+                                "한글",
+                                new JET_COLUMNDEF { coltyp = JET_coltyp.Long },
+                                null,
+                                0,
+                                out columnid);
+                            Assert.Fail("An exception should have been thrown!");
+                        }
+#if MANAGEDESENT_SUPPORTS_ANSI
+                        // The ArgumentException is thrown by the marshalling layer.
+                        catch (ArgumentException)
+                        {
+                        }
+#else
+                        // What's the more precise error code to catch?
+                        catch (Microsoft.Isam.Esent.EsentException)
+                        {
+                        }
+#endif
+
+                        transaction.Commit(CommitTransactionGrbit.LazyFlush);
+                    }
+                }
+            }
+
+            Cleanup.DeleteDirectoryWithRetry(directory);
         }
 
         /// <summary>

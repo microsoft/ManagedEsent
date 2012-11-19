@@ -23,6 +23,16 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         public const JET_param CachedClosedTables = (JET_param)125;
 
         /// <summary>
+        /// Enable the use of the OS file cache for all managed files.
+        /// </summary>
+        public const JET_param EnableFileCache = (JET_param)126;
+
+        /// <summary>
+        /// Enable the use of memory mapped file I/O for database files.
+        /// </summary>
+        public const JET_param EnableViewCache = (JET_param)127;
+
+        /// <summary>
         /// This parameter exposes multiple sets of default values for the
         /// entire set of system parameters. When this parameter is set to
         /// a specific configuration, all system parameter values are reset
@@ -49,6 +59,11 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// (as configured by <see cref="JET_param.DatabasePageSize"/>).
         /// </summary>
         public const JET_param KeyMost = (JET_param)134;
+
+        /// <summary>
+        /// This parameter provides backwards compatibility with the file naming conventions of earlier releases of the database engine.
+        /// </summary>
+        public const JET_param LegacyFileNames = (JET_param)136;
 
         /// <summary>
         /// Set the name associated with table class 1.

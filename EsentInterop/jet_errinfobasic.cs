@@ -208,7 +208,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
         internal NATIVE_ERRINFOBASIC GetNativeErrInfo()
         {
             var native = new NATIVE_ERRINFOBASIC();
-            native.cbStruct = checked((uint)Marshal.SizeOf(native));
+            native.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_ERRINFOBASIC)));
 
             native.errValue = this.errValue;
             native.errcatMostSpecific = this.errcat;

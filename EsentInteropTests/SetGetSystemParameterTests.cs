@@ -472,6 +472,34 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test setting and retrieving the EnableFileCache parameter (if esent supports it)
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting and retrieving the EnableFileCache parameter (if esent supports it)")]
+        public void EnableFileCacheVistaParameter()
+        {
+            if (EsentVersion.SupportsVistaFeatures)
+            {
+                BooleanParameterTest(JET_INSTANCE.Nil, VistaParam.EnableFileCache, Any.Boolean);
+            }
+        }
+
+        /// <summary>
+        /// Test setting and retrieving the EnableViewCache parameter (if esent supports it)
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test setting and retrieving the EnableViewCache parameter (if esent supports it)")]
+        public void EnableViewCacheVistaParameter()
+        {
+            if (EsentVersion.SupportsVistaFeatures)
+            {
+                BooleanParameterTest(JET_INSTANCE.Nil, VistaParam.EnableViewCache, Any.Boolean);
+            }
+        }
+
+        /// <summary>
         /// Test retrieving the KeyMost parameter (if esent supports it)
         /// </summary>
         [TestMethod]
@@ -796,6 +824,20 @@ namespace InteropApiTests
             SystemParameters.MaxInstances = maxInstancesOld;
         }
 
+        /// <summary>
+        /// Test that SystemParameters.ExceptionAction can be set and retrieved.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test that SystemParameters.ExceptionAction can be set and retrieved")]
+        public void VerifyGetAndSetExceptionAction()
+        {
+            JET_ExceptionAction exceptionActionOld = SystemParameters.ExceptionAction;
+            SystemParameters.ExceptionAction = JET_ExceptionAction.MsgBox;
+            Assert.AreEqual(JET_ExceptionAction.MsgBox, SystemParameters.ExceptionAction);
+            SystemParameters.ExceptionAction = exceptionActionOld;
+        }
+
 #region Vista parameters
         /// <summary>
         /// Test that SystemParameters.Configuration can be set and retrieved.
@@ -1100,30 +1142,41 @@ namespace InteropApiTests
         /// Test setting and retrieving an integer system parameter which
         /// is treated as a boolean.
         /// </summary>
+        /// <param name="instance">The ESE instance.</param>
+        /// <param name="param">The parameter to set.</param>
+        /// <param name="expected">The string to set it to.</param>
+        private static void BooleanParameterTest(JET_INSTANCE instance, JET_param param, bool expected)
+        {
+            int value = expected ? 1 : 0;
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, param, value, null);
+
+            int actual = 0;
+            string ignored;
+            Api.JetGetSystemParameter(instance, JET_SESID.Nil, param, ref actual, out ignored, 0);
+
+            if (expected)
+            {
+                Assert.AreNotEqual(0, actual);
+            }
+            else
+            {
+                Assert.AreEqual(0, actual);
+            }
+        }
+
+        /// <summary>
+        /// Test setting and retrieving an integer system parameter which
+        /// is treated as a boolean.
+        /// </summary>
         /// <param name="param">The parameter to set.</param>
         /// <param name="expected">The string to set it to.</param>
         private static void BooleanParameterTest(JET_param param, bool expected)
         {
-            int value = expected ? 1 : 0;
-
             JET_INSTANCE instance;
             Api.JetCreateInstance(out instance, "BoolParameterTest");
             try
             {
-                Api.JetSetSystemParameter(instance, JET_SESID.Nil, param, value, null);
-
-                int actual = 0;
-                string ignored;
-                Api.JetGetSystemParameter(instance, JET_SESID.Nil, param, ref actual, out ignored, 0);
-
-                if (expected)
-                {
-                    Assert.AreNotEqual(0, actual);
-                }
-                else
-                {
-                    Assert.AreEqual(0, actual);
-                }
+                SetGetSystemParameterTests.BooleanParameterTest(instance, param, expected);
             }
             finally
             {

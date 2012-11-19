@@ -26,7 +26,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Cached string values.
         /// </summary>
-        private static readonly string[] cachedStrings = new string[NumCachedBoxedValues];
+        private static readonly string[] CachedStrings = new string[NumCachedBoxedValues];
 
         /// <summary>
         /// Return the interned version of a string, or the original
@@ -82,11 +82,11 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 uint hash = CalculateHash(value, startIndex, count);
                 int index = unchecked((int)(hash % NumCachedBoxedValues));
-                s = cachedStrings[index];
+                s = CachedStrings[index];
                 if (null == s || !AreEqual(s, value, startIndex, count))
                 {
                     s = CreateNewString(value, startIndex, count);
-                    cachedStrings[index] = s;
+                    CachedStrings[index] = s;
                 }
             }
             else

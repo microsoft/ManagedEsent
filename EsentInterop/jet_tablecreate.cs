@@ -574,7 +574,7 @@ namespace Microsoft.Isam.Esent.Interop
             this.CheckMembersAreValid();
 
             var native = new NATIVE_TABLECREATE2();
-            native.cbStruct = checked((uint)Marshal.SizeOf(native));
+            native.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_TABLECREATE2)));
             native.szTableName = this.szTableName;
             native.szTemplateTableName = this.szTemplateTableName;
             native.ulPages = checked((uint)this.ulPages);
@@ -605,7 +605,7 @@ namespace Microsoft.Isam.Esent.Interop
             this.CheckMembersAreValid();
 
             var native = new NATIVE_TABLECREATE3();
-            native.cbStruct = checked((uint)Marshal.SizeOf(native));
+            native.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_TABLECREATE3)));
             native.szTableName = this.szTableName;
             native.szTemplateTableName = this.szTemplateTableName;
             native.ulPages = checked((uint)this.ulPages);

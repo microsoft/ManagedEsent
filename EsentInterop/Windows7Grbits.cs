@@ -95,7 +95,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows7
         /// <summary>
         /// Don't compress the data when storing it.
         /// </summary>
-        public const SetColumnGrbit Uncompressed = (SetColumnGrbit)0x20000;
+        public const SetColumnGrbit Uncompressed = (SetColumnGrbit)0x10000;
 
         /// <summary>
         /// Recover without error even if uncommitted logs have been lost. Set 

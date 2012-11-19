@@ -82,6 +82,11 @@ namespace InteropApiTests
         /// </summary>
         private JET_COLUMNID columnIdData2;
 
+        /// <summary>
+        /// Column ID of the auto-inc column.
+        /// </summary>
+        private JET_COLUMNID columnIdAutoInc;
+
         #region Setup/Teardown
 
         /// <summary>
@@ -983,7 +988,7 @@ namespace InteropApiTests
             Api.JetUpdate(this.sesId, tc.tableid, bookmark, bookmark.Length, out actualBookmarkSize);
             Api.JetGotoBookmark(this.sesId, tc.tableid, bookmark, bookmark.Length);
 
-            this.VerifyCurrentRecord(tc.tableid, key, data1, data2);
+            this.VerifyCurrentRecord(tc.tableid, key, data1, data2, 1, null);
         }
 
         /// <summary>
@@ -1032,7 +1037,7 @@ namespace InteropApiTests
             Api.JetSetColumn(this.sesId, tableId1, this.columnIdData2, data2Array, data2Array.Length, SetColumnGrbit.None, null);
             Api.JetUpdate(this.sesId, tableId1);
 
-            this.VerifyCurrentRecord(tableId1, keyOld, data1, data2);
+            this.VerifyCurrentRecord(tableId1, keyOld, data1, data2, 1, null);
 
             Api.JetCloseDatabase(sesId2, dbId2, CloseDatabaseGrbit.None);
             Api.JetEndSession(sesId2, EndSessionGrbit.None);
@@ -1095,7 +1100,7 @@ namespace InteropApiTests
             Api.JetCommitTransaction(sesId2, CommitTransactionGrbit.None);
             Api.JetBeginTransaction(this.sesId);
 
-            this.VerifyCurrentRecord(tableId1, keyOld, data1Ses2, data2Ses2);
+            this.VerifyCurrentRecord(tableId1, keyOld, data1Ses2, data2Ses2, 1, null);
 
             Api.JetCloseDatabase(sesId2, dbId2, CloseDatabaseGrbit.None);
             Api.JetEndSession(sesId2, EndSessionGrbit.None);
@@ -1110,9 +1115,8 @@ namespace InteropApiTests
         public void JetPrepareUpdateFlagsInsertCopy()
         {
             int keyOld = 10, data1Old = 100, data2Old = 1000;
-            int keyNew = 20, data1New = 200, data2New = 2000;
+            int keyNew = 20, data2New = 2000;
             byte[] keyNewArray = BitConverter.GetBytes(keyNew);
-            byte[] data1NewArray = BitConverter.GetBytes(data1New);
             byte[] data2NewArray = BitConverter.GetBytes(data2New);
 
             JET_TABLECREATE tc = this.CreateTable(this.tableName);
@@ -1121,15 +1125,47 @@ namespace InteropApiTests
 
             Api.JetPrepareUpdate(this.sesId, tc.tableid, JET_prep.InsertCopy);
             Api.JetSetColumn(this.sesId, tc.tableid, this.columnIdKey, keyNewArray, keyNewArray.Length, SetColumnGrbit.None, null);
-            Api.JetSetColumn(this.sesId, tc.tableid, this.columnIdData1, data1NewArray, data1NewArray.Length, SetColumnGrbit.None, null);
             Api.JetSetColumn(this.sesId, tc.tableid, this.columnIdData2, data2NewArray, data2NewArray.Length, SetColumnGrbit.None, null);
             Api.JetUpdate(this.sesId, tc.tableid);
 
             this.MoveCursor(tc.tableid, JET_Move.First);
-            this.VerifyCurrentRecord(tc.tableid, keyOld, data1Old, data2Old);
+            this.VerifyCurrentRecord(tc.tableid, keyOld, data1Old, data2Old, 1, null);
 
             this.MoveCursor(tc.tableid, JET_Move.Next);
-            this.VerifyCurrentRecord(tc.tableid, keyNew, data1New, data2New);
+            this.VerifyCurrentRecord(tc.tableid, keyNew, data1Old, data2New, 2, null);
+        }
+
+        /// <summary>
+        /// JetPrepareUpdate flags: InsertCopy without setting primary key throws EsentKeyDuplicateException.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("JetPrepareUpdate flags: InsertCopy without setting primary key throws EsentKeyDuplicateException")]
+        public void JetPrepareUpdateFlagsInsertCopyWithoutPrimaryKeyThrowsEsentKeyDuplicateException()
+        {
+            int keyOld = 10, data1Old = 100, data2Old = 1000;
+            int data2New = 2000;
+            byte[] data2NewArray = BitConverter.GetBytes(data2New);
+
+            JET_TABLECREATE tc = this.CreateTable(this.tableName);
+            byte[] bookmark = this.InsertRecord(tc.tableid, keyOld, data1Old, data2Old);
+            Api.JetGotoBookmark(this.sesId, tc.tableid, bookmark, bookmark.Length);
+
+            Api.JetPrepareUpdate(this.sesId, tc.tableid, JET_prep.InsertCopy);
+            Api.JetSetColumn(this.sesId, tc.tableid, this.columnIdData2, data2NewArray, data2NewArray.Length, SetColumnGrbit.None, null);
+            try
+            {
+                Api.JetUpdate(this.sesId, tc.tableid);
+                Assert.Fail("Should have thrown EsentKeyDuplicateException");
+            }
+            catch (EsentKeyDuplicateException)
+            {
+            }
+
+            this.MoveCursor(tc.tableid, JET_Move.First);
+            this.VerifyCurrentRecord(tc.tableid, keyOld, data1Old, data2Old, 1, null);
+
+            this.MoveCursor(tc.tableid, JET_Move.Next, typeof(EsentNoCurrentRecordException));
         }
 
         /// <summary>
@@ -1137,13 +1173,12 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(1)]
-        [Description("JetPrepareUpdate flags: InsertCopyDeleteOriginal ")]
+        [Description("JetPrepareUpdate flags: InsertCopyDeleteOriginal")]
         public void JetPrepareUpdateFlagsInsertCopyDeleteOriginal()
         {
             int keyOld = 10, data1Old = 100, data2Old = 1000;
-            int keyNew = 20, data1New = 200, data2New = 2000;
+            int keyNew = 20, data2New = 2000;
             byte[] keyNewArray = BitConverter.GetBytes(keyNew);
-            byte[] data1NewArray = BitConverter.GetBytes(data1New);
             byte[] data2NewArray = BitConverter.GetBytes(data2New);
 
             JET_TABLECREATE tc = this.CreateTable(this.tableName);
@@ -1152,12 +1187,37 @@ namespace InteropApiTests
 
             Api.JetPrepareUpdate(this.sesId, tc.tableid, JET_prep.InsertCopyDeleteOriginal);
             Api.JetSetColumn(this.sesId, tc.tableid, this.columnIdKey, keyNewArray, keyNewArray.Length, SetColumnGrbit.None, null);
-            Api.JetSetColumn(this.sesId, tc.tableid, this.columnIdData1, data1NewArray, data1NewArray.Length, SetColumnGrbit.None, null);
             Api.JetSetColumn(this.sesId, tc.tableid, this.columnIdData2, data2NewArray, data2NewArray.Length, SetColumnGrbit.None, null);
             Api.JetUpdate(this.sesId, tc.tableid);
 
             this.MoveCursor(tc.tableid, JET_Move.First);
-            this.VerifyCurrentRecord(tc.tableid, keyNew, data1New, data2New);
+            this.VerifyCurrentRecord(tc.tableid, keyNew, data1Old, data2New, 2, null);
+
+            this.MoveCursor(tc.tableid, JET_Move.Next, typeof(EsentNoCurrentRecordException));
+        }
+
+        /// <summary>
+        /// JetPrepareUpdate flags: InsertCopyDeleteOriginal without setting primary key works.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("JetPrepareUpdate flags: InsertCopyDeleteOriginal without setting primary key works")]
+        public void JetPrepareUpdateFlagsInsertCopyDeleteOriginalWithoutPrimaryKeyWorks()
+        {
+            int keyOld = 10, data1Old = 100, data2Old = 1000;
+            int data2New = 2000;
+            byte[] data2NewArray = BitConverter.GetBytes(data2New);
+
+            JET_TABLECREATE tc = this.CreateTable(this.tableName);
+            byte[] bookmark = this.InsertRecord(tc.tableid, keyOld, data1Old, data2Old);
+            Api.JetGotoBookmark(this.sesId, tc.tableid, bookmark, bookmark.Length);
+
+            Api.JetPrepareUpdate(this.sesId, tc.tableid, JET_prep.InsertCopyDeleteOriginal);
+            Api.JetSetColumn(this.sesId, tc.tableid, this.columnIdData2, data2NewArray, data2NewArray.Length, SetColumnGrbit.None, null);
+            Api.JetUpdate(this.sesId, tc.tableid);
+
+            this.MoveCursor(tc.tableid, JET_Move.First);
+            this.VerifyCurrentRecord(tc.tableid, keyOld, data1Old, data2New, 2, null);
 
             this.MoveCursor(tc.tableid, JET_Move.Next, typeof(EsentNoCurrentRecordException));
         }
@@ -1193,7 +1253,7 @@ namespace InteropApiTests
             {
             }
 
-            this.VerifyCurrentRecord(tc.tableid, keyOld, data1Old, data2Old);
+            this.VerifyCurrentRecord(tc.tableid, keyOld, data1Old, data2Old, 1, null);
         }
 
         /// <summary>
@@ -1934,6 +1994,7 @@ namespace InteropApiTests
             const string ColumnKeyName = "columnkey";
             const string ColumnData1Name = "columndata1";
             const string ColumnData2Name = "columndata2";
+            const string ColumnAutoIncName = "columnautoinc";
             string clustIndexKey = string.Format("+{0}\0\0", ColumnKeyName);
             string secIndexWithPrimaryKey = string.Format("+{0}\0-{1}\0\0", ColumnData1Name, ColumnKeyName);
             string secIndexWithoutPrimaryKey = string.Format("+{0}\0+{1}\0\0", ColumnData1Name, ColumnData2Name);
@@ -1956,6 +2017,13 @@ namespace InteropApiTests
                 {
                     szColumnName = ColumnData2Name,
                     coltyp = JET_coltyp.Long
+                },
+
+                new JET_COLUMNCREATE
+                {
+                    szColumnName = ColumnAutoIncName,
+                    coltyp = JET_coltyp.Long,
+                    grbit = ColumndefGrbit.ColumnAutoincrement
                 }
             };
 
@@ -1998,18 +2066,21 @@ namespace InteropApiTests
 
             Api.JetCreateTableColumnIndex3(this.sesId, this.dbId, tc);
 
-            Assert.AreEqual<int>(7, tc.cCreated);  // 1 table + 3 colummns + 3 indexes.
+            Assert.AreEqual<int>(8, tc.cCreated);  // 1 table + 4 colummns + 3 indexes.
             Assert.AreNotEqual<JET_TABLEID>(JET_TABLEID.Nil, tc.tableid);
 
             this.columnIdKey = Api.GetTableColumnid(this.sesId, tc.tableid, ColumnKeyName);
             this.columnIdData1 = Api.GetTableColumnid(this.sesId, tc.tableid, ColumnData1Name);
             this.columnIdData2 = Api.GetTableColumnid(this.sesId, tc.tableid, ColumnData2Name);
+            this.columnIdAutoInc = Api.GetTableColumnid(this.sesId, tc.tableid, ColumnAutoIncName);
 
             Assert.AreNotEqual<JET_COLUMNID>(JET_COLUMNID.Nil, this.columnIdKey);
             Assert.AreNotEqual<JET_COLUMNID>(JET_COLUMNID.Nil, this.columnIdData1);
             Assert.AreNotEqual<JET_COLUMNID>(JET_COLUMNID.Nil, this.columnIdData1);
+            Assert.AreNotEqual<JET_COLUMNID>(JET_COLUMNID.Nil, this.columnIdAutoInc);
             Assert.AreNotEqual<JET_COLUMNID>(this.columnIdKey, this.columnIdData1);
             Assert.AreNotEqual<JET_COLUMNID>(this.columnIdKey, this.columnIdData2);
+            Assert.AreNotEqual<JET_COLUMNID>(this.columnIdKey, this.columnIdAutoInc);
 
             return tc;
         }
@@ -2290,12 +2361,14 @@ namespace InteropApiTests
         /// <param name="keyExpected">The key expected.</param>
         /// <param name="data1Expected">The data1 expected.</param>
         /// <param name="data2Expected">The data2 expected.</param>
+        /// <param name="autoIncExpected">The auto inc expected.</param>
         /// <param name="exTypeExpected">The ex type expected.</param>
-        private void VerifyCurrentRecord(JET_TABLEID tableId, int keyExpected, int data1Expected, int data2Expected, Type exTypeExpected)
+        private void VerifyCurrentRecord(JET_TABLEID tableId, int keyExpected, int data1Expected, int data2Expected, int? autoIncExpected, Type exTypeExpected)
         {
             byte[] keyArray = new byte[sizeof(int)];
             byte[] data1Array = new byte[sizeof(int)];
             byte[] data2Array = new byte[sizeof(int)];
+            byte[] autoIncArray = new byte[sizeof(int)];
 
             JET_RETRIEVECOLUMN[] retrieveColumns = new[]
             {
@@ -2321,6 +2394,14 @@ namespace InteropApiTests
                     pvData = data2Array,
                     cbData = data2Array.Length,
                     itagSequence = 1
+                },
+
+                new JET_RETRIEVECOLUMN
+                {
+                    columnid = this.columnIdAutoInc,
+                    pvData = autoIncArray,
+                    cbData = autoIncArray.Length,
+                    itagSequence = 1
                 }
             };
 
@@ -2336,15 +2417,21 @@ namespace InteropApiTests
                 Assert.AreEqual<JET_wrn>(JET_wrn.Success, err);
                 Assert.AreEqual<int>(keyArray.Length, retrieveColumns[0].cbActual);
                 Assert.AreEqual<int>(data1Array.Length, retrieveColumns[1].cbActual);
-                Assert.AreEqual<int>(data1Array.Length, retrieveColumns[2].cbActual);
+                Assert.AreEqual<int>(data2Array.Length, retrieveColumns[2].cbActual);
+                Assert.AreEqual<int>(autoIncArray.Length, retrieveColumns[3].cbActual);
 
                 int keyActual = BitConverter.ToInt32(keyArray, 0);
                 int data1Actual = BitConverter.ToInt32(data1Array, 0);
                 int data2Actual = BitConverter.ToInt32(data2Array, 0);
+                int autoIncActual = BitConverter.ToInt32(autoIncArray, 0);
 
                 Assert.AreEqual<int>(keyExpected, keyActual);
                 Assert.AreEqual<int>(data1Expected, data1Actual);
                 Assert.AreEqual<int>(data2Expected, data2Actual);
+                if (autoIncExpected.HasValue)
+                {
+                    Assert.AreEqual<int>(autoIncExpected.Value, autoIncActual);
+                }
             }
             catch (EsentException ex)
             {
@@ -2357,6 +2444,19 @@ namespace InteropApiTests
                     throw;
                 }
             }
+        }
+
+        /// <summary>
+        /// Verifies the current record.
+        /// </summary>
+        /// <param name="tableId">The table id.</param>
+        /// <param name="keyExpected">The key expected.</param>
+        /// <param name="data1Expected">The data1 expected.</param>
+        /// <param name="data2Expected">The data2 expected.</param>
+        /// <param name="exTypeExpected">The ex type expected.</param>
+        private void VerifyCurrentRecord(JET_TABLEID tableId, int keyExpected, int data1Expected, int data2Expected, Type exTypeExpected)
+        {
+            this.VerifyCurrentRecord(tableId, keyExpected, data1Expected, data2Expected, null, exTypeExpected);
         }
 
         /// <summary>

@@ -178,7 +178,7 @@ namespace InteropApiTests
             var idxunicode = new JET_UNICODEINDEX
             {
                 dwMapFlags = Conversions.LCMapFlagsFromCompareOptions(CompareOptions.None),
-                lcid = 1033,
+                lcid = 1033, // en-US
             };
             Api.JetOpenTempTable3(this.session, columns, columns.Length, idxunicode, TempTableGrbit.Scrollable, out tableid, columnids);
 
@@ -192,7 +192,7 @@ namespace InteropApiTests
                 }
             }
 
-            Array.Sort(data);
+            Array.Sort(data, new CultureInfo("en-US").CompareInfo.Compare);
             CollectionAssert.AreEqual(data, this.RetrieveAllRecordsAsString(tableid, columnids[0]).ToArray());
             Api.JetCloseTable(this.session, tableid);
         }
@@ -215,7 +215,7 @@ namespace InteropApiTests
             var idxunicode = new JET_UNICODEINDEX
             {
                 dwMapFlags = Conversions.LCMapFlagsFromCompareOptions(CompareOptions.None),
-                lcid = 1033,
+                lcid = 1041, // ja-JP
             };
             Api.JetOpenTempTable3(this.session, columns, columns.Length, idxunicode, TempTableGrbit.Scrollable, out tableid, columnids);
 
@@ -227,7 +227,7 @@ namespace InteropApiTests
                 Any.StringOfLength(2000),
                 Any.StringOfLength(2001),
                 Any.StringOfLength(2000),
-                Any.StringOfLength(1999),
+                Any.StringOfLength(1999)
             };
 
             using (var transaction = new Transaction(this.session))
@@ -244,7 +244,8 @@ namespace InteropApiTests
                 transaction.Commit(CommitTransactionGrbit.None);
             }
 
-            Array.Sort(data);
+            Array.Sort(data, new CultureInfo("ja-JP").CompareInfo.Compare);
+
             CollectionAssert.AreEqual(data, this.RetrieveAllRecordsAsString(tableid, columnids[0]).ToArray());
             Api.JetCloseTable(this.session, tableid);
         }
@@ -271,7 +272,7 @@ namespace InteropApiTests
             var idxunicode = new JET_UNICODEINDEX
             {
                 dwMapFlags = Conversions.LCMapFlagsFromCompareOptions(CompareOptions.None),
-                lcid = 1033,
+                lcid = 1031, // de-DE
             };
 
             var opentemporarytable = new JET_OPENTEMPORARYTABLE
@@ -295,7 +296,7 @@ namespace InteropApiTests
                 }
             }
 
-            Array.Sort(data);
+            Array.Sort(data, new CultureInfo("de-DE").CompareInfo.Compare);
             CollectionAssert.AreEqual(
                 data, this.RetrieveAllRecordsAsString(opentemporarytable.tableid, columnids[0]).ToArray());
             Api.JetCloseTable(this.session, opentemporarytable.tableid);

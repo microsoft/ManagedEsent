@@ -1233,6 +1233,36 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Base class for JET_err.BadEmptyPage exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentBadEmptyPageException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentBadEmptyPageException class.
+        /// </summary>
+        public EsentBadEmptyPageException() :
+            base("Database corrupted. Searching an unexpectedly empty page.", JET_err.BadEmptyPage)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBadEmptyPageException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentBadEmptyPageException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+    }
+
+    /// <summary>
     /// Base class for JET_err.KeyTooBig exceptions.
     /// </summary>
     [SuppressMessage(
@@ -8776,7 +8806,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentPrimaryIndexCorruptedException class.
         /// </summary>
         public EsentPrimaryIndexCorruptedException() :
-            base("Primary index is corrupt. The database must be defragmented", JET_err.PrimaryIndexCorrupted)
+            base("Primary index is corrupt. The database must be defragmented or the table deleted.", JET_err.PrimaryIndexCorrupted)
         {
         }
 
@@ -8806,7 +8836,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSecondaryIndexCorruptedException class.
         /// </summary>
         public EsentSecondaryIndexCorruptedException() :
-            base("Secondary index is corrupt. The database must be defragmented", JET_err.SecondaryIndexCorrupted)
+            base("Secondary index is corrupt. The database must be defragmented or the affected index must be deleted. If the corrupt index is over Unicode text, a likely cause a sort-order change.", JET_err.SecondaryIndexCorrupted)
         {
         }
 
@@ -12634,6 +12664,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentKeyTruncatedException();
             case JET_err.DatabaseLeakInSpace:
                 return new EsentDatabaseLeakInSpaceException();
+            case JET_err.BadEmptyPage:
+                return new EsentBadEmptyPageException();
             case JET_err.KeyTooBig:
                 return new EsentKeyTooBigException();
             case JET_err.CannotSeparateIntrinsicLV:

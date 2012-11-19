@@ -40,7 +40,9 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 
             return false;
         }
-
+#if MANAGEDESENT_ON_METRO
+        // File/Directory not availble in Metro.
+#else
         /// <summary>
         /// Delete all files associated with a PersistedDictionary database from
         /// the specified directory.
@@ -75,5 +77,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 }
             }
         }
+#endif
     }
 }

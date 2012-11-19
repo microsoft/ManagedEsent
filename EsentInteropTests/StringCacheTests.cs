@@ -26,7 +26,7 @@ namespace InteropApiTests
         [Priority(0)]
         public void TryToInternRandomString()
         {
-            string s = StringCache.TryToIntern(Any.String);
+            string s = StringCache.TryToIntern(Any.NonInternedString);
             Assert.IsNull(string.IsInterned(s), "Should not have been interned");
         }
 
@@ -38,8 +38,8 @@ namespace InteropApiTests
         [Priority(0)]
         public void TryToInternInternedString()
         {
-            string s = string.Intern(StringCache.TryToIntern(Any.String));
-            Assert.IsNotNull(string.IsInterned(s), "Should not have been interned");
+            string s = string.Intern(StringCache.TryToIntern(Any.NonInternedString));
+            Assert.IsNotNull(string.IsInterned(s), "Should have been interned");
         }
 #endif // !MANAGEDESENT_ON_METRO
 

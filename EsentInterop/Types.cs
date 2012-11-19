@@ -977,7 +977,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// The size of a JET_INDEXID structure.
         /// </summary>
-        private static readonly uint sizeOfIndexId = (uint)Marshal.SizeOf(typeof(JET_INDEXID));
+        private static readonly uint TheSizeOfIndexId = (uint)Marshal.SizeOf(typeof(JET_INDEXID));
 
         /// <summary>
         /// Gets the size of a JET_INDEXINDEXID structure.
@@ -985,7 +985,7 @@ namespace Microsoft.Isam.Esent.Interop
         internal static uint SizeOfIndexId
         {
             [DebuggerStepThrough]
-            get { return sizeOfIndexId; }
+            get { return TheSizeOfIndexId; }
         }
 
         /// <summary>

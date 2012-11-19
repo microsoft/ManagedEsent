@@ -13,8 +13,8 @@ namespace InteropApiTests
     using System.Linq;
     using System.Reflection;
     using System.Text;
+    using Internal.Ese.Common;
     using Internal.Ese.Wstf;
-    using Internal.Ese.Wstf.Utils;
     using VS = Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -28,7 +28,7 @@ namespace InteropApiTests
         /// Initializes a new instance of the VSTestListProvider class
         /// </summary>
         /// <param name="assembly">Associated assembly</param>
-        public VSTestListProvider(Assembly assembly)
+        public VSTestListProvider(System.Reflection.Assembly assembly)
             : this(assembly, null)
         {
         }
@@ -38,7 +38,7 @@ namespace InteropApiTests
         /// </summary>
         /// <param name="assembly">Associated assembly</param>
         /// <param name="attrs">Assembly attributes</param>
-        public VSTestListProvider(Assembly assembly, IEnumerable<Attribute> attrs)
+        public VSTestListProvider(System.Reflection.Assembly assembly, IEnumerable<Attribute> attrs)
             : base(assembly, attrs)
         {
         }
@@ -148,7 +148,7 @@ namespace InteropApiTests
                 return null;
             };
 
-            var allMethods = this.ImplementingType.GetTypeInfo().GetMethods();
+            var allMethods = this.ImplementingType.GetTypeInfo().GetDeclaredMethods();
             this.TestDescriptors = new SortedDictionary<string, TestMethodDescriptor>();
             foreach (var method in allMethods)
             {
@@ -251,7 +251,7 @@ namespace InteropApiTests
         /// </summary>
         /// <param name="methodInfo">A MethodInfo to reflect on</param>
         /// <returns>A TestMethodDescriptor for the method</returns>
-        private TestMethodDescriptor BuildTestMethodDescriptor(MethodInfo methodInfo)
+        private TestMethodDescriptor BuildTestMethodDescriptor(System.Reflection.MethodInfo methodInfo)
         {
             string title = this.Title;
             string desc = this.Description;
@@ -286,7 +286,7 @@ namespace InteropApiTests
             }
            
             // Read tcmid/wttid from AttributeStore
-            id = GetTestId(methodInfo.Name);
+            id = this.GetTestId(methodInfo.Name);
 
             TimeSpan timeout = TimeSpan.Zero;
             VS.TimeoutAttribute timeoutAttr;
@@ -393,9 +393,9 @@ namespace InteropApiTests
                     catch (Exception ex)
                     {
                         var actualEx = ex;
-                        if (ex is TargetInvocationException)
+                        if (ex is System.Reflection.TargetInvocationException)
                         {
-                            actualEx = ((TargetInvocationException)ex).InnerException;
+                            actualEx = ((System.Reflection.TargetInvocationException)ex).InnerException;
                         }
 
                         if (actualEx.GetType() != expectedExcepAttr.ExceptionType)

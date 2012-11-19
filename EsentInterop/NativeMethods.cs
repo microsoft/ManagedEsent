@@ -51,6 +51,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetCreateInstance(out IntPtr instance, string szInstanceName);
 
+        [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
+        public static extern int JetCreateInstanceW(out IntPtr instance, string szInstanceName);
+
         [DllImport(EsentDll, CharSet = EsentCharSet, ExactSpelling = true)]
         public static extern int JetCreateInstance2(out IntPtr instance, string szInstanceName, string szDisplayName, uint grbit);
 #endif // !MANAGEDESENT_ON_METRO

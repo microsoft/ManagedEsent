@@ -68,6 +68,8 @@ namespace InteropApiTests
         [Description("Sort case-sensitive with JetOpenTemporaryTable3")]
         public void SortDataCaseSensitiveWithJetOpenTemporaryTable3()
         {
+            const string LocaleName = "pt-BR";
+
             var columns = new[]
             {
                 new JET_COLUMNDEF { coltyp = JET_coltyp.Text, cp = JET_CP.Unicode, grbit = ColumndefGrbit.TTKey },
@@ -77,7 +79,7 @@ namespace InteropApiTests
             var idxunicode = new JET_UNICODEINDEX
             {
                 dwMapFlags = Conversions.LCMapFlagsFromCompareOptions(CompareOptions.None),
-                szLocaleName = "pt-br",
+                szLocaleName = LocaleName,
             };
 
             var opentemporarytable = new JET_OPENTEMPORARYTABLE
@@ -101,7 +103,7 @@ namespace InteropApiTests
                 }
             }
 
-            Array.Sort(data);
+            Array.Sort(data, new CultureInfo(LocaleName).CompareInfo.Compare);
             CollectionAssert.AreEqual(
                 data, this.RetrieveAllRecordsAsString(opentemporarytable.tableid, columnids[0]).ToArray());
             Api.JetCloseTable(this.session, opentemporarytable.tableid);

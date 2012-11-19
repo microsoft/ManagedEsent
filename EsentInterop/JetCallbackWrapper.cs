@@ -45,7 +45,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// API call tracing.
         /// </summary>
-        private static readonly TraceSwitch traceSwitch = new TraceSwitch("ESENT JetCallbackWrapper", "Wrapper around unmanaged ESENT callback");
+        private static readonly TraceSwitch TraceSwitch = new TraceSwitch("ESENT JetCallbackWrapper", "Wrapper around unmanaged ESENT callback");
 
         /// <summary>
         /// The wrapped status callback.
@@ -166,7 +166,7 @@ namespace Microsoft.Isam.Esent.Interop
                 // Thread aborts aren't handled here. ESENT callbacks can execute on client threads or
                 // internal ESENT threads so it isn't clear what should be done on an abort.
                 Trace.WriteLineIf(
-                    traceSwitch.TraceWarning,
+                    TraceSwitch.TraceWarning,
                     string.Format(CultureInfo.InvariantCulture, "Caught Exception {0}", ex));
                 return JET_err.CallbackFailed;
             }

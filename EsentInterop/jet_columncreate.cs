@@ -313,7 +313,7 @@ namespace Microsoft.Isam.Esent.Interop
         internal NATIVE_COLUMNCREATE GetNativeColumnCreate()
         {
             var native = new NATIVE_COLUMNCREATE();
-            native.cbStruct = checked((uint)Marshal.SizeOf(native));
+            native.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_COLUMNCREATE)));
 
             // columncreate.szColumnName is converted at pinvoke time.
             native.szColumnName = IntPtr.Zero;

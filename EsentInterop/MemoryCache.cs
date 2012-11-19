@@ -19,7 +19,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// A zero-length array that should be used whenever we want to return one.
         /// </summary>
-        private static readonly byte[] zeroLengthArray = new byte[0];
+        private static readonly byte[] ZeroLengthArray = new byte[0];
 
         /// <summary>
         /// Default size for newly allocated buffers.
@@ -68,7 +68,7 @@ namespace Microsoft.Isam.Esent.Interop
             Debug.Assert(data.Length >= length, "length parameter is too long");
             if (0 == length)
             {
-                return zeroLengthArray;
+                return ZeroLengthArray;
             }
 
             var output = new byte[length];

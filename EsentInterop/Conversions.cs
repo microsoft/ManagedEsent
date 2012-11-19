@@ -19,12 +19,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Maps a CompareOption enumeration to the corresponding LCMapString flag.
         /// </summary>
-        private static readonly IDictionary<CompareOptions, uint> compareOptionsToLcmapFlags;
+        private static readonly IDictionary<CompareOptions, uint> CompareOptionsToLcmapFlags;
 
         /// <summary>
         /// Maps an LCMapString flag to the corresponding CompareOption enumeration.
         /// </summary>
-        private static readonly IDictionary<uint, CompareOptions> lcmapFlagsToCompareOptions;
+        private static readonly IDictionary<uint, CompareOptions> LcmapFlagsToCompareOptions;
 
         /// <summary>
         /// Initializes static members of the Conversions class. This sets up the
@@ -33,7 +33,7 @@ namespace Microsoft.Isam.Esent.Interop
         static Conversions()
         {
             // Rather than creating both dictionaries, define one as the inverse of the other.
-            compareOptionsToLcmapFlags = new Dictionary<CompareOptions, uint>
+            CompareOptionsToLcmapFlags = new Dictionary<CompareOptions, uint>
             {
                 { CompareOptions.IgnoreCase, NativeMethods.NORM_IGNORECASE },
                 { CompareOptions.IgnoreKanaType, NativeMethods.NORM_IGNOREKANATYPE },
@@ -43,7 +43,7 @@ namespace Microsoft.Isam.Esent.Interop
                 { CompareOptions.StringSort, NativeMethods.SORT_STRINGSORT }
             };
 
-            lcmapFlagsToCompareOptions = InvertDictionary(compareOptionsToLcmapFlags);
+            LcmapFlagsToCompareOptions = InvertDictionary(CompareOptionsToLcmapFlags);
         }
 
         /// <summary>
@@ -77,11 +77,11 @@ namespace Microsoft.Isam.Esent.Interop
         {
             // This should be a template, but there isn't an elegant way to express than with C# generics
             CompareOptions options = CompareOptions.None;
-            foreach (uint flag in lcmapFlagsToCompareOptions.Keys)
+            foreach (uint flag in LcmapFlagsToCompareOptions.Keys)
             {
                 if (flag == (lcmapFlags & flag))
                 {
-                    options |= lcmapFlagsToCompareOptions[flag];
+                    options |= LcmapFlagsToCompareOptions[flag];
                 }
             }
 
@@ -98,11 +98,11 @@ namespace Microsoft.Isam.Esent.Interop
         {
             // This should be a template, but there isn't an elegant way to express than with C# generics
             uint flags = 0;
-            foreach (CompareOptions option in compareOptionsToLcmapFlags.Keys)
+            foreach (CompareOptions option in CompareOptionsToLcmapFlags.Keys)
             {
                 if (option == (compareOptions & option))
                 {
-                    flags |= compareOptionsToLcmapFlags[option];
+                    flags |= CompareOptionsToLcmapFlags[option];
                 }
             }
 

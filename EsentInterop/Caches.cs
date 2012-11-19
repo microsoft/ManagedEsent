@@ -29,12 +29,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Cached buffers for columns.
         /// </summary>
-        private static readonly MemoryCache columnCache = new MemoryCache(128 * 1024, MaxBuffers);
+        private static readonly MemoryCache TheColumnCache = new MemoryCache(128 * 1024, MaxBuffers);
 
         /// <summary>
         /// Cached buffers for keys and bookmarks.
         /// </summary>
-        private static readonly MemoryCache bookmarkCache = new MemoryCache(KeyMostMost, MaxBuffers);
+        private static readonly MemoryCache TheBookmarkCache = new MemoryCache(KeyMostMost, MaxBuffers);
 
         /// <summary>
         /// Gets the cached buffers for columns.
@@ -42,7 +42,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static MemoryCache ColumnCache
         {
             [DebuggerStepThrough]
-            get { return columnCache; }
+            get { return TheColumnCache; }
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static MemoryCache BookmarkCache
         {
             [DebuggerStepThrough]
-            get { return bookmarkCache; }
+            get { return TheBookmarkCache; }
         }
     }
 }

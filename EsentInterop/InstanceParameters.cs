@@ -483,7 +483,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether JetAttachDatabase will check for
+        /// Gets or sets a value indicating whether <see cref="Api.JetAttachDatabase"/> will check for
         /// indexes that were build using an older version of the NLS library in the
         /// operating system.
         /// </summary>

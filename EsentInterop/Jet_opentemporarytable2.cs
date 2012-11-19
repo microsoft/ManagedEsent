@@ -86,7 +86,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         {
             this.CheckDataSize();
             var openTemporaryTable = new NATIVE_OPENTEMPORARYTABLE2();
-            openTemporaryTable.cbStruct = checked((uint)Marshal.SizeOf(openTemporaryTable));
+            openTemporaryTable.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_OPENTEMPORARYTABLE2)));
             openTemporaryTable.ccolumn = checked((uint)this.ccolumn);
             openTemporaryTable.grbit = (uint)this.grbit;
             openTemporaryTable.cbKeyMost = checked((uint)this.cbKeyMost);

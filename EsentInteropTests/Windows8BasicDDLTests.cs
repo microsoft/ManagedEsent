@@ -901,7 +901,7 @@ namespace InteropApiTests
         [Description("Sort case-sensitive with JetOpenTemporaryTable2")]
         public void SortDataCaseSensitiveWithJetOpenTemporaryTable2()
         {
-            const string LocaleName = "en-US";
+            const string LocaleName = "fr-FR";
 
             var columns = new[]
             {
@@ -936,7 +936,7 @@ namespace InteropApiTests
                 }
             }
 
-            Array.Sort(data);
+            Array.Sort(data, new CultureInfo(LocaleName).CompareInfo.Compare);
             CollectionAssert.AreEqual(
                 data, this.RetrieveAllRecordsAsString(opentemporarytable.tableid, columnids[0]).ToArray());
             Api.JetCloseTable(this.sesid, opentemporarytable.tableid);

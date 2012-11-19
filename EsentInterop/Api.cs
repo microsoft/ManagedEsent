@@ -53,7 +53,6 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Runtime.InteropServices;
     using System.Security.Permissions;
     using Microsoft.Isam.Esent.Interop.Implementation;
-    using Microsoft.Isam.Esent.Interop.Vista;
 
     /// <summary>
     /// Managed versions of the ESENT Api. This class contains static methods corresponding
@@ -952,9 +951,10 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="parametersSize">The parameter is not used.</param>
         /// <param name="grbit">Table open options.</param>
         /// <param name="tableid">Returns the opened table.</param>
-        public static void JetOpenTable(JET_SESID sesid, JET_DBID dbid, string tablename, byte[] parameters, int parametersSize, OpenTableGrbit grbit, out JET_TABLEID tableid)
+        /// <returns>An ESENT warning.</returns>
+        public static JET_wrn JetOpenTable(JET_SESID sesid, JET_DBID dbid, string tablename, byte[] parameters, int parametersSize, OpenTableGrbit grbit, out JET_TABLEID tableid)
         {
-            Api.Check(Impl.JetOpenTable(sesid, dbid, tablename, parameters, parametersSize, grbit, out tableid));
+            return Api.Check(Impl.JetOpenTable(sesid, dbid, tablename, parameters, parametersSize, grbit, out tableid));
         }
 
         /// <summary>
@@ -1247,7 +1247,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// removal on record sets when accessed in a purely sequential manner.
         /// Also see
         /// <seealso cref="Api.JetOpenTempTable3"/>.
-        /// <seealso cref="VistaApi.JetOpenTemporaryTable"/>.
+        /// <seealso cref="Vista.VistaApi.JetOpenTemporaryTable"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="columns">
@@ -1289,7 +1289,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Also see
         /// <seealso cref="Api.JetOpenTempTable"/>,
         /// <seealso cref="Api.JetOpenTempTable3"/>.
-        /// <seealso cref="VistaApi.JetOpenTemporaryTable"/>.
+        /// <seealso cref="Vista.VistaApi.JetOpenTemporaryTable"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="columns">
@@ -1336,7 +1336,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// removal on record sets when accessed in a purely sequential manner.
         /// Also see
         /// <seealso cref="Api.JetOpenTempTable"/>,
-        /// <seealso cref="VistaApi.JetOpenTemporaryTable"/>.
+        /// <seealso cref="Vista.VistaApi.JetOpenTemporaryTable"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="columns">

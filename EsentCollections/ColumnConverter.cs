@@ -172,7 +172,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>True if the type is nullable.</returns>
         private static bool IsNullableType(Type t)
         {
-            return t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>);
+            return t.GetTypeInfo().IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>);
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         private static Type GetUnderlyingType(Type t)
         {
             Debug.Assert(IsNullableType(t), "Type should be nullable");
-            return t.GetGenericArguments()[0];
+            return t.GetTypeInfo().GetGenericArguments()[0];
         }
 
         /// <summary>
@@ -202,20 +202,27 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             }
 
             // Immutable serializable classes from .NET framework.
+#if MANAGEDESENT_ON_METRO
+            // IPAddress not available in Metro.
+            if (typeof(Uri) == type)
+#else
             if (typeof(Uri) == type
                 || typeof(IPAddress) == type)
+#endif
             {
                 return true;
             }
 
+            TypeInfo typeinfo = type.GetTypeInfo();
+
             // A primitive serializable type is fine
-            if (type.IsPrimitive && type.IsSerializable)
+            if (typeinfo.IsPrimitive && typeinfo.IsSerializable)
             {
                 return true;
             }
 
             // If this isn't a serializable struct, the type definitely isn't serializable
-            if (!(type.IsValueType && type.IsSerializable))
+            if (!(typeinfo.IsValueType && typeinfo.IsSerializable))
             {
                 return false;
             }
@@ -223,7 +230,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             // This is a serializable struct. Recursively check that all members are serializable.
             // Unlike classes, structs cannot have cycles in their definitions so a simple enumeration
             // will work.
-            MemberInfo[] members = type.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+            MemberInfo[] members = typeinfo.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
             return members.Cast<FieldInfo>().All(fieldinfo => IsSerializable(fieldinfo.FieldType));
         }
 
