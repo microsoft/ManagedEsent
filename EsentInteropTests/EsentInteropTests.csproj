@@ -13,10 +13,18 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <SignAssembly>true</SignAssembly>
+    <PublicKeyFile>..\scripts\internal\35MSSharedLib1024.snk</PublicKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
+  </PropertyGroup>
+  <!-- The .snk file won't be published to codeplex. -->
+  <PropertyGroup Condition="Exists('$(PublicKeyFile)')" >
+    <DefineConstants>$(DefineConstants);STRONG_NAMED</DefineConstants>
+    <DelaySign>true</DelaySign>
+    <AssemblyOriginatorKeyFile>$(PublicKeyFile)</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
