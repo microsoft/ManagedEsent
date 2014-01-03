@@ -134,7 +134,7 @@ namespace InteropApiTests
 
         #region Session tests
 
-#if !MANAGEDESENT_ON_METRO // The threading model in Metro has changed.
+#if !MANAGEDESENT_ON_WSA // The threading model in Windows Store Apps has changed.
         /// <summary>
         /// Test moving a transaction between threads.
         /// </summary>
@@ -162,13 +162,13 @@ namespace InteropApiTests
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.None);
             Api.JetResetSessionContext(this.sesid);
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         #endregion
 
         #region JetDupCursor
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Verify JetDupCursor returns a different tableid.
         /// </summary>
@@ -206,7 +206,7 @@ namespace InteropApiTests
             Assert.AreEqual(expected, actual);
             Api.JetCloseTable(this.sesid, newTableid);
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         #endregion JetDupCursor
 
@@ -225,6 +225,24 @@ namespace InteropApiTests
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
             this.SetColumnFromString(s);
+            this.UpdateAndGotoBookmark();
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            Assert.AreEqual(s, this.RetrieveColumnAsString());
+        }
+
+        /// <summary>
+        /// Insert a compressed record and retrieve it.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Insert a compressed record and retrieve it")]
+        public void InsertCompressedRecord()
+        {
+            string s = Any.String;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            this.SetCompressedColumnFromString(s);
             this.UpdateAndGotoBookmark();
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
             Assert.AreEqual(s, this.RetrieveColumnAsString());
@@ -429,7 +447,7 @@ namespace InteropApiTests
             }
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Test JetGetLock.
         /// </summary>
@@ -716,7 +734,7 @@ namespace InteropApiTests
             Api.JetCommitTransaction(sesid2, CommitTransactionGrbit.None);
             Api.JetEndSession(sesid2, EndSessionGrbit.None);
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         #endregion DML Tests
 
@@ -851,10 +869,12 @@ namespace InteropApiTests
 
             // Setting a fixed cache size improves reliability of this test case because,
             // due to optimization reasons, we may drop pre-reads with a small cache size.
+            // But first, we'll set the cache to a very small value and only grow it later
+            // so that we know for sure we'll have available buffers.
             int cacheSizeMinOriginal = SystemParameters.CacheSizeMin;
             int cacheSizeMaxOriginal = SystemParameters.CacheSizeMax;
-            SystemParameters.CacheSizeMin = 1024;
-            SystemParameters.CacheSizeMax = 1024;
+            SystemParameters.CacheSizeMin = 128;
+            SystemParameters.CacheSizeMax = 128;
 
             try
             {
@@ -873,6 +893,9 @@ namespace InteropApiTests
                 }
 
                 Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.None);
+
+                SystemParameters.CacheSizeMin = 1024;
+                SystemParameters.CacheSizeMax = 1024;
 
                 int keysPreread;
                 Windows7Api.JetPrereadKeys(this.sesid, this.tableid, keys, keyLengths, NumRecords, out keysPreread, PrereadKeysGrbit.Forward);
@@ -986,7 +1009,7 @@ namespace InteropApiTests
 
             // Don't let the callback be collected before OLD finishes.
             GC.KeepAlive(callback);
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
         }
 
         #endregion
@@ -1075,6 +1098,16 @@ namespace InteropApiTests
         {
             byte[] data = Encoding.Unicode.GetBytes(s);
             Api.JetSetColumn(this.sesid, this.tableid, this.columnidLongText, data, data.Length, SetColumnGrbit.IntrinsicLV | Windows7Grbits.Uncompressed, null);
+        }
+
+        /// <summary>
+        /// Sets the LongText column in the table from a string, using the Compressed bit. An update must be prepared.
+        /// </summary>
+        /// <param name="s">The string to set.</param>
+        private void SetCompressedColumnFromString(string s)
+        {
+            byte[] data = Encoding.Unicode.GetBytes(s);
+            Api.JetSetColumn(this.sesid, this.tableid, this.columnidLongText, data, data.Length, SetColumnGrbit.IntrinsicLV | Windows7Grbits.Compressed, null);
         }
 
         /// <summary>

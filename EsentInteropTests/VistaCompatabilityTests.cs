@@ -6,7 +6,7 @@
 
 namespace InteropApiTests
 {
-#if !MANAGEDESENT_ON_METRO // The Metro version of the DLL always exposes all features.
+#if !MANAGEDESENT_ON_WSA // The Windows Store Apps version of the DLL always exposes all features.
     using System.IO;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Implementation;
@@ -485,5 +485,5 @@ namespace InteropApiTests
             }
         }
     }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 }

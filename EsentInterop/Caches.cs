@@ -37,6 +37,11 @@ namespace Microsoft.Isam.Esent.Interop
         private static readonly MemoryCache TheBookmarkCache = new MemoryCache(KeyMostMost, MaxBuffers);
 
         /// <summary>
+        /// Cached buffers for keys and bookmarks.
+        /// </summary>
+        private static readonly MemoryCache TheSecondaryBookmarkCache = new MemoryCache(KeyMostMost, MaxBuffers);
+
+        /// <summary>
         /// Gets the cached buffers for columns.
         /// </summary>
         public static MemoryCache ColumnCache
@@ -52,6 +57,18 @@ namespace Microsoft.Isam.Esent.Interop
         {
             [DebuggerStepThrough]
             get { return TheBookmarkCache; }
+        }
+
+        /// <summary>
+        /// Gets the cached buffers for keys and secondary bookmarks.
+        /// </summary>
+        public static MemoryCache SecondaryBookmarkCache
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                return TheSecondaryBookmarkCache;
+            }
         }
     }
 }

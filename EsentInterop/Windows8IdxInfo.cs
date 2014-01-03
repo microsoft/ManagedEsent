@@ -9,7 +9,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
     using System;
 
     /// <summary>
-    /// Column info levels that have been added to the Windows 8 version of ESENT.
+    /// Index info levels that have been added to the Windows 8 version of ESENT.
     /// </summary>
     public static class Windows8IdxInfo
     {

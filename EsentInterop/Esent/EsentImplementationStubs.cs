@@ -109,7 +109,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
         }
 
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
         /// <summary>
         /// Converts a string to the byte representation.
         /// </summary>
@@ -217,6 +217,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return returnString;
         }
 
+#if !MANAGEDESENT_ON_WSA
         /// <summary>
         /// Scans the string looking for unmappable characters in the ASCII set, and replaces
         /// them with '?'.
@@ -257,5 +258,6 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             return returnString;
         }
+#endif
     }
 }

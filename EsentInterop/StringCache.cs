@@ -36,8 +36,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>An interned copy of the string or the original string.</returns>
         public static string TryToIntern(string s)
         {
-#if MANAGEDESENT_ON_METRO
-            // Metro Core CLR does not support string interning.
+#if MANAGEDESENT_ON_WSA
+            // new Windows UI Core CLR does not support string interning.
             return s;
 #else
             return string.IsInterned(s) ?? s;

@@ -13,7 +13,7 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Runtime.InteropServices;
     using Microsoft.Isam.Esent.Interop.Vista;
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
     /// <summary>
     /// The native version of the JET_INDEXCREATE structure.
     /// </summary>
@@ -134,7 +134,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public IntPtr pSpaceHints;
     }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
     /// <summary>
     /// Contains the information needed to create an index over data in an ESE database.
@@ -444,7 +444,7 @@ namespace Microsoft.Isam.Esent.Interop
             }
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Gets the native (interop) version of this object, except for
         /// <see cref="szIndexName"/> and <see cref="szKey"/>.
@@ -541,7 +541,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             this.err = (JET_err)value.err;
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Returns a value indicating whether the pidxUnicode member of this

@@ -8,7 +8,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows7
 {
     using System;
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
     /// <summary>
     /// Options for JetConfigureProcessForCrashDump.
     /// </summary>
@@ -58,7 +58,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows7
         /// </summary>
         CacheIncludeCorruptedPages = 0x40,
     }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
     /// <summary>
     /// Options for JetPrereadKeys.
@@ -128,17 +128,27 @@ namespace Microsoft.Isam.Esent.Interop.Windows7
         /// </summary>
         public const CommitTransactionGrbit ForceNewLog = (CommitTransactionGrbit)0x10;
 
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
         /// <summary>
         /// No instances will be prepared by default. Instances must be added explicitly.
         /// </summary>
         public const SnapshotPrepareGrbit ExplicitPrepare = (SnapshotPrepareGrbit)0x8;
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Hint that the sequential traversal will be in the forward direction.
         /// </summary>
         public const SetTableSequentialGrbit Forward = (SetTableSequentialGrbit)0x1;
+
+        /// <summary>
+        /// While running Online Defragmentation, do not perform partial merges of pages.
+        /// </summary>
+        public const DefragGrbit NoPartialMerges = (DefragGrbit)0x80;
+
+        /// <summary>
+        /// Defragment a single BTree.
+        /// </summary>
+        public const DefragGrbit DefragmentBTree = (DefragGrbit)0x100;
 
         /// <summary>
         /// Hint that the sequential traversal will be in the backward direction.

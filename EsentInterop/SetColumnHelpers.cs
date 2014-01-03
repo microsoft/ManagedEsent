@@ -78,8 +78,8 @@ namespace Microsoft.Isam.Esent.Interop
             }
             else if (encoding.GetMaxByteCount(data.Length) <= Caches.ColumnCache.BufferSize)
             {
-#if MANAGEDESENT_ON_METRO
-                // Encoding.GetBytes(char*, int, byte*, int) overload is missing in metro.
+#if MANAGEDESENT_ON_WSA
+                // Encoding.GetBytes(char*, int, byte*, int) overload is missing in new Windows UI.
                 // So we can't use the ColumnCache. We'll just use a different GetBytes() overload.
                 byte[] buffer = encoding.GetBytes(data);
                 unsafe

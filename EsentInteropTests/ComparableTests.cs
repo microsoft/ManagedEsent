@@ -92,8 +92,173 @@ namespace InteropApiTests
             }
         }
 
+        /// <summary>
+        /// Verifies that Instance.IsInvalid works as expected.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verifies that Instance.IsInvalid works as expected.")]
+        public void VerifyInstanceIsInvalidWorksAsExpected()
+        {
+            var zero = JET_INSTANCE.Nil;
+            var minusOne = new JET_INSTANCE()
+            {
+                Value = new IntPtr(~0)
+            };
+            var shouldBeValid = new JET_INSTANCE()
+            {
+                Value = new IntPtr(4)
+            };
+
+            Assert.IsTrue(zero.IsInvalid);
+            Assert.IsTrue(minusOne.IsInvalid);
+            Assert.IsFalse(shouldBeValid.IsInvalid);
+        }
+
+        /// <summary>
+        /// Verifies that JET_SESID.IsInvalid works as expected.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verifies that JET_SESID.IsInvalid works as expected.")]
+        public void VerifySesidIsInvalidWorksAsExpected()
+        {
+            var zero = JET_SESID.Nil;
+            var minusOne = new JET_SESID()
+            {
+                Value = new IntPtr(~0)
+            };
+            var shouldBeValid = new JET_SESID()
+            {
+                Value = new IntPtr(4)
+            };
+
+            Assert.IsTrue(zero.IsInvalid);
+            Assert.IsTrue(minusOne.IsInvalid);
+            Assert.IsFalse(shouldBeValid.IsInvalid);
+        }
+
+        /// <summary>
+        /// Verifies that JET_TABLEID.IsInvalid works as expected.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verifies that JET_TABLEID.IsInvalid works as expected.")]
+        public void VerifyTableidIsInvalidWorksAsExpected()
+        {
+            var zero = JET_TABLEID.Nil;
+            var minusOne = new JET_TABLEID()
+            {
+                Value = new IntPtr(~0)
+            };
+            var shouldBeValid = new JET_TABLEID()
+            {
+                Value = new IntPtr(4)
+            };
+
+            Assert.IsTrue(zero.IsInvalid);
+            Assert.IsTrue(minusOne.IsInvalid);
+            Assert.IsFalse(shouldBeValid.IsInvalid);
+        }
+
+        /// <summary>
+        /// Verifies that JET_COLUMNID.IsInvalid works as expected.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verifies that JET_COLUMNID.IsInvalid works as expected.")]
+        public void VerifyColumnidIsInvalidWorksAsExpected()
+        {
+            var zero = JET_COLUMNID.Nil;
+            var minusOne = new JET_COLUMNID()
+            {
+                Value = unchecked((uint)~0)
+            };
+            var shouldBeValid = new JET_COLUMNID()
+            {
+                Value = 4
+            };
+
+            Assert.IsTrue(zero.IsInvalid);
+            Assert.IsTrue(minusOne.IsInvalid);
+            Assert.IsFalse(shouldBeValid.IsInvalid);
+        }
+
+        /// <summary>
+        /// Verifies that JET_HANDLE.IsInvalid works as expected.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verifies that JET_HANDLE.IsInvalid works as expected.")]
+        public void VerifyJethandleIsInvalidWorksAsExpected()
+        {
+            var zero = JET_HANDLE.Nil;
+            var minusOne = new JET_HANDLE()
+            {
+                Value = new IntPtr(~0)
+            };
+            var shouldBeValid = new JET_HANDLE()
+            {
+                Value = new IntPtr(4)
+            };
+
+            Assert.IsTrue(zero.IsInvalid);
+            Assert.IsTrue(minusOne.IsInvalid);
+            Assert.IsFalse(shouldBeValid.IsInvalid);
+        }
+
+        #region Structures not avaiable to Windows Store Apps.
+#if !MANAGEDESENT_ON_WSA
+        /// <summary>
+        /// Verifies that JET_OSSNAPID.IsInvalid works as expected.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verifies that JET_OSSNAPID.IsInvalid works as expected.")]
+        public void VerifyOssnapidIsInvalidWorksAsExpected()
+        {
+            var zero = JET_OSSNAPID.Nil;
+            var minusOne = new JET_OSSNAPID()
+            {
+                Value = new IntPtr(~0)
+            };
+            var shouldBeValid = new JET_OSSNAPID()
+            {
+                Value = new IntPtr(4)
+            };
+
+            Assert.IsTrue(zero.IsInvalid);
+            Assert.IsTrue(minusOne.IsInvalid);
+            Assert.IsFalse(shouldBeValid.IsInvalid);
+        }
+
+        /// <summary>
+        /// Verifies that JET_LS.IsInvalid works as expected.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verifies that JET_LS.IsInvalid works as expected.")]
+        public void VerifyJetlsIsInvalidWorksAsExpected()
+        {
+            var zero = JET_LS.Nil;
+            var minusOne = new JET_LS()
+            {
+                Value = new IntPtr(~0)
+            };
+            var shouldBeValid = new JET_LS()
+            {
+                Value = new IntPtr(4)
+            };
+
+            Assert.IsTrue(zero.IsInvalid);
+            Assert.IsTrue(minusOne.IsInvalid);
+            Assert.IsFalse(shouldBeValid.IsInvalid);
+        }
+#endif
+        #endregion
+
         #region structures new to Windows 8.
-        
+
         /// <summary>
         /// Check that two equal JET_COMMIT_ID structure can be compared
         /// </summary>

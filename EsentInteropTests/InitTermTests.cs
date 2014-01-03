@@ -67,7 +67,7 @@ namespace InteropApiTests
 
             Api.JetInit(ref instance);
             Api.JetBeginSession(instance, out sesid, string.Empty, string.Empty);
-#if MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if MANAGEDESENT_ON_WSA // Not exposed in MSDK
             version = 0;
 #else
             Api.JetGetVersion(sesid, out version);
@@ -104,7 +104,7 @@ namespace InteropApiTests
 
                 Api.JetInit(ref instance);
                 Api.JetBeginSession(instance, out sesid, string.Empty, string.Empty);
-#if MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if MANAGEDESENT_ON_WSA // Not exposed in MSDK
                 version = Constants.VistaVersion;
 #else
                 Api.JetGetVersion(sesid, out version);
@@ -335,7 +335,7 @@ namespace InteropApiTests
             Api.JetTerm(instance2);
         }
 
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
         /// <summary>
         /// Call JetStopBackupInstance on a running instance.
         /// </summary>
@@ -506,9 +506,9 @@ namespace InteropApiTests
             Assert.AreNotEqual(sesidDup, JET_SESID.Nil);
             Api.JetTerm(instance);
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
-#if !MANAGEDESENT_ON_METRO // The threading model in Metro has changed.
+#if !MANAGEDESENT_ON_WSA // The threading model in Windows Store Apps has changed.
         /// <summary>
         /// Test moving a transaction between threads.
         /// </summary>
@@ -544,6 +544,6 @@ namespace InteropApiTests
                 }
             }
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
     }
 }

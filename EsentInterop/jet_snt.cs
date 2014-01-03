@@ -32,7 +32,8 @@ namespace Microsoft.Isam.Esent.Interop
         Fail = 3,
 
         /// <summary>
-        /// Callback for recovery control.
+        /// RecoveryStep was used for internal reserved functionality
+        /// prior to Windows 8. Windows 8 and later no longer use RecoveryStep.
         /// </summary>
         RecoveryStep = 8,
     }

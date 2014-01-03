@@ -80,8 +80,8 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
         /// Initializes a new instance of the <see cref="JET_COMMIT_ID"/> class. This
         /// is for testing purposes only.
         /// </summary>
-        /// <remarks>This is being implemented in Metro only because the Desktop test
-        /// code uses reflection to create the object, and the Metro reflection does not
+        /// <remarks>This is being implemented in new Windows UI only because the Desktop test
+        /// code uses reflection to create the object, and the new Windows UI reflection does not
         /// appear to work in this scenario -- Activator.CreateInstance() reflection seems to only
         /// work with exising public constructors.</remarks>
         /// <param name="signature">The log signature for this sequence.</param>

@@ -13,7 +13,7 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Runtime.InteropServices;
     using Microsoft.Isam.Esent.Interop.Implementation;
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
     /// <summary>
     /// The native version of the <see cref="JET_TABLECREATE"/> structure. This includes callbacks,
     /// space hints, and uses NATIVE_INDEXCREATE.
@@ -204,7 +204,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public uint cCreated;
     }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
     /// <summary>
     /// Contains the information needed to create a table in an ESE database.
@@ -562,7 +562,7 @@ namespace Microsoft.Isam.Esent.Interop
             }
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Gets the native (interop) version of this object. The following members are
         /// NOT converted: <see cref="rgcolumncreate"/>, <see cref="rgindexcreate"/>,
@@ -628,6 +628,6 @@ namespace Microsoft.Isam.Esent.Interop
 
             return native;
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
     }
 }

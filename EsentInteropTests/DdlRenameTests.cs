@@ -108,7 +108,7 @@ namespace InteropApiTests
             Api.JetCloseTable(this.sesid, tableid);
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Test JetSetColumnDefaultValue.
         /// </summary>
@@ -142,7 +142,7 @@ namespace InteropApiTests
             Api.JetOpenTable(this.sesid, this.dbid, "table", null, 0, OpenTableGrbit.None, out tableid);
             Assert.AreEqual("newfault", this.RetrieveAsciiColumnFromFirstRecord(tableid, columnid));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Go to the first record in the table and retrieve the specified column as a string.

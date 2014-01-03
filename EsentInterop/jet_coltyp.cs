@@ -6,8 +6,12 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using Microsoft.Isam.Esent.Interop.Vista;
+
     /// <summary>
-    /// ESENT column types.
+    /// ESENT column types. This list is not extensive. Some column types introduced later
+    /// are in different classes, such as <see cref="VistaColtyp"/>.
+    /// <seealso cref="VistaColtyp"/>
     /// </summary>
     public enum JET_coltyp
     {

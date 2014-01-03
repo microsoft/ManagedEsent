@@ -8,14 +8,15 @@ namespace InteropApiTests
 {
     using System;
     using System.IO;
+    using System.Reflection;
     using System.Threading;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Implementation;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-#if !MANAGEDESENT_ON_CORECLR
+#if !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
     using Rhino.Mocks;
     using Rhino.Mocks.Constraints;
-#endif
+#endif // !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
 
     /// <summary>
     /// Test the disposable Instance class, which wraps a JET_INSTANCE.
@@ -67,7 +68,7 @@ namespace InteropApiTests
         public void VerifyInstanceGetSetPropertiesWork()
         {
             string dir = SetupHelper.CreateRandomDirectory();
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
             string dirFull = Path.GetFullPath(dir);
 #endif
             using (var instance = new Instance("createnoinit"))
@@ -80,8 +81,8 @@ namespace InteropApiTests
                 instance.Parameters.TempDirectory = dir;
                 instance.TermGrbit = TermGrbit.Complete;
 
-#if MANAGEDESENT_ON_METRO
-                // We can't get the full path in Metro, so we'll just confirm that
+#if MANAGEDESENT_ON_WSA
+                // We can't get the full path in Windows Store Apps, so we'll just confirm that
                 // everything was set to the same value.
                 string dirFull = instance.Parameters.LogFileDirectory;
                 Assert.AreNotEqual(".\\", dirFull);
@@ -111,7 +112,7 @@ namespace InteropApiTests
             }
         }
 
-#if !MANAGEDESENT_ON_CORECLR
+#if !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
         /// <summary>
         /// When the instance is closed JetTerm should be called.
         /// </summary>
@@ -394,7 +395,7 @@ namespace InteropApiTests
                 }
             }
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
 
         /// <summary>
         /// Allocate an instance and initialize it.
@@ -603,7 +604,7 @@ namespace InteropApiTests
             // our assembly can be found.
             var setup = new AppDomainSetup
             {
-                ApplicationBase = Environment.CurrentDirectory
+                ApplicationBase = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
             };
 
             var otherDomain = AppDomain.CreateDomain("InstanceTest", null, setup);
@@ -616,6 +617,7 @@ namespace InteropApiTests
             instanceWrapper.Cleanup();
         }
 
+#if !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
         /// <summary>
         /// Verify JetTerm is is called with specified TermGrbit.
         /// </summary>
@@ -705,7 +707,8 @@ namespace InteropApiTests
                 mocks.VerifyAll();
             }
         }
-        
+#endif // !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
+
         /// <summary>
         /// Create an instance of the specified type in the given AppDomain.
         /// </summary>
@@ -759,7 +762,7 @@ namespace InteropApiTests
                 Assert.Fail("Got exception {0}", ex);
             }
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Create an instance and abandon it. Garbage collection should
@@ -802,6 +805,6 @@ namespace InteropApiTests
                 }
             }
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
     }
 }

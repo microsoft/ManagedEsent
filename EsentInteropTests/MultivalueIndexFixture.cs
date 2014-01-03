@@ -153,7 +153,7 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(2)]
         [Description("Test JetGetSecondaryIndexBookmark")]
-        public void JetGetSecondaryIndexBookmark()
+        public void TestJetGetSecondaryIndexBookmark()
         {
             Api.JetSetCurrentIndex(this.sesid, this.tableid, "index");
 
@@ -176,6 +176,46 @@ namespace InteropApiTests
 
             Assert.AreNotEqual(0, actualPrimaryKeySize);
             Assert.AreNotEqual(0, actualSecondaryKeySize);
+        }
+
+        /// <summary>
+        /// Test GetSecondaryBookmark.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test GetSecondaryBookmark")]
+        public void TestGetSecondaryBookmark()
+        {
+            Api.JetSetCurrentIndex(this.sesid, this.tableid, "index");
+
+            this.InsertRecord(3, "a3", "b3");
+
+            var primaryKeyCumbersome = new byte[SystemParameters.KeyMost];
+            int actualPrimaryKeySize;
+            var secondaryKeyCumbersome = new byte[SystemParameters.KeyMost];
+            int actualSecondaryKeySize;
+            Api.JetGetSecondaryIndexBookmark(
+                this.sesid,
+                this.tableid,
+                secondaryKeyCumbersome,
+                secondaryKeyCumbersome.Length,
+                out actualSecondaryKeySize,
+                primaryKeyCumbersome,
+                primaryKeyCumbersome.Length,
+                out actualPrimaryKeySize,
+                GetSecondaryIndexBookmarkGrbit.None);
+
+            byte[] primaryKey = null;
+            byte[] secondaryKey = Api.GetSecondaryBookmark(
+                this.sesid,
+                this.tableid,
+                out primaryKey);
+
+            Assert.AreNotEqual(0, primaryKey.Length);
+            Assert.AreNotEqual(0, secondaryKey.Length);
+
+            Assert.IsTrue(Util.ArrayEqual(primaryKey, primaryKeyCumbersome, 0, primaryKey.Length));
+            Assert.IsTrue(Util.ArrayEqual(secondaryKey, secondaryKeyCumbersome, 0, secondaryKey.Length));
         }
 
         /// <summary>
@@ -209,7 +249,7 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(2)]
         [Description("Test JetGotoSecondaryIndexBookmark")]
-        public void JetGotoSecondaryIndexBookmark()
+        public void TestJetGotoSecondaryIndexBookmark()
         {
             Api.JetSetCurrentIndex(this.sesid, this.tableid, "index");
 
@@ -257,7 +297,7 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(2)]
         [Description("Test JetSetCurrentIndex2")]
-        public void JetSetCurrentIndex2()
+        public void TestJetSetCurrentIndex2()
         {
             Api.JetSetCurrentIndex(this.sesid, this.tableid, null);
 
@@ -277,7 +317,7 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(2)]
         [Description("Test JetSetCurrentIndex3")]
-        public void JetSetCurrentIndex3()
+        public void TestJetSetCurrentIndex3()
         {
             Api.JetSetCurrentIndex(this.sesid, this.tableid, null);
 
@@ -302,7 +342,7 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(2)]
         [Description("Test JetSetCurrentIndex4")]
-        public void JetSetCurrentIndex4()
+        public void TestJetSetCurrentIndex4()
         {
             JET_INDEXID indexid;
             Api.JetGetTableIndexInfo(this.sesid, this.tableid, "index", out indexid, JET_IdxInfo.IndexId);

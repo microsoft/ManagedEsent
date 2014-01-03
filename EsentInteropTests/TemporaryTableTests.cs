@@ -92,7 +92,7 @@ namespace InteropApiTests
             Api.JetCloseTable(this.session, tableid);
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Sort data with a temporary table
         /// </summary>
@@ -125,7 +125,7 @@ namespace InteropApiTests
             CollectionAssert.AreEqual(expected, this.RetrieveAllRecordsAsString(tableid, columnids[1]).ToArray());
             Api.JetCloseTable(this.session, tableid);
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Sort data with a temporary table

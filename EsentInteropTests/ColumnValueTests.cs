@@ -578,7 +578,7 @@ namespace InteropApiTests
             /// </summary>
             public void RunTest()
             {
-#if !MANAGEDESENT_ON_METRO // The threading model in Metro has changed.
+#if !MANAGEDESENT_ON_WSA // The threading model in Windows Store Apps has changed.
                 Int32ColumnValue columnValue = new Int32ColumnValue();
                 columnValue.Value = 0;
                 Assert.AreEqual(0, columnValue.ValueAsObject);
@@ -606,7 +606,7 @@ namespace InteropApiTests
                 }
 
                 EseInteropTestHelper.ConsoleWriteLine("Performed {0:N0} operations on {1} threads in {2}", N, threads.Length, stopwatch.Elapsed);
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
             }
 
             /// <summary>

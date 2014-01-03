@@ -10,10 +10,9 @@ namespace InteropApiTests
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Implementation;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-#if MANAGEDESENT_ON_CORECLR
-#else
+#if !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
     using Rhino.Mocks;
-#endif
+#endif // !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
 
     /// <summary>
     /// Test the Api class functionality which wraps the IJetApi
@@ -22,8 +21,7 @@ namespace InteropApiTests
     [TestClass]
     public class ApiTests
     {
-#if MANAGEDESENT_ON_CORECLR
-#else
+#if !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
         /// <summary>
         /// Mock object repository.
         /// </summary>
@@ -184,6 +182,6 @@ namespace InteropApiTests
 
             Api.HandleError -= handler;
         }
-#endif
+#endif // !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
     }
 }

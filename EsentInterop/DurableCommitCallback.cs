@@ -64,7 +64,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
             this.wrappedCallback = wrappedCallback;
             this.wrapperCallback = this.NativeDurableCommitCallback;
 
-#if !MANAGEDESENT_ON_METRO // RuntimeHelpers works differently in Metro.
+#if !MANAGEDESENT_ON_WSA // RuntimeHelpers works differently in Windows Store Apps.
             if (this.wrappedCallback != null)
             {
                 RuntimeHelpers.PrepareMethod(this.wrappedCallback.Method.MethodHandle);

@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
 namespace InteropApiTests
 {
     using System;
@@ -54,11 +54,24 @@ namespace InteropApiTests
         private JET_TABLEID tableid;
 
         /// <summary>
+        /// Strong reference to the callback object, to keep it from being garbabe-collected.
+        /// </summary>
+        private JET_CALLBACK runtimeCallback;
+
+        /// <summary>
         /// Set when the runtime callback is called.
         /// </summary>
         private bool runtimeCallbackWasCalled;
 
         #region Setup/Teardown
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JetSetGetLs"/> class.
+        /// </summary>
+        public JetSetGetLs()
+        {
+            this.runtimeCallback = new JET_CALLBACK(this.RuntimeCallback);
+        }
 
         /// <summary>
         /// Initialization method. Called once when the tests are started.
@@ -76,7 +89,7 @@ namespace InteropApiTests
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
 
-            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.RuntimeCallback, this.RuntimeCallback, null);
+            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.RuntimeCallback, this.runtimeCallback, null);
 
             Api.JetInit(ref this.instance);
             Api.JetBeginSession(this.instance, out this.sesid, string.Empty, string.Empty);
@@ -128,6 +141,8 @@ namespace InteropApiTests
         {
             var ls = new JET_LS { Value = new IntPtr(8) };
             Api.JetSetLS(this.sesid, this.tableid, ls, LsGrbit.Cursor);
+
+            this.runtimeCallbackWasCalled = false;
             Api.JetCloseTable(this.sesid, this.tableid);
             Assert.IsTrue(this.runtimeCallbackWasCalled);
         }
@@ -159,4 +174,4 @@ namespace InteropApiTests
         }
     }
 }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA

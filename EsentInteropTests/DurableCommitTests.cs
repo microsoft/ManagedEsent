@@ -107,6 +107,7 @@ namespace InteropApiTests
             this.database = Path.Combine(this.directory, "database.edb");
             this.instance = SetupHelper.CreateNewInstance(this.directory);
 
+////            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, UnpublishedParam.EnablePeriodicShrinkDatabase, 0, null);
             this.callback = new DurableCommitCallback(this.instance, this.TestCallback);
 
             Api.JetInit(ref this.instance);
@@ -252,6 +253,29 @@ namespace InteropApiTests
                     // This was the expected exception.
                 }
             }
+        }
+
+        /// <summary>
+        /// Lazy commit followed by read-only transaction still allows WaitLastLevel0Commit to work
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Lazy commit followed by read-only transaction still allows WaitLastLevel0Commit to work")]
+        public void LazyCommitFollowedByReadOnlyCanCommitLazy()
+        {
+            Api.JetBeginTransaction(this.sesid);
+            this.InsertRecord(this.tableid, 1);
+            JET_COMMIT_ID commitId;
+            Windows8Api.JetCommitTransaction2(this.sesid, CommitTransactionGrbit.LazyFlush, new TimeSpan(0, 0, 0), out commitId);
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.None);
+
+            Assert.IsTrue(commitId >= this.lastCommitIdFlushed);
+
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.WaitLastLevel0Commit);
+
+            Assert.IsTrue(commitId < this.lastCommitIdFlushed);
         }
 
         #endregion Log flush Tests

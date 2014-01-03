@@ -25,12 +25,20 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// A MethodInfo describes TKey.CompareTo(TKey).
         /// </summary>
+#if MANAGEDESENT_ON_WSA
         private static readonly MethodInfo compareToMethod = typeof(TKey).GetTypeInfo().GetMethod("CompareTo", new[] { typeof(TKey) });
+#else
+        private static readonly MethodInfo compareToMethod = typeof(TKey).GetMethod("CompareTo", new[] { typeof(TKey) });
+#endif
 
         /// <summary>
         /// A MethodInfo describing TKey.Equals(TKey).
         /// </summary>
+#if MANAGEDESENT_ON_WSA
         private static readonly MethodInfo equalsMethod = typeof(TKey).GetTypeInfo().GetMethod("Equals", new[] { typeof(TKey) });
+#else
+        private static readonly MethodInfo equalsMethod = typeof(TKey).GetMethod("Equals", new[] { typeof(TKey) });
+#endif
 
         /// <summary>
         /// Evaluate a predicate Expression and determine a key range which

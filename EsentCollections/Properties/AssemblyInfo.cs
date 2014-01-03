@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
 [assembly: AssemblyProduct("EsentCollections")]
-[assembly: AssemblyCopyright("Copyright Ã‚Â© Microsoft")]
+[assembly: AssemblyCopyright("Copyright (c) Microsoft. All Rights Reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -41,6 +41,7 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 // 1.8.3.0 2013.03.25. Signed and Strong Named.
+// 1.9.0.0 2013.12.23. Go back to targetting framework 4.0.
 [assembly: AssemblyVersion("1.8.3.0")]
 [assembly: AssemblyFileVersion("1.8.3.0")]
 

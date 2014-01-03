@@ -67,6 +67,19 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// Gets a value indicating whether the current version of esent
+        /// supports features available in the Windows 8.1 version of
+        /// esent.
+        /// </summary>
+        public static bool SupportsWindows81Features
+        {
+            get
+            {
+                return Capabilities.SupportsWindows81Features;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the current version of esent
         /// can use non-ASCII paths to access databases.
         /// </summary>
         public static bool SupportsUnicodePaths

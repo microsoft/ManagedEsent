@@ -30,7 +30,7 @@ namespace InteropApiTests
 
         #endregion
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Create a database, attach, open, close and detach
         /// </summary>
@@ -163,7 +163,7 @@ namespace InteropApiTests
             var test = new DatabaseFileTestHelper(Path.Combine(EseInteropTestHelper.PathGetRandomFileName(), "database"));
             test.TestSetDatabaseSize();
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Create a database, attach, open, close and detach

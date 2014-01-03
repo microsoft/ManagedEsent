@@ -15,11 +15,10 @@ namespace InteropApiTests
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Implementation;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-#if MANAGEDESENT_ON_CORECLR
-#else
+#if !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
     using Rhino.Mocks;
     using Rhino.Mocks.Constraints;
-#endif
+#endif // !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
 
     /// <summary>
     /// Test the exception classes.
@@ -117,8 +116,7 @@ namespace InteropApiTests
             EseInteropTestHelper.ConsoleWriteLine("Created {0} different error exceptions", i);
         }
 
-#if MANAGEDESENT_ON_CORECLR
-#else
+#if !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
         /// <summary>
         /// Verify that the exception gets the correct error description from ESENT when the eror is unknown
         /// </summary>
@@ -178,7 +176,7 @@ namespace InteropApiTests
                 Assert.IsTrue(!string.IsNullOrEmpty(ex.Message));
             }
         }
-#endif
+#endif // !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
 
         /// <summary>
         /// Check that an exception is thrown when an API call fails and

@@ -144,7 +144,7 @@ namespace InteropApiTests
         /// </summary>
         public static void CheckProcessForInstanceLeaks()
         {
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
             int numInstances;
             JET_INSTANCE_INFO[] instances;
             Api.JetGetInstanceInfo(out numInstances, out instances);
@@ -168,7 +168,7 @@ namespace InteropApiTests
             }
 
             Assert.AreEqual(0, numInstances);
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
         }
 
         /// <summary>

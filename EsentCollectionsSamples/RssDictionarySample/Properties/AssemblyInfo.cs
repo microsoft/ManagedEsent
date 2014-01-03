@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
 [assembly: AssemblyProduct("RssDictionarySample")]
-[assembly: AssemblyCopyright("Copyright © Microsoft")]
+[assembly: AssemblyCopyright("Copyright (c) Microsoft. All Rights Reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

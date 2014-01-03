@@ -270,7 +270,7 @@ namespace InteropApiTests
         }
 
         // UNDONE: Can this be moved to a Task-model?
-#if !MANAGEDESENT_ON_METRO // Thread model has changed in Metro.
+#if !MANAGEDESENT_ON_WSA // Thread model has changed in Windows Store Apps.
         /// <summary>
         /// Perform a PerfTestWorker action on a separate thread.
         /// </summary>
@@ -288,7 +288,7 @@ namespace InteropApiTests
                 });
             return thread;
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Insert some records and then retrieve them.
@@ -318,7 +318,7 @@ namespace InteropApiTests
         private void MultithreadedStress()
         {
             // UNDONE: Can this be moved to a Task-model?
-#if !MANAGEDESENT_ON_METRO // Thread model has changed in Metro.
+#if !MANAGEDESENT_ON_WSA // Thread model has changed in Windows Store Apps.
             const int NumThreads = 8;
             Thread[] threads = (from i in Enumerable.Repeat(0, NumThreads) select this.StartWorkerThread(StressThread)).ToArray();
             foreach (Thread thread in threads)
@@ -330,7 +330,7 @@ namespace InteropApiTests
             {
                 thread.Join();
             }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
         }
 
         /// <summary>

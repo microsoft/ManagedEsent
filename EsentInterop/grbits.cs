@@ -174,7 +174,7 @@ namespace Microsoft.Isam.Esent.Interop
         None = 0,
     }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
     /// <summary>
     /// Options for <see cref="Api.JetCompact"/>.
     /// </summary>
@@ -323,7 +323,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         Abort = 0x2,
     }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
     /// <summary>
     /// Options for <see cref="Api.JetBeginTransaction2"/>.
@@ -541,7 +541,7 @@ namespace Microsoft.Isam.Esent.Interop
         TableClass15 = 0x000F0000,
     }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
     /// <summary>
     /// Options for <see cref="Api.JetDupCursor"/>.
     /// </summary>
@@ -582,7 +582,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         Table = 0x4,
     }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
     /// <summary>
     /// Options for JetSetColumn.
@@ -802,7 +802,7 @@ namespace Microsoft.Isam.Esent.Interop
         EnumerateTaggedOnly = 0x00040000, 
     }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
     /// <summary>
     /// Options for <see cref="Vista.VistaApi.JetGetRecordSize"/>.
     /// </summary>
@@ -834,7 +834,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         Local = 0x4,
     }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
     /// <summary>
     /// Options for <see cref="Api.JetGetSecondaryIndexBookmark"/>.
@@ -1217,8 +1217,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// The column is a version column that specifies the version of the row. The value of
         /// this column starts at zero and will be automatically incremented for each update on
-        /// the row. This option can only be applied to JET_coltyp.Long columns. This option cannot
-        /// be used with ColumnAutoincrement, ColumnEscrowUpdate, or ColumnTagged.
+        /// the row. This option can only be applied to <see cref="JET_coltyp.Long"/> columns. This option cannot
+        /// be used with <see cref="ColumnAutoincrement"/>, <see cref="ColumnEscrowUpdate"/>, or <see cref="ColumnTagged"/>.
         /// </summary>
         ColumnVersion = 0x8,
 
@@ -1227,16 +1227,23 @@ namespace Microsoft.Isam.Esent.Interop
         /// is guaranteed to be unique within a table. The numbers, however, might not be continuous.
         /// For example, if five rows are inserted into a table, the "autoincrement" column could
         /// contain the values { 1, 2, 6, 7, 8 }. This bit can only be used on columns of type
-        /// JET_coltyp.Long or JET_coltyp.Currency.
+        /// <see cref="JET_coltyp.Long"/> or <see cref="JET_coltyp.Currency"/>.
         /// </summary>
         ColumnAutoincrement = 0x10,
+
+        /// <summary>
+        /// The column can be updated. This is NOT a valid grbit to set on input to any API. It is
+        /// returned as part of the <see cref="JET_COLUMNDEF"/> structure's grbit member, as an
+        /// output from Api.JetGetColumnInfo.
+        /// </summary>
+        ColumnUpdatable = 0x20,
 
         /// <summary>
         /// The column can be multi-valued.
         /// A multi-valued column can have zero, one, or more values
         /// associated with it. The various values in a multi-valued column are identified by a number
         /// called the itagSequence member, which belongs to various structures, including:
-        /// JET_RETINFO, JET_SETINFO, JET_SETCOLUMN, JET_RETRIEVECOLUMN, and JET_ENUMCOLUMNVALUE.
+        /// <see cref="JET_RETINFO"/>, <see cref="JET_SETINFO"/>, <see cref="JET_SETCOLUMN"/>, <see cref="JET_RETRIEVECOLUMN"/>, and <see cref="JET_ENUMCOLUMNVALUE"/>.
         /// Multi-valued columns must be tagged columns; that is, they cannot be fixed-length or
         /// variable-length columns.
         /// </summary>
@@ -1266,6 +1273,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// from the inner table.
         /// </summary>
         ColumnMaybeNull = 0x2000,
+
+        /// <summary>
+        /// When the escrow-update column reaches a value of zero, the callback function will be invoked.
+        /// </summary>
+        ColumnFinalize = 0x4000,
 
         /// <summary>
         /// The default value for a column will be provided by a callback function. A column that
@@ -1554,7 +1566,7 @@ namespace Microsoft.Isam.Esent.Interop
         None = 0,
     }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
     /// <summary>
     /// Options for <see cref="Api.JetSetColumnDefaultValue"/>.
     /// </summary>
@@ -1591,7 +1603,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         GetStatus = 0x04,
     }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
     /// <summary>
     /// Options for <see cref="Api.JetDefragment"/>.

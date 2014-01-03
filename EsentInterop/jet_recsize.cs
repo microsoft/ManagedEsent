@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
 namespace Microsoft.Isam.Esent.Interop.Vista
 {
     using System;
@@ -592,4 +592,4 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         public ulong cbLongValueDataCompressed;
     }
 }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA

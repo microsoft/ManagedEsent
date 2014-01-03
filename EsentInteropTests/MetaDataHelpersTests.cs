@@ -188,6 +188,57 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify that new JET_TABLEID instance is invalid
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Verify that new JET_TABLEID instance is invalid.")]
+        public void VerifyTableJetTableidInvalid()
+        {
+            JET_TABLEID t = new JET_TABLEID();
+            Assert.IsTrue(t.IsInvalid);
+        }
+
+        /// <summary>
+        /// Verify that defined JET_TABLEID.Nil is invalid
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Verify that defined JET_TABLEID.Nil is invalid.")]
+        public void VerifyTableJetTableidNilInvalid()
+        {
+            JET_TABLEID t = JET_TABLEID.Nil;
+            Assert.IsTrue(t.IsInvalid);
+        }
+
+        /// <summary>
+        /// Make sure TryOpenTable out parameter tableid is valid table if the table exists
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Make sure TryOpenTable out parameter tableid is valid table if the table exists.")]
+        public void VerifyTryOpenTableReturnsValidTableIdWhenTableExists()
+        {
+            JET_TABLEID t;
+            Assert.IsTrue(Api.TryOpenTable(this.sesid, this.dbid, this.table, OpenTableGrbit.ReadOnly, out t));
+            Assert.IsFalse(t.IsInvalid);
+            Api.JetCloseTable(this.sesid, t);
+        }
+
+        /// <summary>
+        /// Make sure TryOpenTable out parameter tableid is invalid table if the table does not exist
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Make sure TryOpenTable out parameter tableid is invalid table if the table does not exist.")]
+        public void VerifyTryOpenTableReturnsInvalidTableIdWhenTableDoesNotExist()
+        {
+            JET_TABLEID t = JET_TABLEID.Nil;
+            Assert.IsFalse(Api.TryOpenTable(this.sesid, this.dbid, "nosuchtable", OpenTableGrbit.ReadOnly, out t));
+            Assert.IsTrue(t.IsInvalid);
+        }
+
+        /// <summary>
         /// Repeatedly retrieve meta-data. This is looking for bugs where we don't
         /// release the temp table used to retrieve the data.
         /// </summary>

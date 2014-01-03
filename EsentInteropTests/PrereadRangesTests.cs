@@ -969,8 +969,8 @@ namespace InteropApiTests
                 JET_THREADSTATS stat2;
                 VistaApi.JetGetThreadStats(out stat2);
 
-#if MANAGEDESENT_ON_METRO
-                // UNDONE: Why is this test unstable in Metro?
+#if MANAGEDESENT_ON_WSA
+                // UNDONE: Why is this test unstable in Windows Store Apps?
                 Assert.IsTrue(stat2.cPagePreread - stat1.cPagePreread <= 1);
 #else
                 Assert.AreEqual(stat2.cPagePreread, stat1.cPagePreread, string.Format("stat2.cPagePreread = {0}, stat1.cPagePreread = {1}", stat2.cPagePreread, stat1.cPagePreread));

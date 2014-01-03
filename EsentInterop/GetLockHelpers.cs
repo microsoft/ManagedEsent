@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
 namespace Microsoft.Isam.Esent.Interop
 {
     using System.Diagnostics;
@@ -45,4 +45,4 @@ namespace Microsoft.Isam.Esent.Interop
         }
     }
 }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA

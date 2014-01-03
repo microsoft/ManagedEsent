@@ -209,7 +209,7 @@ namespace InteropApiTests
             }
         }
 
-#if !MANAGEDESENT_ON_METRO // String interning is not supported.
+#if !MANAGEDESENT_ON_WSA // String interning is not supported.
         /// <summary>
         /// Gets a random string with the same characteristics of Any.String,
         /// but the string is guaranteed not to be interned.
@@ -228,7 +228,7 @@ namespace InteropApiTests
                 }
             }
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Gets a random array of bytes. The array will
@@ -318,5 +318,16 @@ namespace InteropApiTests
             Any.MyRandom.NextBytes(data);
             return data;            
         }
-    }
+
+        /// <summary>
+        /// Gets a random int within the given range.
+        /// </summary>
+        /// <param name="minValue">Minimum possible value to return.</param>
+        /// <param name="maxValue">Maximum possible value to return.</param>
+        /// <returns>An integer value in the given range.</returns>
+        public static int Int32Range(int minValue, int maxValue)
+        {
+            return Any.MyRandom.Next(minValue, maxValue + 1);
+        }
+      }
 }

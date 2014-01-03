@@ -164,7 +164,7 @@ namespace InteropApiTests
             Api.JetCloseDatabase(this.sesId, this.databaseId, CloseDatabaseGrbit.None);
             Api.JetDetachDatabase(this.sesId, this.database);
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
             EseInteropTestHelper.ConsoleWriteLine("Compact database.");
             Api.JetAttachDatabase(this.sesId, this.database, Windows8Grbits.PurgeCacheOnAttach);
             Api.JetCompact(this.sesId, this.database, Path.Combine(this.directory, "defragged.edb"), null, null, CompactGrbit.None);
@@ -172,7 +172,7 @@ namespace InteropApiTests
 
             this.database = Path.Combine(this.directory, "defragged.edb");
             Assert.IsTrue(EseInteropTestHelper.FileExists(this.database));
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
             Api.JetAttachDatabase(this.sesId, this.database, Windows8Grbits.PurgeCacheOnAttach);
 
             Api.JetOpenDatabase(this.sesId, this.database, null, out this.databaseId, OpenDatabaseGrbit.None);

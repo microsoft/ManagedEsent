@@ -17,7 +17,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Pixie")]
-[assembly: AssemblyCopyright("Copyright Microsoft Corporation ©  2009")]
+[assembly: AssemblyCopyright("Copyright (c) Microsoft. All Rights Reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

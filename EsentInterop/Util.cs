@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Text;
 
@@ -68,11 +69,11 @@ namespace Microsoft.Isam.Esent.Interop
 
             const int MaxBytesToPrint = 8;
             StringBuilder sb = new StringBuilder();
-            sb.AppendFormat("{0}", BitConverter.ToString(data, offset, Math.Min(count, MaxBytesToPrint)));
+            sb.Append(BitConverter.ToString(data, offset, Math.Min(count, MaxBytesToPrint)));
             if (count > MaxBytesToPrint)
             {
                 // The output was truncated
-                sb.AppendFormat("... ({0} bytes)", count);
+                sb.AppendFormat(CultureInfo.InvariantCulture, "... ({0} bytes)", count);
             }
 
             return sb.ToString();

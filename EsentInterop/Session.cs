@@ -6,7 +6,6 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
     using System.Globalization;
 
     /// <summary>
@@ -78,7 +77,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         protected override void ReleaseResource()
         {
-            if (JET_SESID.Nil != this.sesid)
+            if (!this.sesid.IsInvalid)
             {
                 Api.JetEndSession(this.JetSesid, EndSessionGrbit.None);
             }

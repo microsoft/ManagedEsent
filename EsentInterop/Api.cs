@@ -149,7 +149,7 @@ namespace Microsoft.Isam.Esent.Interop
             return Api.Check(Impl.JetInit2(ref instance, grbit));
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Retrieves information about the instances that are running.
         /// </summary>
@@ -184,7 +184,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetStopServiceInstance(instance));            
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Terminate an instance that was created with <see cref="JetInit"/> or
@@ -311,7 +311,7 @@ namespace Microsoft.Isam.Esent.Interop
             return wrn;
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Retrieves the version of the database engine.
         /// </summary>
@@ -322,7 +322,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetGetVersion(sesid, out version));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         #endregion
 
@@ -437,7 +437,7 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetDetachDatabase2(sesid, database, grbit));
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
 #pragma warning disable 618,612 // Disable warning that JET_CONVERT is obsolete
         /// <summary>
         /// Makes a copy of an existing database. The copy is compacted to a
@@ -498,7 +498,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetSetDatabaseSize(sesid, database, desiredPages, out actualPages));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Retrieves certain information about the given database.
@@ -594,7 +594,7 @@ namespace Microsoft.Isam.Esent.Interop
 
         #region Backup/Restore
 
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Performs a streaming backup of an instance, including all the attached
@@ -641,12 +641,12 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetRestoreInstance(instance, source, destination, statusCallback));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
         #endregion
 
         #region Snapshot Backup
 
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Starts a snapshot. While the snapshot is in progress, no
@@ -690,11 +690,11 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetOSSnapshotThaw(snapshot, grbit));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
         #endregion
 
         #region Streaming Backup/Restore
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Initiates an external backup while the engine and database are online and active. 
@@ -873,7 +873,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetTruncateLogInstance(instance));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         #endregion
 
@@ -925,7 +925,7 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetEndSession(sesid, grbit));
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Initialize a new ESE session in the same instance as the given sesid.
         /// </summary>
@@ -935,7 +935,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetDupSession(sesid, out newSesid));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         #endregion
 
@@ -967,7 +967,7 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetCloseTable(sesid, tableid));
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Duplicates an open cursor and returns a handle to the duplicated cursor.
         /// If the cursor that was duplicated was a read-only cursor then the
@@ -1051,7 +1051,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetGetCursorInfo(sesid, tableid));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         #endregion
 
@@ -1278,7 +1278,7 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetOpenTempTable(sesid, columns, numColumns, grbit, out tableid, columnids));            
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Creates a temporary table with a single index. A temporary table
         /// stores and retrieves records just like an ordinary table created
@@ -1325,7 +1325,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetOpenTempTable2(sesid, columns, numColumns, lcid, grbit, out tableid, columnids));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Creates a temporary table with a single index. A temporary table
@@ -1419,6 +1419,22 @@ namespace Microsoft.Isam.Esent.Interop
                 out JET_COLUMNDEF columndef)
         {
             Api.Check(Impl.JetGetTableColumnInfo(sesid, tableid, columnid, out columndef));
+        }
+
+        /// <summary>
+        /// Retrieves information about a table column.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table containing the column.</param>
+        /// <param name="columnName">The name of the column.</param>
+        /// <param name="columnbase">Filled in with information about the column.</param>
+        public static void JetGetTableColumnInfo(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            string columnName,
+            out JET_COLUMNBASE columnbase)
+        {
+            Api.Check(Impl.JetGetTableColumnInfo(sesid, tableid, columnName, out columnbase));
         }
 
         /// <summary>
@@ -1856,7 +1872,7 @@ namespace Microsoft.Isam.Esent.Interop
             Api.Check(Impl.JetRenameColumn(sesid, tableid, name, newName, grbit));
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Changes the default value of an existing column.
         /// </summary>
@@ -1872,7 +1888,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetSetColumnDefaultValue(sesid, dbid, tableName, columnName, data, dataSize, grbit));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         #endregion
 
@@ -2609,7 +2625,7 @@ namespace Microsoft.Isam.Esent.Interop
             }
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Explicitly reserve the ability to update a row, write lock, or to explicitly prevent a row from
         /// being updated by any other session, read lock. Normally, row write locks are acquired implicitly as a
@@ -2624,7 +2640,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetGetLock(sesid, tableid, grbit));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Performs an atomic addition operation on one column. This function allows
@@ -2804,7 +2820,7 @@ namespace Microsoft.Isam.Esent.Interop
             return Api.Check(Impl.JetDefragment2(sesid, dbid, tableName, ref passes, ref seconds, callback, grbit));
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Performs idle cleanup tasks or checks the version store status in ESE.
         /// </summary>
@@ -2821,7 +2837,7 @@ namespace Microsoft.Isam.Esent.Interop
 
         #region Misc
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Frees memory that was allocated by a database engine call.
         /// </summary>
@@ -2837,7 +2853,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetFreeBuffer(buffer));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         #endregion
 

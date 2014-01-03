@@ -6,9 +6,28 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
+    using System;
+
+    using Microsoft.Isam.Esent.Interop.Vista;
+    using Microsoft.Isam.Esent.Interop.Windows7;
+    using Microsoft.Isam.Esent.Interop.Windows8;
+
     /// <summary>
-    /// ESENT system parameters.
+    /// ESENT system parameters. This list is not extensive. Some parameters introduced later
+    /// are in different classes, such as <see cref="VistaParam"/>, <see cref="Windows7Param"/>,
+    /// or <see cref="Windows8Param"/>.
+    /// <para>
+    /// <see cref="JET_param"/> is usually used with <see cref="Api.JetSetSystemParameter(JET_INSTANCE,JET_SESID,JET_param,int,string)"/>,
+    /// <see cref="Api.JetSetSystemParameter(JET_INSTANCE,JET_SESID,JET_param,IntPtr,string)"/>,
+    /// <see cref="Api.JetGetSystemParameter(JET_INSTANCE,JET_SESID,JET_param,ref int, out string, int)"/>, and
+    /// <see cref="Api.JetGetSystemParameter(JET_INSTANCE,JET_SESID,JET_param,ref IntPtr, out string, int)"/>.
+    /// Some of these parameters are exposed with the helper classes <see cref="SystemParameters"/>
+    /// and <see cref="InstanceParameters"/>.
+    /// </para>
     /// </summary>
+    /// <seealso cref="VistaParam"/>
+    /// <seealso cref="Windows7Param"/>
+    /// <seealso cref="Windows8Param"/>
     public enum JET_param
     {
         /// <summary>
@@ -158,6 +177,14 @@ namespace Microsoft.Isam.Esent.Interop
         CheckpointDepthMax = 24,
 
         /// <summary>
+        /// This parameter controls how many database file I/Os can be queued
+        /// per-disk in the host operating system at one time.  A larger value
+        /// for this parameter can significantly help the performance of a large
+        /// database application.
+        /// </summary>
+        OutstandingIOMax = 30,
+
+        /// <summary>
         /// This parameter controls when the database page cache begins evicting pages from the
         /// cache to make room for pages that are not cached. When the number of page buffers in the cache
         /// drops below this threshold then a background process will be started to replenish that pool
@@ -258,6 +285,34 @@ namespace Microsoft.Isam.Esent.Interop
         DeleteOutOfRangeLogs = 52,
 
         /// <summary>
+        /// <para>
+        /// After Windows 7, it was discovered that JET_paramEnableIndexCleanup had some implementation limitations, reducing its effectiveness.
+        /// Rather than update it to work with locale names, the functionality is removed altogether.
+        /// </para>
+        /// <para>
+        /// Unfortunately JET_paramEnableIndexCleanup can not be ignored altogether. JET_paramEnableIndexChecking defaults to false, so if
+        /// JET_paramEnableIndexCleanup were to be removed entirely, then by default there were would be no checks for NLS changes!
+        /// </para>
+        /// <para>
+        /// The current behavious (when enabled) is to track the language sort versions for the indices, and when the sort version for that
+        /// particular locale changes, the engine knows which indices are now invalid. For example, if the sort version for only "de-de" changes,
+        /// then the "de-de" indices are invalid, but the "en-us" indices will be fine.
+        /// </para>
+        /// <para>
+        /// Post-Windows 8:
+        /// JET_paramEnableIndexChecking accepts JET_INDEXCHECKING (which is an enum). The values of '0' and '1' have the same meaning as before,
+        /// but '2' is JET_IndexCheckingDeferToOpenTable, which means that the NLS up-to-date-ness is NOT checked when the database is attached.
+        /// It is deferred to JetOpenTable(), which may now fail with JET_errPrimaryIndexCorrupted or JET_errSecondaryIndexCorrupted (which
+        /// are NOT actual corruptions, but instead reflect an NLS sort change).
+        /// </para>
+        /// <para>
+        /// IN SUMMARY:
+        /// New code should explicitly set both IndexChecking and IndexCleanup to the same value.
+        /// </para>
+        /// </summary>
+        EnableIndexCleanup = 54,
+
+        /// <summary>
         /// This parameter configures the minimum size of the database page cache. The size is in database pages.
         /// </summary>
         CacheSizeMin = 60,
@@ -290,7 +345,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         ErrorToString = 70,
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Configures the engine with a <see cref="JET_CALLBACK"/> delegate.
         /// This callback may be called for the following reasons:
@@ -353,5 +408,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// can be queued to the database engine thread pool at any one time.
         /// </summary>
         VersionStoreTaskQueueMax = 105,
+
+        // If you can not find the parameter you are expecting here, then perhaps it is
+        // in a later version of the API, in VistaParam, Windows7Param, etc.
     }
 }

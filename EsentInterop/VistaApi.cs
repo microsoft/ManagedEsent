@@ -29,6 +29,24 @@ namespace Microsoft.Isam.Esent.Interop.Vista
             Api.Check(Api.Impl.JetGetColumnInfo(sesid, dbid, tablename, columnid, out columnbase));
         }
 
+        #region JetGetTableColumnInfo overloads
+        /// <summary>
+        /// Retrieves information about a table column.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table containing the column.</param>
+        /// <param name="columnid">The columnid of the column.</param>
+        /// <param name="columnbase">Filled in with information about the column.</param>
+        public static void JetGetTableColumnInfo(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            JET_COLUMNID columnid,
+            out JET_COLUMNBASE columnbase)
+        {
+            Api.Check(Api.Impl.JetGetTableColumnInfo(sesid, tableid, columnid, out columnbase));
+        }
+        #endregion
+
         /// <summary>
         /// Creates a temporary table with a single index. A temporary table
         /// stores and retrieves records just like an ordinary table created
@@ -68,7 +86,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
             Api.Check(Api.Impl.JetGetThreadStats(out threadstats));
         }
 
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
         /// <summary>
         /// Selects a specific instance to be part of the snapshot session.
         /// </summary>
@@ -148,7 +166,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         {
             Api.Check(Api.Impl.JetGetInstanceMiscInfo(instance, out signature, infoLevel));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Initialize the ESENT database engine.
@@ -173,7 +191,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
             return Api.Check(Api.Impl.JetInit3(ref instance, recoveryOptions, grbit));
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Retrieves record size information from the desired location.
         /// </summary>
@@ -188,6 +206,6 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         {
             Api.Check(Api.Impl.JetGetRecordSize(sesid, tableid, ref recsize, grbit));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
     }
 }

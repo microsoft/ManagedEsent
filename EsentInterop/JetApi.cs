@@ -44,7 +44,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </summary>
         private readonly CallbackWrappers callbackWrappers = new CallbackWrappers();
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Initializes static members of the JetApi class.
         /// </summary>
@@ -61,7 +61,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             RuntimeHelpers.PrepareMethod(typeof(JetApi).GetMethod("JetTerm").MethodHandle);
             RuntimeHelpers.PrepareMethod(typeof(JetApi).GetMethod("JetTerm2").MethodHandle);
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Initializes a new instance of the JetApi class. This allows the version
@@ -73,12 +73,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </param>
         public JetApi(uint version)
         {
-#if MANAGEDESENT_ON_METRO
-            // JetGetVersion isn't available in Metro, so we'll pretend it's always Win8:
+#if MANAGEDESENT_ON_WSA
+            // JetGetVersion isn't available in new Windows UI, so we'll pretend it's always Win8:
             this.versionOverride = 8250 << 8;
 #else
             this.versionOverride = version;
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
             this.DetermineCapabilities();
         }
 
@@ -87,10 +87,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </summary>
         public JetApi()
         {
-#if MANAGEDESENT_ON_METRO
-            // JetGetVersion isn't available in Metro, so we'll pretend it's always Win8:
+#if MANAGEDESENT_ON_WSA
+            // JetGetVersion isn't available in new Windows UI, so we'll pretend it's always Win8:
             this.versionOverride = 8250 << 8;
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
             this.DetermineCapabilities();
         }
 
@@ -109,7 +109,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetCreateInstance(out JET_INSTANCE instance, string name)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return this.JetCreateInstance2(out instance, name, null, CreateInstanceGrbit.None);
 #else
             TraceFunctionCall("JetCreateInstance");
@@ -122,7 +122,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             {
                 return Err(NativeMethods.JetCreateInstance(out instance.Value, name));
             }
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
         }
 
         /// <summary>
@@ -146,7 +146,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             TraceFunctionCall("JetCreateInstance2");
             instance.Value = IntPtr.Zero;
 
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return Err(NativeMethods.JetCreateInstance2W(out instance.Value, name, displayName, (uint)grbit));
 #else
             if (this.Capabilities.SupportsUnicodePaths)
@@ -157,7 +157,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             {
                 return Err(NativeMethods.JetCreateInstance2(out instance.Value, name, displayName, (uint)grbit));
             }
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
         }
 
         /// <summary>
@@ -171,12 +171,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetInit(ref JET_INSTANCE instance)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return this.JetInit3(ref instance, null, InitGrbit.None);
 #else
             TraceFunctionCall("JetInit");
             return Err(NativeMethods.JetInit(ref instance.Value));
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
         }
 
         /// <summary>
@@ -193,12 +193,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error or a warning.</returns>
         public int JetInit2(ref JET_INSTANCE instance, InitGrbit grbit)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return this.JetInit3(ref instance, null, grbit);
 #else
             TraceFunctionCall("JetInit2");
             return Err(NativeMethods.JetInit2(ref instance.Value, (uint)grbit));
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
         }
 
         /// <summary>
@@ -266,7 +266,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Retrieves information about the instances that are running.
         /// </summary>
@@ -352,7 +352,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             TraceFunctionCall("JetStopServiceInstance");
             return Err(NativeMethods.JetStopServiceInstance(instance.Value));            
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Prepares an instance for termination. Can also be used to resume a previous quiescing.
@@ -377,18 +377,18 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error or warning.</returns>
         public int JetTerm(JET_INSTANCE instance)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return this.JetTerm2(instance, TermGrbit.None);
 #else
             TraceFunctionCall("JetTerm");
             this.callbackWrappers.Collect();
-            if (JET_INSTANCE.Nil != instance)
+            if (!instance.IsInvalid)
             {
                 return Err(NativeMethods.JetTerm(instance.Value));
             }
 
             return (int)JET_err.Success;
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
         }
 
         /// <summary>
@@ -402,7 +402,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             TraceFunctionCall("JetTerm2");
             this.callbackWrappers.Collect();
-            if (JET_INSTANCE.Nil != instance)
+            if (!instance.IsInvalid)
             {
                 return Err(NativeMethods.JetTerm2(instance.Value, (uint)grbit));
             }
@@ -433,11 +433,11 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     return Err(NativeMethods.JetSetSystemParameterW(pinstance, sesid.Value, (uint)paramid, paramValue, paramString));
                 }
 
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 return Err((int)JET_err.FeatureNotAvailable);
 #else
                 return Err(NativeMethods.JetSetSystemParameter(pinstance, sesid.Value, (uint)paramid, paramValue, paramString));
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
             }
         }
 
@@ -467,7 +467,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 {
                     return
                         Err(
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                             NativeMethods.JetSetSystemParameterW(
                                 pinstance,
                                 sesid.Value,
@@ -481,7 +481,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                                 (uint)paramid,
                                 IntPtr.Zero,
                                 paramString));
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
                 }
 
                 JetCallbackWrapper wrapper = this.callbackWrappers.Add(paramValue);
@@ -490,7 +490,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #if DEBUG
                 GC.Collect();
 #endif // DEBUG
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 return Err(
                         NativeMethods.JetSetSystemParameterW(
                             pinstance,
@@ -506,7 +506,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                             (uint)paramid,
                             functionPointer,
                             paramString));
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
             }
         }
 
@@ -540,7 +540,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
                 err = Err(NativeMethods.JetGetSystemParameter(instance.Value, sesid.Value, (uint)paramid, ref paramValue, sb, bytesMax));
@@ -552,7 +552,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return err;
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Retrieves the version of the database engine.
         /// </summary>
@@ -582,7 +582,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             version = nativeVersion;
             return err;
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
         #endregion
 
         #region Databases
@@ -598,7 +598,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error or warning.</returns>
         public int JetCreateDatabase(JET_SESID sesid, string database, string connect, out JET_DBID dbid, CreateDatabaseGrbit grbit)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return this.JetCreateDatabase2(sesid, database, 0, out dbid, grbit);
 #else
             TraceFunctionCall("JetCreateDatabase");
@@ -611,7 +611,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
 
             return Err(NativeMethods.JetCreateDatabase(sesid.Value, database, connect, out dbid.Value, (uint)grbit));
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
         }
 
         /// <summary>
@@ -640,7 +640,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 return Err(NativeMethods.JetCreateDatabase2W(sesid.Value, database, cpgDatabaseSizeMax, out dbid.Value, (uint)grbit));
             }
 
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return Err((int)JET_err.FeatureNotAvailable);
 #else
             return Err(NativeMethods.JetCreateDatabase2(sesid.Value, database, cpgDatabaseSizeMax, out dbid.Value, (uint)grbit));
@@ -657,7 +657,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error or warning.</returns>
         public int JetAttachDatabase(JET_SESID sesid, string database, AttachDatabaseGrbit grbit)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return this.JetAttachDatabase2(sesid, database, 0, grbit);
 #else
             TraceFunctionCall("JetAttachDatabase");
@@ -669,7 +669,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
 
             return Err(NativeMethods.JetAttachDatabase(sesid.Value, database, (uint)grbit));
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
         }
 
         /// <summary>
@@ -696,7 +696,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 return Err(NativeMethods.JetAttachDatabase2W(sesid.Value, database, checked((uint)maxPages), (uint)grbit));
             }
 
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return Err((int)JET_err.FeatureNotAvailable);
 #else
             return Err(NativeMethods.JetAttachDatabase2(sesid.Value, database, checked((uint)maxPages), (uint)grbit));
@@ -725,7 +725,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 return Err(NativeMethods.JetOpenDatabaseW(sesid.Value, database, connect, out dbid.Value, (uint)grbit));                
             }
 
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return Err((int)JET_err.FeatureNotAvailable);
 #else
             return Err(NativeMethods.JetOpenDatabase(sesid.Value, database, connect, out dbid.Value, (uint)grbit));
@@ -756,7 +756,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             TraceFunctionCall("JetDetachDatabase");
 
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return this.JetDetachDatabase2(sesid, database, DetachDatabaseGrbit.None);
 #else
             if (this.Capabilities.SupportsUnicodePaths)
@@ -765,7 +765,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
 
             return Err(NativeMethods.JetDetachDatabase(sesid.Value, database));
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
         }
 
         /// <summary>
@@ -784,14 +784,14 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 return Err(NativeMethods.JetDetachDatabase2W(sesid.Value, database, (uint)grbit));
             }
 
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return Err((int)JET_err.FeatureNotAvailable);
 #else
             return Err(NativeMethods.JetDetachDatabase2(sesid.Value, database, (uint)grbit));
 #endif
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Makes a copy of an existing database. The copy is compacted to a
         /// state optimal for usage. Data in the copied data will be packed
@@ -904,7 +904,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             actualPages = checked((int)actualPagesNative);
             return err;            
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Retrieves certain information about the given database.
@@ -921,7 +921,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_DbInfo infoLevel)
         {
             TraceFunctionCall("JetGetDatabaseInfo");
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return Err(NativeMethods.JetGetDatabaseInfoW(sesid.Value, dbid.Value, out value, sizeof(int), (uint)infoLevel));
 #else
             return Err(NativeMethods.JetGetDatabaseInfo(sesid.Value, dbid.Value, out value, sizeof(int), (uint)infoLevel));
@@ -958,7 +958,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 dbinfomisc = new JET_DBINFOMISC();
                 dbinfomisc.SetFromNativeDbinfoMisc(ref native);
             }
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             else
             {
                 var native = new NATIVE_DBINFOMISC4();
@@ -993,7 +993,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 dbinfomisc = new JET_DBINFOMISC();
                 dbinfomisc.SetFromNativeDbinfoMisc(ref native);
             }
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
 
             return err;
         }
@@ -1023,7 +1023,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
                 err = Err(NativeMethods.JetGetDatabaseInfo(sesid.Value, dbid.Value, sb, MaxCharacters, (uint)infoLevel));
@@ -1055,7 +1055,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 err = Err((int)JET_err.FeatureNotAvailable);
                 value = 0;
 #else
@@ -1087,7 +1087,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 err = Err((int)JET_err.FeatureNotAvailable);
                 value = 0;
 #else
@@ -1122,7 +1122,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 dbinfomisc = new JET_DBINFOMISC();
                 dbinfomisc.SetFromNativeDbinfoMisc(ref native);
             }
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             else
             {
                 err = Err((int)JET_err.FeatureNotAvailable);
@@ -1146,7 +1146,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 dbinfomisc = new JET_DBINFOMISC();
                 dbinfomisc.SetFromNativeDbinfoMisc(ref native);
             }
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
 
             return err;
         }
@@ -1155,7 +1155,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         #region Backup/Restore
 
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
         /// <summary>
         /// Performs a streaming backup of an instance, including all the attached
         /// databases, to a directory. With multiple backup methods supported by
@@ -1239,12 +1239,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             callbackWrapper.ThrowSavedException();
             return err;
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
         #endregion
 
         #region Snapshot Backup
 
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Begins the preparations for a snapshot session. A snapshot session
@@ -1424,11 +1424,11 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             this.CheckSupportsServer2003Features("JetOSSnapshotAbort");
             return Err(NativeMethods.JetOSSnapshotAbort(snapid.Value, (uint)grbit));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
         #endregion
 
         #region Streaming Backup/Restore
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Initiates an external backup while the engine and database are online and active. 
@@ -1743,7 +1743,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             TraceFunctionCall("JetTruncateLogInstance");
             return Err(NativeMethods.JetTruncateLogInstance(instance.Value));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
         #endregion
 
         #region Sessions
@@ -1760,7 +1760,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             TraceFunctionCall("JetBeginSession");
             sesid = JET_SESID.Nil;
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return Err(NativeMethods.JetBeginSessionW(instance.Value, out sesid.Value, username, password));
 #else
             return Err(NativeMethods.JetBeginSession(instance.Value, out sesid.Value, username, password));
@@ -1806,7 +1806,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return Err(NativeMethods.JetEndSession(sesid.Value, (uint)grbit));
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Initialize a new ESE session in the same instance as the given sesid.
         /// </summary>
@@ -1819,7 +1819,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             newSesid = JET_SESID.Nil;
             return Err(NativeMethods.JetDupSession(sesid.Value, out newSesid.Value));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Retrieves performance information from the database engine for the
@@ -1869,7 +1869,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             CheckNotNull(tablename, "tablename");
             CheckDataSize(parameters, parametersLength, "parametersLength");
 
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return Err(NativeMethods.JetOpenTableW(sesid.Value, dbid.Value, tablename, parameters, checked((uint)parametersLength), (uint)grbit, out tableid.Value));
 #else
             return Err(NativeMethods.JetOpenTable(sesid.Value, dbid.Value, tablename, parameters, checked((uint)parametersLength), (uint)grbit, out tableid.Value));
@@ -1888,7 +1888,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return Err(NativeMethods.JetCloseTable(sesid.Value, tableid.Value));
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Duplicates an open cursor and returns a handle to the duplicated cursor.
         /// If the cursor that was duplicated was a read-only cursor then the
@@ -1986,7 +1986,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             TraceFunctionCall("JetGetCursorInfo");
             return Err(NativeMethods.JetGetCursorInfo(sesid.Value, tableid.Value, IntPtr.Zero, 0, 0));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         #endregion
 
@@ -2001,7 +2001,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetBeginTransaction(JET_SESID sesid)
         {
             TraceFunctionCall("JetBeginTransaction");
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             // 19513 is an arbitrary number.
             return this.JetBeginTransaction3(sesid, 19513, BeginTransactionGrbit.None);
 #else
@@ -2019,7 +2019,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetBeginTransaction2(JET_SESID sesid, BeginTransactionGrbit grbit)
         {
             TraceFunctionCall("JetBeginTransaction2");
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             // 33193 is an arbitrary number.
             return this.JetBeginTransaction3(sesid, 33193, BeginTransactionGrbit.None);
 #else
@@ -2039,7 +2039,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetCommitTransaction(JET_SESID sesid, CommitTransactionGrbit grbit)
         {
             TraceFunctionCall("JetCommitTransaction");
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             JET_COMMIT_ID commitId;
             return this.JetCommitTransaction2(sesid, grbit, TimeSpan.Zero, out commitId);
 #else
@@ -2084,7 +2084,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             tableid = JET_TABLEID.Nil;
             CheckNotNull(table, "table");
 
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             var tablecreate = new JET_TABLECREATE
             {
                 szTableName = table,
@@ -2111,7 +2111,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             TraceFunctionCall("JetDeleteTable");
             CheckNotNull(table, "table");
 
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return Err(NativeMethods.JetDeleteTableW(sesid.Value, dbid.Value, table));
 #else
             return Err(NativeMethods.JetDeleteTable(sesid.Value, dbid.Value, table));
@@ -2138,7 +2138,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             CheckDataSize(defaultValue, defaultValueSize, "defaultValueSize");
 
             NATIVE_COLUMNDEF nativeColumndef = columndef.GetNativeColumndef();
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             int err = Err(NativeMethods.JetAddColumnW(
                                    sesid.Value,
                                    tableid.Value,
@@ -2156,7 +2156,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                                    defaultValue, 
                                    checked((uint)defaultValueSize),
                                    out columnid.Value));
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
             // esent doesn't actually set the columnid member of the passed in JET_COLUMNDEF, but we will do that here for
             // completeness.
             columndef.columnid = new JET_COLUMNID { Value = columnid.Value };
@@ -2172,7 +2172,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetDeleteColumn(JET_SESID sesid, JET_TABLEID tableid, string column)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return this.JetDeleteColumn2(sesid, tableid, column, DeleteColumnGrbit.None);
 #else
             TraceFunctionCall("JetDeleteColumn");
@@ -2193,7 +2193,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             TraceFunctionCall("JetDeleteColumn2");
             CheckNotNull(column, "column");
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return Err(NativeMethods.JetDeleteColumn2W(sesid.Value, tableid.Value, column, (uint)grbit));
 #else
             return Err(NativeMethods.JetDeleteColumn2(sesid.Value, tableid.Value, column, (uint)grbit));
@@ -2228,7 +2228,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             int density)
         {
             TraceFunctionCall("JetCreateIndex");
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             // Up-convert to JetCreateIndex2().
             JET_INDEXCREATE indexcreate = new JET_INDEXCREATE();
             indexcreate.szIndexName = indexName;
@@ -2258,7 +2258,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 keyDescription,
                 checked((uint)keyDescriptionLength),
                 checked((uint)density)));
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
         }
 
         /// <summary>
@@ -2284,7 +2284,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     "numIndexCreates", numIndexCreates, "numIndexCreates is larger than the number of indexes passed in");
             }
 
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             // Note that it is actually a bit risky to up-convert to CreateIndexes3(), which is why we don't
             // do it in the regular case.
             // Creating the NATIVE_UNICODEINDEX2 structure requires a locale string (not an LCID). If
@@ -2308,7 +2308,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
 
             return CreateIndexes(sesid, tableid, indexcreates, numIndexCreates);
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
         }
 
         /// <summary>
@@ -2323,7 +2323,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             TraceFunctionCall("JetDeleteIndex");
             CheckNotNull(index, "index");
 
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return Err(NativeMethods.JetDeleteIndexW(sesid.Value, tableid.Value, index));
 #else
             return Err(NativeMethods.JetDeleteIndex(sesid.Value, tableid.Value, index));
@@ -2369,7 +2369,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             CheckNotNull(columnids, "columnids");
             CheckDataSize(columnids, numColumns, "numColumns");
 
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return this.JetOpenTempTable3(sesid, columns, numColumns, null, grbit, out tableid, columnids);
 #else
             tableid = JET_TABLEID.Nil;
@@ -2386,7 +2386,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #endif
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Creates a temporary table with a single index. A temporary table
         /// stores and retrieves records just like an ordinary table created
@@ -2444,7 +2444,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             return err;            
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Creates a temporary table with a single index. A temporary table
@@ -2535,7 +2535,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetOpenTemporaryTable(JET_SESID sesid, JET_OPENTEMPORARYTABLE temporarytable)
         {
             TraceFunctionCall("JetOpenTemporaryTable");
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return this.JetOpenTemporaryTable2(sesid, temporarytable);
 #else
             this.CheckSupportsVistaFeatures("JetOpenTemporaryTable");
@@ -2567,7 +2567,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     return err;
                 }
             }
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
         }
 
         /// <summary>
@@ -2585,7 +2585,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             TraceFunctionCall("JetCreateTableColumnIndex3");
             CheckNotNull(tablecreate, "tablecreate");
 
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return CreateTableColumnIndex4(sesid, dbid, tablecreate);
 #else
             if (this.Capabilities.SupportsWindows7Features)
@@ -2633,7 +2633,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
                 err = Err(NativeMethods.JetGetTableColumnInfo(
@@ -2684,7 +2684,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
                 err = Err(NativeMethods.JetGetTableColumnInfo(
@@ -2698,6 +2698,98 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
 
             columndef.SetFromNativeColumndef(nativeColumndef);
+
+            return err;
+        }
+
+        /// <summary>
+        /// Retrieves information about a table column, given its <see cref="JET_TABLEID"/> and name.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table containing the column.</param>
+        /// <param name="columnName">The name of the column.</param>
+        /// <param name="columnbase">Filled in with information about the column.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetTableColumnInfo(
+                JET_SESID sesid,
+                JET_TABLEID tableid,
+                string columnName,
+                out JET_COLUMNBASE columnbase)
+        {
+            TraceFunctionCall("JetGetTableColumnInfo");
+            CheckNotNull(columnName, "columnName");
+
+            int err;
+
+            if (this.Capabilities.SupportsVistaFeatures)
+            {
+                var nativeColumnbase = new NATIVE_COLUMNBASE_WIDE();
+                nativeColumnbase.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_COLUMNBASE_WIDE)));
+
+                err = Err(NativeMethods.JetGetTableColumnInfoW(
+                    sesid.Value,
+                    tableid.Value,
+                    columnName,
+                    ref nativeColumnbase,
+                    nativeColumnbase.cbStruct,
+                    (uint)JET_ColInfo.Base));
+
+                columnbase = new JET_COLUMNBASE(nativeColumnbase);
+            }
+            else
+            {
+#if MANAGEDESENT_ON_WSA
+                err = Err((int)JET_err.FeatureNotAvailable);
+                columnbase = null;
+#else
+                var nativeColumnbase = new NATIVE_COLUMNBASE();
+                nativeColumnbase.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_COLUMNBASE)));
+
+                err = Err(NativeMethods.JetGetTableColumnInfo(
+                    sesid.Value,
+                    tableid.Value,
+                    columnName,
+                    ref nativeColumnbase,
+                    nativeColumnbase.cbStruct,
+                    (uint)JET_ColInfo.Base));
+
+                columnbase = new JET_COLUMNBASE(nativeColumnbase);
+#endif
+            }
+
+            return err;
+        }
+
+        /// <summary>
+        /// Retrieves information about a table column, given its <see cref="JET_TABLEID"/> and <see cref="JET_COLUMNID"/>.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table containing the column.</param>
+        /// <param name="columnid">The columnid of the column.</param>
+        /// <param name="columnbase">Filled in with information about the column.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetTableColumnInfo(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            JET_COLUMNID columnid,
+            out JET_COLUMNBASE columnbase)
+        {
+            TraceFunctionCall("JetGetTableColumnInfo");
+            this.CheckSupportsVistaFeatures("JetGetTableColumnInfo");
+            int err;
+
+            var nativeColumnbase = new NATIVE_COLUMNBASE_WIDE();
+            nativeColumnbase.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_COLUMNBASE_WIDE)));
+
+            err = Err(NativeMethods.JetGetTableColumnInfoW(
+                sesid.Value,
+                tableid.Value,
+                ref columnid.Value,
+                ref nativeColumnbase,
+                nativeColumnbase.cbStruct,
+                (uint)VistaColInfo.BaseByColid));
+
+            columnbase = new JET_COLUMNBASE(nativeColumnbase);
 
             return err;
         }
@@ -2735,7 +2827,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
                 err = Err(NativeMethods.JetGetTableColumnInfo(
@@ -2795,7 +2887,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
                 err = Err(NativeMethods.JetGetColumnInfo(
@@ -2850,7 +2942,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
                 err = Err(NativeMethods.JetGetColumnInfo(
@@ -2911,7 +3003,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 var nativeColumnbase = new NATIVE_COLUMNBASE();
                 nativeColumnbase.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_COLUMNBASE)));
 
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
                 err = Err(NativeMethods.JetGetColumnInfo(
@@ -2972,7 +3064,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 var nativeColumnbase = new NATIVE_COLUMNBASE();
                 nativeColumnbase.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_COLUMNBASE)));
 
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
                 err = Err(NativeMethods.JetGetColumnInfo(
@@ -3025,7 +3117,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
                 err = Err(NativeMethods.JetGetObjectInfo(
@@ -3081,7 +3173,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
                 err = Err(NativeMethods.JetGetObjectInfo(
@@ -3123,7 +3215,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             CheckNotNegative(maxNameLength, "maxNameLength");
 
             var name = new StringBuilder(maxNameLength);
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             int err = Err(NativeMethods.JetGetCurrentIndexW(sesid.Value, tableid.Value, name, checked((uint)maxNameLength)));
 #else
             int err = Err(NativeMethods.JetGetCurrentIndex(sesid.Value, tableid.Value, name, checked((uint)maxNameLength)));
@@ -3164,7 +3256,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
                 err = Err(
@@ -3207,7 +3299,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
                 err = Err(NativeMethods.JetGetTableInfo(
@@ -3242,7 +3334,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 return Err((int)JET_err.FeatureNotAvailable);
 #else
                 return Err(NativeMethods.JetGetTableInfo(sesid.Value, tableid.Value, out result.Value, sizeof(uint), (uint)infoLevel));
@@ -3274,7 +3366,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 return Err((int)JET_err.FeatureNotAvailable);
 #else
                 return Err(NativeMethods.JetGetTableInfo(sesid.Value, tableid.Value, result, bytesResult, (uint)infoLevel));
@@ -3305,7 +3397,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 nativeResult = 0;
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
@@ -3356,7 +3448,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 result = 0;
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
@@ -3411,7 +3503,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 nativeResult = 0;
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
@@ -3466,7 +3558,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 result = new JET_INDEXID();
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
@@ -3521,7 +3613,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
                 err = Err(NativeMethods.JetGetIndexInfo(
@@ -3618,7 +3710,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 result = 0;
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
@@ -3668,7 +3760,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 nativeResult = 0;
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
@@ -3717,7 +3809,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 result = new JET_INDEXID();
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
@@ -3768,7 +3860,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
                 err = Err(NativeMethods.JetGetTableIndexInfo(
@@ -3840,7 +3932,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             TraceFunctionCall("JetRenameTable");
             CheckNotNull(tableName, "tableName");
             CheckNotNull(newTableName, "newTableName");
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return Err(NativeMethods.JetRenameTableW(sesid.Value, dbid.Value, tableName, newTableName));
 #else
             return Err(NativeMethods.JetRenameTable(sesid.Value, dbid.Value, tableName, newTableName));
@@ -3861,7 +3953,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             TraceFunctionCall("JetRenameColumn");    
             CheckNotNull(name, "name");
             CheckNotNull(newName, "newName");
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return Err(
                 NativeMethods.JetRenameColumnW(sesid.Value, tableid.Value, name, newName, (uint)grbit));
 #else
@@ -3870,7 +3962,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #endif
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Changes the default value of an existing column.
         /// </summary>
@@ -3893,7 +3985,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 NativeMethods.JetSetColumnDefaultValue(
                     sesid.Value, dbid.Value, tableName, columnName, data, checked((uint)dataSize), (uint)grbit));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         #endregion
 
@@ -4097,7 +4189,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetSetCurrentIndex(JET_SESID sesid, JET_TABLEID tableid, string index)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return this.JetSetCurrentIndex4(sesid, tableid, index, IntPtr.Zero, SetCurrentIndexGrbit.MoveFirst, 1);
 #else
             TraceFunctionCall("JetSetCurrentIndex");
@@ -4122,7 +4214,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetSetCurrentIndex2(JET_SESID sesid, JET_TABLEID tableid, string index, SetCurrentIndexGrbit grbit)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return this.JetSetCurrentIndex4(sesid, tableid, index, IntPtr.Zero, grbit, 1);
 #else
             TraceFunctionCall("JetSetCurrentIndex2");
@@ -4154,7 +4246,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetSetCurrentIndex3(JET_SESID sesid, JET_TABLEID tableid, string index, SetCurrentIndexGrbit grbit, int itagSequence)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return this.JetSetCurrentIndex4(sesid, tableid, index, IntPtr.Zero, grbit, itagSequence);
 #else
             TraceFunctionCall("JetSetCurrentIndex3");
@@ -4199,7 +4291,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             TraceFunctionCall("JetSetCurrentIndex4");
 
             // A null index name is valid here -- it will set the table to the primary index
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return Err(NativeMethods.JetSetCurrentIndex4W(sesid.Value, tableid.Value, index, ref indexid, (uint)grbit, checked((uint)itagSequence)));            
 #else
             return Err(NativeMethods.JetSetCurrentIndex4(sesid.Value, tableid.Value, index, ref indexid, (uint)grbit, checked((uint)itagSequence)));            
@@ -4653,7 +4745,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Retrieves record size information from the desired location.
         /// </summary>
@@ -4687,7 +4779,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             return Err(err);
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         #endregion
 
@@ -4739,7 +4831,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetUpdate(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize, out int actualBookmarkSize)
         {
             TraceFunctionCall("JetUpdate");
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return this.JetUpdate2(sesid, tableid, bookmark, bookmarkSize, out actualBookmarkSize, UpdateGrbit.None);
 #else
             CheckDataSize(bookmark, bookmarkSize, "bookmarkSize");
@@ -4847,7 +4939,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return Err(NativeMethods.JetSetColumns(sesid.Value, tableid.Value, setcolumns, checked((uint)numColumns)));
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Explicitly reserve the ability to update a row, write lock, or to explicitly prevent a row from
         /// being updated by any other session, read lock. Normally, row write locks are acquired implicitly as a
@@ -4864,7 +4956,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             TraceFunctionCall("JetGetLock");
             return Err(NativeMethods.JetGetLock(sesid.Value, tableid.Value, unchecked((uint)grbit)));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Performs an atomic addition operation on one column. This function allows
@@ -5019,7 +5111,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code.</returns>
         public int JetDefragment(JET_SESID sesid, JET_DBID dbid, string tableName, ref int passes, ref int seconds, DefragGrbit grbit)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return this.JetDefragment2(sesid, dbid, tableName, ref passes, ref seconds, null, grbit);
 #else
             TraceFunctionCall("JetDefragment");
@@ -5083,7 +5175,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #endif
             }
 
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             int err = Err(NativeMethods.JetDefragment2W(
                 sesid.Value, dbid.Value, tableName, ref nativePasses, ref nativeSeconds, functionPointer, (uint)grbit));
 #else
@@ -5096,7 +5188,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return err;
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Performs idle cleanup tasks or checks the version store status in ESE.
         /// </summary>
@@ -5108,13 +5200,13 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             TraceFunctionCall("JetIdle");
             return Err(NativeMethods.JetIdle(sesid.Value, (uint)grbit));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         #endregion
 
         #region Misc
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Crash dump options for Watson.
         /// </summary>
@@ -5140,7 +5232,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             TraceFunctionCall("JetFreeBuffer");
             return Err(NativeMethods.JetFreeBuffer(buffer));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         #endregion
 
@@ -5272,14 +5364,14 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #endif
         private static void TraceFunctionCall(string function)
         {
-#if DEBUG && !MANAGEDESENT_ON_METRO
+#if DEBUG && !MANAGEDESENT_ON_WSA
             // Make sure the name of the calling function is correct.
             var stackTrace = new StackTrace();
             Debug.Assert(
                 stackTrace.GetFrame(1).GetMethod().Name == function,
                 "Incorrect function name",
                 function);
-#endif // DEBUG && !MANAGEDESENT_ON_METRO
+#endif // DEBUG && !MANAGEDESENT_ON_WSA
 
             Trace.WriteLineIf(TraceSwitch.TraceInfo, function);
         }
@@ -5506,7 +5598,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return nativeBuffer;
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Make native indexcreate structures from the managed ones.
         /// Only supports Ascii data, since it could be used on XP.
@@ -5627,7 +5719,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             return nativeIndices;
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Set managed columnids from unmanaged columnids. This also sets the columnids
@@ -5646,7 +5738,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Creates indexes over data in an ESE database.
         /// </summary>
@@ -5841,7 +5933,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             return instances;
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         #endregion
 
@@ -5887,7 +5979,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         }
 
         /// <summary>
-        /// Check that ESENT supports Windows8 features. Throws an exception if Windows7 features
+        /// Check that ESENT supports Windows8 features. Throws an exception if Windows8 features
         /// aren't supported.
         /// </summary>
         /// <param name="api">The API that is being called.</param>
@@ -5899,13 +5991,26 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
         }
 
+        /// <summary>
+        /// Check that ESENT supports Windows8.1 features. Throws an exception if Windows8.1 features
+        /// aren't supported.
+        /// </summary>
+        /// <param name="api">The API that is being called.</param>
+        private void CheckSupportsWindows81Features(string api)
+        {
+            if (!this.Capabilities.SupportsWindows81Features)
+            {
+                throw UnsupportedApiException(api);
+            }
+        }
+
         #endregion
 
         #region Non-static Helper Methods
 
         // This overload takes an IntPtr rather than a JET_INDEXID. It's meant to only be called by
         // our JetSetCurrentIndex1-3, to 'up-cast' to JetSetCurrentIndex4().
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
         /// <summary>
         /// Set the current index of a cursor.
         /// This overload takes an IntPtr rather than a JET_INDEXID. It's meant to only be called by
@@ -5950,9 +6055,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             // A null index name is valid here -- it will set the table to the primary index
             return Err(NativeMethods.JetSetCurrentIndex4W(sesid.Value, tableid.Value, index, indexid, (uint)grbit, checked((uint)itagSequence)));
         }
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Creates a table, adds columns, and indices on that table.
         /// </summary>
@@ -6036,7 +6141,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 }
             }
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         #endregion
     }

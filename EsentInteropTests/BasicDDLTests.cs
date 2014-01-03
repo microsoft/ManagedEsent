@@ -244,6 +244,81 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Add a column and retrieve its information with JET_COLUMNBASE using JetGetTableColumnInfo, specifying column name.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Add a column and retrieve its information with JET_COLUMNBASE using JetGetTableColumnInfo, specifying column name.")]
+        public void JetGetTableColumnBaseInfo()
+        {
+            const string ColumnName = "column1";
+            Api.JetBeginTransaction(this.sesid);
+            var columndef = new JET_COLUMNDEF()
+            {
+                cbMax = 4096,
+                cp = JET_CP.Unicode,
+                coltyp = JET_coltyp.LongText,
+                grbit = ColumndefGrbit.None,
+            };
+
+            JET_COLUMNID columnid;
+            Api.JetAddColumn(this.sesid, this.tableid, ColumnName, columndef, null, 0, out columnid);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            JET_COLUMNBASE retrievedColumnbase;
+            Api.JetGetTableColumnInfo(this.sesid, this.tableid, ColumnName, out retrievedColumnbase);
+
+            Assert.AreEqual(columndef.cbMax, retrievedColumnbase.cbMax);
+            Assert.AreEqual(columndef.cp, retrievedColumnbase.cp);
+            Assert.AreEqual(columndef.coltyp, retrievedColumnbase.coltyp);
+            Assert.AreEqual(columnid, retrievedColumnbase.columnid);
+            Assert.AreEqual(this.table, retrievedColumnbase.szBaseTableName);
+            Assert.AreEqual(ColumnName, retrievedColumnbase.szBaseColumnName);
+
+            // The output grbit isn't checked for equality as esent will add some options by default.
+        }
+
+        /// <summary>
+        /// Add a column and retrieve its information with JET_COLUMNBASE using JetGetTableColumnInfo, by passing in the columnid.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Add a column and retrieve its information with JET_COLUMNBASE using JetGetTableColumnInfo, by passing in the columnid.")]
+        public void JetGetTableColumnBaseInfoByColumnid()
+        {
+            if (!EsentVersion.SupportsVistaFeatures)
+            {
+                return;
+            }
+
+            const string ColumnName = "column2";
+            Api.JetBeginTransaction(this.sesid);
+            var columndef = new JET_COLUMNDEF()
+            {
+                cbMax = 8192,
+                cp = JET_CP.ASCII,
+                coltyp = JET_coltyp.LongText,
+                grbit = ColumndefGrbit.None,
+            };
+
+            JET_COLUMNID columnid;
+            Api.JetAddColumn(this.sesid, this.tableid, ColumnName, columndef, null, 0, out columnid);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            JET_COLUMNBASE retrievedColumnbase;
+            VistaApi.JetGetTableColumnInfo(this.sesid, this.tableid, columnid, out retrievedColumnbase);
+
+            Assert.AreEqual(columndef.cbMax, retrievedColumnbase.cbMax);
+            Assert.AreEqual(columndef.cp, retrievedColumnbase.cp);
+            Assert.AreEqual(columndef.coltyp, retrievedColumnbase.coltyp);
+            Assert.AreEqual(columnid, retrievedColumnbase.columnid);
+            Assert.AreEqual(this.table, retrievedColumnbase.szBaseTableName);
+            Assert.AreEqual(ColumnName, retrievedColumnbase.szBaseColumnName);
+
+            // The output grbit isn't checked for equality as esent will add some options by default.
+        }
+
+        /// <summary>
         /// Add a column and retrieve its information using JetGetColumnInfo.
         /// </summary>
         [TestMethod]

@@ -191,7 +191,7 @@ namespace InteropApiTests
             CollectionAssert.AreEquivalent(buffers, newBuffers);
         }
 
-#if !MANAGEDESENT_ON_METRO // Thread is not available.
+#if !MANAGEDESENT_ON_WSA // Thread is not available.
         /// <summary>
         /// Have multiple threads allocate and free memory buffers.
         /// </summary>
@@ -235,6 +235,6 @@ namespace InteropApiTests
                 }
             }
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
     }
 }

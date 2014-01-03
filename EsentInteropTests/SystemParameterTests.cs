@@ -11,10 +11,9 @@ namespace InteropApiTests
     using Microsoft.Isam.Esent.Interop.Implementation;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-#if MANAGEDESENT_ON_CORECLR
-#else
+#if !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
     using Rhino.Mocks;
-#endif
+#endif // !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
 
     /// <summary>
     /// Test the SystemParameters class. To avoid changing global parameters
@@ -23,8 +22,7 @@ namespace InteropApiTests
     [TestClass]
     public partial class SystemParameterTests
     {
-#if MANAGEDESENT_ON_CORECLR
-#else
+#if !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
         /// <summary>
         /// Mock object repository.
         /// </summary>
@@ -123,6 +121,22 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verify that setting the property sets the system parameter
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verify that setting SystemParameters.OutstandingIOMax sets JET_param.OutstandingIOMax")]
+        public void VerifySettingOutstandingIOMax()
+        {
+            Expect.Call(
+                this.mockApi.JetSetSystemParameter(
+                    JET_INSTANCE.Nil, JET_SESID.Nil, JET_param.OutstandingIOMax, new IntPtr(64), null)).Return(1);
+            this.repository.ReplayAll();
+            SystemParameters.OutstandingIOMax = 64;
+            this.repository.VerifyAll();
+        }
+
+          /// <summary>
         /// Verify that setting the property sets the system parameter
         /// </summary>
         [TestMethod]
@@ -361,6 +375,6 @@ namespace InteropApiTests
             SystemParameters.EnableViewCache = false;
             this.repository.VerifyAll();
         }
-#endif
+#endif // !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
     }
 }

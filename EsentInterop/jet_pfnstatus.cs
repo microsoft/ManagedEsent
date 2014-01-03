@@ -69,7 +69,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         private readonly NATIVE_PFNSTATUS nativeCallback;
 
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
         /// <summary>
         /// Initializes static members of the <see cref="StatusCallbackWrapper"/> class. 
         /// </summary>
@@ -125,7 +125,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public void ThrowSavedException()
         {
-#if !MANAGEDESENT_ON_METRO // Thread model has changed in Metro.
+#if !MANAGEDESENT_ON_WSA // Thread model has changed in Windows store apps.
             if (this.ThreadWasAborted)
             {
                 Thread.CurrentThread.Abort();
@@ -162,7 +162,7 @@ namespace Microsoft.Isam.Esent.Interop
                 object data = CallbackDataConverter.GetManagedData(nativeData, snp, snt);
                 return this.wrappedCallback(sesid, snp, snt, data);
             }
-#if !MANAGEDESENT_ON_METRO // Thread model has changed in Metro.
+#if !MANAGEDESENT_ON_WSA // Thread model has changed in windows store apps.
             catch (ThreadAbortException)
             {
                 Trace.WriteLineIf(TraceSwitch.TraceWarning, "Caught ThreadAbortException");

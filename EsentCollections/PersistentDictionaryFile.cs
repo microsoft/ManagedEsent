@@ -40,8 +40,8 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 
             return false;
         }
-#if MANAGEDESENT_ON_METRO
-        // File/Directory not availble in Metro.
+#if MANAGEDESENT_ON_WSA
+        // File/Directory not availble in Windows Store Apps.
 #else
         /// <summary>
         /// Delete all files associated with a PersistedDictionary database from

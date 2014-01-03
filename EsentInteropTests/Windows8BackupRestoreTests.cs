@@ -15,7 +15,7 @@ namespace InteropApiTests
     /// </summary>
     public partial class BackupRestoreTests
     {
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
         /// <summary>
         /// Test exception handling for exceptions thrown from
         /// the status callback during JetRestore.
@@ -30,6 +30,6 @@ namespace InteropApiTests
             var test = new DatabaseFileTestHelper("database", "backup", true);            
             test.TestRestoreCallbackExceptionHandling(ex);
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
     }
 }

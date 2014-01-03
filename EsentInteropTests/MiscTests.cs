@@ -66,7 +66,7 @@ namespace InteropApiTests
             Assert.AreNotEqual(0, NATIVE_RSTINFO.SizeOfRstinfo);
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Test calling JetFreeBuffer on a null buffer.
         /// </summary>
@@ -77,7 +77,7 @@ namespace InteropApiTests
         {
             Api.JetFreeBuffer(IntPtr.Zero);
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Verify that all TestMethods in this assembly have priorities.
@@ -178,7 +178,7 @@ namespace InteropApiTests
         /// <returns>An array of method names for test methods without the attribute.</returns>
         private static string[] FindTestMethodsWithoutAttribute<T>(Assembly assembly) where T : Attribute
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return assembly.DefinedTypes
                 .SelectMany(
                     t => from method in t.DeclaredMethods
@@ -196,7 +196,7 @@ namespace InteropApiTests
                          select string.Format("{0}.{1}", method.DeclaringType, method.Name))
                 .OrderBy(x => x)
                 .ToArray();
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
         }
 
         /// <summary>
@@ -207,7 +207,7 @@ namespace InteropApiTests
         /// <returns>An array of method names for methods without the TestMethod attribute.</returns>
         private static IEnumerable<Type> FindPublicClassesWithoutToString(Assembly assembly)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return assembly.ExportedTypes
                 .Where(type =>
                        !type.GetTypeInfo().IsAbstract
@@ -228,7 +228,7 @@ namespace InteropApiTests
                            .Any(method =>
                                   method.Name == "ToString"
                                   && method.DeclaringType == typeof(object)));
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
         }
 
         /// <summary>
@@ -239,7 +239,7 @@ namespace InteropApiTests
         /// <returns>An array of method names for methods without the TestMethod attribute.</returns>
         private static string[] FindPublicNonTestMethods(Assembly assembly)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return assembly.ExportedTypes
                 .Where(type => type.GetTypeInfo().GetCustomAttributes(typeof(TestClassAttribute), true).Any())
                 .SelectMany(
@@ -266,7 +266,7 @@ namespace InteropApiTests
                      select string.Format("{0}.{1}", method.DeclaringType, method.Name))
                 .OrderBy(x => x)
                 .ToArray();
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
         }
     }
 }

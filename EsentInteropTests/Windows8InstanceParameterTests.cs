@@ -10,6 +10,7 @@ namespace InteropApiTests
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Windows7;
     using Microsoft.Isam.Esent.Interop.Windows8;
+    using Microsoft.Isam.Esent.Interop.Windows81;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -52,7 +53,7 @@ namespace InteropApiTests
         [Description("Test the EnableDbScanInRecovery property")]
         public void SetAndRetrieveInstanceParametersEnableDbScanInRecovery()
         {
-            var expected = Any.Boolean;
+            var expected = Any.Int32Range(0, 2);
             this.instanceParameters.EnableDbScanInRecovery = expected;
             Assert.AreEqual(expected, this.instanceParameters.EnableDbScanInRecovery);
         }
@@ -66,9 +67,9 @@ namespace InteropApiTests
         [Description("Setting the EnableDbScanInRecovery property should set the parameter on the instance")]
         public void VerifySetInstanceParametersEnableDbScanInRecovery()
         {
-            bool expected = Any.Boolean;
+            var expected = Any.Int32Range(0, 2);
             this.instanceParameters.EnableDbScanInRecovery = expected;
-            Assert.AreEqual(expected, this.GetBooleanParameter(Windows7Param.EnableDbScanInRecovery));
+            Assert.AreEqual(expected, this.GetIntegerParameter(Windows7Param.EnableDbScanInRecovery));
         }
 
         /// <summary>
@@ -260,6 +261,26 @@ namespace InteropApiTests
             }
         }
 
+        #region Windows 8.1
+        /// <summary>
+        /// Test the EnableShrinkDatabase property. Introduced in Windows 8.1.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Setting the EnableShrinkDatabase property should set the parameter.")]
+        public void VerifySettingEnableDatabaseShrink()
+        {
+            if (!EsentVersion.SupportsWindows81Features)
+            {
+                return;
+            }
+
+            ShrinkDatabaseGrbit expected = ShrinkDatabaseGrbit.On | ShrinkDatabaseGrbit.Realtime;
+            this.instanceParameters.EnableShrinkDatabase = expected;
+            Assert.AreEqual((int)expected, this.GetIntegerParameter(Windows81Param.EnableShrinkDatabase));
+            Assert.AreEqual(expected, this.instanceParameters.EnableShrinkDatabase);
+        }
+        #endregion
         /// <summary>
         /// A dummy function for the durable commit callback.
         /// </summary>

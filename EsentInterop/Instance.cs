@@ -288,7 +288,16 @@ namespace Microsoft.Isam.Esent.Interop
                 // because the instance isn't necessarily terminated. On the other hand if a 
                 // different exception (out of memory or thread abort) is generated we still need
                 // to invalidate the handle.
-                Api.JetTerm2(this.JetInstance, this.termGrbit);
+                try
+                {
+                    Api.JetTerm2(this.JetInstance, this.termGrbit);
+                }
+                catch (EsentDirtyShutdownException)
+                {
+                    this.SetHandleAsInvalid();                
+                    throw;
+                }
+
                 this.SetHandleAsInvalid();                
             }
         }

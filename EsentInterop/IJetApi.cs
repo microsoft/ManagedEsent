@@ -94,7 +94,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code or warning.</returns>
         int JetInit3(ref JET_INSTANCE instance, JET_RSTINFO recoveryOptions, InitGrbit grbit);
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Retrieves information about the instances that are running.
         /// </summary>
@@ -132,7 +132,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="instance">The (running) instance to use.</param>
         /// <returns>An error code.</returns>
         int JetStopServiceInstance(JET_INSTANCE instance);
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Prepares an instance for termination. Can also be used to resume a previous quiescing.
@@ -206,7 +206,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error or warning.</returns>
         int JetGetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, ref IntPtr paramValue, out string paramString, int maxParam);
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Retrieves the version of the database engine.
         /// </summary>
@@ -214,7 +214,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="version">Returns the version number of the database engine.</param>
         /// <returns>An error code if the call fails.</returns>
         int JetGetVersion(JET_SESID sesid, out uint version);
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
         #endregion
 
         #region Databases
@@ -309,7 +309,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error or warning.</returns>
         int JetDetachDatabase2(JET_SESID sesid, string database, DetachDatabaseGrbit grbit);
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Makes a copy of an existing database. The copy is compacted to a
         /// state optimal for usage. Data in the copied data will be packed
@@ -361,7 +361,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </param>
         /// <returns>An error if the call fails.</returns>
         int JetSetDatabaseSize(JET_SESID sesid, string database, int desiredPages, out int actualPages);
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Retrieves certain information about the given database.
@@ -445,7 +445,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         #region Backup/Restore
 
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
         /// <summary>
         /// Performs a streaming backup of an instance, including all the attached
         /// databases, to a directory. With multiple backup methods supported by
@@ -485,12 +485,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </param>
         /// <returns>An error code.</returns>
         int JetRestoreInstance(JET_INSTANCE instance, string source, string destination, JET_PFNSTATUS statusCallback);
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
         #endregion
 
         #region Snapshot Backup
 
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
         /// <summary>
         /// Begins the preparations for a snapshot session. A snapshot session
         /// is a short time interval in which the engine does not issue any
@@ -595,12 +595,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="grbit">Options for this call.</param>
         /// <returns>An error code if the call fails.</returns>
         int JetOSSnapshotAbort(JET_OSSNAPID snapid, SnapshotAbortGrbit grbit);
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
         #endregion
 
         #region Streaming Backup/Restore
 
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
         /// <summary>
         /// Initiates an external backup while the engine and database are online and active. 
         /// </summary>
@@ -758,7 +758,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="instance">The instance to truncate.</param>
         /// <returns>An error code if the call fails.</returns>
         int JetTruncateLogInstance(JET_INSTANCE instance);
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
         #endregion
 
         #region Sessions
@@ -800,7 +800,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         int JetEndSession(JET_SESID sesid, EndSessionGrbit grbit);
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Initialize a new ESE session in the same instance as the given sesid.
         /// </summary>
@@ -808,7 +808,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="newSesid">Returns the new session.</param>
         /// <returns>An error if the call fails.</returns>
         int JetDupSession(JET_SESID sesid, out JET_SESID newSesid);
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Retrieves performance information from the database engine for the
@@ -847,7 +847,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         int JetCloseTable(JET_SESID sesid, JET_TABLEID tableid);
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Duplicates an open cursor and returns a handle to the duplicated cursor.
         /// If the cursor that was duplicated was a read-only cursor then the
@@ -921,7 +921,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="tableid">The cursor to check.</param>
         /// <returns>An error if the call fails.</returns>
         int JetGetCursorInfo(JET_SESID sesid, JET_TABLEID tableid);
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         #endregion
 
@@ -1118,7 +1118,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out JET_TABLEID tableid,
             JET_COLUMNID[] columnids);
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Creates a temporary table with a single index. A temporary table
         /// stores and retrieves records just like an ordinary table created
@@ -1157,7 +1157,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             TempTableGrbit grbit,
             out JET_TABLEID tableid,
             JET_COLUMNID[] columnids);
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Creates a temporary table with a single index. A temporary table
@@ -1259,6 +1259,34 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_TABLEID tableid,
             JET_COLUMNID columnid,
             out JET_COLUMNDEF columndef);
+
+        /// <summary>
+        /// Retrieves information about a table column.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table containing the column.</param>
+        /// <param name="columnName">The name of the column.</param>
+        /// <param name="columnbase">Filled in with information about the column.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetGetTableColumnInfo(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            string columnName,
+            out JET_COLUMNBASE columnbase);
+
+        /// <summary>
+        /// Retrieves information about a table column.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table containing the column.</param>
+        /// <param name="columnid">The columnid of the column.</param>
+        /// <param name="columnbase">Filled in with information about the column.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetGetTableColumnInfo(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            JET_COLUMNID columnid,
+            out JET_COLUMNBASE columnbase);
 
         /// <summary>
         /// Retrieves information about all columns in the table.
@@ -1661,7 +1689,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         int JetRenameColumn(JET_SESID sesid, JET_TABLEID tableid, string name, string newName, RenameColumnGrbit grbit);
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Changes the default value of an existing column.
         /// </summary>
@@ -1675,7 +1703,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         int JetSetColumnDefaultValue(
             JET_SESID sesid, JET_DBID dbid, string tableName, string columnName, byte[] data, int dataSize, SetColumnDefaultValueGrbit grbit);
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         #endregion
 
@@ -2134,7 +2162,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             int maxDataSize,
             EnumerateColumnsGrbit grbit);
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Retrieves record size information from the desired location.
         /// </summary>
@@ -2147,7 +2175,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="grbit">Call options.</param>
         /// <returns>A warning, error or success.</returns>
         int JetGetRecordSize(JET_SESID sesid, JET_TABLEID tableid, ref JET_RECSIZE recsize, GetRecordSizeGrbit grbit);
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
         #endregion
 
         #region DML
@@ -2246,7 +2274,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code or warning.</returns>
         unsafe int JetSetColumns(JET_SESID sesid, JET_TABLEID tableid, NATIVE_SETCOLUMN* setcolumns, int numColumns);
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Explicitly reserve the ability to update a row, write lock, or to explicitly prevent a row from
         /// being updated by any other session, read lock. Normally, row write locks are acquired implicitly as a
@@ -2259,7 +2287,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="grbit">Lock options, use this to specify which type of lock to obtain.</param>
         /// <returns>An error if the call fails.</returns>
         int JetGetLock(JET_SESID sesid, JET_TABLEID tableid, GetLockGrbit grbit);
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Performs an atomic addition operation on one column. This function allows
@@ -2410,7 +2438,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_CALLBACK callback,
             DefragGrbit grbit);
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Performs idle cleanup tasks or checks the version store status in ESE.
         /// </summary>
@@ -2418,13 +2446,13 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="grbit">A combination of JetIdleGrbit flags.</param>
         /// <returns>An error code if the operation fails.</returns>
         int JetIdle(JET_SESID sesid, IdleGrbit grbit);
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         #endregion
 
         #region Misc
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Crash dump options for Watson.
         /// </summary>
@@ -2441,7 +2469,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </param>
         /// <returns>An error code.</returns>
         int JetFreeBuffer(IntPtr buffer);
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         #endregion
     }

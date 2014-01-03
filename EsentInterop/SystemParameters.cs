@@ -86,6 +86,25 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Gets or sets how many database file I/Os can be queued
+        /// per-disk in the host operating system at one time.  A larger value
+        /// for this parameter can significantly help the performance of a large
+        /// database application.
+        /// </summary>
+        public static int OutstandingIOMax
+        {
+            get
+            {
+                return GetIntegerParameter(JET_param.OutstandingIOMax);
+            }
+
+            set
+            {
+                SetIntegerParameter(JET_param.OutstandingIOMax, value);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the threshold at which the database page cache begins evicting pages from the
         /// cache to make room for pages that are not cached. When the number of page buffers in the cache
         /// drops below this threshold then a background process will be started to replenish that pool

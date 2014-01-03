@@ -198,7 +198,7 @@ namespace InteropApiTests
             Assert.AreEqual("12EC", string.Format("{0:X}", value));
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Test JET_OSSNAPID.ToString().
         /// </summary>
@@ -234,7 +234,7 @@ namespace InteropApiTests
             var value = new JET_OSSNAPID { Value = (IntPtr)0x123ABC };
             Assert.AreEqual("123ABC", string.Format("{0:X}", value));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Test JET_HANDLE.ToString().
@@ -272,7 +272,7 @@ namespace InteropApiTests
             Assert.AreEqual("123ABC", string.Format("{0:X}", value));
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Test JET_LS.ToString().
         /// </summary>
@@ -308,7 +308,7 @@ namespace InteropApiTests
             var value = new JET_LS { Value = (IntPtr)0x123ABC };
             Assert.AreEqual("123ABC", string.Format("{0:X}", value));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Test JET_INDEXID.ToString().
@@ -445,7 +445,7 @@ namespace InteropApiTests
             Assert.AreEqual("JET_INDEXCREATE(Index:+C\0\0)", indexcreate.ToString());
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Test JET_INSTANCE_INFO.ToString().
         /// </summary>
@@ -457,7 +457,7 @@ namespace InteropApiTests
             var instanceInfo = new JET_INSTANCE_INFO(JET_INSTANCE.Nil, "name", null);
             Assert.AreEqual("JET_INSTANCE_INFO(name)", instanceInfo.ToString());
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Test JET_COLUMNCREATE.ToString().

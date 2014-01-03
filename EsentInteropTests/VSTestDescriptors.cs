@@ -253,23 +253,18 @@ namespace InteropApiTests
         /// <returns>A TestMethodDescriptor for the method</returns>
         private TestMethodDescriptor BuildTestMethodDescriptor(System.Reflection.MethodInfo methodInfo)
         {
-            string title = this.Title;
-            string desc = this.Description;
-            string owner = this.Owner;
-            int id = 0;
-            int priority = DefaultPriority;
-
             // Visual studio tests dont have a title attribute
-            this.Title = methodInfo.Name;
+            string title = methodInfo.Name;
 
             VS.DescriptionAttribute da;
+            string desc = string.Empty;
             if (methodInfo.TryGetAttribute(out da))
             {
                 desc = da.Description;
-                title = desc;
             }
 
             VS.OwnerAttribute oa;
+            string owner;
             if (methodInfo.TryGetAttribute(out oa))
             {
                 owner = oa.Owner;
@@ -280,13 +275,14 @@ namespace InteropApiTests
             }
 
             VS.PriorityAttribute pa;
+            int priority = DefaultPriority;
             if (methodInfo.TryGetAttribute(out pa))
             {
                 priority = pa.Priority;
             }
            
             // Read tcmid/wttid from AttributeStore
-            id = this.GetTestId(methodInfo.Name);
+            int id = this.GetTestId(methodInfo.Name);
 
             TimeSpan timeout = TimeSpan.Zero;
             VS.TimeoutAttribute timeoutAttr;
@@ -337,13 +333,27 @@ namespace InteropApiTests
         public override void Setup(ISetupContext sc)
         {
             // Copy common binaries required for running InteropApiTests
-            sc.CopyBinary("microsoft.isam.esent.interop.dll");
-            sc.CopyBinary("microsoft.isam.esent.interop.types.dll");
-            
-            sc.CopyBinary("Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll");
-            sc.CopyBinary("Microsoft.VisualStudio.QualityTools.Resource.dll");
-            sc.CopyBinary("Rhino.Mocks.dll");
+            sc.CopyBinary("Microsoft.Isam.Esent.Interop.dll");
+#if !ESENT
+            sc.CopyBinary("Microsoft.Isam.Esent.Interop.Types.dll");
             sc.CopyBinary("Microsoft.Exchange.Diagnostics.dll");
+#endif // !ESENT
+#if M_E_ISAM_INTEROP_WORKS
+            sc.CopyBinary("eseback2.dll");
+#if ESENT
+            sc.CopyBinary("Microsoft.Windows.Isam.Interop.dll");
+#else // ESENT
+            sc.CopyBinary("Microsoft.Exchange.Isam.Interop.dll");
+#endif // !ESENT
+#endif // M_E_ISAM_INTEROP_WORKS
+
+            sc.CopyBinary("Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll");
+#if !ESENT
+            sc.CopyBinary("Microsoft.VisualStudio.QualityTools.Resource.dll");
+#endif
+#if !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
+            sc.CopyBinary("Rhino.Mocks.dll");
+#endif // !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
         }
 
         /// <summary>
@@ -376,7 +386,7 @@ namespace InteropApiTests
             // Must use Console.WriteLine() for logging in this method
             // because StdOut has been redirected. Using the logger directly
             // will print each log twice.
-            Console.WriteLine("{0}.{1}():", methodDesc.ImplementingType.Name, methodDesc.Name);
+            Console.WriteLine("{0}():", methodDesc.FullName);
             var start = DateTime.Now;
 
             try

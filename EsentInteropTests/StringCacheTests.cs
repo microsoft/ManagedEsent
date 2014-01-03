@@ -17,7 +17,7 @@ namespace InteropApiTests
     [TestClass]
     public class StringCacheTests
     {
-#if !MANAGEDESENT_ON_METRO // String interning is not supported.
+#if !MANAGEDESENT_ON_WSA // String interning is not supported.
         /// <summary>
         /// Try to intern a random string (should not be interned).
         /// </summary>
@@ -41,7 +41,7 @@ namespace InteropApiTests
             string s = string.Intern(StringCache.TryToIntern(Any.NonInternedString));
             Assert.IsNotNull(string.IsInterned(s), "Should have been interned");
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Get a string with a null buffer.

@@ -31,6 +31,14 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Gets a value indicating whether the <see cref="T:JET_INSTANCE"/> is valid (checks against 0 and -1)
+        /// </summary>
+        public bool IsInvalid
+        {
+            get { return this.Value == IntPtr.Zero || this.Value == new IntPtr(~0); }
+        }
+
+        /// <summary>
         /// Determines whether two specified instances of JET_INSTANCE
         /// are equal.
         /// </summary>
@@ -136,6 +144,14 @@ namespace Microsoft.Isam.Esent.Interop
         {
             [DebuggerStepThrough]
             get { return new JET_SESID(); }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the <see cref="T:JET_SESID"/> is valid (checks against 0 and -1)
+        /// </summary>
+        public bool IsInvalid
+        {
+            get { return this.Value == IntPtr.Zero || this.Value == new IntPtr(~0); }
         }
 
         /// <summary>
@@ -247,6 +263,14 @@ namespace Microsoft.Isam.Esent.Interop
             get { return new JET_TABLEID(); }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the <see cref="JET_TABLEID"/> is valid (checks against 0 and -1)
+        /// </summary>
+        public bool IsInvalid
+        {
+            get { return this.Value == IntPtr.Zero || this.Value == new IntPtr(~0); }
+        }
+   
         /// <summary>
         /// Determines whether two specified instances of JET_TABLEID
         /// are equal.
@@ -467,6 +491,14 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Gets a value indicating whether the <see cref="JET_COLUMNID"/> is valid (checks against 0 and -1)
+        /// </summary>
+        public bool IsInvalid
+        {
+            get { return this.Value == 0 || this.Value == 0xffffffff; }
+        }
+
+        /// <summary>
         /// Determines whether two specified instances of JET_COLUMNID
         /// are equal.
         /// </summary>
@@ -613,9 +645,24 @@ namespace Microsoft.Isam.Esent.Interop
         {
             return this.Value.CompareTo(other.Value);
         }
+
+        /// <summary>
+        /// Creates a new instance of a <see cref="JET_COLUMNID"/> using the specified
+        /// value as the underlying value.
+        /// </summary>
+        /// <param name="nativeValue">The native ESE JET_COLUMNID.</param>
+        /// <returns>An initialized <see cref="JET_COLUMNID"/> structure.</returns>
+        /// <remarks>Use of this function should be exceedingly rare.</remarks>
+        internal static JET_COLUMNID CreateColumnidFromNativeValue(int nativeValue)
+        {
+            return new JET_COLUMNID()
+            {
+                Value = (uint)nativeValue
+            };
+        }
     }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
     /// <summary>
     /// A JET_OSSNAPID contains a handle to a snapshot of a database.
     /// </summary>
@@ -633,6 +680,14 @@ namespace Microsoft.Isam.Esent.Interop
         {
             [DebuggerStepThrough]
             get { return new JET_OSSNAPID(); }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the <see cref="JET_OSSNAPID"/> is valid (checks against 0 and -1)
+        /// </summary>
+        public bool IsInvalid
+        {
+            get { return this.Value == IntPtr.Zero || this.Value == new IntPtr(~0); }
         }
 
         /// <summary>
@@ -723,7 +778,7 @@ namespace Microsoft.Isam.Esent.Interop
             return this.Value.Equals(other.Value);
         }
     }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
     /// <summary>
     /// A JET_HANDLE contains a generic handle.
@@ -742,6 +797,14 @@ namespace Microsoft.Isam.Esent.Interop
         {
             [DebuggerStepThrough]
             get { return new JET_HANDLE(); }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the <see cref="JET_HANDLE"/> is valid (checks against 0 and -1)
+        /// </summary>
+        public bool IsInvalid
+        {
+            get { return this.Value == IntPtr.Zero || this.Value == new IntPtr(~0); }
         }
 
         /// <summary>
@@ -833,7 +896,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
     }
 
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
     /// <summary>
     /// Local storage for an ESENT handle. Used by <see cref="Api.JetGetLS"/>
     /// and <see cref="Api.JetSetLS"/>.
@@ -844,6 +907,14 @@ namespace Microsoft.Isam.Esent.Interop
         /// The null handle.
         /// </summary>
         public static readonly JET_LS Nil = new JET_LS { Value = new IntPtr(~0) };
+
+        /// <summary>
+        /// Gets a value indicating whether the <see cref="JET_LS"/> is valid (checks against 0 and -1)
+        /// </summary>
+        public bool IsInvalid
+        {
+            get { return this.Value == IntPtr.Zero || this.Value == new IntPtr(~0); }
+        }
 
         /// <summary>
         /// Gets or sets the value of the handle.
@@ -938,7 +1009,7 @@ namespace Microsoft.Isam.Esent.Interop
             return this.Value.Equals(other.Value);
         }
     }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
     /// <summary>
     /// Holds an index ID. An index ID is a hint that is used to accelerate the

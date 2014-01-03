@@ -160,7 +160,7 @@ namespace InteropApiTests
         /// </returns>
         private static IEnumerable<string> GetJetApiNames(Type type)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             foreach (MemberInfo member in type.GetTypeInfo().DeclaredMethods)
             {
                 if (member.Name.StartsWith("Jet"))

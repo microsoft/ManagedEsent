@@ -11,10 +11,9 @@ namespace InteropApiTests
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Implementation;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-#if MANAGEDESENT_ON_CORECLR
-#else
+#if !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
     using Rhino.Mocks;
-#endif
+#endif // !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
 
     /// <summary>
     /// Test some error handling in helper methods using a
@@ -23,8 +22,7 @@ namespace InteropApiTests
     [TestClass]
     public class HelperMethodErrorHandlingTests
     {
-#if MANAGEDESENT_ON_CORECLR
-#else
+#if !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
         /// <summary>
         /// Mock object repository.
         /// </summary>
@@ -475,6 +473,6 @@ namespace InteropApiTests
                 .Return((int)JET_err.ReadVerifyFailure);
             this.mocks.ReplayAll();
         }
-#endif
+#endif // !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
     }
 }

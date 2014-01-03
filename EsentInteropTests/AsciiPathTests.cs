@@ -6,7 +6,7 @@
 
 namespace InteropApiTests
 {
-#if !MANAGEDESENT_ON_METRO // No File or Path APIs are exposed in Metro.
+#if !MANAGEDESENT_ON_WSA // No File or Path APIs are exposed in Windows Store Apps.
     using System;
     using System.IO;
     using Microsoft.Isam.Esent.Interop;
@@ -403,5 +403,5 @@ namespace InteropApiTests
             }
         }
     }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 }

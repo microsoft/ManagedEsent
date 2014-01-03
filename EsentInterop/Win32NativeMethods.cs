@@ -7,7 +7,7 @@
 
 namespace Microsoft.Isam.Esent.Interop.Win32
 {
-#if !MANAGEDESENT_ON_METRO // None of this can be called in Metro.
+#if !MANAGEDESENT_ON_WSA // None of this can be called in windows store apps.
 
     using System;
     using System.ComponentModel;
@@ -122,5 +122,5 @@ namespace Microsoft.Isam.Esent.Interop.Win32
         public static extern IntPtr LocalFree(IntPtr hglobal);
     }
 
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 }

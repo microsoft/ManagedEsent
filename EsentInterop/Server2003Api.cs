@@ -11,7 +11,7 @@ namespace Microsoft.Isam.Esent.Interop.Server2003
     /// </summary>
     public static class Server2003Api
     {
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
         /// <summary>
         /// Notifies the engine that it can resume normal IO operations after a
         /// freeze period ended with a failed snapshot.
@@ -22,7 +22,7 @@ namespace Microsoft.Isam.Esent.Interop.Server2003
         {
             Api.Check(Api.Impl.JetOSSnapshotAbort(snapid, grbit));
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// The JetUpdate function performs an update operation including inserting a new row into

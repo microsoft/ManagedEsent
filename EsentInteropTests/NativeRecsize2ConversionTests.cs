@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
 namespace InteropApiTests
 {
     using Microsoft.Isam.Esent.Interop.Vista;
@@ -172,4 +172,4 @@ namespace InteropApiTests
         }
     }
 }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA

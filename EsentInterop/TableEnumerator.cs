@@ -96,7 +96,7 @@ namespace Microsoft.Isam.Esent.Interop
                 return false;
             }
 
-            if (JET_TABLEID.Nil == this.TableidToEnumerate)
+            if (this.TableidToEnumerate.IsInvalid)
             {
                 Debug.Assert(this.moveToFirst, "Table has not been opened so moveToFirst should be true");
                 this.OpenTable();
@@ -156,7 +156,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         protected virtual void CloseTable()
         {
-            if (JET_TABLEID.Nil != this.TableidToEnumerate)
+            if (!this.TableidToEnumerate.IsInvalid)
             {
                 Api.JetCloseTable(this.Sesid, this.TableidToEnumerate);
             }

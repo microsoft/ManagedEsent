@@ -52,6 +52,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentOperationException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -62,6 +63,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -84,6 +86,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDataException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -94,6 +97,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -116,6 +120,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentApiException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -126,6 +131,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -148,6 +154,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentFatalException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -158,6 +165,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -180,6 +188,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentIOException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -190,6 +199,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -212,6 +222,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentResourceException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -222,6 +233,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -244,6 +256,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentMemoryException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -254,6 +267,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -276,6 +290,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentQuotaException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -286,6 +301,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -308,6 +324,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDiskException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -318,6 +335,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -340,6 +358,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentCorruptionException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -350,6 +369,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -372,6 +392,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInconsistentException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -382,6 +403,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -404,6 +426,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentFragmentationException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -414,6 +437,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -436,6 +460,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentUsageException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -446,6 +471,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -468,6 +494,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentStateException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -478,6 +505,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -500,6 +528,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentObsoleteException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -510,6 +539,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -530,6 +560,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentRfsFailureException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -540,6 +571,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -560,6 +592,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentRfsNotArmedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -570,6 +603,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -590,6 +624,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentFileCloseException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -600,6 +635,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -620,6 +656,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentOutOfThreadsException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -630,6 +667,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -650,6 +688,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTooManyIOException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -660,6 +699,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -680,6 +720,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTaskDroppedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -690,6 +731,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -710,6 +752,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInternalErrorException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -720,6 +763,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -740,6 +784,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDisabledFunctionalityException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -750,6 +795,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -770,6 +816,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentUnloadableOSFunctionalityException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -780,6 +827,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -800,6 +848,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseBufferDependenciesCorruptedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -810,6 +859,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -830,6 +880,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentPreviousVersionException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -840,6 +891,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -860,6 +912,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentPageBoundaryException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -870,6 +923,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -890,6 +944,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentKeyBoundaryException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -900,6 +955,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -920,6 +976,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentBadPageLinkException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -930,6 +987,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -950,6 +1008,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentBadBookmarkException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -960,6 +1019,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -980,6 +1040,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentNTSystemCallFailedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -990,6 +1051,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1010,6 +1072,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentBadParentPageLinkException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1020,6 +1083,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1040,6 +1104,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentSPAvailExtCacheOutOfSyncException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1050,6 +1115,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1070,6 +1136,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentSPAvailExtCorruptedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1080,6 +1147,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1100,6 +1168,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentSPAvailExtCacheOutOfMemoryException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1110,6 +1179,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1130,6 +1200,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentSPOwnExtCorruptedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1140,6 +1211,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1160,6 +1232,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDbTimeCorruptedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1170,6 +1243,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1190,6 +1264,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentKeyTruncatedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1200,6 +1275,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1220,6 +1296,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseLeakInSpaceException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1230,6 +1307,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1250,6 +1328,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentBadEmptyPageException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1260,6 +1339,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1280,6 +1360,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentKeyTooBigException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1290,6 +1371,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1310,6 +1392,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentCannotSeparateIntrinsicLVException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1320,6 +1403,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1340,6 +1424,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentSeparatedLongValueException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1350,6 +1435,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1370,6 +1456,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentMustBeSeparateLongValueException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1380,6 +1467,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1400,6 +1488,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidPrereadException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1410,6 +1499,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1430,6 +1520,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidLoggedOperationException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1440,6 +1531,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1460,6 +1552,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLogFileCorruptException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1470,6 +1563,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1490,6 +1584,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentNoBackupDirectoryException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1500,6 +1595,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1520,6 +1616,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentBackupDirectoryNotEmptyException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1530,6 +1627,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1550,6 +1648,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentBackupInProgressException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1560,6 +1659,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1580,6 +1680,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentRestoreInProgressException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1590,6 +1691,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1610,6 +1712,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentMissingPreviousLogFileException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1620,6 +1723,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1640,6 +1744,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLogWriteFailException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1650,6 +1755,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1670,6 +1776,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLogDisabledDueToRecoveryFailureException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1680,6 +1787,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1700,6 +1808,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentCannotLogDuringRecoveryRedoException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1710,6 +1819,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1730,6 +1840,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLogGenerationMismatchException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1740,6 +1851,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1760,6 +1872,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentBadLogVersionException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1770,6 +1883,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1790,6 +1904,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidLogSequenceException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1800,6 +1915,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1820,6 +1936,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLoggingDisabledException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1830,6 +1947,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1850,6 +1968,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLogBufferTooSmallException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1860,6 +1979,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1880,6 +2000,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLogSequenceEndException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1890,6 +2011,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1910,6 +2032,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentNoBackupException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1920,6 +2043,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1940,6 +2064,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidBackupSequenceException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1950,6 +2075,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -1970,6 +2096,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentBackupNotAllowedYetException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -1980,6 +2107,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2000,6 +2128,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDeleteBackupFileFailException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2010,6 +2139,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2030,6 +2160,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentMakeBackupDirectoryFailException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2040,6 +2171,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2060,6 +2192,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidBackupException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2070,6 +2203,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2090,6 +2224,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentRecoveredWithErrorsException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2100,6 +2235,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2120,6 +2256,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentMissingLogFileException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2130,6 +2267,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2150,6 +2288,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLogDiskFullException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2160,6 +2299,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2180,6 +2320,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentBadLogSignatureException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2190,6 +2331,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2210,6 +2352,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentBadDbSignatureException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2220,6 +2363,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2240,6 +2384,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentBadCheckpointSignatureException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2250,6 +2395,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2270,6 +2416,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentCheckpointCorruptException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2280,6 +2427,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2300,6 +2448,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentMissingPatchPageException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2310,6 +2459,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2330,6 +2480,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentBadPatchPageException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2340,6 +2491,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2360,6 +2512,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentRedoAbruptEndedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2370,36 +2523,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.BadSLVSignature exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentBadSLVSignatureException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentBadSLVSignatureException class.
-        /// </summary>
-        public EsentBadSLVSignatureException() :
-            base("Signature in SLV file does not agree with database", JET_err.BadSLVSignature)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentBadSLVSignatureException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentBadSLVSignatureException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
+#endif
     }
 
     /// <summary>
@@ -2420,6 +2544,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentPatchFileMissingException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2430,6 +2555,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2450,6 +2576,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseLogSetMismatchException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2460,6 +2587,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2480,6 +2608,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseStreamingFileMismatchException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2490,6 +2619,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2510,6 +2640,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLogFileSizeMismatchException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2520,6 +2651,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2540,6 +2672,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentCheckpointFileNotFoundException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2550,6 +2683,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2570,6 +2704,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentRequiredLogFilesMissingException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2580,6 +2715,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2600,6 +2736,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentSoftRecoveryOnBackupDatabaseException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2610,6 +2747,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2630,6 +2768,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLogFileSizeMismatchDatabasesConsistentException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2640,6 +2779,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2660,6 +2800,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLogSectorSizeMismatchException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2670,6 +2811,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2690,6 +2832,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLogSectorSizeMismatchDatabasesConsistentException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2700,6 +2843,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2720,6 +2864,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLogSequenceEndDatabasesConsistentException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2730,6 +2875,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2750,6 +2896,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentStreamingDataNotLoggedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2760,6 +2907,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2780,6 +2928,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseDirtyShutdownException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2790,6 +2939,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2810,6 +2960,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentConsistentTimeMismatchException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2820,6 +2971,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2840,6 +2992,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabasePatchFileMismatchException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2850,6 +3003,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2870,6 +3024,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentEndingRestoreLogTooLowException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2880,6 +3035,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2900,6 +3056,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentStartingRestoreLogTooHighException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2910,6 +3067,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2930,6 +3088,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentGivenLogFileHasBadSignatureException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2940,6 +3099,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2960,6 +3120,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentGivenLogFileIsNotContiguousException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -2970,6 +3131,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -2990,6 +3152,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentMissingRestoreLogFilesException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3000,6 +3163,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3020,6 +3184,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentMissingFullBackupException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3030,6 +3195,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3050,6 +3216,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentBadBackupDatabaseSizeException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3060,6 +3227,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3080,6 +3248,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseAlreadyUpgradedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3090,6 +3259,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3110,6 +3280,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseIncompleteUpgradeException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3120,6 +3291,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3140,6 +3312,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentMissingCurrentLogFilesException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3150,6 +3323,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3170,6 +3344,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDbTimeTooOldException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3180,6 +3355,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3200,6 +3376,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDbTimeTooNewException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3210,6 +3387,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3230,6 +3408,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentMissingFileToBackupException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3240,6 +3419,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3260,6 +3440,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLogTornWriteDuringHardRestoreException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3270,6 +3451,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3290,6 +3472,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLogTornWriteDuringHardRecoveryException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3300,6 +3483,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3320,6 +3504,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLogCorruptDuringHardRestoreException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3330,6 +3515,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3350,6 +3536,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLogCorruptDuringHardRecoveryException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3360,6 +3547,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3380,6 +3568,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentMustDisableLoggingForDbUpgradeException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3390,6 +3579,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3410,6 +3600,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentBadRestoreTargetInstanceException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3420,6 +3611,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3440,6 +3632,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentRecoveredWithoutUndoException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3450,6 +3643,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3470,6 +3664,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabasesNotFromSameSnapshotException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3480,6 +3675,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3500,6 +3696,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentSoftRecoveryOnSnapshotException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3510,6 +3707,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3530,6 +3728,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentCommittedLogFilesMissingException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3540,6 +3739,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3560,6 +3760,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentSectorSizeNotSupportedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3570,6 +3771,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3590,6 +3792,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentRecoveredWithoutUndoDatabasesConsistentException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3600,6 +3803,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3620,6 +3824,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentCommittedLogFileCorruptException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3630,6 +3835,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3650,6 +3856,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentUnicodeTranslationBufferTooSmallException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3660,6 +3867,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3680,6 +3888,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentUnicodeTranslationFailException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3690,6 +3899,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3710,6 +3920,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentUnicodeNormalizationNotSupportedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3720,6 +3931,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3740,6 +3952,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentUnicodeLanguageValidationFailureException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3750,6 +3963,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3770,6 +3984,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentExistingLogFileHasBadSignatureException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3780,6 +3995,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3800,6 +4016,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentExistingLogFileIsNotContiguousException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3810,6 +4027,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3830,6 +4048,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLogReadVerifyFailureException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3840,36 +4059,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVReadVerifyFailure exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVReadVerifyFailureException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVReadVerifyFailureException class.
-        /// </summary>
-        public EsentSLVReadVerifyFailureException() :
-            base("Checksum error in SLV file during backup", JET_err.SLVReadVerifyFailure)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVReadVerifyFailureException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVReadVerifyFailureException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
+#endif
     }
 
     /// <summary>
@@ -3880,7 +4070,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentCheckpointDepthTooDeepException : EsentOperationException
+    public sealed class EsentCheckpointDepthTooDeepException : EsentQuotaException
     {
         /// <summary>
         /// Initializes a new instance of the EsentCheckpointDepthTooDeepException class.
@@ -3890,6 +4080,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentCheckpointDepthTooDeepException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3900,6 +4091,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3920,6 +4112,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentRestoreOfNonBackupDatabaseException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3930,6 +4123,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3950,6 +4144,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLogFileNotCopiedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3960,6 +4155,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -3980,6 +4176,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentSurrogateBackupInProgressException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -3990,6 +4187,39 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.TransactionTooLong exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentTransactionTooLongException : EsentQuotaException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentTransactionTooLongException class.
+        /// </summary>
+        public EsentTransactionTooLongException() :
+            base("Too many outstanding generations between JetBeginTransaction and current generation.", JET_err.TransactionTooLong)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentTransactionTooLongException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentTransactionTooLongException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
     }
 
     /// <summary>
@@ -4010,6 +4240,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentBackupAbortByServerException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4020,6 +4251,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4040,6 +4272,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidGrbitException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4050,6 +4283,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4070,6 +4304,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTermInProgressException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4080,6 +4315,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4100,6 +4336,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentFeatureNotAvailableException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4110,6 +4347,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4130,6 +4368,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidNameException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4140,6 +4379,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4160,6 +4400,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidParameterException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4170,6 +4411,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4190,6 +4432,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseFileReadOnlyException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4200,6 +4443,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4220,6 +4464,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidDatabaseIdException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4230,6 +4475,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4250,6 +4496,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentOutOfMemoryException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4260,6 +4507,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4280,6 +4528,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentOutOfDatabaseSpaceException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4290,6 +4539,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4310,6 +4560,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentOutOfCursorsException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4320,6 +4571,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4340,6 +4592,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentOutOfBuffersException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4350,6 +4603,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4370,6 +4624,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTooManyIndexesException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4380,6 +4635,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4400,6 +4656,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTooManyKeysException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4410,6 +4667,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4430,6 +4688,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentRecordDeletedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4440,6 +4699,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4460,6 +4720,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentReadVerifyFailureException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4470,6 +4731,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4490,6 +4752,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentPageNotInitializedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4500,6 +4763,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4520,6 +4784,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentOutOfFileHandlesException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4530,6 +4795,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4550,6 +4816,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDiskReadVerificationFailureException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4560,6 +4827,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4580,6 +4848,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDiskIOException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4590,6 +4859,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4610,6 +4880,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidPathException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4620,6 +4891,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4640,6 +4912,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidSystemPathException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4650,6 +4923,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4670,6 +4944,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidLogDirectoryException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4680,6 +4955,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4700,6 +4976,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentRecordTooBigException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4710,6 +4987,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4730,6 +5008,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTooManyOpenDatabasesException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4740,6 +5019,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4760,6 +5040,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidDatabaseException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4770,6 +5051,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4790,6 +5072,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentNotInitializedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4800,6 +5083,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4820,6 +5104,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentAlreadyInitializedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4830,6 +5115,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4850,6 +5136,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInitInProgressException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4860,6 +5147,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4880,6 +5168,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentFileAccessDeniedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4890,6 +5179,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4910,6 +5200,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentQueryNotSupportedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4920,6 +5211,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4940,6 +5232,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentSQLLinkNotSupportedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4950,6 +5243,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -4970,6 +5264,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentBufferTooSmallException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -4980,6 +5275,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5000,6 +5296,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTooManyColumnsException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5010,6 +5307,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5030,6 +5328,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentContainerNotEmptyException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5040,6 +5339,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5060,6 +5360,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidFilenameException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5070,6 +5371,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5090,6 +5392,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidBookmarkException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5100,6 +5403,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5120,6 +5424,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentColumnInUseException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5130,6 +5435,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5150,6 +5456,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidBufferSizeException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5160,6 +5467,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5180,6 +5488,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentColumnNotUpdatableException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5190,6 +5499,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5210,6 +5520,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentIndexInUseException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5220,6 +5531,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5240,6 +5552,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLinkNotSupportedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5250,6 +5563,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5270,6 +5584,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentNullKeyDisallowedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5280,6 +5595,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5300,6 +5616,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentNotInTransactionException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5310,6 +5627,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5330,6 +5648,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentMustRollbackException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5340,6 +5659,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5360,6 +5680,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTooManyActiveUsersException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5370,6 +5691,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5390,6 +5712,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidCountryException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5400,6 +5723,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5420,6 +5744,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidLanguageIdException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5430,6 +5755,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5450,6 +5776,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidCodePageException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5460,6 +5787,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5480,6 +5808,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidLCMapStringFlagsException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5490,6 +5819,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5510,6 +5840,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentVersionStoreEntryTooBigException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5520,6 +5851,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5540,6 +5872,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentVersionStoreOutOfMemoryAndCleanupTimedOutException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5550,6 +5883,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5570,6 +5904,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentVersionStoreOutOfMemoryException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5580,6 +5915,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5600,6 +5936,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentCurrencyStackOutOfMemoryException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5610,6 +5947,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5626,10 +5964,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCannotIndexException class.
         /// </summary>
         public EsentCannotIndexException() :
-            base("Cannot index escrow column or SLV column", JET_err.CannotIndex)
+            base("Cannot index escrow column", JET_err.CannotIndex)
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentCannotIndexException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5640,6 +5979,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5660,6 +6000,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentRecordNotDeletedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5670,6 +6011,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5690,6 +6032,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTooManyMempoolEntriesException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5700,6 +6043,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5720,6 +6064,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentOutOfObjectIDsException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5730,6 +6075,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5750,6 +6096,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentOutOfLongValueIDsException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5760,6 +6107,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5780,6 +6128,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentOutOfAutoincrementValuesException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5790,6 +6139,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5810,6 +6160,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentOutOfDbtimeValuesException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5820,6 +6171,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5840,6 +6192,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentOutOfSequentialIndexValuesException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5850,6 +6203,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5870,6 +6224,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentRunningInOneInstanceModeException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5880,6 +6235,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5900,6 +6256,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentRunningInMultiInstanceModeException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5910,6 +6267,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5920,7 +6278,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentSystemParamsAlreadySetException : EsentUsageException
+    public sealed class EsentSystemParamsAlreadySetException : EsentStateException
     {
         /// <summary>
         /// Initializes a new instance of the EsentSystemParamsAlreadySetException class.
@@ -5930,6 +6288,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentSystemParamsAlreadySetException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5940,6 +6299,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5960,6 +6320,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentSystemPathInUseException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -5970,6 +6331,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -5990,6 +6352,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLogFilePathInUseException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6000,6 +6363,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6020,6 +6384,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTempPathInUseException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6030,6 +6395,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6050,6 +6416,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInstanceNameInUseException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6060,6 +6427,39 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.SystemParameterConflict exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentSystemParameterConflictException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentSystemParameterConflictException class.
+        /// </summary>
+        public EsentSystemParameterConflictException() :
+            base("Global system parameters have already been set, but to a conflicting or disagreeable state to the specified values.", JET_err.SystemParameterConflict)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentSystemParameterConflictException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentSystemParameterConflictException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
     }
 
     /// <summary>
@@ -6080,6 +6480,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInstanceUnavailableException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6090,6 +6491,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6110,6 +6512,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseUnavailableException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6120,6 +6523,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6140,6 +6544,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInstanceUnavailableDueToFatalLogDiskFullException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6150,6 +6555,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6170,6 +6576,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentOutOfSessionsException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6180,6 +6587,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6200,6 +6608,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentWriteConflictException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6210,6 +6619,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6230,6 +6640,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTransTooDeepException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6240,6 +6651,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6260,6 +6672,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidSesidException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6270,6 +6683,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6290,6 +6704,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentWriteConflictPrimaryIndexException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6300,6 +6715,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6320,6 +6736,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInTransactionException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6330,6 +6747,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6350,6 +6768,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentRollbackRequiredException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6360,6 +6779,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6380,6 +6800,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTransReadOnlyException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6390,6 +6811,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6410,6 +6832,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentSessionWriteConflictException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6420,6 +6843,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6440,6 +6864,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentRecordTooBigForBackwardCompatibilityException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6450,6 +6875,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6470,6 +6896,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentCannotMaterializeForwardOnlySortException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6480,6 +6907,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6500,6 +6928,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentSesidTableIdMismatchException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6510,6 +6939,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6530,6 +6960,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidInstanceException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6540,6 +6971,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6560,6 +6992,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDirtyShutdownException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6570,6 +7003,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6590,6 +7024,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentReadPgnoVerifyFailureException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6600,6 +7035,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6620,6 +7056,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentReadLostFlushVerifyFailureException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6630,6 +7067,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6650,6 +7088,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentFileSystemCorruptionException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6660,6 +7099,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6680,6 +7120,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentRecoveryVerifyFailureException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6690,6 +7131,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6710,6 +7152,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentFilteredMoveNotSupportedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6720,6 +7163,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6740,6 +7184,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentMustCommitDistributedTransactionToLevel0Exception class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6750,6 +7195,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6770,6 +7216,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDistributedTransactionAlreadyPreparedToCommitException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6780,6 +7227,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6800,6 +7248,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentNotInDistributedTransactionException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6810,6 +7259,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6830,6 +7280,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDistributedTransactionNotYetPreparedToCommitException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6840,6 +7291,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6860,6 +7312,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentCannotNestDistributedTransactionsException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6870,6 +7323,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6890,6 +7344,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDTCMissingCallbackException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6900,6 +7355,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6920,6 +7376,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDTCMissingCallbackOnRecoveryException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6930,6 +7387,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6950,6 +7408,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDTCCallbackUnexpectedErrorException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6960,6 +7419,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -6980,6 +7440,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseDuplicateException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -6990,6 +7451,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7010,6 +7472,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseInUseException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7020,6 +7483,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7040,6 +7504,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseNotFoundException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7050,6 +7515,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7070,6 +7536,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseInvalidNameException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7080,6 +7547,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7100,6 +7568,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseInvalidPagesException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7110,6 +7579,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7130,6 +7600,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseCorruptedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7140,6 +7611,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7160,6 +7632,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseLockedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7170,6 +7643,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7190,6 +7664,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentCannotDisableVersioningException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7200,6 +7675,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7220,6 +7696,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidDatabaseVersionException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7230,6 +7707,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7250,6 +7728,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabase200FormatException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7260,6 +7739,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7280,6 +7760,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabase400FormatException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7290,6 +7771,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7310,6 +7792,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabase500FormatException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7320,6 +7803,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7340,6 +7824,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentPageSizeMismatchException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7350,6 +7835,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7370,6 +7856,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTooManyInstancesException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7380,6 +7867,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7400,6 +7888,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseSharingViolationException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7410,6 +7899,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7430,6 +7920,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentAttachedDatabaseMismatchException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7440,6 +7931,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7460,6 +7952,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseInvalidPathException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7470,6 +7963,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7490,6 +7984,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseIdInUseException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7500,6 +7995,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7520,6 +8016,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentForceDetachNotAllowedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7530,6 +8027,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7550,6 +8048,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentCatalogCorruptedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7560,6 +8059,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7580,6 +8080,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentPartiallyAttachedDBException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7590,6 +8091,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7610,6 +8112,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseSignInUseException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7620,6 +8123,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7640,6 +8144,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseCorruptedNoRepairException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7650,6 +8155,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7670,6 +8176,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidCreateDbVersionException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7680,6 +8187,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7700,6 +8208,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseIncompleteIncrementalReseedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7710,6 +8219,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7730,6 +8240,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseInvalidIncrementalReseedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7740,6 +8251,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7760,6 +8272,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseFailedIncrementalReseedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7770,6 +8283,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7790,6 +8304,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentNoAttachmentsFailedIncrementalReseedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7800,6 +8315,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7820,6 +8336,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTableLockedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7830,6 +8347,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7850,6 +8368,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTableDuplicateException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7860,6 +8379,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7880,6 +8400,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTableInUseException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7890,6 +8411,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7910,6 +8432,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentObjectNotFoundException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7920,6 +8443,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7940,6 +8464,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDensityInvalidException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7950,6 +8475,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -7970,6 +8496,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTableNotEmptyException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -7980,6 +8507,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8000,6 +8528,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidTableIdException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8010,6 +8539,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8030,6 +8560,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTooManyOpenTablesException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8040,6 +8571,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8060,6 +8592,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentIllegalOperationException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8070,6 +8603,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8090,6 +8624,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTooManyOpenTablesAndCleanupTimedOutException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8100,6 +8635,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8120,6 +8656,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentObjectDuplicateException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8130,6 +8667,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8150,6 +8688,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidObjectException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8160,6 +8699,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8180,6 +8720,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentCannotDeleteTempTableException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8190,6 +8731,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8210,6 +8752,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentCannotDeleteSystemTableException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8220,6 +8763,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8240,6 +8784,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentCannotDeleteTemplateTableException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8250,6 +8795,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8270,6 +8816,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentExclusiveTableLockRequiredException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8280,6 +8827,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8300,6 +8848,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentFixedDDLException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8310,6 +8859,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8330,6 +8880,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentFixedInheritedDDLException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8340,6 +8891,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8360,6 +8912,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentCannotNestDDLException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8370,6 +8923,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8390,6 +8944,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDDLNotInheritableException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8400,6 +8955,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8420,6 +8976,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidSettingsException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8430,6 +8987,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8450,6 +9008,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentClientRequestToStopJetServiceException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8460,6 +9019,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8480,6 +9040,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentCannotAddFixedVarColumnToDerivedTableException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8490,6 +9051,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8510,6 +9072,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentIndexCantBuildException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8520,6 +9083,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8540,6 +9104,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentIndexHasPrimaryException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8550,6 +9115,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8570,6 +9136,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentIndexDuplicateException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8580,6 +9147,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8600,6 +9168,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentIndexNotFoundException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8610,6 +9179,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8630,6 +9200,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentIndexMustStayException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8640,6 +9211,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8660,6 +9232,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentIndexInvalidDefException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8670,6 +9243,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8690,6 +9264,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidCreateIndexException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8700,6 +9275,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8720,6 +9296,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTooManyOpenIndexesException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8730,6 +9307,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8750,6 +9328,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentMultiValuedIndexViolationException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8760,6 +9339,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8780,6 +9360,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentIndexBuildCorruptedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8790,6 +9371,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8810,6 +9392,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentPrimaryIndexCorruptedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8820,6 +9403,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8840,6 +9424,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentSecondaryIndexCorruptedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8850,6 +9435,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8870,6 +9456,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidIndexIdException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8880,6 +9467,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8900,6 +9488,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentIndexTuplesSecondaryIndexOnlyException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8910,6 +9499,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8930,6 +9520,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentIndexTuplesTooManyColumnsException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8940,6 +9531,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8960,6 +9552,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentIndexTuplesNonUniqueOnlyException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -8970,6 +9563,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -8990,6 +9584,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentIndexTuplesTextBinaryColumnsOnlyException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9000,6 +9595,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9020,6 +9616,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentIndexTuplesVarSegMacNotAllowedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9030,6 +9627,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9050,6 +9648,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentIndexTuplesInvalidLimitsException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9060,6 +9659,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9080,6 +9680,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentIndexTuplesCannotRetrieveFromIndexException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9090,6 +9691,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9110,6 +9712,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentIndexTuplesKeyTooSmallException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9120,6 +9723,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9140,6 +9744,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentColumnLongException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9150,6 +9755,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9170,6 +9776,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentColumnNoChunkException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9180,6 +9787,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9200,6 +9808,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentColumnDoesNotFitException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9210,6 +9819,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9230,6 +9840,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentNullInvalidException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9240,6 +9851,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9260,6 +9872,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentColumnIndexedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9270,6 +9883,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9290,6 +9904,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentColumnTooBigException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9300,6 +9915,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9320,6 +9936,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentColumnNotFoundException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9330,6 +9947,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9350,6 +9968,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentColumnDuplicateException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9360,6 +9979,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9380,6 +10000,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentMultiValuedColumnMustBeTaggedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9390,6 +10011,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9410,6 +10032,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentColumnRedundantException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9420,6 +10043,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9440,6 +10064,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidColumnTypeException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9450,6 +10075,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9470,6 +10096,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTaggedNotNULLException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9480,6 +10107,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9500,6 +10128,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentNoCurrentIndexException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9510,6 +10139,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9530,6 +10160,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentKeyIsMadeException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9540,6 +10171,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9560,6 +10192,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentBadColumnIdException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9570,6 +10203,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9590,6 +10224,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentBadItagSequenceException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9600,6 +10235,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9620,6 +10256,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentColumnInRelationshipException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9630,6 +10267,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9650,6 +10288,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentCannotBeTaggedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9660,6 +10299,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9680,6 +10320,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDefaultValueTooBigException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9690,6 +10331,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9710,6 +10352,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentMultiValuedDuplicateException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9720,6 +10363,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9740,6 +10384,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLVCorruptedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9750,6 +10395,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9770,6 +10416,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentMultiValuedDuplicateAfterTruncationException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9780,6 +10427,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9800,6 +10448,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDerivedColumnCorruptionException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9810,6 +10459,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9830,6 +10480,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidPlaceholderColumnException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9840,6 +10491,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9860,6 +10512,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentColumnCannotBeCompressedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9870,6 +10523,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9890,6 +10544,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentRecordNotFoundException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9900,6 +10555,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9920,6 +10576,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentRecordNoCopyException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9930,6 +10587,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9950,6 +10608,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentNoCurrentRecordException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9960,6 +10619,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -9980,6 +10640,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentRecordPrimaryChangedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -9990,6 +10651,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10010,6 +10672,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentKeyDuplicateException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10020,6 +10683,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10040,6 +10704,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentAlreadyPreparedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10050,6 +10715,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10070,6 +10736,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentKeyNotMadeException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10080,6 +10747,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10100,6 +10768,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentUpdateNotPreparedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10110,6 +10779,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10130,6 +10800,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDataHasChangedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10140,6 +10811,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10160,6 +10832,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLanguageNotSupportedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10170,6 +10843,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10190,6 +10864,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDecompressionFailedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10200,6 +10875,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10220,6 +10896,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentUpdateMustVersionException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10230,6 +10907,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10250,6 +10928,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTooManySortsException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10260,6 +10939,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10280,6 +10960,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidOnSortException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10290,6 +10971,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10310,6 +10992,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTempFileOpenErrorException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10320,6 +11003,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10340,6 +11024,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTooManyAttachedDatabasesException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10350,6 +11035,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10370,6 +11056,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDiskFullException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10380,6 +11067,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10400,6 +11088,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentPermissionDeniedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10410,6 +11099,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10430,6 +11120,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentFileNotFoundException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10440,6 +11131,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10460,6 +11152,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentFileInvalidTypeException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10470,6 +11163,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10490,6 +11184,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentAfterInitializationException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10500,6 +11195,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10520,6 +11216,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLogCorruptedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10530,6 +11227,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10550,6 +11248,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidOperationException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10560,6 +11259,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10580,6 +11280,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentAccessDeniedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10590,6 +11291,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10610,6 +11312,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTooManySplitsException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10620,6 +11323,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10640,6 +11344,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentSessionSharingViolationException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10650,6 +11355,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10670,6 +11376,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentEntryPointNotFoundException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10680,6 +11387,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10700,6 +11408,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentSessionContextAlreadySetException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10710,6 +11419,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10730,6 +11440,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentSessionContextNotSetByThisThreadException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10740,6 +11451,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10760,6 +11472,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentSessionInUseException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10770,6 +11483,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10790,6 +11504,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentRecordFormatConversionFailedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10800,6 +11515,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10820,6 +11536,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentOneDatabasePerSessionException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10830,6 +11547,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10850,6 +11568,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentRollbackErrorException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10860,6 +11579,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10880,6 +11600,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentDatabaseAlreadyRunningMaintenanceException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10890,6 +11611,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10910,6 +11632,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentCallbackFailedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10920,6 +11643,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10940,6 +11664,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentCallbackNotResolvedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10950,6 +11675,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -10970,6 +11696,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentSpaceHintsInvalidException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -10980,1146 +11707,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVSpaceCorrupted exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVSpaceCorruptedException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVSpaceCorruptedException class.
-        /// </summary>
-        public EsentSLVSpaceCorruptedException() :
-            base("Corruption encountered in space manager of streaming file", JET_err.SLVSpaceCorrupted)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVSpaceCorruptedException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVSpaceCorruptedException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVCorrupted exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVCorruptedException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVCorruptedException class.
-        /// </summary>
-        public EsentSLVCorruptedException() :
-            base("Corruption encountered in streaming file", JET_err.SLVCorrupted)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVCorruptedException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVCorruptedException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVColumnDefaultValueNotAllowed exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVColumnDefaultValueNotAllowedException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVColumnDefaultValueNotAllowedException class.
-        /// </summary>
-        public EsentSLVColumnDefaultValueNotAllowedException() :
-            base("SLV columns cannot have a default value", JET_err.SLVColumnDefaultValueNotAllowed)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVColumnDefaultValueNotAllowedException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVColumnDefaultValueNotAllowedException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVStreamingFileMissing exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVStreamingFileMissingException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVStreamingFileMissingException class.
-        /// </summary>
-        public EsentSLVStreamingFileMissingException() :
-            base("Cannot find streaming file associated with this database", JET_err.SLVStreamingFileMissing)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVStreamingFileMissingException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVStreamingFileMissingException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVDatabaseMissing exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVDatabaseMissingException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVDatabaseMissingException class.
-        /// </summary>
-        public EsentSLVDatabaseMissingException() :
-            base("Streaming file exists, but database to which it belongs is missing", JET_err.SLVDatabaseMissing)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVDatabaseMissingException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVDatabaseMissingException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVStreamingFileAlreadyExists exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVStreamingFileAlreadyExistsException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVStreamingFileAlreadyExistsException class.
-        /// </summary>
-        public EsentSLVStreamingFileAlreadyExistsException() :
-            base("Tried to create a streaming file when one already exists or is already recorded in the catalog", JET_err.SLVStreamingFileAlreadyExists)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVStreamingFileAlreadyExistsException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVStreamingFileAlreadyExistsException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVInvalidPath exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVInvalidPathException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVInvalidPathException class.
-        /// </summary>
-        public EsentSLVInvalidPathException() :
-            base("Specified path to a streaming file is invalid", JET_err.SLVInvalidPath)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVInvalidPathException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVInvalidPathException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVStreamingFileNotCreated exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVStreamingFileNotCreatedException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVStreamingFileNotCreatedException class.
-        /// </summary>
-        public EsentSLVStreamingFileNotCreatedException() :
-            base("Tried to perform an SLV operation but streaming file was never created", JET_err.SLVStreamingFileNotCreated)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVStreamingFileNotCreatedException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVStreamingFileNotCreatedException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVStreamingFileReadOnly exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVStreamingFileReadOnlyException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVStreamingFileReadOnlyException class.
-        /// </summary>
-        public EsentSLVStreamingFileReadOnlyException() :
-            base("Attach a readonly streaming file for read/write operations", JET_err.SLVStreamingFileReadOnly)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVStreamingFileReadOnlyException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVStreamingFileReadOnlyException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVHeaderBadChecksum exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVHeaderBadChecksumException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVHeaderBadChecksumException class.
-        /// </summary>
-        public EsentSLVHeaderBadChecksumException() :
-            base("SLV file header failed checksum verification", JET_err.SLVHeaderBadChecksum)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVHeaderBadChecksumException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVHeaderBadChecksumException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVHeaderCorrupted exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVHeaderCorruptedException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVHeaderCorruptedException class.
-        /// </summary>
-        public EsentSLVHeaderCorruptedException() :
-            base("SLV file header contains invalid information", JET_err.SLVHeaderCorrupted)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVHeaderCorruptedException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVHeaderCorruptedException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVPagesNotFree exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVPagesNotFreeException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVPagesNotFreeException class.
-        /// </summary>
-        public EsentSLVPagesNotFreeException() :
-            base("Tried to move pages from the Free state when they were not in that state", JET_err.SLVPagesNotFree)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVPagesNotFreeException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVPagesNotFreeException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVPagesNotReserved exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVPagesNotReservedException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVPagesNotReservedException class.
-        /// </summary>
-        public EsentSLVPagesNotReservedException() :
-            base("Tried to move pages from the Reserved state when they were not in that state", JET_err.SLVPagesNotReserved)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVPagesNotReservedException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVPagesNotReservedException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVPagesNotCommitted exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVPagesNotCommittedException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVPagesNotCommittedException class.
-        /// </summary>
-        public EsentSLVPagesNotCommittedException() :
-            base("Tried to move pages from the Committed state when they were not in that state", JET_err.SLVPagesNotCommitted)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVPagesNotCommittedException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVPagesNotCommittedException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVPagesNotDeleted exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVPagesNotDeletedException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVPagesNotDeletedException class.
-        /// </summary>
-        public EsentSLVPagesNotDeletedException() :
-            base("Tried to move pages from the Deleted state when they were not in that state", JET_err.SLVPagesNotDeleted)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVPagesNotDeletedException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVPagesNotDeletedException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVSpaceWriteConflict exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVSpaceWriteConflictException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVSpaceWriteConflictException class.
-        /// </summary>
-        public EsentSLVSpaceWriteConflictException() :
-            base("Unexpected conflict detected trying to write-latch SLV space pages", JET_err.SLVSpaceWriteConflict)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVSpaceWriteConflictException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVSpaceWriteConflictException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVRootStillOpen exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVRootStillOpenException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVRootStillOpenException class.
-        /// </summary>
-        public EsentSLVRootStillOpenException() :
-            base("The database can not be created/attached because its corresponding SLV Root is still open by another process.", JET_err.SLVRootStillOpen)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVRootStillOpenException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVRootStillOpenException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVProviderNotLoaded exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVProviderNotLoadedException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVProviderNotLoadedException class.
-        /// </summary>
-        public EsentSLVProviderNotLoadedException() :
-            base("The database can not be created/attached because the SLV Provider has not been loaded.", JET_err.SLVProviderNotLoaded)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVProviderNotLoadedException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVProviderNotLoadedException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVEAListCorrupt exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVEAListCorruptException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVEAListCorruptException class.
-        /// </summary>
-        public EsentSLVEAListCorruptException() :
-            base("The specified SLV EA List is corrupted.", JET_err.SLVEAListCorrupt)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVEAListCorruptException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVEAListCorruptException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVRootNotSpecified exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVRootNotSpecifiedException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVRootNotSpecifiedException class.
-        /// </summary>
-        public EsentSLVRootNotSpecifiedException() :
-            base("The database cannot be created/attached because the SLV Root Name was omitted", JET_err.SLVRootNotSpecified)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVRootNotSpecifiedException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVRootNotSpecifiedException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVRootPathInvalid exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVRootPathInvalidException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVRootPathInvalidException class.
-        /// </summary>
-        public EsentSLVRootPathInvalidException() :
-            base("The specified SLV Root path was invalid.", JET_err.SLVRootPathInvalid)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVRootPathInvalidException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVRootPathInvalidException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVEAListZeroAllocation exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVEAListZeroAllocationException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVEAListZeroAllocationException class.
-        /// </summary>
-        public EsentSLVEAListZeroAllocationException() :
-            base("The specified SLV EA List has no allocated space.", JET_err.SLVEAListZeroAllocation)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVEAListZeroAllocationException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVEAListZeroAllocationException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVColumnCannotDelete exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVColumnCannotDeleteException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVColumnCannotDeleteException class.
-        /// </summary>
-        public EsentSLVColumnCannotDeleteException() :
-            base("Deletion of SLV columns is not currently supported.", JET_err.SLVColumnCannotDelete)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVColumnCannotDeleteException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVColumnCannotDeleteException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVOwnerMapAlreadyExists exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVOwnerMapAlreadyExistsException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVOwnerMapAlreadyExistsException class.
-        /// </summary>
-        public EsentSLVOwnerMapAlreadyExistsException() :
-            base("Tried to create a new catalog entry for SLV Ownership Map when one already exists", JET_err.SLVOwnerMapAlreadyExists)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVOwnerMapAlreadyExistsException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVOwnerMapAlreadyExistsException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVOwnerMapCorrupted exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVOwnerMapCorruptedException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVOwnerMapCorruptedException class.
-        /// </summary>
-        public EsentSLVOwnerMapCorruptedException() :
-            base("Corruption encountered in SLV Ownership Map", JET_err.SLVOwnerMapCorrupted)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVOwnerMapCorruptedException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVOwnerMapCorruptedException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVOwnerMapPageNotFound exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVOwnerMapPageNotFoundException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVOwnerMapPageNotFoundException class.
-        /// </summary>
-        public EsentSLVOwnerMapPageNotFoundException() :
-            base("Corruption encountered in SLV Ownership Map", JET_err.SLVOwnerMapPageNotFound)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVOwnerMapPageNotFoundException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVOwnerMapPageNotFoundException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVFileStale exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVFileStaleException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVFileStaleException class.
-        /// </summary>
-        public EsentSLVFileStaleException() :
-            base("The specified SLV File handle belongs to a SLV Root that no longer exists.", JET_err.SLVFileStale)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVFileStaleException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVFileStaleException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVFileInUse exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVFileInUseException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVFileInUseException class.
-        /// </summary>
-        public EsentSLVFileInUseException() :
-            base("The specified SLV File is currently in use", JET_err.SLVFileInUse)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVFileInUseException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVFileInUseException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVStreamingFileInUse exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVStreamingFileInUseException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVStreamingFileInUseException class.
-        /// </summary>
-        public EsentSLVStreamingFileInUseException() :
-            base("The specified streaming file is currently in use", JET_err.SLVStreamingFileInUse)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVStreamingFileInUseException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVStreamingFileInUseException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVFileIO exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVFileIOException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVFileIOException class.
-        /// </summary>
-        public EsentSLVFileIOException() :
-            base("An I/O error occurred while accessing an SLV File (general read / write failure)", JET_err.SLVFileIO)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVFileIOException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVFileIOException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVStreamingFileFull exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVStreamingFileFullException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVStreamingFileFullException class.
-        /// </summary>
-        public EsentSLVStreamingFileFullException() :
-            base("No space left in the streaming file", JET_err.SLVStreamingFileFull)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVStreamingFileFullException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVStreamingFileFullException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVFileInvalidPath exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVFileInvalidPathException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVFileInvalidPathException class.
-        /// </summary>
-        public EsentSLVFileInvalidPathException() :
-            base("Specified path to a SLV File was invalid", JET_err.SLVFileInvalidPath)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVFileInvalidPathException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVFileInvalidPathException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVFileAccessDenied exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVFileAccessDeniedException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVFileAccessDeniedException class.
-        /// </summary>
-        public EsentSLVFileAccessDeniedException() :
-            base("Cannot access SLV File, the SLV File is locked or is in use", JET_err.SLVFileAccessDenied)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVFileAccessDeniedException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVFileAccessDeniedException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVFileNotFound exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVFileNotFoundException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVFileNotFoundException class.
-        /// </summary>
-        public EsentSLVFileNotFoundException() :
-            base("The specified SLV File was not found", JET_err.SLVFileNotFound)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVFileNotFoundException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVFileNotFoundException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVFileUnknown exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVFileUnknownException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVFileUnknownException class.
-        /// </summary>
-        public EsentSLVFileUnknownException() :
-            base("An unknown error occurred while accessing an SLV File", JET_err.SLVFileUnknown)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVFileUnknownException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVFileUnknownException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVEAListTooBig exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVEAListTooBigException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVEAListTooBigException class.
-        /// </summary>
-        public EsentSLVEAListTooBigException() :
-            base("The specified SLV EA List could not be returned because it is too large to fit in the standard EA format.  Retrieve the SLV File as a file handle instead.", JET_err.SLVEAListTooBig)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVEAListTooBigException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVEAListTooBigException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVProviderVersionMismatch exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVProviderVersionMismatchException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVProviderVersionMismatchException class.
-        /// </summary>
-        public EsentSLVProviderVersionMismatchException() :
-            base("The loaded SLV Provider's version does not match the database engine's version.", JET_err.SLVProviderVersionMismatch)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVProviderVersionMismatchException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVProviderVersionMismatchException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
-    }
-
-    /// <summary>
-    /// Base class for JET_err.SLVBufferTooSmall exceptions.
-    /// </summary>
-    [SuppressMessage(
-        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
-        "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "Auto-generated code.")]
-    [Serializable]
-    public sealed class EsentSLVBufferTooSmallException : EsentObsoleteException
-    {
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVBufferTooSmallException class.
-        /// </summary>
-        public EsentSLVBufferTooSmallException() :
-            base("Buffer allocated for SLV data or meta-data was too small", JET_err.SLVBufferTooSmall)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the EsentSLVBufferTooSmallException class. This constructor
-        /// is used to deserialize a serialized exception.
-        /// </summary>
-        /// <param name="info">The data needed to deserialize the object.</param>
-        /// <param name="context">The deserialization context.</param>
-        private EsentSLVBufferTooSmallException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
-        {
-        }
+#endif
     }
 
     /// <summary>
@@ -12140,6 +11728,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentOSSnapshotInvalidSequenceException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -12150,6 +11739,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -12170,6 +11760,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentOSSnapshotTimeOutException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -12180,6 +11771,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -12200,6 +11792,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentOSSnapshotNotAllowedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -12210,6 +11803,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -12230,6 +11824,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentOSSnapshotInvalidSnapIdException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -12240,6 +11835,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -12260,6 +11856,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTooManyTestInjectionsException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -12270,6 +11867,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -12290,6 +11888,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentTestInjectionNotSupportedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -12300,6 +11899,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -12320,6 +11920,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentInvalidLogDataSequenceException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -12330,6 +11931,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -12350,6 +11952,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLSCallbackNotSpecifiedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -12360,6 +11963,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -12380,6 +11984,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLSAlreadySetException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -12390,6 +11995,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -12410,6 +12016,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentLSNotSetException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -12420,6 +12027,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -12440,6 +12048,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentFileIOSparseException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -12450,6 +12059,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -12470,6 +12080,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentFileIOBeyondEOFException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -12480,6 +12091,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -12500,6 +12112,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentFileIOAbortException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -12510,6 +12123,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -12530,6 +12144,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentFileIORetryException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -12540,6 +12155,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -12560,6 +12176,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentFileIOFailException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -12570,6 +12187,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -12590,6 +12208,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
         }
 
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
         /// Initializes a new instance of the EsentFileCompressedException class. This constructor
         /// is used to deserialize a serialized exception.
@@ -12600,6 +12219,7 @@ namespace Microsoft.Isam.Esent.Interop
             base(info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -12740,8 +12360,6 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentBadPatchPageException();
             case JET_err.RedoAbruptEnded:
                 return new EsentRedoAbruptEndedException();
-            case JET_err.BadSLVSignature:
-                return new EsentBadSLVSignatureException();
             case JET_err.PatchFileMissing:
                 return new EsentPatchFileMissingException();
             case JET_err.DatabaseLogSetMismatch:
@@ -12838,8 +12456,6 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentExistingLogFileIsNotContiguousException();
             case JET_err.LogReadVerifyFailure:
                 return new EsentLogReadVerifyFailureException();
-            case JET_err.SLVReadVerifyFailure:
-                return new EsentSLVReadVerifyFailureException();
             case JET_err.CheckpointDepthTooDeep:
                 return new EsentCheckpointDepthTooDeepException();
             case JET_err.RestoreOfNonBackupDatabase:
@@ -12848,6 +12464,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentLogFileNotCopiedException();
             case JET_err.SurrogateBackupInProgress:
                 return new EsentSurrogateBackupInProgressException();
+            case JET_err.TransactionTooLong:
+                return new EsentTransactionTooLongException();
             case JET_err.BackupAbortByServer:
                 return new EsentBackupAbortByServerException();
             case JET_err.InvalidGrbit:
@@ -12986,6 +12604,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentTempPathInUseException();
             case JET_err.InstanceNameInUse:
                 return new EsentInstanceNameInUseException();
+            case JET_err.SystemParameterConflict:
+                return new EsentSystemParameterConflictException();
             case JET_err.InstanceUnavailable:
                 return new EsentInstanceUnavailableException();
             case JET_err.DatabaseUnavailable:
@@ -13314,82 +12934,6 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentCallbackNotResolvedException();
             case JET_err.SpaceHintsInvalid:
                 return new EsentSpaceHintsInvalidException();
-            case JET_err.SLVSpaceCorrupted:
-                return new EsentSLVSpaceCorruptedException();
-            case JET_err.SLVCorrupted:
-                return new EsentSLVCorruptedException();
-            case JET_err.SLVColumnDefaultValueNotAllowed:
-                return new EsentSLVColumnDefaultValueNotAllowedException();
-            case JET_err.SLVStreamingFileMissing:
-                return new EsentSLVStreamingFileMissingException();
-            case JET_err.SLVDatabaseMissing:
-                return new EsentSLVDatabaseMissingException();
-            case JET_err.SLVStreamingFileAlreadyExists:
-                return new EsentSLVStreamingFileAlreadyExistsException();
-            case JET_err.SLVInvalidPath:
-                return new EsentSLVInvalidPathException();
-            case JET_err.SLVStreamingFileNotCreated:
-                return new EsentSLVStreamingFileNotCreatedException();
-            case JET_err.SLVStreamingFileReadOnly:
-                return new EsentSLVStreamingFileReadOnlyException();
-            case JET_err.SLVHeaderBadChecksum:
-                return new EsentSLVHeaderBadChecksumException();
-            case JET_err.SLVHeaderCorrupted:
-                return new EsentSLVHeaderCorruptedException();
-            case JET_err.SLVPagesNotFree:
-                return new EsentSLVPagesNotFreeException();
-            case JET_err.SLVPagesNotReserved:
-                return new EsentSLVPagesNotReservedException();
-            case JET_err.SLVPagesNotCommitted:
-                return new EsentSLVPagesNotCommittedException();
-            case JET_err.SLVPagesNotDeleted:
-                return new EsentSLVPagesNotDeletedException();
-            case JET_err.SLVSpaceWriteConflict:
-                return new EsentSLVSpaceWriteConflictException();
-            case JET_err.SLVRootStillOpen:
-                return new EsentSLVRootStillOpenException();
-            case JET_err.SLVProviderNotLoaded:
-                return new EsentSLVProviderNotLoadedException();
-            case JET_err.SLVEAListCorrupt:
-                return new EsentSLVEAListCorruptException();
-            case JET_err.SLVRootNotSpecified:
-                return new EsentSLVRootNotSpecifiedException();
-            case JET_err.SLVRootPathInvalid:
-                return new EsentSLVRootPathInvalidException();
-            case JET_err.SLVEAListZeroAllocation:
-                return new EsentSLVEAListZeroAllocationException();
-            case JET_err.SLVColumnCannotDelete:
-                return new EsentSLVColumnCannotDeleteException();
-            case JET_err.SLVOwnerMapAlreadyExists:
-                return new EsentSLVOwnerMapAlreadyExistsException();
-            case JET_err.SLVOwnerMapCorrupted:
-                return new EsentSLVOwnerMapCorruptedException();
-            case JET_err.SLVOwnerMapPageNotFound:
-                return new EsentSLVOwnerMapPageNotFoundException();
-            case JET_err.SLVFileStale:
-                return new EsentSLVFileStaleException();
-            case JET_err.SLVFileInUse:
-                return new EsentSLVFileInUseException();
-            case JET_err.SLVStreamingFileInUse:
-                return new EsentSLVStreamingFileInUseException();
-            case JET_err.SLVFileIO:
-                return new EsentSLVFileIOException();
-            case JET_err.SLVStreamingFileFull:
-                return new EsentSLVStreamingFileFullException();
-            case JET_err.SLVFileInvalidPath:
-                return new EsentSLVFileInvalidPathException();
-            case JET_err.SLVFileAccessDenied:
-                return new EsentSLVFileAccessDeniedException();
-            case JET_err.SLVFileNotFound:
-                return new EsentSLVFileNotFoundException();
-            case JET_err.SLVFileUnknown:
-                return new EsentSLVFileUnknownException();
-            case JET_err.SLVEAListTooBig:
-                return new EsentSLVEAListTooBigException();
-            case JET_err.SLVProviderVersionMismatch:
-                return new EsentSLVProviderVersionMismatchException();
-            case JET_err.SLVBufferTooSmall:
-                return new EsentSLVBufferTooSmallException();
             case JET_err.OSSnapshotInvalidSequence:
                 return new EsentOSSnapshotInvalidSequenceException();
             case JET_err.OSSnapshotTimeOut:

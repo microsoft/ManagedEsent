@@ -195,7 +195,7 @@ namespace InteropApiTests
             Api.JetOpenDatabase(this.sesid, null, null, out dbid, OpenDatabaseGrbit.None);
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Check that an exception is thrown when JetGrowDatabase gets
         /// a negative page count.
@@ -278,12 +278,12 @@ namespace InteropApiTests
             Api.JetCompact(this.sesid, "source", "destination", null, new Converter(), CompactGrbit.None);
 #pragma warning restore 618,612
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         #endregion Database API
 
         #region Streaming Backup/Restore
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Check that an exception is thrown when JetOpenFileInstance gets a 
@@ -450,7 +450,7 @@ namespace InteropApiTests
             int ignored2;
             Api.JetGetTruncateLogInfoInstance(this.instance, out ignored, int.MaxValue, out ignored2);
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
         #endregion
 
         #region DDL
@@ -724,7 +724,7 @@ namespace InteropApiTests
             Api.JetRenameColumn(this.sesid, this.tableid, "oldcolumn", null, RenameColumnGrbit.None);
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Verify that an exception is thrown when JetSetColumnDefaultValue gets a null table name.
         /// </summary>
@@ -772,7 +772,7 @@ namespace InteropApiTests
         {
             Api.JetSetColumnDefaultValue(this.sesid, this.dbid, "table", "column", new byte[1], 2, SetColumnDefaultValueGrbit.None);
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Check that an exception is thrown when JetAddColumn gets a 
@@ -1185,7 +1185,7 @@ namespace InteropApiTests
             Api.JetOpenTempTable(this.sesid, columns, 2, TempTableGrbit.None, out tableidIgnored, columnids);
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Null columns is invalid.
         /// </summary>
@@ -1258,7 +1258,7 @@ namespace InteropApiTests
             var columnids = new JET_COLUMNID[1];
             Api.JetOpenTempTable2(this.sesid, columns, 2, 1033, TempTableGrbit.None, out tableidIgnored, columnids);
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Null columns is invalid.
@@ -3058,7 +3058,7 @@ namespace InteropApiTests
 
         #endregion
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Class used for testing JetCompact.
         /// </summary>
@@ -3067,6 +3067,6 @@ namespace InteropApiTests
 #pragma warning restore 612,618
         {            
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
     }
 }

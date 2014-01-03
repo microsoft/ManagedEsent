@@ -172,7 +172,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>True if the type is nullable.</returns>
         private static bool IsNullableType(Type t)
         {
+#if MANAGEDESENT_ON_WSA
             return t.GetTypeInfo().IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>);
+#else
+            return t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>);
+#endif
         }
 
         /// <summary>
@@ -183,7 +187,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         private static Type GetUnderlyingType(Type t)
         {
             Debug.Assert(IsNullableType(t), "Type should be nullable");
+#if MANAGEDESENT_ON_WSA
             return t.GetTypeInfo().GetGenericArguments()[0];
+#else
+            return t.GetGenericArguments()[0];
+#endif
         }
 
         /// <summary>
@@ -202,7 +210,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             }
 
             // Immutable serializable classes from .NET framework.
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             // IPAddress not available in Metro.
             if (typeof(Uri) == type)
 #else
@@ -213,6 +221,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 return true;
             }
 
+#if MANAGEDESENT_ON_WSA
             TypeInfo typeinfo = type.GetTypeInfo();
 
             // A primitive serializable type is fine
@@ -231,6 +240,24 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             // Unlike classes, structs cannot have cycles in their definitions so a simple enumeration
             // will work.
             MemberInfo[] members = typeinfo.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+#else
+            // A primitive serializable type is fine
+            if (type.IsPrimitive && type.IsSerializable)
+            {
+                return true;
+            }
+
+            // If this isn't a serializable struct, the type definitely isn't serializable
+            if (!(type.IsValueType && type.IsSerializable))
+            {
+                return false;
+            }
+
+            // This is a serializable struct. Recursively check that all members are serializable.
+            // Unlike classes, structs cannot have cycles in their definitions so a simple enumeration
+            // will work.
+            MemberInfo[] members = type.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+#endif
             return members.Cast<FieldInfo>().All(fieldinfo => IsSerializable(fieldinfo.FieldType));
         }
 

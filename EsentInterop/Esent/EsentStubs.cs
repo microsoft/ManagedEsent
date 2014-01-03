@@ -19,7 +19,7 @@ namespace Microsoft.Isam.Esent.Interop
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.MaintainabilityRules",
         "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "These stub classes are compiled only on some platforms that do not contain the entire framework, e.g. Metro.")]
+        Justification = "These stub classes are compiled only on some platforms that do not contain the entire framework, e.g. new Windows user interface.")]
     public static class ExtensionsToCoreClr
     {
         /// <summary>Converts the value of this instance to the equivalent OLE Automation date.</summary>
@@ -39,7 +39,7 @@ namespace Microsoft.Isam.Esent.Interop
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.MaintainabilityRules",
         "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "These stub classes are compiled only on some platforms that do not contain the entire framework, e.g. Metro.")]
+        Justification = "These stub classes are compiled only on some platforms that do not contain the entire framework, e.g. new Windows user interface.")]
     public class SerializationInfo
     {
         /// <summary>
@@ -70,7 +70,7 @@ namespace Microsoft.Isam.Esent.Interop
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.MaintainabilityRules",
         "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "These stub classes are compiled only on some platforms that do not contain the entire framework, e.g. Metro.")]
+        Justification = "These stub classes are compiled only on some platforms that do not contain the entire framework, e.g. new Windows user interface.")]
     internal static class RuntimeHelpers
     {
         /// <summary>
@@ -189,7 +189,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 }
 
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
 namespace System.ComponentModel
 {
     using System;
@@ -201,7 +201,7 @@ namespace System.ComponentModel
     /// An exception from a Win32 call.
     /// </summary>
     //// The original derives from System.Runtime.InteropServices.ExternalException.
-    public class Win32Exception : Exception
+    internal class Win32Exception : Exception
     {
         /// <summary>
         /// The error code from a Win32 call.
@@ -270,4 +270,4 @@ namespace System.ComponentModel
         }
     }
 }
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA

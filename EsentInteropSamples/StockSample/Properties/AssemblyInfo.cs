@@ -17,7 +17,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
 [assembly: AssemblyProduct("StockSample")]
-[assembly: AssemblyCopyright("Copyright © Microsoft")]
+[assembly: AssemblyCopyright("Copyright (c) Microsoft. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

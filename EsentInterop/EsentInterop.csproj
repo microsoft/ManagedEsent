@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Esent.Interop</RootNamespace>
     <AssemblyName>Esent.Interop</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <DefineConstants>MANAGEDESENT_SUPPORTS_SERIALIZATION</DefineConstants>
     <FileAlignment>512</FileAlignment>
     <StartupObject>

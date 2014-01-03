@@ -135,7 +135,7 @@ namespace InteropApiTests
             Cleanup.DeleteDirectoryWithRetry(directory);
 
             // UNDONE: DeleteDirectoryWithRetry doesn't work with non-empty directories, and it just leaks space now!
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
             // The directory should no longer exist
             Assert.IsFalse(EseInteropTestHelper.DirectoryExists(directory));
 #endif

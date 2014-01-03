@@ -59,6 +59,62 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Retrieves the bookmark for the record that is associated with the index entry
+        /// at the current position of a cursor. This bookmark can then be used to
+        /// reposition that cursor back to the same record using JetGotoBookmark. 
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the bookmark from.</param>
+        /// <param name="primaryBookmark">Returns the primary bookmark.</param>
+        /// <returns>The secondary bookmark of the record.</returns>
+        public static byte[] GetSecondaryBookmark(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            out byte[] primaryBookmark)
+        {
+            byte[] bufferPrimary = null;
+            byte[] bufferSecondary = null;
+            byte[] secondaryBookmark;
+            primaryBookmark = null;
+
+            try
+            {
+                bufferPrimary = Caches.BookmarkCache.Allocate();
+                bufferSecondary = Caches.SecondaryBookmarkCache.Allocate();
+                int bookmarkSizePrimary;
+                int bookmarkSizeSecondary;
+
+                Api.JetGetSecondaryIndexBookmark(
+                    sesid,
+                    tableid,
+                    bufferSecondary,
+                    bufferSecondary.Length,
+                    out bookmarkSizeSecondary,
+                    bufferPrimary,
+                    bufferPrimary.Length,
+                    out bookmarkSizePrimary,
+                    GetSecondaryIndexBookmarkGrbit.None);
+
+                primaryBookmark = MemoryCache.Duplicate(bufferPrimary, bookmarkSizePrimary);
+                secondaryBookmark = MemoryCache.Duplicate(bufferSecondary, bookmarkSizeSecondary);
+            }
+            finally
+            {
+                if (bufferPrimary != null)
+                {
+                    Caches.BookmarkCache.Free(ref bufferPrimary);
+                }
+
+                if (bufferSecondary != null)
+                {
+                    Caches.BookmarkCache.Free(ref bufferSecondary);
+                }
+            }
+
+            return secondaryBookmark;
+        }
+
+        /// <summary>
         /// Retrieves the key for the index entry at the current position of a cursor.
         /// </summary>
         /// <param name="sesid">The session to use.</param>

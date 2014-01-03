@@ -179,7 +179,7 @@ namespace InteropApiTests
             Assert.IsFalse(x == y);
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Check that JET_OSSNAPID structures can be
         /// compared for equality.
@@ -211,7 +211,7 @@ namespace InteropApiTests
             Assert.IsTrue(x != y);
             Assert.IsFalse(x == y);
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Check that JET_HANDLE structures can be
@@ -245,7 +245,7 @@ namespace InteropApiTests
             Assert.IsFalse(x == y);
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Check that JET_LS structures can be
         /// compared for equality.
@@ -277,7 +277,7 @@ namespace InteropApiTests
             Assert.IsTrue(x != y);
             Assert.IsFalse(x == y);
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Check that JET_INDEXID structures can be
@@ -622,7 +622,7 @@ namespace InteropApiTests
             }
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Check that JET_RECSIZE structures can be
         /// compared for equality.
@@ -861,7 +861,7 @@ namespace InteropApiTests
                 }
             }
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Check that JET_THREADSTATS structures can be
@@ -1043,7 +1043,7 @@ namespace InteropApiTests
             VerifyAll(snprogs);
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Check that JET_INSTANCE_INFO objects can be
         /// compared for equality.
@@ -1084,7 +1084,7 @@ namespace InteropApiTests
 
             VerifyAll(infos);
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Check that JET_DBINFOMISC objects can be

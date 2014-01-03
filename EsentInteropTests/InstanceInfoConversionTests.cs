@@ -37,7 +37,7 @@ namespace InteropApiTests
         /// </summary>
         private static readonly IntPtr FakeInstance = new IntPtr(0x111);
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Test JET_INSTANCE_INFO.SetFromNativeUnicode.
         /// </summary>
@@ -117,6 +117,6 @@ namespace InteropApiTests
 
             CheckManaged(managed);
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
     }
 }

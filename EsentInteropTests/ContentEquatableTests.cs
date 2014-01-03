@@ -650,7 +650,7 @@ namespace InteropApiTests
                 cIndexes = indexcreatesX.Length,
                 cbSeparateLV = 100,
                 cbtyp = JET_cbtyp.Null,
-                grbit = CreateTableColumnIndexGrbit.NoFixedVarColumnsInDerivedTables,
+                grbit = CreateTableColumnIndexGrbit.TemplateTable,
                 pSeqSpacehints = spacehintsSeqX,
                 pLVSpacehints = spacehintsLvX,
                 tableid = tableidTemp,
@@ -749,7 +749,7 @@ namespace InteropApiTests
                 cIndexes = indexcreatesX.Length,
                 cbSeparateLV = 100,
                 cbtyp = JET_cbtyp.Null,
-                grbit = CreateTableColumnIndexGrbit.NoFixedVarColumnsInDerivedTables,
+                grbit = CreateTableColumnIndexGrbit.TemplateTable,
                 pSeqSpacehints = spacehintsSeqY,
                 pLVSpacehints = spacehintsLvY,
                 tableid = tableidTemp,
@@ -864,7 +864,7 @@ namespace InteropApiTests
                     cIndexes = indexcreates.Length,
                     cbSeparateLV = 100,
                     cbtyp = JET_cbtyp.Null,
-                    grbit = CreateTableColumnIndexGrbit.NoFixedVarColumnsInDerivedTables,
+                    grbit = CreateTableColumnIndexGrbit.TemplateTable,
                     pSeqSpacehints = spacehintsSeq,
                     pLVSpacehints = spacehintsLv,
                     tableid = tableidTemp,
@@ -1100,7 +1100,7 @@ namespace InteropApiTests
         {
             T clone = obj.DeepClone();
             Assert.AreNotSame(obj, clone);
-#if MANAGEDESENT_ON_METRO // Reflection
+#if MANAGEDESENT_ON_WSA // Reflection
             foreach (FieldInfo field in typeof(T).GetTypeInfo().DeclaredFields)
             {
                 if (!field.IsStatic && field.FieldType != typeof(string) && !field.FieldType.GetTypeInfo().IsSubclassOf(typeof(System.Delegate)))
@@ -1126,7 +1126,7 @@ namespace InteropApiTests
                     }
                 }
             }
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
         }
 
         /// <summary>

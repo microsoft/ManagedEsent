@@ -8,7 +8,7 @@ namespace Microsoft.Isam.Esent.Interop.Server2003
 {
     using System;
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
     /// <summary>
     /// Options for <see cref="Server2003Api.JetOSSnapshotAbort"/>.
     /// </summary>
@@ -20,7 +20,7 @@ namespace Microsoft.Isam.Esent.Interop.Server2003
         /// </summary>
         None = 0,    
     }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
     /// <summary>
     /// Options for <see cref="Server2003Api.JetUpdate2"/>.
@@ -33,7 +33,7 @@ namespace Microsoft.Isam.Esent.Interop.Server2003
         /// </summary>
         None = 0,
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// This flag causes the update to return an error if the update would
         /// not have been possible in the Windows 2000 version of ESE, which
@@ -46,7 +46,7 @@ namespace Microsoft.Isam.Esent.Interop.Server2003
         /// </summary>
         [Obsolete("Only needed for legacy replication applications.")]
         CheckESE97Compatibility = 0x1,
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
     }
 
     /// <summary>
@@ -54,6 +54,16 @@ namespace Microsoft.Isam.Esent.Interop.Server2003
     /// </summary>
     public static class Server2003Grbits
     {
+        /// <summary>
+        /// Delete all indexes with unicode columns.
+        /// </summary>
+        public const AttachDatabaseGrbit DeleteUnicodeIndexes = (AttachDatabaseGrbit)0x400;
+
+        /// <summary>
+        /// This is a finalizable column (delete record if escrow value equals 0).
+        /// </summary>
+        public const ColumndefGrbit ColumnDeleteOnZero = (ColumndefGrbit)0x20000;
+
         /// <summary>
         /// This option requests that the temporary table only be created if the
         /// temporary table manager can use the implementation optimized for

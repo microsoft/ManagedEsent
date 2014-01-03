@@ -37,16 +37,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets or sets a value indicating whether Database Maintenance should run during recovery.
         /// </summary>
-        public bool EnableDbScanInRecovery
+        public int EnableDbScanInRecovery
         {
             get
             {
-                return this.GetBoolParameter(Windows7Param.EnableDbScanInRecovery);
+                return this.GetIntegerParameter(Windows7Param.EnableDbScanInRecovery);
             }
 
             set
             {
-                this.SetBoolParameter(Windows7Param.EnableDbScanInRecovery, value);
+                this.SetIntegerParameter(Windows7Param.EnableDbScanInRecovery, value);
             }
         }          
 

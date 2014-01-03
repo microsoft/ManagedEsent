@@ -63,7 +63,7 @@ namespace InteropApiTests
                 string instanceName = "한글";
                 Api.JetCreateInstance(out instance, instanceName);
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
                 // Now to verify it worked.
                 int numInstances;
                 JET_INSTANCE_INFO[] instances;
@@ -90,7 +90,7 @@ namespace InteropApiTests
                 string instanceName = "한글";
                 Api.JetCreateInstance2(out instance, instanceName, "한글-display", CreateInstanceGrbit.None);
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
                 int numInstances;
                 JET_INSTANCE_INFO[] instances;
                 Api.JetGetInstanceInfo(out numInstances, out instances);
@@ -399,7 +399,7 @@ namespace InteropApiTests
             }
         }
 
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
         /// <summary>
         /// Backup and restore a database using unicode paths.
         /// </summary>
@@ -484,7 +484,7 @@ namespace InteropApiTests
             var test = new DatabaseFileTestHelper(this.directory);
             test.TestSnapshotBackupVista();
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Tests for JetInit3 using unicode paths.
@@ -503,7 +503,7 @@ namespace InteropApiTests
             test.TestJetInit3();
         }
 
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
         /// <summary>
         /// Tests for snapshot backup using unicode paths and Win7 APIs.
         /// </summary>
@@ -554,7 +554,7 @@ namespace InteropApiTests
             var test = new DatabaseFileTestHelper(Path.Combine(this.directory, EseInteropTestHelper.PathGetRandomFileName()));
             test.TestSetDatabaseSize();
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Test JetGetDatabaseFileInfo with a Unicode path.
@@ -590,7 +590,7 @@ namespace InteropApiTests
             test.TestGetDatabaseInfo();
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Test JetGetInstanceInfo with a unicode path.
         /// </summary>
@@ -634,6 +634,6 @@ namespace InteropApiTests
                 }
             }
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
     }
 }

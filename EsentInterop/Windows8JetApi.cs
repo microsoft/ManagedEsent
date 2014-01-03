@@ -13,7 +13,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
     using Microsoft.Isam.Esent.Interop.Windows8;
 
     /// <summary>
-    /// Windows8 dalls to the ESENT interop layer. These calls take the managed types (e.g. JET_SESID) and
+    /// Windows8 calls to the ESENT interop layer. These calls take the managed types (e.g. JET_SESID) and
     /// return errors.
     /// </summary>
     internal sealed partial class JetApi : IJetApi

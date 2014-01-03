@@ -65,7 +65,7 @@ namespace Microsoft.Isam.Esent.Interop
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.MaintainabilityRules",
         "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "These stub classes are compiled only on some platforms that do not contain the entire framework, e.g. Metro.")]
+        Justification = "These stub classes are compiled only on some platforms that do not contain the entire framework, e.g. new Windows user interface.")]
     internal sealed class BestFitMappingAttribute : Attribute
     {
         /// <summary>
@@ -109,7 +109,7 @@ namespace Microsoft.Isam.Esent.Interop
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.MaintainabilityRules",
         "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "These stub classes are compiled only on some platforms that do not contain the entire framework, e.g. Metro.")]
+        Justification = "These stub classes are compiled only on some platforms that do not contain the entire framework, e.g. new Windows user interface.")]
     internal sealed class SuppressUnmanagedCodeSecurityAttribute : Attribute
     {
         /// <summary>
@@ -132,7 +132,7 @@ namespace Microsoft.Isam.Esent.Interop
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.MaintainabilityRules",
         "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "These stub classes are compiled only on some platforms that do not contain the entire framework, e.g. Metro.")]
+        Justification = "These stub classes are compiled only on some platforms that do not contain the entire framework, e.g. new Windows user interface.")]
     internal sealed class ComVisibleAttribute : Attribute
     {
         /// <summary>
@@ -165,7 +165,7 @@ namespace Microsoft.Isam.Esent.Interop
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.MaintainabilityRules",
         "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "These stub classes are compiled only on some platforms that do not contain the entire framework, e.g. Metro.")]
+        Justification = "These stub classes are compiled only on some platforms that do not contain the entire framework, e.g. new Windows user interface.")]
     internal sealed class SerializableAttribute : Attribute
     {
         /// <summary>
@@ -188,7 +188,7 @@ namespace Microsoft.Isam.Esent.Interop
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.MaintainabilityRules",
         "SA1402:FileMayOnlyContainASingleClass",
-        Justification = "These stub classes are compiled only on some platforms that do not contain the entire framework, e.g. Metro.")]
+        Justification = "These stub classes are compiled only on some platforms that do not contain the entire framework, e.g. new Windows user interface.")]
     internal sealed class NonSerializedAttribute : Attribute
     {
         /// <summary>

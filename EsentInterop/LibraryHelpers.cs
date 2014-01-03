@@ -87,7 +87,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="size">The size of the memory desired.</param>
         public static IntPtr MarshalAllocHGlobal(int size)
         {
-#if MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_WSA
             return Win32.NativeMethods.LocalAlloc(0, new UIntPtr((uint)size));
 #else
             return Marshal.AllocHGlobal(size);
@@ -100,7 +100,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="buffer">A pointer to native memory.</param>
         public static void MarshalFreeHGlobal(IntPtr buffer)
         {
-#if MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_WSA
             Win32.NativeMethods.LocalFree(buffer);
 #else
             Marshal.FreeHGlobal(buffer);
@@ -114,7 +114,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <exception cref="T:System.ArgumentOutOfRangeException">The <paramref name="managedString" /> parameter exceeds the maximum length allowed by the operating system.</exception>
         public static IntPtr MarshalStringToHGlobalUni(string managedString)
         {
-#if MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_WSA
             return MyStringToHGlobalUni(managedString);
 #else
             return Marshal.StringToHGlobalUni(managedString);
@@ -128,7 +128,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <exception cref="T:System.ArgumentOutOfRangeException">The <paramref name="managedString" /> parameter exceeds the maximum length allowed by the operating system.</exception>
         public static IntPtr MarshalStringToHGlobalAnsi(string managedString)
         {
-#if MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_WSA
             return MyStringToHGlobalAnsi(managedString);
 #else
             return Marshal.StringToHGlobalAnsi(managedString);
@@ -161,7 +161,7 @@ namespace Microsoft.Isam.Esent.Interop
 #endif
         }
 
-#if MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_WSA
         // System.Runtime.InteropServices.Marshal
 
         /// <summary>Copies the contents of a managed <see cref="T:System.String" /> into unmanaged memory.</summary>
@@ -241,7 +241,7 @@ namespace Microsoft.Isam.Esent.Interop
 
             return rawBuffer;
         }
-#endif // MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_WSA
 
         /// <summary>Returns a <see cref="T:System.DateTime" /> equivalent to the specified OLE Automation Date.</summary>
         /// <returns>A <see cref="T:System.DateTime" /> that represents the same date and time as <paramref name="d" />.</returns>
@@ -302,7 +302,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             if (value >= 2958466.0 || value <= -657435.0)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("value does not represent a valid date", "value");
             }
 
             long num = (long)((value * 86400000.0) + ((value >= 0.0) ? 0.5 : -0.5));
@@ -314,7 +314,7 @@ namespace Microsoft.Isam.Esent.Interop
             num += 59926435200000L;
             if (num < 0L || num >= 315537897600000L)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("value does not represent a valid date", "value");
             }
 
             return num * 10000L;

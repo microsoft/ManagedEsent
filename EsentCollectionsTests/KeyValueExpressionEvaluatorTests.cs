@@ -2115,7 +2115,7 @@ namespace EsentCollectionsTests
         {
             // Not handled (the index is case sensitive)
             var expected = KeyRange<string>.OpenRange;
-            var actual = KeyValueExpressionEvaluator<string, int>.GetKeyRange(x => x.Value == string.Compare(x.Key, "foo", true));
+            var actual = KeyValueExpressionEvaluator<string, int>.GetKeyRange(x => x.Value == string.Compare(x.Key, "foo", StringComparison.OrdinalIgnoreCase));
             Assert.AreEqual(expected, actual);
         }
 

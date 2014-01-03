@@ -38,8 +38,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             const int Server2003BuildNumber = 2700;
             const int VistaBuildNumber = 6000;
-            const int Windows7BuildNumber = 7000; // includes beta as well as RTM
-            const int Windows8BuildNumber = 8000; // includes beta as well as RTM
+            const int Windows7BuildNumber = 7000; // includes beta as well as RTM (RTM is 7600)
+            const int Windows8BuildNumber = 8000; // includes beta as well as RTM (RTM is 9200)
+            const int Windows81BuildNumber = 9300; // includes beta as well as RTM (RTM is 9600)
 
             // Create new capabilities, set as all false. This will allow
             // us to call into Esent.
@@ -88,6 +89,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 Trace.WriteLineIf(TraceSwitch.TraceVerbose, "Supports Windows 8 features");
                 this.Capabilities.SupportsWindows8Features = true;
             }
+
+            if (buildNumber >= Windows81BuildNumber)
+            {
+                Trace.WriteLineIf(TraceSwitch.TraceVerbose, "Supports Windows 8.1 features");
+                this.Capabilities.SupportsWindows81Features = true;
+            }
         }
 
         /// <summary>
@@ -96,8 +103,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>The current version of Esent.</returns>
         private uint GetVersionFromEsent()
         {
-#if MANAGEDESENT_ON_METRO
-            // JetGetVersion isn't available in Metro, so we'll pretend it's always Win8:
+#if MANAGEDESENT_ON_WSA
+            // JetGetVersion isn't available in new Windows user interface, so we'll pretend it's always Win8:
             return 8250 << 8;
 #else
             // Create a unique name so that multiple threads can call this simultaneously.

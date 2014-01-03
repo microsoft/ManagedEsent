@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-#if !MANAGEDESENT_ON_METRO // The Metro version of the DLL always exposes all features.
+#if !MANAGEDESENT_ON_WSA // The Windows Store Apps version of the DLL always exposes all features.
 namespace InteropApiTests
 {
     using System;
@@ -493,4 +493,4 @@ namespace InteropApiTests
         }
     }
 }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA

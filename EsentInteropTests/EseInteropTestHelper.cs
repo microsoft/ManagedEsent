@@ -14,7 +14,7 @@ namespace InteropApiTests
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
     using System.Security;
-#if MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_WSA
     using System.Security.Cryptography;
 #endif
 
@@ -95,7 +95,7 @@ namespace InteropApiTests
         /// <returns>The containing Assembly.</returns>
         public static Assembly GetAssembly(Type type)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return type.GetTypeInfo().Assembly;
 #else
             return type.Assembly;
@@ -112,7 +112,7 @@ namespace InteropApiTests
         /// <exception cref="T:System.FormatException">The format specification in <paramref name="format"/> is invalid. </exception><filterpriority>1</filterpriority>
         public static void ConsoleWriteLine(string format, params object[] args)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             Debug.WriteLine(format, args);
 #else
             System.Console.WriteLine(format, args);
@@ -125,7 +125,7 @@ namespace InteropApiTests
         /// <param name="newDirectory">The name of the directory to create.</param>
         public static void DirectoryCreateDirectory(string newDirectory)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             string realPath = StringToPath(newDirectory);
 
             if (!CreateDirectoryW(realPath, IntPtr.Zero))
@@ -144,7 +144,7 @@ namespace InteropApiTests
         /// <returns>True if the file exists.</returns>
         public static bool DirectoryDelete(string dirName)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             string realPath = StringToPath(dirName);
 
             return RemoveDirectoryW(realPath);
@@ -164,7 +164,7 @@ namespace InteropApiTests
             string dirName,
             bool recursive)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             string realPath = StringToPath(dirName);
 
             return RemoveDirectoryW(realPath);
@@ -181,7 +181,7 @@ namespace InteropApiTests
         /// <returns>True if the file exists.</returns>
         public static bool DirectoryExists(string dirName)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             string realPath = StringToPath(dirName);
 
             bool dirExists = false;
@@ -208,7 +208,7 @@ namespace InteropApiTests
         /// <returns>True if the file exists.</returns>
         public static bool FileDelete(string filename)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             string realPath = StringToPath(filename);
 
             return DeleteFileW(realPath);
@@ -225,7 +225,7 @@ namespace InteropApiTests
         /// <returns>True if the file exists.</returns>
         public static bool FileExists(string filename)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             string realPath = StringToPath(filename);
 
             bool fileExists = false;
@@ -304,7 +304,7 @@ namespace InteropApiTests
         /// <param name="forceFullCollection"><c>true</c> to indicate that this method can wait for garbage collection to occur before returning; otherwise, <c>false</c>.</param><filterpriority>1</filterpriority>
         public static long GCGetTotalMemory(bool forceFullCollection)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             return 1024;
 #else
             return GC.GetTotalMemory(forceFullCollection);
@@ -319,7 +319,7 @@ namespace InteropApiTests
         /// </returns>
         public static string PathGetRandomFileName()
         {
-#if MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_WSA
             byte[] numArray = new byte[10];
             RNGCryptoServiceProvider cryptoServiceProvider = new RNGCryptoServiceProvider();
             cryptoServiceProvider.GetBytes(numArray);
@@ -338,7 +338,7 @@ namespace InteropApiTests
         /// <returns>A pointer to the native memory.</returns>
         public static IntPtr MarshalAllocHGlobal(IntPtr size)
         {
-#if MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_WSA
             return MarshalEx.AllocHGlobal(size);
 #else
             return Marshal.AllocHGlobal(size);
@@ -351,7 +351,7 @@ namespace InteropApiTests
         /// <param name="buffer">A pointer to native memory.</param>
         public static void MarshalFreeHGlobal(IntPtr buffer)
         {
-#if MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_WSA
             MarshalEx.FreeHGlobal(buffer);
 #else
             Marshal.FreeHGlobal(buffer);
@@ -422,7 +422,7 @@ namespace InteropApiTests
         /// </summary>
         public static void ThreadBeginThreadAffinity()
         {
-#if !MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_METRO // Thread model has changed in Metro.
+#if !MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_WSA // Thread model has changed in Windows Store Apps.
             Thread.BeginThreadAffinity();
 #endif
         }
@@ -432,7 +432,7 @@ namespace InteropApiTests
         /// </summary>
         public static void ThreadEndThreadAffinity()
         {
-#if !MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_METRO // Thread model has changed in Metro.
+#if !MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_WSA // Thread model has changed in Windows Store Apps.
             Thread.EndThreadAffinity();
 #endif
         }
@@ -443,7 +443,7 @@ namespace InteropApiTests
         /// <param name="ms">The time to sleep, in millisends.</param>
         public static void ThreadSleep(int ms)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             new System.Threading.ManualResetEvent(false).WaitOne(ms);
 #else
             Thread.Sleep(ms);
@@ -456,7 +456,7 @@ namespace InteropApiTests
         /// <param name="timeToSleep">The time to sleep.</param>
         public static void ThreadSleep(TimeSpan timeToSleep)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             new System.Threading.ManualResetEvent(false).WaitOne(timeToSleep);
 #else
             Thread.Sleep(timeToSleep);
@@ -470,7 +470,7 @@ namespace InteropApiTests
         /// <returns>The LCID of the culture.</returns>
         public static int CultureInfoGetLcid(CultureInfo culture)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             // Always returning 1033 (en-us) is egregiously wrong, but this is
             // only used in a couple of spots in test code, so we'll live with it.
             return 1033;
@@ -480,7 +480,7 @@ namespace InteropApiTests
   #else
             return culture.LCID;
   #endif // MANAGEDESENT_ON_CORECLR
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
         }
 
         /// <summary>
@@ -528,12 +528,12 @@ namespace InteropApiTests
         /// Converts a raw string to a meaningful path.
         /// </summary>
         /// <param name="rawPath">A non-fully-qualified path.</param>
-        /// <returns>In Metro programs the ApplicationData
+        /// <returns>In Windows Store Apps programs the ApplicationData
         /// directory will be prefixed. Otherwise the original string is returned.
         /// </returns>
         private static string StringToPath(string rawPath)
         {
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
             // Store information in the ApplicationData location. Note that we don't actually clean up after ourselves.
             var applicationData = Windows.Storage.ApplicationData.Current;
             var writeablePath = applicationData.LocalFolder.Path;
@@ -870,7 +870,7 @@ namespace InteropApiTests
         
         [DllImport("api-ms-win-core-file-l1-1-1.dll", CharSet = CharSet.Unicode)]
         private static extern bool RemoveDirectoryW(string lpPathName);
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
     }
 
 #if MANAGEDESENT_ON_CORECLR
@@ -955,7 +955,7 @@ namespace InteropApiTests
 #endif // MANAGEDESENT_ON_CORECLR
 }
 
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
 namespace System.Threading
 {
     /// <summary>
@@ -989,7 +989,7 @@ namespace System.Threading
         Highest,
     }
 }
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA
 
 #if MANAGEDESENT_ON_CORECLR
 namespace TestRunner

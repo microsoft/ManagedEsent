@@ -942,6 +942,56 @@ namespace InteropApiTests
             Api.JetCloseTable(this.sesid, opentemporarytable.tableid);
         }
 
+        /// <summary>
+        /// Sort with different locales with JetOpenTemporaryTable2.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Sort with different locales with JetOpenTemporaryTable2")]
+        public void SortDataDifferentLocalesWithJetOpenTemporaryTable2()
+        {
+            CultureInfo cultureInfo = new CultureInfo("es-ES_tradnl");
+            string localeName = cultureInfo.CompareInfo.Name;
+            Assert.AreEqual("es-ES_tradnl", localeName);
+
+            var columns = new[]
+            {
+                new JET_COLUMNDEF { coltyp = JET_coltyp.Text, cp = JET_CP.Unicode, grbit = ColumndefGrbit.TTKey },
+            };
+            var columnids = new JET_COLUMNID[columns.Length];
+
+            var idxunicode = new JET_UNICODEINDEX
+            {
+                szLocaleName = localeName,
+            };
+
+            var opentemporarytable = new JET_OPENTEMPORARYTABLE
+            {
+                cbKeyMost = SystemParameters.KeyMost,
+                ccolumn = columns.Length,
+                grbit = TempTableGrbit.Scrollable,
+                pidxunicode = idxunicode,
+                prgcolumndef = columns,
+                prgcolumnid = columnids,
+            };
+            Windows8Api.JetOpenTemporaryTable2(this.sesid, opentemporarytable);
+
+            // Note that es-ES_tradnl sorts differently than English.
+            var data = new[] { "canary", "cocoa", "chicken", "bad!" };
+            foreach (string s in data)
+            {
+                using (var update = new Update(this.sesid, opentemporarytable.tableid, JET_prep.Insert))
+                {
+                    Api.SetColumn(this.sesid, opentemporarytable.tableid, columnids[0], s, Encoding.Unicode);
+                    update.Save();
+                }
+            }
+
+            Array.Sort(data, new CultureInfo(localeName).CompareInfo.Compare);
+
+            CollectionAssert.AreEqual(data, this.RetrieveAllRecordsAsString(opentemporarytable.tableid, columnids[0]).ToArray());
+            Api.JetCloseTable(this.sesid, opentemporarytable.tableid);
+        }
         #endregion DDL Tests
 
         #region Helper Methods

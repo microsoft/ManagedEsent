@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-#if !MANAGEDESENT_ON_METRO // Win32Exception is not supported in Metro.
+#if !MANAGEDESENT_ON_WSA // Win32Exception is not supported in Windows Store Apps.
 namespace InteropApiTests
 {
     using System;
@@ -64,4 +64,4 @@ namespace InteropApiTests
         }
     }
 }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA

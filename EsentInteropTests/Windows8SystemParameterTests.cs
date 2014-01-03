@@ -10,7 +10,7 @@ namespace InteropApiTests
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Windows8;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-#if !MANAGEDESENT_ON_CORECLR
+#if !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
     using Rhino.Mocks;
 #endif
 
@@ -20,7 +20,7 @@ namespace InteropApiTests
     /// </summary>
     public partial class SystemParameterTests
     {
-#if !MANAGEDESENT_ON_CORECLR
+#if !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
         /// <summary>
         /// Verify that setting the property sets the system parameter
         /// </summary>
@@ -86,6 +86,6 @@ namespace InteropApiTests
             SystemParameters.ProcessFriendlyName = processFriendlyName;
             this.repository.VerifyAll();
         }
-#endif // !MANAGEDESENT_ON_CORECLR
+#endif // !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
     }
 }

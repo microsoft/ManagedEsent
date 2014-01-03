@@ -51,7 +51,7 @@ namespace InteropApiTests
             SetupHelper.CheckProcessForInstanceLeaks();
         }
 
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
         /// <summary>
         /// Verify that JetGetInstanceMiscInfo does not return null.
         /// </summary>

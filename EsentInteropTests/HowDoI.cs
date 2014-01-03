@@ -9,7 +9,7 @@
 
 namespace InteropApiTests
 {
-#if !MANAGEDESENT_ON_METRO // The File model in Metro has changed.
+#if !MANAGEDESENT_ON_WSA // The File model in Windows Store Apps has changed.
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -900,5 +900,5 @@ namespace InteropApiTests
             }
         }
     }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 }

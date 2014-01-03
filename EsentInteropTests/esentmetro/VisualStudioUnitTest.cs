@@ -7,11 +7,11 @@
 // This file was copy/pasted from a reflection disassembler. Its purpose is to allow execution
 // of the ESE tests on platformsthat don't have the Visual Studio test DLLs.
 //
-// It is supposed to be available on Metro with Win8 build 8250, but I simply
+// It is supposed to be available on Windows Store Apps with Win8 build 8250, but I simply
 // couldn't get it to work.
 //
 // It is still far from perfect. For example the resources for the strings of the error messages is broken.
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
 namespace Microsoft.VisualStudio.TestTools.UnitTesting
 {
     using System;
@@ -2683,4 +2683,4 @@ namespace Microsoft.VisualStudio.TestTools.UnitTesting
         }
     }
 }
-#endif // MANAGEDESENT_ON_METRO
+#endif // MANAGEDESENT_ON_WSA

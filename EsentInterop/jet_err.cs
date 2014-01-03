@@ -339,11 +339,6 @@ namespace Microsoft.Isam.Esent.Interop
         RedoAbruptEnded = -536,
 
         /// <summary>
-        /// Signature in SLV file does not agree with database
-        /// </summary>
-        BadSLVSignature = -537,
-
-        /// <summary>
         /// Hard restore detected that patch file is missing from backup set
         /// </summary>
         PatchFileMissing = -538,
@@ -584,11 +579,6 @@ namespace Microsoft.Isam.Esent.Interop
         LogReadVerifyFailure = -612,
 
         /// <summary>
-        /// Checksum error in SLV file during backup
-        /// </summary>
-        SLVReadVerifyFailure = -613,
-
-        /// <summary>
         /// too many outstanding generations between checkpoint and current generation
         /// </summary>
         CheckpointDepthTooDeep = -614,
@@ -607,6 +597,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// A surrogate backup is in progress.
         /// </summary>
         SurrogateBackupInProgress = -617,
+
+        /// <summary>
+        /// Too many outstanding generations between JetBeginTransaction and current generation.
+        /// </summary>
+        TransactionTooLong = -618,
 
         /// <summary>
         /// Backup was aborted by server by calling JetTerm with JET_bitTermStopBackup or by calling JetStopBackup
@@ -879,7 +874,7 @@ namespace Microsoft.Isam.Esent.Interop
         CurrencyStackOutOfMemory = -1070,
 
         /// <summary>
-        /// Cannot index escrow column or SLV column
+        /// Cannot index escrow column
         /// </summary>
         CannotIndex = -1071,
 
@@ -952,6 +947,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// Instance Name already in use
         /// </summary>
         InstanceNameInUse = -1086,
+
+        /// <summary>
+        /// Global system parameters have already been set, but to a conflicting or disagreeable state to the specified values.
+        /// </summary>
+        SystemParameterConflict = -1087,
 
         /// <summary>
         /// This instance cannot be used because it encountered a fatal error
@@ -1772,196 +1772,6 @@ namespace Microsoft.Isam.Esent.Interop
         /// An element of the JET space hints structure was not correct or actionable.
         /// </summary>
         SpaceHintsInvalid = -2103,
-
-        /// <summary>
-        /// Corruption encountered in space manager of streaming file
-        /// </summary>
-        SLVSpaceCorrupted = -2201,
-
-        /// <summary>
-        /// Corruption encountered in streaming file
-        /// </summary>
-        SLVCorrupted = -2202,
-
-        /// <summary>
-        /// SLV columns cannot have a default value
-        /// </summary>
-        SLVColumnDefaultValueNotAllowed = -2203,
-
-        /// <summary>
-        /// Cannot find streaming file associated with this database
-        /// </summary>
-        SLVStreamingFileMissing = -2204,
-
-        /// <summary>
-        /// Streaming file exists, but database to which it belongs is missing
-        /// </summary>
-        SLVDatabaseMissing = -2205,
-
-        /// <summary>
-        /// Tried to create a streaming file when one already exists or is already recorded in the catalog
-        /// </summary>
-        SLVStreamingFileAlreadyExists = -2206,
-
-        /// <summary>
-        /// Specified path to a streaming file is invalid
-        /// </summary>
-        SLVInvalidPath = -2207,
-
-        /// <summary>
-        /// Tried to perform an SLV operation but streaming file was never created
-        /// </summary>
-        SLVStreamingFileNotCreated = -2208,
-
-        /// <summary>
-        /// Attach a readonly streaming file for read/write operations
-        /// </summary>
-        SLVStreamingFileReadOnly = -2209,
-
-        /// <summary>
-        /// SLV file header failed checksum verification
-        /// </summary>
-        SLVHeaderBadChecksum = -2210,
-
-        /// <summary>
-        /// SLV file header contains invalid information
-        /// </summary>
-        SLVHeaderCorrupted = -2211,
-
-        /// <summary>
-        /// Tried to move pages from the Free state when they were not in that state
-        /// </summary>
-        SLVPagesNotFree = -2213,
-
-        /// <summary>
-        /// Tried to move pages from the Reserved state when they were not in that state
-        /// </summary>
-        SLVPagesNotReserved = -2214,
-
-        /// <summary>
-        /// Tried to move pages from the Committed state when they were not in that state
-        /// </summary>
-        SLVPagesNotCommitted = -2215,
-
-        /// <summary>
-        /// Tried to move pages from the Deleted state when they were not in that state
-        /// </summary>
-        SLVPagesNotDeleted = -2216,
-
-        /// <summary>
-        /// Unexpected conflict detected trying to write-latch SLV space pages
-        /// </summary>
-        SLVSpaceWriteConflict = -2217,
-
-        /// <summary>
-        /// The database can not be created/attached because its corresponding SLV Root is still open by another process.
-        /// </summary>
-        SLVRootStillOpen = -2218,
-
-        /// <summary>
-        /// The database can not be created/attached because the SLV Provider has not been loaded.
-        /// </summary>
-        SLVProviderNotLoaded = -2219,
-
-        /// <summary>
-        /// The specified SLV EA List is corrupted.
-        /// </summary>
-        SLVEAListCorrupt = -2220,
-
-        /// <summary>
-        /// The database cannot be created/attached because the SLV Root Name was omitted
-        /// </summary>
-        SLVRootNotSpecified = -2221,
-
-        /// <summary>
-        /// The specified SLV Root path was invalid.
-        /// </summary>
-        SLVRootPathInvalid = -2222,
-
-        /// <summary>
-        /// The specified SLV EA List has no allocated space.
-        /// </summary>
-        SLVEAListZeroAllocation = -2223,
-
-        /// <summary>
-        /// Deletion of SLV columns is not currently supported.
-        /// </summary>
-        SLVColumnCannotDelete = -2224,
-
-        /// <summary>
-        /// Tried to create a new catalog entry for SLV Ownership Map when one already exists
-        /// </summary>
-        SLVOwnerMapAlreadyExists = -2225,
-
-        /// <summary>
-        /// Corruption encountered in SLV Ownership Map
-        /// </summary>
-        SLVOwnerMapCorrupted = -2226,
-
-        /// <summary>
-        /// Corruption encountered in SLV Ownership Map
-        /// </summary>
-        SLVOwnerMapPageNotFound = -2227,
-
-        /// <summary>
-        /// The specified SLV File handle belongs to a SLV Root that no longer exists.
-        /// </summary>
-        SLVFileStale = -2229,
-
-        /// <summary>
-        /// The specified SLV File is currently in use
-        /// </summary>
-        SLVFileInUse = -2230,
-
-        /// <summary>
-        /// The specified streaming file is currently in use
-        /// </summary>
-        SLVStreamingFileInUse = -2231,
-
-        /// <summary>
-        /// An I/O error occurred while accessing an SLV File (general read / write failure)
-        /// </summary>
-        SLVFileIO = -2232,
-
-        /// <summary>
-        /// No space left in the streaming file
-        /// </summary>
-        SLVStreamingFileFull = -2233,
-
-        /// <summary>
-        /// Specified path to a SLV File was invalid
-        /// </summary>
-        SLVFileInvalidPath = -2234,
-
-        /// <summary>
-        /// Cannot access SLV File, the SLV File is locked or is in use
-        /// </summary>
-        SLVFileAccessDenied = -2235,
-
-        /// <summary>
-        /// The specified SLV File was not found
-        /// </summary>
-        SLVFileNotFound = -2236,
-
-        /// <summary>
-        /// An unknown error occurred while accessing an SLV File
-        /// </summary>
-        SLVFileUnknown = -2237,
-
-        /// <summary>
-        /// The specified SLV EA List could not be returned because it is too large to fit in the standard EA format.  Retrieve the SLV File as a file handle instead.
-        /// </summary>
-        SLVEAListTooBig = -2238,
-
-        /// <summary>
-        /// The loaded SLV Provider's version does not match the database engine's version.
-        /// </summary>
-        SLVProviderVersionMismatch = -2239,
-
-        /// <summary>
-        /// Buffer allocated for SLV data or meta-data was too small
-        /// </summary>
-        SLVBufferTooSmall = -2243,
 
         /// <summary>
         /// OS Shadow copy API used in an invalid sequence

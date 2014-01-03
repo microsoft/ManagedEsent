@@ -6,7 +6,7 @@
 
 namespace InteropApiTests
 {
-#if !MANAGEDESENT_ON_METRO // The Metro version of the DLL always exposes all features.
+#if !MANAGEDESENT_ON_WSA // The Windows Store Apps version of the DLL always exposes all features.
     using System;
     using System.IO;
     using Microsoft.Isam.Esent.Interop;
@@ -198,6 +198,20 @@ namespace InteropApiTests
         {
             JET_SIGNATURE signature;
             VistaApi.JetGetInstanceMiscInfo(JET_INSTANCE.Nil, out signature, JET_InstanceMiscInfo.LogSignature);
+        }
+
+        /// <summary>
+        /// Verify that JetGetTableColumnInfo with JET_COLUMNBASE throws an exception when using the
+        /// XP version of ESENT.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify that JetGetTableColumnInfo with JET_COLUMNBASE throws an exception when using the XP version of ESENT")]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void VerifyXpThrowsExceptionOnJetGetTableColumnInfoColumnBase()
+        {
+            JET_COLUMNBASE columnbase;
+            VistaApi.JetGetTableColumnInfo(JET_SESID.Nil, JET_TABLEID.Nil, JET_COLUMNID.Nil, out columnbase);
         }
 
         /// <summary>
@@ -753,5 +767,5 @@ namespace InteropApiTests
             }
         }
     }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 }

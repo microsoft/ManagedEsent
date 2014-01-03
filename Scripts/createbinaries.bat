@@ -59,10 +59,14 @@ for %%i in ( esedb.py esedbshelve.py ) do (
 @echo The next step is to sign the binaries (DLLs only!) using https://codesign.gtm.microsoft.com/
 @echo The source dir for the signing is %dest%
 @echo Use both Strong Naming (72) and an Authenticode certificate (10006).
-@echo DisplayName = ManagedEsent-%version%
-@echo URL = http://managedesent.codeplex.com
+@echo DisplayName =
+@echo ManagedEsent-%version%
+@echo URL =
+@echo http://managedesent.codeplex.com
 @echo.
-@echo And then run processsignedbinaries.bat
+@echo Wait for the mail, and then copy the files to %~dp0signed-%version%
+@echo.
+@echo And then run processsignedbinaries.bat %version%
 @echo.
 @goto :eof
 

@@ -20,12 +20,22 @@ for %%i in ( esent.collections.pdb esent.collections.xml esent.interop.pdb esent
 @echo Copying files for nuget...
 set dest=%~dp0nuget-%version%
 
-for %%i in ( esent.collections.dll esent.interop.dll esent.interop.wsa.dll ) do (
-  xcopy /d %~dp0signed-%version%\%%i %dest%\lib\net45\
+@rem signed binaries
+for %%i in ( esent.collections.dll esent.interop.dll ) do (
+  xcopy /d %~dp0signed-%version%\%%i %dest%\lib\net40\
 )
 
-for %%i in ( esent.collections.pdb esent.collections.xml esent.interop.pdb esent.interop.wsa.dll ) do (
-  xcopy /d %~dp0tosign-%version%\%%i %dest%\lib\net45\
+for %%i in ( esent.interop.wsa.dll ) do (
+  xcopy /d %~dp0signed-%version%\%%i %dest%\lib\netcore45\
+)
+
+@rem unsigned files
+for %%i in ( esent.collections.pdb esent.collections.xml esent.interop.xml esent.interop.pdb ) do (
+  xcopy /d %~dp0tosign-%version%\%%i %dest%\lib\net40\
+)
+
+for %%i in ( esent.interop.wsa.pdb ) do (
+  xcopy /d %~dp0tosign-%version%\%%i %dest%\lib\netcore45\
 )
 
 @echo =-=-=-=-=-=-=-=
@@ -48,8 +58,8 @@ echo    ^<requireLicenseAcceptance^>false^</requireLicenseAcceptance^> >>%target
 echo    ^<description^> >>%target%
 echo      ManagedEsent provides managed access to ESENT, the embeddable database engine native to Windows. ManagedEsent uses the esent.dll that is part of Microsoft Windows so there are no extra unmanaged binaries to download and install. >>%target%
 echo    ^</description^> >>%target%
-echo    ^<releaseNotes^>Release %version% from Nov 19 2012. No source code changes. Now strong named, and includes Windows Store App (WSA) version.^</releaseNotes^> >>%target%
-echo    ^<copyright^>Copyright 2013^</copyright^> >>%target%
+echo    ^<releaseNotes^>Release %version% from %date%. Windows 8.1 changes, dependent framework is now 4.0.^</releaseNotes^> >>%target%
+echo    ^<copyright^>Copyright 2014 Microsoft. All Rights Reserved.^</copyright^> >>%target%
 echo    ^<tags^>ManagedEsent NoSql ISAM^</tags^> >>%target%
 echo    ^<!-- >>%target%
 echo    ^<dependencies^> >>%target%
@@ -68,7 +78,7 @@ for %%i in ( esent.collections.dll esent.interop.dll esent.interop.wsa.dll ) do 
   xcopy /d %~dp0signed-%version%\%%i %dest%\
 )
 
-for %%i in ( esent.collections.pdb esent.collections.xml esent.interop.pdb esent.interop.wsa.dll esedb.py esedbshelve.py ) do (
+for %%i in ( esent.collections.pdb esent.collections.xml esent.interop.pdb esent.interop.xml esent.interop.wsa.dll esedb.py esedbshelve.py ) do (
   xcopy /d %~dp0tosign-%version%\%%i %dest%\
 )
 
@@ -89,7 +99,7 @@ popd
 @echo.
 @echo When ready to upload to nuget, run:
 @echo.
-@echo nuget pack %~dp0nuget\ManagedEsent.nuspec
+@echo nuget pack %~dp0nuget-%version%\ManagedEsent-%version%.nuspec
 @echo.
 @echo And if that was successful (verify with nuget package explorer, http://nuget.codeplex.com/downloads/get/clickOnce/NuGetPackageExplorer.application )
 @echo nuget push ManagedEsent.%version%.nupkg

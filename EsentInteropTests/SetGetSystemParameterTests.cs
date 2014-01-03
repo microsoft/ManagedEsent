@@ -11,6 +11,7 @@ namespace InteropApiTests
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Isam.Esent.Interop.Windows7;
     using Microsoft.Isam.Esent.Interop.Windows8;
+    using Microsoft.Isam.Esent.Interop.Windows81;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -46,7 +47,7 @@ namespace InteropApiTests
         
         #endregion
 
-#if !MANAGEDESENT_ON_METRO // String interning is not supported.
+#if !MANAGEDESENT_ON_WSA // String interning is not supported.
         /// <summary>
         /// Verify that retrieving a string parameter tries to intern the string.
         /// </summary>
@@ -74,7 +75,7 @@ namespace InteropApiTests
                 Api.JetTerm(instance);
             }
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Test setting and retrieving the system path.
@@ -118,7 +119,7 @@ namespace InteropApiTests
                 string actual;
                 Api.JetGetSystemParameter(instance, JET_SESID.Nil, JET_param.TempPath, ref ignored, out actual, 256);
 
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                 Assert.IsNotNull(actual);
 #else
                 // Older versions of esent (e.g. Windows XP) return the name of the temporary database
@@ -377,7 +378,7 @@ namespace InteropApiTests
             BooleanParameterTest(JET_param.CleanupMismatchedLogFiles, Any.Boolean);
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Test setting the runtime callback to null.
         /// </summary>
@@ -427,7 +428,7 @@ namespace InteropApiTests
                 Api.JetTerm(instance);
             }
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Test setting and retrieving the Configuration parameter (if esent supports it)
@@ -727,6 +728,20 @@ namespace InteropApiTests
         public void VerifyColumnsKeyMostIsAtLeast12()
         {
             Assert.IsTrue(SystemParameters.ColumnsKeyMost >= 12);
+        }
+
+        /// <summary>
+        /// Test that SystemParameters.OutstandingIOMax can be set and retrieved.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test that SystemParameters.OutstandingIOMax can be set and retrieved")]
+        public void VerifyGetAndSetOutstandingIOMax()
+        {
+            int outstandingIOMaxOld = SystemParameters.OutstandingIOMax;
+            SystemParameters.OutstandingIOMax = 13;
+            Assert.AreEqual(13, SystemParameters.OutstandingIOMax);
+            SystemParameters.OutstandingIOMax = outstandingIOMaxOld;
         }
 
         /// <summary>
@@ -1032,6 +1047,24 @@ namespace InteropApiTests
 
 #endregion
 
+        #region Windows 8.1 Parameters
+        /// <summary>
+        /// Test that SystemParameters.EnablePeriodicShrinkDatabase can be set and retrieved.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test that SystemParameters.EnableShrinkDatabase can be set and retrieved")]
+        public void VerifyGetAndSetEnableShrinkDatabase()
+        {
+            if (!EsentVersion.SupportsWindows81Features)
+            {
+                return;
+            }
+
+            IntegerParameterTest(Windows81Param.EnableShrinkDatabase, 0x3);
+        }
+        #endregion
+
         #region Helper Methods
 
         /// <summary>
@@ -1052,8 +1085,8 @@ namespace InteropApiTests
                 string actual;
                 Api.JetGetSystemParameter(instance, JET_SESID.Nil, param, ref ignored, out actual, 256);
 
-#if MANAGEDESENT_ON_METRO
-                // We can't fetch the full path in Metro, but we can check if the last part of the path is correct.
+#if MANAGEDESENT_ON_WSA
+                // We can't fetch the full path in Windows Store Apps, but we can check if the last part of the path is correct.
                 Assert.IsNotNull(actual);
                 Assert.IsTrue(actual.EndsWith(expected));
 #else

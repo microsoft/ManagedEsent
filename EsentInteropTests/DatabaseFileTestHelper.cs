@@ -12,6 +12,7 @@ namespace InteropApiTests
     using Microsoft.Isam.Esent.Interop.Server2003;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Isam.Esent.Interop.Windows7;
+    using Microsoft.Isam.Esent.Interop.Windows81;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -88,7 +89,7 @@ namespace InteropApiTests
             this.useStatusCallback = useStatusCallback;
         }
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Create a database, back it up to the backup directory and
         /// then restore it.
@@ -269,7 +270,7 @@ namespace InteropApiTests
                 Cleanup.DeleteDirectoryWithRetry(this.databaseDirectory);
             }
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Create a database and do a recovery to a different
@@ -295,7 +296,7 @@ namespace InteropApiTests
             }
         }
 
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
         /// <summary>
         /// Create a database and do a snapshot backup using 
         /// functionality available in Windows 7 onwards.
@@ -352,7 +353,7 @@ namespace InteropApiTests
                 Cleanup.DeleteDirectoryWithRetry(this.databaseDirectory);
             }
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Create a database and call JetGetDatabaseInfo.
@@ -386,7 +387,53 @@ namespace InteropApiTests
             }
         }
 
-#if !MANAGEDESENT_ON_METRO
+        #region Windows 8.1 GetFileInfo
+        /// <summary>
+        /// Create a database and call JetGetDatabaseInfo, checking the
+        /// information specific to Windows 8.1.
+        /// </summary>
+        public void TestWindows81GetDatabaseInfo()
+        {
+            if (!EsentVersion.SupportsWindows81Features)
+            {
+                return;
+            }
+
+            try
+            {
+                this.CreateDatabase();
+                this.TestWindows81JetGetDatabaseInfo();
+            }
+            finally
+            {
+                Cleanup.DeleteDirectoryWithRetry(this.databaseDirectory);
+            }
+        }
+
+        /// <summary>
+        /// Create a database and call JetGetDatabaseFileInfo, checking the
+        /// information specific to Windows 8.1.
+        /// </summary>
+        public void TestWindows81GetDatabaseFileInfo()
+        {
+            if (!EsentVersion.SupportsWindows81Features)
+            {
+                return;
+            }
+
+            try
+            {
+                this.CreateDatabase();
+                this.TestWindows81JetGetDatabaseFileInfo();
+            }
+            finally
+            {
+                Cleanup.DeleteDirectoryWithRetry(this.databaseDirectory);
+            }
+        }
+        #endregion
+
+#if !MANAGEDESENT_ON_WSA
         /// <summary>
         /// Read a file using the JetReadFileInstance API. A backup should be prepared.
         /// </summary>
@@ -409,7 +456,7 @@ namespace InteropApiTests
 
             Api.JetCloseFileInstance(instance, handle);            
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Generate some logs. This is used by tests that do backups.
@@ -493,7 +540,7 @@ namespace InteropApiTests
             }
         }
 
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
         /// <summary>
         /// Backup the database.
         /// </summary>
@@ -610,7 +657,7 @@ namespace InteropApiTests
                 }
             }
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Recovery to an alternate path with JetInit3.
@@ -628,7 +675,7 @@ namespace InteropApiTests
                 }
             }
 
-#if !MANAGEDESENT_ON_METRO // The File model in Metro has changed.
+#if !MANAGEDESENT_ON_WSA // The File model in Windows Store Apps has changed.
             // Delete the database and checkpoint
             File.Delete(this.database);
             File.Delete(Path.Combine(this.databaseDirectory, "edb.chk"));
@@ -655,14 +702,14 @@ namespace InteropApiTests
             VistaApi.JetInit3(ref recoveryInstance, recoveryOptions, InitGrbit.None);
             Api.JetTerm(recoveryInstance);
 
-#if !MANAGEDESENT_ON_METRO // The File model in Metro has changed.
+#if !MANAGEDESENT_ON_WSA // The File model in Windows Store Apps has changed.
             Assert.IsTrue(EseInteropTestHelper.FileExists(newDatabaseName), "New database ({0}) doesn't exist", newDatabaseName);
             Assert.IsFalse(EseInteropTestHelper.FileExists(this.database), "Old database ({0}) still exists", this.database);
             File.Move(newDatabaseName, this.database);
 #endif
         }
 
-#if !MANAGEDESENT_ON_METRO
+#if !MANAGEDESENT_ON_WSA
         /// <summary>
         /// Perform a snapshot backup using the extra Vista APIs.
         /// </summary>
@@ -845,7 +892,7 @@ namespace InteropApiTests
                 }
             }
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Retrieves various pieces of information with JetGetDatabaseFileInfo.
@@ -928,7 +975,7 @@ namespace InteropApiTests
 
                     string path;
                     Api.JetGetDatabaseInfo(session, dbid, out path, JET_DbInfo.Filename);
-#if MANAGEDESENT_ON_METRO
+#if MANAGEDESENT_ON_WSA
                     Assert.IsFalse(string.IsNullOrEmpty(path));
 #else
                     Assert.AreEqual(Path.GetFullPath(this.database), path);
@@ -937,7 +984,67 @@ namespace InteropApiTests
             }
         }
 
-#if !MANAGEDESENT_ON_METRO
+        #region Windows 8.1
+        /// <summary>
+        /// Retrieves various pieces of information with JetGetDatabaseInfo.
+        /// </summary>
+        private void TestWindows81JetGetDatabaseInfo()
+        {
+            using (var instance = this.CreateInstance())
+            {
+                instance.Init();
+                using (var session = new Session(instance))
+                {
+                    // Attach the database.
+                    Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
+                    JET_DBID dbid;
+                    Api.JetOpenDatabase(session, this.database, string.Empty, out dbid, OpenDatabaseGrbit.None);
+
+                    int databasePageSize;
+                    Api.JetGetDatabaseInfo(session, dbid, out databasePageSize, JET_DbInfo.PageSize);
+                    Assert.AreEqual(SystemParameters.DatabasePageSize, databasePageSize);
+
+                    JET_DBINFOMISC dbinfomisc;
+                    Api.JetGetDatabaseInfo(session, dbid, out dbinfomisc, JET_DbInfo.Misc);
+                    Assert.AreEqual(SystemParameters.DatabasePageSize, dbinfomisc.cbPageSize);
+
+                    string path;
+                    Api.JetGetDatabaseInfo(session, dbid, out path, JET_DbInfo.Filename);
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
+                    Assert.AreEqual(Path.GetFullPath(this.database), path);
+#else
+                    Assert.IsNotNull(path);
+#endif
+
+                    int databaseSizeOnDiskInPages;
+                    Api.JetGetDatabaseInfo(session, dbid, out databaseSizeOnDiskInPages, Windows81DbInfo.FilesizeOnDisk);
+                    Assert.IsTrue(databaseSizeOnDiskInPages > 0);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Retrieves various pieces of information with JetGetDatabaseFileInfo.
+        /// </summary>
+        private void TestWindows81JetGetDatabaseFileInfo()
+        {
+            int databasePageSize;
+            Api.JetGetDatabaseFileInfo(this.database, out databasePageSize, JET_DbInfo.PageSize);
+            Assert.AreEqual(SystemParameters.DatabasePageSize, databasePageSize);
+
+            long databaseFileSize;
+            Api.JetGetDatabaseFileInfo(this.database, out databaseFileSize, JET_DbInfo.Filesize);
+
+            long databaseFileSizeOnDisk;
+            Api.JetGetDatabaseFileInfo(this.database, out databaseFileSizeOnDisk, Windows81DbInfo.FilesizeOnDisk);
+            Assert.IsTrue(databaseFileSize <= databaseFileSizeOnDisk);
+
+            JET_DBINFOMISC dbinfomisc;
+            Api.JetGetDatabaseFileInfo(this.database, out dbinfomisc, JET_DbInfo.Misc);
+            Assert.AreEqual(SystemParameters.DatabasePageSize, dbinfomisc.cbPageSize);
+        }
+#endregion
+#if !MANAGEDESENT_ON_WSA
         /// <summary>
         /// Delete the database files from the database directory.
         /// </summary>
@@ -986,10 +1093,10 @@ namespace InteropApiTests
                     });
             }
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         #region Compact Database.
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Compact the database.
         /// </summary>
@@ -1048,10 +1155,10 @@ namespace InteropApiTests
                 }
             }
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
         #endregion
 
-#if !MANAGEDESENT_ON_METRO // Not exposed in MSDK
+#if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         /// <summary>
         /// Set the database's size.
         /// </summary>
@@ -1071,7 +1178,7 @@ namespace InteropApiTests
                 }
             }
         }
-#endif // !MANAGEDESENT_ON_METRO
+#endif // !MANAGEDESENT_ON_WSA
 
         /// <summary>
         /// Check the database files have been restored.
@@ -1150,7 +1257,7 @@ namespace InteropApiTests
                 Assert.IsTrue(snprog.cunitDone <= snprog.cunitTotal, "done > total in the snprog");
             }
 
-            // On Metro, the functions that reference this variable are compiled out, so this
+            // On Windows Store Apps, the functions that reference this variable are compiled out, so this
             // prevents a warning-as-error.
             Assert.IsTrue(this.statusCallbackWasCalled, "This will always be true.");
 
