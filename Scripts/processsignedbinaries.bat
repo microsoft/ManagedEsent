@@ -44,22 +44,24 @@ for %%i in ( esent.interop.wsa.pdb ) do (
 set dest=%~dp0nuget-%version%
 set target=%dest%\ManagedEsent-%version%.nuspec
 
+del %target%
 echo ^<?xml version="1.0"?^> >>%target%
 echo ^<package ^> >>%target%
 echo  ^<metadata^> >>%target%
 echo    ^<id^>ManagedEsent^</id^> >>%target%
 echo    ^<version^>%version%^</version^> >>%target%
-echo    ^<authors^>martinc^</authors^> >>%target%
-echo    ^<owners^>martinc^</owners^> >>%target%
+echo    ^<authors^>Microsoft^</authors^> >>%target%
+echo    ^<owners^>Microsoft, nugetese, martinc^</owners^> >>%target%
 echo    ^<licenseUrl^>http://managedesent.codeplex.com/license^</licenseUrl^> >>%target%
 echo    ^<projectUrl^>http://managedesent.codeplex.com^</projectUrl^> >>%target%
-echo    ^<!-- ^<iconUrl^>http://ICON_URL_HERE_OR_DELETE_THIS_LINE^</iconUrl^> --^> >>%target%
-echo    ^<requireLicenseAcceptance^>false^</requireLicenseAcceptance^> >>%target%
+echo    ^<!-- Unfortunately the following URL is not accepted by nuget. It contains an '='. --^> >>%target%
+echo    ^<!-- ^<iconUrl^>https://download-codeplex.sec.s-msft.com/Download?ProjectName=managedesent^&DownloadId=801231^&Build=20865^</iconUrl^> --^> >>%target%
+echo    ^<requireLicenseAcceptance^>true^</requireLicenseAcceptance^> >>%target%
 echo    ^<description^> >>%target%
 echo      ManagedEsent provides managed access to ESENT, the embeddable database engine native to Windows. ManagedEsent uses the esent.dll that is part of Microsoft Windows so there are no extra unmanaged binaries to download and install. >>%target%
 echo    ^</description^> >>%target%
-echo    ^<releaseNotes^>Release %version% from %date%. Windows 8.1 changes, dependent framework is now 4.0.^</releaseNotes^> >>%target%
-echo    ^<copyright^>Copyright 2014 Microsoft. All Rights Reserved.^</copyright^> >>%target%
+echo    ^<releaseNotes^>Release %version% from %date%. No binary change, only NuGet package compliance updates.^</releaseNotes^> >>%target%
+echo    ^<copyright^>Copyright (c) Microsoft. All Rights Reserved.^</copyright^> >>%target%
 echo    ^<tags^>ManagedEsent NoSql ISAM^</tags^> >>%target%
 echo    ^<!-- >>%target%
 echo    ^<dependencies^> >>%target%
