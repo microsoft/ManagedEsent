@@ -13,6 +13,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.IO;
     using System.Text;
@@ -25,6 +26,9 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
+    [SuppressMessage("Exchange.Performance",
+        "EX0023:DeadVariableDetector",
+        Justification = "databasePath is useful for debugging.")]
     public sealed partial class PersistentDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IDisposable
         where TKey : IComparable<TKey>
     {
@@ -429,7 +433,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                     {
                         if (cursor.TrySeek(item.Key))
                         {
-                            throw new ArgumentException("An item with this key already exists", "key");
+                            throw new ArgumentException("An item with this key already exists", "item");
                         }
 
                         cursor.Insert(item);
@@ -501,14 +505,14 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         public void Clear()
         {
-            // We will be deleting all items so take all the update locks
-            foreach (object lockObject in this.updateLocks)
-            {
-                Monitor.Enter(lockObject);
-            }
-
             try
             {
+                // We will be deleting all items so take all the update locks
+                foreach (object lockObject in this.updateLocks)
+                {
+                    Monitor.Enter(lockObject);
+                }
+
                 PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
                 try
                 {

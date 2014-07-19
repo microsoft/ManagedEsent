@@ -31,7 +31,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Gets a value indicating whether the <see cref="T:JET_INSTANCE"/> is valid (checks against 0 and -1)
+        /// Gets a value indicating whether the <see cref="T:JET_INSTANCE"/> is valid (checks against 0 and -1).
         /// </summary>
         public bool IsInvalid
         {
@@ -147,7 +147,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Gets a value indicating whether the <see cref="T:JET_SESID"/> is valid (checks against 0 and -1)
+        /// Gets a value indicating whether the <see cref="T:JET_SESID"/> is valid (checks against 0 and -1).
         /// </summary>
         public bool IsInvalid
         {
@@ -264,7 +264,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Gets a value indicating whether the <see cref="JET_TABLEID"/> is valid (checks against 0 and -1)
+        /// Gets a value indicating whether the <see cref="JET_TABLEID"/> is valid (checks against 0 and -1).
         /// </summary>
         public bool IsInvalid
         {
@@ -491,7 +491,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Gets a value indicating whether the <see cref="JET_COLUMNID"/> is valid (checks against 0 and -1)
+        /// Gets a value indicating whether the <see cref="JET_COLUMNID"/> is valid (checks against 0 and -1).
         /// </summary>
         public bool IsInvalid
         {
@@ -683,7 +683,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Gets a value indicating whether the <see cref="JET_OSSNAPID"/> is valid (checks against 0 and -1)
+        /// Gets a value indicating whether the <see cref="JET_OSSNAPID"/> is valid (checks against 0 and -1).
         /// </summary>
         public bool IsInvalid
         {
@@ -800,7 +800,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Gets a value indicating whether the <see cref="JET_HANDLE"/> is valid (checks against 0 and -1)
+        /// Gets a value indicating whether the <see cref="JET_HANDLE"/> is valid (checks against 0 and -1).
         /// </summary>
         public bool IsInvalid
         {
@@ -909,7 +909,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static readonly JET_LS Nil = new JET_LS { Value = new IntPtr(~0) };
 
         /// <summary>
-        /// Gets a value indicating whether the <see cref="JET_LS"/> is valid (checks against 0 and -1)
+        /// Gets a value indicating whether the <see cref="JET_LS"/> is valid (checks against 0 and -1).
         /// </summary>
         public bool IsInvalid
         {

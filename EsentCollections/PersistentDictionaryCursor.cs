@@ -12,6 +12,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using Microsoft.Isam.Esent.Interop;
 
@@ -21,6 +22,9 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
+    [SuppressMessage("Exchange.Performance",
+        "EX0023:DeadVariableDetector",
+        Justification = "instance is useful for debugging, and ensures GC doesn't collect the instance.")]
     internal sealed class PersistentDictionaryCursor<TKey, TValue> : IDisposable where TKey : IComparable<TKey>
     {
         /// <summary>

@@ -62,7 +62,7 @@ echo      ManagedEsent provides managed access to ESENT, the embeddable database
 echo    ^</description^> >>%target%
 echo    ^<releaseNotes^>Release %version% from %date%. No binary change, only NuGet package compliance updates.^</releaseNotes^> >>%target%
 echo    ^<copyright^>Copyright (c) Microsoft. All Rights Reserved.^</copyright^> >>%target%
-echo    ^<tags^>ManagedEsent NoSql ISAM^</tags^> >>%target%
+echo    ^<tags^>ManagedEsent NoSql ISAM Database Storage DatabaseEngine^</tags^> >>%target%
 echo    ^<!-- >>%target%
 echo    ^<dependencies^> >>%target%
 echo      ^<dependency id="SampleDependency" version="1.0" /^> >>%target%

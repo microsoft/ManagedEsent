@@ -10,6 +10,7 @@
 namespace Microsoft.Isam.Esent.Collections.Generic
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Reflection;
     using System.Runtime.CompilerServices;
     using System.Text;
@@ -29,6 +30,9 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// Initializes a new instance of the KeyColumnConverter class.
         /// </summary>
+        [SuppressMessage("Microsoft.Usage",
+                         "CA2208:InstantiateArgumentExceptionsCorrectly",
+                         Justification = "ArgumentOutOfRangeException wants a local argument, not a generic type-argument.")]
         public KeyColumnConverter()
         {
             const string MakeKeyMethodName = "MakeKey";
@@ -54,7 +58,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             }
             else
             {
-                throw new ArgumentOutOfRangeException("type", typeof(TColumn), "Not supported for MakeKey");                
+                throw new ArgumentOutOfRangeException("TColumn", typeof(TColumn), "The type of TColumn is not supported for MakeKey");                
             }
         }
 

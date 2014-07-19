@@ -12,6 +12,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Net;
     using System.Reflection;
@@ -46,6 +47,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             { typeof(string), "RetrieveColumnAsString" },
             { typeof(DateTime), "RetrieveColumnAsDateTime" },
             { typeof(TimeSpan), "RetrieveColumnAsTimeSpan" },
+            { typeof(PersistentBlob), "RetrieveColumnAsPersistentBlob" },
         };
 
         /// <summary>
@@ -67,6 +69,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             { typeof(string), JET_coltyp.LongText },
             { typeof(DateTime), JET_coltyp.Currency },
             { typeof(TimeSpan), JET_coltyp.Currency },
+            { typeof(PersistentBlob), JET_coltyp.LongBinary },
         };
 
         /// <summary>
@@ -87,6 +90,9 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// Initializes a new instance of the ColumnConverter class.
         /// </summary>
+        [SuppressMessage("Microsoft.Usage",
+                         "CA2208:InstantiateArgumentExceptionsCorrectly",
+                         Justification = "ArgumentOutOfRangeException wants a local argument, not a generic type-argument.")]
         public ColumnConverter()
         {
             Type underlyingType = IsNullableType(typeof(TColumn)) ? GetUnderlyingType(typeof(TColumn)) : typeof(TColumn);
@@ -493,6 +499,19 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
+        /// Set a PersistentBlob.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to set the value in.</param>
+        /// <param name="columnid">The column to set.</param>
+        /// <param name="value">The value to set.</param>
+        private static void SetColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, PersistentBlob value)
+        {
+            value.CheckImmutability();
+            Api.SetColumn(sesid, tableid, columnid, value.GetBytes());
+        }
+
+        /// <summary>
         /// Retrieve a nullable date time. We do not use Api.RetrieveColumnAsDateTime because
         /// that stores the value in OADate format, which is less accurate than System.DateTime.
         /// Instead we store a DateTime as its Tick value in an Int64 column.
@@ -528,6 +547,19 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Retrieve a PersistentBlob.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to retrieve the value from.</param>
+        /// <param name="columnid">The column containing the value.</param>
+        /// <returns>A PersistentBlob constructed from the column.</returns>
+        private static PersistentBlob RetrieveColumnAsPersistentBlob(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
+        {
+            byte[] bytes = Api.RetrieveColumn(sesid, tableid, columnid);
+            return new PersistentBlob(bytes);
         }
 
         /// <summary>
@@ -612,7 +644,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                                                                null,
                                                                retrieveColumnArguments,
                                                                null);
-            if ((typeof(string) == typeof(TColumn)) || IsNullableType(typeof(TColumn)))
+            if (typeof(TColumn).IsClass || IsNullableType(typeof(TColumn)))
             {
                 // Return the string/nullable type.
                 return (RetrieveColumnDelegate)Delegate.CreateDelegate(typeof(RetrieveColumnDelegate), retrieveColumnMethod);
