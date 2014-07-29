@@ -67,7 +67,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The prefix property of this key segment is true if the value of
+        /// Gets a value indicating whether the value of
         /// this key segment can match any value of a corresponding key column
         /// in an index that starts with its value.
         /// </summary>
@@ -80,7 +80,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The wildcard property of this key segment is true if the value of
+        /// Gets a value indicating whether the value of
         /// this key segment can match any value of a corresponding key column
         /// in an index.
         /// </summary>

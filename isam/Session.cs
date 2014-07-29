@@ -19,9 +19,10 @@ namespace Microsoft.Isam.Esent.Isam
     /// A Session is the transactional context for the ISAM.  It can be used to
     /// begin, commit, or abort transactions that influence when changes made
     /// to databases are kept or discarded.
-    ///
+    /// <para>
     /// The session object currently also controls which databases can be
     /// accessed by the ISAM.
+    /// </para>
     /// </summary>
     public class Session : IDisposable
     {
@@ -76,7 +77,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Finalizes an instance of the Session class
+        /// Finalizes an instance of the Session class.
         /// </summary>
         ~Session()
         {
@@ -84,7 +85,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The instance that created this session
+        /// Gets the instance that created this session.
         /// </summary>
         public Instance Instance
         {
@@ -95,7 +96,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Get the ID of the session's current transaction.
+        /// Gets the ID of the session's current transaction.
         /// </summary>
         /// <remarks>
         /// The transaction ID is incremented every time the session's current
@@ -112,7 +113,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Get the save point (level) of the session's current transaction.
+        /// Gets the save point (level) of the session's current transaction.
         /// </summary>
         /// <remarks>
         /// Every time a new transaction is begun, the save point (level) of
@@ -456,9 +457,10 @@ namespace Microsoft.Isam.Esent.Isam
         /// It is illegal to call this method when the session is not currently
         /// in a transaction.  Use Session.TransactionLevel to determine the
         /// current transaction state of a session.
-        ///
+        /// <para>
         /// Session.AbortTransaction is an alias for
-        /// Session.RollbackTransaction.
+        /// <see cref="Session.RollbackTransaction"/>.
+        /// </para>
         /// </remarks>
         public void AbortTransaction()
         {

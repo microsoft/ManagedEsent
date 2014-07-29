@@ -80,7 +80,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The name of the table
+        /// Gets the name of the table.
         /// </summary>
         /// <value>
         /// The name.
@@ -94,7 +94,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The type of the table
+        /// Gets the type of the table.
         /// </summary>
         public TableType Type
         {
@@ -105,7 +105,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// A collection containing the table's columns
+        /// Gets a collection containing the table's columns.
         /// </summary>
         public ColumnCollection Columns
         {
@@ -116,7 +116,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// A collection containing the tables indices
+        /// Gets a collection containing the tables indices.
         /// </summary>
         public IndexCollection Indices
         {

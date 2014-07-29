@@ -181,7 +181,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Provides access to a boatload of parameters that can be used to
+        /// Gets a <see cref="SystemParameters"/> object that provides access to a boatload of parameters that can be used to
         /// tweak various aspects of the ISAM's behavior or performance for
         /// this instance.
         /// </summary>

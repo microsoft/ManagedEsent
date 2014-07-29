@@ -32,13 +32,13 @@ namespace Microsoft.Isam.Esent.Isam
         private bool readOnly = false;
 
         /// <summary>
-        /// True if this field collection cannot be changed
+        /// Gets a value indicating whether this field collection cannot be changed.
         /// </summary>
         public bool IsReadOnly
         {
             get
             {
-                return readOnly;
+                return this.readOnly;
             }
         }
 
@@ -57,7 +57,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The location of the record that contained these fields
+        /// Gets or sets the location of the record that contained these fields.
         /// </summary>
         /// <value>
         /// The location.
@@ -119,7 +119,7 @@ namespace Microsoft.Isam.Esent.Isam
 
             set
             {
-                Dictionary[columnName.ToLower(CultureInfo.InvariantCulture)] = value;
+                this.Dictionary[columnName.ToLower(CultureInfo.InvariantCulture)] = value;
             }
         }
 
@@ -140,7 +140,7 @@ namespace Microsoft.Isam.Esent.Isam
 
             set
             {
-                Dictionary[column.Name.ToLower(CultureInfo.InvariantCulture)] = value;
+                this.Dictionary[column.Name.ToLower(CultureInfo.InvariantCulture)] = value;
             }
         }
 
@@ -163,7 +163,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="values">The values.</param>
         public void Add(FieldValueCollection values)
         {
-            Dictionary.Add(values.Name.ToLower(CultureInfo.InvariantCulture), values);
+            this.Dictionary.Add(values.Name.ToLower(CultureInfo.InvariantCulture), values);
         }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <returns>Whether the specifed column exists in the row.</returns>
         public bool Contains(string columnName)
         {
-            return Dictionary.Contains(columnName.ToLower(CultureInfo.InvariantCulture));
+            return this.Dictionary.Contains(columnName.ToLower(CultureInfo.InvariantCulture));
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <returns>Whether the specifed column exists in the row.</returns>
         public bool Contains(Columnid column)
         {
-            return Dictionary.Contains(column.Name.ToLower(CultureInfo.InvariantCulture));
+            return this.Dictionary.Contains(column.Name.ToLower(CultureInfo.InvariantCulture));
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="columnName">Name of the column.</param>
         public void Remove(string columnName)
         {
-            Dictionary.Remove(columnName.ToLower(CultureInfo.InvariantCulture));
+            this.Dictionary.Remove(columnName.ToLower(CultureInfo.InvariantCulture));
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="column">The column.</param>
         public void Remove(Columnid column)
         {
-            Dictionary.Remove(column.Name.ToLower(CultureInfo.InvariantCulture));
+            this.Dictionary.Remove(column.Name.ToLower(CultureInfo.InvariantCulture));
         }
 
         /// <summary>
@@ -224,7 +224,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </summary>
         protected override void OnClear()
         {
-            CheckReadOnly();
+            this.CheckReadOnly();
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="value">The value of the element to insert.</param>
         protected override void OnInsert(object key, object value)
         {
-            CheckReadOnly();
+            this.CheckReadOnly();
         }
 
         /// <summary>
@@ -244,7 +244,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="value">The value of the element to remove.</param>
         protected override void OnRemove(object key, object value)
         {
-            CheckReadOnly();
+            this.CheckReadOnly();
         }
 
         /// <summary>
@@ -255,7 +255,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="newValue">The new value of the element associated with <paramref name="key" />.</param>
         protected override void OnSet(object key, object oldValue, object newValue)
         {
-            CheckReadOnly();
+            this.CheckReadOnly();
         }
 
         /// <summary>

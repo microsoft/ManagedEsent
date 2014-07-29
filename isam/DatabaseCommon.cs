@@ -22,11 +22,12 @@ namespace Microsoft.Isam.Esent.Isam
     /// contain data in the form of records.  The database's schema can be
     /// enumerated and manipulated by this object.  Also, the database's
     /// tables can be opened for access by this object.
-    ///
+    /// <para>
     /// DatabaseCommon is the common root class for all types of databases.
     /// Currently, there are two types:  Database which provides access to
     /// ordinary databases and TemporaryDatabase which provides access to
     /// temporary databases.
+    /// </para>
     /// </summary>
     public abstract class DatabaseCommon : IDisposable
     {
@@ -72,7 +73,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The session that created this database
+        /// Gets the session that created this database
         /// </summary>
         public Session Session
         {

@@ -147,36 +147,36 @@ namespace Microsoft.Isam.Esent.Isam
         {
             get
             {
-                if (database != null)
+                if (this.database != null)
                 {
-                    lock (database.Session)
+                    lock (this.database.Session)
                     {
-                        JET_SESID sesid = database.Session.Sesid;
-                        if (cachedIndexDefinition != indexName.ToLower(CultureInfo.InvariantCulture)
-                            || indexUpdateID != DatabaseCommon.SchemaUpdateID)
+                        JET_SESID sesid = this.database.Session.Sesid;
+                        if (this.cachedIndexDefinition != indexName.ToLower(CultureInfo.InvariantCulture)
+                            || this.indexUpdateID != DatabaseCommon.SchemaUpdateID)
                         {
                             JET_INDEXLIST indexList;
                             Api.JetGetIndexInfo(
                                 sesid,
-                                database.Dbid,
-                                tableName,
+                                this.database.Dbid,
+                                this.tableName,
                                 indexName,
                                 out indexList,
                                 JET_IdxInfo.List);
                             try
                             {
-                                indexDefinition = IndexDefinition.Load(database, tableName, indexList);
+                                this.indexDefinition = IndexDefinition.Load(this.database, this.tableName, indexList);
                             }
                             finally
                             {
                                 Api.JetCloseTable(sesid, indexList.tableid);
                             }
 
-                            cachedIndexDefinition = indexName.ToLower(CultureInfo.InvariantCulture);
-                            indexUpdateID = DatabaseCommon.SchemaUpdateID;
+                            this.cachedIndexDefinition = indexName.ToLower(CultureInfo.InvariantCulture);
+                            this.indexUpdateID = DatabaseCommon.SchemaUpdateID;
                         }
 
-                        return indexDefinition;
+                        return this.indexDefinition;
                     }
                 }
                 else
@@ -187,7 +187,7 @@ namespace Microsoft.Isam.Esent.Isam
 
             set
             {
-                Dictionary[indexName.ToLower(CultureInfo.InvariantCulture)] = value;
+                this.Dictionary[indexName.ToLower(CultureInfo.InvariantCulture)] = value;
             }
         }
 
@@ -201,13 +201,13 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public new IndexEnumerator GetEnumerator()
         {
-            if (database != null)
+            if (this.database != null)
             {
-                return new IndexEnumerator(database, tableName);
+                return new IndexEnumerator(this.database, this.tableName);
             }
             else
             {
-                return new IndexEnumerator(Dictionary.GetEnumerator());
+                return new IndexEnumerator(this.Dictionary.GetEnumerator());
             }
         }
 
@@ -217,7 +217,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="indexDefinition">The index definition.</param>
         public void Add(IndexDefinition indexDefinition)
         {
-            Dictionary.Add(indexDefinition.Name.ToLower(CultureInfo.InvariantCulture), indexDefinition);
+            this.Dictionary.Add(indexDefinition.Name.ToLower(CultureInfo.InvariantCulture), indexDefinition);
         }
 
         /// <summary>
@@ -227,9 +227,9 @@ namespace Microsoft.Isam.Esent.Isam
         /// <returns>Whether the collection contains an index of name <paramref name="indexName"/>.</returns>
         public bool Contains(string indexName)
         {
-            if (database != null)
+            if (this.database != null)
             {
-                lock (database.Session)
+                lock (this.database.Session)
                 {
                     bool exists = false;
 
@@ -238,9 +238,9 @@ namespace Microsoft.Isam.Esent.Isam
                         int density;
 
                         Api.JetGetIndexInfo(
-                            database.Session.Sesid,
-                            database.Dbid,
-                            tableName,
+                            this.database.Session.Sesid,
+                            this.database.Dbid,
+                            this.tableName,
                             indexName,
                             out density,
                             JET_IdxInfo.SpaceAlloc);
@@ -288,7 +288,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </summary>
         protected override void OnClear()
         {
-            CheckReadOnly();
+            this.CheckReadOnly();
         }
 
         /// <summary>
@@ -298,7 +298,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="value">The value of the element to insert.</param>
         protected override void OnInsert(object key, object value)
         {
-            CheckReadOnly();
+            this.CheckReadOnly();
         }
 
         /// <summary>
@@ -308,7 +308,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="value">The value of the element to remove.</param>
         protected override void OnRemove(object key, object value)
         {
-            CheckReadOnly();
+            this.CheckReadOnly();
         }
 
         /// <summary>
@@ -319,7 +319,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="newValue">The new value of the element associated with <paramref name="key" />.</param>
         protected override void OnSet(object key, object oldValue, object newValue)
         {
-            CheckReadOnly();
+            this.CheckReadOnly();
         }
 
         /// <summary>

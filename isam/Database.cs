@@ -65,7 +65,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </summary>
         ~Database()
         {
-            Dispose(false);
+            this.Dispose(false);
         }
 
         /// <summary>
@@ -133,9 +133,9 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="tableDefinition">The table definition.</param>
         public override void CreateTable(TableDefinition tableDefinition)
         {
-            lock (Session)
+            lock (this.Session)
             {
-                CheckDisposed();
+                this.CheckDisposed();
 
                 using (Transaction trx = new Transaction(Session))
                 {
@@ -144,7 +144,7 @@ namespace Microsoft.Isam.Esent.Isam
 
                     // Hard-code the initial space and density.
                     JET_TABLEID tableid;
-                    Api.JetCreateTable(this.Session.Sesid, dbid, tableDefinition.Name, 16, 90, out tableid);
+                    Api.JetCreateTable(this.Session.Sesid, this.dbid, tableDefinition.Name, 16, 90, out tableid);
 
                     foreach (ColumnDefinition columnDefinition in tableDefinition.Columns)
                     {
@@ -209,11 +209,11 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public override void DropTable(string tableName)
         {
-            lock (Session)
+            lock (this.Session)
             {
-                CheckDisposed();
+                this.CheckDisposed();
 
-                Api.JetDeleteTable(Session.Sesid, dbid, tableName);
+                Api.JetDeleteTable(Session.Sesid, this.dbid, tableName);
                 DatabaseCommon.SchemaUpdateID++;
             }
         }
@@ -227,9 +227,9 @@ namespace Microsoft.Isam.Esent.Isam
         /// </returns>
         public override bool Exists(string tableName)
         {
-            CheckDisposed();
+            this.CheckDisposed();
 
-            return Tables.Contains(tableName);
+            return this.Tables.Contains(tableName);
         }
 
         /// <summary>
@@ -240,9 +240,9 @@ namespace Microsoft.Isam.Esent.Isam
         /// <returns>a cursor over the specified table in this database</returns>
         public Cursor OpenCursor(string tableName, bool exclusive)
         {
-            lock (Session)
+            lock (this.Session)
             {
-                CheckDisposed();
+                this.CheckDisposed();
 
                 OpenTableGrbit grbit = exclusive ? OpenTableGrbit.DenyRead : OpenTableGrbit.None;
                 return new Cursor(Session, this, tableName, grbit);
@@ -256,11 +256,11 @@ namespace Microsoft.Isam.Esent.Isam
         /// <returns>a cursor over the specified table in this database</returns>
         public override Cursor OpenCursor(string tableName)
         {
-            lock (Session)
+            lock (this.Session)
             {
-                CheckDisposed();
+                this.CheckDisposed();
 
-                return OpenCursor(tableName, false);
+                return this.OpenCursor(tableName, false);
             }
         }
 

@@ -283,7 +283,7 @@ while(<$jetapifileHandle>) {
 print <<__EOCODE1__;
 
         /// <summary>
-        /// Gets or sets a system parameter which is a string.
+        /// $GetsOrSetsString system parameter which is a string.
         /// </summary>
         public $type $param
         {
@@ -345,7 +345,7 @@ __EOCODE6__
 print <<__EOCODE7__;
 
         /// <summary>
-        /// $GetsOrSetsString a system parameter which is a boolean type.
+        /// $GetsOrSetsString a value indicating whether the underlying system parameter is true.
         /// </summary>
         public $type $param
         {

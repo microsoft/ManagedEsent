@@ -132,7 +132,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Whether the column contains ASCII data (text columns only).
+        /// Gets a value indicating whether the column contains ASCII data (text columns only).
         /// </summary>
         public bool IsAscii
         {
@@ -143,7 +143,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The name of the column
+        /// Gets the name of the column
         /// </summary>
         /// <remarks>
         /// A column name is only unique in the context of a specific table.
@@ -157,7 +157,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The type of the column.
+        /// Gets the type of the column.
         /// </summary>
         /// <value>
         /// The type.
@@ -185,7 +185,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The underlying ESE <see cref="JET_coltyp"/> of the column.
+        /// Gets the underlying ESE <see cref="JET_coltyp"/> of the column.
         /// </summary>
         internal JET_coltyp Coltyp
         {

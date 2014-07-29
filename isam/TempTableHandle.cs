@@ -74,7 +74,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The name of the table
+        /// Gets the name of the table.
         /// </summary>
         public string Name
         {
@@ -85,7 +85,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The JET_SESID used to open and access the table.
+        /// Gets the <see cref="JET_SESID"/> used to open and access the table.
         /// </summary>
         public JET_SESID Sesid
         {
@@ -96,7 +96,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The handle of the table
+        /// Gets the handle of the table.
         /// </summary>
         public JET_TABLEID Handle
         {
@@ -107,7 +107,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Is the table handle in insert mode?
+        /// Gets or sets a value indicating whether the table handle is in insert mode.
         /// </summary>
         public bool InInsertMode
         {
@@ -123,7 +123,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Count of cursors open on this table
+        /// Gets or sets the count of cursors open on this table.
         /// </summary>
         public int CursorCount
         {
@@ -139,7 +139,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The GUID of the table
+        /// Gets the GUID of the table.
         /// </summary>
         internal Guid Guid
         {

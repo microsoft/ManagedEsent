@@ -67,7 +67,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The column ID of the column used for this conditional column
+        /// Gets the column ID of the column used for this conditional column
         /// </summary>
         /// <remarks>
         /// The column ID is undefined if this conditional column will be used
@@ -82,7 +82,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The name of the column used for this conditional column
+        /// Gets or sets the name of the column used for this conditional column
         /// </summary>
         public string Name
         {
@@ -98,7 +98,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The type of the column used for this conditional column
+        /// Gets the type of the column used for this conditional column
         /// </summary>
         /// <remarks>
         /// The column type is undefined if this conditional column will be
@@ -113,7 +113,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// True if the column must be null for the record to be visible in the index
+        /// Gets or sets a value indicating whether the column must be null for the record to be visible in the index.
         /// </summary>
         public bool MustBeNull
         {
@@ -129,7 +129,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// True if the column must be non-null for the record to be visible in the index
+        /// Gets or sets a value indicating whether the column must be non-null for the record to be visible in the index.
         /// </summary>
         public bool MustBeNonNull
         {

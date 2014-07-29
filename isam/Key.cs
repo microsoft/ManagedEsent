@@ -38,7 +38,7 @@ namespace Microsoft.Isam.Esent.Isam
         private bool wildcard = false;
 
         /// <summary>
-        /// Returns a key that can be used to represent the start of an index.
+        /// Gets a key that can be used to represent the start of an index.
         /// </summary>
         public static Key Start
         {
@@ -49,7 +49,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Returns a key that can be used to represent the end of an index.
+        /// Gets a key that can be used to represent the end of an index.
         /// </summary>
         public static Key End
         {
@@ -69,7 +69,7 @@ namespace Microsoft.Isam.Esent.Isam
         {
             get
             {
-                return prefix;
+                return this.prefix;
             }
         }
 
@@ -83,7 +83,7 @@ namespace Microsoft.Isam.Esent.Isam
         {
             get
             {
-                return wildcard == true || List.Count == 0;
+                return this.wildcard == true || List.Count == 0;
             }
         }
 
@@ -166,14 +166,15 @@ namespace Microsoft.Isam.Esent.Isam
         /// Prefix key segments only make sense in the context of a variable
         /// length column.  Any other use will result in an argument exception
         /// when the key is used.
-        ///
+        /// <para>
         /// A key may contain only one prefix key segment.  Further, a prefix
         /// key segment may not be followed by an ordinary key segment.
+        /// </para>
         /// </remarks>
         public void AddPrefix(object value)
         {
             List.Add(new KeySegment(value, true, false, false));
-            prefix = true;
+            this.prefix = true;
         }
 
         /// <summary>
@@ -185,9 +186,10 @@ namespace Microsoft.Isam.Esent.Isam
         /// wildcard key segment may be followed only by other wildcard key
         /// segments.  Finally, extra wildcard key segments will be ignored
         /// when the key is used.
-        ///
+        /// <para>
         /// A key with no key segments acts as if it contains a single wildcard
         /// key segment.
+        /// </para>
         /// </remarks>
         public void AddWildcard()
         {
@@ -196,14 +198,14 @@ namespace Microsoft.Isam.Esent.Isam
             if (List.Count > 0)
             {
                 KeySegment segment = (KeySegment)List[List.Count - 1];
-                List[List.Count - 1] = new KeySegment(segment.Value, segment.Prefix, segment.Wildcard, true);
+                this.List[List.Count - 1] = new KeySegment(segment.Value, segment.Prefix, segment.Wildcard, true);
             }
 
             try
             {
                 // add a wildcard key segment
                 List.Add(new KeySegment(null, false, true, false));
-                wildcard = true;
+                this.wildcard = true;
             }
             finally
             {
@@ -213,7 +215,7 @@ namespace Microsoft.Isam.Esent.Isam
                 if (List.Count > 0)
                 {
                     KeySegment segment = (KeySegment)List[List.Count - 1];
-                    List[List.Count - 1] = new KeySegment(segment.Value, segment.Prefix, segment.Wildcard, false);
+                    this.List[List.Count - 1] = new KeySegment(segment.Value, segment.Prefix, segment.Wildcard, false);
                 }
             }
         }

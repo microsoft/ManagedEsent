@@ -33,7 +33,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Gets or sets a system parameter which is a string.
+        /// Gets or sets system parameter which is a string.
         /// </summary>
         public string SystemPath
         {
@@ -52,7 +52,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Gets or sets a system parameter which is a string.
+        /// Gets or sets system parameter which is a string.
         /// </summary>
         public string TempPath
         {
@@ -71,7 +71,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Gets or sets a system parameter which is a string.
+        /// Gets or sets system parameter which is a string.
         /// </summary>
         public string LogFilePath
         {
@@ -90,7 +90,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Gets or sets a system parameter which is a string.
+        /// Gets or sets system parameter which is a string.
         /// </summary>
         public string BaseName
         {
@@ -109,7 +109,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Gets or sets a system parameter which is a string.
+        /// Gets or sets system parameter which is a string.
         /// </summary>
         public string EventSource
         {
@@ -261,7 +261,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Gets or sets a system parameter which is a boolean type.
+        /// Gets or sets a value indicating whether the underlying system parameter is true.
         /// </summary>
         public bool CircularLog
         {
@@ -409,7 +409,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Gets or sets a system parameter which is a string.
+        /// Gets or sets system parameter which is a string.
         /// </summary>
         public string Recovery
         {
@@ -485,7 +485,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Gets or sets a system parameter which is a string.
+        /// Gets or sets system parameter which is a string.
         /// </summary>
         public string EventSourceKey
         {
@@ -504,7 +504,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Gets or sets a system parameter which is a boolean type.
+        /// Gets or sets a value indicating whether the underlying system parameter is true.
         /// </summary>
         public bool NoInformationEvent
         {
@@ -543,7 +543,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Gets or sets a system parameter which is a boolean type.
+        /// Gets or sets a value indicating whether the underlying system parameter is true.
         /// </summary>
         public bool DeleteOutOfRangeLogs
         {
@@ -563,7 +563,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Gets or sets a system parameter which is a boolean type.
+        /// Gets or sets a value indicating whether the underlying system parameter is true.
         /// </summary>
         public bool EnableIndexCleanup
         {
@@ -635,7 +635,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Gets or sets a system parameter which is a boolean type.
+        /// Gets or sets a value indicating whether the underlying system parameter is true.
         /// </summary>
         public bool CleanupMismatchedLogFiles
         {
@@ -674,7 +674,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Gets or sets a system parameter which is a boolean type.
+        /// Gets or sets a value indicating whether the underlying system parameter is true.
         /// </summary>
         public bool CreatePathIfNotExist
         {
@@ -694,7 +694,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Gets or sets a system parameter which is a boolean type.
+        /// Gets or sets a value indicating whether the underlying system parameter is true.
         /// </summary>
         public bool OneDatabasePerSession
         {

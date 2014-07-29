@@ -110,12 +110,12 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// If this is a text column, whether it stores Ascii data. If false, text columns store Unicode data.
+        /// Gets a value indicating whether this is a text column, whether it stores Ascii data. If false, text columns store Unicode data.
         /// </summary>
         public bool IsAscii { get; private set; }
 
         /// <summary>
-        /// The column ID of the column
+        /// Gets the column ID of the column
         /// </summary>
         /// <remarks>
         /// The column ID is undefined if this column definition will be used
@@ -130,7 +130,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The name of the column
+        /// Gets the name of the column.
         /// </summary>
         public string Name
         {
@@ -141,7 +141,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The type of the column
+        /// Gets or sets the type of the column.
         /// </summary>
         public Type Type
         {
@@ -158,7 +158,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The column's flags
+        /// Gets or sets the column's flags.
         /// </summary>
         public ColumnFlags Flags
         {
@@ -175,14 +175,15 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The max length of the column in bytes
+        /// Gets or sets the max length of the column in bytes.
         /// </summary>
         /// <remarks>
         /// The max length of a fixed column need not be specified when
         /// defining a new column.
-        ///
+        /// <para>
         /// A max length of zero for a variable length column is the same as
         /// giving that column the largest possible max length.
+        /// </para>
         /// </remarks>
         public int MaxLength
         {
@@ -199,16 +200,17 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The default value of the column
+        /// Gets or sets the default value of the column.
         /// </summary>
         /// <remarks>
         /// If the field corresponding to this column in a given record is
         /// never set then the value of that field will be the default value of
         /// the column.
-        ///
+        /// <para>
         /// The size of the default value is currently limited to 255 bytes
         /// by the ISAM.  It is also not possible to specify a zero length
         /// default value.
+        /// </para>
         /// </remarks>
         public object DefaultValue
         {
@@ -225,7 +227,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// True if this column definition cannot be changed
+        /// Gets a value indicating whether this column definition cannot be changed.
         /// </summary>
         public bool IsReadOnly
         {

@@ -92,7 +92,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The name of the index
+        /// Gets the name of the index.
         /// </summary>
         public string Name
         {
@@ -103,7 +103,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The index's flags
+        /// Gets or sets the index's flags.
         /// </summary>
         public IndexFlags Flags
         {
@@ -120,7 +120,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The ideal density of the index in percent
+        /// Gets or sets the ideal density of the index in percent.
         /// </summary>
         /// <remarks>
         /// The ideal density of an index is used to setup a newly created
@@ -129,8 +129,9 @@ namespace Microsoft.Isam.Esent.Isam
         /// appended should have a density of 100% and an index that will
         /// experience random insertion should have a lower density to reflect
         /// the average density on which that index would converge at run time.
-        ///
+        /// <para>
         /// The density is primarily tweaked for performance reasons.
+        /// </para>
         /// </remarks>
         public int Density
         {
@@ -147,7 +148,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The locale of the index
+        /// Gets or sets the locale of the index.
         /// </summary>
         /// <remarks>
         /// A locale can be specified for any index but will only affect
@@ -168,7 +169,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The locale sensitive collation options for the index
+        /// Gets or sets the locale sensitive collation options for the index.
         /// </summary>
         /// <remarks>
         /// These options can be specified for any index but will only affect
@@ -189,8 +190,8 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The maximum length of a normalized key that will be stored in the
-        /// index in bytes
+        /// Gets or sets the maximum length of a normalized key that will be stored in the
+        /// index in bytes.
         /// </summary>
         /// <remarks>
         /// In many ways, this is one of the most critical parameters of an
@@ -200,20 +201,22 @@ namespace Microsoft.Isam.Esent.Isam
         /// according to the index's sort order.  This can also cause otherwise
         /// unique index entries to be considered duplicates which can cause
         /// some updates to fail.
-        ///
+        /// <para>
         /// The current limits for the ISAM are as follows:  databases with 2KB
         /// pages can have keys up to 255B in length;  databases with 4KB pages
         /// can have keys up to 1000B in length;  and databases with 8KB pages
         /// can have keys up to 2000B in length.  Note that these lengths are
         /// for normalized keys not raw key data.  Normalized keys are always
         /// slightly longer than the raw data from which they are derived.
-        ///
+        /// </para>
+        /// <para>
         /// NOTE:  a max key length of 255 is "special" in that it uses legacy
         /// semantics for building keys.  Those semantics include the truncation
         /// of the source data for normalization at 256 bytes.  This mode should
         /// only be used if you specifically want this behavior for backwards
         /// compatibility because it causes errors during the generation of
         /// index keys under certain conditions.
+        /// </para>
         /// </remarks>
         public int MaxKeyLength
         {
@@ -230,7 +233,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// A collection of the key columns in this index
+        /// Gets a collection of the key columns in this index.
         /// </summary>
         public KeyColumnCollection KeyColumns
         {
@@ -241,7 +244,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// A collection of conditional columns in this index
+        /// Gets a collection of conditional columns in this index.
         /// </summary>
         public ConditionalColumnCollection ConditionalColumns
         {
@@ -252,7 +255,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// True if this index definition cannot be changed
+        /// Gets a value indicating whether this index definition cannot be changed
         /// </summary>
         /// <value>
         ///   <c>true</c> if [is read only]; otherwise, <c>false</c>.
@@ -351,8 +354,8 @@ namespace Microsoft.Isam.Esent.Isam
                     }
 
                     // load info for each key column in the index
-                    int iColumn = 0;
-                    int cColumn = Api.RetrieveColumnAsInt32(sesid, indexList.tableid, indexList.columnidcColumn).GetValueOrDefault();
+                    int currentColumn = 0;
+                    int totalNumberColumns = Api.RetrieveColumnAsInt32(sesid, indexList.tableid, indexList.columnidcColumn).GetValueOrDefault();
 
                     indexDefinition.keyColumnCollection = new KeyColumnCollection();
                     do
@@ -371,12 +374,12 @@ namespace Microsoft.Isam.Esent.Isam
 
                         // move onto the next key column definition, unless it is
                         // the last key column
-                        if (iColumn != cColumn - 1)
+                        if (currentColumn != totalNumberColumns - 1)
                         {
                             Api.TryMoveNext(sesid, indexList.tableid);
                         }
                     }
-                    while (++iColumn < cColumn);
+                    while (++currentColumn < totalNumberColumns);
 
                     indexDefinition.keyColumnCollection.ReadOnly = true;
 

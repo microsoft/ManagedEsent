@@ -258,7 +258,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The database that created this cursor
+        /// Gets the database that created this cursor
         /// </summary>
         public DatabaseCommon Database
         {
@@ -313,7 +313,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Holds a collection containing all the field values for the
+        /// Gets a collection containing all the field values for the
         /// current record.  If a record is currently being inserted or updated
         /// then the field values will reflect the new data.
         /// </summary>
@@ -324,12 +324,13 @@ namespace Microsoft.Isam.Esent.Isam
         /// be updated if another Cursor belonging to the same Session updates
         /// the record.  The cache can be forced to be updated by performing a
         /// Move( 0 ) on the containing Cursor.
-        ///
+        /// <para>
         /// The cache will be reloaded on every call if the Session that opened
         /// this Cursor is not in a transaction.  This is required because
         /// the record data can change at any time when not in a transaction.
         /// If repeated references to Cursor.Fields will be made, they should
         /// all be done inside the same transaction to avoid poor performance.
+        /// </para>
         /// </remarks>
         public FieldCollection Fields
         {
@@ -380,8 +381,9 @@ namespace Microsoft.Isam.Esent.Isam
         /// The field values seen through this column accessor will
         /// represent the modified data in the record during an update
         /// operation.
-        ///
+        /// <para>
         /// Only this column accessor may be used to set fields in a record.
+        /// </para>
         /// </remarks>
         public ColumnAccessor EditRecord
         {
@@ -399,11 +401,12 @@ namespace Microsoft.Isam.Esent.Isam
         /// The field values seen through this column accessor will
         /// represent the original data in the record during an update
         /// operation.
-        ///
+        /// <para>
         /// Fetching field values through this column accessor for columns that
         /// are also key columns in the current index may result in improved
         /// performance.  This is because in some cases, the field value may be
         /// computed from the index entry rather that fetched from the record.
+        /// </para>
         /// </remarks>
         public ColumnAccessor IndexRecord
         {
@@ -415,7 +418,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The current index of this cursor
+        /// Gets or sets the current index of this cursor.
         /// </summary>
         /// <remarks>
         /// If the table has no primary index then the name of the current
@@ -456,8 +459,8 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The key corresponding to the current record for the current index
-        /// of the cursor
+        /// Gets or sets the key corresponding to the current record for the current index
+        /// of the cursor.
         /// </summary>
         public Key Key
         {
@@ -483,8 +486,8 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The position of the current record for the current index of the
-        /// cursor
+        /// Gets or sets the position of the current record for the current index of the
+        /// cursor.
         /// </summary>
         public Position Position
         {
@@ -508,8 +511,8 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The location of the current record for the current index of the
-        /// cursor
+        /// Gets or sets the location of the current record for the current index of the
+        /// cursor.
         /// </summary>
         public Location Location
         {
@@ -607,9 +610,10 @@ namespace Microsoft.Isam.Esent.Isam
         /// Moving by an offset of zero is allowed and can be used to test if
         /// the cursor is currently on a record.  It will also force any cached
         /// data for the current record to be refreshed.
-        ///
+        /// <para>
         /// Large offsets used on large tables may cause this method to take
         /// quite some time to complete.
+        /// </para>
         /// </remarks>
         public bool Move(int rows)
         {
@@ -699,19 +703,18 @@ namespace Microsoft.Isam.Esent.Isam
                 {
                     this.onBeforeFirst = true;
                 }
-
-                    // let's actually move before first
                 else
                 {
+                    // let's actually move before first
+                    //
                     // if an index range is not specified, simply move first
                     if (this.keyStart == null)
                     {
                         Api.TryMoveFirst(this.session.Sesid, this.tableid);
                     }
-
-                        // if an index range is specified, seek to its lower limit
                     else
                     {
+                        // if an index range is specified, seek to its lower limit
                         Api.MakeKey(this.session.Sesid, this.tableid, this.keyStart, MakeKeyGrbit.NormalizedKey);
                         try
                         {
@@ -759,10 +762,9 @@ namespace Microsoft.Isam.Esent.Isam
                 {
                     Api.TryMoveLast(this.session.Sesid, this.tableid);
                 }
-
-                    // if an index range is specified, seek to its upper limit
                 else
                 {
+                    // if an index range is specified, seek to its upper limit
                     Api.MakeKey(this.session.Sesid, this.tableid, this.keyEnd, MakeKeyGrbit.NormalizedKey);
 
                     // Ignore the return code. We don't care if TrySeek() returns false.
@@ -793,8 +795,9 @@ namespace Microsoft.Isam.Esent.Isam
         /// This will affect the order records are traversed by the MoveNext,
         /// MovePrevious and Move methods. The cursor will be positioned before
         /// the first record on the index.
-        ///
+        /// <para>
         /// As a side effect, any restriction in effect will be cleared.
+        /// </para>
         /// </remarks>
         public void SetCurrentIndex(string indexName)
         {
@@ -842,8 +845,9 @@ namespace Microsoft.Isam.Esent.Isam
         /// for the entry in the old index.  If no such entry exists because
         /// that record does not have an entry in the new index then the
         /// operation will fail with EsentNoCurrentRecordException.
-        ///
+        /// <para>
         /// As a side effect, any restriction in effect will be cleared.
+        /// </para>
         /// </remarks>
         public void MoveToIndex(string indexName)
         {
@@ -1030,11 +1034,13 @@ namespace Microsoft.Isam.Esent.Isam
         /// <remarks>
         /// The restriction will remain in effect until explicitly reset or
         /// until implicitly reset by other methods as noted.
-        ///
+        /// <para>
         /// Any previously defined restriction will be cleared.
-        ///
+        /// </para>
+        /// <para>
         /// The cursor will be positioned before the first record in the new
         /// restriction.
+        /// </para>
         /// </remarks>
         public void FindRecords(MatchCriteria criteria, Key key)
         {
@@ -1073,11 +1079,13 @@ namespace Microsoft.Isam.Esent.Isam
         /// <remarks>
         /// The restriction will remain in effect until explicitly reset or
         /// until implicitly reset by other methods as noted.
-        ///
+        /// <para>
         /// Any previously defined restriction will be cleared.
-        ///
+        /// </para>
+        /// <para>
         /// The cursor will be positioned before the first record in the new
         /// restriction.
+        /// </para>
         /// </remarks>
         public void FindRecordsBetween(Key keyStart, BoundCriteria criteriaStart, Key keyEnd, BoundCriteria criteriaEnd)
         {
@@ -1152,11 +1160,13 @@ namespace Microsoft.Isam.Esent.Isam
         /// </summary>
         /// <remarks>
         /// The record will not be inserted until the changes are accepted.
-        ///
+        /// <para>
         /// Changes must be made to the record's fields through EditRecord.
-        ///
+        /// </para>
+        /// <para>
         /// It is illegal to insert a new record when already inserting or
         /// updating a record.
+        /// </para>
         /// </remarks>
         public void BeginEditForInsert()
         {
@@ -1183,11 +1193,13 @@ namespace Microsoft.Isam.Esent.Isam
         /// </summary>
         /// <remarks>
         /// The record will not be updated until the changes are accepted.
-        ///
+        /// <para>
         /// Changes must be made to the record's fields through EditRecord.
-        ///
+        /// </para>
+        /// <para>
         /// It is illegal to update a record when already inserting or updating
         /// a record.
+        /// </para>
         /// </remarks>
         public void BeginEditForUpdate()
         {

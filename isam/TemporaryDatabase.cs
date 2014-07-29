@@ -20,16 +20,17 @@ namespace Microsoft.Isam.Esent.Isam
     using Microsoft.Isam.Esent.Interop.Windows7;
 
     /// <summary>
-    /// A Database is a file used by the ISAM to store data.  It is organized
+    /// A Database is a file used by the ISAM to store data. It is organized
     /// into tables which are in turn comprised of columns and indices and
-    /// contain data in the form of records.  The database's schema can be
-    /// enumerated and manipulated by this object.  Also, the database's
+    /// contain data in the form of records. The database's schema can be
+    /// enumerated and manipulated by this object. Also, the database's
     /// tables can be opened for access by this object.
-    ///
-    /// A TemporaryDatabase is used to access the temporary database.  There
+    /// <para>
+    /// A <see cref="TemporaryDatabase"/> is used to access the temporary database. There
     /// is one temporary database per instance and its location is configured
-    /// by Instance.SystemParameters.TempPath.  The temporary database is used
+    /// by Instance.SystemParameters.TempPath. The temporary database is used
     /// to store temporary tables.
+    /// </para>
     /// </summary>
     public class TemporaryDatabase : DatabaseCommon, IDisposable
     {
@@ -211,8 +212,7 @@ namespace Microsoft.Isam.Esent.Isam
                     tableDefinitionToCache.Name,
                     this.Session.Sesid,
                     tableid,
-                    tableDefinitionToCache.Type == TableType.Sort
-                    || tableDefinitionToCache.Type == TableType.PreSortTemporary);
+                    tableDefinitionToCache.Type == TableType.Sort || tableDefinitionToCache.Type == TableType.PreSortTemporary);
 
                 this.Tables.Add(tableDefinitionToCache);
                 this.TempTableHandles.Add(tempTableHandle);

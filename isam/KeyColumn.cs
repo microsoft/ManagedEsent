@@ -73,7 +73,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The column ID of the column used for this key column
+        /// Gets the column ID of the column used for this key column.
         /// </summary>
         /// <remarks>
         /// The column ID is undefined if this key column will be used to
@@ -88,7 +88,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The name of the column used for this key column
+        /// Gets or sets the name of the column used for this key column.
         /// </summary>
         public string Name
         {
@@ -105,11 +105,11 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The type of the column used for this key column
+        /// Gets the type of the column used for this key column.
         /// </summary>
         /// <remarks>
         /// The column type is undefined if this key column will be used to
-        /// define a new index
+        /// define a new index.
         /// </remarks>
         public Type Type
         {
@@ -120,7 +120,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The sort order of the key column
+        /// Gets or sets a value indicating whether the sort order of the key column is ascending.
         /// </summary>
         /// <value>
         ///   <c>true</c> if [is ascending]; otherwise, <c>false</c>.

@@ -96,9 +96,10 @@ namespace Microsoft.Isam.Esent.Isam
         /// If an existing transaction is joined, then committing or aborting
         /// this transaction will have no effect on the joined transaction.  If
         /// a new transaction was begun then these actions will work normally.
-        /// 
+        /// <para>
         /// If this transaction is not committed before this object is disposed
         /// then the transaction will automatically be aborted.
+        /// </para>
         /// </remarks>
         public Transaction(Session session, bool join)
         {
@@ -124,7 +125,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Get the save point (level) for this transaction.
+        /// Gets the save point (level) for this transaction.
         /// </summary>
         public long TransactionLevel
         {
@@ -175,12 +176,14 @@ namespace Microsoft.Isam.Esent.Isam
         /// <remarks>
         /// Changes made to the database will become permanent if and only if
         /// those changes are committed to save point (level) zero.
-        ///
+        /// <para>
         /// A commit to save point (level) zero is guaranteed to be persisted
         /// to the database upon completion of this method.
-        ///
+        /// </para>
+        /// <para>
         /// The transaction object will be disposed as a side effect of this
         /// call.
+        /// </para>
         /// </remarks>
         public void Commit()
         {
@@ -196,16 +199,18 @@ namespace Microsoft.Isam.Esent.Isam
         /// <remarks>
         /// Changes made to the database will become permanent if and only if
         /// those changes are committed to save point (level) zero.
-        ///
+        /// <para>
         /// A commit to save point (level) zero is guaranteed to be persisted
         /// to the database upon completion of this method only if
         /// durableCommit is true.  If durableCommit is false then the changes
         /// will only be persisted to the database if their transaction log
         /// entries happen to be written to disk before a crash or if the
         /// database is shut down cleanly.
-        ///
+        /// </para>
+        /// <para>
         /// The transaction object will be disposed as a side effect of this
         /// call.
+        /// </para>
         /// </remarks>
         public void Commit(bool durableCommit)
         {
@@ -250,8 +255,9 @@ namespace Microsoft.Isam.Esent.Isam
         /// <remarks>
         /// The transaction object will be disposed as a side effect of this
         /// call.
-        ///
-        /// Transaction.Abort is an alias for Transaction.Rollback.
+        /// <para>
+        /// Transaction.Abort is an alias for <see cref="Transaction.Rollback"/>.
+        /// </para>
         /// </remarks>
         public void Abort()
         {

@@ -44,7 +44,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The position in the table
+        /// Gets the position in the table.
         /// </summary>
         public int Entry
         {
@@ -55,7 +55,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The total number of records in the table
+        /// Gets the total number of records in the table.
         /// </summary>
         public int TotalEntries
         {

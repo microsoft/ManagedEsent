@@ -225,9 +225,9 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public new ColumnEnumerator GetEnumerator()
         {
-            if (database != null)
+            if (this.database != null)
             {
-                return new ColumnEnumerator(database, tableName);
+                return new ColumnEnumerator(this.database, this.tableName);
             }
             else
             {
@@ -251,9 +251,9 @@ namespace Microsoft.Isam.Esent.Isam
         /// <returns>Whether the specified column exists in the collection.</returns>
         public bool Contains(string columnName)
         {
-            if (database != null)
+            if (this.database != null)
             {
-                lock (database.Session)
+                lock (this.database.Session)
                 {
                     bool exists = false;
 
@@ -261,9 +261,9 @@ namespace Microsoft.Isam.Esent.Isam
                     {
                         JET_COLUMNBASE columnBase;
                         Api.JetGetColumnInfo(
-                            database.Session.Sesid,
-                            database.Dbid,
-                            tableName,
+                            this.database.Session.Sesid,
+                            this.database.Dbid,
+                            this.tableName,
                             columnName,
                             out columnBase);
                         exists = true;
@@ -288,9 +288,9 @@ namespace Microsoft.Isam.Esent.Isam
         /// <returns>Whether the specified column exists in the collection.</returns>
         public bool Contains(Columnid columnid)
         {
-            if (database != null)
+            if (this.database != null)
             {
-                lock (database.Session)
+                lock (this.database.Session)
                 {
                     bool exists = false;
 
@@ -298,9 +298,9 @@ namespace Microsoft.Isam.Esent.Isam
                     {
                         JET_COLUMNBASE columnBase;
                         Api.JetGetColumnInfo(
-                            database.Session.Sesid,
-                            database.Dbid,
-                            tableName,
+                            this.database.Session.Sesid,
+                            this.database.Dbid,
+                            this.tableName,
                             columnid.Name,
                             out columnBase);
                         exists = true;
@@ -356,7 +356,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </summary>
         protected override void OnClear()
         {
-            CheckReadOnly();
+            this.CheckReadOnly();
         }
 
         /// <summary>
@@ -366,7 +366,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="value">The value of the element to insert.</param>
         protected override void OnInsert(object key, object value)
         {
-            CheckReadOnly();
+            this.CheckReadOnly();
         }
 
         /// <summary>
@@ -376,7 +376,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="value">The value of the element to remove.</param>
         protected override void OnRemove(object key, object value)
         {
-            CheckReadOnly();
+            this.CheckReadOnly();
         }
 
         /// <summary>
@@ -387,7 +387,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="newValue">The new value of the element associated with <paramref name="key" />.</param>
         protected override void OnSet(object key, object oldValue, object newValue)
         {
-            CheckReadOnly();
+            this.CheckReadOnly();
         }
 
         /// <summary>

@@ -35,13 +35,13 @@ namespace Microsoft.Isam.Esent.Isam
         {
             get
             {
-                return readOnly;
+                return this.readOnly;
             }
 
             set
             {
-                CheckReadOnly();
-                readOnly = value;
+                this.CheckReadOnly();
+                this.readOnly = value;
             }
         }
 
@@ -117,7 +117,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </summary>
         protected override void OnClear()
         {
-            CheckReadOnly();
+            this.CheckReadOnly();
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="value">The new value of the element at <paramref name="index" />.</param>
         protected override void OnInsert(int index, object value)
         {
-            CheckReadOnly();
+            this.CheckReadOnly();
         }
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="value">The value of the element to remove from <paramref name="index" />.</param>
         protected override void OnRemove(int index, object value)
         {
-            CheckReadOnly();
+            this.CheckReadOnly();
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="newValue">The new value of the element at <paramref name="index" />.</param>
         protected override void OnSet(int index, object oldValue, object newValue)
         {
-            CheckReadOnly();
+            this.CheckReadOnly();
         }
 
         /// <summary>

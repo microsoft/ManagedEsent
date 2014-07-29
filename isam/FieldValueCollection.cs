@@ -41,7 +41,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The column ID of the column for which these field values were set
+        /// Gets the column ID of the column for which these field values were set
         /// in the record
         /// </summary>
         /// <value>
@@ -56,7 +56,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The name of the column for which these field values were set in the
+        /// Gets the name of the column for which these field values were set in the
         /// record
         /// </summary>
         /// <value>
@@ -71,7 +71,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// The type of the column for which these field values were set in the
+        /// Gets the type of the column for which these field values were set in the
         /// record
         /// </summary>
         /// <value>
@@ -86,7 +86,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// True if this field value collection cannot be changed
+        /// Gets or sets a value indicating whether this field value collection cannot be changed
         /// </summary>
         /// <value>
         ///   <c>true</c> if [read only]; otherwise, <c>false</c>.
@@ -181,7 +181,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </summary>
         protected override void OnClear()
         {
-            CheckReadOnly();
+            this.CheckReadOnly();
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="value">The new value of the element at <paramref name="index" />.</param>
         protected override void OnInsert(int index, object value)
         {
-            CheckReadOnly();
+            this.CheckReadOnly();
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="value">The value of the element to remove from <paramref name="index" />.</param>
         protected override void OnRemove(int index, object value)
         {
-            CheckReadOnly();
+            this.CheckReadOnly();
         }
 
         /// <summary>
@@ -212,7 +212,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="newValue">The new value of the element at <paramref name="index" />.</param>
         protected override void OnSet(int index, object oldValue, object newValue)
         {
-            CheckReadOnly();
+            this.CheckReadOnly();
         }
 
         /// <summary>
