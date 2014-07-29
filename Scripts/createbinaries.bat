@@ -37,6 +37,8 @@ if errorlevel 1 goto :eof
 %msbuildexe% ..\EsentCollections\EsentCollections.csproj
 if errorlevel 1 goto :eof
 
+%msbuildexe% ..\isam\Isam.csproj
+if errorlevel 1 goto :eof
 
 @echo =-=-=-=-=-=-=-=
 @echo Copying output files to staging area...
@@ -48,6 +50,10 @@ for %%i in ( esent.collections.dll esent.collections.pdb esent.collections.xml )
 
 for %%i in ( esent.interop.dll esent.interop.pdb esent.interop.wsa.dll esent.interop.wsa.pdb esent.interop.xml esent.interop.wsa.xml ) do (
   xcopy /d ..\EsentInterop\bin\release\%%i %dest%\
+)
+
+for %%i in ( esent.isam.dll esent.isam.pdb esent.isam.xml ) do (
+  xcopy /d ..\isam\bin\release\%%i %dest%\
 )
 
 for %%i in ( esedb.py esedbshelve.py ) do (

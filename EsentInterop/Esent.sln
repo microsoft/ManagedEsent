@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{18B3E50E-454E-49DB-A92F-E1D7DAD2AF7D}"
 	ProjectSection(SolutionItems) = preProject
 		CodeCoverage.testrunconfig = CodeCoverage.testrunconfig
@@ -11,6 +13,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EsentInterop", "EsentInterop.csproj", "{E929E163-52A0-4AAC-917B-6D7FAF70C45E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbUtil", "..\EsentInteropSamples\DbUtil\DbUtil.csproj", "{E0B163B0-5AC6-4304-B932-BFC1F6A2A4EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "isam", "..\isam\isam.csproj", "{21CC632C-B09A-4DB7-BD6E-7F7D2716F58F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockSample", "..\EsentInteropSamples\StockSample\StockSample.csproj", "{B0E6D3AB-26F8-4A77-A7E1-D8024B8FFFCF}"
 EndProject
@@ -31,9 +35,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicTest", "..\EsentInteropSamples\BasicTest\BasicTest.csproj", "{08819B49-02B8-4F93-A143-F9B0461CEA64}"
 EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = Esent.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -47,6 +48,10 @@ Global
 		{E0B163B0-5AC6-4304-B932-BFC1F6A2A4EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0B163B0-5AC6-4304-B932-BFC1F6A2A4EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0B163B0-5AC6-4304-B932-BFC1F6A2A4EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21CC632C-B09A-4DB7-BD6E-7F7D2716F58F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21CC632C-B09A-4DB7-BD6E-7F7D2716F58F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21CC632C-B09A-4DB7-BD6E-7F7D2716F58F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21CC632C-B09A-4DB7-BD6E-7F7D2716F58F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B0E6D3AB-26F8-4A77-A7E1-D8024B8FFFCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B0E6D3AB-26F8-4A77-A7E1-D8024B8FFFCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0E6D3AB-26F8-4A77-A7E1-D8024B8FFFCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -86,5 +91,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Esent.vsmdi
 	EndGlobalSection
 EndGlobal

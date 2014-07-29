@@ -14,11 +14,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EsentCollections")]
+[assembly: AssemblyTitle("EsentIsam")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("EsentCollections")]
+[assembly: AssemblyProduct("EsentIsam")]
 [assembly: AssemblyCopyright("Copyright (c) Microsoft. All Rights Reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -40,8 +40,6 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-// 1.8.3.0 2013.03.25. Signed and Strong Named.
-// 1.9.0.0 2013.12.23. Go back to targetting framework 4.0.
 // 1.9.1.0 2014.07.18. PersistentDictionary gets binary blobs; added Isam layer.
 [assembly: AssemblyVersion("1.9.1.0")]
 [assembly: AssemblyFileVersion("1.9.1.0")]
