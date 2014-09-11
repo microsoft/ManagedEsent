@@ -9,7 +9,7 @@
 // </summary>
 // ---------------------------------------------------------------------
 
-namespace Microsoft.Isam.Esent.Isam
+namespace Microsoft.Database.Isam
 {
     using System;
     using System.Globalization;
@@ -28,7 +28,7 @@ namespace Microsoft.Isam.Esent.Isam
     /// <para>
     /// A <see cref="TemporaryDatabase"/> is used to access the temporary database. There
     /// is one temporary database per instance and its location is configured
-    /// by Instance.SystemParameters.TempPath. The temporary database is used
+    /// by Instance.IsamSystemParameters.TempPath. The temporary database is used
     /// to store temporary tables.
     /// </para>
     /// </summary>
@@ -57,11 +57,11 @@ namespace Microsoft.Isam.Esent.Isam
         /// <summary>
         /// Initializes a new instance of the <see cref="TemporaryDatabase"/> class.
         /// </summary>
-        /// <param name="session">The session.</param>
-        internal TemporaryDatabase(Session session)
-            : base(session)
+        /// <param name="isamSession">The session.</param>
+        internal TemporaryDatabase(IsamSession isamSession)
+            : base(isamSession)
         {
-            lock (session)
+            lock (isamSession)
             {
                 this.cleanup = true;
                 this.tableCollection = new TableCollection();
@@ -100,7 +100,7 @@ namespace Microsoft.Isam.Esent.Isam
         {
             get
             {
-                return this.disposed || this.Session.Disposed;
+                return this.disposed || this.IsamSession.Disposed;
             }
 
             set
@@ -147,7 +147,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <exception cref="System.ArgumentException">A MaxKeyLength &gt; 255 is not supported for indices over a temporary table on this version of the database engine.;tableDefinition</exception>
         public override void CreateTable(TableDefinition tableDefinition)
         {
-            lock (this.Session)
+            lock (this.IsamSession)
             {
                 this.CheckDisposed();
 
@@ -168,7 +168,7 @@ namespace Microsoft.Isam.Esent.Isam
                 // transaction.  we disallow this to sidestep the problem where
                 // JET will automatically close (and destroy) the TT if the
                 // current level of the transaction is aborted
-                if (this.Session.TransactionLevel > 0)
+                if (this.IsamSession.TransactionLevel > 0)
                 {
                     // NOTE:  i'm thinking that this requirement is pretty lame,
                     // especially since it only hits us on an abort.  I am going
@@ -180,11 +180,11 @@ namespace Microsoft.Isam.Esent.Isam
                 JET_TABLEID tableid = new JET_TABLEID();
 
                 if (DatabaseCommon.CheckEngineVersion(
-                    this.Session,
+                    this.IsamSession,
                     DatabaseCommon.ESENTVersion(6, 0, 6000, 0),
                     DatabaseCommon.ESEVersion(8, 0, 685, 0)))
                 {
-                    VistaApi.JetOpenTemporaryTable(this.Session.Sesid, openTemporaryTable);
+                    VistaApi.JetOpenTemporaryTable(this.IsamSession.Sesid, openTemporaryTable);
                     tableid = openTemporaryTable.tableid;
                 }
                 else
@@ -195,7 +195,7 @@ namespace Microsoft.Isam.Esent.Isam
                     }
 
                     Api.JetOpenTempTable2(
-                        this.Session.Sesid,
+                        this.IsamSession.Sesid,
                         openTemporaryTable.prgcolumndef,
                         openTemporaryTable.prgcolumndef.Length,
                         openTemporaryTable.pidxunicode.lcid,
@@ -210,13 +210,13 @@ namespace Microsoft.Isam.Esent.Isam
                 // cache the TT and its handle
                 TempTableHandle tempTableHandle = new TempTableHandle(
                     tableDefinitionToCache.Name,
-                    this.Session.Sesid,
+                    this.IsamSession.Sesid,
                     tableid,
                     tableDefinitionToCache.Type == TableType.Sort || tableDefinitionToCache.Type == TableType.PreSortTemporary);
 
                 this.Tables.Add(tableDefinitionToCache);
                 this.TempTableHandles.Add(tempTableHandle);
-                this.Session.Instance.TempTableHandles.Add(tempTableHandle);
+                this.IsamSession.IsamInstance.TempTableHandles.Add(tempTableHandle);
             }
         }
 
@@ -237,7 +237,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public override void DropTable(string tableName)
         {
-            lock (this.Session)
+            lock (this.IsamSession)
             {
                 this.CheckDisposed();
 
@@ -255,9 +255,9 @@ namespace Microsoft.Isam.Esent.Isam
 
                 this.Tables.Remove(tableName);
 
-                Api.JetCloseTable(this.Session.Sesid, tempTableHandle.Handle);
+                Api.JetCloseTable(this.IsamSession.Sesid, tempTableHandle.Handle);
                 this.TempTableHandles.Remove(tempTableHandle.Name);
-                this.Session.Instance.TempTableHandles.Remove(tempTableHandle.Guid.ToString());
+                this.IsamSession.IsamInstance.TempTableHandles.Remove(tempTableHandle.Guid.ToString());
             }
         }
 
@@ -282,7 +282,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <returns>a cursor over the specified table in this database</returns>
         public override Cursor OpenCursor(string tableName)
         {
-            lock (this.Session)
+            lock (this.IsamSession)
             {
                 this.CheckDisposed();
 
@@ -307,7 +307,7 @@ namespace Microsoft.Isam.Esent.Isam
                         throw new EsentIllegalOperationException();
                     }
 
-                    Api.JetDupCursor(this.Session.Sesid, tempTableHandle.Handle, out tableid, DupCursorGrbit.None);
+                    Api.JetDupCursor(this.IsamSession.Sesid, tempTableHandle.Handle, out tableid, DupCursorGrbit.None);
                     tempTableHandle.InInsertMode = false;
                 }
                 catch (EsentIllegalOperationException)
@@ -322,7 +322,7 @@ namespace Microsoft.Isam.Esent.Isam
                     }
                 }
 
-                Cursor newCursor = new Cursor(this.Session, this, tableName, tableid, tempTableHandle.InInsertMode);
+                Cursor newCursor = new Cursor(this.IsamSession, this, tableName, tableid, tempTableHandle.InInsertMode);
 
                 tempTableHandle.CursorCount++;
 
@@ -345,7 +345,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="inInsertMode">if set to <c>true</c> [in insert mode].</param>
         internal void ReleaseTempTable(string tableName, bool inInsertMode)
         {
-            lock (this.Session)
+            lock (this.IsamSession)
             {
                 TempTableHandle tempTableHandle = this.TempTableHandles[tableName];
 
@@ -360,7 +360,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected override void Dispose(bool disposing)
         {
-            lock (this.Session)
+            lock (this.IsamSession)
             {
                 if (!this.Disposed)
                 {
@@ -368,8 +368,8 @@ namespace Microsoft.Isam.Esent.Isam
                     {
                         foreach (TempTableHandle tempTableHandle in this.TempTableHandles)
                         {
-                            Api.JetCloseTable(this.Session.Sesid, tempTableHandle.Handle);
-                            this.Session.Instance.TempTableHandles.Remove(tempTableHandle.Guid.ToString());
+                            Api.JetCloseTable(this.IsamSession.Sesid, tempTableHandle.Handle);
+                            this.IsamSession.IsamInstance.TempTableHandles.Remove(tempTableHandle.Guid.ToString());
                         }
 
                         base.Dispose(disposing);
@@ -679,7 +679,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <exception cref="System.ObjectDisposedException">If the object has already been disposed.</exception>
         private void CheckDisposed()
         {
-            lock (this.Session)
+            lock (this.IsamSession)
             {
                 if (this.Disposed)
                 {
@@ -766,7 +766,7 @@ namespace Microsoft.Isam.Esent.Isam
                     {
                         // timestamp when ESE/ESENT supports JET_bitTTIntrinsicLVsOnly
                         DatabaseCommon.CheckEngineVersion(
-                            this.Session,
+                            this.IsamSession,
                             DatabaseCommon.ESENTVersion(6, 1, 6492, 0),
                             DatabaseCommon.ESEVersion(14, 0, 46, 0),
                             new ArgumentException(
@@ -831,7 +831,7 @@ namespace Microsoft.Isam.Esent.Isam
                 }
 
                 // 255 in XP.
-                long keyMost = this.Session.Instance.SystemParameters.KeyMost;
+                long keyMost = this.IsamSession.IsamInstance.IsamSystemParameters.KeyMost;
 
                 if (indexDefinition.MaxKeyLength < 255 || indexDefinition.MaxKeyLength > keyMost)
                 {

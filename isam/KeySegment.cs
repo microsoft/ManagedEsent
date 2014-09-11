@@ -9,7 +9,7 @@
 // </summary>
 // ---------------------------------------------------------------------
 
-namespace Microsoft.Isam.Esent.Isam
+namespace Microsoft.Database.Isam
 {
     /// <summary>
     /// A key is composed of a collection of key segments.  Each key segment

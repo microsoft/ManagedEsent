@@ -9,7 +9,7 @@
 // </summary>
 // ---------------------------------------------------------------------
 
-namespace Microsoft.Isam.Esent.Isam
+namespace Microsoft.Database.Isam
 {
     using System;
     using System.Collections;
@@ -23,7 +23,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <summary>
         /// The underlying session.
         /// </summary>
-        private readonly Session session;
+        private readonly IsamSession isamSession;
 
         /// <summary>
         /// The underlying tableid.
@@ -49,13 +49,13 @@ namespace Microsoft.Isam.Esent.Isam
         /// Initializes a new instance of the <see cref="ColumnAccessor" /> class.
         /// </summary>
         /// <param name="cursor">The cursor.</param>
-        /// <param name="session">The session.</param>
+        /// <param name="isamSession">The session.</param>
         /// <param name="tableid">The tableid.</param>
         /// <param name="grbit">The grbit.</param>
-        internal ColumnAccessor(Cursor cursor, Session session, JET_TABLEID tableid, RetrieveColumnGrbit grbit)
+        internal ColumnAccessor(Cursor cursor, IsamSession isamSession, JET_TABLEID tableid, RetrieveColumnGrbit grbit)
         {
             this.cursor = cursor;
-            this.session = session;
+            this.isamSession = isamSession;
             this.tableid = tableid;
             this.grbit = grbit;
         }
@@ -171,11 +171,11 @@ namespace Microsoft.Isam.Esent.Isam
         /// <returns>Returns the size of the specified multivalue stored in the specified column.</returns>
         public long SizeOf(string columnName, int index)
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.cursor.CheckDisposed();
 
-                using (Transaction trx = new Transaction(this.session, true))
+                using (IsamTransaction trx = new IsamTransaction(this.isamSession, true))
                 {
                     return this.SizeOf(this.cursor.TableDefinition.Columns[columnName].Columnid, index);
                 }
@@ -200,7 +200,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <returns>Returns the size of the specified multivalue stored in the specified column.</returns>
         public long SizeOf(Columnid columnid, int index)
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.cursor.CheckDisposed();
 
@@ -212,7 +212,7 @@ namespace Microsoft.Isam.Esent.Isam
                 int itagSequence = index + 1;
 
                 int? size = Api.RetrieveColumnSize(
-                    this.session.Sesid,
+                    this.isamSession.Sesid,
                     this.tableid,
                     columnid.InteropColumnid,
                     itagSequence,
@@ -270,7 +270,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <returns>The value stored within.</returns>
         private object RetrieveColumn(string columnName, int index)
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.cursor.CheckDisposed();
 
@@ -287,11 +287,11 @@ namespace Microsoft.Isam.Esent.Isam
         /// <returns>The value stored within.</returns>
         private object RetrieveColumn(ColumnDefinition columnDefinition, int index)
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.cursor.CheckDisposed();
 
-                using (Transaction trx = new Transaction(this.session, true))
+                using (IsamTransaction trx = new IsamTransaction(this.isamSession, true))
                 {
                     Columnid columnid = columnDefinition.Columnid;
                     return this.RetrieveColumn(columnid.InteropColumnid, columnid.Coltyp, columnid.IsAscii, index);
@@ -307,7 +307,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="obj">The object.</param>
         private void SetColumn(string columnName, int index, object obj)
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.cursor.CheckDisposed();
 
@@ -326,11 +326,11 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="obj">The object.</param>
         private void SetColumn(ColumnDefinition columnDefinition, int index, object obj)
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.cursor.CheckDisposed();
 
-                using (Transaction trx = new Transaction(this.session, true))
+                using (IsamTransaction trx = new IsamTransaction(this.isamSession, true))
                 {
                     Columnid columnid = columnDefinition.Columnid;
                     this.SetColumn(columnid.InteropColumnid, columnid.Coltyp, columnid.IsAscii, index, obj);
@@ -352,7 +352,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         private object RetrieveColumn(JET_COLUMNID columnid, JET_coltyp coltyp, bool isAscii, int index)
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.cursor.CheckDisposed();
 
@@ -364,7 +364,7 @@ namespace Microsoft.Isam.Esent.Isam
                 JET_RETINFO retinfo = new JET_RETINFO();
                 retinfo.ibLongValue = 0;
                 retinfo.itagSequence = index + 1;
-                byte[] bytes = Api.RetrieveColumn(this.session.Sesid, this.tableid, columnid, this.grbit, retinfo);
+                byte[] bytes = Api.RetrieveColumn(this.isamSession.Sesid, this.tableid, columnid, this.grbit, retinfo);
 
                 object obj = Converter.ObjectFromBytes(coltyp, isAscii, bytes);
                 return obj;
@@ -385,7 +385,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         private void SetColumn(JET_COLUMNID columnid, JET_coltyp coltyp, bool isAscii, int index, object obj)
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.cursor.CheckDisposed();
 
@@ -412,7 +412,7 @@ namespace Microsoft.Isam.Esent.Isam
                 byte[] bytes = Converter.BytesFromObject(coltyp, isAscii, obj);
                 int bytesLength = bytes == null ? 0 : bytes.Length;
 
-                Api.JetSetColumn(this.session.Sesid, this.tableid, columnid, bytes, bytesLength, grbitSet, setinfo);
+                Api.JetSetColumn(this.isamSession.Sesid, this.tableid, columnid, bytes, bytesLength, grbitSet, setinfo);
 
                 this.updateID++;
             }

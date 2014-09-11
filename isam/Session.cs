@@ -9,7 +9,7 @@
 // </summary>
 // ---------------------------------------------------------------------
 
-namespace Microsoft.Isam.Esent.Isam
+namespace Microsoft.Database.Isam
 {
     using System;
 
@@ -24,12 +24,12 @@ namespace Microsoft.Isam.Esent.Isam
     /// accessed by the ISAM.
     /// </para>
     /// </summary>
-    public class Session : IDisposable
+    public class IsamSession : IDisposable
     {
         /// <summary>
         /// The instance
         /// </summary>
-        private readonly Instance instance;
+        private readonly IsamInstance isamInstance;
 
         /// <summary>
         /// The sesid
@@ -62,24 +62,24 @@ namespace Microsoft.Isam.Esent.Isam
         private long[] transactionLevelID = null;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Session"/> class.
+        /// Initializes a new instance of the <see cref="IsamSession"/> class.
         /// </summary>
-        /// <param name="instance">The instance.</param>
-        internal Session(Instance instance)
+        /// <param name="isamInstance">The instance.</param>
+        internal IsamSession(IsamInstance isamInstance)
         {
-            lock (instance)
+            lock (isamInstance)
             {
-                this.instance = instance;
-                Api.JetBeginSession(instance.Inst, out this.sesid, null, null);
+                this.isamInstance = isamInstance;
+                Api.JetBeginSession(isamInstance.Inst, out this.sesid, null, null);
                 this.cleanup = true;
                 this.transactionLevelID = new long[7]; // JET only supports 7 levels
             }
         }
 
         /// <summary>
-        /// Finalizes an instance of the Session class.
+        /// Finalizes an instance of the IsamSession class.
         /// </summary>
-        ~Session()
+        ~IsamSession()
         {
             this.Dispose(false);
         }
@@ -87,11 +87,11 @@ namespace Microsoft.Isam.Esent.Isam
         /// <summary>
         /// Gets the instance that created this session.
         /// </summary>
-        public Instance Instance
+        public IsamInstance IsamInstance
         {
             get
             {
-                return this.instance;
+                return this.isamInstance;
             }
         }
 
@@ -158,7 +158,7 @@ namespace Microsoft.Isam.Esent.Isam
         {
             get
             {
-                return this.disposed || this.instance.Disposed;
+                return this.disposed || this.isamInstance.Disposed;
             }
 
             set
@@ -219,7 +219,7 @@ namespace Microsoft.Isam.Esent.Isam
 
                 AttachDatabaseGrbit grbit = AttachDatabaseGrbit.None;
 
-                if (this.instance.ReadOnly)
+                if (this.isamInstance.ReadOnly)
                 {
                     grbit |= AttachDatabaseGrbit.ReadOnly;
                 }
@@ -261,7 +261,7 @@ namespace Microsoft.Isam.Esent.Isam
                 {
                     AttachDatabaseGrbit grbit = AttachDatabaseGrbit.None;
 
-                    if (this.instance.ReadOnly)
+                    if (this.isamInstance.ReadOnly)
                     {
                         grbit |= AttachDatabaseGrbit.ReadOnly;
                     }
@@ -459,7 +459,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// current transaction state of a session.
         /// <para>
         /// Session.AbortTransaction is an alias for
-        /// <see cref="Session.RollbackTransaction"/>.
+        /// <see cref="IsamSession.RollbackTransaction"/>.
         /// </para>
         /// </remarks>
         public void AbortTransaction()

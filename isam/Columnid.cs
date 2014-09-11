@@ -9,7 +9,7 @@
 // </summary>
 // ---------------------------------------------------------------------
 
-namespace Microsoft.Isam.Esent.Isam
+namespace Microsoft.Database.Isam
 {
     using System;
     using Microsoft.Isam.Esent.Interop;

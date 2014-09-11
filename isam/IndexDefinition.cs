@@ -9,7 +9,7 @@
 // </summary>
 // ---------------------------------------------------------------------
 
-namespace Microsoft.Isam.Esent.Isam
+namespace Microsoft.Database.Isam
 {
     using System;
     using System.Globalization;
@@ -291,10 +291,10 @@ namespace Microsoft.Isam.Esent.Isam
         /// <returns>An <see cref="IndexDefinition"/> object represting the specified index.</returns>
         internal static IndexDefinition Load(Database database, string tableName, JET_INDEXLIST indexList)
         {
-            lock (database.Session)
+            lock (database.IsamSession)
             {
-                JET_SESID sesid = database.Session.Sesid;
-                using (Transaction trx = new Transaction(database.Session))
+                JET_SESID sesid = database.IsamSession.Sesid;
+                using (IsamTransaction trx = new IsamTransaction(database.IsamSession))
                 {
                     // load info for the index
                     IndexDefinition indexDefinition = new IndexDefinition();
@@ -316,7 +316,7 @@ namespace Microsoft.Isam.Esent.Isam
                         JET_IdxInfo.SpaceAlloc);
                     int lcid;
                     Api.JetGetIndexInfo(
-                        database.Session.Sesid,
+                        database.IsamSession.Sesid,
                         database.Dbid,
                         tableName,
                         indexDefinition.name,
@@ -327,7 +327,7 @@ namespace Microsoft.Isam.Esent.Isam
                     indexDefinition.compareOptions =
                         Conversions.CompareOptionsFromLCMapFlags(
                             Api.RetrieveColumnAsUInt32(
-                                database.Session.Sesid,
+                                database.IsamSession.Sesid,
                                 indexList.tableid,
                                 indexList.columnidLCMapFlags).GetValueOrDefault());
 
@@ -336,7 +336,7 @@ namespace Microsoft.Isam.Esent.Isam
                     {
                         ushort maxKeyLength;
                         Api.JetGetIndexInfo(
-                            database.Session.Sesid,
+                            database.IsamSession.Sesid,
                             database.Dbid,
                             tableName,
                             indexDefinition.name,
@@ -393,7 +393,7 @@ namespace Microsoft.Isam.Esent.Isam
                     indexDefinition.conditionalColumnCollection = new ConditionalColumnCollection();
                     JET_TABLEID tableidCatalog;
                     Api.JetOpenTable(
-                        database.Session.Sesid,
+                        database.IsamSession.Sesid,
                         database.Dbid,
                         "MSysObjects",
                         null,
@@ -460,7 +460,7 @@ namespace Microsoft.Isam.Esent.Isam
 
                         JET_COLUMNID castedColid = JET_COLUMNID.CreateColumnidFromNativeValue(unchecked((int)colid));
                         VistaApi.JetGetColumnInfo(
-                            database.Session.Sesid,
+                            database.IsamSession.Sesid,
                             database.Dbid,
                             tableName,
                             castedColid,

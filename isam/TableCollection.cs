@@ -9,7 +9,7 @@
 // </summary>
 // ---------------------------------------------------------------------
 
-namespace Microsoft.Isam.Esent.Isam
+namespace Microsoft.Database.Isam
 {
     using System;
     using System.Collections;
@@ -126,14 +126,14 @@ namespace Microsoft.Isam.Esent.Isam
             {
                 if (this.database != null)
                 {
-                    lock (this.database.Session)
+                    lock (this.database.IsamSession)
                     {
                         if (this.cachedTableDefinition != tableName.ToLower(CultureInfo.InvariantCulture)
                             || this.tableUpdateID != DatabaseCommon.SchemaUpdateID)
                         {
                             JET_OBJECTINFO objectInfo;
                             Api.JetGetObjectInfo(
-                                this.database.Session.Sesid,
+                                this.database.IsamSession.Sesid,
                                 this.database.Dbid,
                                 JET_objtyp.Table,
                                 tableName,
@@ -167,7 +167,7 @@ namespace Microsoft.Isam.Esent.Isam
         {
             if (this.database != null)
             {
-                lock (this.database.Session)
+                lock (this.database.IsamSession)
                 {
                     bool exists = false;
 
@@ -175,7 +175,7 @@ namespace Microsoft.Isam.Esent.Isam
                     {
                         JET_OBJECTINFO objectInfo;
                         Api.JetGetObjectInfo(
-                            this.database.Session.Sesid,
+                            this.database.IsamSession.Sesid,
                             this.database.Dbid,
                             JET_objtyp.Table,
                             tableName,

@@ -9,7 +9,7 @@
 // </summary>
 // ---------------------------------------------------------------------
 
-namespace Microsoft.Isam.Esent.Isam
+namespace Microsoft.Database.Isam
 {
     using System;
     using System.Collections;
@@ -114,7 +114,7 @@ namespace Microsoft.Isam.Esent.Isam
             {
                 if (this.database != null)
                 {
-                    lock (this.database.Session)
+                    lock (this.database.IsamSession)
                     {
                         if (!this.current)
                         {
@@ -167,18 +167,18 @@ namespace Microsoft.Isam.Esent.Isam
         {
             if (this.database != null)
             {
-                lock (this.database.Session)
+                lock (this.database.IsamSession)
                 {
                     if (this.cleanup)
                     {
-                        if (!this.database.Session.Disposed)
+                        if (!this.database.IsamSession.Disposed)
                         {
                             // BUGBUG:  we will try to close an already closed tableid
                             // if it was already closed due to a rollback.  this could
                             // cause us to crash in ESENT due to lack of full validation
                             // in small config.  we should use cursor LS to detect when
                             // our cursor gets closed and thus avoid closing it again
-                            Api.JetCloseTable(this.database.Session.Sesid, this.columnList.tableid);
+                            Api.JetCloseTable(this.database.IsamSession.Sesid, this.columnList.tableid);
                         }
                     }
 
@@ -204,9 +204,9 @@ namespace Microsoft.Isam.Esent.Isam
         {
             if (this.database != null)
             {
-                lock (this.database.Session)
+                lock (this.database.IsamSession)
                 {
-                    JET_SESID sesid = this.database.Session.Sesid;
+                    JET_SESID sesid = this.database.IsamSession.Sesid;
                     if (!this.moved)
                     {
                         Api.JetGetColumnInfo(sesid, this.database.Dbid, this.tableName, null, out this.columnList);

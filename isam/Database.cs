@@ -9,7 +9,7 @@
 // </summary>
 // ---------------------------------------------------------------------
 
-namespace Microsoft.Isam.Esent.Isam
+namespace Microsoft.Database.Isam
 {
     using System;
 
@@ -47,14 +47,14 @@ namespace Microsoft.Isam.Esent.Isam
         /// <summary>
         /// Initializes a new instance of the <see cref="Database"/> class.
         /// </summary>
-        /// <param name="session">The session.</param>
+        /// <param name="isamSession">The session.</param>
         /// <param name="databaseName">Name of the database.</param>
-        internal Database(Session session, string databaseName)
-            : base(session)
+        internal Database(IsamSession isamSession, string databaseName)
+            : base(isamSession)
         {
-            lock (session)
+            lock (isamSession)
             {
-                Api.JetOpenDatabase(session.Sesid, databaseName, null, out this.dbid, OpenDatabaseGrbit.None);
+                Api.JetOpenDatabase(isamSession.Sesid, databaseName, null, out this.dbid, OpenDatabaseGrbit.None);
                 this.cleanup = true;
                 this.tableCollection = new TableCollection(this);
             }
@@ -105,7 +105,7 @@ namespace Microsoft.Isam.Esent.Isam
         {
             get
             {
-                return this.disposed || this.Session.Disposed;
+                return this.disposed || this.IsamSession.Disposed;
             }
 
             set
@@ -133,18 +133,18 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="tableDefinition">The table definition.</param>
         public override void CreateTable(TableDefinition tableDefinition)
         {
-            lock (this.Session)
+            lock (this.IsamSession)
             {
                 this.CheckDisposed();
 
-                using (Transaction trx = new Transaction(Session))
+                using (IsamTransaction trx = new IsamTransaction(this.IsamSession))
                 {
                     // FUTURE-2013/11/15-martinc: Consider using JetCreateTableColumnIndex(). It would be
                     // a bit faster because it's only a single managed/native transition.
 
                     // Hard-code the initial space and density.
                     JET_TABLEID tableid;
-                    Api.JetCreateTable(this.Session.Sesid, this.dbid, tableDefinition.Name, 16, 90, out tableid);
+                    Api.JetCreateTable(this.IsamSession.Sesid, this.dbid, tableDefinition.Name, 16, 90, out tableid);
 
                     foreach (ColumnDefinition columnDefinition in tableDefinition.Columns)
                     {
@@ -162,7 +162,7 @@ namespace Microsoft.Isam.Esent.Isam
                         JET_COLUMNID columnid;
                         int defaultValueLength = (defaultValueBytes == null) ? 0 : defaultValueBytes.Length;
                         Api.JetAddColumn(
-                            this.Session.Sesid,
+                            this.IsamSession.Sesid,
                             tableid,
                             columnDefinition.Name,
                             columndef,
@@ -187,11 +187,11 @@ namespace Microsoft.Isam.Esent.Isam
                         indexcreates[0].rgconditionalcolumn = Database.ConditionalColumnsFromIndexDefinition(indexDefinition);
                         indexcreates[0].cConditionalColumn = indexcreates[0].rgconditionalcolumn.Length;
                         indexcreates[0].cbKeyMost = indexDefinition.MaxKeyLength;
-                        Api.JetCreateIndex2(this.Session.Sesid, tableid, indexcreates, indexcreates.Length);
+                        Api.JetCreateIndex2(this.IsamSession.Sesid, tableid, indexcreates, indexcreates.Length);
                     }
 
                     // The initially-created tableid is opened exclusively.
-                    Api.JetCloseTable(this.Session.Sesid, tableid);
+                    Api.JetCloseTable(this.IsamSession.Sesid, tableid);
                     trx.Commit();
                     DatabaseCommon.SchemaUpdateID++;
                 }
@@ -209,11 +209,11 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public override void DropTable(string tableName)
         {
-            lock (this.Session)
+            lock (this.IsamSession)
             {
                 this.CheckDisposed();
 
-                Api.JetDeleteTable(Session.Sesid, this.dbid, tableName);
+                Api.JetDeleteTable(this.IsamSession.Sesid, this.dbid, tableName);
                 DatabaseCommon.SchemaUpdateID++;
             }
         }
@@ -240,12 +240,12 @@ namespace Microsoft.Isam.Esent.Isam
         /// <returns>a cursor over the specified table in this database</returns>
         public Cursor OpenCursor(string tableName, bool exclusive)
         {
-            lock (this.Session)
+            lock (this.IsamSession)
             {
                 this.CheckDisposed();
 
                 OpenTableGrbit grbit = exclusive ? OpenTableGrbit.DenyRead : OpenTableGrbit.None;
-                return new Cursor(Session, this, tableName, grbit);
+                return new Cursor(this.IsamSession, this, tableName, grbit);
             }
         }
 
@@ -256,7 +256,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <returns>a cursor over the specified table in this database</returns>
         public override Cursor OpenCursor(string tableName)
         {
-            lock (this.Session)
+            lock (this.IsamSession)
             {
                 this.CheckDisposed();
 
@@ -278,13 +278,13 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected override void Dispose(bool disposing)
         {
-            lock (this.Session)
+            lock (this.IsamSession)
             {
                 if (!this.Disposed)
                 {
                     if (this.cleanup)
                     {
-                        Api.JetCloseDatabase(this.Session.Sesid, this.dbid, CloseDatabaseGrbit.None);
+                        Api.JetCloseDatabase(this.IsamSession.Sesid, this.dbid, CloseDatabaseGrbit.None);
                         base.Dispose(disposing);
                         this.cleanup = false;
                     }
@@ -302,7 +302,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </exception>
         private void CheckDisposed()
         {
-            lock (this.Session)
+            lock (this.IsamSession)
             {
                 if (this.Disposed)
                 {

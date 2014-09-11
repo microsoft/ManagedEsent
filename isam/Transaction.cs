@@ -9,19 +9,19 @@
 // </summary>
 // ---------------------------------------------------------------------
 
-namespace Microsoft.Isam.Esent.Isam
+namespace Microsoft.Database.Isam
 {
     using System;
 
     /// <summary>
-    /// A Transaction object represents a single save point of a transaction
+    /// A IsamTransaction object represents a single save point of a transaction
     /// that is begun on a Session object.  This object is not required to
     /// begin, commit, or abort a transaction as this can be done directly
     /// on the Session object.  However, this object is very useful for making
     /// convenient code constructs involving transactions with the "using"
     /// keyword in C# like this:
     /// <code>
-    ///     using( Transaction t = new Transaction( session ) )
+    ///     using( IsamTransaction t = new IsamTransaction( session ) )
     ///     {
     ///         /* do some work */
     ///
@@ -30,12 +30,12 @@ namespace Microsoft.Isam.Esent.Isam
     ///     }
     /// </code>
     /// </summary>
-    public class Transaction : IDisposable
+    public class IsamTransaction : IDisposable
     {
         /// <summary>
         /// The session
         /// </summary>
-        private readonly Session session;
+        private readonly IsamSession isamSession;
 
         /// <summary>
         /// The transaction level
@@ -58,35 +58,35 @@ namespace Microsoft.Isam.Esent.Isam
         private bool disposed = false;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Transaction"/> class. 
+        /// Initializes a new instance of the <see cref="IsamTransaction"/> class. 
         /// Begin a transaction on the given session.
         /// </summary>
-        /// <param name="session">
+        /// <param name="isamSession">
         /// The session we will use for the transaction.
         /// </param>
         /// <remarks>
         /// If this transaction is not committed before this object is disposed
         /// then the transaction will automatically be aborted.
         /// </remarks>
-        public Transaction(Session session)
+        public IsamTransaction(IsamSession isamSession)
         {
-            lock (session)
+            lock (isamSession)
             {
-                this.session = session;
-                this.session.BeginTransaction();
-                this.transactionLevel = session.TransactionLevel;
-                this.transactionLevelID = session.TransactionLevelID(session.TransactionLevel);
+                this.isamSession = isamSession;
+                this.isamSession.BeginTransaction();
+                this.transactionLevel = isamSession.TransactionLevel;
+                this.transactionLevelID = isamSession.TransactionLevelID(isamSession.TransactionLevel);
                 this.cleanup = true;
             }
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Transaction"/> class. 
+        /// Initializes a new instance of the <see cref="IsamTransaction"/> class. 
         /// Joins the current transaction on the given session.  If the session
         /// is not currently in a transaction then a new transaction will be
         /// begun.
         /// </summary>
-        /// <param name="session">
+        /// <param name="isamSession">
         /// The session we will use for the transaction.
         /// </param>
         /// <param name="join">
@@ -101,25 +101,25 @@ namespace Microsoft.Isam.Esent.Isam
         /// then the transaction will automatically be aborted.
         /// </para>
         /// </remarks>
-        public Transaction(Session session, bool join)
+        public IsamTransaction(IsamSession isamSession, bool join)
         {
-            lock (session)
+            lock (isamSession)
             {
-                this.session = session;
-                if (!join || session.TransactionLevel == 0)
+                this.isamSession = isamSession;
+                if (!join || isamSession.TransactionLevel == 0)
                 {
-                    this.session.BeginTransaction();
-                    this.transactionLevel = session.TransactionLevel;
-                    this.transactionLevelID = session.TransactionLevelID(session.TransactionLevel);
+                    this.isamSession.BeginTransaction();
+                    this.transactionLevel = isamSession.TransactionLevel;
+                    this.transactionLevelID = isamSession.TransactionLevelID(isamSession.TransactionLevel);
                     this.cleanup = true;
                 }
             }
         }
 
         /// <summary>
-        /// Finalizes an instance of the Transaction class
+        /// Finalizes an instance of the IsamTransaction class
         /// </summary>
-        ~Transaction()
+        ~IsamTransaction()
         {
             this.Dispose(false);
         }
@@ -146,7 +146,7 @@ namespace Microsoft.Isam.Esent.Isam
         {
             get
             {
-                return this.disposed || this.session.Disposed || (this.cleanup && this.session.TransactionLevelID(this.transactionLevel) != this.transactionLevelID);
+                return this.disposed || this.isamSession.Disposed || (this.cleanup && this.isamSession.TransactionLevelID(this.transactionLevel) != this.transactionLevelID);
             }
 
             set
@@ -214,13 +214,13 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public void Commit(bool durableCommit)
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.CheckDisposed();
 
                 if (this.cleanup)
                 {
-                    this.session.CommitTransaction(durableCommit);
+                    this.isamSession.CommitTransaction(durableCommit);
                     this.cleanup = false;
                 }
 
@@ -239,7 +239,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public void Rollback()
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.CheckDisposed();
 
@@ -256,7 +256,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// The transaction object will be disposed as a side effect of this
         /// call.
         /// <para>
-        /// Transaction.Abort is an alias for <see cref="Transaction.Rollback"/>.
+        /// IsamTransaction.Abort is an alias for <see cref="IsamTransaction.Rollback"/>.
         /// </para>
         /// </remarks>
         public void Abort()
@@ -290,13 +290,13 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected virtual void Dispose(bool disposing)
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 if (!this.Disposed)
                 {
                     if (this.cleanup)
                     {
-                        this.session.RollbackTransaction();
+                        this.isamSession.RollbackTransaction();
                         this.cleanup = false;
                     }
 

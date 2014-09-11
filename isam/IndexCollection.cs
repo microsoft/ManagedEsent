@@ -9,7 +9,7 @@
 // </summary>
 // ---------------------------------------------------------------------
 
-namespace Microsoft.Isam.Esent.Isam
+namespace Microsoft.Database.Isam
 {
     using System;
     using System.Collections;
@@ -149,9 +149,9 @@ namespace Microsoft.Isam.Esent.Isam
             {
                 if (this.database != null)
                 {
-                    lock (this.database.Session)
+                    lock (this.database.IsamSession)
                     {
-                        JET_SESID sesid = this.database.Session.Sesid;
+                        JET_SESID sesid = this.database.IsamSession.Sesid;
                         if (this.cachedIndexDefinition != indexName.ToLower(CultureInfo.InvariantCulture)
                             || this.indexUpdateID != DatabaseCommon.SchemaUpdateID)
                         {
@@ -229,7 +229,7 @@ namespace Microsoft.Isam.Esent.Isam
         {
             if (this.database != null)
             {
-                lock (this.database.Session)
+                lock (this.database.IsamSession)
                 {
                     bool exists = false;
 
@@ -238,7 +238,7 @@ namespace Microsoft.Isam.Esent.Isam
                         int density;
 
                         Api.JetGetIndexInfo(
-                            this.database.Session.Sesid,
+                            this.database.IsamSession.Sesid,
                             this.database.Dbid,
                             this.tableName,
                             indexName,

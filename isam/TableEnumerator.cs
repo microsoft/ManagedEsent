@@ -9,7 +9,7 @@
 // </summary>
 // ---------------------------------------------------------------------
 
-namespace Microsoft.Isam.Esent.Isam
+namespace Microsoft.Database.Isam
 {
     using System;
     using System.Collections;
@@ -108,7 +108,7 @@ namespace Microsoft.Isam.Esent.Isam
             {
                 if (this.database != null)
                 {
-                    lock (this.database.Session)
+                    lock (this.database.IsamSession)
                     {
                         if (!this.current)
                         {
@@ -161,18 +161,18 @@ namespace Microsoft.Isam.Esent.Isam
         {
             if (this.database != null)
             {
-                lock (this.database.Session)
+                lock (this.database.IsamSession)
                 {
                     if (this.cleanup)
                     {
-                        if (!this.database.Session.Disposed)
+                        if (!this.database.IsamSession.Disposed)
                         {
                             // BUGBUG:  we will try to close an already closed tableid
                             // if it was already closed due to a rollback.  this could
                             // cause us to crash in ESENT due to lack of full validation
                             // in small config.  we should use cursor LS to detect when
                             // our cursor gets closed and thus avoid closing it again
-                            Api.JetCloseTable(this.database.Session.Sesid, this.objectList.tableid);
+                            Api.JetCloseTable(this.database.IsamSession.Sesid, this.objectList.tableid);
                         }
                     }
 
@@ -198,7 +198,7 @@ namespace Microsoft.Isam.Esent.Isam
         {
             if (this.database != null)
             {
-                lock (this.database.Session)
+                lock (this.database.IsamSession)
                 {
                     // filter out anything that is not a normal table
                     ObjectInfoFlags flags = 0;
@@ -209,7 +209,7 @@ namespace Microsoft.Isam.Esent.Isam
                         if (this.current)
                         {
                             flags = (ObjectInfoFlags)Api.RetrieveColumnAsUInt32(
-                                    this.database.Session.Sesid,
+                                    this.database.IsamSession.Sesid,
                                     this.objectList.tableid,
                                     this.objectList.columnidflags);
                         }
@@ -232,16 +232,16 @@ namespace Microsoft.Isam.Esent.Isam
         {
             if (!this.moved)
             {
-                Api.JetGetObjectInfo(this.database.Session.Sesid, this.database.Dbid, out this.objectList);
+                Api.JetGetObjectInfo(this.database.IsamSession.Sesid, this.database.Dbid, out this.objectList);
                 this.cleanup = true;
-                this.current = Api.TryMoveFirst(this.database.Session.Sesid, this.objectList.tableid);
+                this.current = Api.TryMoveFirst(this.database.IsamSession.Sesid, this.objectList.tableid);
             }
             else if (this.current)
             {
-                this.current = Api.TryMoveNext(this.database.Session.Sesid, this.objectList.tableid);
+                this.current = Api.TryMoveNext(this.database.IsamSession.Sesid, this.objectList.tableid);
                 if (!this.current)
                 {
-                    Api.JetCloseTable(this.database.Session.Sesid, this.objectList.tableid);
+                    Api.JetCloseTable(this.database.IsamSession.Sesid, this.objectList.tableid);
                     this.cleanup = false;
                 }
             }

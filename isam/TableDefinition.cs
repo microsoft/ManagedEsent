@@ -9,7 +9,7 @@
 // </summary>
 // ---------------------------------------------------------------------
 
-namespace Microsoft.Isam.Esent.Isam
+namespace Microsoft.Database.Isam
 {
     using Microsoft.Isam.Esent.Interop;
 
@@ -132,11 +132,11 @@ namespace Microsoft.Isam.Esent.Isam
         /// <value>
         /// The session.
         /// </value>
-        internal Session Session
+        internal IsamSession IsamSession
         {
             get
             {
-                return this.database.Session;
+                return this.database.IsamSession;
             }
         }
 
@@ -168,9 +168,9 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public Columnid AddColumn(ColumnDefinition columnDefinition)
         {
-            lock (this.database.Session)
+            lock (this.database.IsamSession)
             {
-                using (Transaction trx = new Transaction(this.database.Session))
+                using (IsamTransaction trx = new IsamTransaction(this.database.IsamSession))
                 {
                     OpenTableGrbit grbit = OpenTableGrbit.None;
 
@@ -184,7 +184,7 @@ namespace Microsoft.Isam.Esent.Isam
 
                     // open the table with the appropriate access
                     JET_TABLEID tableid;
-                    Api.JetOpenTable(this.database.Session.Sesid, this.database.Dbid, this.name, null, 0, grbit, out tableid);
+                    Api.JetOpenTable(this.database.IsamSession.Sesid, this.database.Dbid, this.name, null, 0, grbit, out tableid);
 
                     // add the new column to the table
                     JET_COLUMNDEF columndef = new JET_COLUMNDEF();
@@ -199,7 +199,7 @@ namespace Microsoft.Isam.Esent.Isam
                     int defaultValueBytesLength = (defaultValueBytes == null) ? 0 : defaultValueBytes.Length;
                     JET_COLUMNID jetColumnid;
                     Api.JetAddColumn(
-                        this.database.Session.Sesid,
+                        this.database.IsamSession.Sesid,
                         tableid,
                         columnDefinition.Name,
                         columndef,
@@ -208,7 +208,7 @@ namespace Microsoft.Isam.Esent.Isam
                         out jetColumnid);
 
                     // commit our change
-                    Api.JetCloseTable(this.database.Session.Sesid, tableid);
+                    Api.JetCloseTable(this.database.IsamSession.Sesid, tableid);
                     trx.Commit();
                     DatabaseCommon.SchemaUpdateID++;
 
@@ -233,14 +233,14 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public void DropColumn(string columnName)
         {
-            lock (this.database.Session)
+            lock (this.database.IsamSession)
             {
-                using (Transaction trx = new Transaction(this.database.Session))
+                using (IsamTransaction trx = new IsamTransaction(this.database.IsamSession))
                 {
                     // open the table
                     JET_TABLEID tableid;
                     Api.JetOpenTable(
-                        this.database.Session.Sesid,
+                        this.database.IsamSession.Sesid,
                         this.database.Dbid,
                         this.name,
                         null,
@@ -249,10 +249,10 @@ namespace Microsoft.Isam.Esent.Isam
                         out tableid);
 
                     // delete the column from the table
-                    Api.JetDeleteColumn(this.database.Session.Sesid, tableid, columnName);
+                    Api.JetDeleteColumn(this.database.IsamSession.Sesid, tableid, columnName);
 
                     // commit our change
-                    Api.JetCloseTable(this.database.Session.Sesid, tableid);
+                    Api.JetCloseTable(this.database.IsamSession.Sesid, tableid);
                     trx.Commit();
                     DatabaseCommon.SchemaUpdateID++;
                 }
@@ -266,14 +266,14 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="indexDefinition">The index definition.</param>
         public void CreateIndex(IndexDefinition indexDefinition)
         {
-            lock (this.database.Session)
+            lock (this.database.IsamSession)
             {
-                using (Transaction trx = new Transaction(this.database.Session))
+                using (IsamTransaction trx = new IsamTransaction(this.database.IsamSession))
                 {
                     // open the table
                     JET_TABLEID tableid;
                     Api.JetOpenTable(
-                        this.database.Session.Sesid,
+                        this.database.IsamSession.Sesid,
                         this.database.Dbid,
                         this.name,
                         null,
@@ -294,10 +294,10 @@ namespace Microsoft.Isam.Esent.Isam
                     indexcreates[0].rgconditionalcolumn = DatabaseCommon.ConditionalColumnsFromIndexDefinition(indexDefinition);
                     indexcreates[0].cConditionalColumn = indexcreates[0].rgconditionalcolumn.Length;
                     indexcreates[0].cbKeyMost = indexDefinition.MaxKeyLength;
-                    Api.JetCreateIndex2(this.database.Session.Sesid, tableid, indexcreates, indexcreates.Length);
+                    Api.JetCreateIndex2(this.database.IsamSession.Sesid, tableid, indexcreates, indexcreates.Length);
 
                     // commit our change
-                    Api.JetCloseTable(this.database.Session.Sesid, tableid);
+                    Api.JetCloseTable(this.database.IsamSession.Sesid, tableid);
                     trx.Commit();
                     DatabaseCommon.SchemaUpdateID++;
                 }
@@ -316,14 +316,14 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public void DropIndex(string name)
         {
-            lock (this.database.Session)
+            lock (this.database.IsamSession)
             {
-                using (Transaction trx = new Transaction(this.database.Session))
+                using (IsamTransaction trx = new IsamTransaction(this.database.IsamSession))
                 {
                     // open the table
                     JET_TABLEID tableid;
                     Api.JetOpenTable(
-                        this.database.Session.Sesid,
+                        this.database.IsamSession.Sesid,
                         this.database.Dbid,
                         this.name,
                         null,
@@ -332,10 +332,10 @@ namespace Microsoft.Isam.Esent.Isam
                         out tableid);
 
                     // delete the index from the table
-                    Api.JetDeleteIndex(this.database.Session.Sesid, tableid, name);
+                    Api.JetDeleteIndex(this.database.IsamSession.Sesid, tableid, name);
 
                     // commit our change
-                    Api.JetCloseTable(this.database.Session.Sesid, tableid);
+                    Api.JetCloseTable(this.database.IsamSession.Sesid, tableid);
                     trx.Commit();
                     DatabaseCommon.SchemaUpdateID++;
                 }
@@ -350,7 +350,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <returns>A <see cref="TableDefinition"/> corresponding to the table specified in <paramref name="objectList"/>.</returns>
         internal static TableDefinition Load(Database database, JET_OBJECTLIST objectList)
         {
-            lock (database.Session)
+            lock (database.IsamSession)
             {
                 // save the database
                 TableDefinition tableDefinition = new TableDefinition();
@@ -358,7 +358,7 @@ namespace Microsoft.Isam.Esent.Isam
 
                 // load info for the table
                 tableDefinition.name = Api.RetrieveColumnAsString(
-                    database.Session.Sesid,
+                    database.IsamSession.Sesid,
                     objectList.tableid,
                     objectList.columnidobjectname);
 
@@ -379,7 +379,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <returns>A <see cref="TableDefinition"/> corresponding to the table specified in <paramref name="objectInfo"/>.</returns>
         internal static TableDefinition Load(Database database, string tableName, JET_OBJECTINFO objectInfo)
         {
-            lock (database.Session)
+            lock (database.IsamSession)
             {
                 // save the database
                 TableDefinition tableDefinition = new TableDefinition();

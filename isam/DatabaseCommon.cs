@@ -9,7 +9,7 @@
 // </summary>
 // ---------------------------------------------------------------------
 
-namespace Microsoft.Isam.Esent.Isam
+namespace Microsoft.Database.Isam
 {
     using System;
     using System.Text;
@@ -39,7 +39,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <summary>
         /// The session
         /// </summary>
-        private readonly Session session;
+        private readonly IsamSession isamSession;
 
         /// <summary>
         /// The cleanup
@@ -54,12 +54,12 @@ namespace Microsoft.Isam.Esent.Isam
         /// <summary>
         /// Initializes a new instance of the <see cref="DatabaseCommon"/> class.
         /// </summary>
-        /// <param name="session">The session.</param>
-        internal DatabaseCommon(Session session)
+        /// <param name="isamSession">The session.</param>
+        internal DatabaseCommon(IsamSession isamSession)
         {
-            lock (session)
+            lock (isamSession)
             {
-                this.session = session;
+                this.isamSession = isamSession;
                 this.cleanup = true;
             }
         }
@@ -75,11 +75,11 @@ namespace Microsoft.Isam.Esent.Isam
         /// <summary>
         /// Gets the session that created this database
         /// </summary>
-        public Session Session
+        public IsamSession IsamSession
         {
             get
             {
-                return this.session;
+                return this.isamSession;
             }
         }
 
@@ -118,7 +118,7 @@ namespace Microsoft.Isam.Esent.Isam
         {
             get
             {
-                return this.disposed || this.session.Disposed;
+                return this.disposed || this.isamSession.Disposed;
             }
 
             set
@@ -463,12 +463,12 @@ namespace Microsoft.Isam.Esent.Isam
         /// <summary>
         /// Checks the engine version.
         /// </summary>
-        /// <param name="session">The session.</param>
+        /// <param name="isamSession">The session.</param>
         /// <param name="versionESENT">The minimum ESENT version required.</param>
         /// <param name="versionESE">The minimum ESE version required.</param>
         /// <returns>Whether the current engine is greater than or equal to the required version.</returns>
         internal static bool CheckEngineVersion(
-            Session session,
+            IsamSession isamSession,
             long versionESENT,
             long versionESE)
         {
@@ -479,24 +479,24 @@ namespace Microsoft.Isam.Esent.Isam
 #endif
 
             uint engineVersion;
-            Api.JetGetVersion(session.Sesid, out engineVersion);
+            Api.JetGetVersion(isamSession.Sesid, out engineVersion);
             return engineVersion >= version;
         }
 
         /// <summary>
         /// Checks the engine version.
         /// </summary>
-        /// <param name="session">The session.</param>
+        /// <param name="isamSession">The session.</param>
         /// <param name="versionESENT">The version esent.</param>
         /// <param name="versionESE">The version ese.</param>
         /// <param name="e">The e.</param>
         internal static void CheckEngineVersion(
-            Session session,
+            IsamSession isamSession,
             long versionESENT,
             long versionESE,
             System.Exception e)
         {
-            if (!CheckEngineVersion(session, versionESENT, versionESE))
+            if (!CheckEngineVersion(isamSession, versionESENT, versionESE))
             {
                 throw e;
             }
@@ -508,7 +508,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected virtual void Dispose(bool disposing)
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 if (!this.Disposed)
                 {
@@ -530,7 +530,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </exception>
         private void CheckDisposed()
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 if (this.Disposed)
                 {

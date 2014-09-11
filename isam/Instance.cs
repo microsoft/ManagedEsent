@@ -9,7 +9,7 @@
 // </summary>
 // ---------------------------------------------------------------------
 
-namespace Microsoft.Isam.Esent.Isam
+namespace Microsoft.Database.Isam
 {
     using System;
 
@@ -22,7 +22,7 @@ namespace Microsoft.Isam.Esent.Isam
     /// used to manage the set of files that comprise the transaction logs and
     /// databases used by the ISAM.
     /// </summary>
-    public class Instance : IDisposable
+    public class IsamInstance : IDisposable
     {
         /// <summary>
         /// The read only
@@ -37,7 +37,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <summary>
         /// The system parameters
         /// </summary>
-        private SystemParameters systemParameters;
+        private IsamSystemParameters isamSystemParameters;
 
         /// <summary>
         /// The cleanup instance
@@ -65,18 +65,18 @@ namespace Microsoft.Isam.Esent.Isam
         private TempTableHandleCollection tempTableHandleCollection = null;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Instance"/> class. 
+        /// Initializes a new instance of the <see cref="IsamInstance"/> class. 
         /// </summary>
         /// <param name="workingDirectory">
         /// The directory (relative or absolute) that will contain all the files managed by the ISAM.  The path must have a trailing backslash.
         /// </param>
-        public Instance(string workingDirectory)
+        public IsamInstance(string workingDirectory)
         {
             this.Create(workingDirectory, workingDirectory, workingDirectory, "ese", string.Empty, false, 8192);
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Instance"/> class. 
+        /// Initializes a new instance of the <see cref="IsamInstance"/> class. 
         /// </summary>
         /// <param name="workingDirectory">
         /// The directory (relative or absolute) that will contain all the files managed by the ISAM.  The path must have a trailing backslash.
@@ -84,7 +84,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="readOnly">
         /// Set to true when this instance will only be used to access read only databases
         /// </param>
-        public Instance(string workingDirectory, bool readOnly)
+        public IsamInstance(string workingDirectory, bool readOnly)
         {
             // if this is a RO instance then we will create a unique temp db
             // name so that it is easy to use the same workingDirectory for
@@ -95,7 +95,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Instance"/> class. 
+        /// Initializes a new instance of the <see cref="IsamInstance"/> class. 
         /// </summary>
         /// <param name="checkpointFileDirectoryPath">
         /// The directory (relative or absolute) that will contain the checkpoint file managed by the ISAM.  The path must have a trailing backslash.
@@ -112,7 +112,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="eventSource">
         /// A short name that will be used to identify this instance when the ISAM emits diagnostic data.
         /// </param>
-        public Instance(
+        public IsamInstance(
             string checkpointFileDirectoryPath,
             string logfileDirectoryPath,
             string temporaryDatabaseFileDirectoryPath,
@@ -130,7 +130,7 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Instance"/> class. 
+        /// Initializes a new instance of the <see cref="IsamInstance"/> class. 
         /// </summary>
         /// <param name="checkpointFileDirectoryPath">
         /// The directory (relative or absolute) that will contain the checkpoint file managed by the ISAM.  The path must have a trailing backslash.
@@ -153,7 +153,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="pageSize">
         /// Set to the page size that will be used by all databases managed by the instance.
         /// </param>
-        public Instance(
+        public IsamInstance(
             string checkpointFileDirectoryPath,
             string logfileDirectoryPath,
             string temporaryDatabaseFileDirectoryPath,
@@ -173,9 +173,9 @@ namespace Microsoft.Isam.Esent.Isam
         }
 
         /// <summary>
-        /// Finalizes an instance of the Instance class
+        /// Finalizes an instance of the IsamInstance class
         /// </summary>
-        ~Instance()
+        ~IsamInstance()
         {
             this.Dispose(false);
         }
@@ -185,12 +185,12 @@ namespace Microsoft.Isam.Esent.Isam
         /// tweak various aspects of the ISAM's behavior or performance for
         /// this instance.
         /// </summary>
-        public SystemParameters SystemParameters
+        public IsamSystemParameters IsamSystemParameters
         {
             get
             {
                 this.CheckDisposed();
-                return this.systemParameters;
+                return this.isamSystemParameters;
             }
         }
 
@@ -273,7 +273,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// Creates a session
         /// </summary>
         /// <returns>a session associated with this instance</returns>
-        public Session CreateSession()
+        public IsamSession CreateSession()
         {
             lock (this)
             {
@@ -297,7 +297,7 @@ namespace Microsoft.Isam.Esent.Isam
                     this.instanceInitialized = true;
                 }
 
-                return new Session(this);
+                return new IsamSession(this);
             }
         }
 
@@ -380,20 +380,20 @@ namespace Microsoft.Isam.Esent.Isam
                 Api.JetCreateInstance(out this.instance, eventSource);
                 this.cleanupInstance = true;
                 this.instanceInitialized = false;
-                this.systemParameters = new SystemParameters(this);
+                this.isamSystemParameters = new IsamSystemParameters(this);
                 this.tempTableHandleCollection = new TempTableHandleCollection(true);
                 this.cleanupTempTables = true;
 
-                this.systemParameters.CreatePathIfNotExist = true;
-                this.systemParameters.PageTempDBMin = 14;
-                this.systemParameters.LogFileSize = 64;
-                this.systemParameters.CircularLog = true;
-                this.systemParameters.SystemPath = checkpointFileDirectoryPath;
-                this.systemParameters.LogFilePath = logfileDirectoryPath;
-                this.systemParameters.TempPath = temporaryDatabaseFileDirectoryPath;
-                this.systemParameters.BaseName = baseName;
-                this.systemParameters.EventSource = eventSource;
-                this.systemParameters.Recovery = this.readOnly ? "off" : "on";
+                this.isamSystemParameters.CreatePathIfNotExist = true;
+                this.isamSystemParameters.PageTempDBMin = 14;
+                this.isamSystemParameters.LogFileSize = 64;
+                this.isamSystemParameters.CircularLog = true;
+                this.isamSystemParameters.SystemPath = checkpointFileDirectoryPath;
+                this.isamSystemParameters.LogFilePath = logfileDirectoryPath;
+                this.isamSystemParameters.TempPath = temporaryDatabaseFileDirectoryPath;
+                this.isamSystemParameters.BaseName = baseName;
+                this.isamSystemParameters.EventSource = eventSource;
+                this.isamSystemParameters.Recovery = this.readOnly ? "off" : "on";
             }
         }
 

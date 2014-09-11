@@ -9,7 +9,7 @@
 // </summary>
 // ---------------------------------------------------------------------
 
-namespace Microsoft.Isam.Esent.Isam
+namespace Microsoft.Database.Isam
 {
     using System;
     using System.Collections;
@@ -26,7 +26,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <summary>
         /// The session
         /// </summary>
-        private readonly Session session;
+        private readonly IsamSession isamSession;
 
         /// <summary>
         /// The database
@@ -186,22 +186,22 @@ namespace Microsoft.Isam.Esent.Isam
         /// <summary>
         /// Initializes a new instance of the <see cref="Cursor"/> class.
         /// </summary>
-        /// <param name="session">The session.</param>
+        /// <param name="isamSession">The session.</param>
         /// <param name="database">The database.</param>
         /// <param name="tableName">Name of the table.</param>
         /// <param name="grbit">The grbit.</param>
-        internal Cursor(Session session, Database database, string tableName, OpenTableGrbit grbit)
+        internal Cursor(IsamSession isamSession, Database database, string tableName, OpenTableGrbit grbit)
         {
-            lock (session)
+            lock (isamSession)
             {
-                this.session = session;
+                this.isamSession = isamSession;
                 this.database = database;
                 this.tableName = tableName;
-                Api.JetOpenTable(session.Sesid, database.Dbid, tableName, null, 0, grbit, out this.tableid);
+                Api.JetOpenTable(isamSession.Sesid, database.Dbid, tableName, null, 0, grbit, out this.tableid);
                 this.cleanup = true;
-                this.record = new ColumnAccessor(this, session, this.tableid, RetrieveColumnGrbit.None);
-                this.editRecord = new ColumnAccessor(this, session, this.tableid, RetrieveColumnGrbit.RetrieveCopy);
-                this.indexRecord = new ColumnAccessor(this, session, this.tableid, RetrieveColumnGrbit.RetrieveFromIndex);
+                this.record = new ColumnAccessor(this, isamSession, this.tableid, RetrieveColumnGrbit.None);
+                this.editRecord = new ColumnAccessor(this, isamSession, this.tableid, RetrieveColumnGrbit.RetrieveCopy);
+                this.indexRecord = new ColumnAccessor(this, isamSession, this.tableid, RetrieveColumnGrbit.RetrieveFromIndex);
 
                 this.MoveBeforeFirst();
             }
@@ -210,28 +210,28 @@ namespace Microsoft.Isam.Esent.Isam
         /// <summary>
         /// Initializes a new instance of the <see cref="Cursor"/> class.
         /// </summary>
-        /// <param name="session">The session.</param>
+        /// <param name="isamSession">The session.</param>
         /// <param name="database">The database.</param>
         /// <param name="tableName">Name of the table.</param>
         /// <param name="tableid">The tableid.</param>
         /// <param name="inInsertMode">if set to <c>true</c> [in insert mode].</param>
         internal Cursor(
-            Session session,
+            IsamSession isamSession,
             TemporaryDatabase database,
             string tableName,
             JET_TABLEID tableid,
             bool inInsertMode)
         {
-            lock (session)
+            lock (isamSession)
             {
-                this.session = session;
+                this.isamSession = isamSession;
                 this.database = database;
                 this.tableName = tableName;
                 this.tableid = tableid;
                 this.cleanup = true;
-                this.record = new ColumnAccessor(this, session, tableid, RetrieveColumnGrbit.None);
-                this.editRecord = new ColumnAccessor(this, session, tableid, RetrieveColumnGrbit.RetrieveCopy);
-                this.indexRecord = new ColumnAccessor(this, session, tableid, RetrieveColumnGrbit.RetrieveFromIndex);
+                this.record = new ColumnAccessor(this, isamSession, tableid, RetrieveColumnGrbit.None);
+                this.editRecord = new ColumnAccessor(this, isamSession, tableid, RetrieveColumnGrbit.RetrieveCopy);
+                this.indexRecord = new ColumnAccessor(this, isamSession, tableid, RetrieveColumnGrbit.RetrieveFromIndex);
                 this.isSort = database.Tables[tableName].Type == TableType.Sort;
                 this.isSortOrPreSort = database.Tables[tableName].Type == TableType.Sort
                                        || database.Tables[tableName].Type == TableType.PreSortTemporary;
@@ -275,7 +275,7 @@ namespace Microsoft.Isam.Esent.Isam
         {
             get
             {
-                lock (this.session)
+                lock (this.isamSession)
                 {
                     this.CheckDisposed();
 
@@ -297,7 +297,7 @@ namespace Microsoft.Isam.Esent.Isam
         {
             get
             {
-                lock (this.session)
+                lock (this.isamSession)
                 {
                     this.CheckDisposed();
 
@@ -336,19 +336,19 @@ namespace Microsoft.Isam.Esent.Isam
         {
             get
             {
-                lock (this.session)
+                lock (this.isamSession)
                 {
                     this.CheckDisposed();
 
                     if (this.fields == null
-                        || this.session.TransactionLevel == 0
-                        || this.transactionID != this.session.TransactionID
+                        || this.isamSession.TransactionLevel == 0
+                        || this.transactionID != this.isamSession.TransactionID
                         || this.updateID != this.editRecord.UpdateID)
                     {
                         // we always ask for the copy buffer and will only get
                         // it if we are actually doing an insert or update
                         this.fields = this.GetFields(RetrieveColumnGrbit.RetrieveCopy);
-                        this.transactionID = this.session.TransactionID;
+                        this.transactionID = this.isamSession.TransactionID;
                         this.updateID = this.editRecord.UpdateID;
                     }
 
@@ -428,7 +428,7 @@ namespace Microsoft.Isam.Esent.Isam
         {
             get
             {
-                lock (this.session)
+                lock (this.isamSession)
                 {
                     this.CheckDisposed();
 
@@ -446,7 +446,7 @@ namespace Microsoft.Isam.Esent.Isam
                     else
                     {
                         string currentIndex = null;
-                        Api.JetGetCurrentIndex(this.session.Sesid, this.tableid, out currentIndex, 255);
+                        Api.JetGetCurrentIndex(this.isamSession.Sesid, this.tableid, out currentIndex, 255);
                         return currentIndex;
                     }
                 }
@@ -493,13 +493,13 @@ namespace Microsoft.Isam.Esent.Isam
         {
             get
             {
-                lock (this.session)
+                lock (this.isamSession)
                 {
                     this.CheckDisposed();
                     this.CheckRecord();
 
                     JET_RECPOS recpos;
-                    Api.JetGetRecordPosition(this.session.Sesid, this.tableid, out recpos);
+                    Api.JetGetRecordPosition(this.isamSession.Sesid, this.tableid, out recpos);
                     return new Position((int)recpos.centriesLT, (int)recpos.centriesTotal);
                 }
             }
@@ -518,7 +518,7 @@ namespace Microsoft.Isam.Esent.Isam
         {
             get
             {
-                lock (this.session)
+                lock (this.isamSession)
                 {
                     this.CheckDisposed();
                     this.CheckRecord();
@@ -533,14 +533,14 @@ namespace Microsoft.Isam.Esent.Isam
                     {
                         byte[] primaryBookmark;
                         byte[] secondaryBookmark = Api.GetSecondaryBookmark(
-                            this.session.Sesid,
+                            this.isamSession.Sesid,
                             this.tableid,
                             out primaryBookmark);
                         return new Location(indexName, primaryBookmark, secondaryBookmark);
                     }
                     catch (EsentNoCurrentIndexException)
                     {
-                        return new Location(indexName, Api.GetBookmark(this.session.Sesid, this.tableid), null);
+                        return new Location(indexName, Api.GetBookmark(this.isamSession.Sesid, this.tableid), null);
                     }
                 }
             }
@@ -617,7 +617,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public bool Move(int rows)
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.CheckDisposed();
 
@@ -655,7 +655,7 @@ namespace Microsoft.Isam.Esent.Isam
                 }
 
                 // try to move by the desired offset
-                bool found = Api.TryMove(this.session.Sesid, this.tableid, unchecked((JET_Move)rows), MoveGrbit.None);
+                bool found = Api.TryMove(this.isamSession.Sesid, this.tableid, unchecked((JET_Move)rows), MoveGrbit.None);
                 this.onBeforeFirst = false;
 
                 // clear our field cache because the current record has changed
@@ -675,7 +675,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public void MoveBeforeFirst()
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 bool prevInRetrieveMode = this.inRetrieveMode;
 
@@ -710,15 +710,15 @@ namespace Microsoft.Isam.Esent.Isam
                     // if an index range is not specified, simply move first
                     if (this.keyStart == null)
                     {
-                        Api.TryMoveFirst(this.session.Sesid, this.tableid);
+                        Api.TryMoveFirst(this.isamSession.Sesid, this.tableid);
                     }
                     else
                     {
                         // if an index range is specified, seek to its lower limit
-                        Api.MakeKey(this.session.Sesid, this.tableid, this.keyStart, MakeKeyGrbit.NormalizedKey);
+                        Api.MakeKey(this.isamSession.Sesid, this.tableid, this.keyStart, MakeKeyGrbit.NormalizedKey);
                         try
                         {
-                            Api.JetSeek(this.session.Sesid, this.tableid, this.grbitSeekStart);
+                            Api.JetSeek(this.isamSession.Sesid, this.tableid, this.grbitSeekStart);
                         }
                         catch (EsentRecordNotFoundException)
                         {
@@ -727,7 +727,7 @@ namespace Microsoft.Isam.Esent.Isam
 
                     // back up one to account for the MoveBeforeFirst/MoveNext
                     // iterator model of CLR
-                    Api.TryMovePrevious(this.session.Sesid, this.tableid);
+                    Api.TryMovePrevious(this.isamSession.Sesid, this.tableid);
                 }
 
                 // clear our navigation direction
@@ -752,7 +752,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public void MoveAfterLast()
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.CheckDisposed();
                 this.OnNavigation();
@@ -760,20 +760,20 @@ namespace Microsoft.Isam.Esent.Isam
                 // if an index range is not specified, simply move last
                 if (this.keyEnd == null)
                 {
-                    Api.TryMoveLast(this.session.Sesid, this.tableid);
+                    Api.TryMoveLast(this.isamSession.Sesid, this.tableid);
                 }
                 else
                 {
                     // if an index range is specified, seek to its upper limit
-                    Api.MakeKey(this.session.Sesid, this.tableid, this.keyEnd, MakeKeyGrbit.NormalizedKey);
+                    Api.MakeKey(this.isamSession.Sesid, this.tableid, this.keyEnd, MakeKeyGrbit.NormalizedKey);
 
                     // Ignore the return code. We don't care if TrySeek() returns false.
-                    Api.TrySeek(this.session.Sesid, this.tableid, this.grbitSeekEnd);
+                    Api.TrySeek(this.isamSession.Sesid, this.tableid, this.grbitSeekEnd);
                 }
 
                 // move down one to account for the MoveAfterLast/MovePrevious
                 // iterator model of CLR
-                Api.TryMoveNext(this.session.Sesid, this.tableid);
+                Api.TryMoveNext(this.isamSession.Sesid, this.tableid);
 
                 // clear our navigation direction
                 this.moveNext = false;
@@ -801,7 +801,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public void SetCurrentIndex(string indexName)
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.CheckDisposed();
 
@@ -817,7 +817,7 @@ namespace Microsoft.Isam.Esent.Isam
                     this.OnNavigation();
 
                     // select the new index
-                    Api.JetSetCurrentIndex(this.session.Sesid, this.tableid, indexName);
+                    Api.JetSetCurrentIndex(this.isamSession.Sesid, this.tableid, indexName);
 
                     // purge our cached index definition
                     this.indexDefinition = null;
@@ -851,7 +851,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public void MoveToIndex(string indexName)
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.CheckDisposed();
 
@@ -866,7 +866,7 @@ namespace Microsoft.Isam.Esent.Isam
 
                     // select the new index and attempt to maintain our
                     // position on this record
-                    Api.JetSetCurrentIndex2(this.session.Sesid, this.tableid, indexName, SetCurrentIndexGrbit.NoMove);
+                    Api.JetSetCurrentIndex2(this.isamSession.Sesid, this.tableid, indexName, SetCurrentIndexGrbit.NoMove);
 
                     // purge our cached index definition
                     this.indexDefinition = null;
@@ -888,7 +888,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <returns>true if a record was found, false otherwise</returns>
         public bool GotoKey(Key key)
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.CheckDisposed();
 
@@ -915,11 +915,11 @@ namespace Microsoft.Isam.Esent.Isam
                 }
 
                 // compute the key for our seek
-                Api.MakeKey(this.session.Sesid, this.tableid, this.MakeKey(key, false), MakeKeyGrbit.NormalizedKey);
+                Api.MakeKey(this.isamSession.Sesid, this.tableid, this.MakeKey(key, false), MakeKeyGrbit.NormalizedKey);
 
                 // seek for the record that exactly matches this key and remember
                 // if we found it
-                bool found = Api.TrySeek(this.session.Sesid, this.tableid, SeekGrbit.SeekEQ);
+                bool found = Api.TrySeek(this.isamSession.Sesid, this.tableid, SeekGrbit.SeekEQ);
 
                 // clear our field cache because the current record has changed
                 this.fields = null;
@@ -940,7 +940,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public void GotoPosition(Position position)
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.CheckDisposed();
                 this.OnNavigation();
@@ -952,7 +952,7 @@ namespace Microsoft.Isam.Esent.Isam
                 JET_RECPOS recpos = new JET_RECPOS();
                 recpos.centriesLT = position.Entry;
                 recpos.centriesTotal = position.TotalEntries;
-                Api.JetGotoPosition(this.session.Sesid, this.tableid, recpos);
+                Api.JetGotoPosition(this.isamSession.Sesid, this.tableid, recpos);
 
                 // clear our field cache because the current record has changed
                 this.fields = null;
@@ -968,7 +968,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public void GotoLocation(Location location)
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.CheckDisposed();
                 this.OnNavigation();
@@ -985,7 +985,7 @@ namespace Microsoft.Isam.Esent.Isam
                     try
                     {
                         Api.JetGotoSecondaryIndexBookmark(
-                            this.session.Sesid,
+                            this.isamSession.Sesid,
                             this.tableid,
                             location.SecondaryBookmark,
                             location.SecondaryBookmark.Length,
@@ -996,7 +996,7 @@ namespace Microsoft.Isam.Esent.Isam
                     catch (EsentNoCurrentIndexException)
                     {
                         Api.JetGotoBookmark(
-                            this.session.Sesid,
+                            this.isamSession.Sesid,
                             this.tableid,
                             location.PrimaryBookmark,
                             location.PrimaryBookmark.Length);
@@ -1006,7 +1006,7 @@ namespace Microsoft.Isam.Esent.Isam
                 {
                     // the index has changed, use the primary bookmark
                     Api.JetGotoBookmark(
-                        this.session.Sesid,
+                        this.isamSession.Sesid,
                         this.tableid,
                         location.PrimaryBookmark,
                         location.PrimaryBookmark.Length);
@@ -1089,7 +1089,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public void FindRecordsBetween(Key keyStart, BoundCriteria criteriaStart, Key keyEnd, BoundCriteria criteriaEnd)
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.CheckDisposed();
                 this.OnNavigation();
@@ -1123,7 +1123,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public void FindAllRecords()
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.CheckDisposed();
 
@@ -1134,7 +1134,7 @@ namespace Microsoft.Isam.Esent.Isam
                     // without throwing an exception.
                     try
                     {
-                        Api.JetSetIndexRange(this.session.Sesid, this.tableid, SetIndexRangeGrbit.RangeRemove);
+                        Api.JetSetIndexRange(this.isamSession.Sesid, this.tableid, SetIndexRangeGrbit.RangeRemove);
                     }
                     catch (EsentInvalidOperationException)
                     {
@@ -1170,7 +1170,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public void BeginEditForInsert()
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.CheckDisposed();
 
@@ -1180,7 +1180,7 @@ namespace Microsoft.Isam.Esent.Isam
                 }
 
                 // prepare for the insert
-                Api.JetPrepareUpdate(this.session.Sesid, this.tableid, JET_prep.Insert);
+                Api.JetPrepareUpdate(this.isamSession.Sesid, this.tableid, JET_prep.Insert);
                 this.updating = true;
 
                 // clear our field cache because we are working on a new record
@@ -1203,7 +1203,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public void BeginEditForUpdate()
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.CheckDisposed();
 
@@ -1212,7 +1212,7 @@ namespace Microsoft.Isam.Esent.Isam
                     throw new InvalidOperationException("It is illegal to update a record when already inserting or updating a record.");
                 }
 
-                Api.JetPrepareUpdate(this.session.Sesid, this.tableid, JET_prep.Replace);
+                Api.JetPrepareUpdate(this.isamSession.Sesid, this.tableid, JET_prep.Replace);
                 this.updating = true;
             }
         }
@@ -1226,7 +1226,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public void RejectChanges()
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.CheckDisposed();
 
@@ -1235,7 +1235,7 @@ namespace Microsoft.Isam.Esent.Isam
                     throw new InvalidOperationException("It is illegal to cancel an insert or update when not inserting or updating a record.");
                 }
 
-                Api.JetPrepareUpdate(this.session.Sesid, this.tableid, JET_prep.Cancel);
+                Api.JetPrepareUpdate(this.isamSession.Sesid, this.tableid, JET_prep.Cancel);
                 this.updating = false;
 
                 // clear our field cache because our record data has changed
@@ -1252,7 +1252,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public void AcceptChanges()
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.CheckDisposed();
 
@@ -1261,7 +1261,7 @@ namespace Microsoft.Isam.Esent.Isam
                     throw new InvalidOperationException("It is illegal to accept an insert or update when not inserting or updating a record.");
                 }
 
-                Api.JetUpdate(this.session.Sesid, this.tableid);
+                Api.JetUpdate(this.isamSession.Sesid, this.tableid);
                 this.updating = false;
             }
         }
@@ -1275,7 +1275,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </remarks>
         public void Delete()
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.CheckDisposed();
 
@@ -1284,7 +1284,7 @@ namespace Microsoft.Isam.Esent.Isam
                     throw new InvalidOperationException("It is illegal to delete a record when inserting or updating a record.");
                 }
 
-                Api.JetDelete(this.session.Sesid, this.tableid);
+                Api.JetDelete(this.isamSession.Sesid, this.tableid);
                 this.updating = false;
             }
 
@@ -1337,7 +1337,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </exception>
         internal void CheckDisposed()
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 if (this.Disposed)
                 {
@@ -1354,7 +1354,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </exception>
         internal void CheckRecord()
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 if (this.outOfRange)
                 {
@@ -1369,7 +1369,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <exception cref="System.InvalidOperationException">It is illegal to move to a different record when inserting or updating a record.</exception>
         internal void CheckNotUpdating()
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 if (this.updating)
                 {
@@ -1383,7 +1383,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </summary>
         internal void OnNavigation()
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.CheckNotUpdating();
 
@@ -1409,7 +1409,7 @@ namespace Microsoft.Isam.Esent.Isam
                 (context, pv, cb) =>
                 IntPtr.Zero == pv ? Marshal.AllocHGlobal(new IntPtr(cb)) : Marshal.ReAllocHGlobal(pv, new IntPtr(cb));
 
-            lock (this.session)
+            lock (this.isamSession)
             {
                 this.CheckDisposed();
                 this.CheckRecord();
@@ -1418,14 +1418,14 @@ namespace Microsoft.Isam.Esent.Isam
                                                            ? EnumerateColumnsGrbit.EnumerateCopy
                                                            : EnumerateColumnsGrbit.None;
 
-                using (Transaction trx = new Transaction(this.session, true))
+                using (IsamTransaction trx = new IsamTransaction(this.isamSession, true))
                 {
                     // enumerate all field values in the current record or copy
                     // buffer
                     JET_ENUMCOLUMN[] jecs;
                     int numColumnValues;
                     Api.JetEnumerateColumns(
-                        this.session.Sesid,
+                        this.isamSession.Sesid,
                         this.tableid,
                         0, // numColumnids
                         null, // columnids
@@ -1451,7 +1451,7 @@ namespace Microsoft.Isam.Esent.Isam
                             {
                                 JET_COLUMNBASE columnbase;
                                 VistaApi.JetGetTableColumnInfo(
-                                    this.session.Sesid,
+                                    this.isamSession.Sesid,
                                     this.tableid,
                                     jec.columnid,
                                     out columnbase);
@@ -1491,7 +1491,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected virtual void Dispose(bool disposing)
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 if (!this.Disposed)
                 {
@@ -1508,7 +1508,7 @@ namespace Microsoft.Isam.Esent.Isam
                             // cause us to crash in ESENT due to lack of full validation
                             // in small config.  we should use cursor LS to detect when
                             // our cursor gets closed and thus avoid closing it again
-                            Api.JetCloseTable(this.session.Sesid, this.tableid);
+                            Api.JetCloseTable(this.isamSession.Sesid, this.tableid);
                         }
 
                         this.cleanup = false;
@@ -1531,7 +1531,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <exception cref="System.ArgumentException">the provided key must have a key segment per key column on the current index or it must contain a prefix or wildcard;key</exception>
         private byte[] MakeKey(Key key, bool end)
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 bool firstSegment = true;
                 int i = 0;
@@ -1585,7 +1585,7 @@ namespace Microsoft.Isam.Esent.Isam
                         if (segment.Wildcard == false)
                         {
                             int valueLength = value == null ? 0 : value.Length;
-                            Api.JetMakeKey(this.session.Sesid, this.tableid, value, valueLength, grbit);
+                            Api.JetMakeKey(this.isamSession.Sesid, this.tableid, value, valueLength, grbit);
                             firstSegment = false;
                         }
                     }
@@ -1605,7 +1605,7 @@ namespace Microsoft.Isam.Esent.Isam
                     return null;
                 }
 
-                return Api.RetrieveKey(this.session.Sesid, this.tableid, RetrieveKeyGrbit.RetrieveCopy);
+                return Api.RetrieveKey(this.isamSession.Sesid, this.tableid, RetrieveKeyGrbit.RetrieveCopy);
             }
         }
 
@@ -1614,7 +1614,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </summary>
         private void SetLowerLimit()
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 // we need to setup our index range
                 if (this.movePrev == false)
@@ -1623,10 +1623,10 @@ namespace Microsoft.Isam.Esent.Isam
                     if (this.keyStart != null)
                     {
                         // load the key for the start of the current index range
-                        Api.MakeKey(this.session.Sesid, this.tableid, this.keyStart, MakeKeyGrbit.NormalizedKey);
+                        Api.MakeKey(this.isamSession.Sesid, this.tableid, this.keyStart, MakeKeyGrbit.NormalizedKey);
 
                         // limit our backward movement to the defined index range
-                        Api.TrySetIndexRange(this.session.Sesid, this.tableid, this.grbitRangeStart);
+                        Api.TrySetIndexRange(this.isamSession.Sesid, this.tableid, this.grbitRangeStart);
                     }
                 }
 
@@ -1644,7 +1644,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// </summary>
         private void SetUpperLimit()
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 // we need to setup our index range
                 if (this.moveNext == false)
@@ -1653,10 +1653,10 @@ namespace Microsoft.Isam.Esent.Isam
                     if (this.keyEnd != null)
                     {
                         // load the key for the end of the current index range
-                        Api.MakeKey(this.session.Sesid, this.tableid, this.keyEnd, MakeKeyGrbit.NormalizedKey);
+                        Api.MakeKey(this.isamSession.Sesid, this.tableid, this.keyEnd, MakeKeyGrbit.NormalizedKey);
 
                         // limit our foward movement to the defined index range
-                        Api.TrySetIndexRange(this.session.Sesid, this.tableid, this.grbitRangeEnd);
+                        Api.TrySetIndexRange(this.isamSession.Sesid, this.tableid, this.grbitRangeEnd);
                     }
                 }
 
@@ -1698,7 +1698,7 @@ namespace Microsoft.Isam.Esent.Isam
         /// <returns>Whether the cursor is currently in the index range.</returns>
         private bool CheckRange()
         {
-            lock (this.session)
+            lock (this.isamSession)
             {
                 byte[] keyCurr = null;
 
@@ -1711,7 +1711,7 @@ namespace Microsoft.Isam.Esent.Isam
                 {
                     try
                     {
-                        keyCurr = Api.RetrieveKey(this.session.Sesid, this.tableid, RetrieveKeyGrbit.None);
+                        keyCurr = Api.RetrieveKey(this.isamSession.Sesid, this.tableid, RetrieveKeyGrbit.None);
                     }
                     catch (EsentNoCurrentRecordException)
                     {

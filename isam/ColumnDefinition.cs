@@ -9,7 +9,7 @@
 // </summary>
 // ---------------------------------------------------------------------
 
-namespace Microsoft.Isam.Esent.Isam
+namespace Microsoft.Database.Isam
 {
     using System;
     using System.Text;
@@ -264,14 +264,14 @@ namespace Microsoft.Isam.Esent.Isam
         /// </returns>
         internal static ColumnDefinition Load(Database database, string tableName, JET_COLUMNLIST columnList)
         {
-            lock (database.Session)
+            lock (database.IsamSession)
             {
-                using (Transaction trx = new Transaction(database.Session))
+                using (IsamTransaction trx = new IsamTransaction(database.IsamSession))
                 {
                     // load info for the column
                     ColumnDefinition columnDefinition = new ColumnDefinition();
 
-                    JET_SESID sesid = database.Session.Sesid;
+                    JET_SESID sesid = database.IsamSession.Sesid;
 
                     // If we use the wide API (Vista+), then the temp table will be in UTF-16.
                     Encoding encodingOfTextColumns = EsentVersion.SupportsVistaFeatures
@@ -279,12 +279,12 @@ namespace Microsoft.Isam.Esent.Isam
                                                          : Encoding.ASCII;
 
                     string columnName = Api.RetrieveColumnAsString(
-                        database.Session.Sesid,
+                        database.IsamSession.Sesid,
                         columnList.tableid,
                         columnList.columnidcolumnname,
                         encodingOfTextColumns);
                     JET_COLUMNBASE columnbase;
-                    Api.JetGetColumnInfo(database.Session.Sesid, database.Dbid, tableName, columnName, out columnbase);
+                    Api.JetGetColumnInfo(database.IsamSession.Sesid, database.Dbid, tableName, columnName, out columnbase);
                     columnDefinition.columnid = new Columnid(columnbase);
                     columnDefinition.name = columnDefinition.columnid.Name;
                     columnDefinition.type = columnDefinition.columnid.Type;
@@ -321,11 +321,11 @@ namespace Microsoft.Isam.Esent.Isam
         /// </returns>
         internal static ColumnDefinition Load(Database database, string tableName, JET_COLUMNBASE columnBase)
         {
-            lock (database.Session)
+            lock (database.IsamSession)
             {
-                using (Transaction trx = new Transaction(database.Session))
+                using (IsamTransaction trx = new IsamTransaction(database.IsamSession))
                 {
-                    JET_SESID sesid = database.Session.Sesid;
+                    JET_SESID sesid = database.IsamSession.Sesid;
 
                     // load info for the column
                     ColumnDefinition columnDefinition = new ColumnDefinition();

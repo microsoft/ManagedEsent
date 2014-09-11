@@ -9,7 +9,7 @@
 // </summary>
 // ---------------------------------------------------------------------
 
-namespace Microsoft.Isam.Esent.Isam
+namespace Microsoft.Database.Isam
 {
     using System;
     using System.Collections;
@@ -147,14 +147,14 @@ namespace Microsoft.Isam.Esent.Isam
             {
                 if (this.database != null)
                 {
-                    lock (this.database.Session)
+                    lock (this.database.IsamSession)
                     {
                         if (this.cachedColumnDefinition != columnName.ToLower(CultureInfo.InvariantCulture)
                             || this.columnUpdateID != DatabaseCommon.SchemaUpdateID)
                         {
                             JET_COLUMNBASE columnBase;
                             Api.JetGetColumnInfo(
-                                this.database.Session.Sesid,
+                                this.database.IsamSession.Sesid,
                                 this.database.Dbid,
                                 this.tableName,
                                 columnName,
@@ -188,14 +188,14 @@ namespace Microsoft.Isam.Esent.Isam
             {
                 if (this.database != null)
                 {
-                    lock (this.database.Session)
+                    lock (this.database.IsamSession)
                     {
                         if (this.cachedColumnDefinition != columnid.Name.ToLower(CultureInfo.InvariantCulture)
                             || this.columnUpdateID != DatabaseCommon.SchemaUpdateID)
                         {
                             JET_COLUMNBASE columnBase;
                             Api.JetGetColumnInfo(
-                                this.database.Session.Sesid,
+                                this.database.IsamSession.Sesid,
                                 this.database.Dbid,
                                 this.tableName,
                                 columnid.Name,
@@ -253,7 +253,7 @@ namespace Microsoft.Isam.Esent.Isam
         {
             if (this.database != null)
             {
-                lock (this.database.Session)
+                lock (this.database.IsamSession)
                 {
                     bool exists = false;
 
@@ -261,7 +261,7 @@ namespace Microsoft.Isam.Esent.Isam
                     {
                         JET_COLUMNBASE columnBase;
                         Api.JetGetColumnInfo(
-                            this.database.Session.Sesid,
+                            this.database.IsamSession.Sesid,
                             this.database.Dbid,
                             this.tableName,
                             columnName,
@@ -290,7 +290,7 @@ namespace Microsoft.Isam.Esent.Isam
         {
             if (this.database != null)
             {
-                lock (this.database.Session)
+                lock (this.database.IsamSession)
                 {
                     bool exists = false;
 
@@ -298,7 +298,7 @@ namespace Microsoft.Isam.Esent.Isam
                     {
                         JET_COLUMNBASE columnBase;
                         Api.JetGetColumnInfo(
-                            this.database.Session.Sesid,
+                            this.database.IsamSession.Sesid,
                             this.database.Dbid,
                             this.tableName,
                             columnid.Name,
