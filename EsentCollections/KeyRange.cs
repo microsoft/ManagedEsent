@@ -24,12 +24,12 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// A singleton instance of the open range (a range with no limits).
         /// </summary>
-        private static readonly KeyRange<T> openRange = new KeyRange<T>(null, null);
+        private static readonly KeyRange<T> OpenRangeInstance = new KeyRange<T>(null, null);
 
         /// <summary>
         /// A singleton instance of the empty range (a range with no records).
         /// </summary>
-        private static readonly KeyRange<T> emptyRange = new KeyRange<T>(
+        private static readonly KeyRange<T> EmptyRangeInstance = new KeyRange<T>(
             Key<T>.CreateKey(default(T), false), Key<T>.CreateKey(default(T), false));
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             get
             {
-                return openRange;
+                return OpenRangeInstance;
             }
         }
 
@@ -61,7 +61,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             get
             {
-                return emptyRange;
+                return EmptyRangeInstance;
             }
         }
 

@@ -202,6 +202,42 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Create a database, attach, open, close and detach with simpler overloads.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Create a database, attach, open, close and detach with simpler overloads.")]
+        public void CreateAndOpenDatabaseSimpleOverloads()
+        {
+            string dir = SetupHelper.CreateRandomDirectory();
+            JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
+            Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
+            Api.JetInit(ref instance);
+            try
+            {
+                string database = Path.Combine(dir, "test.db");
+
+                JET_SESID sesid;
+                JET_DBID dbid;
+                Api.BeginSession(instance, out sesid);
+                Api.CreateDatabase(sesid, database, out dbid, CreateDatabaseGrbit.None);
+                Api.JetCloseDatabase(sesid, dbid, CloseDatabaseGrbit.None);
+                Api.JetDetachDatabase2(sesid, database, DetachDatabaseGrbit.None);
+
+                Api.JetAttachDatabase(sesid, database, AttachDatabaseGrbit.None);
+                Api.OpenDatabase(sesid, database, out dbid, OpenDatabaseGrbit.None);
+                Api.JetCloseDatabase(sesid, dbid, CloseDatabaseGrbit.None);
+                Api.JetDetachDatabase(sesid, database);
+            }
+            finally
+            {
+                Api.JetTerm(instance);
+                Cleanup.DeleteDirectoryWithRetry(dir);
+            }
+        }
+
+        /// <summary>
         /// Create a database, open read-only
         /// </summary>
         [TestMethod]

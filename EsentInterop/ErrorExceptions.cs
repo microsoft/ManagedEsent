@@ -4223,6 +4223,166 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Base class for JET_err.EngineFormatVersionNoLongerSupportedTooLow exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentEngineFormatVersionNoLongerSupportedTooLowException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentEngineFormatVersionNoLongerSupportedTooLowException class.
+        /// </summary>
+        public EsentEngineFormatVersionNoLongerSupportedTooLowException() :
+            base("The specified JET_ENGINEFORMATVERSION value is too low to be supported by this version of ESE.", JET_err.EngineFormatVersionNoLongerSupportedTooLow)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentEngineFormatVersionNoLongerSupportedTooLowException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentEngineFormatVersionNoLongerSupportedTooLowException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.EngineFormatVersionNotYetImplementedTooHigh exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentEngineFormatVersionNotYetImplementedTooHighException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentEngineFormatVersionNotYetImplementedTooHighException class.
+        /// </summary>
+        public EsentEngineFormatVersionNotYetImplementedTooHighException() :
+            base("The specified JET_ENGINEFORMATVERSION value is too high, higher than this version of ESE knows about.", JET_err.EngineFormatVersionNotYetImplementedTooHigh)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentEngineFormatVersionNotYetImplementedTooHighException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentEngineFormatVersionNotYetImplementedTooHighException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.EngineFormatVersionParamTooLowForRequestedFeature exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentEngineFormatVersionParamTooLowForRequestedFeatureException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentEngineFormatVersionParamTooLowForRequestedFeatureException class.
+        /// </summary>
+        public EsentEngineFormatVersionParamTooLowForRequestedFeatureException() :
+            base("Thrown by a format feature (not at JetSetSystemParameter) if the client requests a feature that requires a version higher than that set for the JET_paramEngineFormatVersion.", JET_err.EngineFormatVersionParamTooLowForRequestedFeature)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentEngineFormatVersionParamTooLowForRequestedFeatureException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentEngineFormatVersionParamTooLowForRequestedFeatureException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.EngineFormatVersionSpecifiedTooLowForLogVersion exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentEngineFormatVersionSpecifiedTooLowForLogVersionException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentEngineFormatVersionSpecifiedTooLowForLogVersionException class.
+        /// </summary>
+        public EsentEngineFormatVersionSpecifiedTooLowForLogVersionException() :
+            base("The specified JET_ENGINEFORMATVERSION is set too low for this log stream, the log files have already been upgraded to a higher version.  A higher JET_ENGINEFORMATVERSION value must be set in the param.", JET_err.EngineFormatVersionSpecifiedTooLowForLogVersion)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentEngineFormatVersionSpecifiedTooLowForLogVersionException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentEngineFormatVersionSpecifiedTooLowForLogVersionException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.EngineFormatVersionSpecifiedTooLowForDatabaseVersion exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentEngineFormatVersionSpecifiedTooLowForDatabaseVersionException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentEngineFormatVersionSpecifiedTooLowForDatabaseVersionException class.
+        /// </summary>
+        public EsentEngineFormatVersionSpecifiedTooLowForDatabaseVersionException() :
+            base("The specified JET_ENGINEFORMATVERSION is set too low for this database file, the database file has already been upgraded to a higher version.  A higher JET_ENGINEFORMATVERSION value must be set in the param.", JET_err.EngineFormatVersionSpecifiedTooLowForDatabaseVersion)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentEngineFormatVersionSpecifiedTooLowForDatabaseVersionException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentEngineFormatVersionSpecifiedTooLowForDatabaseVersionException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
     /// Base class for JET_err.BackupAbortByServer exceptions.
     /// </summary>
     [SuppressMessage(
@@ -5190,7 +5350,7 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentQueryNotSupportedException : EsentUsageException
+    public sealed class EsentQueryNotSupportedException : EsentObsoleteException
     {
         /// <summary>
         /// Initializes a new instance of the EsentQueryNotSupportedException class.
@@ -6552,6 +6712,38 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
         private EsentInstanceUnavailableDueToFatalLogDiskFullException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.InvalidSesparamId exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentInvalidSesparamIdException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidSesparamIdException class.
+        /// </summary>
+        public EsentInvalidSesparamIdException() :
+            base("This JET_sesparam* identifier is not known to the ESE engine.", JET_err.InvalidSesparamId)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidSesparamIdException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentInvalidSesparamIdException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
         }
@@ -8319,6 +8511,102 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Base class for JET_err.DatabaseNotReady exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentDatabaseNotReadyException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseNotReadyException class.
+        /// </summary>
+        public EsentDatabaseNotReadyException() :
+            base("Recovery on this database has not yet completed enough to permit access.", JET_err.DatabaseNotReady)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseNotReadyException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentDatabaseNotReadyException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.DatabaseAttachedForRecovery exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentDatabaseAttachedForRecoveryException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseAttachedForRecoveryException class.
+        /// </summary>
+        public EsentDatabaseAttachedForRecoveryException() :
+            base("Database is attached but only for recovery.  It must be explicitly attached before it can be opened. ", JET_err.DatabaseAttachedForRecovery)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseAttachedForRecoveryException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentDatabaseAttachedForRecoveryException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.TransactionsNotReadyDuringRecovery exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentTransactionsNotReadyDuringRecoveryException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentTransactionsNotReadyDuringRecoveryException class.
+        /// </summary>
+        public EsentTransactionsNotReadyDuringRecoveryException() :
+            base("Recovery has not seen any Begin0/Commit0 records and so does not know what trxBegin0 to assign to this transaction", JET_err.TransactionsNotReadyDuringRecovery)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentTransactionsNotReadyDuringRecoveryException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentTransactionsNotReadyDuringRecoveryException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
     /// Base class for JET_err.TableLocked exceptions.
     /// </summary>
     [SuppressMessage(
@@ -9727,6 +10015,102 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Base class for JET_err.InvalidLVChunkSize exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentInvalidLVChunkSizeException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidLVChunkSizeException class.
+        /// </summary>
+        public EsentInvalidLVChunkSizeException() :
+            base("Specified LV chunk size is not supported", JET_err.InvalidLVChunkSize)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidLVChunkSizeException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentInvalidLVChunkSizeException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.ColumnCannotBeEncrypted exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentColumnCannotBeEncryptedException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentColumnCannotBeEncryptedException class.
+        /// </summary>
+        public EsentColumnCannotBeEncryptedException() :
+            base("Only JET_coltypLongText and JET_coltypLongBinary columns can be encrypted", JET_err.ColumnCannotBeEncrypted)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentColumnCannotBeEncryptedException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentColumnCannotBeEncryptedException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.CannotIndexOnEncryptedColumn exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentCannotIndexOnEncryptedColumnException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentCannotIndexOnEncryptedColumnException class.
+        /// </summary>
+        public EsentCannotIndexOnEncryptedColumnException() :
+            base("Cannot index encrypted column", JET_err.CannotIndexOnEncryptedColumn)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentCannotIndexOnEncryptedColumnException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentCannotIndexOnEncryptedColumnException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
     /// Base class for JET_err.ColumnLong exceptions.
     /// </summary>
     [SuppressMessage(
@@ -10527,6 +10911,38 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Base class for JET_err.ColumnNoEncryptionKey exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentColumnNoEncryptionKeyException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentColumnNoEncryptionKeyException class.
+        /// </summary>
+        public EsentColumnNoEncryptionKeyException() :
+            base("Cannot retrieve/set encrypted column without an encryption key", JET_err.ColumnNoEncryptionKey)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentColumnNoEncryptionKeyException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentColumnNoEncryptionKeyException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
     /// Base class for JET_err.RecordNotFound exceptions.
     /// </summary>
     [SuppressMessage(
@@ -10904,6 +11320,38 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
         private EsentUpdateMustVersionException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.DecryptionFailed exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentDecryptionFailedException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentDecryptionFailedException class.
+        /// </summary>
+        public EsentDecryptionFailedException() :
+            base("Data could not be decrypted", JET_err.DecryptionFailed)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentDecryptionFailedException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentDecryptionFailedException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
         }
@@ -11576,6 +12024,102 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
         private EsentRollbackErrorException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.FlushMapVersionUnsupported exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentFlushMapVersionUnsupportedException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentFlushMapVersionUnsupportedException class.
+        /// </summary>
+        public EsentFlushMapVersionUnsupportedException() :
+            base("The version of the persisted flush map is not supported by this version of the engine.", JET_err.FlushMapVersionUnsupported)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentFlushMapVersionUnsupportedException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentFlushMapVersionUnsupportedException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.FlushMapDatabaseMismatch exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentFlushMapDatabaseMismatchException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentFlushMapDatabaseMismatchException class.
+        /// </summary>
+        public EsentFlushMapDatabaseMismatchException() :
+            base("The persisted flush map and the database do not match.", JET_err.FlushMapDatabaseMismatch)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentFlushMapDatabaseMismatchException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentFlushMapDatabaseMismatchException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.FlushMapUnrecoverable exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentFlushMapUnrecoverableException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentFlushMapUnrecoverableException class.
+        /// </summary>
+        public EsentFlushMapUnrecoverableException() :
+            base("The persisted flush map cannot be reconstructed.", JET_err.FlushMapUnrecoverable)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentFlushMapUnrecoverableException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentFlushMapUnrecoverableException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
         }
@@ -12466,6 +13010,16 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentSurrogateBackupInProgressException();
             case JET_err.TransactionTooLong:
                 return new EsentTransactionTooLongException();
+            case JET_err.EngineFormatVersionNoLongerSupportedTooLow:
+                return new EsentEngineFormatVersionNoLongerSupportedTooLowException();
+            case JET_err.EngineFormatVersionNotYetImplementedTooHigh:
+                return new EsentEngineFormatVersionNotYetImplementedTooHighException();
+            case JET_err.EngineFormatVersionParamTooLowForRequestedFeature:
+                return new EsentEngineFormatVersionParamTooLowForRequestedFeatureException();
+            case JET_err.EngineFormatVersionSpecifiedTooLowForLogVersion:
+                return new EsentEngineFormatVersionSpecifiedTooLowForLogVersionException();
+            case JET_err.EngineFormatVersionSpecifiedTooLowForDatabaseVersion:
+                return new EsentEngineFormatVersionSpecifiedTooLowForDatabaseVersionException();
             case JET_err.BackupAbortByServer:
                 return new EsentBackupAbortByServerException();
             case JET_err.InvalidGrbit:
@@ -12612,6 +13166,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentDatabaseUnavailableException();
             case JET_err.InstanceUnavailableDueToFatalLogDiskFull:
                 return new EsentInstanceUnavailableDueToFatalLogDiskFullException();
+            case JET_err.InvalidSesparamId:
+                return new EsentInvalidSesparamIdException();
             case JET_err.OutOfSessions:
                 return new EsentOutOfSessionsException();
             case JET_err.WriteConflict:
@@ -12722,6 +13278,12 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentDatabaseFailedIncrementalReseedException();
             case JET_err.NoAttachmentsFailedIncrementalReseed:
                 return new EsentNoAttachmentsFailedIncrementalReseedException();
+            case JET_err.DatabaseNotReady:
+                return new EsentDatabaseNotReadyException();
+            case JET_err.DatabaseAttachedForRecovery:
+                return new EsentDatabaseAttachedForRecoveryException();
+            case JET_err.TransactionsNotReadyDuringRecovery:
+                return new EsentTransactionsNotReadyDuringRecoveryException();
             case JET_err.TableLocked:
                 return new EsentTableLockedException();
             case JET_err.TableDuplicate:
@@ -12810,6 +13372,12 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentIndexTuplesCannotRetrieveFromIndexException();
             case JET_err.IndexTuplesKeyTooSmall:
                 return new EsentIndexTuplesKeyTooSmallException();
+            case JET_err.InvalidLVChunkSize:
+                return new EsentInvalidLVChunkSizeException();
+            case JET_err.ColumnCannotBeEncrypted:
+                return new EsentColumnCannotBeEncryptedException();
+            case JET_err.CannotIndexOnEncryptedColumn:
+                return new EsentCannotIndexOnEncryptedColumnException();
             case JET_err.ColumnLong:
                 return new EsentColumnLongException();
             case JET_err.ColumnNoChunk:
@@ -12860,6 +13428,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentInvalidPlaceholderColumnException();
             case JET_err.ColumnCannotBeCompressed:
                 return new EsentColumnCannotBeCompressedException();
+            case JET_err.ColumnNoEncryptionKey:
+                return new EsentColumnNoEncryptionKeyException();
             case JET_err.RecordNotFound:
                 return new EsentRecordNotFoundException();
             case JET_err.RecordNoCopy:
@@ -12884,6 +13454,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentDecompressionFailedException();
             case JET_err.UpdateMustVersion:
                 return new EsentUpdateMustVersionException();
+            case JET_err.DecryptionFailed:
+                return new EsentDecryptionFailedException();
             case JET_err.TooManySorts:
                 return new EsentTooManySortsException();
             case JET_err.InvalidOnSort:
@@ -12926,6 +13498,12 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentOneDatabasePerSessionException();
             case JET_err.RollbackError:
                 return new EsentRollbackErrorException();
+            case JET_err.FlushMapVersionUnsupported:
+                return new EsentFlushMapVersionUnsupportedException();
+            case JET_err.FlushMapDatabaseMismatch:
+                return new EsentFlushMapDatabaseMismatchException();
+            case JET_err.FlushMapUnrecoverable:
+                return new EsentFlushMapUnrecoverableException();
             case JET_err.DatabaseAlreadyRunningMaintenance:
                 return new EsentDatabaseAlreadyRunningMaintenanceException();
             case JET_err.CallbackFailed:

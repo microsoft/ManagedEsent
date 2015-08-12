@@ -94,7 +94,7 @@ namespace InteropApiTests
         [Description("Verify JetSetSessionParameter( CommitDefault )")]
         public void VerifySetSessionParamCommitDefault()
         {
-            Windows8Api.JetSetSessionParameter(this.session, JET_sesparam.CommitDefault, BitConverter.GetBytes((int)CommitTransactionGrbit.LazyFlush), sizeof(CommitTransactionGrbit));
+            Windows8Api.JetSetSessionParameter(this.session, JET_sesparam.CommitDefault, (int)CommitTransactionGrbit.LazyFlush);
         }
         
         /// <summary>

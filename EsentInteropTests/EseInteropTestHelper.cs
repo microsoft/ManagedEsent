@@ -396,8 +396,8 @@ namespace InteropApiTests
         /// <exception cref="T:System.ArgumentOutOfRangeException">The <paramref name="managedString" /> parameter exceeds the maximum length allowed by the operating system.</exception>
         public static IntPtr MarshalStringToHGlobalAnsi(string managedString)
         {
-#if MANAGEDESENT_ON_CORECLR
-            return LibraryHelpers.MarshalStringToHGlobalAnsi(managedString);
+#if MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_WSA
+            return MyStringToHGlobalAnsi(managedString);
 #else
             return Marshal.StringToHGlobalAnsi(managedString);
 #endif
@@ -543,6 +543,48 @@ namespace InteropApiTests
             return rawPath;
 #endif
         }
+
+#if MANAGEDESENT_ON_CORECLR && !MANAGEDESENT_ON_WSA
+        // System.Runtime.InteropServices.Marshal
+
+        /// <summary>Copies the contents of a managed <see cref="T:System.String" /> into unmanaged memory.</summary>
+        /// <returns>The address, in unmanaged memory, to where the <paramref name="managedString" /> was copied, or 0 if <paramref name="managedString" /> is null.</returns>
+        /// <param name="managedString">A managed string to be copied.</param>
+        /// <exception cref="T:System.OutOfMemoryException">The method could not allocate enough native heap memory.</exception>
+        /// <exception cref="T:System.ArgumentOutOfRangeException">The <paramref name="managedString" /> parameter exceeds the maximum length allowed by the operating system.</exception>
+        [SecurityCritical]
+        private static unsafe IntPtr MyStringToHGlobalAnsi(string managedString)
+        {
+            if (managedString == null)
+            {
+                return IntPtr.Zero;
+            }
+
+            int charCountWithNull = managedString.Length + 1;
+            int byteCount = charCountWithNull;
+
+            if (byteCount < managedString.Length)
+            {
+                throw new ArgumentOutOfRangeException("managedString");
+            }
+
+            UIntPtr sizetdwBytes = new UIntPtr((uint)byteCount);
+            IntPtr rawBuffer = Win32.NativeMethods.LocalAlloc(0, sizetdwBytes);
+            if (rawBuffer == IntPtr.Zero)
+            {
+                throw new OutOfMemoryException();
+            }
+
+            fixed (char* sourcePointer = managedString)
+            {
+                byte* destPointer = (byte*)rawBuffer;
+                var utf8Encoding = new SlowAsciiEncoding();
+                int bytesWritten = utf8Encoding.GetBytes(sourcePointer, charCountWithNull, destPointer, byteCount);
+            }
+
+            return rawBuffer;
+        }
+#endif
 
 #if MANAGEDESENT_ON_CORECLR
         [DllImport("api-ms-win-core-heap-obsolete-l1-1-0.dll")]

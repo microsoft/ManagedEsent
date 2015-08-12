@@ -537,6 +537,24 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Gets or sets the detail level of eventlog messages that are emitted
+        /// to the eventlog by the database engine. Higher numbers will result
+        /// in more detailed eventlog messages.
+        /// </summary>
+        public EventLoggingLevels EventLoggingLevel
+        {
+            get
+            {
+                return (EventLoggingLevels)this.GetIntegerParameter(JET_param.EventLoggingLevel);
+            }
+
+            set
+            {
+                this.SetIntegerParameter(JET_param.EventLoggingLevel, (int)value);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether only one database is allowed to
         /// be opened using JetOpenDatabase by a given session at one time.
         /// The temporary database is excluded from this restriction. 

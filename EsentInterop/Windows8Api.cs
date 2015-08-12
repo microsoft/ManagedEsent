@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
 {
     using System;
     using Microsoft.Isam.Esent.Interop.Vista;
+    using Win81 = Microsoft.Isam.Esent.Interop.Windows81;
 
     /// <summary>
     /// Api calls introduced in Windows 8.
@@ -43,6 +44,26 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
         {
             Api.Check(Api.Impl.JetBeginTransaction3(sesid, userTransactionId, grbit));
         }
+
+        /// <summary>
+        /// Commits the changes made to the state of the database during the current save point
+        /// and migrates them to the previous save point. If the outermost save point is committed
+        /// then the changes made during that save point will be committed to the state of the
+        /// database and the session will exit the transaction.
+        /// </summary>
+        /// <param name="sesid">The session to commit the transaction for.</param>
+        /// <param name="grbit">Commit options.</param>
+        /// <param name="durableCommit">Duration to commit lazy transaction.</param>
+        /// <param name="commitId">Commit-id associated with this commit record.</param>
+        public static void JetCommitTransaction2(
+            JET_SESID sesid,
+            CommitTransactionGrbit grbit,
+            TimeSpan durableCommit,
+            out JET_COMMIT_ID commitId)
+        {
+            Api.Check(Api.Impl.JetCommitTransaction2(sesid, grbit, durableCommit, out commitId));
+        }
+
         #endregion
 
         /// <summary>
@@ -58,8 +79,19 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
         }
 
         /// <summary>
-        /// Resizes a currently open database.
+        /// Resizes a currently open database. Windows 8: Only supports growing a database file.
+        /// Windows 8.1: When <see cref="InstanceParameters.EnableShrinkDatabase"/> is set to
+        /// <see cref="Win81.ShrinkDatabaseGrbit.On"/>, and if the
+        /// file system supports Sparse Files, then space may be freed up in the middle of the
+        /// file.
         /// </summary>
+        /// <remarks>
+        /// Many APIs return the logical size of the file, not how many bytes it takes up on disk.
+        /// Win32's GetCompressedFileSize returns the correct on-disk size.
+        /// <see cref="Api.JetGetDatabaseInfo(JET_SESID, JET_DBID, out int, JET_DbInfo)"/>
+        /// returns the on-disk size when used with
+        /// <see cref="Win81.Windows81DbInfo.FilesizeOnDisk"/>
+        /// </remarks>
         /// <param name="sesid">The session to use.</param>
         /// <param name="dbid">The database to grow.</param>
         /// <param name="desiredPages">The desired size of the database, in pages.</param>
@@ -137,6 +169,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
         /// <param name="sesid">The session to use.</param>
         /// <param name="dbid">The database to which to add the new table.</param>
         /// <param name="tablecreate">Object describing the table to create.</param>
+        /// <seealso cref="Api.JetCreateTableColumnIndex3"/>
         public static void JetCreateTableColumnIndex4(
             JET_SESID sesid,
             JET_DBID dbid,
@@ -146,7 +179,52 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
         }
         #endregion
 
-        #region Misc
+        #region Session Parameters
+
+        /// <summary>
+        /// Gets a parameter on the provided session state, used for the lifetime of this session or until reset.
+        /// </summary>
+        /// <param name="sesid">The session to set the parameter on.</param>
+        /// <param name="sesparamid">The ID of the session parameter to set, see
+        /// <see cref="JET_sesparam"/> and <see cref="Windows10.Windows10Sesparam"/>.</param>
+        /// <param name="value">A 32-bit integer to retrieve.</param>
+        public static void JetGetSessionParameter(
+            JET_SESID sesid,
+            JET_sesparam sesparamid,
+            out int value)
+        {
+            Api.Check(Api.Impl.JetGetSessionParameter(sesid, sesparamid, out value));
+        }
+
+        /// <summary>
+        /// Gets a parameter on the provided session state, used for the lifetime of this session or until reset.
+        /// </summary>
+        /// <param name="sesid">The session to set the parameter on.</param>
+        /// <param name="sesparamid">The ID of the session parameter to set, see
+        /// <see cref="JET_sesparam"/> and <see cref="Windows10.Windows10Sesparam"/>.</param>
+        /// <param name="data">A byte array to retrieve.</param>
+        /// <param name="length">AThe length of the data array.</param>
+        /// <param name="actualDataSize">The actual size of the data field.</param>
+        public static void JetGetSessionParameter(
+            JET_SESID sesid,
+            JET_sesparam sesparamid,
+            byte[] data,
+            int length,
+            out int actualDataSize)
+        {
+            Api.Check(Api.Impl.JetGetSessionParameter(sesid, sesparamid, data, length, out actualDataSize));
+        }
+
+        /// <summary>
+        /// Sets a parameter on the provided session state, used for the lifetime of this session or until reset.
+        /// </summary>
+        /// <param name="sesid">The session to set the parameter on.</param>
+        /// <param name="sesparamid">The ID of the session parameter to set.</param>
+        /// <param name="value">A 32-bit integer to set.</param>
+        public static void JetSetSessionParameter(JET_SESID sesid, JET_sesparam sesparamid, int value)
+        {
+            Api.Check(Api.Impl.JetSetSessionParameter(sesid, sesparamid, value));
+        }
 
         /// <summary>
         /// Sets a parameter on the provided session state, used for the lifetime of this session or until reset.
@@ -155,29 +233,18 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
         /// <param name="sesparamid">The ID of the session parameter to set.</param>
         /// <param name="data">Data to set in this session parameter.</param>
         /// <param name="dataSize">Size of the data provided.</param>
-        public static void JetSetSessionParameter(JET_SESID sesid, JET_sesparam sesparamid, byte[] data, int dataSize)
+        public static void JetSetSessionParameter(
+            JET_SESID sesid,
+            JET_sesparam sesparamid,
+            byte[] data,
+            int dataSize)
         {
             Api.Check(Api.Impl.JetSetSessionParameter(sesid, sesparamid, data, dataSize));
         }
 
-        /// <summary>
-        /// Commits the changes made to the state of the database during the current save point
-        /// and migrates them to the previous save point. If the outermost save point is committed
-        /// then the changes made during that save point will be committed to the state of the
-        /// database and the session will exit the transaction.
-        /// </summary>
-        /// <param name="sesid">The session to commit the transaction for.</param>
-        /// <param name="grbit">Commit options.</param>
-        /// <param name="durableCommit">Duration to commit lazy transaction.</param>
-        /// <param name="commitId">Commit-id associated with this commit record.</param>
-        public static void JetCommitTransaction2(
-            JET_SESID sesid,
-            CommitTransactionGrbit grbit,
-            TimeSpan durableCommit,
-            out JET_COMMIT_ID commitId)
-        {
-            Api.Check(Api.Impl.JetCommitTransaction2(sesid, grbit, durableCommit, out commitId));
-        }
+        #endregion
+
+        #region Misc
 
         /// <summary>
         /// If the records with the specified key ranges are not in the buffer

@@ -1,314 +1,270 @@
-// ---------------------------------------------------------------------------
-// <copyright file="Database.cs" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
+//-----------------------------------------------------------------------
+// <copyright file="Database.cs" company="Microsoft Corporation">
+//     Copyright (c) Microsoft Corporation.
 // </copyright>
-// ---------------------------------------------------------------------------
-
-// ---------------------------------------------------------------------
-// <summary>
-// </summary>
-// ---------------------------------------------------------------------
+//-----------------------------------------------------------------------
 
 namespace Microsoft.Database.Isam
 {
     using System;
-
+    using System.Diagnostics.Contracts;
+    using System.Globalization;
+    using System.IO;
+    using System.Threading;
+    using Microsoft.Database.Isam.Config;
     using Microsoft.Isam.Esent.Interop;
 
     /// <summary>
-    /// A Database is a file used by the ISAM to store data.  It is organized
-    /// into tables which are in turn comprised of columns and indices and
-    /// contain data in the form of records.  The database's schema can be
-    /// enumerated and manipulated by this object.  Also, the database's
-    /// tables can be opened for access by this object.
+    /// Miscellaneous parameters that are specified during the span of instance initialization and database attach.
+    /// They are similar to system parameters (instance-wide scope) but are not part of JET_param*.
+    /// This enum shares number space with JET_param*. So we start at 4096 to give us ample cushion.
     /// </summary>
-    public class Database : DatabaseCommon, IDisposable
+    internal enum DatabaseParams
     {
         /// <summary>
-        /// The dbid
+        /// A string identifier that uniquely identifies an instance of Database
         /// </summary>
-        private readonly JET_DBID dbid;
+        Identifier = 4096,
 
         /// <summary>
-        /// The table collection
+        /// A user-friendly name that is used to identify an instance of Database in system diagnostics (event log etc).
         /// </summary>
-        private TableCollection tableCollection = null;
+        DisplayName,
 
         /// <summary>
-        /// The cleanup
+        /// Gets or sets flags used to select optional Engine behaviour at initialization. See <see cref ="CreateInstanceGrbit"/> and <see cref="Api.JetCreateInstance2"/>
         /// </summary>
-        private bool cleanup = false;
+        EngineFlags,
 
         /// <summary>
-        /// The disposed
+        /// Specifies a path to use for creating or opening the database file.
         /// </summary>
-        private bool disposed = false;
+        DatabaseFilename,
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Database"/> class.
+        /// Gets or sets flags used to select optional behaviour while creating a new database file. See <see cref ="CreateDatabaseGrbit"/> and <see cref="Api.JetCreateDatabase2"/>
         /// </summary>
-        /// <param name="isamSession">The session.</param>
-        /// <param name="databaseName">Name of the database.</param>
-        internal Database(IsamSession isamSession, string databaseName)
-            : base(isamSession)
+        DatabaseCreationFlags,
+
+        /// <summary>
+        /// Gets or sets flags used to select optional behaviour while attaching a database file to the Engine. See <see cref ="AttachDatabaseGrbit"/> and <see cref="Api.JetAttachDatabase2"/>
+        /// </summary>
+        DatabaseAttachFlags,
+
+        /// <summary>
+        /// Gets or sets the maximum size of the database in pages. Zero means there is no maximum. See maxPages parameter for <see cref ="Api.JetCreateDatabase2"/> or <see cref="Api.JetAttachDatabase2"/>
+        /// </summary>
+        DatabaseMaxPages,
+    }
+
+    /// <summary>
+    /// A class that encapsulate an online Ese database.
+    /// </summary>
+    public sealed class Database : IDisposable
+    {
+        /// <summary>
+        /// A variable for generating instance display names.
+        /// </summary>
+        private static int instanceCounter;
+
+        /// <summary>
+        /// True if the instance handle is owned by this engine. Dispose()/Stop() will only call JetTerm() if this is true.
+        /// </summary>
+        private readonly bool ownsInstance = true;
+
+        /// <summary>
+        /// The configuration object associated with the Engine.
+        /// </summary>
+        private readonly DatabaseConfig config;
+
+        /// <summary>
+        /// The instance handle associated with this engine.
+        /// </summary>
+        private JET_INSTANCE instance = JET_INSTANCE.Nil;
+
+        /// <summary>
+        /// Initializes a new instance of the Database class.
+        /// </summary>
+        /// <param name="databaseFilename">Specifies a path to use for creating or opening a database file to use with the engine.</param>
+        public Database(string databaseFilename) : this(databaseFilename, null)
         {
-            lock (isamSession)
-            {
-                Api.JetOpenDatabase(isamSession.Sesid, databaseName, null, out this.dbid, OpenDatabaseGrbit.None);
-                this.cleanup = true;
-                this.tableCollection = new TableCollection(this);
-            }
         }
 
         /// <summary>
-        /// Finalizes an instance of the Database class
+        /// Initializes a new instance of the Database class.
         /// </summary>
-        ~Database()
+        /// <param name="customConfig">A custom config set to use with the engine.</param>
+        public Database(IConfigSet customConfig) : this(null, customConfig)
         {
-            this.Dispose(false);
         }
 
         /// <summary>
-        /// Gets a collection of tables in the database.
+        /// Initializes a new instance of the Database class.
         /// </summary>
-        /// <returns>a collection of tables in the database</returns>
-        public override TableCollection Tables
+        /// <param name="databaseFilename">Specifies a path to use for creating or opening a database file to use with the engine.</param>
+        /// <param name="customConfig">A custom config set to use with the engine.</param>
+        public Database(string databaseFilename, IConfigSet customConfig)
         {
-            get
+            if (string.IsNullOrEmpty(databaseFilename) && customConfig == null)
             {
-                this.CheckDisposed();
-                return this.tableCollection;
+                throw new ArgumentException("Must specify a valid databaseFilename or customConfig");
             }
+
+            this.config = new DatabaseConfig();
+            if (!string.IsNullOrEmpty(databaseFilename))
+            {
+                this.config.DatabaseFilename = databaseFilename;
+                string systemPath = Path.GetDirectoryName(databaseFilename);
+                this.config.SystemPath = systemPath;
+                this.config.LogFilePath = systemPath;
+                this.config.TempPath = systemPath;
+                this.config.AlternateDatabaseRecoveryPath = systemPath;
+            }
+
+            if (customConfig != null)
+            {
+                this.config.Merge(customConfig);    // throw on conflicts
+            }
+
+            if (string.IsNullOrEmpty(this.config.Identifier))
+            {
+                this.config.Identifier = Guid.NewGuid().ToString();
+            }
+
+            if (string.IsNullOrEmpty(this.config.DisplayName))
+            {
+                this.config.DisplayName = string.Format("Database Inst{0:D2}", Interlocked.Increment(ref Database.instanceCounter) - 1);
+            }
+
+            this.Start();
         }
 
         /// <summary>
-        /// Gets the dbid.
+        /// Initializes a new instance of the Database class.
         /// </summary>
-        /// <value>
-        /// The dbid.
-        /// </value>
-        internal JET_DBID Dbid
+        /// <param name="instance">An initialized instance to be used with Database. The instance should have a database attached and ready to use.</param>
+        /// <param name="ownsInstance">True if the instance handle passed into the constructur should be owned by the Database.</param>
+        /// <param name="customConfig">A custom config set to use with the engine. The config set should atleast contain the attached database filename.</param>
+        /// <remarks>Database will only manage the handle lifetime if ownsInstance is set to true. If its set to false, the caller is responsible for managing the teardown of the instance.</remarks>
+        public Database(JET_INSTANCE instance, bool ownsInstance, IConfigSet customConfig)
         {
-            get
+            this.config = new DatabaseConfig();
+            this.config.Merge(customConfig);
+            this.instance = instance;
+            this.ownsInstance = ownsInstance;
+
+            // Ensure that there is an attached database at a path specified by the config set
+            using (var session = new Session(this.instance))
             {
-                return this.dbid;
+                JET_DBID dbid;
+                JET_wrn wrn = Api.JetOpenDatabase(session, this.config.DatabaseFilename, null, out dbid, OpenDatabaseGrbit.ReadOnly);
+                Contract.Ensures(wrn == JET_wrn.Success);
+                Api.JetCloseDatabase(session, dbid, CloseDatabaseGrbit.None);
             }
+
+            // The config set is live now
+            this.config.GetParamDelegate = this.TryGetParam;
+            this.config.SetParamDelegate = this.SetParam;
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether [disposed].
+        /// Gets the configuration object associated with the Engine.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if [disposed]; otherwise, <c>false</c>.
-        /// </value>
-        internal override bool Disposed
+        public DatabaseConfig Config
         {
-            get
-            {
-                return this.disposed || this.IsamSession.Disposed;
-            }
-
-            set
-            {
-                this.disposed = value;
-            }
+            get { return this.config; }
         }
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// Gets the instance handle associated with this engine.
         /// </summary>
-        public new void Dispose()
+        public JET_INSTANCE InstanceHandle
         {
-            lock (this)
-            {
-                this.Dispose(true);
-            }
-
-            GC.SuppressFinalize(this);
+            get { return this.instance; }
         }
 
         /// <summary>
-        /// Creates a single table with the specified definition in the database
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="Database"/>.
         /// </summary>
-        /// <param name="tableDefinition">The table definition.</param>
-        public override void CreateTable(TableDefinition tableDefinition)
-        {
-            lock (this.IsamSession)
-            {
-                this.CheckDisposed();
-
-                using (IsamTransaction trx = new IsamTransaction(this.IsamSession))
-                {
-                    // FUTURE-2013/11/15-martinc: Consider using JetCreateTableColumnIndex(). It would be
-                    // a bit faster because it's only a single managed/native transition.
-
-                    // Hard-code the initial space and density.
-                    JET_TABLEID tableid;
-                    Api.JetCreateTable(this.IsamSession.Sesid, this.dbid, tableDefinition.Name, 16, 90, out tableid);
-
-                    foreach (ColumnDefinition columnDefinition in tableDefinition.Columns)
-                    {
-                        JET_COLUMNDEF columndef = new JET_COLUMNDEF();
-                        columndef.coltyp = Database.ColtypFromColumnDefinition(columnDefinition);
-                        columndef.cp = JET_CP.Unicode;
-                        columndef.cbMax = columnDefinition.MaxLength;
-
-                        columndef.grbit = Converter.ColumndefGrbitFromColumnFlags(columnDefinition.Flags);
-                        byte[] defaultValueBytes = Converter.BytesFromObject(
-                            columndef.coltyp,
-                            false /*ASCII */,
-                            columnDefinition.DefaultValue);
-
-                        JET_COLUMNID columnid;
-                        int defaultValueLength = (defaultValueBytes == null) ? 0 : defaultValueBytes.Length;
-                        Api.JetAddColumn(
-                            this.IsamSession.Sesid,
-                            tableid,
-                            columnDefinition.Name,
-                            columndef,
-                            defaultValueBytes,
-                            defaultValueLength,
-                            out columnid);
-                    }
-
-                    foreach (IndexDefinition indexDefinition in tableDefinition.Indices)
-                    {
-                        JET_INDEXCREATE[] indexcreates = new JET_INDEXCREATE[1];
-                        indexcreates[0] = new JET_INDEXCREATE();
-
-                        indexcreates[0].szIndexName = indexDefinition.Name;
-                        indexcreates[0].szKey = Database.IndexKeyFromIndexDefinition(indexDefinition);
-                        indexcreates[0].cbKey = indexcreates[0].szKey.Length;
-                        indexcreates[0].grbit = Database.GrbitFromIndexDefinition(indexDefinition);
-                        indexcreates[0].ulDensity = indexDefinition.Density;
-                        indexcreates[0].pidxUnicode = new JET_UNICODEINDEX();
-                        indexcreates[0].pidxUnicode.lcid = indexDefinition.CultureInfo.LCID;
-                        indexcreates[0].pidxUnicode.dwMapFlags = (uint)Converter.UnicodeFlagsFromCompareOptions(indexDefinition.CompareOptions);
-                        indexcreates[0].rgconditionalcolumn = Database.ConditionalColumnsFromIndexDefinition(indexDefinition);
-                        indexcreates[0].cConditionalColumn = indexcreates[0].rgconditionalcolumn.Length;
-                        indexcreates[0].cbKeyMost = indexDefinition.MaxKeyLength;
-                        Api.JetCreateIndex2(this.IsamSession.Sesid, tableid, indexcreates, indexcreates.Length);
-                    }
-
-                    // The initially-created tableid is opened exclusively.
-                    Api.JetCloseTable(this.IsamSession.Sesid, tableid);
-                    trx.Commit();
-                    DatabaseCommon.SchemaUpdateID++;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Deletes a single table in the database.
-        /// </summary>
-        /// <param name="tableName">The name of the table to be deleted.</param>
-        /// <remarks>
-        /// It is currently not possible to delete a table that is being used
-        /// by a Cursor.  All such Cursors must be disposed before the
-        /// table can be successfully deleted.
-        /// </remarks>
-        public override void DropTable(string tableName)
-        {
-            lock (this.IsamSession)
-            {
-                this.CheckDisposed();
-
-                Api.JetDeleteTable(this.IsamSession.Sesid, this.dbid, tableName);
-                DatabaseCommon.SchemaUpdateID++;
-            }
-        }
-
-        /// <summary>
-        /// Determines if a given table exists in the database
-        /// </summary>
-        /// <param name="tableName">The name of the table to evaluate for existence.</param>
         /// <returns>
-        /// true if the table was found, false otherwise
+        /// A <see cref="T:System.String"/> that represents the current <see cref="Database"/>.
         /// </returns>
-        public override bool Exists(string tableName)
+        public override string ToString()
         {
-            this.CheckDisposed();
-
-            return this.Tables.Contains(tableName);
+            return string.Format(CultureInfo.InvariantCulture, "Database( {0} ) [Id: {1}]", this.config.DisplayName, this.config.Identifier);
         }
 
         /// <summary>
-        /// Opens a cursor over the specified table.
+        /// Terminates the Database gracefully.
+        /// All pending updates to the database are flushed to the disk and associated resources are freed.
         /// </summary>
-        /// <param name="tableName">the name of the table to be opened</param>
-        /// <param name="exclusive">when true, the table will be opened for exclusive access</param>
-        /// <returns>a cursor over the specified table in this database</returns>
-        public Cursor OpenCursor(string tableName, bool exclusive)
+        public void Dispose()
         {
-            lock (this.IsamSession)
-            {
-                this.CheckDisposed();
+            this.Term(TermGrbit.Complete);
+        }
 
-                OpenTableGrbit grbit = exclusive ? OpenTableGrbit.DenyRead : OpenTableGrbit.None;
-                return new Cursor(this.IsamSession, this, tableName, grbit);
+        /// <summary>
+        /// Terminates the Database. The exact behaviour of the termination process depends on the <see cref="TermGrbit"/> passed to the function.
+        /// </summary>
+        /// <param name="termOptions">Termination behavior to use.</param>
+        public void Term(TermGrbit termOptions)
+        {
+            if (this.ownsInstance && this.instance != JET_INSTANCE.Nil)
+            {
+                Api.JetTerm2(this.instance, termOptions);
+                this.instance = JET_INSTANCE.Nil;
             }
         }
 
         /// <summary>
-        /// Opens a cursor over the specified table.
+        /// Initializes the Database and gets it into a state where it can support application use of the database.
+        /// After this method completes, the specified database file is attached and ready for use.
         /// </summary>
-        /// <param name="tableName">the name of the table to be opened</param>
-        /// <returns>a cursor over the specified table in this database</returns>
-        public override Cursor OpenCursor(string tableName)
+        private void Start()
         {
-            lock (this.IsamSession)
+            this.config.SetGlobalParams();
+            Api.JetCreateInstance2(out this.instance, this.config.Identifier, this.config.DisplayName, this.config.EngineFlags);
+            this.config.SetInstanceParams(this.instance);
+
+            // The config set is live now
+            this.config.GetParamDelegate = this.TryGetParam;
+            this.config.SetParamDelegate = this.SetParam;
+
+            Api.JetInit(ref this.instance);
+            using (var session = new Session(this.instance))
             {
-                this.CheckDisposed();
-
-                return this.OpenCursor(tableName, false);
-            }
-        }
-
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        void IDisposable.Dispose()
-        {
-            this.Dispose();
-        }
-
-        /// <summary>
-        /// Releases unmanaged and - optionally - managed resources.
-        /// </summary>
-        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        protected override void Dispose(bool disposing)
-        {
-            lock (this.IsamSession)
-            {
-                if (!this.Disposed)
+                try
                 {
-                    if (this.cleanup)
-                    {
-                        Api.JetCloseDatabase(this.IsamSession.Sesid, this.dbid, CloseDatabaseGrbit.None);
-                        base.Dispose(disposing);
-                        this.cleanup = false;
-                    }
-
-                    this.Disposed = true;
+                    Api.JetAttachDatabase2(session, this.config.DatabaseFilename, this.config.DatabaseMaxPages, this.config.DatabaseAttachFlags);
+                }
+                catch (EsentFileNotFoundException)
+                {
+                    JET_DBID dbid;
+                    Api.JetCreateDatabase2(session, this.config.DatabaseFilename, this.config.DatabaseMaxPages, out dbid, this.config.DatabaseCreationFlags);
+                    Api.JetCloseDatabase(session, dbid, CloseDatabaseGrbit.None);
                 }
             }
         }
 
         /// <summary>
-        /// Checks the disposed.
+        /// Get a JET_param from the associated instance.
         /// </summary>
-        /// <exception cref="System.ObjectDisposedException">
-        /// Thrown when the object is already disposed.
-        /// </exception>
-        private void CheckDisposed()
+        /// <param name="param">The param id.</param>
+        /// <param name="value">The param value.</param>
+        /// <returns>True for all instance params. False otherwise.</returns>
+        private bool TryGetParam(int param, out object value)
         {
-            lock (this.IsamSession)
-            {
-                if (this.Disposed)
-                {
-                    throw new ObjectDisposedException(this.GetType().Name);
-                }
-            }
+            return DatabaseConfig.TryGetParamFromInstance(this.instance, param, out value);
+        }
+
+        /// <summary>
+        /// Sets a JET_param on the associated instance.
+        /// </summary>
+        /// <param name="param">The param id.</param>
+        /// <param name="value">The param value.</param>
+        private void SetParam(int param, object value)
+        {
+            DatabaseConfig.SetParamOnInstance(this.instance, param, value);
         }
     }
 }

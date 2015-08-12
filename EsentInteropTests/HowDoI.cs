@@ -650,9 +650,17 @@ namespace InteropApiTests
             JET_RETRIEVECOLUMN retrievecolumn = new JET_RETRIEVECOLUMN();
             retrievecolumn.columnid = tagColumn;
             retrievecolumn.itagSequence = 0;
-            Api.JetRetrieveColumns(sesid, tableid, new[] { retrievecolumn }, 1); 
-            EseInteropTestHelper.ConsoleWriteLine("{0}", retrievecolumn.itagSequence);
+            Api.JetRetrieveColumns(sesid, tableid, new[] { retrievecolumn }, 1);
+            EseInteropTestHelper.ConsoleWriteLine("Api.JetRetrieveColumns retrieved {0} multi-values.", retrievecolumn.itagSequence);
             Assert.AreEqual(3, retrievecolumn.itagSequence);
+
+            // Use Api.RetrieveColumns() to get the number of multi-values.
+            StringColumnValue retrieveStringColumnValue = new StringColumnValue();
+            retrieveStringColumnValue.Columnid = tagColumn;
+            retrieveStringColumnValue.ItagSequence = 0;
+            Api.RetrieveColumns(sesid, tableid, retrieveStringColumnValue);
+            EseInteropTestHelper.ConsoleWriteLine("Api.RetrieveColumns retrieved {0} multi-values.", retrieveStringColumnValue.ItagSequence);
+            Assert.AreEqual(3, retrieveStringColumnValue.ItagSequence);
 
             // Retrieve all the columns
             for (int itag = 1; itag <= retrievecolumn.itagSequence; ++itag)

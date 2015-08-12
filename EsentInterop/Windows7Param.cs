@@ -19,6 +19,17 @@ namespace Microsoft.Isam.Esent.Interop.Windows7
         public const JET_param WaypointLatency = (JET_param)153;
 
         /// <summary>
+        /// Turn on/off automatic sequential B-tree defragmentation.
+        /// </summary>
+        public const JET_param DefragmentSequentialBTrees = (JET_param)160;
+
+        /// <summary>
+        /// Determine how frequently B-tree density is checked (Note: currently not
+        /// implemented).
+        /// </summary>
+        public const JET_param DefragmentSequentialBTreesDensityCheckFrequency = (JET_param)161;
+
+        /// <summary>
         /// This parameter is used to retrieve the chunk size of long-value
         /// (blob) data. Setting and retrieving data in multiples of this 
         /// size increases efficiency.

@@ -31,7 +31,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// A mapping of types to RetrieveColumn function names.
         /// </summary>
-        private static readonly IDictionary<Type, string> retrieveColumnMethodNames = new Dictionary<Type, string>
+        private static readonly IDictionary<Type, string> RetrieveColumnMethodNamesMap = new Dictionary<Type, string>
         {
             { typeof(bool), "RetrieveColumnAsBoolean" },
             { typeof(byte), "RetrieveColumnAsByte" },
@@ -53,7 +53,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// A mapping of types to ESENT column types.
         /// </summary>
-        private static readonly IDictionary<Type, JET_coltyp> coltyps = new Dictionary<Type, JET_coltyp>
+        private static readonly IDictionary<Type, JET_coltyp> ColumnTypeMap = new Dictionary<Type, JET_coltyp>
         {
             { typeof(bool), JET_coltyp.Bit },
             { typeof(byte), JET_coltyp.UnsignedByte },
@@ -96,11 +96,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         public ColumnConverter()
         {
             Type underlyingType = IsNullableType(typeof(TColumn)) ? GetUnderlyingType(typeof(TColumn)) : typeof(TColumn);
-            if (retrieveColumnMethodNames.ContainsKey(underlyingType))
+            if (RetrieveColumnMethodNamesMap.ContainsKey(underlyingType))
             {
                 this.columnSetter = CreateSetColumnDelegate();
                 this.columnRetriever = CreateRetrieveColumnDelegate();
-                this.coltyp = coltyps[underlyingType];
+                this.coltyp = ColumnTypeMap[underlyingType];
             }
             else if (IsSerializable(typeof(TColumn)))
             {
@@ -631,7 +631,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             // reference types). First look for a private method in this class that
             // takes the appropriate arguments, otherwise a method on the Api class.
             Type underlyingType = IsNullableType(typeof(TColumn)) ? GetUnderlyingType(typeof(TColumn)) : typeof(TColumn);
-            string retrieveColumnMethodName = retrieveColumnMethodNames[underlyingType];
+            string retrieveColumnMethodName = RetrieveColumnMethodNamesMap[underlyingType];
             Type[] retrieveColumnArguments = new[] { typeof(JET_SESID), typeof(JET_TABLEID), typeof(JET_COLUMNID) };
             MethodInfo retrieveColumnMethod = typeof(ColumnConverter<TColumn>).GetMethod(
                                                   retrieveColumnMethodName,

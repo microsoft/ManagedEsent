@@ -14,7 +14,7 @@ namespace InteropApiTests
     /// Tests for JetGetInstanceMiscInfo
     /// </summary>
     [TestClass]
-    public class InstanceMiscInfoTests
+    public partial class InstanceMiscInfoTests
     {
         /// <summary>
         /// The instance.

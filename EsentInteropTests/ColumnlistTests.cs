@@ -32,6 +32,7 @@ namespace InteropApiTests
             var col5 = new JET_COLUMNID { Value = 5 };
             var col6 = new JET_COLUMNID { Value = 6 };
             var col7 = new JET_COLUMNID { Value = 7 };
+            var col8 = new JET_COLUMNID { Value = 8 };
 
             var native = new NATIVE_COLUMNLIST()
             {
@@ -44,6 +45,7 @@ namespace InteropApiTests
                 columnidcbMax = col5.Value,
                 columnidgrbit = col6.Value,
                 columnidDefault = col7.Value,
+                columnidBaseTableName = col8.Value,
             };
 
             var columnlist = new JET_COLUMNLIST();
@@ -58,6 +60,7 @@ namespace InteropApiTests
             Assert.AreEqual(col5, columnlist.columnidcbMax);
             Assert.AreEqual(col6, columnlist.columnidgrbit);
             Assert.AreEqual(col7, columnlist.columnidDefault);
+            Assert.AreEqual(col8, columnlist.columnidBaseTableName);
         }
     }
 }

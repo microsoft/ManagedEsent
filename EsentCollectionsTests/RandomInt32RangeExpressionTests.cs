@@ -33,12 +33,12 @@ namespace EsentCollectionsTests
         /// The parameter expression used to build out expression trees. This 
         /// should be the same object in all places so we need a singleton.
         /// </summary>
-        private static readonly ParameterExpression parameterExpression = Expression.Parameter(typeof(KeyValuePair<int, int>), "x");
+        private static readonly ParameterExpression ParameterExpression = Expression.Parameter(typeof(KeyValuePair<int, int>), "x");
 
         /// <summary>
         /// MemberInfo that describes the Key member of the KeyValuePair.
         /// </summary>
-        private static readonly MemberInfo keyMemberInfo = typeof(KeyValuePair<int, int>).GetProperty("Key", typeof(int));
+        private static readonly MemberInfo KeyMemberInfo = typeof(KeyValuePair<int, int>).GetProperty("Key", typeof(int));
 
         /// <summary>
         /// Random number generator.
@@ -144,7 +144,7 @@ namespace EsentCollectionsTests
         /// </returns>
         private static ParameterExpression CreateParameterExpression()
         {
-            return parameterExpression;
+            return ParameterExpression;
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace EsentCollectionsTests
                 }
             }
 
-            KeyRange<int> keyRange = PredicateExpressionEvaluator<int>.GetKeyRange(expression.Body, keyMemberInfo);
+            KeyRange<int> keyRange = PredicateExpressionEvaluator<int>.GetKeyRange(expression.Body, KeyMemberInfo);
             if (count > 0)
             {
                 Assert.IsTrue(
@@ -245,7 +245,7 @@ namespace EsentCollectionsTests
         {
             Expression parameter = CreateParameterExpression();
             Expression constant = this.CreateConstantExpression();
-            Expression key = Expression.MakeMemberAccess(parameter, keyMemberInfo);
+            Expression key = Expression.MakeMemberAccess(parameter, KeyMemberInfo);
 
             Expression left;
             Expression right;

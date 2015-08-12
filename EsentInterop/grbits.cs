@@ -9,7 +9,7 @@ namespace Microsoft.Isam.Esent.Interop
     using System;
 
     /// <summary>
-    /// Options for JetCreateInstance2.
+    /// Options for <see cref="Api.JetCreateInstance2"/>.
     /// </summary>
     [Flags]
     public enum CreateInstanceGrbit
@@ -23,7 +23,12 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for <see cref="Api.JetInit2"/>.
     /// </summary>
+    /// <seealso cref="Vista.VistaGrbits.RecoveryWithoutUndo"/>
+    /// <seealso cref="Vista.VistaGrbits.TruncateLogsAfterRecovery"/>
+    /// <seealso cref="Vista.VistaGrbits.ReplayMissingMapEntryDB"/>
+    /// <seealso cref="Vista.VistaGrbits.LogStreamMustExist"/>
     /// <seealso cref="Windows7.Windows7Grbits.ReplayIgnoreLostLogs"/>
+    /// <seealso cref="Windows8.Windows8Grbits.KeepDbAttachedAtEndOfRecovery"/>
     [Flags]
     public enum InitGrbit
     {
@@ -63,6 +68,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for <see cref="Api.JetCreateDatabase"/>.
     /// </summary>
+    /// <seealso cref="Windows7.Windows7Grbits.EnableCreateDbBackgroundMaintenance"/>
     [Flags]
     public enum CreateDatabaseGrbit
     {
@@ -117,8 +123,10 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetAttachDatabase.
+    /// Options for <see cref="Api.JetAttachDatabase"/>.
     /// </summary>
+    /// <seealso cref="Windows7.Windows7Grbits.EnableAttachDbBackgroundMaintenance"/>
+    /// <seealso cref="Windows8.Windows8Grbits.PurgeCacheOnAttach"/>
     [Flags]
     public enum AttachDatabaseGrbit
     {
@@ -227,6 +235,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for <see cref="Api.JetOSSnapshotPrepare"/>.
     /// </summary>
+    /// <seealso cref="Vista.VistaGrbits.ContinueAfterThaw"/>
+    /// <seealso cref="Windows7.Windows7Grbits.ExplicitPrepare"/>
     [Flags]
     public enum SnapshotPrepareGrbit
     {
@@ -305,6 +315,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for <see cref="Api.JetEndExternalBackupInstance"/>.
     /// </summary>
+    /// <seealso cref="Vista.VistaGrbits.TruncateDone"/>
     [Flags]
     public enum EndExternalBackupGrbit
     {
@@ -348,6 +359,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for JetCommitTransaction.
     /// </summary>
+    /// <seealso cref="Windows7.Windows7Grbits.ForceNewLog"/>
     [Flags]
     public enum CommitTransactionGrbit
     {
@@ -585,7 +597,8 @@ namespace Microsoft.Isam.Esent.Interop
 #endif // !MANAGEDESENT_ON_WSA
 
     /// <summary>
-    /// Options for JetSetColumn.
+    /// Options for the <see cref="Api.JetSetColumn(JET_SESID, JET_TABLEID, JET_COLUMNID, byte[], int, int, SetColumnGrbit, JET_SETINFO)"/>
+    /// and its associated overloads.
     /// </summary>
     /// <seealso cref="Windows7.Windows7Grbits.Compressed"/>
     /// <seealso cref="Windows7.Windows7Grbits.Uncompressed"/>
@@ -731,7 +744,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetEnumerateColumns.
+    /// Options for <see cref="Api.JetEnumerateColumns"/>.
     /// </summary>
     /// <seealso cref="Server2003.Server2003Grbits.EnumerateIgnoreUserDefinedDefault"/>
     /// <seealso cref="Windows7.Windows7Grbits.EnumerateInRecordOnly"/>
@@ -985,7 +998,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetSeek.
+    /// Options for <see cref="Api.JetSeek"/>.
     /// </summary>
     [Flags]
     public enum SeekGrbit
@@ -1032,7 +1045,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetSetIndexRange.
+    /// Options for <see cref="Api.JetSetIndexRange"/>.
     /// </summary>
     [Flags]
     public enum SetIndexRangeGrbit
@@ -1068,7 +1081,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for the JET_INDEXRANGE object.
+    /// Options for the <see cref="JET_INDEXRANGE"/> object.
     /// </summary>
     [Flags]
     public enum IndexRangeGrbit
@@ -1080,7 +1093,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetIntersectIndexes.
+    /// Options for <see cref="Api.JetIntersectIndexes"/>.
     /// </summary>
     [Flags]
     public enum IntersectIndexesGrbit
@@ -1119,8 +1132,9 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetSetTableSequential.
+    /// Options for <see cref="Api.JetSetTableSequential"/>.
     /// </summary>
+    /// <seealso cref="Windows7.Windows7Grbits.Backward"/>
     [Flags]
     public enum SetTableSequentialGrbit
     {
@@ -1131,7 +1145,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetResetTableSequential.
+    /// Options for <see cref="Api.JetResetTableSequential"/>.
     /// </summary>
     [Flags]
     public enum ResetTableSequentialGrbit
@@ -1164,7 +1178,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetEscrowUpdate.
+    /// Options for <see cref="Api.JetEscrowUpdate"/>.
     /// </summary>
     [Flags]
     public enum EscrowUpdateGrbit
@@ -1183,7 +1197,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for the JET_COLUMNDEF structure.
+    /// Options for the <see cref="JET_COLUMNDEF"/> structure.
     /// </summary>
     /// <seealso cref="Windows7.Windows7Grbits.ColumnCompressed"/>
     [Flags]
@@ -1256,8 +1270,8 @@ namespace Microsoft.Isam.Esent.Interop
         ///  An escrow update column can be created only when the table is empty. 
         ///  An escrow update column must be of type JET_coltypLong. 
         ///  An escrow update column must have a default value.
-        ///  JET_bitColumnEscrowUpdate cannot be used in conjunction with ColumnTagged,
-        ///  ColumnVersion, or ColumnAutoincrement. 
+        ///  ColumnEscrowUpdate cannot be used in conjunction with <see cref="ColumnTagged"/>,
+        ///  <see cref="ColumnVersion"/>, or <see cref="ColumnAutoincrement"/>. 
         /// </summary>
         ColumnEscrowUpdate = 0x800,
 
@@ -1281,7 +1295,7 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// The default value for a column will be provided by a callback function. A column that
-        /// has a user-defined default must be a tagged column. Specifying JET_bitColumnUserDefinedDefault
+        /// has a user-defined default must be a tagged column. Specifying <see cref="ColumnUserDefinedDefault"/>
         /// means that pvDefault must point to a JET_USERDEFINEDDEFAULT structure, and cbDefault must be
         /// set to sizeof( JET_USERDEFINEDDEFAULT ).
         /// </summary>
@@ -1308,8 +1322,10 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetCreateTableColumnIndex.
+    /// Options for the <see cref="JET_TABLECREATE"/> parameter used by
+    /// <see cref="Api.JetCreateTableColumnIndex3"/>.
     /// </summary>
+    /// <seealso cref="Windows10.Windows10Grbits.TableCreateImmutableStructure"/>
     [Flags]
     public enum CreateTableColumnIndexGrbit
     {
@@ -1335,8 +1351,15 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for JetCreateIndex.
+    /// Options for <see cref="Api.JetCreateIndex"/> and <see cref="JET_INDEXCREATE"/>.
     /// </summary>
+    /// <seealso cref="Vista.VistaGrbits.IndexCrossProduct"/>
+    /// <seealso cref="Vista.VistaGrbits.IndexDisallowTruncation"/>
+    /// <seealso cref="Vista.VistaGrbits.IndexNestedTable"/>
+    /// <seealso cref="Vista.VistaGrbits.IndexUnicode"/>
+    /// <seealso cref="Vista.VistaGrbits.IndexKeyMost"/>
+    /// <seealso cref="Windows8.Windows8Grbits.IndexDotNetGuid"/>
+    /// <seealso cref="Windows10.Windows10Grbits.IndexCreateImmutableStructure"/>
     [Flags]
     public enum CreateIndexGrbit
     {        
@@ -1414,7 +1437,8 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Key definition grbits. Used when retrieving information about an index.
+    /// Key definition grbits. Used when retrieving information about an index, contained
+    /// in the column specified in <see cref="JET_INDEXLIST.columnidgrbitColumn"/>.
     /// </summary>
     [Flags]
     public enum IndexKeyGrbit
@@ -1431,7 +1455,7 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for the JET_CONDITIONALCOLUMN structure.
+    /// Options for the <seealso cref="JET_CONDITIONALCOLUMN"/> structure.
     /// </summary>
     [Flags]
     public enum ConditionalColumnGrbit
@@ -1448,10 +1472,12 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Options for temporary table creation.
+    /// Options for temporary table creation, with <see cref="Api.JetOpenTempTable"/>,
+    /// Api.JetOpenTempTable2, and <see cref="Api.JetOpenTempTable3"/>.
     /// </summary>
     /// <seealso cref="Server2003.Server2003Grbits.ForwardOnly"/>
     /// <seealso cref="Windows7.Windows7Grbits.IntrinsicLVsOnly"/>
+    /// <seealso cref="Windows8.Windows8Grbits.TTDotNetGuid"/>
     [Flags]
     public enum TempTableGrbit
     {
@@ -1590,12 +1616,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         None = 0x0,
 
-        /// <summary>Triggers cleanup of the version store.</summary>
-        FlushBuffers = 0x01,
-
         /// <summary>
         /// Reserved for future use. If this flag is specified, the API will return <see cref="JET_err.InvalidGrbit"/>.
         /// </summary>
+        FlushBuffers = 0x01,
+
+        /// <summary>Triggers cleanup of the version store.</summary>
         Compact = 0x02,
 
         /// <summary>
@@ -1608,6 +1634,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Options for <see cref="Api.JetDefragment"/>.
     /// </summary>
+    /// <seealso cref="Windows7.Windows7Grbits.NoPartialMerges"/>
+    /// <seealso cref="Windows7.Windows7Grbits.DefragmentBTree"/>
     [Flags]
     public enum DefragGrbit
     {
@@ -1631,6 +1659,45 @@ namespace Microsoft.Isam.Esent.Interop
         /// Stops a defragmentation task.
         /// </summary>
         BatchStop = 0x2, 
+    }
+
+    /// <summary>
+    /// Grbits for the various Api.JetGetColumnInfo and Api.JetGetTableColumnInfo
+    /// overloads.
+    /// </summary>
+    /// <remarks>
+    /// Internally this value is OR'ed together with the
+    /// <see cref="JET_ColInfo"/> info level. The info level is not publically exposed
+    /// in this CLR code because it's only used to differentiate the type of the output
+    /// parameter, which is covered by having explicit function overloads with different
+    /// signatures. There is no need to expose JET_ColInfo to CLR.
+    /// </remarks>
+    [Flags]
+    public enum ColInfoGrbit
+    {
+        /// <summary>
+        /// Default options.
+        /// </summary>
+        None = 0x0,
+
+        /// <summary>
+        /// For lists (example: <see cref="JET_ColInfo.List"/>), only return
+        /// non-derived columns (if the table is derived from a template).
+        /// </summary>
+        /// <remarks>This value is 0x80000000.</remarks>
+        NonDerivedColumnsOnly = int.MinValue,
+
+        /// <summary>
+        /// For lists (example: <see cref="JET_ColInfo.List"/>), only return
+        /// the column name and columnid of each column.
+        /// </summary>
+        MinimalInfo = 0x40000000,
+
+        /// <summary>
+        /// For lists (example: <see cref="JET_ColInfo.List"/>), sort
+        /// returned column list by columnid (the default is to sort list by column name).
+        /// </summary>
+        SortByColumnid = 0x20000000,
     }
 
     /// <summary>

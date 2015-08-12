@@ -109,7 +109,31 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             this.config = config;
             this.database = database;
             Api.JetBeginSession(this.instance, out this.sesid, string.Empty, string.Empty);
-            this.AttachDatabase();
+            this.OpenDatabase();
+        }
+
+        /// <summary>
+        /// Gets the current transaction level of the
+        /// <see cref="PersistentDictionaryCursor&lt;TKey, TValue&gt;"/>.
+        /// Requires Win10. Otherwise returns -1, since 0 and positive numbers
+        /// are legitimate output.
+        /// </summary>
+        public int TransactionLevel
+        {
+            get
+            {
+                int transactionLevel = -1;
+
+                if (EsentVersion.SupportsWindows10Features)
+                {
+                    Interop.Windows8.Windows8Api.JetGetSessionParameter(
+                        this.sesid,
+                        Interop.Windows10.Windows10Sesparam.TransactionLevel,
+                        out transactionLevel);
+                }
+
+                return transactionLevel;
+            }
         }
 
         /// <summary>
@@ -465,11 +489,10 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
-        /// Attach the database, open the global and data tables and get the required columnids.
+        /// Open the database, open the global and data tables and get the required columnids.
         /// </summary>
-        private void AttachDatabase()
+        private void OpenDatabase()
         {
-            Api.JetAttachDatabase(this.sesid, this.database, AttachDatabaseGrbit.None);
             Api.JetOpenDatabase(this.sesid, this.database, string.Empty, out this.dbid, OpenDatabaseGrbit.None);
             Api.JetOpenTable(
                 this.sesid, this.dbid, this.config.GlobalsTableName, null, 0, OpenTableGrbit.None, out this.globalsTable);

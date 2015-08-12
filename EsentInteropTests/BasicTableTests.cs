@@ -690,6 +690,60 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test Api.OpenTable overload.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test Api.OpenTable.")]
+        public void TestApiOpenTable()
+        {
+            JET_SESID sesid2;
+            JET_DBID dbid2;
+            JET_TABLEID tableid2;
+            Api.BeginSession(this.instance, out sesid2);
+            Api.OpenDatabase(sesid2, this.database, out dbid2, OpenDatabaseGrbit.None);
+            Api.OpenTable(sesid2, dbid2, this.table, OpenTableGrbit.None, out tableid2);
+
+            Api.JetEndSession(sesid2, EndSessionGrbit.None);
+        }
+
+        /// <summary>
+        /// Test Api.TryOpenTable overload.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test Api.TryOpenTable.")]
+        public void TestApiTryOpenTable()
+        {
+            JET_SESID sesid2;
+            JET_DBID dbid2;
+            JET_TABLEID tableid2;
+            Api.BeginSession(this.instance, out sesid2);
+            Api.OpenDatabase(sesid2, this.database, out dbid2, OpenDatabaseGrbit.None);
+            Assert.IsTrue(Api.TryOpenTable(sesid2, dbid2, this.table, OpenTableGrbit.None, out tableid2));
+
+            Api.JetEndSession(sesid2, EndSessionGrbit.None);
+        }
+
+        /// <summary>
+        /// Test Api.TryOpenTable overload that fails to open a table.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test Api.TryOpenTable overload that fails to open a table.")]
+        public void TestApiTryOpenTableFail()
+        {
+            JET_SESID sesid2;
+            JET_DBID dbid2;
+            JET_TABLEID tableid2;
+            Api.BeginSession(this.instance, out sesid2);
+            Api.OpenDatabase(sesid2, this.database, out dbid2, OpenDatabaseGrbit.None);
+            Assert.IsFalse(Api.TryOpenTable(sesid2, dbid2, "does_not_exist", OpenTableGrbit.None, out tableid2));
+
+            Api.JetEndSession(sesid2, EndSessionGrbit.None);
+        }
+
+        /// <summary>
         /// Test JetGetCursorInfo when there is a write conflict.
         /// </summary>
         [TestMethod]

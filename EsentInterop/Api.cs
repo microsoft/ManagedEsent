@@ -336,6 +336,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="connect">The parameter is not used.</param>
         /// <param name="dbid">Returns the dbid of the new database.</param>
         /// <param name="grbit">Database creation options.</param>
+        /// <seealso cref="Api.CreateDatabase"/>
         public static void JetCreateDatabase(JET_SESID sesid, string database, string connect, out JET_DBID dbid, CreateDatabaseGrbit grbit)
         {
             Api.Check(Impl.JetCreateDatabase(sesid, database, connect, out dbid, grbit));
@@ -399,6 +400,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="dbid">Returns the dbid of the attached database.</param>
         /// <param name="grbit">Open database options.</param>
         /// <returns>An ESENT warning code.</returns>
+        /// <seealso cref="Api.OpenDatabase"/>
         public static JET_wrn JetOpenDatabase(JET_SESID sesid, string database, string connect, out JET_DBID dbid, OpenDatabaseGrbit grbit)
         {
             return Api.Check(Impl.JetOpenDatabase(sesid, database, connect, out dbid, grbit));
@@ -886,6 +888,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="sesid">Returns the created session.</param>
         /// <param name="username">The parameter is not used.</param>
         /// <param name="password">The parameter is not used.</param>
+        /// <seealso cref="Api.BeginSession"/>
         public static void JetBeginSession(JET_INSTANCE instance, out JET_SESID sesid, string username, string password)
         {
             Api.Check(Impl.JetBeginSession(instance, out sesid, username, password));
@@ -1379,6 +1382,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="sesid">The session to use.</param>
         /// <param name="dbid">The database to which to add the new table.</param>
         /// <param name="tablecreate">Object describing the table to create.</param>
+        /// <seealso cref="Microsoft.Isam.Esent.Interop.Windows8.Windows8Api.JetCreateTableColumnIndex4"/>
         public static void JetCreateTableColumnIndex3(
             JET_SESID sesid,
             JET_DBID dbid,
@@ -1450,7 +1454,25 @@ namespace Microsoft.Isam.Esent.Interop
                 string columnName,
                 out JET_COLUMNLIST columnlist)
         {
-            Api.Check(Impl.JetGetTableColumnInfo(sesid, tableid, columnName, out columnlist));
+            Api.Check(Impl.JetGetTableColumnInfo(sesid, tableid, columnName, ColInfoGrbit.None, out columnlist));
+        }
+
+        /// <summary>
+        /// Retrieves information about all columns in the table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table containing the column.</param>
+        /// <param name="columnName">The parameter is ignored.</param>
+        /// <param name="grbit">Additional options for JetGetTableColumnInfo.</param>
+        /// <param name="columnlist">Filled in with information about the columns in the table.</param>
+        public static void JetGetTableColumnInfo(
+                JET_SESID sesid,
+                JET_TABLEID tableid,
+                string columnName,
+                ColInfoGrbit grbit,
+                out JET_COLUMNLIST columnlist)
+        {
+            Api.Check(Impl.JetGetTableColumnInfo(sesid, tableid, columnName, grbit, out columnlist));
         }
 
         #endregion
@@ -2894,7 +2916,7 @@ namespace Microsoft.Isam.Esent.Interop
 
             // We didn't throw an exception from the handler, so
             // generate the default exception.
-            return EsentExceptionHelper.JetErrToException(error);            
+            return EsentExceptionHelper.JetErrToException(error);
         }
 
         #endregion Error Handling

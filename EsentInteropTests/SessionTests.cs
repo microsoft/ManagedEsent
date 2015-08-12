@@ -14,7 +14,7 @@ namespace InteropApiTests
     /// Test the disposable Session class, which wraps a JET_SESSION.
     /// </summary>
     [TestClass]
-    public class SessionTests
+    public partial class SessionTests
     {
         /// <summary>
         /// The instance used by the test.

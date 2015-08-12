@@ -24,7 +24,7 @@ namespace Microsoft.Database.Isam
         /// <summary>
         /// The database
         /// </summary>
-        private readonly Database database;
+        private readonly IsamDatabase database;
 
         /// <summary>
         /// The enumerator
@@ -65,7 +65,7 @@ namespace Microsoft.Database.Isam
         /// Initializes a new instance of the <see cref="TableEnumerator"/> class.
         /// </summary>
         /// <param name="database">The database.</param>
-        internal TableEnumerator(Database database)
+        internal TableEnumerator(IsamDatabase database)
         {
             this.database = database;
             this.enumerator = null;

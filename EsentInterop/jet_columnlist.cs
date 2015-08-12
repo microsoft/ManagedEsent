@@ -174,6 +174,12 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_COLUMNID columnidDefault { get; internal set; }
 
         /// <summary>
+        /// Gets the columnid of the column in the temporary table which
+        /// stores the name of the base table.
+        /// </summary>
+        public JET_COLUMNID columnidBaseTableName { get; internal set; }
+
+        /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="JET_COLUMNLIST"/>.
         /// </summary>
         /// <returns>
@@ -205,6 +211,7 @@ namespace Microsoft.Isam.Esent.Interop
             this.columnidcbMax = new JET_COLUMNID { Value = value.columnidcbMax };
             this.columnidgrbit = new JET_COLUMNID { Value = value.columnidgrbit };
             this.columnidDefault = new JET_COLUMNID { Value = value.columnidDefault };
+            this.columnidBaseTableName = new JET_COLUMNID { Value = value.columnidBaseTableName };
         }
     }
 }

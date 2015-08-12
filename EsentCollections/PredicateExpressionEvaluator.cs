@@ -26,18 +26,18 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// A MethodInfo describes TKey.CompareTo(TKey).
         /// </summary>
 #if MANAGEDESENT_ON_WSA
-        private static readonly MethodInfo compareToMethod = typeof(TKey).GetTypeInfo().GetMethod("CompareTo", new[] { typeof(TKey) });
+        private static readonly MethodInfo CompareToMethod = typeof(TKey).GetTypeInfo().GetMethod("CompareTo", new[] { typeof(TKey) });
 #else
-        private static readonly MethodInfo compareToMethod = typeof(TKey).GetMethod("CompareTo", new[] { typeof(TKey) });
+        private static readonly MethodInfo CompareToMethod = typeof(TKey).GetMethod("CompareTo", new[] { typeof(TKey) });
 #endif
 
         /// <summary>
         /// A MethodInfo describing TKey.Equals(TKey).
         /// </summary>
 #if MANAGEDESENT_ON_WSA
-        private static readonly MethodInfo equalsMethod = typeof(TKey).GetTypeInfo().GetMethod("Equals", new[] { typeof(TKey) });
+        private static readonly MethodInfo EqualsMethod = typeof(TKey).GetTypeInfo().GetMethod("Equals", new[] { typeof(TKey) });
 #else
-        private static readonly MethodInfo equalsMethod = typeof(TKey).GetMethod("Equals", new[] { typeof(TKey) });
+        private static readonly MethodInfo EqualsMethod = typeof(TKey).GetMethod("Equals", new[] { typeof(TKey) });
 #endif
 
         /// <summary>
@@ -196,7 +196,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 TKey value;
 
                 // TKey.Equals
-                if ((equalsMethod == methodCall.Method)
+                if ((EqualsMethod == methodCall.Method)
                     && ConstantExpressionEvaluator<TKey>.TryGetConstantExpression(methodCall.Arguments[0], out value))
                 {
                     keyRange = new KeyRange<TKey>(Key<TKey>.CreateKey(value, true), Key<TKey>.CreateKey(value, true));
@@ -560,7 +560,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             if (expression is MethodCallExpression)
             {
                 MethodCallExpression methodCall = (MethodCallExpression)expression;
-                if (methodCall.Method == compareToMethod
+                if (methodCall.Method == CompareToMethod
                     && null != methodCall.Object
                     && IsKeyAccess(methodCall.Object, keyMemberInfo))
                 {

@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.Serialization;
 #if MANAGEDESENT_SUPPORTS_SERIALIZATION
     using System.Runtime.Serialization.Formatters.Binary;
@@ -407,6 +408,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The table to write to. An update should be prepared.</param>
         /// <param name="columnid">The column to write to.</param>
         /// <param name="value">The object to write. The object must be serializable.</param>
+        [SuppressMessage("Exchange.Security", "EX0043:DoNotUseBinarySoapFormatter", Justification = "Suppress warning in current code base.The usage has already been verified.")]
         public static void SerializeObjectToColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, object value)
         {
             if (null == value)

@@ -98,6 +98,22 @@ namespace InteropApiTests
             DateTime? actual = logtime.ToDateTime();
             Assert.AreEqual(expected, actual.Value);
             Assert.AreEqual(expected.Kind, actual.Value.Kind);
+            Assert.IsFalse(logtime.fOSSnapshot);
+        }
+
+        /// <summary>
+        /// Test creating a bklogtime with fOSSnapshot.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test creating a bklogtime with fOSSnapshot")]
+        public void TestBklogtimeIsSnapshot()
+        {
+            var expected = Any.DateTimeLimited;
+            var logtime = new JET_BKLOGTIME(expected, true);
+            DateTime? actual = logtime.ToDateTime();
+            Assert.AreEqual(expected, actual.Value);
+            Assert.IsTrue(logtime.fOSSnapshot);
         }
     }
 }

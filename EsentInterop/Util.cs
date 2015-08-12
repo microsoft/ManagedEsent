@@ -184,7 +184,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="hashes">The sub hash codes.</param>
         /// <returns>A hash of the hash codes.</returns>
-        public static int CalculateHashCode(params int[] hashes)
+        public static int CalculateHashCode(IEnumerable<int> hashes)
         {
             int hash = 0;
             foreach (int h in hashes)

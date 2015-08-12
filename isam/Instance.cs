@@ -285,13 +285,13 @@ namespace Microsoft.Database.Isam
                     {
                         Api.JetInit(ref this.instance);
                     }
-                    catch (EsentErrorException e)
+                    catch (EsentErrorException)
                     {
                         // if JETInit throws then we must not call JETTerm
                         // and we must not use the instance anymore
                         this.cleanupInstance = false;
                         this.instance = new JET_INSTANCE();
-                        throw e;
+                        throw;
                     }
 
                     this.instanceInitialized = true;

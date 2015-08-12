@@ -262,7 +262,7 @@ namespace Microsoft.Database.Isam
         /// A <see cref="ColumnDefinition"/> object based on the current row in the temptable
         /// represented by <paramref name="columnList"/>.
         /// </returns>
-        internal static ColumnDefinition Load(Database database, string tableName, JET_COLUMNLIST columnList)
+        internal static ColumnDefinition Load(IsamDatabase database, string tableName, JET_COLUMNLIST columnList)
         {
             lock (database.IsamSession)
             {
@@ -319,7 +319,7 @@ namespace Microsoft.Database.Isam
         /// <returns>
         /// A <see cref="ColumnDefinition"/> object based on the <paramref name="columnBase"/> object.
         /// </returns>
-        internal static ColumnDefinition Load(Database database, string tableName, JET_COLUMNBASE columnBase)
+        internal static ColumnDefinition Load(IsamDatabase database, string tableName, JET_COLUMNBASE columnBase)
         {
             lock (database.IsamSession)
             {

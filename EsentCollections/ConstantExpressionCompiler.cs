@@ -22,7 +22,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// Dictionary of type => compiler mapping. The compiler functions
         /// take an expression and return its value.
         /// </summary>
-        private static readonly Dictionary<Type, Func<Expression, object>> compilers = new Dictionary<Type, Func<Expression, object>>
+        private static readonly Dictionary<Type, Func<Expression, object>> CompilersMap = new Dictionary<Type, Func<Expression, object>>
         {
             { typeof(bool), GetValue<bool> },
             { typeof(bool?), GetValue<bool?> },
@@ -60,7 +60,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         public static object Compile(Expression expression)
         {
             Func<Expression, object> f;
-            if (compilers.TryGetValue(expression.Type, out f))
+            if (CompilersMap.TryGetValue(expression.Type, out f))
             {
                 return f(expression);
             }

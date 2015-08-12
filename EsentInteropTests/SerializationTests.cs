@@ -83,7 +83,7 @@ namespace InteropApiTests
         {
             var expected = new JET_BKINFO
             {
-                bklogtimeMark = new JET_BKLOGTIME(DateTime.UtcNow, false),
+                bklogtimeMark = new JET_BKLOGTIME(DateTime.UtcNow, Any.Boolean),
                 genHigh = 1,
                 genLow = 2,
                 lgposMark = new JET_LGPOS { ib = 7, isec = 8, lGeneration = 9 },

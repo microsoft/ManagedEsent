@@ -313,6 +313,53 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test that TryJetGetTableIndexInfo (JET_INDEXID) returns false when index name is invalid.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test that TryJetGetTableIndexInfo (JET_INDEXID) returns false when index name is invalid")]
+        public void TestTryJetGetTableIndexInfoIndexIdReturnsFalseWhenIndexNameIsInvalid()
+        {
+            JET_INDEXID result;
+
+            Assert.IsTrue(!Api.TryJetGetTableIndexInfo(this.sesid, this.tableid, "NoSuchIndex", out result, JET_IdxInfo.IndexId));
+        }
+
+        /// <summary>
+        /// Test that TryJetGetTableIndexInfo (JET_INDEXID) returns true when index name is valid.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test that TryJetGetTableIndexInfo (JET_INDEXID) returns true when index name is valid")]
+        public void TestTryJetGetTableIndexInfoIndexIdReturnsTrueWhenIndexNameIsValid()
+        {
+            JET_INDEXID result;
+
+            Assert.IsTrue(Api.TryJetGetTableIndexInfo(this.sesid, this.tableid, "Index2", out result, JET_IdxInfo.IndexId));
+        }
+
+        /// <summary>
+        /// Test that TryJetGetTableIndexInfo (JET_INDEXID) throws when a bad param is passed.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test that TryJetGetTableIndexInfo (JET_INDEXID) throws when a bad param is passed")]
+        public void TestTryJetGetTableIndexInfoIndexIdThrowsWhenBadParam()
+        {
+            JET_INDEXID result;
+
+            try
+            {
+                Api.TryJetGetTableIndexInfo(this.sesid, this.tableid, "Index2", out result, (JET_IdxInfo)int.MaxValue);
+                Assert.Fail("Expected an EsentInvalidParameterException");
+            }
+            catch (EsentInvalidParameterException ex)
+            {
+                Assert.AreEqual(JET_err.InvalidParameter, ex.Error);
+            }
+        }
+
+        /// <summary>
         /// Test the overload of JetGetTableIndexInfo that returns a locale name.
         /// </summary>
         [TestMethod]

@@ -9,6 +9,7 @@ namespace Microsoft.Isam.Esent.Interop
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
 #if MANAGEDESENT_SUPPORTS_SERIALIZATION
     using System.Runtime.Serialization.Formatters.Binary;
@@ -857,6 +858,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="columnid">The column to read from.</param>
         /// <param name="grbit">The retrieval options to use.</param>
         /// <returns>The deserialized object. Null if the column was null.</returns>
+        [SuppressMessage("Exchange.Security", "EX0043:DoNotUseBinarySoapFormatter", Justification = "Suppress warning in current code base.The usage has already been verified.")]
         public static object DeserializeObjectFromColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {
             int actualSize;

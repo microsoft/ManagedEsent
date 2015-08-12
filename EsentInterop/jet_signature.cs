@@ -101,11 +101,19 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The structure as a string.</returns>
         public override string ToString()
         {
+            string convertedDate = string.Empty;
+            DateTime? createDate = this.logtimeCreate.ToDateTime();
+            if (createDate.HasValue)
+            {
+                // the standard Round-trip date/time pattern
+                convertedDate = createDate.Value.ToString("o", CultureInfo.InvariantCulture);
+            }
+
             return string.Format(
                 CultureInfo.InvariantCulture,
                 "JET_SIGNATURE({0}:{1}:{2})",
                 this.ulRandom,
-                this.logtimeCreate.ToDateTime(),
+                convertedDate,
                 this.szComputerName);
         }
 

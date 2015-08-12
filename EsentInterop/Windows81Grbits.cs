@@ -42,7 +42,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows81
     }
 
     /// <summary>
-    /// System parameters that have been introduced in Windows 8.1.
+    /// Options that have been introduced in Windows 8.1.
     /// </summary>
     public static class Windows81Grbits
     {

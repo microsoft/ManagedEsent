@@ -379,7 +379,7 @@ namespace Microsoft.Isam.Esent.Interop
 
         /// <summary>
         /// Gets or sets a callback function to use for the table. This is in the form "module!functionName",
-        /// and assumes unmanaged code. See <see cref="JetApi.JetRegisterCallback"/> for an alternative.
+        /// and assumes unmanaged code. See <see cref="Api.JetRegisterCallback"/> for an alternative.
         /// </summary>
         public string szCallback
         {
@@ -475,7 +475,11 @@ namespace Microsoft.Isam.Esent.Interop
             this.CheckMembersAreValid();
             other.CheckMembersAreValid();
 
-            return this.szTableName == other.szTableName
+            bool notYetPublishedEquals = true;
+            this.NotYetPublishedEquals(other, ref notYetPublishedEquals);
+
+            return notYetPublishedEquals
+                && this.szTableName == other.szTableName
                 && this.szTemplateTableName == other.szTemplateTableName
                 && this.ulPages == other.ulPages
                 && this.ulDensity == other.ulDensity
@@ -629,5 +633,15 @@ namespace Microsoft.Isam.Esent.Interop
             return native;
         }
 #endif // !MANAGEDESENT_ON_WSA
+
+        /// <summary>
+        /// Provides a hook to allow comparison of additional fields in
+        /// a different file. These additonal fields are not yet published
+        /// on MSDN.
+        /// </summary>
+        /// <param name="other">The structure to compare with.</param>
+        /// <param name="notYetPublishedEquals">Whether the additional fields in <paramref name="other"/>
+        /// are the same as this.</param>
+        partial void NotYetPublishedEquals(JET_TABLECREATE other, ref bool notYetPublishedEquals);
     }
 }

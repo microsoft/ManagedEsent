@@ -24,7 +24,7 @@ namespace InteropApiTests
         /// <summary>
         /// Non-empty bklogtime used for testing.
         /// </summary>
-        private static readonly JET_BKLOGTIME Bklogtime = new JET_BKLOGTIME(DateTime.Now, true);
+        private static readonly JET_BKLOGTIME Bklogtime = new JET_BKLOGTIME(DateTime.Now, Any.Boolean);
 
         /// <summary>
         /// Non-empty lgpos used for testing.

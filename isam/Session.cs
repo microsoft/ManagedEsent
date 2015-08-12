@@ -304,13 +304,13 @@ namespace Microsoft.Database.Isam
         /// A database must first be attached (or created) before it can be
         /// opened successfully.
         /// </remarks>
-        public Database OpenDatabase(string databaseName)
+        public IsamDatabase OpenDatabase(string databaseName)
         {
             lock (this)
             {
                 this.CheckDisposed();
 
-                return new Database(this, databaseName);
+                return new IsamDatabase(this, databaseName);
             }
         }
 

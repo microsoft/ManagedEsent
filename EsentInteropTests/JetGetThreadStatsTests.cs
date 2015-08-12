@@ -17,7 +17,7 @@ namespace InteropApiTests
     /// Tests for JetGetThreadStats
     /// </summary>
     [TestClass]
-    public class JetGetThreadStatsTests
+    public partial class JetGetThreadStatsTests
     {
         /// <summary>
         /// The directory being used for the database and its files.

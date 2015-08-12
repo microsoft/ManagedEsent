@@ -18,6 +18,69 @@ namespace Microsoft.Isam.Esent.Interop
     /// </summary>
     public static partial class Api
     {
+        #region Simpler API. Overloads that omit unused/obsolete parameters.
+        /// <summary>
+        /// Initialize a new ESENT session.
+        /// </summary>
+        /// <param name="instance">The initialized instance to create the session in.</param>
+        /// <param name="sesid">Returns the created session.</param>
+        public static void BeginSession(JET_INSTANCE instance, out JET_SESID sesid)
+        {
+            Api.JetBeginSession(instance, out sesid, null, null);
+        }
+
+        /// <summary>
+        /// Creates and attaches a database file.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="database">The path to the database file to create.</param>
+        /// <param name="dbid">Returns the dbid of the new database.</param>
+        /// <param name="grbit">Database creation options.</param>
+        public static void CreateDatabase(JET_SESID sesid, string database, out JET_DBID dbid, CreateDatabaseGrbit grbit)
+        {
+            Api.JetCreateDatabase(sesid, database, null, out dbid, grbit);
+        }
+
+        /// <summary>
+        /// Opens a database previously attached with <see cref="JetAttachDatabase"/>,
+        /// for use with a database session. This function can be called multiple times
+        /// for the same database.
+        /// </summary>
+        /// <param name="sesid">The session that is opening the database.</param>
+        /// <param name="database">The database to open.</param>
+        /// <param name="dbid">Returns the dbid of the attached database.</param>
+        /// <param name="grbit">Open database options.</param>
+        /// <returns>An ESENT warning code.</returns>
+        public static JET_wrn OpenDatabase(
+            JET_SESID sesid,
+            string database,
+            out JET_DBID dbid,
+            OpenDatabaseGrbit grbit)
+        {
+            return Api.JetOpenDatabase(sesid, database, null, out dbid, grbit);
+        }
+
+        /// <summary>
+        /// Opens a cursor on a previously created table.
+        /// </summary>
+        /// <param name="sesid">The database session to use.</param>
+        /// <param name="dbid">The database to open the table in.</param>
+        /// <param name="tablename">The name of the table to open.</param>
+        /// <param name="grbit">Table open options.</param>
+        /// <param name="tableid">Returns the opened table.</param>
+        /// <returns>An ESENT warning.</returns>
+        public static JET_wrn OpenTable(
+            JET_SESID sesid,
+            JET_DBID dbid,
+            string tablename,
+            OpenTableGrbit grbit,
+            out JET_TABLEID tableid)
+        {
+            return Api.JetOpenTable(sesid, dbid, tablename, null, 0, grbit, out tableid);
+        }
+
+        #endregion
+
         /// <summary>
         /// Try to open a table.
         /// </summary>
@@ -132,7 +195,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             if (null == tablename)
             {
-                throw new ArgumentNullException("tablename");    
+                throw new ArgumentNullException("tablename");
             }
 
             return new GenericEnumerable<ColumnInfo>(() => new TableColumnInfoEnumerator(sesid, dbid, tablename));
@@ -175,6 +238,34 @@ namespace Microsoft.Isam.Esent.Interop
         public static IEnumerable<string> GetTableNames(JET_SESID sesid, JET_DBID dbid)
         {
             return new GenericEnumerable<string>(() => new TableNameEnumerator(sesid, dbid));
+        }
+
+        /// <summary>
+        /// Retrieves information about indexes on a table.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table to retrieve index information about.</param>
+        /// <param name="indexname">The name of the index.</param>
+        /// <param name="result">Filled in with information about indexes on the table.</param>
+        /// <param name="infoLevel">The type of information to retrieve.</param>
+        /// <returns>true if there was no error, false if the index wasn't found. Throws for other Jet errors.</returns>
+        public static bool TryJetGetTableIndexInfo(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            string indexname,
+            out JET_INDEXID result,
+            JET_IdxInfo infoLevel)
+        {
+            int err = Impl.JetGetTableIndexInfo(sesid, tableid, indexname, out result, infoLevel);
+
+            if ((JET_err)err == JET_err.IndexNotFound)
+            {
+                return false;
+            }
+
+            Api.Check(err);
+
+            return true;
         }
     }
 }

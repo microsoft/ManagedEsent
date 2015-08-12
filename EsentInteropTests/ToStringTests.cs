@@ -356,7 +356,19 @@ namespace InteropApiTests
         {
             var t = new DateTime(2010, 5, 31, 4, 44, 17, 678, DateTimeKind.Utc);
             var signature = new JET_SIGNATURE(99, t, "COMPUTER");
-            Assert.AreEqual("JET_SIGNATURE(99:05/31/2010 04:44:17:COMPUTER)", signature.ToString());
+            Assert.AreEqual("JET_SIGNATURE(99:2010-05-31T04:44:17.6780000Z:COMPUTER)", signature.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_SIGNATURE.ToString() with a null DateTime.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_SIGNATURE.ToString() with a null DateTime.")]
+        public void JetSignatureWithNullDateTimeToString()
+        {
+            var signature = new JET_SIGNATURE(399, null, "COMPUTER");
+            Assert.AreEqual("JET_SIGNATURE(399::COMPUTER)", signature.ToString());
         }
 
         /// <summary>

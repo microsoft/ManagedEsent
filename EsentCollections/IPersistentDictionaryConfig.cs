@@ -12,24 +12,13 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     /// <summary>
     /// An interface for meta-data configuration for the dictionary database.
     /// </summary>
-    internal interface IPersistentDictionaryConfig
+    public interface IPersistentDictionaryConfig
     {
         /// <summary>
         /// Gets a string describing the current version of the 
         /// PersistentDictionary.
         /// </summary>
         string Version { get; }
-
-        /// <summary>
-        /// Gets the name of the database. The user provides the
-        /// directory and the database is always given this name.
-        /// </summary>
-        string Database { get; }
-
-        /// <summary>
-        /// Gets the basename of the logfiles for the instance.
-        /// </summary>
-        string BaseName { get; }
 
         /// <summary>
         /// Gets the name of the globals table.

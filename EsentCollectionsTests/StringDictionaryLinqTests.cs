@@ -32,38 +32,38 @@ namespace EsentCollectionsTests
         /// <summary>
         /// A MethodInfo describing String.Compare(string, string).
         /// </summary>
-        private static readonly MethodInfo stringCompareMethod = typeof(string).GetMethod("Compare", new[] { typeof(string), typeof(string) });
+        private static readonly MethodInfo StringCompareMethod = typeof(string).GetMethod("Compare", new[] { typeof(string), typeof(string) });
 
         /// <summary>
         /// A MethodInfo describing String.Equals(string).
         /// </summary>
-        private static readonly MethodInfo stringEqualsMethod = typeof(string).GetMethod("Equals", new[] { typeof(string) });
+        private static readonly MethodInfo StringEqualsMethod = typeof(string).GetMethod("Equals", new[] { typeof(string) });
 
         /// <summary>
         /// A MethodInfo describing String.StartsWith(string).
         /// </summary>
-        private static readonly MethodInfo stringStartsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) }); 
+        private static readonly MethodInfo StringStartsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) }); 
 
         /// <summary>
         /// The parameter expression used to build out expression trees. This 
         /// should be the same object in all places so we need a singleton.
         /// </summary>
-        private static readonly ParameterExpression parameterExpression = Expression.Parameter(typeof(KeyValuePair<string, string>), "x");
+        private static readonly ParameterExpression ParameterExpression = Expression.Parameter(typeof(KeyValuePair<string, string>), "x");
 
         /// <summary>
         /// MemberInfo that describes the Key member of the KeyValuePair.
         /// </summary>
-        private static readonly MemberInfo keyMemberInfo = typeof(KeyValuePair<string, string>).GetProperty("Key", typeof(string));
-
-        /// <summary>
-        /// Random number generator.
-        /// </summary>
-        private readonly Random rand = new Random();
+        private static readonly MemberInfo KeyMemberInfo = typeof(KeyValuePair<string, string>).GetProperty("Key", typeof(string));
 
         /// <summary>
         /// Data for tests.
         /// </summary>
         private static KeyValuePair<string, string>[] data;
+
+        /// <summary>
+        /// Random number generator.
+        /// </summary>
+        private readonly Random rand = new Random();
 
         /// <summary>
         /// The dictionary we are testing.
@@ -145,7 +145,7 @@ namespace EsentCollectionsTests
         /// </returns>
         private static ParameterExpression CreateParameterExpression()
         {
-            return parameterExpression;
+            return ParameterExpression;
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace EsentCollectionsTests
         private static Expression CreateKeyAccess()
         {
             Expression parameter = CreateParameterExpression();
-            return Expression.MakeMemberAccess(parameter, keyMemberInfo);
+            return Expression.MakeMemberAccess(parameter, KeyMemberInfo);
         }
 
         /// <summary>
@@ -257,7 +257,7 @@ namespace EsentCollectionsTests
         {
             Expression parameter = CreateKeyAccess();
             Expression value = this.CreateConstantExpression();
-            return Expression.Call(parameter, stringStartsWithMethod, value);
+            return Expression.Call(parameter, StringStartsWithMethod, value);
         }
 
         /// <summary>
@@ -268,7 +268,7 @@ namespace EsentCollectionsTests
         {
             Expression parameter = CreateKeyAccess();
             Expression value = this.CreateConstantExpression();
-            return Expression.Call(parameter, stringEqualsMethod, value);
+            return Expression.Call(parameter, StringEqualsMethod, value);
         }
 
         /// <summary>
@@ -280,8 +280,8 @@ namespace EsentCollectionsTests
             Expression key = CreateKeyAccess();
             Expression value = this.CreateConstantExpression();
             Expression stringCompare = (0 == this.rand.Next(2))
-                                           ? Expression.Call(null, stringCompareMethod, key, value)
-                                           : Expression.Call(null, stringCompareMethod, value, key);
+                                           ? Expression.Call(null, StringCompareMethod, key, value)
+                                           : Expression.Call(null, StringCompareMethod, value, key);
 
             Expression zero = Expression.Constant(0);
 
@@ -322,7 +322,7 @@ namespace EsentCollectionsTests
         private BinaryExpression CreateKeyEqualityComparisonExpression()
         {
             Expression parameter = CreateParameterExpression();
-            Expression key = Expression.MakeMemberAccess(parameter, keyMemberInfo);
+            Expression key = Expression.MakeMemberAccess(parameter, KeyMemberInfo);
             Expression value = this.CreateConstantExpression();
 
             Expression left;

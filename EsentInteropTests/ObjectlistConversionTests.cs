@@ -133,6 +133,21 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test conversion from the native stuct sets columnidcontainername.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test conversation from NATIVE_OBJECTLIST to JET_OBJECTLIST sets columnidcRecord")]
+        public void ConvertObjectlistFromNativeSetsColumnidcontainername()
+        {
+            var column = new JET_COLUMNID
+            {
+                Value = this.native.columnidcontainername
+            };
+            Assert.AreEqual(column, this.managed.columnidcontainername);
+        }
+
+        /// <summary>
         /// Test conversion from the native stuct sets columnidcPage.
         /// </summary>
         [TestMethod]

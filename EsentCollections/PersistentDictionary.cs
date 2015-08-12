@@ -13,11 +13,15 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.IO;
     using System.Text;
     using System.Threading;
+    using Microsoft.Database.Isam;
+    using Microsoft.Database.Isam.Config;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Windows7;
 
@@ -56,6 +60,21 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         private readonly object[] updateLocks;
 
         /// <summary>
+        /// The disposeLock ensures safety when Diposing an object in a multi-threaded
+        /// environment.
+        /// All public access points of entry acquire a reader lock.
+        /// Once this is acquired, it calls <see cref="CheckObjectDisposed"/>.
+        /// <see cref="Dispose(bool)"/> enters as a writer, ensuring that
+        /// any call in progress will complete. While it is disposing, new calls
+        /// will be blocked.
+        /// </summary>
+        /// <remarks>
+        /// Consider moving to NoRecursion.
+        /// </remarks>
+        private readonly ReaderWriterLockSlim disposeLock =
+            new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+
+        /// <summary>
         /// Methods to set and retrieve data in ESE.
         /// </summary>
         private readonly PersistentDictionaryConverters<TKey, TValue> converters;
@@ -63,7 +82,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// Meta-data information for the dictionary database.
         /// </summary>
-        private readonly IPersistentDictionaryConfig config;
+        private readonly IPersistentDictionaryConfig schema;
 
         /// <summary>
         /// Cache of cursors used to access the dictionary.
@@ -81,81 +100,51 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         private readonly string databasePath;
 
         /// <summary>
+        /// Database object associated with the PersistentDictionary.
+        /// </summary>
+        private readonly Database database;
+
+        /// <summary>
+        /// Tracks whether the object has been Disposed.
+        /// </summary>
+        private bool alreadyDisposed;
+
+        /// <summary>
         /// Initializes a new instance of the PersistentDictionary class.
         /// </summary>
         /// <param name="directory">
-        /// The directory to create the database in.
+        /// The directory in which to create the database.
         /// </param>
-        public PersistentDictionary(string directory)
+        public PersistentDictionary(string directory) : this(directory, null, null)
         {
             if (null == directory)
             {
                 throw new ArgumentNullException("directory");
             }
+        }
 
-            CollectionsSystemParameters.Init();
-            this.converters = new PersistentDictionaryConverters<TKey, TValue>();
-            this.config = new PersistentDictionaryConfig();
-            this.databaseDirectory = directory;
-            this.databasePath = Path.Combine(directory, this.config.Database);
-
-            this.updateLocks = new object[NumUpdateLocks];
-            for (int i = 0; i < this.updateLocks.Length; ++i)
+        /// <summary>
+        /// Initializes a new instance of the PersistentDictionary class.
+        /// </summary>
+        /// <param name="customConfig">The custom config to use for creating the PersistentDictionary.</param>
+        public PersistentDictionary(IConfigSet customConfig) : this(null, customConfig, null)
+        {
+            if (null == customConfig)
             {
-                this.updateLocks[i] = new object();
+                throw new ArgumentNullException("customConfig");
             }
+        }
 
-            this.instance = new Instance(Guid.NewGuid().ToString());            
-            this.instance.Parameters.SystemDirectory = directory;
-            this.instance.Parameters.LogFileDirectory = directory;
-            this.instance.Parameters.TempDirectory = directory;
-
-            // If the database has been moved while inconsistent recovery
-            // won't be able to find the database (logfiles contain the
-            // absolute path of the referenced database). Set this parameter
-            // to indicate a directory which contains any databases that couldn't
-            // be found by recovery.
-            this.instance.Parameters.AlternateDatabaseRecoveryDirectory = directory;
-
-            this.instance.Parameters.CreatePathIfNotExist = true;
-            this.instance.Parameters.BaseName = this.config.BaseName;
-            this.instance.Parameters.EnableIndexChecking = false;       // TODO: fix unicode indexes
-            this.instance.Parameters.CircularLog = true;
-            this.instance.Parameters.CheckpointDepthMax = 64 * 1024 * 1024;
-            this.instance.Parameters.LogFileSize = 1024;    // 1MB logs
-            this.instance.Parameters.LogBuffers = 1024;     // buffers = 1/2 of logfile
-            this.instance.Parameters.MaxTemporaryTables = 0;
-            this.instance.Parameters.MaxVerPages = 1024;
-            this.instance.Parameters.NoInformationEvent = true;
-            this.instance.Parameters.WaypointLatency = 1;
-            this.instance.Parameters.MaxSessions = 256;
-            this.instance.Parameters.MaxOpenTables = 256;
-
-            InitGrbit grbit = EsentVersion.SupportsWindows7Features
-                                  ? Windows7Grbits.ReplayIgnoreLostLogs
-                                  : InitGrbit.None;
-            this.instance.Init(grbit);
-
-            try
+        /// <summary>
+        /// Initializes a new instance of the PersistentDictionary class.
+        /// </summary>
+        /// <param name="directory">The directory in which to create the database.</param>
+        /// <param name="customConfig">The custom config to use for creating the PersistentDictionary.</param>
+        public PersistentDictionary(string directory, IConfigSet customConfig) : this(directory, customConfig, null)
+        {
+            if (directory == null && customConfig == null)
             {
-                if (!File.Exists(this.databasePath))
-                {
-                    this.CreateDatabase(this.databasePath);
-                }
-                else
-                {
-                    this.CheckDatabaseMetaData(this.databasePath);
-                }
-
-                this.cursors = new PersistentDictionaryCursorCache<TKey, TValue>(
-                    this.instance, this.databasePath, this.converters, this.config);
-            }
-            catch (Exception)
-            {
-                // We have failed to initialize for some reason. Terminate
-                // the instance.
-                this.instance.Term();                
-                throw;
+                throw new ArgumentException("Must specify a valid directory or customConfig");
             }
         }
 
@@ -166,27 +155,172 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// The IDictionary whose contents are copied to the new dictionary.
         /// </param>
         /// <param name="directory">
-        /// The directory to create the database in.
+        /// The directory in which to create the database.
         /// </param>
-        public PersistentDictionary(IEnumerable<KeyValuePair<TKey, TValue>> dictionary, string directory) : this(directory)
+        public PersistentDictionary(IEnumerable<KeyValuePair<TKey, TValue>> dictionary, string directory) : this(directory, null, dictionary)
         {
+            if (null == directory)
+            {
+                throw new ArgumentNullException("directory");
+            }
+
+            if (null == dictionary)
+            {
+                this.Dispose();
+                throw new ArgumentNullException("dictionary");
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the PersistentDictionary class.
+        /// </summary>
+        /// <param name="dictionary">The IDictionary whose contents are copied to the new dictionary.</param>
+        /// <param name="customConfig">The custom config to use for creating the PersistentDictionary.</param>
+        public PersistentDictionary(IEnumerable<KeyValuePair<TKey, TValue>> dictionary, IConfigSet customConfig) : this(null, customConfig, dictionary)
+        {
+            if (null == customConfig)
+            {
+                throw new ArgumentNullException("customConfig");
+            }
+
+            if (null == dictionary)
+            {
+                this.Dispose();
+                throw new ArgumentNullException("dictionary");
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the PersistentDictionary class.
+        /// </summary>
+        /// <param name="dictionary">The IDictionary whose contents are copied to the new dictionary.</param>
+        /// <param name="directory">The directory in which to create the database.</param>
+        /// <param name="customConfig">The custom config to use for creating the PersistentDictionary.</param>
+        public PersistentDictionary(
+            IEnumerable<KeyValuePair<TKey, TValue>> dictionary,
+            string directory,
+            IConfigSet customConfig)
+            : this(directory, customConfig, dictionary)
+        {
+            if (directory == null && customConfig == null)
+            {
+                throw new ArgumentException("Must specify a valid directory or customConfig");
+            }
+
+            if (null == dictionary)
+            {
+                this.Dispose();
+                throw new ArgumentNullException("dictionary");
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the PersistentDictionary class.
+        /// </summary>
+        /// <param name="directory">The directory to create the database in.</param>
+        /// <param name="customConfig">The custom config to use for creating the PersistentDictionary.</param>
+        /// <param name="dictionary">The IDictionary whose contents are copied to the new dictionary.</param>
+        /// <remarks>The constructor can either intialize PersistentDictioarny from a directory string, or a full custom config set. But not both.</remarks>
+        private PersistentDictionary(
+            string directory,
+            IConfigSet customConfig,
+            IEnumerable<KeyValuePair<TKey, TValue>> dictionary)
+        {
+            Contract.Requires(directory != null || customConfig != null); // At least 1 of the two arguments should be set
+            if (directory == null && customConfig == null)
+            {
+                return; // The calling constructor will throw an error
+            }
+
+            this.converters = new PersistentDictionaryConverters<TKey, TValue>();
+            this.schema = new PersistentDictionaryConfig();
+            var defaultConfig = PersistentDictionaryDefaultConfig.GetDefaultDatabaseConfig();
+            var databaseConfig = new DatabaseConfig();
+
+            if (directory != null)
+            {
+                this.databaseDirectory = directory;
+                this.databasePath = Path.Combine(directory, defaultConfig.DatabaseFilename);
+                databaseConfig.DatabaseFilename = this.databasePath;
+                databaseConfig.SystemPath = this.databaseDirectory;
+                databaseConfig.LogFilePath = this.databaseDirectory;
+                databaseConfig.TempPath = this.databaseDirectory;
+
+                // If the database has been moved while inconsistent recovery
+                // won't be able to find the database (logfiles contain the
+                // absolute path of the referenced database). Set this parameter
+                // to indicate a directory which contains any databases that couldn't
+                // be found by recovery.
+                databaseConfig.AlternateDatabaseRecoveryPath = directory;
+            }
+
+            if (customConfig != null)
+            {
+                databaseConfig.Merge(customConfig); // throw on conflicts
+            }
+
+            // Use defaults for anything that the caller didn't explicitly set
+            databaseConfig.Merge(defaultConfig, MergeRules.KeepExisting);
+
+            // Finally, we know what database path to use
+            this.databaseDirectory = Path.GetDirectoryName(databaseConfig.DatabaseFilename);
+            this.databasePath = databaseConfig.DatabaseFilename;
+
+            this.updateLocks = new object[NumUpdateLocks];
+            for (int i = 0; i < this.updateLocks.Length; ++i)
+            {
+                this.updateLocks[i] = new object();
+            }
+
+            databaseConfig.SetGlobalParams();
+            this.instance = new Instance(databaseConfig.Identifier, databaseConfig.DisplayName);
+            databaseConfig.SetInstanceParams(this.instance.JetInstance);
+
+            InitGrbit grbit = EsentVersion.SupportsWindows7Features
+                                  ? Windows7Grbits.ReplayIgnoreLostLogs
+                                  : InitGrbit.None;
+            this.instance.Init(grbit);
+
             try
             {
-                if (null == dictionary)
+                if (!File.Exists(this.databasePath))
                 {
-                    throw new ArgumentNullException("dictionary");
+                    this.CreateDatabase(databaseConfig);
+                }
+                else
+                {
+                    this.CheckDatabaseMetaData(databaseConfig);
                 }
 
-                foreach (KeyValuePair<TKey, TValue> item in dictionary)
-                {
-                    this.Add(item);
-                }
+                this.cursors = new PersistentDictionaryCursorCache<TKey, TValue>(
+                    this.instance, this.databasePath, this.converters, this.schema);
             }
             catch (Exception)
             {
-                // We have failed to copy the dictionary. Terminate the instance.
+                // We have failed to initialize for some reason. Terminate
+                // the instance.
                 this.instance.Term();
                 throw;
+            }
+
+            this.database = new Database(this.instance.JetInstance, false, databaseConfig);
+
+            // Optionally, fill the db from the supplied dictionary
+            if (dictionary != null)
+            {
+                try
+                {
+                    foreach (KeyValuePair<TKey, TValue> item in dictionary)
+                    {
+                        this.Add(item);
+                    }
+                }
+                catch (Exception)
+                {
+                    // We have failed to copy the dictionary. Terminate the instance.
+                    this.Dispose();
+                    throw;
+                }
             }
         }
 
@@ -200,15 +334,19 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             get
             {
-                PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
-                try
-                {
-                    return cursor.RetrieveCount();
-                }
-                finally
-                {
-                    this.cursors.FreeCursor(cursor);
-                }
+                return this.ReturnReadLockedOperation(
+                    () =>
+                        {
+                            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+                            try
+                            {
+                                return cursor.RetrieveCount();
+                            }
+                            finally
+                            {
+                                this.cursors.FreeCursor(cursor);
+                            }
+                        });
             }
         }
 
@@ -250,7 +388,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             get
             {
-                return new PersistentDictionaryKeyCollection<TKey, TValue>(this);
+                return this.ReturnReadLockedOperation(
+                    () =>
+                        {
+                            return new PersistentDictionaryKeyCollection<TKey, TValue>(this);
+                        });
             }
         }
 
@@ -278,7 +420,22 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             get
             {
-                return new PersistentDictionaryValueCollection<TKey, TValue>(this);
+                return this.ReturnReadLockedOperation(
+                    () =>
+                        {
+                            return new PersistentDictionaryValueCollection<TKey, TValue>(this);
+                        });
+            }
+        }
+
+        /// <summary>
+        /// Gets the schema configuration used by dictionary to store data in the underlying database.
+        /// </summary>
+        public IPersistentDictionaryConfig Schema
+        {
+            get
+            {
+                return this.schema;
             }
         }
 
@@ -289,11 +446,28 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <value>
         /// The path of the directory that contains the dictionary database.
         /// </value>
-        public string Database
+        public string DatabasePath
         {
             get
             {
                 return this.databaseDirectory;
+            }
+        }
+
+        /// <summary>
+        /// Gets the Database object associated with the dictionary.
+        /// Database can be used to control runtime parameters affecting the dictionary's backing database (e.g. database cache size).
+        /// See <see cref="DatabaseConfig"/>.
+        /// </summary>
+        public Database Database
+        {
+            get
+            {
+                return this.ReturnReadLockedOperation(
+                    () =>
+                        {
+                            return this.database;
+                        });
             }
         }
 
@@ -311,48 +485,56 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             get
             {
-                PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
-                try
-                {
-                    using (var transaction = cursor.BeginReadOnlyTransaction())
-                    {
-                        cursor.SeekWithKeyNotFoundException(key);
-                        var value = cursor.RetrieveCurrentValue();
-                        return value;
-                    }
-                }
-                finally
-                {
-                    this.cursors.FreeCursor(cursor);
-                }
+                return this.ReturnReadLockedOperation(
+                    () =>
+                        {
+                            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+                            try
+                            {
+                                using (var transaction = cursor.BeginReadOnlyTransaction())
+                                {
+                                    cursor.SeekWithKeyNotFoundException(key);
+                                    var value = cursor.RetrieveCurrentValue();
+                                    return value;
+                                }
+                            }
+                            finally
+                            {
+                                this.cursors.FreeCursor(cursor);
+                            }
+                        });
             }
 
             set
             {
-                lock (this.LockObject(key))
-                {
-                    PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
-                    try
-                    {
-                        using (var transaction = cursor.BeginLazyTransaction())
+                this.DoReadLockedOperation(
+                    () =>
                         {
-                            if (cursor.TrySeek(key))
+                            lock (this.LockObject(key))
                             {
-                                cursor.ReplaceCurrentValue(value);
-                            }
-                            else
-                            {
-                                cursor.Insert(new KeyValuePair<TKey, TValue>(key, value));
-                            }
+                                PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+                                try
+                                {
+                                    using (var transaction = cursor.BeginLazyTransaction())
+                                    {
+                                        if (cursor.TrySeek(key))
+                                        {
+                                            cursor.ReplaceCurrentValue(value);
+                                        }
+                                        else
+                                        {
+                                            cursor.Insert(new KeyValuePair<TKey, TValue>(key, value));
+                                        }
 
-                            transaction.Commit();
-                        }
-                    }
-                    finally
-                    {
-                        this.cursors.FreeCursor(cursor);
-                    }
-                }
+                                        transaction.Commit();
+                                    }
+                                }
+                                finally
+                                {
+                                    this.cursors.FreeCursor(cursor);
+                                }
+                            }
+                        });
             }
         }
 
@@ -365,8 +547,12 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </returns>
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
-            return new PersistentDictionaryEnumerator<TKey, TValue, KeyValuePair<TKey, TValue>>(
-                this, KeyRange<TKey>.OpenRange, c => c.RetrieveCurrent(), x => true);
+            return this.ReturnReadLockedOperation(
+                () =>
+                {
+                    return new PersistentDictionaryEnumerator<TKey, TValue, KeyValuePair<TKey, TValue>>(
+                        this, KeyRange<TKey>.OpenRange, c => c.RetrieveCurrent(), x => true);
+                });
         }
 
         /// <summary>
@@ -392,30 +578,34 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="item">The object to remove from the <see cref="PersistentDictionary{TKey,TValue}"/>.</param>
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
-            lock (this.LockObject(item.Key))
-            {            
-                PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
-                try
-                {
-                    // Having the update lock means the record can't be
-                    // deleted after we seek to it.
-                    if (cursor.TrySeek(item.Key) && cursor.RetrieveCurrentValue().Equals(item.Value))
+            return this.ReturnReadLockedOperation(
+                () =>
                     {
-                        using (var transaction = cursor.BeginLazyTransaction())
+                        lock (this.LockObject(item.Key))
                         {
-                            cursor.DeleteCurrent();
-                            transaction.Commit();
-                            return true;
-                        }
-                    }
+                            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+                            try
+                            {
+                                // Having the update lock means the record can't be
+                                // deleted after we seek to it.
+                                if (cursor.TrySeek(item.Key) && cursor.RetrieveCurrentValue().Equals(item.Value))
+                                {
+                                    using (var transaction = cursor.BeginLazyTransaction())
+                                    {
+                                        cursor.DeleteCurrent();
+                                        transaction.Commit();
+                                        return true;
+                                    }
+                                }
 
-                    return false;
-                }
-                finally
-                {
-                    this.cursors.FreeCursor(cursor);
-                }
-            }
+                                return false;
+                            }
+                            finally
+                            {
+                                this.cursors.FreeCursor(cursor);
+                            }
+                        }
+                    });
         }
 
         /// <summary>
@@ -424,27 +614,31 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="item">The object to add to the <see cref="PersistentDictionary{TKey,TValue}"/>.</param>
         public void Add(KeyValuePair<TKey, TValue> item)
         {
-            lock (this.LockObject(item.Key))
-            {
-                PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
-                try
-                {
-                    using (var transaction = cursor.BeginLazyTransaction())
+            this.DoReadLockedOperation(
+                () =>
                     {
-                        if (cursor.TrySeek(item.Key))
+                        lock (this.LockObject(item.Key))
                         {
-                            throw new ArgumentException("An item with this key already exists", "item");
-                        }
+                            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+                            try
+                            {
+                                using (var transaction = cursor.BeginLazyTransaction())
+                                {
+                                    if (cursor.TrySeek(item.Key))
+                                    {
+                                        throw new ArgumentException("An item with this key already exists", "item");
+                                    }
 
-                        cursor.Insert(item);
-                        transaction.Commit();
-                    }
-                }
-                finally
-                {
-                    this.cursors.FreeCursor(cursor);
-                }    
-            }
+                                    cursor.Insert(item);
+                                    transaction.Commit();
+                                }
+                            }
+                            finally
+                            {
+                                this.cursors.FreeCursor(cursor);
+                            }
+                        }
+                    });
         }
 
         /// <summary>
@@ -460,22 +654,26 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </param>
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
-            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
-            try
-            {
-                // Start a transaction here to avoid the case where the record
-                // is deleted after we seek to it.
-                using (var transaction = cursor.BeginReadOnlyTransaction())
-                {
-                    bool isPresent = cursor.TrySeek(item.Key)
-                                     && Compare.AreEqual(item.Value, cursor.RetrieveCurrentValue());
-                    return isPresent;
-                }
-            }
-            finally
-            {
-                this.cursors.FreeCursor(cursor);
-            }
+            return this.ReturnReadLockedOperation(
+                () =>
+                    {
+                        PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+                        try
+                        {
+                            // Start a transaction here to avoid the case where the record
+                            // is deleted after we seek to it.
+                            using (var transaction = cursor.BeginReadOnlyTransaction())
+                            {
+                                bool isPresent = cursor.TrySeek(item.Key)
+                                                 && Compare.AreEqual(item.Value, cursor.RetrieveCurrentValue());
+                                return isPresent;
+                            }
+                        }
+                        finally
+                        {
+                            this.cursors.FreeCursor(cursor);
+                        }
+                    });
         }
 
         /// <summary>
@@ -497,7 +695,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </exception>
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
-            Copy.CopyTo(this, array, arrayIndex);
+            this.DoReadLockedOperation(
+                () =>
+                    {
+                        Copy.CopyTo(this, array, arrayIndex);
+                    });
         }
 
         /// <summary>
@@ -505,40 +707,44 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         public void Clear()
         {
-            try
-            {
-                // We will be deleting all items so take all the update locks
-                foreach (object lockObject in this.updateLocks)
-                {
-                    Monitor.Enter(lockObject);
-                }
-
-                PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
-                try
-                {
-                    cursor.MoveBeforeFirst();
-                    while (cursor.TryMoveNext())
+            this.DoReadLockedOperation(
+                () =>
                     {
-                        using (var transaction = cursor.BeginLazyTransaction())
+                        try
                         {
-                            cursor.DeleteCurrent();
-                            transaction.Commit();
+                            // We will be deleting all items so take all the update locks
+                            foreach (object lockObject in this.updateLocks)
+                            {
+                                Monitor.Enter(lockObject);
+                            }
+
+                            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+                            try
+                            {
+                                cursor.MoveBeforeFirst();
+                                while (cursor.TryMoveNext())
+                                {
+                                    using (var transaction = cursor.BeginLazyTransaction())
+                                    {
+                                        cursor.DeleteCurrent();
+                                        transaction.Commit();
+                                    }
+                                }
+                            }
+                            finally
+                            {
+                                this.cursors.FreeCursor(cursor);
+                            }
                         }
-                    }
-                }
-                finally
-                {
-                    this.cursors.FreeCursor(cursor);
-                }
-            }
-            finally
-            {
-                // Remember to unlock everything
-                foreach (object lockObject in this.updateLocks)
-                {
-                    Monitor.Exit(lockObject);
-                }                
-            }
+                        finally
+                        {
+                            // Remember to unlock everything
+                            foreach (object lockObject in this.updateLocks)
+                            {
+                                Monitor.Exit(lockObject);
+                            }
+                        }
+                    });
         }
 
         /// <summary>
@@ -550,15 +756,19 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="key">The key to locate in the <see cref="PersistentDictionary{TKey,TValue}"/>.</param>
         public bool ContainsKey(TKey key)
         {
-            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
-            try
-            {
-                return cursor.TrySeek(key);
-            }
-            finally
-            {
-                this.cursors.FreeCursor(cursor);
-            }
+            return this.ReturnReadLockedOperation(
+                () =>
+                    {
+                        PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+                        try
+                        {
+                            return cursor.TrySeek(key);
+                        }
+                        finally
+                        {
+                            this.cursors.FreeCursor(cursor);
+                        }
+                    });
         }
 
         /// <summary>
@@ -582,28 +792,32 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="key">The key of the element to remove.</param>
         public bool Remove(TKey key)
         {
-            lock (this.LockObject(key))
-            {
-                PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
-                try
-                {
-                    if (cursor.TrySeek(key))
+            return this.ReturnReadLockedOperation(
+                () =>
                     {
-                        using (var transaction = cursor.BeginLazyTransaction())
+                        lock (this.LockObject(key))
                         {
-                            cursor.DeleteCurrent();
-                            transaction.Commit();
-                            return true;
-                        }
-                    }
+                            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+                            try
+                            {
+                                if (cursor.TrySeek(key))
+                                {
+                                    using (var transaction = cursor.BeginLazyTransaction())
+                                    {
+                                        cursor.DeleteCurrent();
+                                        transaction.Commit();
+                                        return true;
+                                    }
+                                }
 
-                    return false;
-                }
-                finally
-                {
-                    this.cursors.FreeCursor(cursor);
-                }
-            }
+                                return false;
+                            }
+                            finally
+                            {
+                                this.cursors.FreeCursor(cursor);
+                            }
+                        }
+                    });
         }
 
         /// <summary>
@@ -622,39 +836,38 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </param>
         public bool TryGetValue(TKey key, out TValue value)
         {
-            TValue retrievedValue = default(TValue);
-            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
-            try
-            {
-                // Start a transaction so the record can't be deleted after
-                // we seek to it.
-                bool isPresent = false;
-                using (var transaction = cursor.BeginReadOnlyTransaction())
-                {
-                    if (cursor.TrySeek(key))
+            TValue toReturn = default(TValue);
+
+            bool found = this.ReturnReadLockedOperation(
+                () =>
                     {
-                        retrievedValue = cursor.RetrieveCurrentValue();
-                        isPresent = true;
-                    }
-                }
+                        TValue retrievedValue = default(TValue);
+                        PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+                        try
+                        {
+                            // Start a transaction so the record can't be deleted after
+                            // we seek to it.
+                            bool isPresent = false;
+                            using (var transaction = cursor.BeginReadOnlyTransaction())
+                            {
+                                if (cursor.TrySeek(key))
+                                {
+                                    retrievedValue = cursor.RetrieveCurrentValue();
+                                    isPresent = true;
+                                }
+                            }
 
-                value = retrievedValue;
-                return isPresent;
-            }
-            finally
-            {
-                this.cursors.FreeCursor(cursor);
-            }
-        }
+                            toReturn = retrievedValue;
+                            return isPresent;
+                        }
+                        finally
+                        {
+                            this.cursors.FreeCursor(cursor);
+                        }
+                    });
 
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            this.cursors.Dispose();
-            this.instance.Dispose();
-            GC.SuppressFinalize(this);
+            value = toReturn;
+            return found;
         }
 
         /// <summary>
@@ -670,7 +883,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="value">The value to locate in the <see cref="PersistentDictionary{TKey,TValue}"/>.</param>
         public bool ContainsValue(TValue value)
         {
-            return this.Values.Contains(value);
+            return this.ReturnReadLockedOperation(
+                () =>
+                    {
+                        return this.Values.Contains(value);
+                    });
         }
 
         /// <summary>
@@ -678,15 +895,28 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         public void Flush()
         {
-            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
-            try
-            {
-                cursor.Flush();
-            }
-            finally
-            {
-                this.cursors.FreeCursor(cursor);
-            }
+            this.DoReadLockedOperation(
+                () =>
+                    {
+                        PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+                        try
+                        {
+                            cursor.Flush();
+                        }
+                        finally
+                        {
+                            this.cursors.FreeCursor(cursor);
+                        }
+                    });
+        }
+
+        /// <summary>
+        /// Invokes the Dispose(bool) function.
+        /// </summary>
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -697,18 +927,26 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </returns>
         internal PersistentDictionaryCursor<TKey, TValue> GetCursor()
         {
-            return this.cursors.GetCursor();
+            return this.ReturnReadLockedOperation(
+                () =>
+                    {
+                        return this.cursors.GetCursor();
+                    });
         }
 
         /// <summary>
-        /// Opens a cursor on the PersistentDictionary. Used by enumerators.
+        /// Frees a cursor on the PersistentDictionary. Used by enumerators.
         /// </summary>
         /// <param name="cursor">
         /// The cursor being freed.
         /// </param>
         internal void FreeCursor(PersistentDictionaryCursor<TKey, TValue> cursor)
         {
-            this.cursors.FreeCursor(cursor);
+            this.DoReadLockedOperation(
+                () =>
+                    {
+                        this.cursors.FreeCursor(cursor);
+                    });
         }
 
         /// <summary>
@@ -724,6 +962,50 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
+        /// Performs the specified action while under a ReadLock.
+        /// </summary>
+        /// <param name="action">The action to perform.</param>
+        internal void DoReadLockedOperation(Action action)
+        {
+            this.CheckObjectDisposed();
+
+            try
+            {
+                this.disposeLock.EnterReadLock();
+                this.CheckObjectDisposed();
+
+                action();
+            }
+            finally
+            {
+                this.disposeLock.ExitReadLock();
+            }
+        }
+
+        /// <summary>
+        /// Performs the specified action while under a ReadLock.
+        /// </summary>
+        /// <param name="action">The action to perform.</param>
+        /// <typeparam name="TReturn">The type of the return value of the block.</typeparam>
+        /// <returns>Returns the value of the function.</returns>
+        internal TReturn ReturnReadLockedOperation<TReturn>(Func<TReturn> action)
+        {
+            this.CheckObjectDisposed();
+
+            try
+            {
+                this.disposeLock.EnterReadLock();
+                this.CheckObjectDisposed();
+
+                return action();
+            }
+            finally
+            {
+                this.disposeLock.ExitReadLock();
+            }
+        }
+
+        /// <summary>
         /// Determine if the given column can be compressed.
         /// </summary>
         /// <param name="columndef">The definition of the column.</param>
@@ -735,26 +1017,74 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <param name="userInitiatedDisposing">Whether it's a user-initiated call.</param>
+        private void Dispose(bool userInitiatedDisposing)
+        {
+            if (this.alreadyDisposed)
+            {
+                return;
+            }
+
+            if (userInitiatedDisposing)
+            {
+                // Indicates a coding error.
+                Debug.Assert(!this.disposeLock.IsReadLockHeld, "No read lock should be held when Disposing this object.");
+                Debug.Assert(!this.disposeLock.IsWriteLockHeld, "No read lock should be held when Disposing this object.");
+
+                bool writeLocked = false;
+                try
+                {
+                    this.disposeLock.EnterWriteLock();
+                    writeLocked = true;
+
+                    if (this.alreadyDisposed)
+                    {
+                        return;
+                    }
+
+                    this.cursors.Dispose();
+                    this.database.Dispose();
+                    this.instance.Dispose();
+                }
+                finally
+                {
+                    this.alreadyDisposed = true;
+                    if (writeLocked)
+                    {
+                        this.disposeLock.ExitWriteLock();
+                    }
+
+                    // Can't Dipose it when other threads may be blocked on it,
+                    // trying to enter as Readers.
+                    //// this.disposeLock.Dispose();
+                }
+            }
+        }
+
+        /// <summary>
         /// Check the database meta-data. This makes sure the tables and columns exist and
         /// checks the type of the database.
         /// </summary>
-        /// <param name="database">The database to check.</param>
-        private void CheckDatabaseMetaData(string database)
+        /// <param name="databaseConfig">The database configuration to use.</param>
+        private void CheckDatabaseMetaData(DatabaseConfig databaseConfig)
         {
+            string databasePath = databaseConfig.DatabaseFilename;
             using (var session = new Session(this.instance))
             {
                 JET_DBID dbid;
                 JET_TABLEID tableid;
 
-                Api.JetAttachDatabase(session, database, AttachDatabaseGrbit.None);
-                Api.JetOpenDatabase(session, database, string.Empty, out dbid, OpenDatabaseGrbit.None);
+                Api.JetAttachDatabase2(session, databasePath, databaseConfig.DatabaseMaxPages, databaseConfig.DatabaseAttachFlags);
+                Api.JetOpenDatabase(session, databasePath, string.Empty, out dbid, OpenDatabaseGrbit.None);
 
                 // Globals table
-                Api.JetOpenTable(session, dbid, this.config.GlobalsTableName, null, 0, OpenTableGrbit.None, out tableid);
-                Api.GetTableColumnid(session, tableid, this.config.CountColumnName);
-                Api.GetTableColumnid(session, tableid, this.config.FlushColumnName);
-                var keyTypeColumnid = Api.GetTableColumnid(session, tableid, this.config.KeyTypeColumnName);
-                var valueTypeColumnid = Api.GetTableColumnid(session, tableid, this.config.ValueTypeColumnName);
+                Api.JetOpenTable(session, dbid, this.schema.GlobalsTableName, null, 0, OpenTableGrbit.None, out tableid);
+                Api.GetTableColumnid(session, tableid, this.schema.CountColumnName);
+                Api.GetTableColumnid(session, tableid, this.schema.FlushColumnName);
+                var keyTypeColumnid = Api.GetTableColumnid(session, tableid, this.schema.KeyTypeColumnName);
+                var valueTypeColumnid = Api.GetTableColumnid(session, tableid, this.schema.ValueTypeColumnName);
                 if (!Api.TryMoveFirst(session, tableid))
                 {
                     throw new InvalidDataException("globals table is empty");
@@ -777,9 +1107,9 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 Api.JetCloseTable(session, tableid);
 
                 // Data table
-                Api.JetOpenTable(session, dbid, this.config.DataTableName, null, 0, OpenTableGrbit.None, out tableid);
-                Api.GetTableColumnid(session, tableid, this.config.KeyColumnName);
-                Api.GetTableColumnid(session, tableid, this.config.ValueColumnName);
+                Api.JetOpenTable(session, dbid, this.schema.DataTableName, null, 0, OpenTableGrbit.None, out tableid);
+                Api.GetTableColumnid(session, tableid, this.schema.KeyColumnName);
+                Api.GetTableColumnid(session, tableid, this.schema.ValueColumnName);
                 Api.JetCloseTable(session, tableid);
             }
         }
@@ -787,13 +1117,14 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// Create the database.
         /// </summary>
-        /// <param name="database">The name of the database to create.</param>
-        private void CreateDatabase(string database)
+        /// <param name="databaseConfig">The database configuration to use.</param>
+        private void CreateDatabase(DatabaseConfig databaseConfig)
         {
+            string databasePath = databaseConfig.DatabaseFilename;
             using (var session = new Session(this.instance))
             {
                 JET_DBID dbid;
-                Api.JetCreateDatabase(session, database, string.Empty, out dbid, CreateDatabaseGrbit.None);
+                Api.JetCreateDatabase2(session, databasePath, databaseConfig.DatabaseMaxPages, out dbid, databaseConfig.DatabaseCreationFlags);
                 try
                 {
                     using (var transaction = new Transaction(session))
@@ -802,15 +1133,14 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                         this.CreateDataTable(session, dbid);
                         transaction.Commit(CommitTransactionGrbit.None);
                         Api.JetCloseDatabase(session, dbid, CloseDatabaseGrbit.None);
-                        Api.JetDetachDatabase(session, database);
                     }
                 }
                 catch
                 {
                     // Delete the partially constructed database
                     Api.JetCloseDatabase(session, dbid, CloseDatabaseGrbit.None);
-                    Api.JetDetachDatabase(session, database);
-                    File.Delete(database);
+                    Api.JetDetachDatabase(session, databasePath);
+                    File.Delete(databasePath);
                     throw;
                 }
             }
@@ -829,11 +1159,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             JET_COLUMNID keyTypeColumnid;
             JET_COLUMNID valueTypeColumnid;
 
-            Api.JetCreateTable(session, dbid, this.config.GlobalsTableName, 1, 100, out tableid);
+            Api.JetCreateTable(session, dbid, this.schema.GlobalsTableName, 1, 100, out tableid);
             Api.JetAddColumn(
                 session,
                 tableid,
-                this.config.VersionColumnName,
+                this.schema.VersionColumnName,
                 new JET_COLUMNDEF { coltyp = JET_coltyp.LongText },
                 null,
                 0,
@@ -844,7 +1174,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             Api.JetAddColumn(
                 session,
                 tableid,
-                this.config.CountColumnName,
+                this.schema.CountColumnName,
                 new JET_COLUMNDEF { coltyp = JET_coltyp.Long, grbit = ColumndefGrbit.ColumnEscrowUpdate },
                 defaultValue,
                 defaultValue.Length,
@@ -853,7 +1183,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             Api.JetAddColumn(
                 session,
                 tableid,
-                this.config.FlushColumnName,
+                this.schema.FlushColumnName,
                 new JET_COLUMNDEF { coltyp = JET_coltyp.Long, grbit = ColumndefGrbit.ColumnEscrowUpdate },
                 defaultValue,
                 defaultValue.Length,
@@ -862,7 +1192,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             Api.JetAddColumn(
                 session,
                 tableid,
-                this.config.KeyTypeColumnName,
+                this.schema.KeyTypeColumnName,
                 new JET_COLUMNDEF { coltyp = JET_coltyp.LongBinary },
                 null,
                 0,
@@ -871,7 +1201,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             Api.JetAddColumn(
                 session,
                 tableid,
-                this.config.ValueTypeColumnName,
+                this.schema.ValueTypeColumnName,
                 new JET_COLUMNDEF { coltyp = JET_coltyp.LongBinary },
                 null,
                 0,
@@ -881,7 +1211,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             {
                 Api.SerializeObjectToColumn(session, tableid, keyTypeColumnid, typeof(TKey));
                 Api.SerializeObjectToColumn(session, tableid, valueTypeColumnid, typeof(TValue));
-                Api.SetColumn(session, tableid, versionColumnid, this.config.Version, Encoding.Unicode);
+                Api.SetColumn(session, tableid, versionColumnid, this.schema.Version, Encoding.Unicode);
                 update.Save();
             }
 
@@ -899,7 +1229,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             JET_COLUMNID keyColumnid;
             JET_COLUMNID valueColumnid;
 
-            Api.JetCreateTable(session, dbid, this.config.DataTableName, 128, 100, out tableid);
+            Api.JetCreateTable(session, dbid, this.schema.DataTableName, 128, 100, out tableid);
             var columndef = new JET_COLUMNDEF { coltyp = this.converters.KeyColtyp, cp = JET_CP.Unicode, grbit = ColumndefGrbit.None };
             if (ColumnCanBeCompressed(columndef))
             {
@@ -908,8 +1238,8 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 
             Api.JetAddColumn(
                 session,
-                tableid,
-                this.config.KeyColumnName,
+                tableid, 
+                this.schema.KeyColumnName,
                 columndef,
                 null,
                 0,
@@ -924,32 +1254,51 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             Api.JetAddColumn(
                 session,
                 tableid,
-                this.config.ValueColumnName,
+                this.schema.ValueColumnName,
                 columndef,
                 null,
                 0,
                 out valueColumnid);
 
-            string indexKey = string.Format(CultureInfo.InvariantCulture, "+{0}\0\0", this.config.KeyColumnName);
+            string indexKey = string.Format(CultureInfo.InvariantCulture, "+{0}\0\0", this.schema.KeyColumnName);
             var indexcreates = new[]
-            {
-                new JET_INDEXCREATE
-                {
-                    cbKeyMost = SystemParameters.KeyMost,
-                    grbit = CreateIndexGrbit.IndexPrimary,
-                    szIndexName = "primary",
-                    szKey = indexKey,
-                    cbKey = indexKey.Length,
-                    pidxUnicode = new JET_UNICODEINDEX
-                    {
-                        lcid = CultureInfo.CurrentCulture.LCID,
-                        dwMapFlags = Conversions.LCMapFlagsFromCompareOptions(CompareOptions.None),
-                    },
-                },
-            };
+                                   {
+                                       new JET_INDEXCREATE
+                                           {
+                                               cbKeyMost = SystemParameters.KeyMost,
+                                               grbit = CreateIndexGrbit.IndexPrimary,
+                                               szIndexName = "primary",
+                                               szKey = indexKey,
+                                               cbKey = indexKey.Length,
+                                               pidxUnicode = new JET_UNICODEINDEX
+                                                       {
+                                                           lcid = CultureInfo.CurrentCulture.LCID,
+                                                           dwMapFlags = Conversions.LCMapFlagsFromCompareOptions(CompareOptions.None),
+                                                       },
+                                           },
+                                   };
             Api.JetCreateIndex2(session, tableid, indexcreates, indexcreates.Length);
 
             Api.JetCloseTable(session, tableid);
+        }
+
+        /// <summary>
+        /// Verifies that the object is not already disposed.
+        /// This should be checked while the disposeLock ReadLock is held. If
+        /// the read lock is not held, then the caller must acquire the lock
+        /// first and check for a guaranteed correct value.
+        /// (The caller may call this wihtout the lcok first to get a fast-but-
+        /// inaccurate result.)
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">
+        /// Thrown if the object has already been disposed.
+        /// </exception>
+        private void CheckObjectDisposed()
+        {
+            if (this.alreadyDisposed)
+            {
+                throw new ObjectDisposedException("PersistentDictionary");
+            }
         }
 
         /// <summary>
@@ -965,7 +1314,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             {
                 return this.updateLocks[0];
             }
-            
+
             // Remember: hash codes can be negative, and we can't negate Int32.MinValue.
             uint hash = unchecked((uint)key.GetHashCode());
             hash %= checked((uint)this.updateLocks.Length);

@@ -102,7 +102,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets a value indicating whether the JET_BKLOGTIME is in UTC.
         /// </summary>
-        public bool IsUtc
+        [SuppressMessage(
+            "Microsoft.StyleCop.CSharp.NamingRules",
+            "SA1300:ElementMustBeginWithUpperCaseLetter",
+            Justification = "This should match the unmanaged API, which isn't capitalized.")]
+        public bool fTimeIsUTC
         {
             get { return 0 != (this.bFiller1 & 0x1); }
         }
@@ -110,7 +114,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets a value indicating whether the JET_BKLOGTIME is for a snapshot backup.
         /// </summary>
-        public bool IsSnapshot
+        [SuppressMessage(
+            "Microsoft.StyleCop.CSharp.NamingRules",
+            "SA1300:ElementMustBeginWithUpperCaseLetter",
+            Justification = "This should match the unmanaged API, which isn't capitalized.")]
+        public bool fOSSnapshot
         {
             get { return 0 != (this.bFiller2 & 0x1); }
         }
@@ -161,7 +169,7 @@ namespace Microsoft.Isam.Esent.Interop
                 this.bMinutes,
                 this.bSeconds,
                 checked((int)((((uint)this.bFiller2 & 0xE) << 6) | (((uint)this.bFiller1 & 0xFE) >> 1))),
-                this.IsUtc ? DateTimeKind.Utc : DateTimeKind.Local);
+                this.fTimeIsUTC ? DateTimeKind.Utc : DateTimeKind.Local);
         }
 
         /// <summary>

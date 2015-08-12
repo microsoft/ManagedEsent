@@ -14,11 +14,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EsentInteropTests")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("EsentCollectionsTests")]
+[assembly: AssemblyDescription("Persistent Dictionary Tests for ESE/ESENT")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("EsentInteropTests")]
+[assembly: AssemblyProduct("EsentCollectionsTests")]
 [assembly: AssemblyCopyright("Copyright (c) Microsoft. All Rights Reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

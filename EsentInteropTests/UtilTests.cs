@@ -477,5 +477,18 @@ namespace InteropApiTests
 
             Assert.IsTrue(Util.ArrayStructEquals(byteArray, Encoding.Unicode.GetBytes(key + char.MinValue), byteArray.Length));
         }
+
+        /// <summary>
+        /// Test ConvertToNullTerminatedUnicodeByteArray with a null string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test ConvertToNullTerminatedUnicodeByteArray with a null string")]
+        public void TestConvertToNullTerminatedUnicodeByteArrayWithNull()
+        {
+            byte[] byteArray = Util.ConvertToNullTerminatedUnicodeByteArray(null);
+
+            Assert.IsNull(byteArray);
+        }
     }
 }

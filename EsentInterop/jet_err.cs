@@ -604,6 +604,31 @@ namespace Microsoft.Isam.Esent.Interop
         TransactionTooLong = -618,
 
         /// <summary>
+        /// The specified JET_ENGINEFORMATVERSION value is too low to be supported by this version of ESE.
+        /// </summary>
+        EngineFormatVersionNoLongerSupportedTooLow = -619,
+
+        /// <summary>
+        /// The specified JET_ENGINEFORMATVERSION value is too high, higher than this version of ESE knows about.
+        /// </summary>
+        EngineFormatVersionNotYetImplementedTooHigh = -620,
+
+        /// <summary>
+        /// Thrown by a format feature (not at JetSetSystemParameter) if the client requests a feature that requires a version higher than that set for the JET_paramEngineFormatVersion.
+        /// </summary>
+        EngineFormatVersionParamTooLowForRequestedFeature = -621,
+
+        /// <summary>
+        /// The specified JET_ENGINEFORMATVERSION is set too low for this log stream, the log files have already been upgraded to a higher version.  A higher JET_ENGINEFORMATVERSION value must be set in the param.
+        /// </summary>
+        EngineFormatVersionSpecifiedTooLowForLogVersion = -622,
+
+        /// <summary>
+        /// The specified JET_ENGINEFORMATVERSION is set too low for this database file, the database file has already been upgraded to a higher version.  A higher JET_ENGINEFORMATVERSION value must be set in the param.
+        /// </summary>
+        EngineFormatVersionSpecifiedTooLowForDatabaseVersion = -623,
+
+        /// <summary>
         /// Backup was aborted by server by calling JetTerm with JET_bitTermStopBackup or by calling JetStopBackup
         /// </summary>
         BackupAbortByServer = -801,
@@ -969,6 +994,11 @@ namespace Microsoft.Isam.Esent.Interop
         InstanceUnavailableDueToFatalLogDiskFull = -1092,
 
         /// <summary>
+        /// This JET_sesparam* identifier is not known to the ESE engine.
+        /// </summary>
+        InvalidSesparamId = -1093,
+
+        /// <summary>
         /// Out of sessions
         /// </summary>
         OutOfSessions = -1101,
@@ -1244,6 +1274,21 @@ namespace Microsoft.Isam.Esent.Interop
         NoAttachmentsFailedIncrementalReseed = -1229,
 
         /// <summary>
+        /// Recovery on this database has not yet completed enough to permit access.
+        /// </summary>
+        DatabaseNotReady = -1230,
+
+        /// <summary>
+        /// Database is attached but only for recovery.  It must be explicitly attached before it can be opened. 
+        /// </summary>
+        DatabaseAttachedForRecovery = -1231,
+
+        /// <summary>
+        /// Recovery has not seen any Begin0/Commit0 records and so does not know what trxBegin0 to assign to this transaction
+        /// </summary>
+        TransactionsNotReadyDuringRecovery = -1232,
+
+        /// <summary>
         /// Table is exclusively locked
         /// </summary>
         TableLocked = -1302,
@@ -1464,6 +1509,21 @@ namespace Microsoft.Isam.Esent.Interop
         IndexTuplesKeyTooSmall = -1437,
 
         /// <summary>
+        /// Specified LV chunk size is not supported
+        /// </summary>
+        InvalidLVChunkSize = -1438,
+
+        /// <summary>
+        /// Only JET_coltypLongText and JET_coltypLongBinary columns can be encrypted
+        /// </summary>
+        ColumnCannotBeEncrypted = -1439,
+
+        /// <summary>
+        /// Cannot index encrypted column
+        /// </summary>
+        CannotIndexOnEncryptedColumn = -1440,
+
+        /// <summary>
         /// Column value is long
         /// </summary>
         ColumnLong = -1501,
@@ -1589,6 +1649,11 @@ namespace Microsoft.Isam.Esent.Interop
         ColumnCannotBeCompressed = -1538,
 
         /// <summary>
+        /// Cannot retrieve/set encrypted column without an encryption key
+        /// </summary>
+        ColumnNoEncryptionKey = -1540,
+
+        /// <summary>
         /// The key was not found
         /// </summary>
         RecordNotFound = -1601,
@@ -1647,6 +1712,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// No version updates only for uncommitted tables
         /// </summary>
         UpdateMustVersion = -1621,
+
+        /// <summary>
+        /// Data could not be decrypted
+        /// </summary>
+        DecryptionFailed = -1622,
 
         /// <summary>
         /// Too many sort processes
@@ -1752,6 +1822,21 @@ namespace Microsoft.Isam.Esent.Interop
         /// error during rollback
         /// </summary>
         RollbackError = -1917,
+
+        /// <summary>
+        /// The version of the persisted flush map is not supported by this version of the engine.
+        /// </summary>
+        FlushMapVersionUnsupported = -1918,
+
+        /// <summary>
+        /// The persisted flush map and the database do not match.
+        /// </summary>
+        FlushMapDatabaseMismatch = -1919,
+
+        /// <summary>
+        /// The persisted flush map cannot be reconstructed.
+        /// </summary>
+        FlushMapUnrecoverable = -1920,
 
         /// <summary>
         /// The operation did not complete successfully because the database is already running maintenance on specified database

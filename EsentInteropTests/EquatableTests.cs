@@ -403,6 +403,8 @@ namespace InteropApiTests
             TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
+
+            Assert.IsFalse(x.fOSSnapshot);
         }
 
         /// <summary>
@@ -573,7 +575,7 @@ namespace InteropApiTests
         [Description("Check that JET_BKINFO structures can be compared for equality")]
         public void VerifyJetBkinfoEquality()
         {
-            var bklogtime = new JET_BKLOGTIME(DateTime.Now, false);
+            var bklogtime = new JET_BKLOGTIME(DateTime.Now, true);
             var lgpos = new JET_LGPOS { lGeneration = 1, isec = 2, ib = 3 };
 
             var x = new JET_BKINFO { bklogtimeMark = bklogtime, genHigh = 11, genLow = 3, lgposMark = lgpos };
@@ -581,6 +583,8 @@ namespace InteropApiTests
             TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
+
+            Assert.IsTrue(bklogtime.fOSSnapshot);
         }
 
         /// <summary>
@@ -1363,7 +1367,7 @@ namespace InteropApiTests
 
             Func<JET_BKINFO> bkinfo = () => new JET_BKINFO
             {
-                bklogtimeMark = new JET_BKLOGTIME(epoch + TimeSpan.FromSeconds(++i), false),
+                bklogtimeMark = new JET_BKLOGTIME(epoch + TimeSpan.FromSeconds(++i), true),
                 genHigh = ++i,
                 genLow = ++i,
                 lgposMark = new JET_LGPOS { ib = ++i, isec = ++i, lGeneration = ++i },

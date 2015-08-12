@@ -22,6 +22,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
     /// <summary>
     /// Options for <see cref="Windows8Api.JetResizeDatabase"/>.
     /// </summary>
+    /// <seealso cref="Windows81.Windows81Grbits.OnlyShrink"/>
     [Flags]
     public enum ResizeDatabaseGrbit
     {
@@ -39,6 +40,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
     /// <summary>
     /// Options passed to log flush callback.
     /// </summary>
+    /// <seealso cref="Microsoft.Isam.Esent.Interop.Windows10.Windows10Grbits.LogUnavailable"/>
     [Flags]
     public enum DurableCommitCallbackGrbit
     {
@@ -111,6 +113,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
     /// <summary>
     /// Options passed while setting cursor filters.
     /// </summary>
+    /// <seealso cref="Windows8Api.JetSetCursorFilter"/>
     [Flags]
     public enum CursorFilterGrbit
     {

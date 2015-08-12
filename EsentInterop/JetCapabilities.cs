@@ -42,6 +42,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public bool SupportsWindows81Features { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether Win10 features (in the
+        /// Interop.Windows10 namespace) are supported.
+        /// </summary>
+        public bool SupportsWindows10Features { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether unicode file paths are supported.
         /// </summary>
         public bool SupportsUnicodePaths { get; set; }

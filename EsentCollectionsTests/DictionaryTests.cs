@@ -58,7 +58,7 @@ namespace EsentCollectionsTests
         [Priority(2)]
         public void VerifyDatabasePropertyReturnsDatabaseDirectory()
         {
-            Assert.AreEqual(DictionaryLocation, this.dictionary.Database);
+            Assert.AreEqual(DictionaryLocation, this.dictionary.DatabasePath);
         }
 
         /// <summary>
@@ -518,6 +518,27 @@ namespace EsentCollectionsTests
         }
 
         #endregion
+
+        /// <summary>
+        /// Verify that changing cache size at runtime works.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Verify that changing cache size at runtime works.")]
+        public void VerifyCanChangeConfigAtRuntime()
+        {
+            int pagesize = this.dictionary.Database.Config.DatabasePageSize;
+            int currMinCacheSize = this.dictionary.Database.Config.CacheSizeMin;
+            int currCacheSize = this.dictionary.Database.Config.CacheSize;
+            int newCacheSize = (256 * 1024 * 1024) / pagesize;
+            Assert.IsTrue(currCacheSize < newCacheSize);
+
+            this.dictionary.Database.Config.CacheSizeMin = newCacheSize;
+            Assert.IsTrue(
+                this.dictionary.Database.Config.CacheSize >= newCacheSize - 1,
+                string.Format("Actual = {0}, Expected = {1}", this.dictionary.Database.Config.CacheSize, newCacheSize - 1));
+            this.dictionary.Database.Config.CacheSizeMin = currMinCacheSize;
+        }
 
         /// <summary>
         /// Make sure the given collection is read-only.

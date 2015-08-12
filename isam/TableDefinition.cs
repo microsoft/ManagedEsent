@@ -23,7 +23,7 @@ namespace Microsoft.Database.Isam
         /// <summary>
         /// The database
         /// </summary>
-        private Database database = null;
+        private IsamDatabase database = null;
 
         /// <summary>
         /// The name
@@ -146,7 +146,7 @@ namespace Microsoft.Database.Isam
         /// <value>
         /// The database.
         /// </value>
-        internal Database Database
+        internal IsamDatabase Database
         {
             get
             {
@@ -348,7 +348,7 @@ namespace Microsoft.Database.Isam
         /// <param name="database">The database.</param>
         /// <param name="objectList">The object list.</param>
         /// <returns>A <see cref="TableDefinition"/> corresponding to the table specified in <paramref name="objectList"/>.</returns>
-        internal static TableDefinition Load(Database database, JET_OBJECTLIST objectList)
+        internal static TableDefinition Load(IsamDatabase database, JET_OBJECTLIST objectList)
         {
             lock (database.IsamSession)
             {
@@ -377,7 +377,7 @@ namespace Microsoft.Database.Isam
         /// <param name="tableName">Name of the table.</param>
         /// <param name="objectInfo">The object information.</param>
         /// <returns>A <see cref="TableDefinition"/> corresponding to the table specified in <paramref name="objectInfo"/>.</returns>
-        internal static TableDefinition Load(Database database, string tableName, JET_OBJECTINFO objectInfo)
+        internal static TableDefinition Load(IsamDatabase database, string tableName, JET_OBJECTINFO objectInfo)
         {
             lock (database.IsamSession)
             {

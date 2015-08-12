@@ -12,6 +12,7 @@ namespace EsentCollectionsTests
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Threading;
     using Microsoft.Isam.Esent.Collections.Generic;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -25,6 +26,11 @@ namespace EsentCollectionsTests
         /// Where the dictionary will be located.
         /// </summary>
         private const string DictionaryLocation = "SortedDictionaryComparisonFixture";
+
+        /// <summary>
+        /// The lock object.
+        /// </summary>
+        private static readonly object Mylock = new object();
 
         /// <summary>
         /// A generic sorted dictionary that we will use as the oracle.
@@ -42,6 +48,7 @@ namespace EsentCollectionsTests
         [TestInitialize]
         public void Setup()
         {
+            Monitor.Enter(Mylock);
             this.expected = new SortedDictionary<string, string>();
             this.actual = new PersistentDictionary<string, string>(DictionaryLocation);
         }
@@ -57,6 +64,8 @@ namespace EsentCollectionsTests
             {
                 Cleanup.DeleteDirectoryWithRetry(DictionaryLocation);
             }
+
+            Monitor.Exit(Mylock);
         }
 
         /// <summary>

@@ -150,5 +150,18 @@ namespace InteropApiTests
         {
             Assert.AreEqual("JET_COLUMNCREATE(column9,Binary,ColumnAutoincrement)", this.managed.ToString());
         }
+
+        /// <summary>
+        /// Verifies that JET_COLUMNID.CreateColumnidFromNativeValue() is correct.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verifies that JET_COLUMNID.CreateColumnidFromNativeValue() is correct.")]
+        public void VerifyCreateColumnidFromNativeValue()
+        {
+            int nativeValue = Any.Int32;
+            var columnid = JET_COLUMNID.CreateColumnidFromNativeValue(nativeValue);
+            Assert.AreEqual(nativeValue, unchecked((int)columnid.Value));
+        }
     }
 }

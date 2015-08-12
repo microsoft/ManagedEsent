@@ -17,6 +17,36 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
     /// </summary>
     internal partial interface IJetApi
     {
+        #region Transactions
+        /// <summary>
+        /// Causes a session to enter a transaction or create a new save point in an existing
+        /// transaction.
+        /// </summary>
+        /// <param name="sesid">The session to begin the transaction for.</param>
+        /// <param name="userTransactionId">An optional identifier supplied by the user for identifying the transaction.</param>
+        /// <param name="grbit">Transaction options.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetBeginTransaction3(JET_SESID sesid, long userTransactionId, BeginTransactionGrbit grbit);
+
+        /// <summary>
+        /// Commits the changes made to the state of the database during the current save point
+        /// and migrates them to the previous save point. If the outermost save point is committed
+        /// then the changes made during that save point will be committed to the state of the
+        /// database and the session will exit the transaction.
+        /// </summary>
+        /// <param name="sesid">The session to commit the transaction for.</param>
+        /// <param name="grbit">Commit options.</param>
+        /// <param name="durableCommit">Duration to commit lazy transaction.</param>
+        /// <param name="commitId">Commit-id associated with this commit record.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetCommitTransaction2(
+            JET_SESID sesid,
+            CommitTransactionGrbit grbit,
+            TimeSpan durableCommit,
+            out JET_COMMIT_ID commitId);
+
+        #endregion
+
         /// <summary>
         /// Gets extended information about an error.
         /// </summary>
@@ -88,7 +118,43 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_TABLECREATE tablecreate);
         #endregion
 
-        #region Misc
+        #region Session Parameters
+        /// <summary>
+        /// Gets a parameter on the provided session state, used for the lifetime of this session or until reset.
+        /// </summary>
+        /// <param name="sesid">The session to set the parameter on.</param>
+        /// <param name="sesparamid">The ID of the session parameter to set, see
+        /// <see cref="JET_sesparam"/> and <see cref="Windows10.Windows10Sesparam"/>.</param>
+        /// <param name="value">A 32-bit integer to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetGetSessionParameter(JET_SESID sesid, JET_sesparam sesparamid, out int value);
+
+        /// <summary>
+        /// Gets a parameter on the provided session state, used for the lifetime of this session or until reset.
+        /// </summary>
+        /// <param name="sesid">The session to set the parameter on.</param>
+        /// <param name="sesparamid">The ID of the session parameter to set, see
+        /// <see cref="JET_sesparam"/> and <see cref="Windows10.Windows10Sesparam"/>.</param>
+        /// <param name="data">A byte array to retrieve.</param>
+        /// <param name="length">AThe length of the data array.</param>
+        /// <param name="actualDataSize">The actual size of the data field.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetGetSessionParameter(
+            JET_SESID sesid,
+            JET_sesparam sesparamid,
+            byte[] data,
+            int length,
+            out int actualDataSize);
+
+        /// <summary>
+        /// Sets a parameter on the provided session state, used for the lifetime of this session or until reset.
+        /// </summary>
+        /// <param name="sesid">The session to set the parameter on.</param>
+        /// <param name="sesparamid">The ID of the session parameter to set.</param>
+        /// <param name="value">A 32-bit integer to set.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetSetSessionParameter(JET_SESID sesid, JET_sesparam sesparamid, int value);
+
         /// <summary>
         /// Sets a parameter on the provided session state, used for the lifetime of this session or until reset.
         /// </summary>
@@ -96,25 +162,16 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="sesparamid">The ID of the session parameter to set.</param>
         /// <param name="data">Data to set in this session parameter.</param>
         /// <param name="dataSize">Size of the data provided.</param>
-        /// <returns>An error code.</returns>
-        int JetSetSessionParameter(JET_SESID sesid, JET_sesparam sesparamid, byte[] data, int dataSize);
-
-        /// <summary>
-        /// Commits the changes made to the state of the database during the current save point
-        /// and migrates them to the previous save point. If the outermost save point is committed
-        /// then the changes made during that save point will be committed to the state of the
-        /// database and the session will exit the transaction.
-        /// </summary>
-        /// <param name="sesid">The session to commit the transaction for.</param>
-        /// <param name="grbit">Commit options.</param>
-        /// <param name="durableCommit">Duration to commit lazy transaction.</param>
-        /// <param name="commitId">Commit-id associated with this commit record.</param>
         /// <returns>An error if the call fails.</returns>
-        int JetCommitTransaction2(
+        int JetSetSessionParameter(
             JET_SESID sesid,
-            CommitTransactionGrbit grbit,
-            TimeSpan durableCommit,
-            out JET_COMMIT_ID commitId);
+            JET_sesparam sesparamid,
+            byte[] data,
+            int dataSize);
+
+        #endregion
+
+        #region Misc
 
         /// <summary>
         /// If the records with the specified key ranges are not in the buffer

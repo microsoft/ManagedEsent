@@ -166,6 +166,7 @@ namespace InteropApiTests
         [TestMethod]
         [Description("Test the performance of RetrieveColumnAsString with a Unicode column and a custom encoding")]
         [Priority(3)]
+        [Timeout(2 * 60 * 1000)]
         public void TimeRetrieveColumnAsStringUnicodeCustomEncoding()
         {
             this.TimeRetrieveColumnAsString("unicode", 512, new UnicodeEncoding(false, false, true));

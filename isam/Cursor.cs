@@ -190,7 +190,7 @@ namespace Microsoft.Database.Isam
         /// <param name="database">The database.</param>
         /// <param name="tableName">Name of the table.</param>
         /// <param name="grbit">The grbit.</param>
-        internal Cursor(IsamSession isamSession, Database database, string tableName, OpenTableGrbit grbit)
+        internal Cursor(IsamSession isamSession, IsamDatabase database, string tableName, OpenTableGrbit grbit)
         {
             lock (isamSession)
             {

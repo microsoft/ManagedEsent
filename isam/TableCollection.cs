@@ -25,7 +25,7 @@ namespace Microsoft.Database.Isam
         /// <summary>
         /// The database
         /// </summary>
-        private readonly Database database;
+        private readonly IsamDatabase database;
 
         /// <summary>
         /// The read only
@@ -59,7 +59,7 @@ namespace Microsoft.Database.Isam
         /// Initializes a new instance of the <see cref="TableCollection"/> class.
         /// </summary>
         /// <param name="database">The database.</param>
-        internal TableCollection(Database database)
+        internal TableCollection(IsamDatabase database)
         {
             this.database = database;
             this.readOnly = true;

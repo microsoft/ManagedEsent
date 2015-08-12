@@ -85,6 +85,18 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Gets a random positive int.
+        /// </summary>
+        public static int PositiveInt32
+        {
+            get
+            {
+                var temp = Any.Int32;
+                return temp >= 0 ? temp : (temp - int.MinValue);
+            }
+        }
+
+        /// <summary>
         /// Gets a random uint.
         /// </summary>
         public static uint UInt32
@@ -107,6 +119,18 @@ namespace InteropApiTests
                 var data = new byte[8];
                 Any.MyRandom.NextBytes(data);
                 return BitConverter.ToInt64(data, 0);
+            }
+        }
+
+        /// <summary>
+        /// Gets a random positive Int64 (long).
+        /// </summary>
+        public static long PositiveInt64
+        {
+            get
+            {
+                var temp = Any.Int64;
+                return temp >= 0 ? temp : (temp - long.MinValue);
             }
         }
 

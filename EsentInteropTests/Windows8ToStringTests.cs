@@ -66,11 +66,14 @@ namespace InteropApiTests
         public void JetCommitIdToString()
         {
             DateTime d = DateTime.Now;
-            JET_COMMIT_ID commitId = InteropApiTests.DurableCommitTests.CreateJetCommitId(1, d, "computer", 2);
+            JET_COMMIT_ID commitId = DurableCommitTests.CreateJetCommitId(1, d, "computer", 2);
+            var signature = new JET_SIGNATURE(1, d, "computer");
+
+            string sigString = signature.ToString();
             string expected = string.Format(
                 CultureInfo.InvariantCulture,
-                "JET_COMMIT_ID(JET_SIGNATURE(1:{0}:computer):2",
-                d);
+                string.Format("JET_COMMIT_ID({0}:2", sigString));
+
             Assert.AreEqual(expected, commitId.ToString());
         }
 

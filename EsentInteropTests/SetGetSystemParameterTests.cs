@@ -783,6 +783,7 @@ namespace InteropApiTests
             int eventLoggingLevelOld = SystemParameters.EventLoggingLevel;
             SystemParameters.EventLoggingLevel = (int)EventLoggingLevels.High;
             Assert.AreEqual((int)EventLoggingLevels.High, SystemParameters.EventLoggingLevel);
+            Assert.AreNotEqual(eventLoggingLevelOld, SystemParameters.EventLoggingLevel);
             SystemParameters.EventLoggingLevel = eventLoggingLevelOld;
         }
 
@@ -837,6 +838,54 @@ namespace InteropApiTests
             SystemParameters.MaxInstances = 16;
             Assert.AreEqual(16, SystemParameters.MaxInstances);
             SystemParameters.MaxInstances = maxInstancesOld;
+        }
+
+        /// <summary>
+        /// Test that SystemParameters.LegacyFileNames can be set and retrieved.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test that SystemParameters.LegacyFileNames can be set and retrieved")]
+        public void VerifyGetAndSetLegacyFileNames()
+        {
+            int oldValue = SystemParameters.LegacyFileNames;
+            int newValue = (oldValue == 0) ? 1 : 0;
+            SystemParameters.LegacyFileNames = newValue;
+            Assert.AreEqual(newValue, SystemParameters.LegacyFileNames);
+
+            SystemParameters.LegacyFileNames = oldValue;
+        }
+
+        /// <summary>
+        /// Test that SystemParameters.EnableFileCache can be set and retrieved.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test that SystemParameters.EnableFileCache can be set and retrieved")]
+        public void VerifyGetAndSetEnableFileCache()
+        {
+            bool oldValue = SystemParameters.EnableFileCache;
+            bool newValue = !oldValue;
+            SystemParameters.EnableFileCache = newValue;
+            Assert.AreEqual(newValue, SystemParameters.EnableFileCache);
+
+            SystemParameters.EnableFileCache = oldValue;
+        }
+
+        /// <summary>
+        /// Test that SystemParameters.EnableViewCache can be set and retrieved.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test that SystemParameters.EnableViewCache can be set and retrieved")]
+        public void VerifyGetAndSetEnableViewCache()
+        {
+            bool oldValue = SystemParameters.EnableViewCache;
+            bool newValue = !oldValue;
+            SystemParameters.EnableViewCache = newValue;
+            Assert.AreEqual(newValue, SystemParameters.EnableViewCache);
+
+            SystemParameters.EnableViewCache = oldValue;
         }
 
         /// <summary>

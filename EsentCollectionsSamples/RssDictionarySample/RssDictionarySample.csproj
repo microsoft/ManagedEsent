@@ -62,6 +62,10 @@
       <Project>{CF2D4EE4-0D11-404D-B800-C4DCFEC42588}</Project>
       <Name>EsentCollections</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\isam\isam.csproj">
+      <Project>{21cc632c-b09a-4db7-bd6e-7f7d2716f58f}</Project>
+      <Name>EsentInterop</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

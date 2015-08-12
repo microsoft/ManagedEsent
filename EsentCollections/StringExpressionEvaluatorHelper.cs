@@ -20,17 +20,17 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// A MethodInfo describing the static String.Compare(string, string).
         /// </summary>
-        private static readonly MethodInfo stringStaticCompareMethod = typeof(string).GetMethod("Compare", new[] { typeof(string), typeof(string) });
+        private static readonly MethodInfo StringStaticCompareMethodImplementation = typeof(string).GetMethod("Compare", new[] { typeof(string), typeof(string) });
 
         /// <summary>
         /// A MethodInfo describing the static String.Equals(string, string).
         /// </summary>
-        private static readonly MethodInfo stringStaticEqualsMethod = typeof(string).GetMethod("Equals", new[] { typeof(string), typeof(string) });
+        private static readonly MethodInfo StringStaticEqualsMethodImplementation = typeof(string).GetMethod("Equals", new[] { typeof(string), typeof(string) });
 
         /// <summary>
         /// A MethodInfo describing String.StartsWith(string).
         /// </summary>
-        private static readonly MethodInfo stringStartsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) }); 
+        private static readonly MethodInfo StringStartsWithMethodImplementation = typeof(string).GetMethod("StartsWith", new[] { typeof(string) }); 
 
         /// <summary>
         /// Gets a MethodInfo describing the static String.Compare(string, string).
@@ -39,7 +39,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             get
             {
-                return stringStaticCompareMethod;
+                return StringStaticCompareMethodImplementation;
             }
         }
 
@@ -50,7 +50,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             get
             {
-                return stringStaticEqualsMethod;
+                return StringStaticEqualsMethodImplementation;
             }
         }
 
@@ -61,7 +61,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             get
             {
-                return stringStartsWithMethod;
+                return StringStartsWithMethodImplementation;
             }
         }
     }

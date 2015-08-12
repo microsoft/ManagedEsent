@@ -139,5 +139,14 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// Set the name associated with table class 15.
         /// </summary>
         public const JET_param TableClass15Name = (JET_param)151;
+
+        /// <summary>
+        /// Sets the IO priority per instance, anytime. This is used
+        /// mainly for background recovery (log replay).
+        /// Does not affect the pending IOs, just the subsequent ones issued.
+        /// The valid values for this parameter are contained in the
+        /// <see cref="JET_IOPriority"/> enumeration.
+        /// </summary>
+        public const JET_param IOPriority = (JET_param)152;
     }
 }

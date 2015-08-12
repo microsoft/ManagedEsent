@@ -751,6 +751,21 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test that this.instanceParameters.EventLoggingLevel can be set and retrieved.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test that this.instanceParameters.EventLoggingLevel can be set and retrieved")]
+        public void VerifyGetAndSetEventLoggingLevel()
+        {
+            EventLoggingLevels eventLoggingLevelOld = this.instanceParameters.EventLoggingLevel;
+            this.instanceParameters.EventLoggingLevel = EventLoggingLevels.High;
+            Assert.AreEqual(EventLoggingLevels.High, this.instanceParameters.EventLoggingLevel);
+            Assert.AreNotEqual(eventLoggingLevelOld, this.instanceParameters.EventLoggingLevel);
+            this.instanceParameters.EventLoggingLevel = eventLoggingLevelOld;
+        }
+
+        /// <summary>
         /// Test setting the one database per session property to true.
         /// </summary>
         [TestMethod]

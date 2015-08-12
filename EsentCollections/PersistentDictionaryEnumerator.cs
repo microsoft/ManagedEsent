@@ -89,7 +89,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
-        /// Resets the enumerator. The next call to MoveNext will move
+        /// Resets the enumerator. The next call to <see cref="MoveNext"/> will move
         /// to the first entry.
         /// </summary>
         public void Reset()
@@ -115,36 +115,40 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </returns>
         public bool MoveNext()
         {
-            // Moving to the end is sticky (until Reset is called)
-            if (this.isAtEnd)
-            {
-                return false;
-            }
-
-            if (null == this.cursor)
-            {
-                this.cursor = this.dictionary.GetCursor();
-                using (this.cursor.BeginReadOnlyTransaction())
-                {
-                    if (this.cursor.SetIndexRange(this.range) && this.MoveToMatch())
+            return this.dictionary.ReturnReadLockedOperation(
+                () =>
                     {
-                        return true;
-                    }
-                }
-            }
-            else
-            {
-                using (this.cursor.BeginReadOnlyTransaction())
-                {
-                    if (this.cursor.TryMoveNext() && this.MoveToMatch())
-                    {
-                        return true;
-                    }
-                }                
-            }
+                        // Moving to the end is sticky (until Reset is called)
+                        if (this.isAtEnd)
+                        {
+                            return false;
+                        }
 
-            this.isAtEnd = true;
-            return false;
+                        if (null == this.cursor)
+                        {
+                            this.cursor = this.dictionary.GetCursor();
+                            using (this.cursor.BeginReadOnlyTransaction())
+                            {
+                                if (this.cursor.SetIndexRange(this.range) && this.MoveToMatch())
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            using (this.cursor.BeginReadOnlyTransaction())
+                            {
+                                if (this.cursor.TryMoveNext() && this.MoveToMatch())
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+
+                        this.isAtEnd = true;
+                        return false;
+                    });
         }
 
         /// <summary>
@@ -154,20 +158,24 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>True if a matching entry was found.</returns>
         private bool MoveToMatch()
         {
-            TReturn candidate = this.getter(this.cursor);
+            return this.dictionary.ReturnReadLockedOperation(
+                () =>
+                    {
+                        TReturn candidate = this.getter(this.cursor);
 
-            while (!this.predicate(candidate))
-            {
-                if (!this.cursor.TryMoveNext())
-                {
-                    return false;
-                }
+                        while (!this.predicate(candidate))
+                        {
+                            if (!this.cursor.TryMoveNext())
+                            {
+                                return false;
+                            }
 
-                candidate = this.getter(this.cursor);
-            }
+                            candidate = this.getter(this.cursor);
+                        }
 
-            this.Current = candidate;
-            return true;
+                        this.Current = candidate;
+                        return true;
+                    });
         }
 
         /// <summary>

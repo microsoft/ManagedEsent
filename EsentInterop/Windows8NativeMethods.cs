@@ -44,15 +44,40 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetOpenTemporaryTable2(IntPtr sesid, [In] [Out] ref NATIVE_OPENTEMPORARYTABLE2 popentemporarytable);
 
-        #region Misc
-        // FUTURE-2011/10/01-BrettSh - After so much time was burned trying to get JetSetSessionParameter() to work
-        // I don't have time to try JetGetSessionParameter.  Since store doesn't need it, I'm leaving it unimplemented
-        // for now.
+        #region Session Parameters
         [DllImport(EsentDll, ExactSpelling = true)]
-        public static extern int JetSetSessionParameter(IntPtr sesid, uint sesparamid, IntPtr data, int dataSize);
+        public static extern int JetGetSessionParameter(
+            IntPtr sesid,
+            uint sesparamid,
+            out int data,
+            int dataSize,
+            out int actualDataSize);
 
-        //// UNDONE: JetGetSessionParameterW()
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetGetSessionParameter(
+            IntPtr sesid,
+            uint sesparamid,
+            [Out] byte[] data,
+            int dataSize,
+            out int actualDataSize);
 
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetSetSessionParameter(
+            IntPtr sesid,
+            uint sesparamid,
+            byte[] data,
+            int dataSize);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetSetSessionParameter(
+            IntPtr sesid,
+            uint sesparamid,
+            ref int data,
+            int dataSize);
+
+        #endregion
+
+        #region Misc
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetCommitTransaction2(
             IntPtr sesid,

@@ -945,16 +945,6 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         int JetBeginTransaction2(JET_SESID sesid, BeginTransactionGrbit grbit);
 
         /// <summary>
-        /// Causes a session to enter a transaction or create a new save point in an existing
-        /// transaction.
-        /// </summary>
-        /// <param name="sesid">The session to begin the transaction for.</param>
-        /// <param name="userTransactionId">An optional identifier supplied by the user for identifying the transaction.</param>
-        /// <param name="grbit">Transaction options.</param>
-        /// <returns>An error if the call fails.</returns>
-        int JetBeginTransaction3(JET_SESID sesid, long userTransactionId, BeginTransactionGrbit grbit);
-
-        /// <summary>
         /// Commits the changes made to the state of the database during the current save point
         /// and migrates them to the previous save point. If the outermost save point is committed
         /// then the changes made during that save point will be committed to the state of the
@@ -1294,12 +1284,14 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The table containing the column.</param>
         /// <param name="ignored">The parameter is ignored.</param>
+        /// <param name="grbit">Additional options for JetGetTableColumnInfo.</param>
         /// <param name="columnlist">Filled in with information about the columns in the table.</param>
         /// <returns>An error if the call fails.</returns>
         int JetGetTableColumnInfo(
             JET_SESID sesid,
             JET_TABLEID tableid,
             string ignored,
+            ColInfoGrbit grbit,
             out JET_COLUMNLIST columnlist);
 
         #endregion

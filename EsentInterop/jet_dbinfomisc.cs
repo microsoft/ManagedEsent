@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
@@ -260,7 +261,7 @@ namespace Microsoft.Isam.Esent.Interop
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
-        Justification = "This should match the unmanaged API, which isn't capitalized.")]
+        Justification = "Need to avoid clash between members and properties.")]
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1309:FieldNamesMustNotBeginWithUnderscore",
@@ -268,6 +269,7 @@ namespace Microsoft.Isam.Esent.Interop
     [Serializable]
     public sealed partial class JET_DBINFOMISC : IEquatable<JET_DBINFOMISC>
     {
+        #region Fields
         /// <summary>
         /// Version of Esent that created the database.
         /// </summary>
@@ -465,6 +467,10 @@ namespace Microsoft.Isam.Esent.Interop
         /// <see cref="_bkinfoFullPrev"/> is set.
         /// </summary>
         private JET_BKINFO _bkinfoDiffPrev;
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// Gets the version of Esent that created the database.
@@ -863,6 +869,8 @@ namespace Microsoft.Isam.Esent.Interop
             internal set { this._bkinfoDiffPrev = value; }
         }
 
+        #endregion
+
         /// <summary>
         /// Gets a string representation of this object.
         /// </summary>
@@ -921,7 +929,10 @@ namespace Microsoft.Isam.Esent.Interop
                 this._bkinfoDiffPrev.GetHashCode(),
             };
 
-            return Util.CalculateHashCode(hashes);
+            var listHashes = new List<int>(hashes);
+            this.AddNotYetPublishedHashCodes(listHashes);
+
+            return Util.CalculateHashCode(listHashes);
         }
 
         /// <summary>
@@ -955,7 +966,11 @@ namespace Microsoft.Isam.Esent.Interop
                 return false;
             }
 
-            return this._ulVersion == other._ulVersion
+            bool notYetPublishedEquals = true;
+            this.NotYetPublishedEquals(other, ref notYetPublishedEquals);
+
+            return notYetPublishedEquals
+                   && this._ulVersion == other._ulVersion
                    && this._ulUpdate == other._ulUpdate
                    && this._signDb == other._signDb
                    && this._dbstate == other._dbstate
@@ -1129,5 +1144,22 @@ namespace Microsoft.Isam.Esent.Interop
 
             return native;
         }
+
+        /// <summary>
+        /// Provides a hook to allow comparison of additional fields in
+        /// a different file. These additonal fields are not yet published
+        /// on MSDN.
+        /// </summary>
+        /// <param name="other">The structure to compare with.</param>
+        /// <param name="notYetPublishedEquals">Whether the additional fields in <paramref name="other"/>
+        /// are the same as this.</param>
+        partial void NotYetPublishedEquals(JET_DBINFOMISC other, ref bool notYetPublishedEquals);
+
+        /// <summary>
+        /// Provides a hook to allow additional fields to be calculated in the hashcode.
+        /// These additonal fields are not yet published on MSDN.
+        /// </summary>
+        /// <param name="hashCodes">The list of hashcodes to add to.</param>
+        partial void AddNotYetPublishedHashCodes(IList<int> hashCodes);
     }
 }

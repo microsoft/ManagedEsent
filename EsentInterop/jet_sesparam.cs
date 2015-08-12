@@ -9,6 +9,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
     /// <summary>
     /// ESENT session parameters.
     /// </summary>
+    /// <seealso cref="Windows10.Windows10Sesparam"/>
     public enum JET_sesparam
     {
         /// <summary>
@@ -19,6 +20,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
         /// <summary>
         /// This parameter sets the grbits for commit.  It is functionally the same as the
         /// system parameter JET_param.CommitDefault when used with an instance and a sesid.
+        /// Note: JET_param.CommitDefault is not currently exposed in the ESE interop layer.
         /// </summary>
         CommitDefault = Base + 1,
 

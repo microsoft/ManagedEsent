@@ -27,9 +27,9 @@ namespace EsentCollectionsTests
         /// </summary>
         private const int N =
 #if DEBUG
-        100000;
+        50 * 1000;
 #else
-        1000000;
+        1000 * 1000;
 #endif
 
         /// <summary>
@@ -72,6 +72,7 @@ namespace EsentCollectionsTests
         /// </summary>
         [TestMethod]
         [Priority(4)]
+        [Timeout(10 * 60 * 1000)]
         public void TestPersistentDictionarySequentialInsertAndLookupSpeed()
         {
             using (var dictionary = new PersistentDictionary<long, string>(DictionaryLocation))
@@ -107,11 +108,13 @@ namespace EsentCollectionsTests
         /// </summary>
         [TestMethod]
         [Priority(4)]
+        [Timeout(10 * 60 * 1000)]
         public void TestPersistentDictionaryBoxing()
         {
             using (var dictionary = new PersistentDictionary<long, long>(DictionaryLocation))
             {
-                long[] keys = (from x in Enumerable.Range(0, N) select (long)x).ToArray();
+                int numberOfRecords = N / 6;
+                long[] keys = (from x in Enumerable.Range(0, numberOfRecords) select (long)x).ToArray();
 
                 long data = 1;
                 long newData = 2;
@@ -126,7 +129,7 @@ namespace EsentCollectionsTests
                 ScanEntries(dictionary);
 
                 // Retrieve one record
-                RetrieveOneRecord(dictionary, 1000000, 3);
+                RetrieveOneRecord(dictionary, numberOfRecords * 2, 3);
 
                 // Now lookup entries
                 keys.Shuffle();
@@ -148,6 +151,7 @@ namespace EsentCollectionsTests
         /// </summary>
         [TestMethod]
         [Priority(4)]
+        [Timeout(10 * 60 * 1000)]
         public void TestPersistentDictionaryRandomInsertAndLookupSpeed()
         {
             using (var dictionary = new PersistentDictionary<long, string>(DictionaryLocation))
@@ -180,7 +184,7 @@ namespace EsentCollectionsTests
             SequentialInsertLookupAndUpdate(dictionary);
             SlowLinqQueries(dictionary, 1000);
             LinqQueries(dictionary, 10000);
-            FastLinqQueries(dictionary, 100000);
+            FastLinqQueries(dictionary, 50 * 1000);
         }
 
         /// <summary>
@@ -205,7 +209,7 @@ namespace EsentCollectionsTests
             RandomInsertLookupAndUpdate(dictionary);
             SlowLinqQueries(dictionary, 1000);
             LinqQueries(dictionary, 10000);
-            FastLinqQueries(dictionary, 100000);
+            FastLinqQueries(dictionary, 50 * 1000);
         }
 
         /// <summary>
@@ -294,8 +298,8 @@ namespace EsentCollectionsTests
                 "Did {0:N0} LINQ queries in {1} ({2:N0} queries/second, {3:N0} records/second)",
                 numQueries,
                 stopwatch.Elapsed,
-                numQueries * 1000 / stopwatch.ElapsedMilliseconds,
-                total * 1000 / stopwatch.ElapsedMilliseconds);
+                numQueries * 1000 / stopwatch.Elapsed.TotalMilliseconds,
+                total * 1000 / stopwatch.Elapsed.TotalMilliseconds);
         }
 
         /// <summary>
@@ -327,8 +331,8 @@ namespace EsentCollectionsTests
                 "Did {0:N0} LINQ queries in {1} ({2:N0} queries/second, {3:N0} records/second)",
                 numQueries,
                 stopwatch.Elapsed,
-                numQueries * 1000 / stopwatch.ElapsedMilliseconds,
-                total * 1000 / stopwatch.ElapsedMilliseconds);
+                numQueries * 1000 / stopwatch.Elapsed.TotalMilliseconds,
+                total * 1000 / stopwatch.Elapsed.TotalMilliseconds);
         }
 
         /// <summary>
@@ -355,11 +359,11 @@ namespace EsentCollectionsTests
 
             stopwatch.Stop();
             Console.WriteLine(
-                "Did {0:N0} LINQ queries in {1} ({2:N0} queries/second, {3:N0} records/second)",
+                "Did {0:N0} IDictionary LINQ queries in {1} ({2:N0} queries/second, {3:N0} records/second)",
                 numQueries,
                 stopwatch.Elapsed,
-                numQueries * 1000 / stopwatch.ElapsedMilliseconds,
-                total * 1000 / stopwatch.ElapsedMilliseconds);
+                numQueries * 1000 / stopwatch.Elapsed.TotalMilliseconds,
+                total * 1000 / stopwatch.Elapsed.TotalMilliseconds);
         }
 
         /// <summary>
@@ -389,8 +393,8 @@ namespace EsentCollectionsTests
                 "Did {0:N0} PersistentDictionary LINQ queries in {1} ({2:N0} queries/second, {3:N0} records/second)",
                 numQueries,
                 stopwatch.Elapsed,
-                numQueries * 1000 / stopwatch.ElapsedMilliseconds,
-                total * 1000 / stopwatch.ElapsedMilliseconds);
+                numQueries * 1000 / stopwatch.Elapsed.TotalMilliseconds,
+                total * 1000 / stopwatch.Elapsed.TotalMilliseconds);
         }
 
         /// <summary>
@@ -422,11 +426,11 @@ namespace EsentCollectionsTests
             stopwatch.Stop();
             stopwatch.Stop();
             Console.WriteLine(
-                "Did {0:N0} LINQ queries in {1} ({2:N0} queries/second, {3:N0} records/second)",
+                "Did {0:N0} IDictionary Fast LINQ queries against in {1} ({2:N0} queries/second, {3:N0} records/second)",
                 numQueries,
                 stopwatch.Elapsed,
-                numQueries * 1000 / stopwatch.ElapsedMilliseconds,
-                total * 1000 / stopwatch.ElapsedMilliseconds);
+                numQueries * 1000 / stopwatch.Elapsed.TotalMilliseconds,
+                total * 1000 / stopwatch.Elapsed.TotalMilliseconds);
         }
 
         /// <summary>
@@ -459,11 +463,11 @@ namespace EsentCollectionsTests
             stopwatch.Stop();
             stopwatch.Stop();
             Console.WriteLine(
-                "Did {0:N0} PersistentDictionary LINQ queries in {1} ({2:N0} queries/second, {3:N0} records/second)",
+                "Did {0:N0} PersistentDictionary Fast LINQ queries in {1} ({2:N0} queries/second, {3:N0} records/second)",
                 numQueries,
                 stopwatch.Elapsed,
-                numQueries * 1000 / stopwatch.ElapsedMilliseconds,
-                total * 1000 / stopwatch.ElapsedMilliseconds);
+                numQueries * 1000 / stopwatch.Elapsed.TotalMilliseconds,
+                total * 1000 / stopwatch.Elapsed.TotalMilliseconds);
         }
 
         /// <summary>
@@ -490,7 +494,7 @@ namespace EsentCollectionsTests
                 "Read one record {0:N0} times {1} ({2:N0} reads/second)",
                 numRetrieves,
                 stopwatch.Elapsed,
-                numRetrieves * 1000 / stopwatch.ElapsedMilliseconds);
+                numRetrieves * 1000 / stopwatch.Elapsed.TotalMilliseconds);
         }
 
         /// <summary>
@@ -515,7 +519,7 @@ namespace EsentCollectionsTests
                 "Updated {0:N0} records in {1} ({2:N0} records/second)",
                 keys.Count,
                 stopwatch.Elapsed,
-                keys.Count * 1000 / stopwatch.ElapsedMilliseconds);
+                keys.Count * 1000 / stopwatch.Elapsed.TotalMilliseconds);
         }
 
         /// <summary>
@@ -543,7 +547,7 @@ namespace EsentCollectionsTests
                 "Looked up {0:N0} records in {1} ({2:N0} records/second)",
                 keys.Count,
                 stopwatch.Elapsed,
-                keys.Count * 1000 / stopwatch.ElapsedMilliseconds);
+                keys.Count * 1000 / stopwatch.Elapsed.TotalMilliseconds);
         }
 
         /// <summary>
@@ -567,7 +571,7 @@ namespace EsentCollectionsTests
                 "Scanned {0:N0} records in {1} ({2:N0} records/second)",
                 i,
                 stopwatch.Elapsed,
-                i * 1000 / stopwatch.ElapsedMilliseconds);
+                i * 1000 / stopwatch.Elapsed.TotalMilliseconds);
         }
 
         /// <summary>
@@ -592,7 +596,7 @@ namespace EsentCollectionsTests
                 "Inserted {0:N0} records in {1} ({2:N0} records/second)",
                 keys.Count,
                 stopwatch.Elapsed,
-                keys.Count * 1000 / stopwatch.ElapsedMilliseconds);
+                keys.Count * 1000 / stopwatch.Elapsed.TotalMilliseconds);
         }
     }
 }

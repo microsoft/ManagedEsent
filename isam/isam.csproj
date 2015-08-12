@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EsentIsam</RootNamespace>
     <AssemblyName>Esent.Isam</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <PublicKeyFile>..\scripts\internal\35MSSharedLib1024.snk</PublicKeyFile>
@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="*.cs" Exclude="assemblyinfo.cs" />
     <Compile Include="properties\assemblyinfo.cs" />
+    <Compile Include="config\*.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EsentInterop\EsentInterop.csproj">

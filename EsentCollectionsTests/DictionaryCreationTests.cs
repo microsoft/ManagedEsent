@@ -12,6 +12,7 @@ namespace EsentCollectionsTests
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using Microsoft.Database.Isam.Config;
     using Microsoft.Isam.Esent.Collections.Generic;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -40,7 +41,52 @@ namespace EsentCollectionsTests
         [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyConstructorThrowsExceptionWhenDirectoryIsNull()
         {
-            var dictionary = new PersistentDictionary<int, int>(null);
+            var dictionary = new PersistentDictionary<int, int>((string)null);
+        }
+
+        /// <summary>
+        /// Creating a dictionary without an IConfigSet fails.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void VerifyConstructorThrowsExceptionWhenConfigSetIsNull()
+        {
+            var dictionary = new PersistentDictionary<int, int>((IConfigSet)null);
+        }
+
+        /// <summary>
+        /// Creating a dictionary without a directory and an IConfigSet fails.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ArgumentException))]
+        public void VerifyConstructorThrowsExceptionWhenDirectoryAndConfigSetIsNull()
+        {
+            var dictionary = new PersistentDictionary<int, int>((string)null, (IConfigSet)null);
+        }
+
+        /// <summary>
+        /// Creating a dictionary with a conflicting directory and an IConfigSet fails.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [ExpectedException(typeof(ConfigSetMergeException))]
+        public void VerifyConstructorThrowsExceptionWhenDirectoryAndConfigSetConflict()
+        {
+            const string DictionaryLocation = "ConfigSetDictionary";
+            string dictionaryFilename = Path.Combine(DictionaryLocation, "configsetDict.edb");
+            var config = new DatabaseConfig()
+            {
+                DatabasePageSize = 32 * 1024,
+                DatabaseFilename = dictionaryFilename,
+                SystemPath = "DifferentPath",
+                TableClass1Name = "_test_",
+            };
+
+            using (var pd = new PersistentDictionary<int, Guid?>(DictionaryLocation, config))
+            {
+            }
         }
 
         /// <summary>
@@ -84,7 +130,7 @@ namespace EsentCollectionsTests
         [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyExistsThrowsExceptionWhenDirectoryIsNull()
         {
-            PersistentDictionaryFile.Exists(null);
+            PersistentDictionaryFile.Exists((string)null);
         }
 
         /// <summary>
@@ -135,7 +181,7 @@ namespace EsentCollectionsTests
         [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyDeleteThrowsExceptionWhenDirectoryIsNull()
         {
-            PersistentDictionaryFile.DeleteFiles(null);
+            PersistentDictionaryFile.DeleteFiles((string)null);
         }
 
         /// <summary>
@@ -289,6 +335,70 @@ namespace EsentCollectionsTests
             DictionaryAssert.AreEqual(expected, actual);
             actual.Dispose();
             Cleanup.DeleteDirectoryWithRetry(DictionaryLocation);            
+        }
+
+        /// <summary>
+        /// Create a dictionary with custom configuration.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void VerifyCreateDictionaryFromConfigSet()
+        {
+            const string DictionaryLocation = "ConfigSetDictionary";
+            string dictionaryFilename = Path.Combine(DictionaryLocation, "configsetDict.edb");
+            var config = new DatabaseConfig()
+            {
+                DatabasePageSize = 32 * 1024,
+                DatabaseFilename = dictionaryFilename,
+                SystemPath = DictionaryLocation,
+                LogFilePath = DictionaryLocation,
+                TempPath = DictionaryLocation,
+                TableClass1Name = "_test_",
+            };
+            
+            var pd = new PersistentDictionary<int, Guid?>(config);
+            for (int i = 0; i < 256; i++)
+            {
+                pd[i] = Guid.NewGuid();
+            }
+
+            Assert.AreEqual(pd.Database.Config.DatabasePageSize, 32 * 1024);
+            Assert.AreEqual(pd.Database.Config.TableClass1Name, "_test_");
+            
+            pd.Dispose();
+            
+            Assert.IsTrue(File.Exists(dictionaryFilename));
+            Cleanup.DeleteDirectoryWithRetry(DictionaryLocation);
+        }
+
+        /// <summary>
+        /// Create a dictionary with a directory and custom configuration.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        public void VerifyCreateDictionaryFromDirectoryAndConfigSet()
+        {
+            const string DictionaryLocation = "ConfigSetDictionary";
+            var config = new DatabaseConfig()
+            {
+                DatabasePageSize = 32 * 1024,
+                TableClass1Name = "_test_",
+            };
+
+            var pd = new PersistentDictionary<int, Guid?>(DictionaryLocation, config);
+            for (int i = 0; i < 256; i++)
+            {
+                pd[i] = Guid.NewGuid();
+            }
+
+            Assert.AreEqual(pd.Database.Config.DatabasePageSize, 32 * 1024);
+            Assert.AreEqual(pd.Database.Config.TableClass1Name, "_test_");
+
+            pd.Dispose();
+
+            Assert.IsTrue(Directory.Exists(DictionaryLocation));
+            Assert.AreEqual(DictionaryLocation, pd.DatabasePath);
+            Cleanup.DeleteDirectoryWithRetry(DictionaryLocation);
         }
 
         /// <summary>

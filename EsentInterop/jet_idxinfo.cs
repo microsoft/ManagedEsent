@@ -8,10 +8,15 @@ namespace Microsoft.Isam.Esent.Interop
 {
     using System;
 
+    using Win7 = Microsoft.Isam.Esent.Interop.Windows7;
+    using Win8 = Microsoft.Isam.Esent.Interop.Windows8;
+
     /// <summary>
     /// Info levels for retrieve index information with JetGetIndexInfo.
     /// and JetGetTableIndexInfo.
     /// </summary>
+    /// <seealso cref="Win7.Windows7IdxInfo"/>
+    /// <seealso cref="Win8.Windows8IdxInfo"/>
     public enum JET_IdxInfo
     {
         /// <summary>

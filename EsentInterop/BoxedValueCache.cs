@@ -22,7 +22,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Cached boxed values.
         /// </summary>
-        private static readonly IEquatable<T>[] BoxedValues = new IEquatable<T>[NumCachedBoxedValues];
+        private static readonly object[] BoxedValues = new object[NumCachedBoxedValues];
 
         /// <summary>
         /// Gets a boxed version of the value. A cached copy is used if possible.
@@ -38,14 +38,14 @@ namespace Microsoft.Isam.Esent.Interop
 
             T valueToBox = value.Value;
             int index = (valueToBox.GetHashCode() & 0x7fffffff) % NumCachedBoxedValues;
-            IEquatable<T> boxedValue = BoxedValues[index];
-            if (null == boxedValue || !boxedValue.Equals(valueToBox))
+            object boxedValue = BoxedValues[index];
+            if (null == boxedValue || !((T)boxedValue).Equals(valueToBox))
             {
                 boxedValue = valueToBox;
                 BoxedValues[index] = boxedValue;
             }
 
             return boxedValue;
-        }    
+        }
     }
 }

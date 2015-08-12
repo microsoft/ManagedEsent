@@ -151,10 +151,11 @@ namespace Microsoft.Isam.Esent.Interop
                         // Retrieve the columns
                         Api.Check(Api.Impl.JetRetrieveColumns(sesid, tableid, nativeRetrievecolumns, columnValues.Length));
 
-                        // Propagate the warnings.
+                        // Propagate the warnings and output.
                         for (int i = 0; i < columnValues.Length; ++i)
                         {
                             columnValues[i].Error = (JET_wrn)nativeRetrievecolumns[i].err;
+                            columnValues[i].ItagSequence = (int)nativeRetrievecolumns[i].itagSequence;
                         }
 
                         // Now parse out the columns that were retrieved successfully

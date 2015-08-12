@@ -7,7 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop.Windows81
 {
     /// <summary>
-    /// System parameters that were introduced in Windows 8.
+    /// System parameters that were introduced in Windows 8.1.
     /// </summary>
     public static class Windows81Param
     {

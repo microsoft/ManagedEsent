@@ -7,13 +7,12 @@
 
 namespace Microsoft.Isam.Esent.Interop.Win32
 {
-#if !MANAGEDESENT_ON_WSA // None of this can be called in windows store apps.
-
     using System;
     using System.ComponentModel;
     using System.Runtime.ConstrainedExecution;
     using System.Runtime.InteropServices;
 
+#if !MANAGEDESENT_ON_WSA // None of this can be called in windows store apps.
     /// <summary>
     /// Allocation type options for <see cref="NativeMethods.VirtualAlloc"/>.
     /// </summary>
@@ -52,13 +51,14 @@ namespace Microsoft.Isam.Esent.Interop.Win32
         /// </summary>
         MEM_RELEASE = 0x8000,
     }
+#endif
 
     /// <summary>
     /// P/Invoke methods for Win32 functions.
     /// </summary>
     internal static class NativeMethods
     {
-#if MANAGEDESENT_ON_CORECLR
+#if MANAGEDESENT_ON_CORECLR || MANAGEDESENT_ON_WSA
         /// <summary>
         /// The name of the DLL that holds the Core Memory API set.
         /// </summary>
@@ -69,6 +69,11 @@ namespace Microsoft.Isam.Esent.Interop.Win32
         /// (Might be api-ms-win-core-heap-obsolete-l1-1-0.dll.)
         /// </summary>
         private const string HeapObsolete = "kernelbase";
+
+        /// <summary>
+        /// The name of the DLL that holds the Core process/threads API set.
+        /// </summary>
+        private const string WinCoreProcessThreads = "api-ms-win-core-processthreads-l1-1-1.dll";
 #else
         /// <summary>
         /// The name of the DLL that holds the Core Memory API set.
@@ -79,8 +84,14 @@ namespace Microsoft.Isam.Esent.Interop.Win32
         /// The name of the DLL that holds the Obsolete Heap API set.
         /// </summary>
         private const string HeapObsolete = "kernel32.dll";
-#endif // MANAGEDESENT_ON_CORECLR
 
+        /// <summary>
+        /// The name of the DLL that holds the Core process/threads API set.
+        /// </summary>
+        private const string WinCoreProcessThreads = "kernel32.dll";
+#endif // MANAGEDESENT_ON_CORECLR || MANAGEDESENT_ON_WSA
+
+#if !MANAGEDESENT_ON_WSA // None of this can be called in windows store apps.
         /// <summary>
         /// Throw an exception if the given pointer is null (IntPtr.Zero).
         /// </summary>
@@ -120,7 +131,11 @@ namespace Microsoft.Isam.Esent.Interop.Win32
 
         [DllImport(HeapObsolete)]
         public static extern IntPtr LocalFree(IntPtr hglobal);
-    }
 
 #endif // !MANAGEDESENT_ON_WSA
+
+        // Win32 APIs that are white-listed for Windows Store Apps can be safely referenced here.
+        [DllImport(WinCoreProcessThreads)]
+        public static extern int GetCurrentProcessId();
+    }
 }

@@ -4,7 +4,7 @@
 #   Do not use, go to the ese dev root, and call gengen.bat
 #
 
-$jetapifile = 'src\ese\jetapi.cxx';
+$jetapifile = 'src\ese\sysparamtable.g.cxx';
 open(my $jetapifileHandle, "<", $jetapifile) or die "Can't open $jetapifile!";
 
 my $public = 0;

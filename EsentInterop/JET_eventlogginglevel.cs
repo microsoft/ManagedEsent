@@ -6,8 +6,6 @@
 
 namespace Microsoft.Isam.Esent.Interop
 {
-    using System;
-
     /// <summary>
     /// Options for EventLoggingLevel.
     /// </summary>
@@ -19,22 +17,22 @@ namespace Microsoft.Isam.Esent.Interop
         Disable = 0,
 
         /// <summary>
-        /// Default level.
+        /// Default level. Windows 7 and later.
         /// </summary>
         Min = 1,
 
         /// <summary>
-        /// Low verbosity and lower.
+        /// Low verbosity and lower. Windows 7 and later.
         /// </summary>
         Low = 25,
 
         /// <summary>
-        /// Medium verbosity and lower.
+        /// Medium verbosity and lower. Windows 7 and later.
         /// </summary>
         Medium = 50,
 
         /// <summary>
-        /// High verbosity and lower.
+        /// High verbosity and lower. Windows 7 and later.
         /// </summary>
         High = 75,
 

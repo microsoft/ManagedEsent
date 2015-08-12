@@ -262,7 +262,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-                return Err(NativeMethods.JetInit3W(ref instance.Value, IntPtr.Zero, (uint)grbit));                
+                return Err(NativeMethods.JetInit3W(ref instance.Value, IntPtr.Zero, (uint)grbit));
             }
         }
 
@@ -297,12 +297,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 else
                 {
                     err = NativeMethods.JetGetInstanceInfo(out nativeNumInstance, out nativeInstanceInfos);
-                    instances = this.ConvertInstanceInfosAscii(nativeNumInstance, nativeInstanceInfos);                    
+                    instances = this.ConvertInstanceInfosAscii(nativeNumInstance, nativeInstanceInfos);
                 }
-                
+
                 numInstances = instances.Length;
 
-                return Err(err);                
+                return Err(err);
             }
         }
 
@@ -322,7 +322,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             int err = NativeMethods.JetGetInstanceMiscInfo(
                 instance.Value,
                 ref nativeSignature,
-                checked((uint)NATIVE_SIGNATURE.Size), 
+                checked((uint)NATIVE_SIGNATURE.Size),
                 unchecked((uint)infoLevel));
 
             signature = new JET_SIGNATURE(nativeSignature);
@@ -350,7 +350,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetStopServiceInstance(JET_INSTANCE instance)
         {
             TraceFunctionCall("JetStopServiceInstance");
-            return Err(NativeMethods.JetStopServiceInstance(instance.Value));            
+            return Err(NativeMethods.JetStopServiceInstance(instance.Value));
         }
 #endif // !MANAGEDESENT_ON_WSA
 
@@ -576,7 +576,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             else
             {
                 // Get the version from Esent
-                err = Err(NativeMethods.JetGetVersion(sesid.Value, out nativeVersion));                
+                err = Err(NativeMethods.JetGetVersion(sesid.Value, out nativeVersion));
             }
 
             version = nativeVersion;
@@ -665,7 +665,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             if (this.Capabilities.SupportsUnicodePaths)
             {
-                return Err(NativeMethods.JetAttachDatabaseW(sesid.Value, database, (uint)grbit));                
+                return Err(NativeMethods.JetAttachDatabaseW(sesid.Value, database, (uint)grbit));
             }
 
             return Err(NativeMethods.JetAttachDatabase(sesid.Value, database, (uint)grbit));
@@ -722,7 +722,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             if (this.Capabilities.SupportsUnicodePaths)
             {
-                return Err(NativeMethods.JetOpenDatabaseW(sesid.Value, database, connect, out dbid.Value, (uint)grbit));                
+                return Err(NativeMethods.JetOpenDatabaseW(sesid.Value, database, connect, out dbid.Value, (uint)grbit));
             }
 
 #if MANAGEDESENT_ON_WSA
@@ -761,7 +761,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #else
             if (this.Capabilities.SupportsUnicodePaths)
             {
-                return Err(NativeMethods.JetDetachDatabaseW(sesid.Value, database));                
+                return Err(NativeMethods.JetDetachDatabaseW(sesid.Value, database));
             }
 
             return Err(NativeMethods.JetDetachDatabase(sesid.Value, database));
@@ -898,11 +898,11 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             else
             {
                 err = Err(NativeMethods.JetSetDatabaseSize(
-                            sesid.Value, database, checked((uint)desiredPages), out actualPagesNative));                
+                            sesid.Value, database, checked((uint)desiredPages), out actualPagesNative));
             }
 
             actualPages = checked((int)actualPagesNative);
-            return err;            
+            return err;
         }
 #endif // !MANAGEDESENT_ON_WSA
 
@@ -1111,9 +1111,17 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_DbInfo infoLevel)
         {
             TraceFunctionCall("JetGetDatabaseFileInfo");
-            int err;
+            int err = (int)JET_err.Success;
+            dbinfomisc = null;
 
-            if (this.Capabilities.SupportsWindows7Features)
+            bool notYetPublishedSupported = false;
+            this.NotYetPublishedGetDbinfomisc(databaseName, ref dbinfomisc, infoLevel, ref notYetPublishedSupported, ref err);
+
+            if (notYetPublishedSupported)
+            {
+                // The not-yet-published function in the other file set the 'ref' parameters.
+            }
+            else if (this.Capabilities.SupportsWindows7Features)
             {
                 // Windows7 -> Unicode path support
                 NATIVE_DBINFOMISC4 native;
@@ -1140,7 +1148,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 }
                 else
                 {
-                    err = Err(NativeMethods.JetGetDatabaseFileInfo(databaseName, out native, (uint)Marshal.SizeOf(typeof(NATIVE_DBINFOMISC)), (uint)infoLevel));                    
+                    err = Err(NativeMethods.JetGetDatabaseFileInfo(databaseName, out native, (uint)Marshal.SizeOf(typeof(NATIVE_DBINFOMISC)), (uint)infoLevel));
                 }
 
                 dbinfomisc = new JET_DBINFOMISC();
@@ -1188,7 +1196,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             }
             else
             {
-                err = Err(NativeMethods.JetBackupInstance(instance.Value, destination, (uint)grbit, functionPointer));                
+                err = Err(NativeMethods.JetBackupInstance(instance.Value, destination, (uint)grbit, functionPointer));
             }
 
             callbackWrapper.ThrowSavedException();
@@ -1199,7 +1207,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// Restores and recovers a streaming backup of an instance including all
         /// the attached databases. It is designed to work with a backup created
         /// with the <see cref="Api.JetBackupInstance"/> function. This is the
-        /// simplest and most encapsulated restore function. 
+        /// simplest and most encapsulated restore function.
         /// </summary>
         /// <param name="instance">The instance to use.</param>
         /// <param name="source">
@@ -1229,11 +1237,11 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             int err;
             if (this.Capabilities.SupportsUnicodePaths)
             {
-                err = Err(NativeMethods.JetRestoreInstanceW(instance.Value, source, destination, functionPointer));                
+                err = Err(NativeMethods.JetRestoreInstanceW(instance.Value, source, destination, functionPointer));
             }
             else
             {
-                err = Err(NativeMethods.JetRestoreInstance(instance.Value, source, destination, functionPointer));                
+                err = Err(NativeMethods.JetRestoreInstance(instance.Value, source, destination, functionPointer));
             }
 
             callbackWrapper.ThrowSavedException();
@@ -1310,11 +1318,11 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     err = NativeMethods.JetOSSnapshotFreeze(snapshot.Value, out nativeNumInstance, out nativeInstanceInfos, (uint)grbit);
                     instances = this.ConvertInstanceInfosAscii(nativeNumInstance, nativeInstanceInfos);
                 }
-                
+
                 numInstances = instances.Length;
 
                 return Err(err);
-            }            
+            }
         }
 
         /// <summary>
@@ -1343,9 +1351,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 int err = NativeMethods.JetOSSnapshotGetFreezeInfoW(snapshot.Value, out nativeNumInstance, out nativeInstanceInfos, (uint)grbit);
                 instances = this.ConvertInstanceInfosUnicode(nativeNumInstance, nativeInstanceInfos);
                 numInstances = instances.Length;
-                
+
                 return Err(err);
-            }                        
+            }
         }
 
         /// <summary>
@@ -1408,7 +1416,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         {
             TraceFunctionCall("JetOSSnapshotEnd");
             this.CheckSupportsVistaFeatures("JetOSSnapshotEnd");
-            return Err(NativeMethods.JetOSSnapshotEnd(snapid.Value, (uint)grbit));            
+            return Err(NativeMethods.JetOSSnapshotEnd(snapid.Value, (uint)grbit));
         }
 
         /// <summary>
@@ -1431,7 +1439,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #if !MANAGEDESENT_ON_WSA
 
         /// <summary>
-        /// Initiates an external backup while the engine and database are online and active. 
+        /// Initiates an external backup while the engine and database are online and active.
         /// </summary>
         /// <param name="instance">The instance prepare for backup.</param>
         /// <param name="grbit">Backup options.</param>
@@ -1465,7 +1473,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetEndExternalBackupInstance(JET_INSTANCE instance)
         {
             TraceFunctionCall("JetEndExternalBackupInstance");
-            return Err(NativeMethods.JetEndExternalBackupInstance(instance.Value));  
+            return Err(NativeMethods.JetEndExternalBackupInstance(instance.Value));
         }
 
         /// <summary>
@@ -1493,7 +1501,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <remarks>
         /// It is important to note that this API does not return an error or warning if
         /// the output buffer is too small to accept the full list of files that should be
-        /// part of the backup file set. 
+        /// part of the backup file set.
         /// </remarks>
         /// <param name="instance">The instance to get the information for.</param>
         /// <param name="files">
@@ -1541,14 +1549,14 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         /// <summary>
         /// Used during a backup initiated by <see cref="JetBeginExternalBackupInstance"/>
-        /// to query an instance for the names of database patch files and logfiles that 
-        /// should become part of the backup file set. These files may subsequently be 
+        /// to query an instance for the names of database patch files and logfiles that
+        /// should become part of the backup file set. These files may subsequently be
         /// opened using <see cref="JetOpenFileInstance"/> and read using <see cref="JetReadFileInstance"/>.
         /// </summary>
         /// <remarks>
         /// It is important to note that this API does not return an error or warning if
         /// the output buffer is too small to accept the full list of files that should be
-        /// part of the backup file set. 
+        /// part of the backup file set.
         /// </remarks>
         /// <param name="instance">The instance to get the information for.</param>
         /// <param name="files">
@@ -1591,7 +1599,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 files = LibraryHelpers.EncodingASCII.GetString(szz, 0, Math.Min(szz.Length, (int)bytesActual));
             }
 
-            return err; 
+            return err;
         }
 
         /// <summary>
@@ -1602,7 +1610,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <remarks>
         /// It is important to note that this API does not return an error or warning if
         /// the output buffer is too small to accept the full list of files that should be
-        /// part of the backup file set. 
+        /// part of the backup file set.
         /// </remarks>
         /// <param name="instance">The instance to get the information for.</param>
         /// <param name="files">
@@ -1644,7 +1652,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 actualChars = checked((int)bytesActual);
                 files = LibraryHelpers.EncodingASCII.GetString(szz, 0, Math.Min(szz.Length, (int)bytesActual));
             }
-            
+
             return err;
         }
 
@@ -1679,12 +1687,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             else
             {
                 err = Err(NativeMethods.JetOpenFileInstance(
-                            instance.Value, file, out handle.Value, out nativeFileSizeLow, out nativeFileSizeHigh));                
+                            instance.Value, file, out handle.Value, out nativeFileSizeLow, out nativeFileSizeHigh));
             }
 
             fileSizeLow = nativeFileSizeLow;
             fileSizeHigh = nativeFileSizeHigh;
-            return err;                 
+            return err;
         }
 
         /// <summary>
@@ -1771,7 +1779,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// Associates a session with the current thread using the given context
         /// handle. This association overrides the default engine requirement
         /// that a transaction for a given session must occur entirely on the
-        /// same thread. 
+        /// same thread.
         /// </summary>
         /// <param name="sesid">The session to set the context on.</param>
         /// <param name="context">The context to set.</param>
@@ -1825,7 +1833,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// Retrieves performance information from the database engine for the
         /// current thread. Multiple calls can be used to collect statistics
         /// that reflect the activity of the database engine on this thread
-        /// between those calls. 
+        /// between those calls.
         /// </summary>
         /// <param name="threadstats">
         /// Returns the thread statistics..
@@ -1843,7 +1851,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 fixed (JET_THREADSTATS* rawJetThreadstats = &threadstats)
                 {
                     return Err(NativeMethods.JetGetThreadStats(rawJetThreadstats, JET_THREADSTATS.Size));
-                }                
+                }
             }
         }
 
@@ -1925,7 +1933,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetComputeStats(JET_SESID sesid, JET_TABLEID tableid)
         {
             TraceFunctionCall("JetComputeStats");
-            return Err(NativeMethods.JetComputeStats(sesid.Value, tableid.Value));           
+            return Err(NativeMethods.JetComputeStats(sesid.Value, tableid.Value));
         }
 
         /// <summary>
@@ -1954,7 +1962,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// associated with that cursor. This context handle must have been
         /// previously set using <see cref="JetSetLS"/>. JetGetLS can also
         /// be used to simultaneously fetch the current context handle for
-        /// a cursor or table and reset that context handle.  
+        /// a cursor or table and reset that context handle.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to use.</param>
@@ -2149,11 +2157,11 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                                    out columnid.Value));
 #else
             int err = Err(NativeMethods.JetAddColumn(
-                                   sesid.Value, 
-                                   tableid.Value, 
-                                   column, 
+                                   sesid.Value,
+                                   tableid.Value,
+                                   column,
                                    ref nativeColumndef,
-                                   defaultValue, 
+                                   defaultValue,
                                    checked((uint)defaultValueSize),
                                    out columnid.Value));
 #endif // MANAGEDESENT_ON_WSA
@@ -2207,7 +2215,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The table to create the index on.</param>
         /// <param name="indexName">
-        /// Pointer to a null-terminated string that specifies the name of the index to create. 
+        /// Pointer to a null-terminated string that specifies the name of the index to create.
         /// </param>
         /// <param name="grbit">Index creation options.</param>
         /// <param name="keyDescription">
@@ -2222,7 +2230,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_SESID sesid,
             JET_TABLEID tableid,
             string indexName,
-            CreateIndexGrbit grbit, 
+            CreateIndexGrbit grbit,
             string keyDescription,
             int keyDescriptionLength,
             int density)
@@ -2304,7 +2312,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             if (this.Capabilities.SupportsVistaFeatures)
             {
-                return CreateIndexes1(sesid, tableid, indexcreates, numIndexCreates);                
+                return CreateIndexes1(sesid, tableid, indexcreates, numIndexCreates);
             }
 
             return CreateIndexes(sesid, tableid, indexcreates, numIndexCreates);
@@ -2381,7 +2389,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 sesid.Value, nativecolumndefs, checked((uint)numColumns), (uint)grbit, out tableid.Value, nativecolumnids));
 
             SetColumnids(columns, columnids, nativecolumnids, numColumns);
-            
+
             return err;
 #endif
         }
@@ -2403,7 +2411,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="lcid">
         /// The locale ID to use to compare any Unicode key column data in the temporary table.
         /// Any locale may be used as long as the appropriate language pack has been installed
-        /// on the machine. 
+        /// on the machine.
         /// </param>
         /// <param name="grbit">Table creation options.</param>
         /// <param name="tableid">
@@ -2442,7 +2450,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             SetColumnids(columns, columnids, nativecolumnids, numColumns);
 
-            return err;            
+            return err;
         }
 #endif // !MANAGEDESENT_ON_WSA
 
@@ -2461,8 +2469,8 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="numColumns">Number of column definitions.</param>
         /// <param name="unicodeindex">
         /// The Locale ID and normalization flags that will be used to compare
-        /// any Unicode key column data in the temporary table. When this 
-        /// is not present then the default options are used. 
+        /// any Unicode key column data in the temporary table. When this
+        /// is not present then the default options are used.
         /// </param>
         /// <param name="grbit">Table creation options.</param>
         /// <param name="tableid">
@@ -2506,12 +2514,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             else
             {
                 err = Err(NativeMethods.JetOpenTempTable3(
-                    sesid.Value, nativecolumndefs, checked((uint)numColumns), IntPtr.Zero, (uint)grbit, out tableid.Value, nativecolumnids));                
+                    sesid.Value, nativecolumndefs, checked((uint)numColumns), IntPtr.Zero, (uint)grbit, out tableid.Value, nativecolumnids));
             }
 
             SetColumnids(columns, columnids, nativecolumnids, numColumns);
 
-            return err;            
+            return err;
         }
 
         /// <summary>
@@ -2671,7 +2679,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             var nativeColumndef = new NATIVE_COLUMNDEF();
             nativeColumndef.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_COLUMNDEF)));
-            
+
             if (this.Capabilities.SupportsVistaFeatures)
             {
                 err = Err(NativeMethods.JetGetTableColumnInfoW(
@@ -2800,12 +2808,14 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The table containing the column.</param>
         /// <param name="ignored">The parameter is ignored.</param>
+        /// <param name="grbit">Additional options for JetGetTableColumnInfo.</param>
         /// <param name="columnlist">Filled in with information about the columns in the table.</param>
         /// <returns>An error if the call fails.</returns>
         public int JetGetTableColumnInfo(
                 JET_SESID sesid,
                 JET_TABLEID tableid,
                 string ignored,
+                ColInfoGrbit grbit,
                 out JET_COLUMNLIST columnlist)
         {
             TraceFunctionCall("JetGetTableColumnInfo");
@@ -2823,7 +2833,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     ignored,
                     ref nativeColumnlist,
                     nativeColumnlist.cbStruct,
-                    (uint)JET_ColInfo.List));
+                    (uint)grbit | (uint)JET_ColInfo.List));
             }
             else
             {
@@ -2836,7 +2846,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     ignored,
                     ref nativeColumnlist,
                     nativeColumnlist.cbStruct,
-                    (uint)JET_ColInfo.List));
+                    (uint)grbit | (uint)JET_ColInfo.List));
 #endif
             }
 
@@ -2922,7 +2932,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 string ignored,
                 out JET_COLUMNLIST columnlist)
         {
-            TraceFunctionCall("JetGetColumnInfo");      
+            TraceFunctionCall("JetGetColumnInfo");
             columnlist = new JET_COLUMNLIST();
             CheckNotNull(tablename, "tablename");
             int err;
@@ -3205,7 +3215,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="tableid">The cursor to get the index name for.</param>
         /// <param name="indexName">Returns the name of the index.</param>
         /// <param name="maxNameLength">
-        /// The maximum length of the index name. Index names are no more than 
+        /// The maximum length of the index name. Index names are no more than
         /// Api.MaxNameLength characters.
         /// </param>
         /// <returns>An error if the call fails.</returns>
@@ -3295,7 +3305,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             if (this.Capabilities.SupportsVistaFeatures)
             {
                 err = Err(NativeMethods.JetGetTableInfoW(
-                    sesid.Value, tableid.Value, resultBuffer, (uint)resultBuffer.Capacity, (uint)infoLevel));
+                    sesid.Value, tableid.Value, resultBuffer, (uint)resultBuffer.Capacity * sizeof(char), (uint)infoLevel));
             }
             else
             {
@@ -3303,7 +3313,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 err = Err((int)JET_err.FeatureNotAvailable);
 #else
                 err = Err(NativeMethods.JetGetTableInfo(
-                                        sesid.Value, tableid.Value, resultBuffer, (uint)resultBuffer.Capacity, (uint)infoLevel));
+                    sesid.Value, tableid.Value, resultBuffer, (uint)resultBuffer.Capacity, (uint)infoLevel));
 #endif
             }
 
@@ -3356,7 +3366,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetGetTableInfo(JET_SESID sesid, JET_TABLEID tableid, int[] result, JET_TblInfo infoLevel)
         {
-            TraceFunctionCall("JetGetTableInfo");  
+            TraceFunctionCall("JetGetTableInfo");
             CheckNotNull(result, "result");
 
             uint bytesResult = checked((uint)(result.Length * sizeof(int)));
@@ -3404,7 +3414,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 err = Err(NativeMethods.JetGetTableInfo(sesid.Value, tableid.Value, out nativeResult, sizeof(uint), (uint)infoLevel));
 #endif
             }
-            
+
             result = unchecked((int)nativeResult);
             return err;
         }
@@ -3462,7 +3472,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     (uint)infoLevel));
 #endif
             }
-            
+
             return err;
         }
 
@@ -3950,7 +3960,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetRenameColumn(JET_SESID sesid, JET_TABLEID tableid, string name, string newName, RenameColumnGrbit grbit)
         {
-            TraceFunctionCall("JetRenameColumn");    
+            TraceFunctionCall("JetRenameColumn");
             CheckNotNull(name, "name");
             CheckNotNull(newName, "newName");
 #if MANAGEDESENT_ON_WSA
@@ -3977,7 +3987,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public int JetSetColumnDefaultValue(
             JET_SESID sesid, JET_DBID dbid, string tableName, string columnName, byte[] data, int dataSize, SetColumnDefaultValueGrbit grbit)
         {
-            TraceFunctionCall("JetSetColumnDefaultValue");  
+            TraceFunctionCall("JetSetColumnDefaultValue");
             CheckNotNull(tableName, "tableName");
             CheckNotNull(columnName, "columnName");
             CheckDataSize(data, dataSize, "dataSize");
@@ -3994,7 +4004,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <summary>
         /// Positions a cursor to an index entry for the record that is associated with
         /// the specified bookmark. The bookmark can be used with any index defined over
-        /// a table. The bookmark for a record can be retrieved using <see cref="IJetApi.JetGetBookmark"/>. 
+        /// a table. The bookmark for a record can be retrieved using <see cref="IJetApi.JetGetBookmark"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to position.</param>
@@ -4075,7 +4085,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <summary>
         /// Efficiently positions a cursor to an index entry that matches the search
         /// criteria specified by the search key in that cursor and the specified
-        /// inequality. A search key must have been previously constructed using 
+        /// inequality. A search key must have been previously constructed using
         /// JetMakeKey.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
@@ -4125,7 +4135,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <summary>
         /// Computes the intersection between multiple sets of index entries from different secondary
         /// indices over the same table. This operation is useful for finding the set of records in a
-        /// table that match two or more criteria that can be expressed using index ranges. 
+        /// table that match two or more criteria that can be expressed using index ranges.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="ranges">
@@ -4292,9 +4302,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             // A null index name is valid here -- it will set the table to the primary index
 #if MANAGEDESENT_ON_WSA
-            return Err(NativeMethods.JetSetCurrentIndex4W(sesid.Value, tableid.Value, index, ref indexid, (uint)grbit, checked((uint)itagSequence)));            
+            return Err(NativeMethods.JetSetCurrentIndex4W(sesid.Value, tableid.Value, index, ref indexid, (uint)grbit, checked((uint)itagSequence)));
 #else
-            return Err(NativeMethods.JetSetCurrentIndex4(sesid.Value, tableid.Value, index, ref indexid, (uint)grbit, checked((uint)itagSequence)));            
+            return Err(NativeMethods.JetSetCurrentIndex4(sesid.Value, tableid.Value, index, ref indexid, (uint)grbit, checked((uint)itagSequence)));
 #endif
         }
 
@@ -4303,7 +4313,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// The current position is included in the count. The count can be greater than the
         /// total number of records in the table if the current index is over a multi-valued
         /// column and instances of the column have multiple-values. If the table is empty,
-        /// then 0 will be returned for the count. 
+        /// then 0 will be returned for the count.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to count the records in.</param>
@@ -4326,7 +4336,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// Notifies the database engine that the application is scanning the entire
         /// index that the cursor is positioned on. Consequently, the methods that
         /// are used to access the index data will be tuned to make this scenario as
-        /// fast as possible. 
+        /// fast as possible.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor that will be accessing the data.</param>
@@ -4373,7 +4383,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         /// <summary>
         /// Moves a cursor to a new location that is a fraction of the way through
-        /// the current index. 
+        /// the current index.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to position.</param>
@@ -4442,7 +4452,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
                     err = Err(NativeMethods.JetPrereadKeys(
                                 sesid.Value, tableid.Value, rgpvKeys, rgcbKeys, keyCount, out keysPreread, (uint)grbit));
-                }                
+                }
             }
 
             return err;
@@ -4455,7 +4465,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <summary>
         /// Retrieves the bookmark for the record that is associated with the index entry
         /// at the current position of a cursor. This bookmark can then be used to
-        /// reposition that cursor back to the same record using <see cref="IJetApi.JetGotoBookmark"/>. 
+        /// reposition that cursor back to the same record using <see cref="IJetApi.JetGotoBookmark"/>.
         /// The bookmark will be no longer than <see cref="SystemParameters.BookmarkMost"/>
         /// bytes.
         /// </summary>
@@ -4566,7 +4576,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// index entry that references the current record. In addition to retrieving the
         /// actual column value, JetRetrieveColumn can also be used to retrieve the size
         /// of a column, before retrieving the column data itself so that application
-        /// buffers can be sized appropriately.  
+        /// buffers can be sized appropriately.
         /// </summary>
         /// <remarks>
         /// The RetrieveColumnAs functions provide datatype-specific retrieval functions.
@@ -4712,7 +4722,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             {
                 // Converting to the native structs is a bit complex because we
                 // do not want to allocate heap memory for this operations. We
-                // allocate the NATIVE_ENUMCOLUMNID array on the stack and 
+                // allocate the NATIVE_ENUMCOLUMNID array on the stack and
                 // convert the managed objects. During the conversion pass we
                 // calculate the total size of the tags. An array for the tags
                 // is then allocated and a second pass converts the tags.
@@ -4872,7 +4882,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             int err = Err(NativeMethods.JetUpdate2(sesid.Value, tableid.Value, bookmark, checked((uint)bookmarkSize), out bytesActual, (uint)grbit));
             actualBookmarkSize = GetActualSize(bytesActual);
 
-            return err;            
+            return err;
         }
 
         /// <summary>
@@ -4880,7 +4890,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// update the current record. It can overwrite an existing value, add a new value to a sequence of
         /// values in a multi-valued column, remove a value from a sequence of values in a multi-valued column,
         /// or update all or part of a long value (a column of type <see cref="JET_coltyp.LongText"/>
-        /// or <see cref="JET_coltyp.LongBinary"/>). 
+        /// or <see cref="JET_coltyp.LongBinary"/>).
         /// </summary>
         /// <remarks>
         /// The SetColumn methods provide datatype-specific overrides which may be more efficient.
@@ -4945,7 +4955,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// being updated by any other session, read lock. Normally, row write locks are acquired implicitly as a
         /// result of updating rows. Read locks are usually not required because of record versioning. However,
         /// in some cases a transaction may desire to explicitly lock a row to enforce serialization, or to ensure
-        /// that a subsequent operation will succeed. 
+        /// that a subsequent operation will succeed.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to use. A lock will be acquired on the current record.</param>
@@ -5049,7 +5059,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return Err(NativeMethods.JetRegisterCallback(
                 sesid.Value,
                 tableid.Value,
-                unchecked((uint)cbtyp), 
+                unchecked((uint)cbtyp),
                 this.callbackWrappers.Add(callback).NativeCallback,
                 context,
                 out callbackId.Value));
@@ -5341,7 +5351,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         }
 
         /// <summary>
-        /// Used when an unsupported API method is called. This 
+        /// Used when an unsupported API method is called. This
         /// logs an error and returns an InvalidOperationException.
         /// </summary>
         /// <param name="method">The name of the method.</param>
@@ -5428,7 +5438,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 nativecolumnids[i] = columnids[i].GetNativeEnumColumnid();
                 checked
                 {
-                    totalNumTags += columnids[i].ctagSequence;                    
+                    totalNumTags += columnids[i].ctagSequence;
                 }
             }
 
@@ -5992,13 +6002,13 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         }
 
         /// <summary>
-        /// Check that ESENT supports Windows8.1 features. Throws an exception if Windows8.1 features
+        /// Check that ESENT supports Windows10 features. Throws an exception if Windows10 features
         /// aren't supported.
         /// </summary>
         /// <param name="api">The API that is being called.</param>
-        private void CheckSupportsWindows81Features(string api)
+        private void CheckSupportsWindows10Features(string api)
         {
-            if (!this.Capabilities.SupportsWindows81Features)
+            if (!this.Capabilities.SupportsWindows10Features)
             {
                 throw UnsupportedApiException(api);
             }
@@ -6144,5 +6154,26 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #endif // !MANAGEDESENT_ON_WSA
 
         #endregion
+
+        #region Hooks for not-yet-published APIs.
+        /// <summary>
+        /// Provides a hook to allow population of additional fields in
+        /// a different file. These additonal fields are not yet published
+        /// on MSDN.
+        /// </summary>
+        /// <param name="databaseName">The name of the database about which to retrieve information.</param>
+        /// <param name="dbinfomisc">The output structure to populate.</param>
+        /// <param name="infoLevel">Specifies which information to retrieve.</param>
+        /// <param name="notYetPublishedSupported">Whether the additional fields specified by in <paramref name="infoLevel"/>
+        /// are populated.</param>
+        /// <param name="err">The <see cref="JET_err"/> error code returned.</param>
+        partial void NotYetPublishedGetDbinfomisc(
+            string databaseName,
+            ref JET_DBINFOMISC dbinfomisc,
+            JET_DbInfo infoLevel,
+            ref bool notYetPublishedSupported,
+            ref int err);
+
+#endregion
     }
 }

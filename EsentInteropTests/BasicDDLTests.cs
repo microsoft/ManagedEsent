@@ -1181,7 +1181,7 @@ namespace InteropApiTests
         [Description("Test the version of JetGetTableInfo that returns an array of integers")]
         public void TestGetTableInfoIntArray()
         {
-            int[] result = new int[7];
+            int[] result = new int[2];
             Api.JetGetTableInfo(this.sesid, this.tableid, result, JET_TblInfo.SpaceUsage);
             Assert.AreNotEqual(0, result[0]);
         }

@@ -150,7 +150,7 @@ namespace Microsoft.Isam.Esent.Interop
             public const uint NORM_IGNORESYMBOLS = 0x00000004;
 
             /// <summary>
-            /// Inore kanatype.
+            /// Ignore kanatype.
             /// </summary>
             public const uint NORM_IGNOREKANATYPE = 0x00010000;
 

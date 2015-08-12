@@ -27,29 +27,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
-        /// Gets the name of the database. The user provides the
-        /// directory and the database is always given this name.
-        /// </summary>
-        public string Database
-        {
-            get
-            {
-                return "PersistentDictionary.edb";
-            }
-        }
-
-        /// <summary>
-        /// Gets the basename of the logfiles for the instance.
-        /// </summary>
-        public string BaseName
-        {
-            get
-            {
-                return "epc";
-            }
-        }
-
-        /// <summary>
         /// Gets the name of the globals table.
         /// </summary>
         public string GlobalsTableName

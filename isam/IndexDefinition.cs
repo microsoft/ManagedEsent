@@ -289,7 +289,7 @@ namespace Microsoft.Database.Isam
         /// <param name="tableName">Name of the table.</param>
         /// <param name="indexList">The index list.</param>
         /// <returns>An <see cref="IndexDefinition"/> object represting the specified index.</returns>
-        internal static IndexDefinition Load(Database database, string tableName, JET_INDEXLIST indexList)
+        internal static IndexDefinition Load(IsamDatabase database, string tableName, JET_INDEXLIST indexList)
         {
             lock (database.IsamSession)
             {

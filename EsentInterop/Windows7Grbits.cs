@@ -10,7 +10,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows7
 
 #if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
     /// <summary>
-    /// Options for JetConfigureProcessForCrashDump.
+    /// Options for <see cref="Windows7Api.JetConfigureProcessForCrashDump"/>.
     /// </summary>
     [Flags]
     public enum CrashDumpGrbit
@@ -61,7 +61,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows7
 #endif // !MANAGEDESENT_ON_WSA
 
     /// <summary>
-    /// Options for JetPrereadKeys.
+    /// Options for <see cref="Windows7Api.JetPrereadKeys(JET_SESID, JET_TABLEID, byte[][], int[], int, int, out int, PrereadKeysGrbit)"/>.
     /// </summary>
     [Flags]
     public enum PrereadKeysGrbit

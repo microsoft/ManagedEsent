@@ -139,6 +139,12 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_COLUMNID columnidcRecord { get; internal set; }
 
         /// <summary>
+        /// Gets the columnid of the column in the temporary table whic
+        /// stores the name of the container.
+        /// </summary>
+        public JET_COLUMNID columnidcontainername { get; internal set; }
+
+        /// <summary>
         /// Gets the columnid of the column in the temporary table which
         /// stores the number of pages used by the table.
         /// </summary>
@@ -176,6 +182,7 @@ namespace Microsoft.Isam.Esent.Interop
             this.columnidflags = new JET_COLUMNID { Value = value.columnidflags };
             this.columnidcRecord = new JET_COLUMNID { Value = value.columnidcRecord };
             this.columnidcPage = new JET_COLUMNID { Value = value.columnidcPage };
+            this.columnidcontainername = new JET_COLUMNID { Value = value.columnidcontainername };
         }
     }
 }

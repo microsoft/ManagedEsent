@@ -8,6 +8,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Runtime.InteropServices;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Isam.Esent.Interop.Windows8;
@@ -32,6 +33,36 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             TraceFunctionCall("JetBeginTransaction3");
             return Err(NativeMethods.JetBeginTransaction3(sesid.Value, userTransactionId, unchecked((uint)grbit)));
         }
+
+        /// <summary>
+        /// Commits the changes made to the state of the database during the current save point
+        /// and migrates them to the previous save point. If the outermost save point is committed
+        /// then the changes made during that save point will be committed to the state of the
+        /// database and the session will exit the transaction.
+        /// </summary>
+        /// <param name="sesid">The session to commit the transaction for.</param>
+        /// <param name="grbit">Commit options.</param>
+        /// <param name="durableCommit">Duration to commit lazy transaction.</param>
+        /// <param name="commitId">Commit-id associated with this commit record.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetCommitTransaction2(JET_SESID sesid, CommitTransactionGrbit grbit, TimeSpan durableCommit, out JET_COMMIT_ID commitId)
+        {
+            TraceFunctionCall("JetCommitTransaction2");
+            this.CheckSupportsWindows8Features("JetCommitTransaction2");
+            int err;
+            uint cmsecDurableCommit = (uint)durableCommit.TotalMilliseconds;
+
+            NATIVE_COMMIT_ID nativeCommitId = new NATIVE_COMMIT_ID();
+            unsafe
+            {
+                err = Err(NativeMethods.JetCommitTransaction2(sesid.Value, unchecked((uint)grbit), cmsecDurableCommit, ref nativeCommitId));
+            }
+
+            commitId = new JET_COMMIT_ID(nativeCommitId);
+
+            return err;
+        }
+
         #endregion
 
         /// <summary>
@@ -187,7 +218,103 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             return CreateTableColumnIndex4(sesid, dbid, tablecreate);
         }
 
-        #region Misc
+        #region Session Parameters
+
+        /// <summary>
+        /// Gets a parameter on the provided session state, used for the lifetime of this session or until reset.
+        /// </summary>
+        /// <param name="sesid">The session to set the parameter on.</param>
+        /// <param name="sesparamid">The ID of the session parameter to set, see
+        /// <see cref="JET_sesparam"/> and <see cref="Windows10.Windows10Sesparam"/>.</param>
+        /// <param name="value">A 32-bit integer to retrieve.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetSessionParameter(
+            JET_SESID sesid,
+            JET_sesparam sesparamid,
+            out int value)
+        {
+            TraceFunctionCall("JetGetSessionParameter");
+            this.CheckSupportsWindows8Features("JetGetSessionParameter");
+            int err;
+
+            int actualDataSize;
+            err = NativeMethods.JetGetSessionParameter(
+                sesid.Value,
+                (uint)sesparamid,
+                out value,
+                sizeof(int),
+                out actualDataSize);
+
+            if (err >= (int)JET_err.Success)
+            {
+                if (actualDataSize != sizeof(int))
+                {
+                    throw new ArgumentException(
+                        string.Format(
+                            CultureInfo.InvariantCulture,
+                            "Bad return value. Unexpected data size returned. Expected {0}, but received {1}.",
+                            sizeof(int),
+                            actualDataSize),
+                        "sesparamid");
+                }
+            }
+
+            return Err(err);
+        }
+
+        /// <summary>
+        /// Gets a parameter on the provided session state, used for the lifetime of this session or until reset.
+        /// </summary>
+        /// <param name="sesid">The session to set the parameter on.</param>
+        /// <param name="sesparamid">The ID of the session parameter to set, see
+        /// <see cref="JET_sesparam"/> and <see cref="Windows10.Windows10Sesparam"/>.</param>
+        /// <param name="data">A byte array to retrieve.</param>
+        /// <param name="length">AThe length of the data array.</param>
+        /// <param name="actualDataSize">The actual size of the data field.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetGetSessionParameter(
+            JET_SESID sesid,
+            JET_sesparam sesparamid,
+            byte[] data,
+            int length,
+            out int actualDataSize)
+        {
+            TraceFunctionCall("JetGetSessionParameter");
+            this.CheckSupportsWindows8Features("JetGetSessionParameter");
+            CheckDataSize(data, length, "length");
+
+            int err;
+
+            err = NativeMethods.JetGetSessionParameter(
+                sesid.Value,
+                (uint)sesparamid,
+                data,
+                length,
+                out actualDataSize);
+
+            return Err(err);
+        }
+
+        /// <summary>
+        /// Sets a parameter on the provided session state, used for the lifetime of this session or until reset.
+        /// </summary>
+        /// <param name="sesid">The session to set the parameter on.</param>
+        /// <param name="sesparamid">The ID of the session parameter to set.</param>
+        /// <param name="valueToSet">A 32-bit integer to set.</param>
+        /// <returns>An error if the call fails.</returns>
+        public int JetSetSessionParameter(
+            JET_SESID sesid,
+            JET_sesparam sesparamid,
+            int valueToSet)
+        {
+            TraceFunctionCall("JetSetSessionParameter");
+            this.CheckSupportsWindows8Features("JetSetSessionParameter");
+            int err;
+
+            err = NativeMethods.JetSetSessionParameter(sesid.Value, (uint)sesparamid, ref valueToSet, sizeof(int));
+
+            return Err(err);
+        }
 
         /// <summary>
         /// Sets a parameter on the provided session state, used for the lifetime of this session or until reset.
@@ -196,64 +323,28 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="sesparamid">The ID of the session parameter to set.</param>
         /// <param name="data">Data to set in this session parameter.</param>
         /// <param name="dataSize">Size of the data provided.</param>
-        /// <returns>An error code.</returns>
+        /// <returns>An error if the call fails.</returns>
         public int JetSetSessionParameter(
-            JET_SESID sesid, 
-            JET_sesparam sesparamid, 
-            byte[] data, 
+            JET_SESID sesid,
+            JET_sesparam sesparamid,
+            byte[] data,
             int dataSize)
         {
             TraceFunctionCall("JetSetSessionParameter");
             this.CheckSupportsWindows8Features("JetSetSessionParameter");
             CheckNotNegative(dataSize, "dataSize");
             CheckDataSize(data, dataSize, "dataSize");
+
             int err;
 
-            unsafe
-            {
-                fixed (byte* pb = data)
-                {
-                    System.IntPtr ptr = (System.IntPtr)pb;
-                    err = NativeMethods.JetSetSessionParameter(sesid.Value, (uint)sesparamid, ptr, checked((int)dataSize));
-                }
-            }
+            err = NativeMethods.JetSetSessionParameter(sesid.Value, (uint)sesparamid, data, dataSize);
 
             return Err(err);
         }
 
         #endregion
 
-        #region Private utility functions
-
-        /// <summary>
-        /// Commits the changes made to the state of the database during the current save point
-        /// and migrates them to the previous save point. If the outermost save point is committed
-        /// then the changes made during that save point will be committed to the state of the
-        /// database and the session will exit the transaction.
-        /// </summary>
-        /// <param name="sesid">The session to commit the transaction for.</param>
-        /// <param name="grbit">Commit options.</param>
-        /// <param name="durableCommit">Duration to commit lazy transaction.</param>
-        /// <param name="commitId">Commit-id associated with this commit record.</param>
-        /// <returns>An error if the call fails.</returns>
-        public int JetCommitTransaction2(JET_SESID sesid, CommitTransactionGrbit grbit, TimeSpan durableCommit, out JET_COMMIT_ID commitId)
-        {
-            TraceFunctionCall("JetCommitTransaction2");
-            this.CheckSupportsWindows8Features("JetCommitTransaction2");
-            int err;
-            uint cmsecDurableCommit = (uint)durableCommit.TotalMilliseconds;
-
-            NATIVE_COMMIT_ID nativeCommitId = new NATIVE_COMMIT_ID();
-            unsafe
-            {
-                err = Err(NativeMethods.JetCommitTransaction2(sesid.Value, unchecked((uint)grbit), cmsecDurableCommit, ref nativeCommitId));
-            }
-
-            commitId = new JET_COMMIT_ID(nativeCommitId);
-
-            return err;
-        }
-
+        #region prereading
         /// <summary>
         /// If the records with the specified key rangess are not in the buffer
         /// cache, then start asynchronous reads to bring the records into the
@@ -438,7 +529,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 handles.Dispose();
             }
         }
+        #endregion
 
+        #region Private utility functions
         /// <summary>
         /// Make native indexcreate structures from the managed ones.
         /// </summary>

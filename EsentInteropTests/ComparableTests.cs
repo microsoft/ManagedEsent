@@ -268,8 +268,8 @@ namespace InteropApiTests
         public void VerifyJetCommitIdEquality()
         {
             DateTime d = DateTime.Now;
-            JET_COMMIT_ID commitId1 = InteropApiTests.DurableCommitTests.CreateJetCommitId(1, d, "computer", 2);
-            JET_COMMIT_ID commitId2 = InteropApiTests.DurableCommitTests.CreateJetCommitId(1, d, "computer", 2);
+            JET_COMMIT_ID commitId1 = DurableCommitTests.CreateJetCommitId(1, d, "computer", 2);
+            JET_COMMIT_ID commitId2 = DurableCommitTests.CreateJetCommitId(1, d, "computer", 2);
             Assert.IsTrue(commitId1 == commitId2);
             Assert.IsTrue(commitId1.GetHashCode() == commitId2.GetHashCode());
             Assert.IsTrue(commitId1.Equals(commitId2));
@@ -289,8 +289,8 @@ namespace InteropApiTests
         public void VerifyJetCommitIdInequality()
         {
             DateTime d = DateTime.Now;
-            JET_COMMIT_ID commitId1 = InteropApiTests.DurableCommitTests.CreateJetCommitId(1, d, "computer", 2);
-            JET_COMMIT_ID commitId2 = InteropApiTests.DurableCommitTests.CreateJetCommitId(1, d, "computer", 3);
+            JET_COMMIT_ID commitId1 = DurableCommitTests.CreateJetCommitId(1, d, "computer", 2);
+            JET_COMMIT_ID commitId2 = DurableCommitTests.CreateJetCommitId(1, d, "computer", 3);
             Assert.IsFalse(commitId1 == commitId2);
             Assert.IsTrue(commitId1.GetHashCode() != commitId2.GetHashCode());
             Assert.IsFalse(commitId1.Equals(commitId2));
@@ -312,8 +312,8 @@ namespace InteropApiTests
         public void VerifyJetCommitIdIncomparable()
         {
             DateTime d = DateTime.Now;
-            JET_COMMIT_ID commitId1 = InteropApiTests.DurableCommitTests.CreateJetCommitId(1, d, "computer", 3);
-            JET_COMMIT_ID commitId2 = InteropApiTests.DurableCommitTests.CreateJetCommitId(2, d, "computer", 3);
+            JET_COMMIT_ID commitId1 = DurableCommitTests.CreateJetCommitId(1, d, "computer", 3);
+            JET_COMMIT_ID commitId2 = DurableCommitTests.CreateJetCommitId(2, d, "computer", 3);
             Assert.IsTrue(commitId1.GetHashCode() != commitId2.GetHashCode());
             Assert.IsFalse(commitId1 == commitId2);
         }

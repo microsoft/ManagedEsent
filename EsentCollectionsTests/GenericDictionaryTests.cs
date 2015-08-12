@@ -239,6 +239,23 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// Test a PersistentDictionary{String, PersistentBlob}
+        /// </summary>
+        [TestMethod]
+        [Priority(3)]
+        [Description("Test a String => PersistentBlob dictionary")]
+        public void TestGenericStringPersistenBlobDictionary()
+        {
+            using (var dictionary = new PersistentDictionary<string, PersistentBlob>(DictionaryPath))
+            {
+                var blob = new PersistentBlob(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 });
+                RunDictionaryTests(dictionary, "blob0", blob);
+                RunDictionaryTests(dictionary, "blob1", new PersistentBlob(null));
+                RunDictionaryTests(dictionary, "blob2", new PersistentBlob(new byte[0]));
+            }
+        }
+
+        /// <summary>
         /// Run a set of tests against a dictionary.
         /// </summary>
         /// <typeparam name="TKey">Key type of the dictionary.</typeparam>
@@ -250,7 +267,7 @@ namespace EsentCollectionsTests
             where TKey : IComparable<TKey>
         {
             Assert.IsFalse(dictionary.IsReadOnly, "Dictionary is read-only");
-            Assert.AreEqual(DictionaryPath, dictionary.Database);
+            Assert.AreEqual(DictionaryPath, dictionary.DatabasePath);
 
             TestBasicOperations(dictionary, key, value);
 

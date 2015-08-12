@@ -129,6 +129,35 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Verifies that TransactionLevel works.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("Verifies that TransactionLevel works.")]
+        public void VerifyTransactionLevel()
+        {
+            using (var transaction = new Transaction(this.sesid))
+            {
+                if (EsentVersion.SupportsWindows10Features)
+                {
+                    Assert.AreEqual(1, transaction.TransactionLevel);
+                    transaction.Rollback();
+                    Assert.AreEqual(0, transaction.TransactionLevel);
+                    transaction.Begin();
+                    Assert.AreEqual(1, transaction.TransactionLevel);
+                }
+                else
+                {
+                    Assert.AreEqual(-1, transaction.TransactionLevel);
+                    transaction.Rollback();
+                    Assert.AreEqual(-1, transaction.TransactionLevel);
+                    transaction.Begin();
+                    Assert.AreEqual(-1, transaction.TransactionLevel);
+                }
+            }
+        }
+
+        /// <summary>
         /// Start a transaction twice, expecting an exception
         /// </summary>
         [TestMethod]

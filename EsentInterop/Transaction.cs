@@ -34,6 +34,28 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Gets the current transaction level of the
+        /// <see cref="Transaction"/>.
+        /// Requires Win10.
+        /// </summary>
+        public int TransactionLevel
+        {
+            get
+            {
+                int transactionLevel = -1;
+                if (EsentVersion.SupportsWindows10Features)
+                {
+                    Windows8Api.JetGetSessionParameter(
+                        this.sesid,
+                        Windows10.Windows10Sesparam.TransactionLevel,
+                        out transactionLevel);
+                }
+
+                return transactionLevel;
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether this object is currently in a
         /// transaction.
         /// </summary>

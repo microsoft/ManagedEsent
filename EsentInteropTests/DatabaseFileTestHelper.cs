@@ -914,6 +914,10 @@ namespace InteropApiTests
             JET_DBINFOMISC dbinfomisc;
             Api.JetGetDatabaseFileInfo(this.database, out dbinfomisc, JET_DbInfo.Misc);
             Assert.AreEqual(SystemParameters.DatabasePageSize, dbinfomisc.cbPageSize);
+
+            // (0x620,9) was done pre-XP.
+            Assert.IsTrue(dbinfomisc.ulVersion >= 0x620);
+            Assert.IsTrue(dbinfomisc.ulUpdate >= 9);
         }
 
         /// <summary>

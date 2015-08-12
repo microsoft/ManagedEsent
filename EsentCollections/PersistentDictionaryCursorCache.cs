@@ -129,6 +129,12 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         public void FreeCursor(PersistentDictionaryCursor<TKey, TValue> cursor)
         {
             Debug.Assert(null != cursor, "Freeing a null cursor");
+            int transactionLevel = cursor.TransactionLevel;
+            if (transactionLevel > 0)
+            {
+                throw new InvalidOperationException(
+                    string.Format("Freeing a cursor with an outstanding transaction (level={0}).", transactionLevel));
+            }
 
             lock (this.lockObject)
             {

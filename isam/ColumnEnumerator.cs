@@ -23,7 +23,7 @@ namespace Microsoft.Database.Isam
         /// <summary>
         /// The database
         /// </summary>
-        private readonly Database database;
+        private readonly IsamDatabase database;
 
         /// <summary>
         /// The table name
@@ -70,7 +70,7 @@ namespace Microsoft.Database.Isam
         /// </summary>
         /// <param name="database">The database.</param>
         /// <param name="tableName">Name of the table.</param>
-        internal ColumnEnumerator(Database database, string tableName)
+        internal ColumnEnumerator(IsamDatabase database, string tableName)
         {
             this.database = database;
             this.tableName = tableName;

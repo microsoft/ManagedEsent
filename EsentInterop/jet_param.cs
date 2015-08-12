@@ -177,6 +177,18 @@ namespace Microsoft.Isam.Esent.Interop
         CheckpointDepthMax = 24,
 
         /// <summary>
+        /// This parameter controls the correlation interval of ESE's LRU-K page replacement
+        /// algorithm.
+        /// </summary>
+        LrukCorrInterval = 25,
+
+        /// <summary>
+        /// This parameter controls the timeout interval of ESE's LRU-K page replacement
+        /// algorithm.
+        /// </summary>
+        LrukTimeout = 28,
+
+        /// <summary>
         /// This parameter controls how many database file I/Os can be queued
         /// per-disk in the host operating system at one time.  A larger value
         /// for this parameter can significantly help the performance of a large

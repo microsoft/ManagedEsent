@@ -111,7 +111,7 @@ namespace Microsoft.Isam.Esent.Interop
             else
             {
                 this.Value = new byte[count];
-                Array.Copy(value, startIndex, this.Value, 0, count);
+                Buffer.BlockCopy(value, startIndex, this.Value, 0, count);
             }
         }
     }
