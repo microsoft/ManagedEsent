@@ -23,7 +23,10 @@ if %version%.==. goto :usage
 @rem ==============
 
 
-set msbuildexe=%windir%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe /property:Configuration=Release
+@set msbuildpath="%ProgramFiles(x86)%\MSBuild\12.0\Bin\MSBuild.exe"
+@if not exist %msbuildpath% set msbuildpath=%windir%\microsoft.net\framework\v4.0.30319\msbuild.exe
+@rem verbosity=minimal;Summary would be better, but
+set msbuildexe=%msbuildpath% /nologo /property:Configuration=Release
 
 @echo =-=-=-=-=-=-=-=
 @echo Compiling... (http://xkcd.com/303/)

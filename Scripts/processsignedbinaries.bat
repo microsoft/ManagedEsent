@@ -117,11 +117,12 @@ echo      PersistentDictionary is a simple class that implements IDictionary, an
 echo      disk. It allows a simple key-value pair store. It supports strings, value-types, and binary>>%target%
 echo      blobs. It is built on the ManagedEsent library.>>%target%
 echo    ^</description^> >>%target%
-echo    ^<releaseNotes^>Release %version% from %date%. Initial independent package. Previously it was part of the ManagedEsent package.^</releaseNotes^> >>%target%
+echo    ^<releaseNotes^>Release %version% from %date%. Bug fixes. Now has a dependency on Microsoft.Database.Isam.^</releaseNotes^> >>%target%
 echo    ^<copyright^>Copyright (c) Microsoft. All Rights Reserved.^</copyright^> >>%target%
 echo    ^<tags^>ManagedEsent NoSql PersistentDictionary Persistent Dictionary Key-Value Store ^</tags^> >>%target%
 echo    ^<dependencies^> >>%target%
 echo      ^<dependency id="ManagedEsent" version="%version%" /^> >>%target%
+echo      ^<dependency id="Microsoft.Database.Isam" version="%version%" /^> >>%target%
 echo    ^</dependencies^> >>%target%
 echo  ^</metadata^> >>%target%
 echo ^</package^> >>%target%
@@ -151,7 +152,7 @@ echo      As of mid-2014, the interface is still under development (for example,
 echo      in the future. We are releasing it to see if>>%target%
 echo      anyone finds it useful. Please keep the feedback coming!>>%target%
 echo    ^</description^> >>%target%
-echo    ^<releaseNotes^>Release %version% from %date%. Initial alpha release (but numbered to match ManagedEsent).^</releaseNotes^> >>%target%
+echo    ^<releaseNotes^>Release %version% from %date%. Bug fixes.^</releaseNotes^> >>%target%
 echo    ^<copyright^>Copyright (c) Microsoft. All Rights Reserved.^</copyright^> >>%target%
 echo    ^<tags^>ManagedEsent NoSql ISAM Database Storage DatabaseEngine^</tags^> >>%target%
 echo    ^<dependencies^> >>%target%
