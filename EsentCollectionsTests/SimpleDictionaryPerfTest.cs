@@ -279,7 +279,7 @@ namespace InteropApiTests
             private readonly byte[] data;
 
             /// <summary>
-            /// Used to wrap Dthe <see cref="data"/> member.
+            /// Used to wrap the <see cref="data"/> member.
             /// </summary>
             private readonly PersistentBlob persistentBlob;
 

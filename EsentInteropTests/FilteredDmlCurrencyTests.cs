@@ -141,6 +141,11 @@ namespace InteropApiTests
         [Description("Navigation: move-first, clustered index")]
         public void NavigationMoveFirstClustered()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_TABLECREATE tc = this.CreateTable(this.tableName);
             this.InsertRecord(tc.tableid, 2);
             this.InsertRecord(tc.tableid, 1);
@@ -162,6 +167,11 @@ namespace InteropApiTests
         [Description("Navigation: clearing filter")]
         public void NavigationClearFilter()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_TABLECREATE tc = this.CreateTable(this.tableName);
             this.InsertRecord(tc.tableid, 1);
             this.InsertRecord(tc.tableid, 2);
@@ -188,6 +198,11 @@ namespace InteropApiTests
         [Description("Navigation: move-last, clustered index")]
         public void NavigationMoveLastClustered()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_TABLECREATE tc = this.CreateTable(this.tableName);
             this.InsertRecord(tc.tableid, 2);
             this.InsertRecord(tc.tableid, 3);
@@ -209,6 +224,11 @@ namespace InteropApiTests
         [Description("Navigation: move-next, clustered index")]
         public void NavigationMoveNextClustered()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_TABLECREATE tc = this.CreateTable(this.tableName);
             this.InsertRecord(tc.tableid, 2);
             this.InsertRecord(tc.tableid, 1);
@@ -231,6 +251,11 @@ namespace InteropApiTests
         [Description("Navigation: move-next, check byte order")]
         public void NavigationMoveNextByteOrder()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_TABLECREATE tc = this.CreateTable(this.tableName);
             this.InsertRecord(tc.tableid, 1, 10);
             this.InsertRecord(tc.tableid, 2, 260);
@@ -252,6 +277,11 @@ namespace InteropApiTests
         [Description("Navigation: move-previous, clustered index")]
         public void NavigationMovePreviousClustered()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_TABLECREATE tc = this.CreateTable(this.tableName);
             this.InsertRecord(tc.tableid, 2);
             this.InsertRecord(tc.tableid, 3);
@@ -274,6 +304,11 @@ namespace InteropApiTests
         [Description("Navigation: multiple filters")]
         public void NavigationMultipleFilters()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_TABLECREATE tc = this.CreateTable(this.tableName);
             this.InsertRecord(tc.tableid, 1, 20);
             this.InsertRecord(tc.tableid, 2, 30);
@@ -296,6 +331,11 @@ namespace InteropApiTests
         [Description("Navigation: bitmask operators")]
         public void NavigationBitmask()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_TABLECREATE tc = this.CreateTable(this.tableName);
             this.InsertRecord(tc.tableid, 1, 15);
             this.InsertRecord(tc.tableid, 3, 11);
@@ -319,6 +359,11 @@ namespace InteropApiTests
         [Description("Navigation: filtered move not supported with secondary index")]
         public void NavigationMoveSecondaryNotSupported()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_TABLECREATE tc = this.CreateTable(this.tableName);
             this.InsertRecord(tc.tableid, 1, 10);
             this.InsertRecord(tc.tableid, 2, 10);
@@ -338,6 +383,11 @@ namespace InteropApiTests
         [Description("Navigation: seek with filtering")]
         public void NavigationSeekWithFiltering()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_TABLECREATE tc = this.CreateTable(this.tableName);
 
             this.InsertRecord(tc.tableid, 1, 300);
@@ -360,6 +410,11 @@ namespace InteropApiTests
         [Description("JetMove with MoveKeyNE: clustered index")]
         public void JetMoveWithMoveKeyNeClustered()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_TABLECREATE tc = this.CreateTable(this.tableName);
             this.InsertRecord(tc.tableid, 1);
             this.InsertRecord(tc.tableid, 2);

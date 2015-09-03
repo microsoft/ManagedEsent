@@ -162,7 +162,7 @@ namespace EsentCollectionsTests
             public DateTime X;
 
             /// <summary>
-            /// Dummy guid.
+            /// Dummy Guid.
             /// </summary>
             public Guid? Y;
 

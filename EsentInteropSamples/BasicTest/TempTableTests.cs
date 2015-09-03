@@ -149,7 +149,7 @@ namespace BasicTest
         /// Iterate over all records in the table, returning column values.
         /// </summary>
         /// <param name="sesid">
-        /// The sesssion.
+        /// The session.
         /// </param>
         /// <param name="tableid">
         /// The tableid.

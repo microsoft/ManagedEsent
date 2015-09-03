@@ -60,7 +60,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         private readonly object[] updateLocks;
 
         /// <summary>
-        /// The disposeLock ensures safety when Diposing an object in a multi-threaded
+        /// The disposeLock ensures safety when Disposing an object in a multi-threaded
         /// environment.
         /// All public access points of entry acquire a reader lock.
         /// Once this is acquired, it calls <see cref="CheckObjectDisposed"/>.
@@ -220,7 +220,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="directory">The directory to create the database in.</param>
         /// <param name="customConfig">The custom config to use for creating the PersistentDictionary.</param>
         /// <param name="dictionary">The IDictionary whose contents are copied to the new dictionary.</param>
-        /// <remarks>The constructor can either intialize PersistentDictioarny from a directory string, or a full custom config set. But not both.</remarks>
+        /// <remarks>The constructor can either intialize PersistentDictionary from a directory string, or a full custom config set. But not both.</remarks>
         private PersistentDictionary(
             string directory,
             IConfigSet customConfig,
@@ -273,12 +273,12 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             }
 
             databaseConfig.SetGlobalParams();
-            this.instance = new Instance(databaseConfig.Identifier, databaseConfig.DisplayName);
+            this.instance = new Instance(databaseConfig.Identifier, databaseConfig.DisplayName, databaseConfig.DatabaseStopFlags);
+
             databaseConfig.SetInstanceParams(this.instance.JetInstance);
 
-            InitGrbit grbit = EsentVersion.SupportsWindows7Features
-                                  ? Windows7Grbits.ReplayIgnoreLostLogs
-                                  : InitGrbit.None;
+            InitGrbit grbit = databaseConfig.DatabaseRecoveryFlags |
+                                  (EsentVersion.SupportsWindows7Features ? Windows7Grbits.ReplayIgnoreLostLogs : InitGrbit.None);
             this.instance.Init(grbit);
 
             try
@@ -431,6 +431,9 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// Gets the schema configuration used by dictionary to store data in the underlying database.
         /// </summary>
+        /// <value>
+        /// The schema configuration used by dictionary to store data in the underlying database.
+        /// </value>
         public IPersistentDictionaryConfig Schema
         {
             get
@@ -459,6 +462,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// Database can be used to control runtime parameters affecting the dictionary's backing database (e.g. database cache size).
         /// See <see cref="DatabaseConfig"/>.
         /// </summary>
+        /// <value>
+        /// The Database object associated with the dictionary.
+        /// Database can be used to control runtime parameters affecting the dictionary's backing database (e.g. database cache size).
+        /// See <see cref="DatabaseConfig"/>.
+        /// </value>
         public Database Database
         {
             get
@@ -1287,8 +1295,8 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// This should be checked while the disposeLock ReadLock is held. If
         /// the read lock is not held, then the caller must acquire the lock
         /// first and check for a guaranteed correct value.
-        /// (The caller may call this wihtout the lcok first to get a fast-but-
-        /// inaccurate result.)
+        /// (The caller may call this without the lock first to get a fast-but-
+        /// inaccurate result).
         /// </summary>
         /// <exception cref="ObjectDisposedException">
         /// Thrown if the object has already been disposed.

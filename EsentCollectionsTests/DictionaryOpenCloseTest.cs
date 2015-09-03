@@ -312,7 +312,7 @@ namespace InteropApiTests
             private static string dictonaryPathRoot;
 
             /// <summary>
-            /// The PersistentDictionary to use. May be dispose'd and re-created.
+            /// The PersistentDictionary to use. May be disposed and re-created.
             /// </summary>
             private static PersistentDictionary<long, PersistentBlob> perfDictionary;
 
@@ -327,7 +327,7 @@ namespace InteropApiTests
             private readonly byte[] data;
 
             /// <summary>
-            /// Used to wrap Dthe <see cref="data"/> member.
+            /// Used to wrap the <see cref="data"/> member.
             /// </summary>
             private readonly PersistentBlob persistentBlob;
 
@@ -403,7 +403,7 @@ namespace InteropApiTests
             }
 
             /// <summary>
-            /// Gets or sets the PersistentDictionary to use. May be dispose'd and re-created.
+            /// Gets or sets the PersistentDictionary to use. May be disposed and re-created.
             /// </summary>
             public static PersistentDictionary<long, PersistentBlob> PerfDictionary
             {

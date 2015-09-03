@@ -341,12 +341,12 @@ namespace InteropApiTests
             JET_COLUMNBASE columnbase;
             VistaApi.JetGetColumnInfo(this.sesid, this.dbid, "tableChild", this.columncreatesChild[1].columnid, out columnbase);
 
-            Assert.AreEqual(columnbase.coltyp, this.columncreatesChild[1].coltyp);
-            Assert.AreEqual(columnbase.szBaseColumnName, this.columncreatesChild[1].szColumnName);
-            Assert.AreEqual(columnbase.szBaseTableName, this.tablecreateChild.szTableName);
-            Assert.AreEqual(columnbase.cp, this.columncreatesChild[1].cp);
-            Assert.AreEqual(columnbase.cbMax, this.columncreatesChild[1].cbMax);
-            Assert.AreEqual(columnbase.grbit, this.columncreatesChild[1].grbit);
+            Assert.AreEqual(this.columncreatesChild[1].coltyp, columnbase.coltyp);
+            Assert.AreEqual(this.columncreatesChild[1].szColumnName, columnbase.szBaseColumnName);
+            Assert.AreEqual(this.tablecreateChild.szTableName, columnbase.szBaseTableName);
+            Assert.AreEqual(this.columncreatesChild[1].cp, columnbase.cp);
+            Assert.AreEqual(this.columncreatesChild[1].cbMax, columnbase.cbMax);
+            Assert.AreEqual(this.columncreatesChild[1].grbit, columnbase.grbit);
         }
 
         #endregion

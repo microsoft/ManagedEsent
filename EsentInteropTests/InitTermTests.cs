@@ -430,6 +430,11 @@ namespace InteropApiTests
         [Description("Call JetStopServiceInstance2 on a running instance and try another operation.")]
         public void TestJetStopServiceInstance2StopsSubsequentOperations()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             using (var instance = new Instance("TestJetStopServiceInstance"))
             {
                 instance.Parameters.Recovery = false;

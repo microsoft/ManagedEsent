@@ -11,9 +11,9 @@ namespace Microsoft.Database.Isam.Config
     using System.Globalization;
     using System.Reflection;
     using System.Threading;
+    using Microsoft.Database.Isam.Win32;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Vista;
-    using Microsoft.Isam.Esent.Interop.Win32;
     using Microsoft.Isam.Esent.Interop.Windows10;
 
     /// <summary>
@@ -32,7 +32,7 @@ namespace Microsoft.Database.Isam.Config
         public bool StaticAfterGlobalInit;
 
         /// <summary>
-        /// Managed type of the param.
+        /// Managed type of the parameter.
         /// </summary>
         public Type ParamType;
 
@@ -61,14 +61,14 @@ namespace Microsoft.Database.Isam.Config
         internal static readonly ParamDef[] ParamTable;
 
         /// <summary>
-        /// A per-process lock to synchronize calls to SetGlobalParams()
-        /// </summary>
-        private static readonly Mutex globalParamsMutex;
-
-        /// <summary>
         /// Passed to JetGetSystemParameter for retrieving string parameters.
         /// </summary>
         private const int MaxStringParamSize = 260;
+
+        /// <summary>
+        /// A per-process lock to synchronize calls to SetGlobalParams()
+        /// </summary>
+        private static readonly Mutex GlobalParamsMutex;
 
         /// <summary>
         /// Initializes static members of the <see cref="DatabaseConfig" /> class.
@@ -77,7 +77,7 @@ namespace Microsoft.Database.Isam.Config
         static DatabaseConfig()
         {
             // Create a per-process named mutex. C# locks are per app-domain, which could potentially screw up Ese global params that are process wide.
-            DatabaseConfig.globalParamsMutex = new Mutex(false, "Microsoft.Isam.Esent.Interop.DatabaseConfig.globalParamsMutex_" + NativeMethods.GetCurrentProcessId());
+            DatabaseConfig.GlobalParamsMutex = new Mutex(false, "Microsoft.Isam.Esent.Interop.DatabaseConfig.globalParamsMutex_" + NativeMethods.GetCurrentProcessId());
 
             DatabaseConfig.ParamTable = new ParamDef[DatabaseConfig.ParamMaxValueInvalid];
             FillParamTable();
@@ -85,7 +85,7 @@ namespace Microsoft.Database.Isam.Config
         }
 
         /// <summary>
-        /// Get or sets a string identifier that uniquely identifies an instance of Database.
+        /// Gets or sets a string identifier that uniquely identifies an instance of Database.
         /// </summary>
         public string Identifier
         {
@@ -94,7 +94,7 @@ namespace Microsoft.Database.Isam.Config
         }
 
         /// <summary>
-        /// Get or sets a user-friendly name that is used to identify an instance of Database in system diagnostics (event log etc).
+        /// Gets or sets a user-friendly name that is used to identify an instance of Database in system diagnostics (event log, etc).
         /// </summary>
         public string DisplayName
         {
@@ -109,6 +109,15 @@ namespace Microsoft.Database.Isam.Config
         {
             get { return this.GetEngineParam<CreateInstanceGrbit>(DatabaseParams.EngineFlags); }
             set { this.SetEngineParam(DatabaseParams.EngineFlags, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets flags used to select optional behaviour while initializing an instance in the Engine and recovering the database from the log stream. See <see cref ="InitGrbit"/> and <see cref="Api.JetInit2"/>
+        /// </summary>
+        public InitGrbit DatabaseRecoveryFlags
+        {
+            get { return this.GetEngineParam<InitGrbit>(DatabaseParams.DatabaseRecoveryFlags); }
+            set { this.SetEngineParam(DatabaseParams.DatabaseRecoveryFlags, value); }
         }
 
         /// <summary>
@@ -139,6 +148,15 @@ namespace Microsoft.Database.Isam.Config
         }
 
         /// <summary>
+        /// Gets or sets flags used to select optional behaviour while terminating an instance in the Engine. See <see cref ="TermGrbit"/> and <see cref="Api.JetTerm2"/>
+        /// </summary>
+        public TermGrbit DatabaseStopFlags
+        {
+            get { return this.GetEngineParam<TermGrbit>(DatabaseParams.DatabaseStopFlags); }
+            set { this.SetEngineParam(DatabaseParams.DatabaseStopFlags, value); }
+        }
+
+        /// <summary>
         /// Gets or sets the maximum size of the database in pages. Zero means there is no maximum. See maxPages parameter for <see cref ="Api.JetCreateDatabase2"/> or <see cref="Api.JetAttachDatabase2"/>
         /// </summary>
         public int DatabaseMaxPages
@@ -153,7 +171,7 @@ namespace Microsoft.Database.Isam.Config
         public void SetGlobalParams()
         {
             // Lock this section using a process-wide lock, so in case of a race between two threads, a config set is either completely set or completely over-written
-            DatabaseConfig.globalParamsMutex.WaitOne();
+            DatabaseConfig.GlobalParamsMutex.WaitOne();
             try
             {
                 for (int i = 0; i < DatabaseConfig.ParamTable.Length; i++)
@@ -179,7 +197,7 @@ namespace Microsoft.Database.Isam.Config
             }
             finally
             {
-                DatabaseConfig.globalParamsMutex.ReleaseMutex();
+                DatabaseConfig.GlobalParamsMutex.ReleaseMutex();
             }
         }
 
@@ -267,7 +285,7 @@ namespace Microsoft.Database.Isam.Config
                 {
                     value = Convert.ToBoolean(intValue.ToInt32());
                 }
-                else if (paramDef.ParamType.GetTypeInfo().IsEnum)
+                else if (paramDef.ParamType.IsEnum)
                 {
                     value = Enum.ToObject(paramDef.ParamType, intValue.ToInt32());
                 }
@@ -305,7 +323,7 @@ namespace Microsoft.Database.Isam.Config
             else
             {
                 IntPtr intValue;
-                if (paramDef.ParamType == typeof(int) || paramDef.ParamType.GetTypeInfo().IsEnum)
+                if (paramDef.ParamType == typeof(int) || paramDef.ParamType.IsEnum)
                 {
                     intValue = new IntPtr((int)value);
                 }

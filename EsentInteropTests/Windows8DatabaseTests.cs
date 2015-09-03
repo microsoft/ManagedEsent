@@ -32,6 +32,11 @@ namespace InteropApiTests
         [Description("Create and resize a database")]
         public void CreateAndResizeDatabase()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             string dir = SetupHelper.CreateRandomDirectory();
             JET_INSTANCE instance = SetupHelper.CreateNewInstance(dir);
             Api.JetSetSystemParameter(instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);

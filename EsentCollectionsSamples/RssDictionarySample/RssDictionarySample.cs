@@ -44,7 +44,7 @@ namespace RssDictionarySample
         /// dictionary will be opened. There should be only one dictionary object
         /// per file (directory) but the dictionary can be used by multiple threads.
         /// </summary>
-        private static readonly PersistentDictionary<string, RssFeedData> dictionary =
+        private static readonly PersistentDictionary<string, RssFeedData> Dictionary =
             new PersistentDictionary<string, RssFeedData>("RssDictionary");
 
         /// <summary>
@@ -71,17 +71,17 @@ namespace RssDictionarySample
         }
 
         /// <summary>
-        /// Add the specified urls to the RSS dictionary.
+        /// Add the specified URLs to the RSS dictionary.
         /// </summary>
-        /// <param name="urls">Urls to add.</param>
+        /// <param name="urls">URLs to add.</param>
         private static void Add(string[] urls)
         {
             foreach (string url in urls)
             {
                 // Don't overwrite an existing entry
-                if (!dictionary.ContainsKey(url))
+                if (!Dictionary.ContainsKey(url))
                 {
-                    dictionary[url] = new RssFeedData
+                    Dictionary[url] = new RssFeedData
                     {
                         LastRetrieved = null,
                         Data = string.Empty,
@@ -95,12 +95,12 @@ namespace RssDictionarySample
         /// </summary>
         private static void Update()
         {
-            foreach (string url in dictionary.Keys)
+            foreach (string url in Dictionary.Keys)
             {
                 // For simplicity, so this synchronously, single-threaded and
                 // without error handling.
                 var response = new StreamReader(WebRequest.Create(url).GetResponse().GetResponseStream());
-                dictionary[url] = new RssFeedData
+                Dictionary[url] = new RssFeedData
                 {
                     LastRetrieved = DateTime.UtcNow,
                     Data = response.ReadToEnd(),
@@ -113,14 +113,14 @@ namespace RssDictionarySample
         /// </summary>
         private static void Print()
         {
-            foreach (string url in dictionary.Keys)
+            foreach (string url in Dictionary.Keys)
             {
-                ParseAndPrintRssData(dictionary[url].Data);
+                ParseAndPrintRssData(Dictionary[url].Data);
             }
         }
 
         /// <summary>
-        /// Parse and print some RSS data. This doesn't do a particularily
+        /// Parse and print some RSS data. This doesn't do a particularly
         /// good job of parsing/printing.
         /// </summary>
         /// <param name="rssdata">The data to print.</param>

@@ -2884,7 +2884,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             var nativeColumndef = new NATIVE_COLUMNDEF();
             nativeColumndef.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_COLUMNDEF)));
 
-            if (this.Capabilities.SupportsVistaFeatures)
+            // Technically, this should have worked in Vista. But there was a bug, and
+            // it was fixed after Windows 7.
+            if (this.Capabilities.SupportsWindows8Features)
             {
                 err = Err(NativeMethods.JetGetColumnInfoW(
                         sesid.Value,
@@ -2939,7 +2941,10 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             var nativeColumnlist = new NATIVE_COLUMNLIST();
             nativeColumnlist.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_COLUMNLIST)));
-            if (this.Capabilities.SupportsVistaFeatures)
+
+            // Technically, this should have worked in Vista. But there was a bug, and
+            // it was fixed after Windows 7.
+            if (this.Capabilities.SupportsWindows8Features)
             {
                 err = Err(NativeMethods.JetGetColumnInfoW(
                     sesid.Value,
@@ -2992,7 +2997,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             CheckNotNull(columnName, "columnName");
             int err;
 
-            if (this.Capabilities.SupportsVistaFeatures)
+            // Technically, this should have worked in Vista. But there was a bug, and
+            // it was fixed after Windows 7.
+            if (this.Capabilities.SupportsWindows8Features)
             {
                 var nativeColumnbase = new NATIVE_COLUMNBASE_WIDE();
                 nativeColumnbase.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_COLUMNBASE_WIDE)));
@@ -3053,7 +3060,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             CheckNotNull(tablename, "tablename");
             int err;
 
-            if (this.Capabilities.SupportsVistaFeatures)
+            // Technically, this should have worked in Vista. But there was a bug, and
+            // it was fixed after Windows 7.
+            if (this.Capabilities.SupportsWindows8Features)
             {
                 var nativeColumnbase = new NATIVE_COLUMNBASE_WIDE();
                 nativeColumnbase.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_COLUMNBASE_WIDE)));

@@ -142,6 +142,11 @@ namespace InteropApiTests
         [Description("Creates an index with JetCreateIndex4")]
         public void JetCreateIndex4()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             Api.JetBeginTransaction(this.sesid);
 
             const string IndexName = "another_index";
@@ -169,6 +174,11 @@ namespace InteropApiTests
         [Description("Creates an index with JetCreateIndex4 and set JET_UNICODEINDEX2.")]
         public void JetCreateIndex4UnicodeIndex2()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             Api.JetBeginTransaction(this.sesid);
 
             const string IndexName = "another_index";
@@ -204,6 +214,11 @@ namespace InteropApiTests
         [Description("Creates an index with JetCreateIndex4 and set JET_UNICODEINDEX2.")]
         public void VerifyJetIndexInfoLocaleName()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             Api.JetBeginTransaction(this.sesid);
 
             const string IndexName = "localizedIndex";
@@ -249,6 +264,11 @@ namespace InteropApiTests
         [Description("Creates an index with JetCreateIndex4 and space hints.")]
         public void JetCreateIndex4SpaceHints()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             Api.JetBeginTransaction(this.sesid);
 
             const string IndexName = "another_index";
@@ -287,6 +307,11 @@ namespace InteropApiTests
         [Description("Creates an index with JetCreateIndex4 and space hints and unicodeindex2.")]
         public void JetCreateIndex4SpaceHintsUnicodeIndex2()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             Api.JetBeginTransaction(this.sesid);
 
             const string IndexName = "another_index";
@@ -333,6 +358,11 @@ namespace InteropApiTests
         [Description("Creates two indexes using JetCreateIndex4")]
         public void CreateTwoIndexesUsingJetCreateIndex4()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_TABLEID tableToIndex;
 
             Api.JetBeginTransaction(this.sesid);
@@ -390,6 +420,11 @@ namespace InteropApiTests
         [Description("Creates a table, two columns, and two indexes using JetCreateTableColumnIndex4")]
         public void JetCreateTableColumnIndex4()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             var columncreates = new JET_COLUMNCREATE[]
             {
                 new JET_COLUMNCREATE()
@@ -474,6 +509,11 @@ namespace InteropApiTests
         [Description("Creates a table, two columns, and two indexes using JetCreateTableColumnIndex4 and set UnicodeIndex2")]
         public void JetCreateTableColumnIndex4UnicodeIndex2()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             const string LocaleName = "en-US";
 
             var unicode = new JET_UNICODEINDEX()
@@ -568,6 +608,11 @@ namespace InteropApiTests
         [Description("Creates a template table, two columns, and two indexes using JetCreateTableColumnIndex4")]
         public void JetCreateTemplateTableColumnIndex4()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             var columncreates = new JET_COLUMNCREATE[]
             {
                 new JET_COLUMNCREATE()
@@ -680,6 +725,11 @@ namespace InteropApiTests
         [Description("Creates a table, two columns, and two indexes using JetCreateTableColumnIndex4 and Space Hints.")]
         public void JetCreateTableColumnIndex4SpaceHints()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             var columncreates = new[]
             {
                 new JET_COLUMNCREATE()
@@ -799,6 +849,11 @@ namespace InteropApiTests
         [Description("Creates a table, two columns, and three indexes (one with an invalid name) using JetCreateTableColumnIndex4")]
         public void JetCreateTableColumnIndex4WithInvalidIndexName()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             var columncreates = new JET_COLUMNCREATE[]
             {
                 new JET_COLUMNCREATE()
@@ -901,6 +956,11 @@ namespace InteropApiTests
         [Description("Sort case-sensitive with JetOpenTemporaryTable2")]
         public void SortDataCaseSensitiveWithJetOpenTemporaryTable2()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             const string LocaleName = "fr-FR";
 
             var columns = new[]
@@ -950,6 +1010,11 @@ namespace InteropApiTests
         [Description("Sort with different locales with JetOpenTemporaryTable2")]
         public void SortDataDifferentLocalesWithJetOpenTemporaryTable2()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             CultureInfo cultureInfo = new CultureInfo("es-ES_tradnl");
             string localeName = cultureInfo.CompareInfo.Name;
             Assert.AreEqual("es-ES_tradnl", localeName);

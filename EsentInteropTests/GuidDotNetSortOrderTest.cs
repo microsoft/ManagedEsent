@@ -158,7 +158,12 @@ namespace InteropApiTests
         [Description("Test .Net Guid sort order")]
         public void TestDotNetGuidSortOrder()
         {
-            //// create table with GUID column and index over GUID column
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
+            // Create table with GUID column and index over GUID column.
             this.CreatePopulateAndTestTable();
 
             Api.JetCloseDatabase(this.sesId, this.databaseId, CloseDatabaseGrbit.None);

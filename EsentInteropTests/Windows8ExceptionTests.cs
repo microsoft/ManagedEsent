@@ -23,6 +23,11 @@ namespace InteropApiTests
         [Description("Check that JetGetErrorInfo returns valid information.")]
         public void VerifyEsentErrorInformationIsCorrect()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_ERRINFOBASIC errinfobasic;
 
             // OutOfCursors is a Memory error.

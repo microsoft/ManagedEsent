@@ -646,12 +646,12 @@ namespace Microsoft.Database.Isam
                 // setup our index range
                 if (rows < 0)
                 {
-                    this.SetUpperLimit();
+                    this.SetLowerLimit();
                 }
 
                 if (rows > 0)
                 {
-                    this.SetLowerLimit();
+                    this.SetUpperLimit();
                 }
 
                 // try to move by the desired offset

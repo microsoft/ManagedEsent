@@ -283,6 +283,10 @@ namespace Microsoft.Database.Isam
                 {
                     try
                     {
+                        // FUTURE-2015/06/21-BrettSh - Someone should explain to me, why we have JetInit in Database.cs, in here
+                        // and in PersistentDictionary.cs.  These different APIs are supposed to be consolidating.  Anyways, either
+                        // someone will DatabaseConfig enable this and then this should consume DatabaseRecoveryFlags from there, or
+                        // this should be deprecated and we'll just use Database.cs going forward (which I think is plan).
                         Api.JetInit(ref this.instance);
                     }
                     catch (EsentErrorException)
@@ -336,6 +340,7 @@ namespace Microsoft.Database.Isam
 
                     if (this.cleanupInstance)
                     {
+                        // FUTURE-2015/06/21-BrettSh - Similar issue to above date, should consume DatabaseStopFlags.
                         Api.JetTerm2(this.instance, TermGrbit.Complete);
                         this.cleanupInstance = false;
                         this.instanceInitialized = false;

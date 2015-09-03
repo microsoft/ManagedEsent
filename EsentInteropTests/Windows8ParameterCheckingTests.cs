@@ -28,6 +28,11 @@ namespace InteropApiTests
         [Description("Check that an exception is thrown when JetResizeDatabase gets a negative page count")]
         public void VerifyJetResizeDatabaseThrowsExceptionWhenDesiredPagesIsNegative()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
             int ignored;
             Windows8Api.JetResizeDatabase(this.sesid, this.dbid, -1, out ignored, ResizeDatabaseGrbit.None);
         }
@@ -45,6 +50,11 @@ namespace InteropApiTests
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetCreateIndex4ThrowsExceptionWhenIndexcreatesAreNull()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                throw new ArgumentNullException();
+            }
+
             Windows8Api.JetCreateIndex4(this.sesid, this.tableid, null, 0);
         }
 
@@ -58,6 +68,11 @@ namespace InteropApiTests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetCreateIndex4ThrowsExceptionWhenNumIndexcreatesIsNegative()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
             var indexcreates = new[] { new JET_INDEXCREATE() };
             Windows8Api.JetCreateIndex4(this.sesid, this.tableid, indexcreates, -1);
         }
@@ -72,6 +87,11 @@ namespace InteropApiTests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void JetCreateIndex4ThrowsExceptionWhenNumIndexcreatesIsTooLong()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
             var indexcreates = new[] { new JET_INDEXCREATE() };
             Windows8Api.JetCreateIndex4(this.sesid, this.tableid, indexcreates, indexcreates.Length + 1);
         }
@@ -86,6 +106,11 @@ namespace InteropApiTests
         [ExpectedException(typeof(ArgumentNullException))]
         public void JetCreateIndex4ThrowsExceptionWhenIndexNameIsNull()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                throw new ArgumentNullException();
+            }
+
             const string Key = "+column\0";
             var indexcreates = new[]
             {

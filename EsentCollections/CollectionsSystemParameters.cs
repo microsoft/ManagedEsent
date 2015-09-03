@@ -20,7 +20,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// Used to make sure only one thread can perform the global initialization.
         /// </summary>
-        private static readonly object initLock = new object();
+        private static readonly object InitLock = new object();
 
         /// <summary>
         /// True if the Init() method has already run.
@@ -35,7 +35,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             if (!isInit)
             {
-                lock (initLock)
+                lock (InitLock)
                 {
                     if (!isInit)
                     {

@@ -16,7 +16,7 @@ namespace Microsoft.Isam.Esent.Utilities
     internal partial class Dbutil
     {
         /// <summary>
-        /// Maps a commad to the method that implements it.
+        /// Maps a command to the method that implements it.
         /// </summary>
         private readonly Dictionary<string, Action<string[]>> actions;
 

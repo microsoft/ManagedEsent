@@ -203,7 +203,7 @@ namespace Microsoft.Database.Isam
         /// </returns>
         public override string ToString()
         {
-            return string.Format("Columnid({0}, {1}, IsAscii={2})", this.type.Name, this.coltyp, this.isAscii);
+            return string.Format("Columnid({0}, {1}, {2}, IsAscii={3})", this.Name, this.type.Name, this.coltyp, this.isAscii);
         }
     }
 }

@@ -26,6 +26,11 @@ namespace InteropApiTests
         [Description("Test the MaxTransactionSize property")]
         public void SetAndRetrieveInstanceParametersMaxTransactionSize()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             var expected = 79;
             this.instanceParameters.MaxTransactionSize = expected;
             Assert.AreEqual(expected, this.instanceParameters.MaxTransactionSize);
@@ -40,6 +45,11 @@ namespace InteropApiTests
         [Description("Setting the MaxTransactionSize property should set the parameter on the instance")]
         public void VerifySetInstanceParametersMaxTransactionSize()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             int expected = 33;
             this.instanceParameters.MaxTransactionSize = expected;
             Assert.AreEqual(expected, this.GetIntegerParameter(Windows8Param.MaxTransactionSize));
@@ -67,6 +77,11 @@ namespace InteropApiTests
         [Description("Setting the EnableDbScanInRecovery property should set the parameter on the instance")]
         public void VerifySetInstanceParametersEnableDbScanInRecovery()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             var expected = Any.Int32Range(0, 2);
             this.instanceParameters.EnableDbScanInRecovery = expected;
             Assert.AreEqual(expected, this.GetIntegerParameter(Windows7Param.EnableDbScanInRecovery));
@@ -80,6 +95,11 @@ namespace InteropApiTests
         [Description("Test the DbScanThrottle property")]
         public void SetAndRetrieveInstanceParametersDbScanThrottle()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             var expected = 80;
             this.instanceParameters.DbScanThrottle = expected;
             Assert.AreEqual(expected, this.instanceParameters.DbScanThrottle);
@@ -121,6 +141,11 @@ namespace InteropApiTests
         [Description("Setting the DbScanIntervalMinSec property should set the parameter on the instance")]
         public void VerifySetInstanceParametersDbScanIntervalMinSec()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             int expected = 34;
             this.instanceParameters.DbScanIntervalMinSec = expected;
             Assert.AreEqual(expected, this.GetIntegerParameter(Windows7Param.DbScanIntervalMinSec));
@@ -148,6 +173,11 @@ namespace InteropApiTests
         [Description("Setting the DbScanIntervalMaxSec property should set the parameter on the instance")]
         public void VerifySetInstanceParametersDbScanIntervalMaxSec()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             int expected = 35;
             this.instanceParameters.DbScanIntervalMaxSec = expected;
             Assert.AreEqual(expected, this.GetIntegerParameter(Windows7Param.DbScanIntervalMaxSec));
@@ -161,6 +191,11 @@ namespace InteropApiTests
         [Description("Test the CachePriority property")]
         public void SetAndRetrieveInstanceParametersCachePriority()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             var expected = 83;
             this.instanceParameters.CachePriority = expected;
             Assert.AreEqual(expected, this.instanceParameters.CachePriority);
@@ -175,6 +210,11 @@ namespace InteropApiTests
         [Description("Setting the CachePriority property should set the parameter on the instance")]
         public void VerifySetInstanceParametersCachePriority()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             int expected = 36;
             this.instanceParameters.CachePriority = expected;
             Assert.AreEqual(expected, this.GetIntegerParameter(Windows8Param.CachePriority));
@@ -188,6 +228,11 @@ namespace InteropApiTests
         [Description("Test the PrereadIOMax property")]
         public void SetAndRetrieveInstanceParametersPrereadIOMax()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             var expected = 84;
             this.instanceParameters.PrereadIOMax = expected;
             Assert.AreEqual(expected, this.instanceParameters.PrereadIOMax);
@@ -202,6 +247,11 @@ namespace InteropApiTests
         [Description("Setting the PrereadIOMax property should set the parameter on the instance")]
         public void VerifySetInstanceParametersPrereadIOMax()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             int expected = 37;
             this.instanceParameters.PrereadIOMax = expected;
             Assert.AreEqual(expected, this.GetIntegerParameter(Windows8Param.PrereadIOMax));
@@ -215,6 +265,11 @@ namespace InteropApiTests
         [Description("Test that EnableDBScanSerialization can be set and retrieved")]
         public void VerifyGetAndSetEnableDBScanSerialization()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             bool expected = Any.Boolean;
             this.instanceParameters.EnableDBScanSerialization = expected;
             Assert.AreEqual(expected, this.GetBooleanParameter(Windows8Param.EnableDBScanSerialization));
@@ -229,6 +284,11 @@ namespace InteropApiTests
         [Description("Test that DurableCommitCallback can be set and retrieved")]
         public void VerifyGetAndSetDurableCommitCallback()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             NATIVE_JET_PFNDURABLECOMMITCALLBACK savedCallback = this.instanceParameters.GetDurableCommitCallback();
             try
             {
@@ -249,6 +309,11 @@ namespace InteropApiTests
         [Description("Test that a null DurableCommitCallback can be set and retrieved.")]
         public void VerifyGetAndSetNullDurableCommitCallback()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             NATIVE_JET_PFNDURABLECOMMITCALLBACK savedCallback = this.instanceParameters.GetDurableCommitCallback();
             try
             {

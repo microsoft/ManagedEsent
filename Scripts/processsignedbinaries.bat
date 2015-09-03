@@ -82,7 +82,7 @@ echo    ^<requireLicenseAcceptance^>true^</requireLicenseAcceptance^> >>%target%
 echo    ^<description^> >>%target%
 echo      ManagedEsent provides managed access to ESENT, the embeddable database engine native to Windows. ManagedEsent uses the esent.dll that is part of Microsoft Windows so there are no extra unmanaged binaries to download and install. >>%target%
 echo    ^</description^> >>%target%
-echo    ^<releaseNotes^>Release %version% from %date%. Minor updates needed for PersistentDictionary changes.^</releaseNotes^> >>%target%
+echo    ^<releaseNotes^>Release %version% from %date%. 1.9.3.1 contains no binary changes from 1.9.3.0. Fixing the NuSpec metadata to accurately reflect that it's now targetted against .NET 4.5.^</releaseNotes^> >>%target%
 echo    ^<copyright^>Copyright (c) Microsoft. All Rights Reserved.^</copyright^> >>%target%
 echo    ^<tags^>ManagedEsent NoSql ISAM Database Storage DatabaseEngine^</tags^> >>%target%
 echo    ^<!-- >>%target%
@@ -117,7 +117,7 @@ echo      PersistentDictionary is a simple class that implements IDictionary, an
 echo      disk. It allows a simple key-value pair store. It supports strings, value-types, and binary>>%target%
 echo      blobs. It is built on the ManagedEsent library.>>%target%
 echo    ^</description^> >>%target%
-echo    ^<releaseNotes^>Release %version% from %date%. Bug fixes. Now has a dependency on Microsoft.Database.Isam.^</releaseNotes^> >>%target%
+echo    ^<releaseNotes^>Release %version% from %date%. 1.9.3.1 contains no binary changes from 1.9.3.0. Fixing the NuSpec metadata to accurately reflect that it's now targetted against .NET 4.5.^</releaseNotes^> >>%target%
 echo    ^<copyright^>Copyright (c) Microsoft. All Rights Reserved.^</copyright^> >>%target%
 echo    ^<tags^>ManagedEsent NoSql PersistentDictionary Persistent Dictionary Key-Value Store ^</tags^> >>%target%
 echo    ^<dependencies^> >>%target%
@@ -152,7 +152,7 @@ echo      As of mid-2014, the interface is still under development (for example,
 echo      in the future. We are releasing it to see if>>%target%
 echo      anyone finds it useful. Please keep the feedback coming!>>%target%
 echo    ^</description^> >>%target%
-echo    ^<releaseNotes^>Release %version% from %date%. Bug fixes.^</releaseNotes^> >>%target%
+echo    ^<releaseNotes^>Release %version% from %date%. 1.9.3.1 contains no binary changes from 1.9.3.0. Fixing the NuSpec metadata to accurately reflect that it's now targetted against .NET 4.5.^</releaseNotes^> >>%target%
 echo    ^<copyright^>Copyright (c) Microsoft. All Rights Reserved.^</copyright^> >>%target%
 echo    ^<tags^>ManagedEsent NoSql ISAM Database Storage DatabaseEngine^</tags^> >>%target%
 echo    ^<dependencies^> >>%target%
@@ -194,15 +194,17 @@ popd
 @echo =-=-=-=-=-=-=-=
 @echo.
 @echo When ready to upload to nuget, run:
+@echo nuget_pack-%version%.bat
 @echo.
-@echo nuget pack %managedesentdestdir%\ManagedEsent-%version%.nuspec -OutputDirectory %managedesentdestdir%
-@echo nuget pack %collectionsdestdir%\Microsoft.Database.Collections.Generic-%version%.nuspec -OutputDirectory %collectionsdestdir%
-@echo nuget pack %isamdestdir%\Microsoft.Database.Isam-%version%.nuspec -OutputDirectory %isamdestdir%
+@echo nuget pack %managedesentdestdir%\ManagedEsent-%version%.nuspec -OutputDirectory %managedesentdestdir% > nuget_pack-%version%.bat
+@echo nuget pack %collectionsdestdir%\Microsoft.Database.Collections.Generic-%version%.nuspec -OutputDirectory %collectionsdestdir% >> nuget_pack-%version%.bat
+@echo nuget pack %isamdestdir%\Microsoft.Database.Isam-%version%.nuspec -OutputDirectory %isamdestdir% >> nuget_pack-%version%.bat
 @echo.
 @echo And if that was successful (verify with nuget package explorer, http://nuget.codeplex.com/downloads/get/clickOnce/NuGetPackageExplorer.application )
-@echo nuget push %managedesentdestdir%\ManagedEsent.%version%.nupkg
-@echo nuget push %collectionsdestdir%\Microsoft.Database.Collections.Generic.%version%.nupkg
-@echo nuget push %isamdestdir%\Microsoft.Database.Isam.%version%.nupkg
+@echo run nuget_push-%version%.bat
+@echo nuget push %managedesentdestdir%\ManagedEsent.%version%.nupkg > nuget_push-%version%.bat
+@echo nuget push %collectionsdestdir%\Microsoft.Database.Collections.Generic.%version%.nupkg >> nuget_push-%version%.bat
+@echo nuget push %isamdestdir%\Microsoft.Database.Isam.%version%.nupkg >> nuget_push-%version%.bat
 @echo.
 @echo You should also upload %~dp0signed-%version%\ManagedEsent%version%.zip to http://managedesent.codeplex.com/releases
 @goto :eof

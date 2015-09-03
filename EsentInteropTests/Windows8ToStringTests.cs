@@ -44,6 +44,11 @@ namespace InteropApiTests
         [Description("Test DurableCommitCallback.ToString()")]
         public void DurableCommitCallbackToString()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_INSTANCE inst;
             Api.JetCreateInstance(out inst, "dummy");
             try

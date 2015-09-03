@@ -252,6 +252,17 @@ namespace Microsoft.Database.Isam
         }
 
         /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
+        public override string ToString()
+        {
+            return string.Format("ColumnDefinition({0}, {1})", this.type.Name, this.Name);
+        }
+
+        /// <summary>
         /// Creates a <see cref="ColumnDefinition"/> object representing the column passed in by <paramref name="columnList"/>.
         /// </summary>
         /// <param name="database">The database.</param>

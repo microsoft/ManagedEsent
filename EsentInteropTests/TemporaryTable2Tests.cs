@@ -68,6 +68,11 @@ namespace InteropApiTests
         [Description("Sort case-sensitive with JetOpenTemporaryTable3")]
         public void SortDataCaseSensitiveWithJetOpenTemporaryTable3()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             const string LocaleName = "pt-BR";
 
             var columns = new[]

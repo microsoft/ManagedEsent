@@ -657,7 +657,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             return new JET_COLUMNID()
             {
-                Value = (uint)nativeValue
+                Value = unchecked((uint)nativeValue)
             };
         }
     }

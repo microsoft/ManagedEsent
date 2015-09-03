@@ -6,6 +6,8 @@
 
 namespace InteropApiTests
 {
+    using System;
+
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Windows10;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -25,28 +27,47 @@ namespace InteropApiTests
         {
             if (EsentVersion.SupportsWindows10Features)
             {
-           using (var session = new Session(this.instance))
-            {
-                Assert.AreEqual(0, session.GetTransactionLevel());
-                Api.JetBeginTransaction(session.JetSesid);
-                Assert.AreEqual(1, session.GetTransactionLevel());
-                Api.JetCommitTransaction(session.JetSesid, CommitTransactionGrbit.None);
-                Assert.AreEqual(0, session.GetTransactionLevel());
-            }
+                using (var session = new Session(this.instance))
+                {
+                    Assert.AreEqual(0, session.GetTransactionLevel());
+                    Api.JetBeginTransaction(session.JetSesid);
+                    Assert.AreEqual(1, session.GetTransactionLevel());
+                    Api.JetCommitTransaction(session.JetSesid, CommitTransactionGrbit.None);
+                    Assert.AreEqual(0, session.GetTransactionLevel());
+                }
             }
             else
             {
                 // Functionality not supported.
-                try
+                if (EsentVersion.SupportsWindows8Features)
                 {
-                    using (var session = new Session(this.instance))
+                    // Win8/Win81
+                    try
                     {
-                        Assert.AreEqual(0, session.GetTransactionLevel());
+                        using (var session = new Session(this.instance))
+                        {
+                            Assert.AreEqual(0, session.GetTransactionLevel());
+                        }
+                    }
+                    catch (EsentInvalidParameterException)
+                    {
+                        return;
                     }
                 }
-                catch (EsentInvalidParameterException)
+                else
                 {
-                    return;
+                    // Win7 and below
+                    try
+                    {
+                        using (var session = new Session(this.instance))
+                        {
+                            Assert.AreEqual(0, session.GetTransactionLevel());
+                        }
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        return;
+                    }
                 }
             }
         }
@@ -79,17 +100,37 @@ namespace InteropApiTests
             else
             {
                 // Functionality not supported.
-                try
+                if (EsentVersion.SupportsWindows8Features)
                 {
-                    using (var session = new Session(this.instance))
+                    // Win8/Win81
+                    try
                     {
-                        // A new session shouldn't re-use the old value.
-                        Assert.AreEqual(0, session.GetCorrelationID());
+                        using (var session = new Session(this.instance))
+                        {
+                            // A new session shouldn't re-use the old value.
+                            Assert.AreEqual(0, session.GetCorrelationID());
+                        }
+                    }
+                    catch (EsentInvalidParameterException)
+                    {
+                        return;
                     }
                 }
-                catch (EsentInvalidParameterException)
+                else
                 {
-                    return;
+                    // Win7 and below
+                    try
+                    {
+                        using (var session = new Session(this.instance))
+                        {
+                            // A new session shouldn't re-use the old value.
+                            Assert.AreEqual(0, session.GetCorrelationID());
+                        }
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        return;
+                    }
                 }
             }
         }

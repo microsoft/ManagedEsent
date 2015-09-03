@@ -94,6 +94,11 @@ namespace InteropApiTests
         [Description("Verify JetSetSessionParameter( CommitDefault )")]
         public void VerifySetSessionParamCommitDefault()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             Windows8Api.JetSetSessionParameter(this.session, JET_sesparam.CommitDefault, (int)CommitTransactionGrbit.LazyFlush);
         }
         
@@ -105,6 +110,11 @@ namespace InteropApiTests
         [Description("Verify JetSetSessionParameter( CommitGenericContext ) Simple")]
         public void VerifySetSessionParamCommitGenericContextSimple()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             int cb = 3;
             byte[] trxContext = new byte[cb];
             trxContext[0] = 0x23;
@@ -124,6 +134,11 @@ namespace InteropApiTests
         [Description("Verify JetSetSessionParameter( CommitGenericContext ) and Reset")]
         public void VerifySetSessionParamCommitGenericContextAndReset()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             int cb = 5;
             byte[] trxContext = new byte[cb];
             trxContext[0] = 0x23;

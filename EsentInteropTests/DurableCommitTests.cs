@@ -103,6 +103,11 @@ namespace InteropApiTests
         [Description("Setup for each test in DurableCommitTests")]
         public void TestSetup()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             this.directory = SetupHelper.CreateRandomDirectory();
             this.database = Path.Combine(this.directory, "database.edb");
             this.instance = SetupHelper.CreateNewInstance(this.directory);
@@ -131,6 +136,11 @@ namespace InteropApiTests
         [Description("Cleanup for each test in DurableCommitTests")]
         public void TestTeardown()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             Api.JetCloseTable(this.sesid, this.tableid);
             Api.JetCloseDatabase(this.sesid, this.dbid, CloseDatabaseGrbit.None);
             Api.JetEndSession(this.sesid, EndSessionGrbit.None);
@@ -152,6 +162,11 @@ namespace InteropApiTests
         [Description("Get a commit-id")]
         public void CommitIdFromCommitTransaction2()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             Api.JetBeginTransaction(this.sesid);
             this.InsertRecord(this.tableid, 2);
             this.InsertRecord(this.tableid, 1);
@@ -170,6 +185,11 @@ namespace InteropApiTests
         [Description("Get commit-id from Transaction.Commit(), should immediately be reported by callback.")]
         public void CommitIdFromCommitTransactionWrapper()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             using (var transaction = new Transaction(this.sesid))
             {
                 this.InsertRecord(this.tableid, 2);
@@ -190,6 +210,11 @@ namespace InteropApiTests
         [Description("Lazy commit with duration")]
         public void LazyCommitWithDuration()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             Api.JetBeginTransaction(this.sesid);
             this.InsertRecord(this.tableid, 2);
             this.InsertRecord(this.tableid, 1);
@@ -212,6 +237,11 @@ namespace InteropApiTests
         [Description("Lazy commit with smaller duration")]
         public void LazyCommitWithSmallerDuration()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             Api.JetBeginTransaction(this.sesid);
             this.InsertRecord(this.tableid, 2);
             this.InsertRecord(this.tableid, 1);
@@ -239,6 +269,11 @@ namespace InteropApiTests
         [Description("Transaction.Commit() thows when it's not in a transaction.")]
         public void LazyTransactionCommitThrowsWhenNotInTransaction()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             using (var transaction = new Transaction(this.sesid))
             {
                 JET_COMMIT_ID commitId;
@@ -263,6 +298,11 @@ namespace InteropApiTests
         [Description("Lazy commit followed by read-only transaction still allows WaitLastLevel0Commit to work")]
         public void LazyCommitFollowedByReadOnlyCanCommitLazy()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             Api.JetBeginTransaction(this.sesid);
             this.InsertRecord(this.tableid, 1);
             JET_COMMIT_ID commitId;

@@ -149,7 +149,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
-        /// Checks that this instance hasn't changed illegaly, throws an exception if it did.
+        /// Checks that this instance hasn't changed illegally, throws an exception if it did.
         /// </summary>
         internal void CheckImmutability()
         {

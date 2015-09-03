@@ -13,9 +13,9 @@ namespace Microsoft.Database.Isam.Config
     /// <summary>
     /// A delegate type that is used by the config classes to change the parameter get behaviour when the config set is alive (is associated with a container).
     /// </summary>
-    /// <param name="key">The param id.</param>
-    /// <param name="value">The param value.</param>
-    /// <returns>True if the param's value was read and returned. False otherwise.</returns>
+    /// <param name="key">The parameter id.</param>
+    /// <param name="value">The parameter value.</param>
+    /// <returns>True if the parameter's value was read and returned. False otherwise.</returns>
     internal delegate bool TryGetParamDelegate(int key, out object value);
 
     /// <summary>
@@ -32,17 +32,17 @@ namespace Microsoft.Database.Isam.Config
         }
 
         /// <summary>
-        /// The dictionary containing all config parameters.
+        /// Gets or sets the dictionary containing all config parameters.
         /// </summary>
         internal Dictionary<int, object> ParamStore { get; set; }
 
         /// <summary>
-        /// Delegate used by config sets to update parameters.
+        /// Gets or sets the delegate used by config sets to update parameters.
         /// </summary>
         internal Action<int, object> SetParamDelegate { get; set; }
 
         /// <summary>
-        /// Delegate used by config sets to get parameter values.
+        /// Gets or sets the delegate used by config sets to get parameter values.
         /// </summary>
         internal TryGetParamDelegate GetParamDelegate { get; set; }
 

@@ -567,7 +567,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         /// <typeparam name="T">The underlying type.</typeparam>
         /// <param name="sesid">The session to use.</param>
-        /// <param name="tableid">The tablid to set.</param>
+        /// <param name="tableid">The tableid to set.</param>
         /// <param name="columnid">The column to set.</param>
         /// <param name="value">The nullable value to set.</param>
         /// <returns>

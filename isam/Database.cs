@@ -17,14 +17,15 @@ namespace Microsoft.Database.Isam
     /// <summary>
     /// Miscellaneous parameters that are specified during the span of instance initialization and database attach.
     /// They are similar to system parameters (instance-wide scope) but are not part of JET_param*.
-    /// This enum shares number space with JET_param*. So we start at 4096 to give us ample cushion.
+    /// This enum shares number space with JET_param* (and we would like to avoid overlapping with JET_sesparam*
+    /// just to avoid confusion). So we start at 8192 to give us ample cushion.
     /// </summary>
     internal enum DatabaseParams
     {
         /// <summary>
         /// A string identifier that uniquely identifies an instance of Database
         /// </summary>
-        Identifier = 4096,
+        Identifier = 8192,
 
         /// <summary>
         /// A user-friendly name that is used to identify an instance of Database in system diagnostics (event log etc).
@@ -35,6 +36,11 @@ namespace Microsoft.Database.Isam
         /// Gets or sets flags used to select optional Engine behaviour at initialization. See <see cref ="CreateInstanceGrbit"/> and <see cref="Api.JetCreateInstance2"/>
         /// </summary>
         EngineFlags,
+
+        /// <summary>
+        /// Gets or sets the used to select optional behaviour while initializing the engine and recoverying the database from the log stream. See <see cref ="InitGrbit"/> and <see cref="Api.JetInit2"/>
+        /// </summary>
+        DatabaseRecoveryFlags,
 
         /// <summary>
         /// Specifies a path to use for creating or opening the database file.
@@ -50,6 +56,11 @@ namespace Microsoft.Database.Isam
         /// Gets or sets flags used to select optional behaviour while attaching a database file to the Engine. See <see cref ="AttachDatabaseGrbit"/> and <see cref="Api.JetAttachDatabase2"/>
         /// </summary>
         DatabaseAttachFlags,
+
+        /// <summary>
+        /// Gets or sets the used to select optional behaviour while terminating / shutting the engine. See <see cref ="TermGrbit"/> and <see cref="Api.JetTerm2"/>
+        /// </summary>
+        DatabaseStopFlags,
 
         /// <summary>
         /// Gets or sets the maximum size of the database in pages. Zero means there is no maximum. See maxPages parameter for <see cref ="Api.JetCreateDatabase2"/> or <see cref="Api.JetAttachDatabase2"/>
@@ -200,18 +211,19 @@ namespace Microsoft.Database.Isam
         /// </summary>
         public void Dispose()
         {
-            this.Term(TermGrbit.Complete);
+            this.Term();
         }
 
         /// <summary>
         /// Terminates the Database. The exact behaviour of the termination process depends on the <see cref="TermGrbit"/> passed to the function.
         /// </summary>
-        /// <param name="termOptions">Termination behavior to use.</param>
-        public void Term(TermGrbit termOptions)
+        public void Term()
         {
             if (this.ownsInstance && this.instance != JET_INSTANCE.Nil)
             {
-                Api.JetTerm2(this.instance, termOptions);
+                // The TermGrbit.None should be equivalent to TermGrbit.Complete, but to stay consistent
+                // with JetInit[2]() mapping to JetInit2() mapping in jetapi, we just translate it.
+                Api.JetTerm2(this.instance, this.config.DatabaseStopFlags == TermGrbit.None ? TermGrbit.Complete : this.config.DatabaseStopFlags);
                 this.instance = JET_INSTANCE.Nil;
             }
         }
@@ -230,7 +242,8 @@ namespace Microsoft.Database.Isam
             this.config.GetParamDelegate = this.TryGetParam;
             this.config.SetParamDelegate = this.SetParam;
 
-            Api.JetInit(ref this.instance);
+            Api.JetInit2(ref this.instance, this.config.DatabaseRecoveryFlags);
+
             using (var session = new Session(this.instance))
             {
                 try

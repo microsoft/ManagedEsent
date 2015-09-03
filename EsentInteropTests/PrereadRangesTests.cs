@@ -207,6 +207,11 @@ namespace InteropApiTests
         [Description("Test PrereadRanges with invalid relop")]
         public void TestReadRangeInvalidRelop()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_INDEX_COLUMN[] startColumn = new JET_INDEX_COLUMN[1];
             startColumn[0] = this.CreateKeyColumn(this.columnIdKey1, 6, JetRelop.GreaterThanOrEqual);
             JET_INDEX_COLUMN[] endColumn = new JET_INDEX_COLUMN[1];
@@ -248,6 +253,11 @@ namespace InteropApiTests
         [Description("Test PrereadRanges of one range with all keys")]
         public void TestReadRangeAllKeys()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_INDEX_COLUMN[] startColumn = new JET_INDEX_COLUMN[3];
             startColumn[0] = this.CreateKeyColumn(this.columnIdKey1, 6, JetRelop.Equals);
             startColumn[1] = this.CreateKeyColumn(this.columnIdKey2, 60, JetRelop.Equals);
@@ -304,6 +314,11 @@ namespace InteropApiTests
         [Description("Test PrereadRanges of one range only spanning one page")]
         public void TestReadRangeSpanningOnePage()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_INDEX_COLUMN[] startColumn = new JET_INDEX_COLUMN[1];
             startColumn[0] = this.CreateKeyColumn(this.columnIdKey1, 6, JetRelop.Equals);
             JET_INDEX_COLUMN[] endColumn = new JET_INDEX_COLUMN[1];
@@ -356,6 +371,11 @@ namespace InteropApiTests
         [Description("Test PrereadRanges of one range too high")]
         public void TestReadRangeTooHigh()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_INDEX_COLUMN[] startColumn = new JET_INDEX_COLUMN[1];
             startColumn[0] = this.CreateKeyColumn(this.columnIdKey1, 150, JetRelop.Equals);
             JET_INDEX_COLUMN[] endColumn = new JET_INDEX_COLUMN[1];
@@ -408,6 +428,11 @@ namespace InteropApiTests
         [Description("Test PrereadRanges of one range to end of table")]
         public void TestReadKeyRangeToEndOfTable()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             Api.MakeKey(this.sesId, this.tableId, 10, MakeKeyGrbit.NewKey | MakeKeyGrbit.FullColumnStartLimit);
             byte[] startKey = new byte[SystemParameters.KeyMost];
             int startKeyLength;
@@ -461,6 +486,11 @@ namespace InteropApiTests
         [Description("Test PrereadRanges of one range to end of table")]
         public void TestReadRangeToEndOfTable()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_INDEX_COLUMN[] startColumn = new JET_INDEX_COLUMN[1];
             startColumn[0] = this.CreateKeyColumn(this.columnIdKey1, 10, JetRelop.Equals);
             JET_INDEX_COLUMN[] endColumn = new JET_INDEX_COLUMN[1];
@@ -513,6 +543,11 @@ namespace InteropApiTests
         [Description("Test PrereadRanges of one range only start")]
         public void TestReadRangeOnlyStart()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_INDEX_COLUMN[] startColumn = new JET_INDEX_COLUMN[1];
             startColumn[0] = this.CreateKeyColumn(this.columnIdKey1, 23, JetRelop.Equals);
             JET_INDEX_RANGE[] indexRanges =
@@ -663,6 +698,11 @@ namespace InteropApiTests
         [Description("Test PrereadRanges of one range too low")]
         public void TestReadRangeTooLow()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_INDEX_COLUMN[] startColumn = new JET_INDEX_COLUMN[1];
             startColumn[0] = this.CreateKeyColumn(this.columnIdKey1, -60, JetRelop.Equals);
             JET_INDEX_COLUMN[] endColumn = new JET_INDEX_COLUMN[1];
@@ -715,6 +755,11 @@ namespace InteropApiTests
         [Description("Test PrereadRanges of one range out of order")]
         public void TestReadRangeOutOfOrder()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_INDEX_COLUMN[] startColumn = new JET_INDEX_COLUMN[1];
             startColumn[0] = this.CreateKeyColumn(this.columnIdKey1, 8, JetRelop.Equals);
             JET_INDEX_COLUMN[] endColumn = new JET_INDEX_COLUMN[1];
@@ -747,6 +792,11 @@ namespace InteropApiTests
         [Description("Test PrereadRanges of one range spanning multiple page")]
         public void TestReadRangeSpanningMultiplePage()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_INDEX_COLUMN[] startColumn = new JET_INDEX_COLUMN[1];
             startColumn[0] = this.CreateKeyColumn(this.columnIdKey1, 16, JetRelop.Equals);
             JET_INDEX_COLUMN[] endColumn = new JET_INDEX_COLUMN[1];
@@ -799,6 +849,11 @@ namespace InteropApiTests
         [Description("Test PrereadRanges of one range only spanning one page backwards")]
         public void TestReadRangeSpanningOnePageBackwards()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_INDEX_COLUMN[] startColumn = new JET_INDEX_COLUMN[1];
             startColumn[0] = this.CreateKeyColumn(this.columnIdKey1, 8, JetRelop.Equals);
             JET_INDEX_COLUMN[] endColumn = new JET_INDEX_COLUMN[1];
@@ -851,6 +906,11 @@ namespace InteropApiTests
         [Description("Test PrereadRanges of one range out of order backwards")]
         public void TestReadRangeOutOfOrderBackwards()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_INDEX_COLUMN[] startColumn = new JET_INDEX_COLUMN[1];
             startColumn[0] = this.CreateKeyColumn(this.columnIdKey1, 6, JetRelop.Equals);
             JET_INDEX_COLUMN[] endColumn = new JET_INDEX_COLUMN[1];
@@ -883,6 +943,11 @@ namespace InteropApiTests
         [Description("Test PrereadRanges of one range spanning multiple page backwards")]
         public void TestReadRangeSpanningMultiplePageBackwards()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_INDEX_COLUMN[] startColumn = new JET_INDEX_COLUMN[1];
             startColumn[0] = this.CreateKeyColumn(this.columnIdKey1, 40, JetRelop.Equals);
             JET_INDEX_COLUMN[] endColumn = new JET_INDEX_COLUMN[1];
@@ -935,7 +1000,12 @@ namespace InteropApiTests
         [Description("Test PrereadRanges of one partial range")]
         public void TestReadPartialRange()
         {
-             JET_INDEX_COLUMN[] startColumn = new JET_INDEX_COLUMN[1];
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
+            JET_INDEX_COLUMN[] startColumn = new JET_INDEX_COLUMN[1];
             startColumn[0] = this.CreateKeyColumn(this.columnIdKey1, 8, JetRelop.Equals);
             JET_INDEX_COLUMN[] endColumn = new JET_INDEX_COLUMN[1];
             endColumn[0] = this.CreateKeyColumn(this.columnIdKey1, 88, JetRelop.Equals);
@@ -987,6 +1057,11 @@ namespace InteropApiTests
         [Description("Test PrereadRanges of multiple overlapping ranges")]
         public void TestReadMultipleOverlappingRanges()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_INDEX_COLUMN[] startColumn1 = new JET_INDEX_COLUMN[1];
             startColumn1[0] = this.CreateKeyColumn(this.columnIdKey1, 5, JetRelop.Equals);
             JET_INDEX_COLUMN[] endColumn1 = new JET_INDEX_COLUMN[1];
@@ -1049,6 +1124,11 @@ namespace InteropApiTests
         [Description("Test PrereadRanges of multiple ranges in one page")]
         public void TestReadMultipleRangesOnePage()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_INDEX_COLUMN[] startColumn1 = new JET_INDEX_COLUMN[1];
             startColumn1[0] = this.CreateKeyColumn(this.columnIdKey1, 14, JetRelop.Equals);
             JET_INDEX_COLUMN[] endColumn1 = new JET_INDEX_COLUMN[1];
@@ -1111,6 +1191,11 @@ namespace InteropApiTests
         [Description("Test PrereadRanges of multiple ranges out of order")]
         public void TestReadMultipleRangesOutOfOrder()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_INDEX_COLUMN[] startColumn1 = new JET_INDEX_COLUMN[1];
             startColumn1[0] = this.CreateKeyColumn(this.columnIdKey1, 16, JetRelop.Equals);
             JET_INDEX_COLUMN[] endColumn1 = new JET_INDEX_COLUMN[1];
@@ -1153,6 +1238,11 @@ namespace InteropApiTests
         [Description("Test PrereadRanges of multiple non-overlapping ranges")]
         public void TestReadMultipleNonOverlappingRanges()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_INDEX_COLUMN[] startColumn1 = new JET_INDEX_COLUMN[1];
             startColumn1[0] = this.CreateKeyColumn(this.columnIdKey1, 16, JetRelop.Equals);
             JET_INDEX_COLUMN[] endColumn1 = new JET_INDEX_COLUMN[1];
@@ -1215,7 +1305,12 @@ namespace InteropApiTests
         [Description("Test partial PrereadRanges of multiple ranges")]
         public void TestReadPartialMultipleRanges()
         {
-             JET_INDEX_COLUMN[] startColumn1 = new JET_INDEX_COLUMN[1];
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
+            JET_INDEX_COLUMN[] startColumn1 = new JET_INDEX_COLUMN[1];
             startColumn1[0] = this.CreateKeyColumn(this.columnIdKey1, 8, JetRelop.Equals);
             JET_INDEX_COLUMN[] endColumn1 = new JET_INDEX_COLUMN[1];
             endColumn1[0] = this.CreateKeyColumn(this.columnIdKey1, 23, JetRelop.Equals);
@@ -1277,6 +1372,11 @@ namespace InteropApiTests
         [Description("Test PrereadRanges of multiple overlapping ranges backwards")]
         public void TestReadMultipleOverlappingRangesBackwards()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_INDEX_COLUMN[] startColumn1 = new JET_INDEX_COLUMN[1];
             startColumn1[0] = this.CreateKeyColumn(this.columnIdKey1, 18, JetRelop.Equals);
             JET_INDEX_COLUMN[] endColumn1 = new JET_INDEX_COLUMN[1];
@@ -1339,6 +1439,11 @@ namespace InteropApiTests
         [Description("Test PrereadRanges of multiple ranges out of order backwards")]
         public void TestReadMultipleRangesOutOfOrderBackwards()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_INDEX_COLUMN[] startColumn1 = new JET_INDEX_COLUMN[1];
             startColumn1[0] = this.CreateKeyColumn(this.columnIdKey1, 40, JetRelop.Equals);
             JET_INDEX_COLUMN[] endColumn1 = new JET_INDEX_COLUMN[1];
@@ -1381,6 +1486,11 @@ namespace InteropApiTests
         [Description("Test PrereadRanges of multiple non-overlapping ranges backwards")]
         public void TestReadMultipleNonOverlappingRangesBackwards()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_INDEX_COLUMN[] startColumn1 = new JET_INDEX_COLUMN[1];
             startColumn1[0] = this.CreateKeyColumn(this.columnIdKey1, 40, JetRelop.Equals);
             JET_INDEX_COLUMN[] endColumn1 = new JET_INDEX_COLUMN[1];
@@ -1443,6 +1553,11 @@ namespace InteropApiTests
         [Description("Test PrereadRanges of part of the range array")]
         public void TestReadPartOfRangeArray()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             JET_INDEX_COLUMN[] startColumn1 = new JET_INDEX_COLUMN[1];
             startColumn1[0] = this.CreateKeyColumn(this.columnIdKey1, 16, JetRelop.Equals);
             JET_INDEX_COLUMN[] endColumn1 = new JET_INDEX_COLUMN[1];
@@ -1515,6 +1630,11 @@ namespace InteropApiTests
         [Description("Test PrereadRanges of one range on secondary index")]
         public void TestReadRangeOnSecondaryIndex()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             Api.JetSetCurrentIndex(this.sesId, this.tableId, this.secIndexWithPrimaryName);
 
             // secondary index has 12 records on first page, 11 on rest
@@ -1555,6 +1675,11 @@ namespace InteropApiTests
         [Description("MoveNext with filter does not keep reading beyond end of IndexRange")]
         public void TestFilteredMoveBeyondIndexRange()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             this.SeekToRecordClustered(16, SeekGrbit.SeekGE);
             this.VerifyCurrentRecord(16);
             this.MakeKeyAndSetIndexRangeClustered(24, SetIndexRangeGrbit.RangeUpperLimit);
@@ -1589,6 +1714,11 @@ namespace InteropApiTests
         [Description("LV pre-reads with secondary index")]
         public void TestLvPrereadsWithSecIndex()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             Api.JetSetCurrentIndex(this.sesId, this.tableId, this.secIndexWithPrimaryName);
 
             JET_INDEX_COLUMN[] startColumn = new JET_INDEX_COLUMN[1];
@@ -1623,6 +1753,11 @@ namespace InteropApiTests
         [Description("Verify that a failing preread with the 'Try' Preread overload does not throw an exception.")]
         public void TestTryLvPrereadsWithSecIndex()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             Api.JetSetCurrentIndex(this.sesId, this.tableId, this.secIndexWithPrimaryName);
 
             JET_INDEX_COLUMN[] startColumn = new JET_INDEX_COLUMN[1];
@@ -1650,6 +1785,11 @@ namespace InteropApiTests
         [Description("LV pre-reads with intrinsic LV")]
         public void TestLvPrereadsWithIntrinsicLv()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             for (int i = 25; i < 30; i++)
             {
                 this.UpdateExLv(this.tableId, i, 4, true);
@@ -1690,7 +1830,12 @@ namespace InteropApiTests
         [Description("LV pre-reads with default flags")]
         public void TestLvPrereadsWithDefaultFlags()
         {
-             JET_INDEX_COLUMN[] startColumn = new JET_INDEX_COLUMN[1];
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
+            JET_INDEX_COLUMN[] startColumn = new JET_INDEX_COLUMN[1];
             startColumn[0] = this.CreateKeyColumn(this.columnIdKey1, 6, JetRelop.Equals);
             JET_INDEX_COLUMN[] endColumn = new JET_INDEX_COLUMN[1];
             endColumn[0] = this.CreateKeyColumn(this.columnIdKey1, 12, JetRelop.Equals);
@@ -1725,6 +1870,11 @@ namespace InteropApiTests
         [Description("Test max LV pre-reads limit")]
         public void TestMaxLvPrereadLimit()
         {
+            if (!EsentVersion.SupportsWindows8Features)
+            {
+                return;
+            }
+
             for (int i = 25; i < 40; i++)
             {
                 this.UpdateExLv(this.tableId, i, 8 * SystemParameters.LVChunkSizeMost, false);

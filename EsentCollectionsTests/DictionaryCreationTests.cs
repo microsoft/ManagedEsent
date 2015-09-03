@@ -14,6 +14,9 @@ namespace EsentCollectionsTests
     using System.IO;
     using Microsoft.Database.Isam.Config;
     using Microsoft.Isam.Esent.Collections.Generic;
+    using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Vista;
+    using Microsoft.Isam.Esent.Interop.Windows7;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -399,6 +402,102 @@ namespace EsentCollectionsTests
             Assert.IsTrue(Directory.Exists(DictionaryLocation));
             Assert.AreEqual(DictionaryLocation, pd.DatabasePath);
             Cleanup.DeleteDirectoryWithRetry(DictionaryLocation);
+        }
+
+        /// <summary>
+        /// Create a dictionary with custom configuration that uses the DatabaseRecoveryFlags setting.
+        /// FUTURE-2015/08/14-BrettSh - Should probably be somewhere more generic, but this is what is easily
+        /// accessible.  And TestChangeEngineParamsAtRuntime is opaque / confusing.
+        /// </summary>
+        [TestMethod]
+        [Priority(3)]
+        public void VerifyCreateDictionaryFromConfigSetWithRecoveryFlags()
+        {
+            const string DictionaryLocation = "ConfigSetDictForNewRecoveryFlags";
+            string dictionaryFilename = Path.Combine(DictionaryLocation, "ConfigSetDict.edb");
+            var config = new DatabaseConfig()
+            {
+                SystemPath = DictionaryLocation,
+                LogFilePath = DictionaryLocation,
+                TempPath = DictionaryLocation,
+                DatabaseFilename = dictionaryFilename,
+                TableClass1Name = "_test_",
+                DatabaseRecoveryFlags = VistaGrbits.LogStreamMustExist,
+            };
+
+            PersistentDictionary<int, Guid?> pd;
+            bool grbitWorked = false;
+            try
+            {
+                using (pd = new PersistentDictionary<int, Guid?>(config))
+                {
+                }
+            }
+            catch (EsentMissingLogFileException)
+            {
+                grbitWorked = true;
+            }
+
+            Assert.IsTrue(grbitWorked);
+            Assert.IsTrue(!File.Exists(dictionaryFilename));
+            Cleanup.DeleteDirectoryWithRetry(DictionaryLocation);
+        }
+
+        /// <summary>
+        /// Create a dictionary with custom configuration that uses the DatabaseStopFlags setting.
+        /// </summary>
+        [TestMethod]
+        [Priority(3)]
+        public void VerifyCreateDictionaryFromConfigSetWithTermFlags()
+        {
+            const string DictionaryLocation = "ConfigSetDictForTermFlags";
+            string dictionaryFilename = Path.Combine(DictionaryLocation, "ConfigSetDict.edb");
+            var config = new DatabaseConfig()
+            {
+                SystemPath = DictionaryLocation,
+                LogFilePath = DictionaryLocation,
+                TempPath = DictionaryLocation,
+                DatabaseFilename = dictionaryFilename,
+                TableClass1Name = "_testX_",
+                DatabaseStopFlags = Windows7Grbits.Dirty,
+            };
+
+            using (var pd = new PersistentDictionary<int, Guid?>(config))
+            {
+                for (int i = 0; i < 256; i++)
+                {
+                    pd[i] = Guid.NewGuid();
+                }
+
+                Assert.IsTrue(File.Exists(dictionaryFilename));
+
+                pd.Dispose();
+            }
+
+            JET_dbstate dbstate = GetDbState(dictionaryFilename);
+            Console.WriteLine("Dbstate after TermDirty: {0}", dbstate);
+            Assert.AreEqual(JET_dbstate.DirtyShutdown, dbstate);
+
+            Cleanup.DeleteDirectoryWithRetry(DictionaryLocation);
+        }
+
+        /// <summary>
+        /// Retrieves and returns the <see cref="JET_dbstate"/> enum of the specified database / filename.
+        /// </summary>
+        /// <param name="fileName">File name of the database you want to check the state of.</param>
+        /// <returns>
+        /// The <see cref="JET_dbstate"/> enum of the specified database / filename.
+        /// </returns>
+        private static JET_dbstate GetDbState(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                throw new ArgumentException("The fileName argument must be non-null and non-empty.");
+            }
+
+            JET_DBINFOMISC dbinfo;
+            Api.JetGetDatabaseFileInfo(fileName, out dbinfo, JET_DbInfo.Misc);
+            return dbinfo.dbstate;
         }
 
         /// <summary>

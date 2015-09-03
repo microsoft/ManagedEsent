@@ -50,6 +50,28 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Initializes a new instance of the <see cref="JET_SIGNATURE"/> struct.
         /// </summary>
+        /// <param name="bytes">The serialized representation of a JET_SIGNATURE from ToBytes().</param>
+        public JET_SIGNATURE(byte[] bytes)
+        {
+            var nativeSignature = new NATIVE_SIGNATURE();
+            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(nativeSignature));
+            Marshal.Copy(bytes, 0, ptr, Marshal.SizeOf(nativeSignature));
+            for (int i = bytes.Length; i < Marshal.SizeOf(nativeSignature); i++)
+            {
+                Marshal.WriteByte(ptr, i, 0);
+            }
+
+            nativeSignature = (NATIVE_SIGNATURE)Marshal.PtrToStructure(ptr, nativeSignature.GetType());
+            Marshal.FreeHGlobal(ptr);
+
+            this.ulRandom = nativeSignature.ulRandom;
+            this.logtimeCreate = nativeSignature.logtimeCreate;
+            this.szComputerName = nativeSignature.szComputerName;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JET_SIGNATURE"/> struct.
+        /// </summary>
         /// <param name="random">A random number.</param>
         /// <param name="time">The time for the creation time.</param>
         /// <param name="computerName">The optional computer name.</param>
@@ -115,6 +137,21 @@ namespace Microsoft.Isam.Esent.Interop
                 this.ulRandom,
                 convertedDate,
                 this.szComputerName);
+        }
+
+        /// <summary>
+        /// Generate the serialized representation of the structure.
+        /// </summary>
+        /// <returns>The structure as a byte array.</returns>
+        public byte[] ToBytes()
+        {
+            NATIVE_SIGNATURE nativeSignature = this.GetNativeSignature();
+            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(nativeSignature));
+            Marshal.StructureToPtr(nativeSignature, ptr, false);
+            byte[] bytes = new byte[Marshal.SizeOf(nativeSignature)];
+            Marshal.Copy(ptr, bytes, 0, Marshal.SizeOf(nativeSignature));
+            Marshal.FreeHGlobal(ptr);
+            return bytes;
         }
 
         /// <summary>

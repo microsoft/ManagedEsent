@@ -15,7 +15,7 @@ namespace Microsoft.Database.Isam
     using System.Collections;
 
     /// <summary>
-    /// Holds the condtional columns associated with a <see cref="IndexDefinition"/>.
+    /// Holds the conditional columns associated with a <see cref="IndexDefinition"/>.
     /// </summary>
     public class ConditionalColumnCollection : CollectionBase
     {
