@@ -27,7 +27,7 @@ namespace InteropApiTests
         /// The native conditional column structure created from the JET_TABLECREATE
         /// object.
         /// </summary>
-        private NATIVE_TABLECREATE2 native;
+        private JET_TABLECREATE.NATIVE_TABLECREATE2 native;
 
         /// <summary>
         /// Setup the test fixture. This creates a native structure and converts

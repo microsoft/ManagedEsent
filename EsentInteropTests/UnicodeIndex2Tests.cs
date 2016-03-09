@@ -7,10 +7,8 @@
 namespace InteropApiTests
 {
     using System;
-    using System.Runtime.InteropServices;
-    using System.Text;
+
     using Microsoft.Isam.Esent.Interop;
-    using Microsoft.Isam.Esent.Interop.Windows8;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -49,6 +47,86 @@ namespace InteropApiTests
                 dwMapFlags = 0x400,
             };
             this.native = this.managed.GetNativeUnicodeIndex2();
+        }
+
+        /// <summary>
+        /// Verify GetEffectiveLocaleName() works with null.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify GetEffectiveLocaleName() works with null.")]
+        public void VerifyGetEffectiveLocaleNameWorksWithNull()
+        {
+            var unicodeIndex = new JET_UNICODEINDEX()
+            {
+                szLocaleName = null,
+                dwMapFlags = 0x400,
+            };
+            Assert.AreEqual(null, unicodeIndex.GetEffectiveLocaleName());
+        }
+
+        /// <summary>
+        /// Verify GetEffectiveLocaleName() works with empty string.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify GetEffectiveLocaleName() works with empty string.")]
+        public void VerifyGetEffectiveLocaleNameWorksWithEmptyString()
+        {
+            var unicodeIndex = new JET_UNICODEINDEX()
+            {
+                szLocaleName = string.Empty,
+                dwMapFlags = 0x400,
+            };
+            Assert.AreEqual(string.Empty, unicodeIndex.GetEffectiveLocaleName());
+        }
+
+        /// <summary>
+        /// Verify GetEffectiveLocaleName() works with LCID 127.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify GetEffectiveLocaleName() works with LCID 127.")]
+        public void VerifyGetEffectiveLocaleNameWorksWithLcid127()
+        {
+            var unicodeIndex = new JET_UNICODEINDEX()
+            {
+                lcid = 127,
+                dwMapFlags = 0x400,
+            };
+            Assert.AreEqual(string.Empty, unicodeIndex.GetEffectiveLocaleName());
+        }
+
+        /// <summary>
+        /// Verify GetEffectiveLocaleName() works with LCID 1033.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify GetEffectiveLocaleName() works with LCID 1033.")]
+        public void VerifyGetEffectiveLocaleNameWorksWithLcid1033()
+        {
+            var unicodeIndex = new JET_UNICODEINDEX()
+            {
+                lcid = 1033,
+                dwMapFlags = 0x400,
+            };
+            Assert.AreEqual("en-us", unicodeIndex.GetEffectiveLocaleName());
+        }
+
+        /// <summary>
+        /// Verify GetEffectiveLocaleName() works with LCID not in cache.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Verify GetEffectiveLocaleName() works with LCID not in cache.")]
+        public void VerifyGetEffectiveLocaleNameWorksWithLcidNotInCache()
+        {
+            var unicodeIndex = new JET_UNICODEINDEX()
+            {
+                lcid = 0x0477, // "la-Latn"
+                dwMapFlags = 0x400,
+            };
+            Assert.AreEqual(null, unicodeIndex.GetEffectiveLocaleName());
         }
 
         /// <summary>

@@ -28,7 +28,7 @@ namespace InteropApiTests
         /// The native conditional column structure created from the JET_INDEXCREATE
         /// object.
         /// </summary>
-        private NATIVE_INDEXCREATE1 native;
+        private JET_INDEXCREATE.NATIVE_INDEXCREATE1 native;
 
         /// <summary>
         /// Setup the test fixture. This creates a native structure and converts

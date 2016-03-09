@@ -518,14 +518,15 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 this.DoReadLockedOperation(
                     () =>
                         {
-                            lock (this.LockObject(key))
+                            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+                            cursor.MakeKey(key);
+                            lock (this.LockObject(cursor.GetNormalizedKey()))
                             {
-                                PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
                                 try
                                 {
                                     using (var transaction = cursor.BeginLazyTransaction())
                                     {
-                                        if (cursor.TrySeek(key))
+                                        if (cursor.TrySeek())
                                         {
                                             cursor.ReplaceCurrentValue(value);
                                         }
@@ -589,14 +590,15 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             return this.ReturnReadLockedOperation(
                 () =>
                     {
-                        lock (this.LockObject(item.Key))
+                        PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+                        cursor.MakeKey(item.Key);
+                        lock (this.LockObject(cursor.GetNormalizedKey()))
                         {
-                            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
                             try
                             {
                                 // Having the update lock means the record can't be
                                 // deleted after we seek to it.
-                                if (cursor.TrySeek(item.Key) && cursor.RetrieveCurrentValue().Equals(item.Value))
+                                if (cursor.TrySeek() && cursor.RetrieveCurrentValue().Equals(item.Value))
                                 {
                                     using (var transaction = cursor.BeginLazyTransaction())
                                     {
@@ -625,14 +627,15 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             this.DoReadLockedOperation(
                 () =>
                     {
-                        lock (this.LockObject(item.Key))
+                        PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+                        cursor.MakeKey(item.Key);
+                        lock (this.LockObject(cursor.GetNormalizedKey()))
                         {
-                            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
                             try
                             {
                                 using (var transaction = cursor.BeginLazyTransaction())
                                 {
-                                    if (cursor.TrySeek(item.Key))
+                                    if (cursor.TrySeek())
                                     {
                                         throw new ArgumentException("An item with this key already exists", "item");
                                     }
@@ -803,9 +806,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             return this.ReturnReadLockedOperation(
                 () =>
                     {
-                        lock (this.LockObject(key))
+                        PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
+                        cursor.MakeKey(key);
+
+                        lock (this.LockObject(cursor.GetNormalizedKey()))
                         {
-                            PersistentDictionaryCursor<TKey, TValue> cursor = this.cursors.GetCursor();
                             try
                             {
                                 if (cursor.TrySeek(key))
@@ -991,7 +996,8 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
-        /// Performs the specified action while under a ReadLock.
+        /// Performs the specified action while under a ReadLock. This is usually done to
+        /// prevent the underlying dictionary from being Dispose'd from underneath us.
         /// </summary>
         /// <param name="action">The action to perform.</param>
         /// <typeparam name="TReturn">The type of the return value of the block.</typeparam>
@@ -1312,19 +1318,19 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// Gets an object used to lock updates to the key.
         /// </summary>
-        /// <param name="key">The key to be locked.</param>
+        /// <param name="normalizedKey">The normalized key to be locked.</param>
         /// <returns>
         /// An object that should be locked when the key is updated.
         /// </returns>
-        private object LockObject(TKey key)
+        private object LockObject(byte[] normalizedKey)
         {
-            if (null == key)
+            if (null == normalizedKey)
             {
                 return this.updateLocks[0];
             }
 
             // Remember: hash codes can be negative, and we can't negate Int32.MinValue.
-            uint hash = unchecked((uint)key.GetHashCode());
+            uint hash = unchecked((uint)PersistentDictionaryMath.GetHashCodeForKey(normalizedKey));
             hash %= checked((uint)this.updateLocks.Length);
 
             return this.updateLocks[checked((int)hash)];

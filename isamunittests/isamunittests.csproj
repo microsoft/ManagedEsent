@@ -6,11 +6,11 @@
     <DefineConstants>$(DefineConstants);MANAGEDESENT_SUPPORTS_ANSI</DefineConstants>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{85B2B7BB-BF95-42DF-8CBF-348AEF63BD1F}</ProjectGuid>
+    <ProjectGuid>{6ac9c0be-6bce-493f-bd80-6f2247cb669d}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>InteropApiTests</RootNamespace>
-    <AssemblyName>InteropApiTests</AssemblyName>
+    <RootNamespace>IsamUnitTests</RootNamespace>
+    <AssemblyName>IsamUnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -70,15 +70,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="*.cs" Exclude="Vstestdescriptors.cs" />
-    <Compile Include="IsamTests\*.cs" />
+    <Compile Include="*.cs" Exclude="AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EsentInteropSamples\DbUtil\DbUtil.csproj">
-      <Project>{E0B163B0-5AC6-4304-B932-BFC1F6A2A4EB}</Project>
-      <Name>DbUtil</Name>
-    </ProjectReference>
     <ProjectReference Include="..\EsentInterop\EsentInterop.csproj">
       <Project>{E929E163-52A0-4AAC-917B-6D7FAF70C45E}</Project>
       <Name>EsentInterop</Name>
@@ -86,6 +81,9 @@
     <ProjectReference Include="..\isam\isam.csproj">
       <Project>{21cc632c-b09a-4db7-bd6e-7f7d2716f58f}</Project>
       <Name>EsentInterop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EsentInteropTests\EsentInteropTests.csproj">
+      <Name>EsentInteropTests</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -34,6 +34,7 @@ namespace InteropApiTests
         [Description("Setup the IndexlistTests fixture")]
         public void Setup()
         {
+#pragma warning disable 618 // It's OK to use Deprecated values in our tests.
             this.native = new NATIVE_INDEXLIST()
             {
                 tableid = (IntPtr)0x1000,
@@ -55,6 +56,7 @@ namespace InteropApiTests
                 columnidcolumnname = 14,
                 columnidLCMapFlags = 15,
             };
+#pragma warning restore 618
 
             this.converted = new JET_INDEXLIST();
             this.converted.SetFromNativeIndexlist(this.native);

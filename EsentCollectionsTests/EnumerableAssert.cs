@@ -50,11 +50,12 @@ namespace EsentCollectionsTests
                     i++;
                 }
 
+                T extraElement = actualEnumerator.Current;
                 Assert.IsFalse(
                     actualEnumerator.MoveNext(),
                     "Error. Expected enumerator has {0} entries. Actual enumerator has more. First extra entry is {1}. ({2})",
                     i,
-                    actualEnumerator.Current,
+                    extraElement,
                     message);
             }
         }

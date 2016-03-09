@@ -13,7 +13,7 @@ namespace InteropApiTests
     /// <summary>
     /// Generate arbitrary (random) values
     /// </summary>
-    internal static partial class Any
+    public static partial class Any
     {
         /// <summary>
         /// Random object used to generate the values.
@@ -61,6 +61,7 @@ namespace InteropApiTests
         /// <summary>
         /// Gets a random ushort.
         /// </summary>
+        [CLSCompliant(false)]
         public static ushort UInt16
         {
             get
@@ -99,6 +100,7 @@ namespace InteropApiTests
         /// <summary>
         /// Gets a random uint.
         /// </summary>
+        [CLSCompliant(false)]
         public static uint UInt32
         {
             get
@@ -137,6 +139,7 @@ namespace InteropApiTests
         /// <summary>
         /// Gets a random UInt64 (ulong).
         /// </summary>
+        [CLSCompliant(false)]
         public static ulong UInt64
         {
             get
@@ -270,6 +273,7 @@ namespace InteropApiTests
         /// <summary>
         /// Gets a random JET_LOGTIME.
         /// </summary>
+        [CLSCompliant(false)]
         public static JET_LOGTIME Logtime
         {
             get
@@ -281,6 +285,7 @@ namespace InteropApiTests
         /// <summary>
         /// Gets a random JET_SIGNATURE.
         /// </summary>
+        [CLSCompliant(false)]
         public static Microsoft.Isam.Esent.Interop.JET_SIGNATURE Signature
         {
             get
@@ -292,6 +297,7 @@ namespace InteropApiTests
         /// <summary>
         /// Gets a random JET_LGPOS.
         /// </summary>
+        [CLSCompliant(false)]
         public static JET_LGPOS Lgpos
         {
             get { return new JET_LGPOS { ib = Any.UInt16, isec = Any.UInt16, lGeneration = Any.UInt16 }; }
@@ -300,6 +306,7 @@ namespace InteropApiTests
         /// <summary>
         /// Gets a random JET_BKINFO.
         /// </summary>
+        [CLSCompliant(false)]
         public static JET_BKINFO Bkinfo
         {
             get

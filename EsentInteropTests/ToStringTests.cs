@@ -825,6 +825,49 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test EnumeratedColumn.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test EnumeratedColumn.ToString()")]
+        public void EnumeratedColumnToString()
+        {
+            var value1 = new EnumeratedColumn
+            {
+                Id = new JET_COLUMNID { Value = 27 },
+                Error = JET_err.BadColumnId,
+                Warning = JET_wrn.Success,
+                Values = new EnumeratedColumn.Value[3]
+            };
+            Assert.AreEqual("EnumeratedColumn(0x1b: BadColumnId Values[3])", value1.ToString());
+            var value2 = new EnumeratedColumn
+            {
+                Id = new JET_COLUMNID { Value = 27 },
+                Error = JET_err.Success,
+                Warning = JET_wrn.ColumnNull,
+                Values = new EnumeratedColumn.Value[3]
+            };
+            Assert.AreEqual("EnumeratedColumn(0x1b: ColumnNull Values[3])", value2.ToString());
+        }
+
+        /// <summary>
+        /// Test EnumeratedColumn.Value.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test EnumeratedColumn.Value.ToString()")]
+        public void EnumeratedColumnValueToString()
+        {
+            var value = new EnumeratedColumn.Value
+            {
+                Ordinal = 11,
+                Warning = JET_wrn.ColumnTruncated,
+                Bytes = new byte[18] { 0x55, 0xAA, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
+            };
+            Assert.AreEqual("EnumeratedColumn.Value(11: ColumnTruncated Bytes[18] = {55-AA-00-00-00-00-00-00-00-00-00-00-00-00-00-00...})", value.ToString());
+        }
+
+        /// <summary>
         /// Test that the "G" format gives the same result as ToString().
         /// </summary>
         /// <param name="obj">The object to test</param>

@@ -14,6 +14,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
+
     using Microsoft.Isam.Esent.Interop;
 
     /// <summary>
@@ -176,6 +177,18 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         public bool TrySeek(TKey key)
         {
             this.MakeKey(key);
+            return Api.TrySeek(this.sesid, this.dataTable, SeekGrbit.SeekEQ);
+        }
+
+        /// <summary>
+        /// Try to find the key specified with a previous call to <see cref="MakeKey"/>.
+        /// If the key is found
+        /// the cursor will be positioned on the record with the
+        /// key.
+        /// </summary>
+        /// <returns>True if the key was found, false otherwise.</returns>
+        public bool TrySeek()
+        {
             return Api.TrySeek(this.sesid, this.dataTable, SeekGrbit.SeekEQ);
         }
 
@@ -443,21 +456,30 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
-        /// Calls JetMakeKey for a prefix.
+        /// Calls JetRetrieveKey.
         /// </summary>
-        /// <param name="key">The value of the key column.</param>
-        private void MakePrefixKey(TKey key)
+        /// <returns>The byte value of the normalized key.</returns> 
+        internal byte[] GetNormalizedKey()
         {
-            this.converters.MakeKey(this.sesid, this.dataTable, key, MakeKeyGrbit.NewKey | MakeKeyGrbit.PartialColumnEndLimit);
+            return Api.RetrieveKey(this.sesid, this.dataTable, RetrieveKeyGrbit.RetrieveCopy);
         }
 
         /// <summary>
         /// Calls JetMakeKey.
         /// </summary>
         /// <param name="key">The value of the key column.</param>
-        private void MakeKey(TKey key)
+        internal void MakeKey(TKey key)
         {
             this.converters.MakeKey(this.sesid, this.dataTable, key, MakeKeyGrbit.NewKey);
+        }
+
+        /// <summary>
+        /// Calls JetMakeKey for a prefix.
+        /// </summary>
+        /// <param name="key">The value of the key column.</param>
+        private void MakePrefixKey(TKey key)
+        {
+            this.converters.MakeKey(this.sesid, this.dataTable, key, MakeKeyGrbit.NewKey | MakeKeyGrbit.PartialColumnEndLimit);
         }
 
         /// <summary>

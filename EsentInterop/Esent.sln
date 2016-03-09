@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{18B3E50E-454E-49DB-A92F-E1D7DAD2AF7D}"
 	ProjectSection(SolutionItems) = preProject
@@ -27,6 +27,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EsentInteropTests", "..\EsentInteropTests\EsentInteropTests.csproj", "{85B2B7BB-BF95-42DF-8CBF-348AEF63BD1F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EsentCollectionsTests", "..\EsentCollectionsTests\EsentCollectionsTests.csproj", "{D3A1C1C8-6119-4827-AC24-1FF49FACFD4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IsamUnitTests", "..\isamunittests\IsamUnitTests.csproj", "{6AC9C0BE-6BCE-493F-BD80-6F2247CB669D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbUtilTests", "..\EsentInteropSamples\DbUtilTests\DbUtilTests.csproj", "{C9B82A4F-8306-41A9-91DA-1BA5080F1DB0}"
 EndProject
@@ -76,6 +78,10 @@ Global
 		{D3A1C1C8-6119-4827-AC24-1FF49FACFD4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3A1C1C8-6119-4827-AC24-1FF49FACFD4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3A1C1C8-6119-4827-AC24-1FF49FACFD4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AC9C0BE-6BCE-493F-BD80-6F2247CB669D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AC9C0BE-6BCE-493F-BD80-6F2247CB669D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AC9C0BE-6BCE-493F-BD80-6F2247CB669D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AC9C0BE-6BCE-493F-BD80-6F2247CB669D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C9B82A4F-8306-41A9-91DA-1BA5080F1DB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C9B82A4F-8306-41A9-91DA-1BA5080F1DB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9B82A4F-8306-41A9-91DA-1BA5080F1DB0}.Release|Any CPU.ActiveCfg = Release|Any CPU

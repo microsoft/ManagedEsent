@@ -565,7 +565,10 @@ namespace InteropApiTests
             }
 
             /// <summary>
-            /// Repeatedly retrieve one record using <see cref="Api.JetEnumerateColumns"/>.
+            /// Repeatedly retrieve one record using 
+            /// <see cref="Api.JetEnumerateColumns(JET_SESID, JET_TABLEID, 
+            /// int, JET_ENUMCOLUMNID[], out int, out JET_ENUMCOLUMN[], 
+            /// JET_PFNREALLOC, IntPtr, int, EnumerateColumnsGrbit)"/>. 
             /// </summary>
             /// <param name="numRetrieves">The number of times to retrieve the record.</param>
             public void RepeatedlyRetrieveOneRecordWithEnumColumns(int numRetrieves)

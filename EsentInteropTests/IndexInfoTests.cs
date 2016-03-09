@@ -16,7 +16,7 @@ namespace InteropApiTests
     /// Tests for JetGetIndexInfo and JetGetTableIndexInfo.
     /// </summary>
     [TestClass]
-    public class IndexInfoTests
+    public partial class IndexInfoTests
     {
         /// <summary>
         /// The directory being used for the database and its files.

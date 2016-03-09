@@ -181,16 +181,65 @@ namespace InteropApiTests
 
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
-            byte[] data = Any.Bytes;
+            byte[] data = new byte[65536];
             Api.JetSetColumn(this.sesid, this.tableid, this.columnid, data, data.Length, SetColumnGrbit.None, null);
             Api.JetUpdate(this.sesid, this.tableid);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
-            JET_THREADSTATS threadstats;
-            VistaApi.JetGetThreadStats(out threadstats);
+            this.ResetCache();
+
+            JET_THREADSTATS threadstatsBefore;
+            VistaApi.JetGetThreadStats(out threadstatsBefore);
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
+            byte[] actual = Api.RetrieveColumn(this.sesid, this.tableid, this.columnid);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            data = new byte[65536];
+            Api.JetSetColumn(this.sesid, this.tableid, this.columnid, data, data.Length, SetColumnGrbit.None, null);
+            Api.JetUpdate(this.sesid, this.tableid);
+            Api.JetMove(this.sesid, this.tableid, JET_Move.Last, MoveGrbit.None);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Replace);
+            Api.JetSetColumn(this.sesid, this.tableid, this.columnid, data, data.Length, SetColumnGrbit.None, null);
+            Api.JetUpdate(this.sesid, this.tableid);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            JET_THREADSTATS threadstatsAfter;
+            VistaApi.JetGetThreadStats(out threadstatsAfter);
+
+            JET_THREADSTATS threadstats = threadstatsAfter - threadstatsBefore;
+
             Assert.AreNotEqual(0, threadstats.cPageReferenced);
+            Assert.AreNotEqual(0, threadstats.cPageRead);
+            ////Assert.AreNotEqual(0, threadstats.cPagePreread);
+            Assert.AreNotEqual(0, threadstats.cPageDirtied);
+            Assert.AreNotEqual(0, threadstats.cPageRedirtied);
             Assert.AreNotEqual(0, threadstats.cLogRecord);
             Assert.AreNotEqual(0, threadstats.cbLogRecord);
         }
+
+        #region Support
+
+        /// <summary>
+        /// Resets the cache for the database.
+        /// </summary>
+        private void ResetCache()
+        {
+            Api.JetCloseTable(this.sesid, this.tableid);
+            Api.JetEndSession(this.sesid, EndSessionGrbit.None);
+            Api.JetTerm(this.instance);
+            this.instance = SetupHelper.CreateNewInstance(this.directory);
+            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
+            Api.JetInit(ref this.instance);
+            Api.JetBeginSession(this.instance, out this.sesid, string.Empty, string.Empty);
+            Api.JetAttachDatabase(this.sesid, this.database, AttachDatabaseGrbit.None);
+            Api.JetOpenDatabase(this.sesid, this.database, null, out this.dbid, OpenDatabaseGrbit.None);
+            Api.JetOpenTable(this.sesid, this.dbid, this.table, null, 0, OpenTableGrbit.None, out this.tableid);
+        }
+
+        #endregion Support
     }
 }

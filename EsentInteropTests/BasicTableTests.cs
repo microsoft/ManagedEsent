@@ -849,6 +849,26 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// TryGotoBookmark for both positive and negative cases.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("TryGotoBookmark for both positive and negative cases.")]
+        public void TryGotoBookmark()
+        {
+            var bookmark = new byte[256];
+            int bookmarkSize;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.JetUpdate(this.sesid, this.tableid, bookmark, bookmark.Length, out bookmarkSize);
+            Assert.AreEqual(true, Api.TryGotoBookmark(this.sesid, this.tableid, bookmark, bookmarkSize));
+            Api.JetDelete(this.sesid, this.tableid);
+            Assert.AreEqual(false, Api.TryGotoBookmark(this.sesid, this.tableid, bookmark, bookmarkSize));
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+        }
+
+        /// <summary>
         /// Insert a record and retrieve its key.
         /// </summary>
         [TestMethod]
@@ -1021,6 +1041,18 @@ namespace InteropApiTests
             int seconds = 1;
             Api.JetDefragment(this.sesid, this.dbid, null, ref passes, ref seconds, DefragGrbit.BatchStart);
             Api.JetDefragment(this.sesid, this.dbid, null, ref passes, ref seconds, DefragGrbit.BatchStop);
+        }
+
+        /// <summary>
+        /// Test starting and stoppping OLD with <see cref="Api.Defragment"/>.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Start and stop online defragmentation with Api.Defragment")]
+        public void TestStartAndStopApiDefragment()
+        {
+            Api.Defragment(this.sesid, this.dbid, null, DefragGrbit.BatchStart);
+            Api.Defragment(this.sesid, this.dbid, null, DefragGrbit.BatchStop);
         }
 
         /// <summary>

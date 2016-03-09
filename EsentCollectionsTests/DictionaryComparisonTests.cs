@@ -169,7 +169,7 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
-        /// Insert an item into the dictionary.
+        /// Insert a KeyValuePair into the dictionary.
         /// </summary>
         [TestMethod]
         [Priority(2)]
@@ -182,7 +182,7 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
-        /// Insert an item into the dictionary and remove it.
+        /// Insert a KeyValuePair into the dictionary and remove it.
         /// </summary>
         [TestMethod]
         [Priority(2)]

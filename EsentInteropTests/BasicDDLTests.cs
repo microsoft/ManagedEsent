@@ -959,8 +959,7 @@ namespace InteropApiTests
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
             Api.JetSetCurrentIndex(this.sesid, this.tableid, IndexName);
-            string actual;
-            Api.JetGetCurrentIndex(this.sesid, this.tableid, out actual, SystemParameters.NameMost);
+            string actual = Api.JetGetCurrentIndex(this.sesid, this.tableid);
             Assert.AreEqual(IndexName, actual);
         }
 

@@ -8,6 +8,7 @@ namespace InteropApiTests
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Runtime.InteropServices;
     using System.Text;
     using Microsoft.Isam.Esent.Interop;
@@ -381,6 +382,95 @@ namespace InteropApiTests
             allocator(IntPtr.Zero, values[1].rgEnumColumnValue[0].pvData, 0);    // free the memory
             Assert.AreEqual(Expected16, actual16);
             Assert.AreEqual(Expected64, actual64);
+        }
+
+        #endregion
+
+        #region EnumerateColumns tests
+
+        /// <summary>
+        /// EnumerateColumns all finds zero column values.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("EnumerateColumns all finds zero column values.")]
+        public void TestEnumerateColumnsAllZeroColumnValues()
+        {
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+
+            IEnumerable<EnumeratedColumn> columns = Api.EnumerateColumns(
+                this.sesid,
+                this.tableid,
+                EnumerateColumnsGrbit.EnumerateCopy);
+            Assert.IsNotNull(columns);
+
+            List<EnumeratedColumn> enumeratedColumns = new List<EnumeratedColumn>(columns);
+
+            Assert.AreEqual(0, enumeratedColumns.Count);
+
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Cancel);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+        }
+
+        /// <summary>
+        /// EnumerateColumns all finds one single value and one multi value.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        [Description("EnumerateColumns all finds one single value and one multi value.")]
+        public void TestEnumerateColumnsAllOneSingleOneMulti()
+        {
+            const short Expected0 = 42;
+            const int Expected1 = 123;
+            const int Expected2 = 456;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+
+            this.SetColumn(this.columnidDict["int16"], BitConverter.GetBytes(Expected0), 1);
+            this.SetColumn(this.columnidDict["int32"], BitConverter.GetBytes(Expected1), 1);
+            this.SetColumn(this.columnidDict["int32"], BitConverter.GetBytes(Expected2), 2);
+
+            IEnumerable<EnumeratedColumn> columns = Api.EnumerateColumns(
+                this.sesid,
+                this.tableid,
+                EnumerateColumnsGrbit.EnumerateCopy);
+            Assert.IsNotNull(columns);
+
+            List<EnumeratedColumn> enumeratedColumns = new List<EnumeratedColumn>(columns);
+
+            Assert.AreEqual(2, enumeratedColumns.Count);
+
+            Assert.AreEqual(this.columnidDict["int16"], enumeratedColumns[0].Id);
+            Assert.AreEqual(JET_err.Success, enumeratedColumns[0].Error);
+            Assert.AreEqual(JET_wrn.Success, enumeratedColumns[0].Warning);
+            Assert.IsNotNull(enumeratedColumns[0].Values);
+            Assert.AreEqual(1, enumeratedColumns[0].Values.Length);
+
+            Assert.AreEqual(1, enumeratedColumns[0].Values[0].Ordinal);
+            Assert.AreEqual(JET_wrn.Success, enumeratedColumns[0].Values[0].Warning);
+            Assert.IsNotNull(enumeratedColumns[0].Values[0].Bytes);
+            Assert.AreEqual(true, Enumerable.SequenceEqual(enumeratedColumns[0].Values[0].Bytes, BitConverter.GetBytes(Expected0)));
+
+            Assert.AreEqual(this.columnidDict["int32"], enumeratedColumns[1].Id);
+            Assert.AreEqual(JET_err.Success, enumeratedColumns[1].Error);
+            Assert.AreEqual(JET_wrn.Success, enumeratedColumns[1].Warning);
+            Assert.IsNotNull(enumeratedColumns[1].Values);
+            Assert.AreEqual(2, enumeratedColumns[1].Values.Length);
+
+            Assert.AreEqual(1, enumeratedColumns[1].Values[0].Ordinal);
+            Assert.AreEqual(JET_wrn.Success, enumeratedColumns[1].Values[0].Warning);
+            Assert.IsNotNull(enumeratedColumns[1].Values[0].Bytes);
+            Assert.AreEqual(true, Enumerable.SequenceEqual(enumeratedColumns[1].Values[0].Bytes, BitConverter.GetBytes(Expected1)));
+
+            Assert.AreEqual(2, enumeratedColumns[1].Values[1].Ordinal);
+            Assert.AreEqual(JET_wrn.Success, enumeratedColumns[1].Values[1].Warning);
+            Assert.IsNotNull(enumeratedColumns[1].Values[1].Bytes);
+            Assert.AreEqual(true, Enumerable.SequenceEqual(enumeratedColumns[1].Values[1].Bytes, BitConverter.GetBytes(Expected2)));
+
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Cancel);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
         }
 
         #endregion

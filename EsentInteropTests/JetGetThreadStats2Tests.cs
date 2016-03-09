@@ -28,16 +28,46 @@ namespace InteropApiTests
         {
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
-            byte[] data = Any.Bytes;
+            byte[] data = new byte[65536];
             Api.JetSetColumn(this.sesid, this.tableid, this.columnid, data, data.Length, SetColumnGrbit.None, null);
             Api.JetUpdate(this.sesid, this.tableid);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
-            JET_THREADSTATS2 threadstats2;
-            Windows10Api.JetGetThreadStats(out threadstats2);
-            Assert.AreNotEqual(0, threadstats2.cPageReferenced);
-            Assert.AreNotEqual(0, threadstats2.cLogRecord);
-            Assert.AreNotEqual(0, threadstats2.cbLogRecord);
+            this.ResetCache();
+
+            JET_THREADSTATS2 threadstatsBefore;
+            Windows10Api.JetGetThreadStats(out threadstatsBefore);
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
+            byte[] actual = Api.RetrieveColumn(this.sesid, this.tableid, this.columnid);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            data = new byte[65536];
+            Api.JetSetColumn(this.sesid, this.tableid, this.columnid, data, data.Length, SetColumnGrbit.None, null);
+            Api.JetUpdate(this.sesid, this.tableid);
+            Api.JetMove(this.sesid, this.tableid, JET_Move.Last, MoveGrbit.None);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Replace);
+            Api.JetSetColumn(this.sesid, this.tableid, this.columnid, data, data.Length, SetColumnGrbit.None, null);
+            Api.JetUpdate(this.sesid, this.tableid);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            JET_THREADSTATS2 threadstatsAfter;
+            Windows10Api.JetGetThreadStats(out threadstatsAfter);
+
+            JET_THREADSTATS2 threadstats = threadstatsAfter - threadstatsBefore;
+
+            Assert.AreNotEqual(0, threadstats.cPageReferenced);
+            Assert.AreNotEqual(0, threadstats.cPageRead);
+            ////Assert.AreNotEqual(0, threadstats.cPagePreread);
+            Assert.AreNotEqual(0, threadstats.cPageDirtied);
+            Assert.AreNotEqual(0, threadstats.cPageRedirtied);
+            Assert.AreNotEqual(0, threadstats.cLogRecord);
+            Assert.AreNotEqual(0, threadstats.cbLogRecord);
+            Assert.AreNotEqual(0, threadstats.cusecPageCacheMiss);
+            Assert.AreNotEqual(0, threadstats.cPageCacheMiss);
         }
     }
 }
