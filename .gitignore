@@ -1,0 +1,32 @@
+# Ignore SlickEdit files.
+*.vpj
+*.vpw
+*.vpwhist
+*.vtg
+
+# Visual Studio files
+*.[Oo]bj
+*.user
+*.aps
+*.pch
+*_i.c
+*_p.c
+*.ncb
+*.opendb
+*.suo
+*.exe.config
+*.dbmdl
+*.refactorlog
+*.userprefs
+.vs/
+CustomBuild.properties
+
+# Test files
+testresults/
+
+# Ojbect files
+bin/
+obj/
+
+# Other files
+*.cache
