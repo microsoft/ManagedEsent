@@ -215,14 +215,14 @@ namespace InteropApiTests
         {
             using (var database = new Database(this.databaseConfig))
             {
-                database.Config.CacheSizeMin = 128;
-                database.Config.CacheSizeMax = 256;
+                database.Config.CacheSizeMin = 99;
+                database.Config.CacheSizeMax = 199;
                 database.Config.DefragmentSequentialBTrees = false;
                 database.Config.ExceptionAction = JET_ExceptionAction.None;
 
-                int cacheSize = this.GetIntParam(database.InstanceHandle, JET_param.CacheSize);
-                Assert.IsTrue(cacheSize >= 128 && cacheSize <= 256);
-                Assert.AreEqual(false, this.GetIntParam(database.InstanceHandle,  (JET_param)160) == 1); // JET_paramDefragmentSequentialBTrees
+                Assert.AreEqual(99, this.GetIntParam(database.InstanceHandle, JET_param.CacheSizeMin));
+                Assert.AreEqual(199, this.GetIntParam(database.InstanceHandle, JET_param.CacheSizeMax));
+                Assert.AreEqual(false, this.GetIntParam(database.InstanceHandle, (JET_param)160) == 1); // JET_paramDefragmentSequentialBTrees
                 Assert.AreEqual((int)JET_ExceptionAction.None, this.GetIntParam(database.InstanceHandle, JET_param.ExceptionAction));
             }
         }
@@ -237,8 +237,8 @@ namespace InteropApiTests
         {
             var newConfig = new DatabaseConfig()
             {
-                CacheSizeMin = 128,
-                CacheSizeMax = 256,
+                CacheSizeMin = 101,
+                CacheSizeMax = 201,
                 DefragmentSequentialBTrees = false,
                 ExceptionAction = JET_ExceptionAction.None,
             };
@@ -247,8 +247,8 @@ namespace InteropApiTests
             {
                 database.Config.Merge(newConfig, MergeRules.Overwrite);
 
-                int cacheSize = this.GetIntParam(database.InstanceHandle, JET_param.CacheSize);
-                Assert.IsTrue(cacheSize >= 128 && cacheSize <= 256);
+                Assert.AreEqual(101, this.GetIntParam(database.InstanceHandle, JET_param.CacheSizeMin));
+                Assert.AreEqual(201, this.GetIntParam(database.InstanceHandle, JET_param.CacheSizeMax));
                 Assert.AreEqual(false, this.GetIntParam(database.InstanceHandle, (JET_param)160) == 1); // JET_paramDefragmentSequentialBTrees
                 Assert.AreEqual((int)JET_ExceptionAction.None, this.GetIntParam(database.InstanceHandle, JET_param.ExceptionAction));
             }

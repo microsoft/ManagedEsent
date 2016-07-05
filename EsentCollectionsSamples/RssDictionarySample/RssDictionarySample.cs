@@ -16,6 +16,7 @@ namespace RssDictionarySample
     /// <summary>
     /// Contains information about the RSS feed.
     /// </summary>
+    [Serializable]
     internal struct RssFeedData
     {
         /// <summary>
