@@ -48,10 +48,18 @@ namespace InteropApiTests
                 columnidiColumn = 6,
                 columnidcolumnid = 7,
                 columnidcoltyp = 8,
+
+// Suppressing error that columnidCountry is deprecated.
+#pragma warning disable 618
                 columnidCountry = 9,
+#pragma warning restore 618
                 columnidLangid = 10,
                 columnidCp = 11,
+
+// Suppressing error that columnidCollate is deprecated.
+#pragma warning disable 618
                 columnidCollate = 12,
+#pragma warning restore 618
                 columnidgrbitColumn = 13,
                 columnidcolumnname = 14,
                 columnidLCMapFlags = 15,

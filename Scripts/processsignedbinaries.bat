@@ -84,7 +84,7 @@ echo    ^<requireLicenseAcceptance^>true^</requireLicenseAcceptance^> >>%target%
 echo    ^<description^> >>%target%
 echo      ManagedEsent provides managed access to ESENT, the embeddable database engine native to Windows. ManagedEsent uses the esent.dll that is part of Microsoft Windows so there are no extra unmanaged binaries to download and install. >>%target%
 echo    ^</description^> >>%target%
-echo    ^<releaseNotes^>Release %version% from %date%. 1.9.3.2 has some bug fixes, and is back to .NET 4.5.^</releaseNotes^> >>%target%
+echo    ^<releaseNotes^>Release %version% from %date%. 1.9.4 has some bug fixes.^</releaseNotes^> >>%target%
 echo    ^<copyright^>Copyright (c) Microsoft. All Rights Reserved.^</copyright^> >>%target%
 echo    ^<tags^>ManagedEsent NoSql ISAM Database Storage DatabaseEngine^</tags^> >>%target%
 echo    ^<!-- >>%target%
@@ -119,7 +119,7 @@ echo      PersistentDictionary is a simple class that implements IDictionary, an
 echo      disk. It allows a simple key-value pair store. It supports strings, value-types, and binary>>%target%
 echo      blobs. It is built on the ManagedEsent library.>>%target%
 echo    ^</description^> >>%target%
-echo    ^<releaseNotes^>Release %version% from %date%. 1.9.3.3 has some bug fixes and performance improvements.^</releaseNotes^> >>%target%
+echo    ^<releaseNotes^>Release %version% from %date%. 1.9.4 has some bug fixes.^</releaseNotes^> >>%target%
 echo    ^<copyright^>Copyright (c) Microsoft. All Rights Reserved.^</copyright^> >>%target%
 echo    ^<tags^>ManagedEsent NoSql PersistentDictionary Persistent Dictionary Key-Value Store ^</tags^> >>%target%
 echo    ^<dependencies^> >>%target%
@@ -154,7 +154,7 @@ echo      As of mid-2014, the interface is still under development (for example,
 echo      in the future. We are releasing it to see if>>%target%
 echo      anyone finds it useful. Please keep the feedback coming!>>%target%
 echo    ^</description^> >>%target%
-echo    ^<releaseNotes^>Release %version% from %date%. 1.9.3.2 has some bug fixes, and is back to .NET 4.5.^</releaseNotes^> >>%target%
+echo    ^<releaseNotes^>Release %version% from %date%. 1.9.4 has some bug fixes.^</releaseNotes^> >>%target%
 echo    ^<copyright^>Copyright (c) Microsoft. All Rights Reserved.^</copyright^> >>%target%
 echo    ^<tags^>ManagedEsent NoSql ISAM Database Storage DatabaseEngine^</tags^> >>%target%
 echo    ^<dependencies^> >>%target%

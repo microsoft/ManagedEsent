@@ -1865,7 +1865,7 @@ namespace InteropApiTests
             }
 
             int ignored;
-            Windows7Api.JetPrereadKeys(this.sesid, this.tableid, new byte[1][], new int[2], 1, 0, out ignored, PrereadKeysGrbit.Forward);
+            Windows7Api.JetPrereadKeys(this.sesid, this.tableid, new byte[1][], new int[2], 1, 1, out ignored, PrereadKeysGrbit.Forward);
         }
 
         /// <summary>
@@ -1883,7 +1883,7 @@ namespace InteropApiTests
             }
 
             int ignored;
-            Windows7Api.JetPrereadKeys(this.sesid, this.tableid, new byte[2][], new int[1], 1, 0, out ignored, PrereadKeysGrbit.Forward);
+            Windows7Api.JetPrereadKeys(this.sesid, this.tableid, new byte[2][], new int[1], 1, 1, out ignored, PrereadKeysGrbit.Forward);
         }
 
         /// <summary>
