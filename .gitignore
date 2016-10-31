@@ -30,3 +30,7 @@ obj/
 
 # Other files
 *.cache
+
+# Log files
+msbuild.log
+msbuild.err
