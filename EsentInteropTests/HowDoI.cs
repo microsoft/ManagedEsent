@@ -202,7 +202,7 @@ namespace InteropApiTests
                         Api.SetColumn(sesid, tableid, keyColumn, k, Encoding.Unicode);
                         Api.SetColumn(sesid, tableid, dataColumn, i++);
                         update.Save();
-                    }                    
+                    }
                 }
 
                 transaction.Commit(CommitTransactionGrbit.LazyFlush);
@@ -307,6 +307,15 @@ namespace InteropApiTests
             Api.MakeKey(sesid, tableid, "C", Encoding.Unicode, MakeKeyGrbit.NewKey);
             Api.JetSetIndexRange(sesid, tableid, SetIndexRangeGrbit.RangeUpperLimit);
             CheckIndexRange(sesid, tableid, keyColumn, new[] { "B", "BAT" });
+
+            // This case is similar to a case above, but shows that FullColumnEndLimit
+            // results in matching for "C", not "C*" (PartialColumnEndLimit).
+            // "A*" < key <= "C" -> ["B", "BAT", "C"]
+            Api.MakeKey(sesid, tableid, "A", Encoding.Unicode, MakeKeyGrbit.NewKey | MakeKeyGrbit.PartialColumnEndLimit);
+            Api.JetSeek(sesid, tableid, SeekGrbit.SeekGT);
+            Api.MakeKey(sesid, tableid, "C", Encoding.Unicode, MakeKeyGrbit.NewKey | MakeKeyGrbit.FullColumnEndLimit);
+            Api.JetSetIndexRange(sesid, tableid, SetIndexRangeGrbit.RangeUpperLimit | SetIndexRangeGrbit.RangeInclusive);
+            CheckIndexRange(sesid, tableid, keyColumn, new[] { "B", "BAT", "C" });
         }
 
         /// <summary>
@@ -377,7 +386,7 @@ namespace InteropApiTests
             Api.JetAddColumn(sesid, tableid, "data", columndef, null, 0, out autoincColumn);
 
             // Once the update is prepared the autoinc column can be retrieved. This
-            // requires the RetrieveCopy option, which gets a value from the record 
+            // requires the RetrieveCopy option, which gets a value from the record
             // currently under construction.
             for (int i = 0; i < 10; i++)
             {

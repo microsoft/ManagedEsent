@@ -7,11 +7,13 @@
 namespace InteropApiTests
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Runtime.InteropServices;
     using System.Threading;
+    using System.Threading.Tasks;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -163,6 +165,30 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test inserting and retrieving records.
+        /// </summary>
+        [TestMethod]
+        [Priority(4)]
+        [Description("Run a basic performance test")]
+        [Timeout(30 * 60 * 1000)]
+        public void BasicBeginReadTrxSerial()
+        {
+            CheckMemoryUsage(this.BeginReadTrxSerial);
+        }
+
+        /// <summary>
+        /// Test inserting and retrieving records.
+        /// </summary>
+        [TestMethod]
+        [Priority(4)]
+        [Description("Run a basic performance test")]
+        [Timeout(30 * 60 * 1000)]
+        public void BasicBeginReadTrxParallel()
+        {
+            CheckMemoryUsage(this.BeginReadTrxParallel);
+        }
+
+        /// <summary>
         /// Test inserting and retrieving records with multiple threads.
         /// </summary>
         [TestMethod]
@@ -222,6 +248,30 @@ namespace InteropApiTests
         /// </summary>
         /// <param name="worker">The worker to use.</param>
         private static void StressThread(PerfTestWorker worker)
+        {
+            const int NumRecords = 50000;
+            const int NumRetrieves = 100;
+
+            worker.InsertRecordsWithSetColumn(NumRecords);
+            worker.RepeatedlyRetrieveOneRecord(NumRetrieves);
+            worker.RepeatedlyRetrieveOneRecordWithJetRetrieveColumns(NumRetrieves);
+            worker.RepeatedlyRetrieveOneRecordWithRetrieveColumns(NumRetrieves);
+            worker.RepeatedlyRetrieveOneRecordWithEnumColumns(NumRetrieves);
+            worker.RetrieveAllRecords();
+
+            worker.InsertRecordsWithSetColumns(NumRecords);
+            worker.RepeatedlyRetrieveOneRecord(NumRetrieves);
+            worker.RepeatedlyRetrieveOneRecordWithJetRetrieveColumns(NumRetrieves);
+            worker.RepeatedlyRetrieveOneRecordWithRetrieveColumns(NumRetrieves);
+            worker.RepeatedlyRetrieveOneRecordWithEnumColumns(NumRetrieves);
+            worker.RetrieveAllRecords();
+        }
+
+        /// <summary>
+        /// Run multithreaded operations.
+        /// </summary>
+        /// <param name="worker">The worker to use.</param>
+        private static void StressThreadTrx(PerfTestWorker worker)
         {
             const int NumRecords = 50000;
             const int NumRetrieves = 100;
@@ -310,6 +360,54 @@ namespace InteropApiTests
                 TimeAction("Read all records", worker.RetrieveAllRecords);
                 TimeAction("Seek to all records", () => worker.SeekToAllRecords(keys));
             }
+        }
+
+        /// <summary>
+        /// Insert some records and then retrieve them.
+        /// </summary>
+        private void BeginReadTrxSerial()
+        {
+            const int NumRecords = 1000000;
+
+            using (var worker = new PerfTestWorker(this.instance, this.database))
+            {
+                TimeAction("Begin Read Trx", () => worker.RepeatedlyBeginReadTrxSerial(NumRecords));
+            }
+        }
+
+        /// <summary>
+        /// Insert some records and then retrieve them.
+        /// </summary>
+        private void BeginReadTrxParallel()
+        {
+            const int NumRecords = 1000000;
+
+            using (var worker = new PerfTestWorker(this.instance, this.database))
+            {
+                TimeAction("Begin Read Trx", () => worker.RepeatedlyBeginReadTrxParallel(NumRecords));
+            }
+        }
+
+        /// <summary>
+        /// Insert some records and then retrieve them.
+        /// </summary>
+        private void MultithreadedReadTrx()
+        {
+            // UNDONE: Can this be moved to a Task-model?
+#if !MANAGEDESENT_ON_WSA // Thread model has changed in Windows Store Apps.
+            const int NumThreads = 8;
+            Thread[] threads = (from i in Enumerable.Repeat(0, NumThreads)
+                                select this.StartWorkerThread(StressThread)).ToArray();
+            foreach (Thread thread in threads)
+            {
+                thread.Start();
+            }
+
+            foreach (Thread thread in threads)
+            {
+                thread.Join();
+            }
+#endif // !MANAGEDESENT_ON_WSA
         }
 
         /// <summary>
@@ -452,6 +550,47 @@ namespace InteropApiTests
                     Api.JetBeginTransaction(this.session);
                     this.InsertRecordWithSetColumn();
                     Api.JetCommitTransaction(this.session, CommitTransactionGrbit.LazyFlush);
+                }
+            }
+
+            public void RepeatedlyBeginReadTrxSerial(int numRecords)
+            {
+                for (int i = 0; i < numRecords; ++i)
+                {
+                    JET_SESID sesid;
+                    Api.BeginSession(this.instance, out sesid);
+                    Api.JetBeginTransaction2(sesid, BeginTransactionGrbit.ReadOnly);
+                    Api.JetCommitTransaction(sesid, CommitTransactionGrbit.None);
+                    Api.JetEndSession(sesid, EndSessionGrbit.None);
+                }
+            }
+
+            public void RepeatedlyBeginReadTrxParallel(int numRecords)
+            {
+                TaskFactory taskFactory = new TaskFactory();
+
+                ConcurrentBag<Task> allTasks = new ConcurrentBag<Task>();
+                {
+                    for (int i = 0; i < numRecords; ++i)
+                    {
+                        Task newTask = taskFactory.StartNew(() =>
+                        {
+                            JET_SESID sesid;
+                            Api.BeginSession(this.instance, out sesid);
+                            Api.JetBeginTransaction2(sesid, BeginTransactionGrbit.ReadOnly);
+                            Api.JetCommitTransaction(sesid, CommitTransactionGrbit.None);
+                            Api.JetEndSession(sesid, EndSessionGrbit.None);
+                        });
+                        allTasks.Add(newTask);
+                    }
+
+                    Task taskToWait;
+                    while (allTasks.TryTake(out taskToWait))
+                    {
+                        taskToWait.Wait();
+                    }
+
+                    Assert.IsTrue(allTasks.IsEmpty);
                 }
             }
 
