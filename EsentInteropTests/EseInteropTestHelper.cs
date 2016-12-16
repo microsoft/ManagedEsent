@@ -440,7 +440,7 @@ namespace InteropApiTests
         /// <summary>
         /// A wrapper around Thread.Sleep(), if available.
         /// </summary>
-        /// <param name="ms">The time to sleep, in millisends.</param>
+        /// <param name="ms">The time to sleep, in milliseconds.</param>
         public static void ThreadSleep(int ms)
         {
 #if MANAGEDESENT_ON_WSA

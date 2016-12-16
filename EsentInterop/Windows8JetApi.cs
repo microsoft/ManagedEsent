@@ -114,7 +114,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             TraceFunctionCall("JetResizeDatabase");
             this.CheckSupportsWindows8Features("JetResizeDatabase");
             CheckNotNegative(desiredPages, "desiredPages");
-        
+
             uint actualPagesNative = 0;
             int err = Err(NativeMethods.JetResizeDatabase(
                         sesid.Value, dbid.Value, checked((uint)desiredPages), out actualPagesNative, (uint)grbit));

@@ -17,7 +17,7 @@ namespace InteropApiTests
     public class EnumColumnidTests
     {
         /// <summary>
-        /// When ctagSequence is negative we should throw an exception.
+        /// When <see cref="JET_ENUMCOLUMNID.ctagSequence"/> is negative we should throw an exception.
         /// </summary>
         [TestMethod]
         [Priority(0)]

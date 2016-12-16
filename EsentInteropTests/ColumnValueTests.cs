@@ -19,7 +19,7 @@ namespace InteropApiTests
     public class ColumnValueTests
     {
         /// <summary>
-        /// Test the ValuesAsObject method of a Bool column value.
+        /// Test the ValuesAsObject method of a <see cref="bool"/> column value.
         /// </summary>
         [TestMethod]
         [Priority(0)]

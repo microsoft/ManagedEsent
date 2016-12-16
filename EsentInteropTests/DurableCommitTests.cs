@@ -262,7 +262,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Transaction.Commit() thows when it's not in a transaction.
+        /// Transaction.Commit() throws when it's not in a transaction.
         /// </summary>
         [TestMethod]
         [Priority(2)]

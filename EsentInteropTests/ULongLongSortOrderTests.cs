@@ -367,7 +367,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Creates a randome ulong.
+        /// Creates a random ulong.
         /// </summary>
         /// <returns>Random ulong.</returns>
         private ulong RandomULong()

@@ -329,7 +329,7 @@ namespace InteropApiTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-        [Description("Calls JetGetColumnInfo using a columnn id that's defined in the child table.")]
+        [Description("Calls JetGetColumnInfo using a column id that's defined in the child table.")]
         public void JetGetTemplateColumnInfoByColumIdOnChildColumn()
         {
             if (!EsentVersion.SupportsVistaFeatures)

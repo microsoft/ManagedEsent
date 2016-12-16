@@ -1,6 +1,17 @@
 <StyleCopSettings Version="105">
   <GlobalSettings>
     <BooleanProperty Name="WriteCache">False</BooleanProperty>
+    <CollectionProperty Name="RecognizedWords">
+      <Value>api</Value>
+      <Value>columndef</Value>
+      <Value>columnid</Value>
+      <Value>dll</Value>
+      <Value>ese</Value>
+      <Value>esent</Value>
+      <Value>interop</Value>
+      <Value>itag</Value>
+      <Value>param</Value>
+    </CollectionProperty>
   </GlobalSettings>
   <Analyzers>
     <Analyzer AnalyzerId="StyleCop.CSharp.NamingRules">

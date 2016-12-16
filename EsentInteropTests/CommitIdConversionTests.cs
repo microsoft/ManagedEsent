@@ -56,7 +56,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion from the native stuct works.
+        /// Test conversion from the native struct works.
         /// </summary>
         [TestMethod]
         [Priority(0)]

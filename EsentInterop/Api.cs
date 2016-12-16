@@ -2192,7 +2192,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// The current position is included in the count. The count can be greater than the
         /// total number of records in the table if the current index is over a multi-valued
         /// column and instances of the column have multiple-values. If the table is empty,
-        /// then 0 will be returned for the count. 
+        /// then 0 will be returned for the count.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to count the records in.</param>

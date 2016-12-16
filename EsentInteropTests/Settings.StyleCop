@@ -1,4 +1,15 @@
 <StyleCopSettings Version="105">
+  <GlobalSettings>
+    <CollectionProperty Name="RecognizedWords">
+      <Value>Api</Value>
+      <Value>autoincrement</Value>
+      <Value>behaviour</Value>
+      <Value>Equatable</Value>
+      <Value>esent</Value>
+      <Value>multivalues</Value>
+      <Value>nullable</Value>
+    </CollectionProperty>
+  </GlobalSettings>
   <Analyzers>
     <Analyzer AnalyzerId="StyleCop.CSharp.DocumentationRules">
       <Rules>

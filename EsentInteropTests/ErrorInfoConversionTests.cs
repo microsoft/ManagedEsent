@@ -53,7 +53,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion from the native stuct sets errValue.
+        /// Test conversion from the native struct sets errValue.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -64,7 +64,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion from the native stuct sets errcatMostSpecific.
+        /// Test conversion from the native struct sets errcatMostSpecific.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -75,7 +75,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion from the native stuct sets lSourceLine.
+        /// Test conversion from the native struct sets lSourceLine.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -86,7 +86,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion from the native stuct sets rgszSourceFile.
+        /// Test conversion from the native struct sets rgszSourceFile.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -97,7 +97,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion from the native stuct sets rgCategoricalHierarchy.
+        /// Test conversion from the native struct sets rgCategoricalHierarchy.
         /// </summary>
         [TestMethod]
         [Priority(0)]

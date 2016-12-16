@@ -97,7 +97,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Get severals strings twice to make sure they are cached.
+        /// Get several strings twice to make sure they are cached.
         /// </summary>
         [TestMethod]
         [Description("Test StringCache.GetString caching with multiple strings")]

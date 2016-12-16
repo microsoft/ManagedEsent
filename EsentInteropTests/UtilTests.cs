@@ -314,7 +314,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Check that ArrayStructEquals comparesun equal arrays correctly.
+        /// Check that ArrayStructEquals compares unequal arrays correctly.
         /// </summary>
         [TestMethod]
         [Priority(0)]

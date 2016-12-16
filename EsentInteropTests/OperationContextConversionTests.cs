@@ -53,7 +53,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion from the native stuct sets ulUserID.
+        /// Test conversion from the native struct sets ulUserID.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -64,7 +64,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion to the native stuct sets ulUserID.
+        /// Test conversion to the native struct sets ulUserID.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -75,7 +75,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion from the native stuct sets nOperationID.
+        /// Test conversion from the native struct sets nOperationID.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -86,7 +86,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion to the native stuct sets nOperationID.
+        /// Test conversion to the native struct sets nOperationID.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -97,7 +97,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion from the native stuct sets nOperationType.
+        /// Test conversion from the native struct sets nOperationType.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -108,7 +108,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion to the native stuct sets nOperationType.
+        /// Test conversion to the native struct sets nOperationType.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -119,7 +119,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion from the native stuct sets nClientType.
+        /// Test conversion from the native struct sets nClientType.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -130,7 +130,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion to the native stuct sets nClientType.
+        /// Test conversion to the native struct sets nClientType.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -141,7 +141,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion from the native stuct sets fFlags.
+        /// Test conversion from the native struct sets fFlags.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -152,7 +152,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion to the native stuct sets fFlags.
+        /// Test conversion to the native struct sets fFlags.
         /// </summary>
         [TestMethod]
         [Priority(0)]

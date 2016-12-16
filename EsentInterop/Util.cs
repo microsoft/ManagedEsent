@@ -203,7 +203,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Add a trailing directory separator character to the string.
         /// </summary>
         /// <param name="dir">The directory.</param>
-        /// <returns>The directory with a separator character added (if necesary).</returns>
+        /// <returns>The directory with a separator character added (if necessary).</returns>
         public static string AddTrailingDirectorySeparator(string dir)
         {
             if (!string.IsNullOrEmpty(dir))

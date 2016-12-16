@@ -18,7 +18,7 @@ namespace InteropApiTests
     public class GCHandleCollectionTests
     {
         /// <summary>
-        /// Adding null should return IntPtr.Zero.
+        /// Adding null should return <see cref="IntPtr.Zero"/>.
         /// </summary>
         [TestMethod]
         [Priority(0)]

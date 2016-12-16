@@ -346,7 +346,7 @@ namespace InteropApiTests
 
         /// <summary>
         /// Creates a table with JetCreateTableColumnIndex3 to test the
-        /// compatability path.
+        /// compatibility path.
         /// </summary>
         [TestMethod]
         [Priority(2)]
@@ -446,7 +446,7 @@ namespace InteropApiTests
 
         /// <summary>
         /// Creates a basic table with JetCreateTableColumnIndex3 to test the
-        /// compatability path.
+        /// compatibility path.
         /// </summary>
         [TestMethod]
         [Priority(2)]

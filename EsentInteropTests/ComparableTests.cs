@@ -337,7 +337,7 @@ namespace InteropApiTests
         /// </summary>
         /// <typeparam name="T">The object type.</typeparam>
         /// <param name="smaller">The smaller object.</param>
-        /// <param name="larger">The larer object.</param>
+        /// <param name="larger">The larger object.</param>
         private static void TestOrderedObjects<T>(T smaller, T larger) where T : struct, IComparable<T>
         {
             int compare = smaller.CompareTo(larger);

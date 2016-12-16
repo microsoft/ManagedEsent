@@ -46,11 +46,11 @@ namespace InteropApiTests
             };
 
             this.managed = new JET_OBJECTLIST();
-            this.managed.SetFromNativeObjectlist(this.native);            
+            this.managed.SetFromNativeObjectlist(this.native);
         }
 
         /// <summary>
-        /// Test conversion from the native stuct sets tableid.
+        /// Test conversion from the native struct sets tableid.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -62,7 +62,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion from the native stuct sets cRecord.
+        /// Test conversion from the native struct sets cRecord.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -73,7 +73,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion from the native stuct sets columnidobjectname.
+        /// Test conversion from the native struct sets columnidobjectname.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -85,7 +85,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion from the native stuct sets columnidobjtyp.
+        /// Test conversion from the native struct sets columnidobjtyp.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -97,7 +97,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion from the native stuct sets columnidgrbit.
+        /// Test conversion from the native struct sets columnidgrbit.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -109,7 +109,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion from the native stuct sets columnidflags.
+        /// Test conversion from the native struct sets columnidflags.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -121,7 +121,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion from the native stuct sets columnidcRecord.
+        /// Test conversion from the native struct sets columnidcRecord.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -133,7 +133,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion from the native stuct sets columnidcontainername.
+        /// Test conversion from the native struct sets columnidcontainername.
         /// </summary>
         [TestMethod]
         [Priority(0)]
@@ -148,7 +148,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test conversion from the native stuct sets columnidcPage.
+        /// Test conversion from the native struct sets columnidcPage.
         /// </summary>
         [TestMethod]
         [Priority(0)]

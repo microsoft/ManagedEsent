@@ -356,7 +356,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test JetSeek(SeekGrbit.SeekGE) when the record found is greaer than the key
+        /// Test JetSeek(SeekGrbit.SeekGE) when the record found is greater than the key
         /// </summary>
         [TestMethod]
         [Priority(1)]

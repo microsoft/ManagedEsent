@@ -471,7 +471,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Verify that removing a non-existant index range is not an error when
+        /// Verify that removing a non-existent index range is not an error when
         /// ResetIndexRange is used.
         /// </summary>
         [TestMethod]

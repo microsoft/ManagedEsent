@@ -1030,7 +1030,7 @@ namespace InteropApiTests
         #region JetDefragment Tests
 
         /// <summary>
-        /// Test starting and stoppping OLD with JetDefragment.
+        /// Test starting and stopping OLD with JetDefragment.
         /// </summary>
         [TestMethod]
         [Priority(2)]
@@ -1056,7 +1056,7 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test starting and stoppping OLD with JetDefragment2.
+        /// Test starting and stopping OLD with JetDefragment2.
         /// </summary>
         [TestMethod]
         [Priority(2)]
