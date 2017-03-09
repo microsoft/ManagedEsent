@@ -66,8 +66,11 @@ namespace InteropApiTests
             Assert.AreNotEqual(0, threadstats.cPageRedirtied);
             Assert.AreNotEqual(0, threadstats.cLogRecord);
             Assert.AreNotEqual(0, threadstats.cbLogRecord);
-            Assert.AreNotEqual(0, threadstats.cusecPageCacheMiss);
-            Assert.AreNotEqual(0, threadstats.cPageCacheMiss);
+            if (EsentVersion.SupportsWindows10Features)
+            {
+                Assert.AreNotEqual(0, threadstats.cusecPageCacheMiss);
+                Assert.AreNotEqual(0, threadstats.cPageCacheMiss);
+            }
         }
     }
 }

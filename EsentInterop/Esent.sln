@@ -1,17 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.25914.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C6830C41-2872-4A9F-B572-A3C6F47883F2}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{18B3E50E-454E-49DB-A92F-E1D7DAD2AF7D}"
 	ProjectSection(SolutionItems) = preProject
 		CodeCoverage.testrunconfig = CodeCoverage.testrunconfig
 		esent.vsmdi = esent.vsmdi
-		..\..\..\..\docusign_source\Core\Platform\Local.testsettings = ..\..\..\..\docusign_source\Core\Platform\Local.testsettings
 		Normal.testrunconfig = Normal.testrunconfig
-		..\..\..\..\docusign_source\Core\Platform\Platform Structure.txt = ..\..\..\..\docusign_source\Core\Platform\Platform Structure.txt
-		..\..\..\..\docusign_source\Core\Platform\Platform.vsmdi = ..\..\..\..\docusign_source\Core\Platform\Platform.vsmdi
-		..\..\..\..\docusign_source\Core\Platform\Remote.testsettings = ..\..\..\..\docusign_source\Core\Platform\Remote.testsettings
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EsentInterop", "EsentInterop.csproj", "{E929E163-52A0-4AAC-917B-6D7FAF70C45E}"
