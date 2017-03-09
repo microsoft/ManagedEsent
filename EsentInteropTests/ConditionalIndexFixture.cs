@@ -188,6 +188,96 @@ namespace InteropApiTests
             this.AssertIndexHasKeys("c8", 0);
         }
 
+        /// <summary>
+        /// Test creating conditional indexes with JetCreateIndex2.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test JetCreateIndex2 with conditional columns on a newly added column.")]
+        public void JetCreateIndex2ConditionalColumnsNewColumn()
+        {
+            const string IndexKey = "+key\0\0";
+
+            var indexes = new[]
+            {
+                GetIndexCreate("n1-0", IndexKey, new[] { "condition1" }, new string[0]),
+                GetIndexCreate("n2-0", IndexKey, new[] { "condition2" }, new string[0]),
+                GetIndexCreate("n12-0", IndexKey, new[] { "condition1", "condition2" }, new string[0]),
+
+                GetIndexCreate("n1-2", IndexKey, new[] { "condition1" }, new[] { "condition2" }),
+                GetIndexCreate("n2-1", IndexKey, new[] { "condition2" }, new[] { "condition1" }),
+
+                GetIndexCreate("n0-1", IndexKey, new string[0], new[] { "condition1", }),
+                GetIndexCreate("n0-2", IndexKey, new string[0], new[] { "condition2" }),
+                GetIndexCreate("n0-12", IndexKey, new string[0], new[] { "condition1", "condition2" }),
+
+                GetIndexCreate("n13-0", IndexKey, new[] { "condition1", "condition3" }, new string[0]),
+                GetIndexCreate("n23-0", IndexKey, new[] { "condition2", "condition3" }, new string[0]),
+                GetIndexCreate("n123-0", IndexKey, new[] { "condition1", "condition2", "condition3" }, new string[0]),
+
+                GetIndexCreate("n13-2", IndexKey, new[] { "condition1", "condition3" }, new[] { "condition2" }),
+                GetIndexCreate("n23-1", IndexKey, new[] { "condition2", "condition3" }, new[] { "condition1" }),
+
+                GetIndexCreate("n3-1", IndexKey, new[] { "condition3" }, new[] { "condition1", }),
+                GetIndexCreate("n3-2", IndexKey, new[] { "condition3" }, new[] { "condition2" }),
+                GetIndexCreate("n3-12", IndexKey, new[] { "condition3" }, new[] { "condition1", "condition2" }),
+
+                GetIndexCreate("n1-3", IndexKey, new[] { "condition1" }, new[] { "condition3" }),
+                GetIndexCreate("n2-3", IndexKey, new[] { "condition2" }, new[] { "condition3" }),
+                GetIndexCreate("n12-3", IndexKey, new[] { "condition1", "condition2" }, new[] { "condition3" }),
+
+                GetIndexCreate("n1-23", IndexKey, new[] { "condition1" }, new[] { "condition2", "condition3" }),
+                GetIndexCreate("n2-13", IndexKey, new[] { "condition2" }, new[] { "condition1", "condition3" }),
+
+                GetIndexCreate("n0-13", IndexKey, new string[0], new[] { "condition1", "condition3" }),
+                GetIndexCreate("n0-23", IndexKey, new string[0], new[] { "condition2", "condition3" }),
+                GetIndexCreate("n0-123", IndexKey, new string[0], new[] { "condition1", "condition2", "condition3" }),
+
+            };
+
+            using (var transaction = new Transaction(this.sesid))
+            {
+                this.InsertRecord(10, "foo", false, false);
+                this.InsertRecord(11, "bar", false, true);
+                this.InsertRecord(12, "baz", true, false);
+                this.InsertRecord(13, "qux", true, true);
+
+                transaction.Commit(CommitTransactionGrbit.LazyFlush);
+            }
+
+            Api.JetAddColumn(this.sesid, this.tableid, "condition2", columndef, null, 0, out this.conditionalColumn2);
+
+            Api.JetCreateIndex2(this.sesid, this.tableid, indexes, indexes.Length);
+
+            this.AssertIndexHasKeys("primary", 10, 11, 12, 13);
+            this.AssertIndexHasKeys("n1-0", 12, 13);
+            this.AssertIndexHasKeys("n2-0", 11, 13);
+            this.AssertIndexHasKeys("n12-0", 13);
+            this.AssertIndexHasKeys("n1-2", 12);
+            this.AssertIndexHasKeys("n2-1", 11);
+            this.AssertIndexHasKeys("n0-1", 10, 11);
+            this.AssertIndexHasKeys("n0-2", 10, 12);
+            this.AssertIndexHasKeys("n0-12", 10);
+
+            this.AssertIndexHasKeys("n13-0", 12, 13);
+            this.AssertIndexHasKeys("n23-0", 11, 13);
+            this.AssertIndexHasKeys("n123-0", 13);
+            this.AssertIndexHasKeys("n13-2", 12);
+            this.AssertIndexHasKeys("n23-1", 11);
+            this.AssertIndexHasKeys("n33-1", 10, 11);
+            this.AssertIndexHasKeys("n3-2", 10, 12);
+            this.AssertIndexHasKeys("n3-12", 10);
+
+            this.AssertIndexHasKeys("n1-3", 12, 13);
+            this.AssertIndexHasKeys("n2-3", 11, 13);
+            this.AssertIndexHasKeys("n12-3", 13);
+            this.AssertIndexHasKeys("n1-23", 12);
+            this.AssertIndexHasKeys("n2-13", 11);
+            this.AssertIndexHasKeys("n0-13", 10, 11);
+            this.AssertIndexHasKeys("n0-23", 10, 12);
+            this.AssertIndexHasKeys("n0-123", 10);
+        }
+
         #region Helper Methods
 
         /// <summary>
