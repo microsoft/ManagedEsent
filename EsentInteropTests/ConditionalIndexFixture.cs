@@ -75,6 +75,11 @@ namespace InteropApiTests
         /// </summary>
         private JET_COLUMNID conditionalColumn2;
 
+        /// <summary>
+        /// Columnid of a conditional column.
+        /// </summary>
+        private JET_COLUMNID conditionalColumn3;
+
         #region Setup/Teardown
 
         /// <summary>
@@ -202,6 +207,7 @@ namespace InteropApiTests
             {
                 GetIndexCreate("n1-0", IndexKey, new[] { "condition1" }, new string[0]),
                 GetIndexCreate("n2-0", IndexKey, new[] { "condition2" }, new string[0]),
+                GetIndexCreate("n3-0", IndexKey, new[] { "condition3" }, new string[0]),
                 GetIndexCreate("n12-0", IndexKey, new[] { "condition1", "condition2" }, new string[0]),
 
                 GetIndexCreate("n1-2", IndexKey, new[] { "condition1" }, new[] { "condition2" }),
@@ -232,7 +238,6 @@ namespace InteropApiTests
                 GetIndexCreate("n0-13", IndexKey, new string[0], new[] { "condition1", "condition3" }),
                 GetIndexCreate("n0-23", IndexKey, new string[0], new[] { "condition2", "condition3" }),
                 GetIndexCreate("n0-123", IndexKey, new string[0], new[] { "condition1", "condition2", "condition3" }),
-
             };
 
             using (var transaction = new Transaction(this.sesid))
@@ -245,37 +250,69 @@ namespace InteropApiTests
                 transaction.Commit(CommitTransactionGrbit.LazyFlush);
             }
 
-            Api.JetAddColumn(this.sesid, this.tableid, "condition2", columndef, null, 0, out this.conditionalColumn2);
+            var columndef = new JET_COLUMNDEF()
+            {
+                coltyp = JET_coltyp.Bit,
+            };
+
+            Api.JetAddColumn(this.sesid, this.tableid, "condition3", columndef, null, 0, out this.conditionalColumn3);
 
             Api.JetCreateIndex2(this.sesid, this.tableid, indexes, indexes.Length);
 
-            this.AssertIndexHasKeys("primary", 10, 11, 12, 13);
-            this.AssertIndexHasKeys("n1-0", 12, 13);
-            this.AssertIndexHasKeys("n2-0", 11, 13);
-            this.AssertIndexHasKeys("n12-0", 13);
-            this.AssertIndexHasKeys("n1-2", 12);
-            this.AssertIndexHasKeys("n2-1", 11);
-            this.AssertIndexHasKeys("n0-1", 10, 11);
-            this.AssertIndexHasKeys("n0-2", 10, 12);
-            this.AssertIndexHasKeys("n0-12", 10);
+            using (var transaction = new Transaction(this.sesid))
+            {
+                this.ModifyRecord(10, "foo", false, false, true);
+                this.ModifyRecord(13, "qux", true, true, true);
 
-            this.AssertIndexHasKeys("n13-0", 12, 13);
-            this.AssertIndexHasKeys("n23-0", 11, 13);
-            this.AssertIndexHasKeys("n123-0", 13);
-            this.AssertIndexHasKeys("n13-2", 12);
-            this.AssertIndexHasKeys("n23-1", 11);
-            this.AssertIndexHasKeys("n33-1", 10, 11);
-            this.AssertIndexHasKeys("n3-2", 10, 12);
-            this.AssertIndexHasKeys("n3-12", 10);
+                this.InsertRecord(20, "2foo", false, false);
+                this.InsertRecord(21, "2bar", false, true);
+                this.InsertRecord(22, "2baz", true, false);
+                this.InsertRecord(23, "2qux", true, true);
 
-            this.AssertIndexHasKeys("n1-3", 12, 13);
-            this.AssertIndexHasKeys("n2-3", 11, 13);
-            this.AssertIndexHasKeys("n12-3", 13);
-            this.AssertIndexHasKeys("n1-23", 12);
-            this.AssertIndexHasKeys("n2-13", 11);
-            this.AssertIndexHasKeys("n0-13", 10, 11);
-            this.AssertIndexHasKeys("n0-23", 10, 12);
-            this.AssertIndexHasKeys("n0-123", 10);
+                this.InsertRecord(30, "3foo", false, false, false);
+                this.InsertRecord(31, "3bar", false, true, false);
+                this.InsertRecord(32, "3baz", true, false, false);
+                this.InsertRecord(33, "3qux", true, true, false);
+
+                this.InsertRecord(40, "4foo", false, false, true);
+                this.InsertRecord(41, "4bar", false, true, true);
+                this.InsertRecord(42, "4baz", true, false, true);
+                this.InsertRecord(43, "4qux", true, true, true);
+
+                transaction.Commit(CommitTransactionGrbit.LazyFlush);
+            }
+
+            // Same as the test case above.
+            this.AssertIndexHasKeys("primary", 10, 11, 12, 13, 20, 21, 22, 23, 30, 31, 32, 33, 40, 41, 42, 43);
+            this.AssertIndexHasKeys("n1-0", 12, 13, 22, 23, 32, 33, 42, 43);
+            this.AssertIndexHasKeys("n2-0", 11, 13, 21, 23, 31, 33, 41, 43);
+            this.AssertIndexHasKeys("n12-0", 13, 23, 33, 43);
+            this.AssertIndexHasKeys("n1-2", 12, 22, 32, 42);
+            this.AssertIndexHasKeys("n2-1", 11, 21, 31, 41);
+            this.AssertIndexHasKeys("n0-1", 10, 11, 20, 21, 30, 31, 40, 41);
+            this.AssertIndexHasKeys("n0-2", 10, 12, 20, 22, 30, 32, 40, 42);
+            this.AssertIndexHasKeys("n0-12", 10, 20, 30, 40);
+
+            // New column is in the 'true' category.
+            this.AssertIndexHasKeys("n13-0", 13, 42, 43);
+            this.AssertIndexHasKeys("n23-0", 13, 41, 43);
+            this.AssertIndexHasKeys("n123-0", 13, 43);
+            this.AssertIndexHasKeys("n13-2", 42);
+            this.AssertIndexHasKeys("n23-1", 41);
+            this.AssertIndexHasKeys("n3-0", 10, 13, 40, 41, 42, 43);
+            this.AssertIndexHasKeys("n3-1", 10, 40, 41);
+            this.AssertIndexHasKeys("n3-2", 10, 40, 42);
+            this.AssertIndexHasKeys("n3-12", 10, 40);
+
+            // New column is in the 'false' category.
+            this.AssertIndexHasKeys("n1-3", 12, 22, 23, 32, 33);
+            this.AssertIndexHasKeys("n2-3", 11, 21, 23, 31, 33);
+            this.AssertIndexHasKeys("n12-3", 23, 33);
+            this.AssertIndexHasKeys("n1-23", 12, 22, 32);
+            this.AssertIndexHasKeys("n2-13", 11, 21, 31);
+            this.AssertIndexHasKeys("n0-13", 11, 20, 21, 30, 31);
+            this.AssertIndexHasKeys("n0-23", 12, 20, 22, 30, 32);
+            this.AssertIndexHasKeys("n0-123", 20, 30);
         }
 
         #region Helper Methods
@@ -328,7 +365,12 @@ namespace InteropApiTests
         private void AssertIndexHasKeys(string index, params int[] expectedKeys)
         {
             int[] actualKeys = this.GetIndexKeys(index).ToArray();
-            CollectionAssert.AreEqual(expectedKeys, actualKeys, "Mistmatch on index {0}", index);
+            if (actualKeys.Length != expectedKeys.Length)
+            {
+                Console.WriteLine("Expected: [{0}]. Actual: [{1}].", string.Join(", ", expectedKeys), string.Join(", ", actualKeys));
+            }
+
+            CollectionAssert.AreEqual(expectedKeys, actualKeys, "Mismatch on index {0}. Found {1} keys, expected to find {2} keys.", index, actualKeys.Length, expectedKeys.Length);
         }
 
         /// <summary>
@@ -372,6 +414,77 @@ namespace InteropApiTests
 
                 update.Save();
                 transaction.Commit(CommitTransactionGrbit.None);
+            }
+        }
+
+        /// <summary>
+        /// Insert a record with the given column values. After the insert the cursor is 
+        /// positioned on the record.
+        /// </summary>
+        /// <param name="key">
+        /// The key of the record.
+        /// </param>
+        /// <param name="data">
+        /// Data to insert.
+        /// </param>
+        /// <param name="condition1">The value of the first condition.</param>
+        /// <param name="condition2">The value of the second condition.</param>
+        /// <param name="condition3">The value of the third condition.</param>
+        private void InsertRecord(int key, string data, bool condition1, bool condition2, bool condition3)
+        {
+            byte[] nonNull = new byte[] { 0x1 };
+
+            using (var transaction = new Transaction(this.sesid))
+            using (var update = new Update(this.sesid, this.tableid, JET_prep.Insert))
+            {
+                Api.SetColumn(this.sesid, this.tableid, this.keyColumn, key);
+                Api.SetColumn(this.sesid, this.tableid, this.dataColumn, data, Encoding.Unicode);
+                Api.SetColumn(this.sesid, this.tableid, this.conditionalColumn1, condition1 ? nonNull : null);
+                Api.SetColumn(this.sesid, this.tableid, this.conditionalColumn2, condition2 ? nonNull : null);
+                Api.SetColumn(this.sesid, this.tableid, this.conditionalColumn3, condition3 ? nonNull : null);
+
+                update.Save();
+                transaction.Commit(CommitTransactionGrbit.None);
+            }
+        }
+
+        /// <summary>
+        /// Insert a record with the given column values. After the insert the cursor is 
+        /// positioned on the record.
+        /// </summary>
+        /// <param name="key">
+        /// The key of the record.
+        /// </param>
+        /// <param name="data">
+        /// Data to insert.
+        /// </param>
+        /// <param name="condition1">The value of the first condition.</param>
+        /// <param name="condition2">The value of the second condition.</param>
+        /// <param name="condition3">The value of the third condition.</param>
+        private void ModifyRecord(int key, string data, bool condition1, bool condition2, bool condition3)
+        {
+            byte[] nonNull = new byte[] { 0x1 };
+
+            using (var transaction = new Transaction(this.sesid))
+            {
+                Api.JetSetCurrentIndex(this.sesid, this.tableid, null);
+                Api.MakeKey(this.sesid, this.tableid, key, MakeKeyGrbit.NewKey);
+                if (!Api.TrySeek(this.sesid, this.tableid, SeekGrbit.SeekEQ))
+                {
+                    Assert.Fail("Key {0} not found in the table!", key);
+                }
+
+                using (var update = new Update(this.sesid, this.tableid, JET_prep.Replace))
+                {
+                    Api.SetColumn(this.sesid, this.tableid, this.keyColumn, key);
+                    Api.SetColumn(this.sesid, this.tableid, this.dataColumn, data, Encoding.Unicode);
+                    Api.SetColumn(this.sesid, this.tableid, this.conditionalColumn1, condition1 ? nonNull : null);
+                    Api.SetColumn(this.sesid, this.tableid, this.conditionalColumn2, condition2 ? nonNull : null);
+                    Api.SetColumn(this.sesid, this.tableid, this.conditionalColumn3, condition3 ? nonNull : null);
+
+                    update.Save();
+                    transaction.Commit(CommitTransactionGrbit.None);
+                }
             }
         }
 

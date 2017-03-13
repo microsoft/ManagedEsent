@@ -4,10 +4,12 @@
       <Value>Api</Value>
       <Value>autoincrement</Value>
       <Value>behaviour</Value>
+      <Value>columnid</Value>
       <Value>Equatable</Value>
       <Value>esent</Value>
       <Value>multivalues</Value>
       <Value>nullable</Value>
+      <Value>tableid</Value>
     </CollectionProperty>
   </GlobalSettings>
   <Analyzers>
