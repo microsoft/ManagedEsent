@@ -1053,6 +1053,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern int JetIndexRecordCount(IntPtr sesid, IntPtr tableid, out uint crec, uint crecMax);
 
         [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetIndexRecordCount2(IntPtr sesid, IntPtr tableid, out ulong crec, ulong crecMax);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetSetTableSequential(IntPtr sesid, IntPtr tableid, uint grbit);
 
         [DllImport(EsentDll, ExactSpelling = true)]

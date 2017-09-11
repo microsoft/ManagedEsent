@@ -191,6 +191,19 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Count the records in the table with JetIndexRecordCount2.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Count the records in the table with JetIndexRecordCount.")]
+        public void GetIndexRecordCount2()
+        {
+            long countedRecords;
+            Api.JetIndexRecordCount2(this.sesid, this.tableid, out countedRecords, 0);
+            Assert.AreEqual(this.numRecords, countedRecords);
+        }
+
+        /// <summary>
         /// Count the records in the table with JetIndexRecordCount, with
         /// the maximum number of records constrained.
         /// </summary>
@@ -205,6 +218,20 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Count the records in the table with JetIndexRecordCount2, with
+        /// the maximum number of records constrained.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Count the records in the table with JetIndexRecordCount, with the maximum number of records constrained.")]
+        public void GetIndexRecordCountConstrained2()
+        {
+            long countedRecords;
+            Api.JetIndexRecordCount2(this.sesid, this.tableid, out countedRecords, this.numRecords - 1);
+            Assert.AreEqual(this.numRecords - 1, countedRecords);
+        }
+
+        /// <summary>
         /// Count the records in an index range with JetGetIndexRecordCount.
         /// </summary>
         [TestMethod]
@@ -215,14 +242,28 @@ namespace InteropApiTests
             int first = 2;
             int last = this.numRecords - 2;
 
-            this.MakeKeyForRecord(first);
-            Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekEQ);
-
-            this.MakeKeyForRecord(last);
-            Api.JetSetIndexRange(this.sesid, this.tableid, SetIndexRangeGrbit.RangeUpperLimit);
+            this.SetupIndexRange(first, last);
 
             int countedRecords;
             Api.JetIndexRecordCount(this.sesid, this.tableid, out countedRecords, 0);
+            Assert.AreEqual(last - first, countedRecords);
+        }
+
+        /// <summary>
+        /// Count the records in an index range with JetGetIndexRecordCount2.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Count the records in an index range with JetGetIndexRecordCount.")]
+        public void CountIndexRangeRecords2()
+        {
+            int first = 2;
+            int last = this.numRecords - 2;
+
+            this.SetupIndexRange(first, last);
+
+            long countedRecords;
+            Api.JetIndexRecordCount2(this.sesid, this.tableid, out countedRecords, 0);
             Assert.AreEqual(last - first, countedRecords);
         }
 
@@ -302,6 +343,20 @@ namespace InteropApiTests
         {
             byte[] data = BitConverter.GetBytes(id);
             Api.JetMakeKey(this.sesid, this.tableid, data, data.Length, MakeKeyGrbit.NewKey);
+        }
+
+        /// <summary>
+        /// Setup the index range for counting with JetGetIndexRecordCount* APIs
+        /// </summary>
+        /// <param name="first">The first element in the range.</param>
+        /// <param name="last">The last element in the range.</param>        
+        private void SetupIndexRange(int first, int last)
+        {
+            this.MakeKeyForRecord(first);
+            Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekEQ);
+
+            this.MakeKeyForRecord(last);
+            Api.JetSetIndexRange(this.sesid, this.tableid, SetIndexRangeGrbit.RangeUpperLimit);
         }
 
         #endregion Helper Methods

@@ -20,6 +20,7 @@
 *.userprefs
 .vs/
 CustomBuild.properties
+*.userosscache
 
 # Test files
 testresults/

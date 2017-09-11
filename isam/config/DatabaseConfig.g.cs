@@ -27,7 +27,7 @@ namespace Microsoft.Database.Isam.Config
         /// <summary>
         /// The exclusive upper bound on JET_param*.
         /// </summary>
-        internal const int ParamMaxValueInvalid = 196; // should be equal to JET_paramMaxValueInvalid
+        internal const int ParamMaxValueInvalid = 212; // should be equal to JET_paramMaxValueInvalid
     
         /// <summary>
         /// Fills the param table from auto-generated code.
@@ -77,6 +77,7 @@ namespace Microsoft.Database.Isam.Config
             DatabaseConfig.ParamTable[52] = new ParamDef(52, false, typeof(bool)); // JET_paramDeleteOutOfRangeLogs
             DatabaseConfig.ParamTable[53] = new ParamDef(53, false, typeof(int)); // JET_paramAccessDeniedRetryPeriod
             DatabaseConfig.ParamTable[54] = new ParamDef(54, false, typeof(bool)); // JET_paramEnableIndexCleanup
+            DatabaseConfig.ParamTable[56] = new ParamDef(56, false, typeof(int)); // JET_paramFlight_ElasticWaypointLatency
             DatabaseConfig.ParamTable[60] = new ParamDef(60, false, typeof(int)); // JET_paramCacheSizeMin
             DatabaseConfig.ParamTable[63] = new ParamDef(63, false, typeof(int)); // JET_paramPreferredVerPages
             DatabaseConfig.ParamTable[64] = new ParamDef(64, true, typeof(int)); // JET_paramDatabasePageSize
@@ -675,6 +676,15 @@ namespace Microsoft.Database.Isam.Config
         {
             get { return this.GetParam<bool>(54); }
             set { this.SetParam(54, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets Flight_ElasticWaypointLatency of type int
+        /// </summary>
+        public int Flight_ElasticWaypointLatency
+        {
+            get { return this.GetParam<int>(56); }
+            set { this.SetParam(56, value); }
         }
 
         /// <summary>

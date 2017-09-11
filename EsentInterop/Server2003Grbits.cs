@@ -60,7 +60,13 @@ namespace Microsoft.Isam.Esent.Interop.Server2003
         public const AttachDatabaseGrbit DeleteUnicodeIndexes = (AttachDatabaseGrbit)0x400;
 
         /// <summary>
-        /// This is a finalizable column (delete record if escrow value equals 0).
+        /// When the escrow-update column reaches a value of zero (after all 
+        /// versions are resolve), the record will be deleted. A common use for 
+        /// a column that can be finalized is to use it as a reference count 
+        /// field, and when the field reaches zero the record gets deleted. A 
+        /// Delete-on-zero column must be an escrow update / <see cref="ColumndefGrbit.ColumnEscrowUpdate"/> 
+        /// column. ColumnDeleteOnZero cannot be used with ColumnFinalize.
+        /// ColumnDeleteOnZero cannot be used with user defined default columns. 
         /// </summary>
         public const ColumndefGrbit ColumnDeleteOnZero = (ColumndefGrbit)0x20000;
 

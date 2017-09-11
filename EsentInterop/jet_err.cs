@@ -74,6 +74,26 @@ namespace Microsoft.Isam.Esent.Interop
         UnloadableOSFunctionality = -113,
 
         /// <summary>
+        /// A required hardware device or functionality was missing.
+        /// </summary>
+        DeviceMissing = -114,
+
+        /// <summary>
+        /// A required hardware device was misconfigured externally.
+        /// </summary>
+        DeviceMisconfigured = -115,
+
+        /// <summary>
+        /// Timeout occurred while waiting for a hardware device to respond.
+        /// </summary>
+        DeviceTimeout = -116,
+
+        /// <summary>
+        /// A required hardware device didn't function as expected.
+        /// </summary>
+        DeviceFailure = -118,
+
+        /// <summary>
         /// Buffer dependencies improperly set. Recovery failure
         /// </summary>
         DatabaseBufferDependenciesCorrupted = -255,
@@ -1027,6 +1047,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// This JET_sesparam* identifier is not known to the ESE engine.
         /// </summary>
         InvalidSesparamId = -1093,
+
+        /// <summary>
+        /// There are too many records to enumerate, switch to an API that handles 64-bit numbers
+        /// </summary>
+        TooManyRecords = -1094,
+
+        /// <summary>
+        /// This JET_dbparam* identifier is not known to the ESE engine.
+        /// </summary>
+        InvalidDbparamId = -1095,
 
         /// <summary>
         /// Out of sessions
