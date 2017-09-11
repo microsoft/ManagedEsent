@@ -79,16 +79,6 @@ namespace InteropApiTests
             this.table = "table";
             this.instance = SetupHelper.CreateNewInstance(this.directory);
 
-#if !MANAGEDESENT_ON_WSA
-            // StageFlighting needs to be set to enable efv staging in retail bits. Remove once efv comes out of staging.
-            Api.JetSetSystemParameter(
-                this.instance,
-                JET_SESID.Nil,
-                Microsoft.Isam.Esent.Interop.Unpublished.UnpublishedParam.StageFlighting,
-                (int)Microsoft.Isam.Esent.Interop.Unpublished.StageGrbit.TestEnvAlphaMode,
-                null);
-#endif
-
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetInit(ref this.instance);
