@@ -18,7 +18,7 @@ namespace Microsoft.Isam.Esent.Interop.Server2003
         /// <summary>
         /// Default options.
         /// </summary>
-        None = 0,    
+        None = 0,
     }
 #endif // !MANAGEDESENT_ON_WSA
 
@@ -40,7 +40,7 @@ namespace Microsoft.Isam.Esent.Interop.Server2003
         /// enforced a smaller maximum number of multi-valued column instances
         /// in each record than later versions of ESE. This is important only
         /// for applications that wish to replicate data between applications
-        /// hosted on Windows 2000 and applications hosted on Windows 
+        /// hosted on Windows 2000 and applications hosted on Windows
         /// 2003, or later versions of ESE. It should not be necessary for most
         /// applications.
         /// </summary>
@@ -73,7 +73,7 @@ namespace Microsoft.Isam.Esent.Interop.Server2003
         /// of this option is to allow the temporary table to contain records
         /// with duplicate index keys. See <see cref="TempTableGrbit.Unique"/>
         /// for more information.
-        /// </summary>        
+        /// </summary>
         public const TempTableGrbit ForwardOnly = (TempTableGrbit)0x40;
 
         /// <summary>
