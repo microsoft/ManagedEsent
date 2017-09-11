@@ -47,7 +47,7 @@ namespace EsentCollectionsTests
         public void TestGenericBooleanDictionary()
         {
             TestNullableGenericDictionary<bool, bool>();
-        } 
+        }
 
         /// <summary>
         /// Test a PersistentDictionary{Byte, Byte}
@@ -254,6 +254,39 @@ namespace EsentCollectionsTests
                 RunDictionaryTests(dictionary, "blob2", new PersistentBlob(new byte[0]));
             }
         }
+
+        /// <summary>
+        /// Test a PersistentDictionary{struct, struct{PersistentBlob}}
+        /// </summary>
+        [TestMethod]
+        [Priority(3)]
+        [Description("Test a String => PersistentBlob dictionary")]
+        public void TestGenericStructAndPersistenBlobDictionary()
+        {
+            try
+            {
+                using (var dictionary = new PersistentDictionary<int, ContainingStruct>(DictionaryPath))
+                {
+                    var blob = new PersistentBlob(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 });
+                    var nestedBlob = new ContainingStruct() { Key = 3, Blob = blob, };
+
+                    RunDictionaryTests(dictionary, 1, nestedBlob);
+                    RunDictionaryTests(dictionary, 2, new ContainingStruct());
+                    RunDictionaryTests(dictionary,
+                        3,
+                        new ContainingStruct() { Key = 4, Blob = new PersistentBlob(new byte[0]) });
+                }
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                Assert.AreEqual("Not supported for SetColumn\r\nParameter name: TColumn\r\nActual value was EsentCollectionsTests.GenericDictionaryTests+ContainingStruct.", ex.Message);
+            }
+        }
+
+        public struct SimpleStruct { public int Key; }
+
+        [Serializable]
+        public struct ContainingStruct { public int Key; public PersistentBlob Blob; }
 
         /// <summary>
         /// Run a set of tests against a dictionary.
