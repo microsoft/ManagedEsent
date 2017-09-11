@@ -6108,7 +6108,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     {
                         for (int i = 0; i < tablecreate.rgcolumncreate.Length; ++i)
                         {
-                            tablecreate.rgcolumncreate[i].SetFromNativeColumnCreate(nativeTableCreate.rgcolumncreate[i]);
+                            tablecreate.rgcolumncreate[i].SetFromNativeColumnCreate(ref nativeTableCreate.rgcolumncreate[i]);
                         }
                     }
 
@@ -6361,7 +6361,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     {
                         for (int i = 0; i < tablecreate.rgcolumncreate.Length; ++i)
                         {
-                            tablecreate.rgcolumncreate[i].SetFromNativeColumnCreate(nativeTableCreate.rgcolumncreate[i]);
+                            tablecreate.rgcolumncreate[i].SetFromNativeColumnCreate(ref nativeTableCreate.rgcolumncreate[i]);
                         }
                     }
 
