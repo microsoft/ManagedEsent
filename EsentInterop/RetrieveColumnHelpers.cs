@@ -31,7 +31,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Retrieves the bookmark for the record that is associated with the index entry
         /// at the current position of a cursor. This bookmark can then be used to
-        /// reposition that cursor back to the same record using JetGotoBookmark. 
+        /// reposition that cursor back to the same record using JetGotoBookmark.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to retrieve the bookmark from.</param>
@@ -55,14 +55,14 @@ namespace Microsoft.Isam.Esent.Interop
                     Caches.BookmarkCache.Free(ref buffer);
                 }
             }
-            
+
             return bookmark;
         }
 
         /// <summary>
         /// Retrieves the bookmark for the record that is associated with the index entry
         /// at the current position of a cursor. This bookmark can then be used to
-        /// reposition that cursor back to the same record using JetGotoBookmark. 
+        /// reposition that cursor back to the same record using JetGotoBookmark.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to retrieve the bookmark from.</param>
@@ -141,7 +141,7 @@ namespace Microsoft.Isam.Esent.Interop
                     Caches.BookmarkCache.Free(ref buffer);
                 }
             }
-            
+
             return key;
         }
 
@@ -210,7 +210,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// index entry that references the current record. In addition to retrieving the
         /// actual column value, JetRetrieveColumn can also be used to retrieve the size
         /// of a column, before retrieving the column data itself so that application
-        /// buffers can be sized appropriately.  
+        /// buffers can be sized appropriately.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to retrieve the column from.</param>
@@ -275,7 +275,7 @@ namespace Microsoft.Isam.Esent.Interop
                     Caches.ColumnCache.Free(ref cache);
                 }
             }
-            
+
             return data;
         }
 
@@ -740,7 +740,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to retrieve the column from.</param>
         /// <param name="columnid">The columnid to retrieve.</param>
-        /// <returns>The data retrieved from the column as a datetime. Null if the column is null.</returns>
+        /// <returns>The data retrieved from the column as a <see cref="DateTime"/>. Null if the column is null.</returns>
         public static DateTime? RetrieveColumnAsDateTime(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
             return RetrieveColumnAsDateTime(sesid, tableid, columnid, RetrieveColumnGrbit.None);
@@ -754,7 +754,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">The cursor to retrieve the column from.</param>
         /// <param name="columnid">The columnid to retrieve.</param>
         /// <param name="grbit">Retrieval options.</param>
-        /// <returns>The data retrieved from the column as a datetime. Null if the column is null.</returns>
+        /// <returns>The data retrieved from the column as a <see cref="DateTime"/>. Null if the column is null.</returns>
         public static DateTime? RetrieveColumnAsDateTime(
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {
