@@ -50,7 +50,7 @@ namespace InteropApiTests
             };
 
             this.managedTarget = new JET_COLUMNCREATE();
-            this.managedTarget.SetFromNativeColumnCreate(this.nativeSource);
+            this.managedTarget.SetFromNativeColumnCreate(ref this.nativeSource);
         }
 
         /// <summary>

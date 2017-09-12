@@ -214,7 +214,7 @@ namespace Microsoft.Isam.Esent.Interop
         NoBackupDirectory = -503,
 
         /// <summary>
-        /// The backup directory is not emtpy
+        /// The backup directory is not empty
         /// </summary>
         BackupDirectoryNotEmpty = -504,
 
@@ -239,7 +239,7 @@ namespace Microsoft.Isam.Esent.Interop
         LogWriteFail = -510,
 
         /// <summary>
-        /// Try to log something after recovery faild
+        /// Try to log something after recovery failed
         /// </summary>
         LogDisabledDueToRecoveryFailure = -511,
 
@@ -1069,7 +1069,7 @@ namespace Microsoft.Isam.Esent.Interop
         TransReadOnly = -1110,
 
         /// <summary>
-        /// Attempt to replace the same record by two diffrerent cursors in the same session
+        /// Attempt to replace the same record by two different cursors in the same session
         /// </summary>
         SessionWriteConflict = -1111,
 
@@ -1839,7 +1839,7 @@ namespace Microsoft.Isam.Esent.Interop
         SessionContextAlreadySet = -1912,
 
         /// <summary>
-        /// Tried to reset session context, but current thread did not orignally set the session context
+        /// Tried to reset session context, but current thread did not originally set the session context
         /// </summary>
         SessionContextNotSetByThisThread = -1913,
 

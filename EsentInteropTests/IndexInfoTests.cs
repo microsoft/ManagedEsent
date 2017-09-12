@@ -6,9 +6,12 @@
 
 namespace InteropApiTests
 {
+    using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Isam.Esent.Interop.Windows8;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -53,6 +56,8 @@ namespace InteropApiTests
         /// </summary>
         private JET_TABLEID tableid;
 
+        private IList<JET_INDEXCREATE> indexcreates;
+
         #region Setup/Teardown
 
         /// <summary>
@@ -67,6 +72,7 @@ namespace InteropApiTests
             this.database = Path.Combine(this.directory, "database.edb");
             this.table = "table";
             this.instance = SetupHelper.CreateNewInstance(this.directory);
+            this.indexcreates = new List<JET_INDEXCREATE>(10);
 
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
             Api.JetInit(ref this.instance);
@@ -87,10 +93,16 @@ namespace InteropApiTests
 
             JET_INDEXCREATE[] indexcreates = new[]
             {
+                // Multi-segment indices cause failures! JET_INDEXLIST.cRecords is inaccurate. Possibly because cRecords is incremented
+                // as the key segment rows are traversed in the catalog, even though no rows are added
+                // to the temptable.
+                // new JET_INDEXCREATE { szIndexName = "Index2", cbKey = 9, szKey = "+C2\0+C3\0\0" },
                 new JET_INDEXCREATE { szIndexName = "Index2", cbKey = 5, szKey = "+C2\0\0" },
                 new JET_INDEXCREATE { szIndexName = "Index3", cbKey = 5, szKey = "+C3\0\0", cbVarSegMac = 100 },
             };
             Api.JetCreateIndex2(this.sesid, this.tableid, indexcreates, indexcreates.Length);
+            this.indexcreates.Add(indexcreates[0]);
+            this.indexcreates.Add(indexcreates[1]);
 
             if (EsentVersion.SupportsWindows8Features)
             {
@@ -110,6 +122,7 @@ namespace InteropApiTests
                     ulDensity = 100,
                 };
                 Windows8Api.JetCreateIndex4(this.sesid, this.tableid, new[] { indexcreate }, 1);
+                this.indexcreates.Add(indexcreate);
             }
 
             Api.JetCloseTable(this.sesid, this.tableid);
@@ -218,11 +231,16 @@ namespace InteropApiTests
         public void TestJetGetIndexInfoIndexList()
         {
             JET_INDEXLIST result;
+            var indices = Api.GetTableIndexes(this.sesid, this.dbid, this.table).ToList();
+
             Api.JetGetIndexInfo(this.sesid, this.dbid, this.table, null, out result, JET_IdxInfo.List);
             int expectedIndexCount = EsentVersion.SupportsWindows8Features ? 4 : 3;
+
+            Assert.AreEqual(indices.Count, result.cRecord);
             Assert.AreEqual(expectedIndexCount, result.cRecord);
             Api.JetCloseTable(this.sesid, result.tableid);
         }
+
 
         /// <summary>
         /// Test the obsolete overload of JetGetIndexInfo that returns a JET_INDEXLIST.
@@ -239,6 +257,36 @@ namespace InteropApiTests
             int expectedIndexCount = EsentVersion.SupportsWindows8Features ? 4 : 3;
             Assert.AreEqual(expectedIndexCount, result.cRecord);
             Api.JetCloseTable(this.sesid, result.tableid);
+        }
+
+        /// <summary>
+        /// Test the overload of JetGetIndexInfo that returns a JET_INDEXCREATE.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test the overload of JetGetIndexInfo that returns a JET_INDEXCREATE")]
+        public void TestJetGetIndexInfoIndexCreate()
+        {
+            JET_INDEXCREATE result;
+
+            Api.JetGetIndexInfo(this.sesid, this.dbid, this.table, "Primary", out result, Windows8IdxInfo.InfoCreateIndex3);
+
+            Assert.AreEqual("Primary", result.szIndexName);
+            Assert.AreEqual(100, result.ulDensity);
+            Assert.AreEqual("+C1\0\0", result.szKey);
+            Assert.AreEqual((CreateIndexGrbit.IndexPrimary | CreateIndexGrbit.IndexUnique | VistaGrbits.IndexUnicode), result.grbit);
+
+            Api.JetGetIndexInfo(this.sesid, this.dbid, this.table, "Index2", out result, Windows8IdxInfo.InfoCreateIndex3);
+            CompareIndexCreateWithOutput(this.indexcreates.ElementAt(0), result);
+
+            Api.JetGetIndexInfo(this.sesid, this.dbid, this.table, "Index3", out result, Windows8IdxInfo.InfoCreateIndex3);
+            CompareIndexCreateWithOutput(this.indexcreates.ElementAt(1), result);
+
+            if (EsentVersion.SupportsWindows8Features)
+            {
+                Api.JetGetIndexInfo(this.sesid, this.dbid, this.table, "Win8BrazilIndex", out result, Windows8IdxInfo.InfoCreateIndex3);
+                CompareIndexCreateWithOutput(this.indexcreates.ElementAt(2), result);
+            }
         }
 
         /// <summary>
@@ -410,6 +458,36 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test the overload of JetGetTableIndexInfo that returns a JET_INDEXCREATE.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test the overload of JetGetTableIndexInfo that returns a JET_INDEXCREATE")]
+        public void TestJetGetTableIndexInfoIndexCreate()
+        {
+            JET_INDEXCREATE result;
+
+            Api.JetGetTableIndexInfo(this.sesid, this.tableid, "Primary", out result, Windows8IdxInfo.InfoCreateIndex3);
+
+            Assert.AreEqual("Primary", result.szIndexName);
+            Assert.AreEqual(100, result.ulDensity);
+            Assert.AreEqual("+C1\0\0", result.szKey);
+            Assert.AreEqual((CreateIndexGrbit.IndexPrimary | CreateIndexGrbit.IndexUnique | VistaGrbits.IndexUnicode), result.grbit);
+
+            Api.JetGetTableIndexInfo(this.sesid, this.tableid, "Index2", out result, Windows8IdxInfo.InfoCreateIndex3);
+            CompareIndexCreateWithOutput(this.indexcreates.ElementAt(0), result);
+
+            Api.JetGetTableIndexInfo(this.sesid, this.tableid, "Index3", out result, Windows8IdxInfo.InfoCreateIndex3);
+            CompareIndexCreateWithOutput(this.indexcreates.ElementAt(1), result);
+
+            if (EsentVersion.SupportsWindows8Features)
+            {
+                Api.JetGetTableIndexInfo(this.sesid, this.tableid, "Win8BrazilIndex", out result, Windows8IdxInfo.InfoCreateIndex3);
+                CompareIndexCreateWithOutput(this.indexcreates.ElementAt(2), result);
+            }
+        }
+
+        /// <summary>
         /// Tests that GetTableIndexes() works when specifying the table id.
         /// </summary>
         [TestMethod]
@@ -437,6 +515,80 @@ namespace InteropApiTests
             Assert.AreEqual(expectedIndexCount, foundIndices);
         }
 
+        #endregion
+
+        #region Helper function
+        private static void CompareIndexCreateWithOutput(
+            JET_INDEXCREATE orig,
+            JET_INDEXCREATE actual)
+        {
+            Assert.AreEqual(orig.szIndexName, actual.szIndexName);
+            Assert.AreEqual(orig.cConditionalColumn, actual.cConditionalColumn);
+            Assert.AreEqual(orig.cbKey, actual.cbKey);
+            Assert.AreEqual(orig.szKey, actual.szKey);
+            if (orig.cbKeyMost == 0)
+            {
+                Assert.AreEqual(255, actual.cbKeyMost);
+            }
+            else
+            {
+                Assert.AreEqual(orig.cbKeyMost, actual.cbKeyMost);
+            }
+
+            if (orig.cbVarSegMac == 0)
+            {
+                Assert.AreEqual(255, actual.cbVarSegMac);
+            }
+            else
+            {
+                Assert.AreEqual(orig.cbVarSegMac, actual.cbVarSegMac);
+            }
+
+            if (orig.ulDensity == 0)
+            {
+                Assert.AreEqual(100, actual.ulDensity);
+            }
+            else
+            {
+                Assert.AreEqual(orig.ulDensity, actual.ulDensity);
+            }
+
+            // Clear the bits that might get set:
+            CreateIndexGrbit originalGrbit = orig.grbit;
+            CreateIndexGrbit actualGrbit = actual.grbit & ~(CreateIndexGrbit.IndexUnique | VistaGrbits.IndexUnicode);
+            if (originalGrbit.HasFlag(CreateIndexGrbit.IndexIgnoreAnyNull))
+            {
+                originalGrbit &= ~(CreateIndexGrbit.IndexIgnoreAnyNull | CreateIndexGrbit.IndexIgnoreFirstNull |
+                                CreateIndexGrbit.IndexIgnoreNull);
+                actualGrbit &= ~(CreateIndexGrbit.IndexIgnoreAnyNull | CreateIndexGrbit.IndexIgnoreFirstNull |
+                                CreateIndexGrbit.IndexIgnoreNull);
+            }
+
+            Assert.AreEqual(originalGrbit, actualGrbit);
+
+            if (orig.pSpaceHints == null)
+            {
+                JET_SPACEHINTS defaultSpaceHints = new JET_SPACEHINTS()
+                {
+                    ulInitialDensity = 100, // Or is it actual.ulDensity ?
+                };
+                Assert.IsTrue(defaultSpaceHints.ContentEquals(actual.pSpaceHints));
+            }
+            else
+            {
+                Assert.IsTrue(orig.pSpaceHints.ContentEquals(actual.pSpaceHints));
+            }
+
+            if (orig.pidxUnicode == null)
+            {
+                JET_UNICODEINDEX defaultUnicodeIndex = new JET_UNICODEINDEX()
+                {
+                    dwMapFlags = 0x30401,
+                    szLocaleName = "en-us",
+                };
+                Assert.IsTrue(defaultUnicodeIndex.ContentEquals(actual.pidxUnicode));
+            }
+        }
         #endregion
     }
 }
