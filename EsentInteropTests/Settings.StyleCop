@@ -10,6 +10,7 @@
       <Value>esent</Value>
       <Value>multivalues</Value>
       <Value>nullable</Value>
+      <Value>tableid</Value>
     </CollectionProperty>
   </GlobalSettings>
   <Analyzers>
