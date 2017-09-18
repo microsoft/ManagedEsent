@@ -9,8 +9,6 @@ namespace InteropApiTests
     using System;
     using System.IO;
     using Microsoft.Isam.Esent.Interop;
-    using Microsoft.Isam.Esent.Interop.Vista;
-    using Microsoft.Isam.Esent.Interop.Windows10;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -55,14 +53,9 @@ namespace InteropApiTests
         private JET_TABLEID tableid;
 
         /// <summary>
-        /// Columnid of the long escrow update column in the table.
+        /// Columnid of the escrow update column in the table.
         /// </summary>
-        private JET_COLUMNID columnidLong;
-
-        /// <summary>
-        /// Columnid of the longlong escrow update column in the table.
-        /// </summary>
-        private JET_COLUMNID columnidLongLong;
+        private JET_COLUMNID columnid;
 
         #region Setup/Teardown
 
@@ -92,10 +85,7 @@ namespace InteropApiTests
                 coltyp = JET_coltyp.Long,
                 grbit = ColumndefGrbit.ColumnEscrowUpdate,
             };
-            Api.JetAddColumn(this.sesid, this.tableid, "EscrowColumnLong", columndef, BitConverter.GetBytes(0), 4, out this.columnidLong);
-
-            columndef.coltyp = VistaColtyp.LongLong;
-            Api.JetAddColumn(this.sesid, this.tableid, "EscrowColumnLongLong", columndef, BitConverter.GetBytes(0L), 8, out this.columnidLongLong);
+            Api.JetAddColumn(this.sesid, this.tableid, "EscrowColumn", columndef, BitConverter.GetBytes(0), 4, out this.columnid);
 
             Api.JetCloseTable(this.sesid, this.tableid);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
@@ -134,22 +124,16 @@ namespace InteropApiTests
             Assert.AreNotEqual(JET_SESID.Nil, this.sesid);
             Assert.AreNotEqual(JET_DBID.Nil, this.dbid);
             Assert.AreNotEqual(JET_TABLEID.Nil, this.tableid);
-            Assert.AreNotEqual(JET_COLUMNID.Nil, this.columnidLong);
+            Assert.AreNotEqual(JET_COLUMNID.Nil, this.columnid);
 
             // The escrow-update column exists
             JET_COLUMNDEF columndef;
-
-            Api.JetGetTableColumnInfo(this.sesid, this.tableid, this.columnidLong, out columndef);
+            Api.JetGetTableColumnInfo(this.sesid, this.tableid, this.columnid, out columndef);
             Assert.AreEqual(JET_coltyp.Long, columndef.coltyp);
             Assert.AreEqual(ColumndefGrbit.ColumnEscrowUpdate, columndef.grbit & ColumndefGrbit.ColumnEscrowUpdate);
 
-            Api.JetGetTableColumnInfo(this.sesid, this.tableid, this.columnidLongLong, out columndef);
-            Assert.AreEqual(VistaColtyp.LongLong, columndef.coltyp);
-            Assert.AreEqual(ColumndefGrbit.ColumnEscrowUpdate, columndef.grbit & ColumndefGrbit.ColumnEscrowUpdate);
-
             // We are on a record and the escrow-update column is zeroed
-            Assert.AreEqual(0, Api.RetrieveColumnAsInt32(this.sesid, this.tableid, this.columnidLong).Value);
-            Assert.AreEqual(0L, Api.RetrieveColumnAsInt64(this.sesid, this.tableid, this.columnidLongLong).Value);
+            Assert.AreEqual(0, this.RetrieveEscrowColumn());
         }
 
         #endregion Setup/Teardown
@@ -162,20 +146,15 @@ namespace InteropApiTests
         [Description("Verify that JetEscrowUpdate returns the previous column value")]
         public void VerifyJetEscrowUpdateReturnsOldValue()
         {
-            var previousValue = new byte[8];
+            var previousValue = new byte[4];
             int actual;
 
             Api.JetBeginTransaction(this.sesid);
+            Api.JetEscrowUpdate(this.sesid, this.tableid, this.columnid, BitConverter.GetBytes(1), 4, previousValue, 4, out actual, EscrowUpdateGrbit.None);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
 
-            Api.JetEscrowUpdate(this.sesid, this.tableid, this.columnidLong, BitConverter.GetBytes(1), 4, previousValue, 4, out actual, EscrowUpdateGrbit.None);
             Assert.AreEqual(4, actual);
             Assert.AreEqual(0, BitConverter.ToInt32(previousValue, 0));
-
-            Api.JetEscrowUpdate(this.sesid, this.tableid, this.columnidLongLong, BitConverter.GetBytes(1L), 8, previousValue, 8, out actual, EscrowUpdateGrbit.None);
-            Assert.AreEqual(8, actual);
-            Assert.AreEqual(0L, BitConverter.ToInt64(previousValue, 0));
-
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
         }
 
         /// <summary>
@@ -187,18 +166,13 @@ namespace InteropApiTests
         public void VerifyJetEscrowUpdateUpdatesColumn()
         {
             const int Delta = -9;
-            const long LongDelta = -(uint.MaxValue + 9L);
             int ignored;
 
             Api.JetBeginTransaction(this.sesid);
-
-            Api.JetEscrowUpdate(this.sesid, this.tableid, this.columnidLong, BitConverter.GetBytes(Delta), 4, null, 0, out ignored, EscrowUpdateGrbit.None);
-            Assert.AreEqual(Api.RetrieveColumnAsInt32(this.sesid, this.tableid, this.columnidLong).Value, Delta);
-
-            Api.JetEscrowUpdate(this.sesid, this.tableid, this.columnidLongLong, BitConverter.GetBytes(LongDelta), 8, null, 0, out ignored, EscrowUpdateGrbit.None);
-            Assert.AreEqual(Api.RetrieveColumnAsInt64(this.sesid, this.tableid, this.columnidLongLong).Value, LongDelta);
-
+            Api.JetEscrowUpdate(this.sesid, this.tableid, this.columnid, BitConverter.GetBytes(Delta), 4, null, 0, out ignored, EscrowUpdateGrbit.None);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Assert.AreEqual(this.RetrieveEscrowColumn(), Delta);
         }
 
         /// <summary>
@@ -210,14 +184,10 @@ namespace InteropApiTests
         public void VerifyEscrowUpdateReturnsOldValue()
         {
             Api.JetBeginTransaction(this.sesid);
-
-            int actual1 = Api.EscrowUpdate(this.sesid, this.tableid, this.columnidLong, 1);
-            Assert.AreEqual(0, actual1);
-
-            long actual3 = Api.EscrowUpdate(this.sesid, this.tableid, this.columnidLongLong, 1L);
-            Assert.AreEqual(0L, actual3);
-
+            int actual = Api.EscrowUpdate(this.sesid, this.tableid, this.columnid, 1);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Assert.AreEqual(0, actual);
         }
 
         /// <summary>
@@ -229,60 +199,20 @@ namespace InteropApiTests
         public void VerifyEscrowUpdateUpdatesColumn()
         {
             const int Delta = 17;
-            const long LongDelta = uint.MaxValue + 17L;
-
             Api.JetBeginTransaction(this.sesid);
-            
-            Api.EscrowUpdate(this.sesid, this.tableid, this.columnidLong, Delta);
-            Assert.AreEqual(Delta, Api.RetrieveColumnAsInt32(this.sesid, this.tableid, this.columnidLong).Value);
-
-            Api.EscrowUpdate(this.sesid, this.tableid, this.columnidLongLong, LongDelta);
-            Assert.AreEqual(LongDelta, Api.RetrieveColumnAsInt64(this.sesid, this.tableid, this.columnidLongLong).Value);
-
+            Api.EscrowUpdate(this.sesid, this.tableid, this.columnid, Delta);
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Assert.AreEqual(this.RetrieveEscrowColumn(), Delta);
         }
 
         /// <summary>
-        /// Test overflow on escrow updates. Overflow should cause the column value to roll over.
+        /// Retrieve the value of the escrow column.
         /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        [Description("Test overflow on escrow updates")]
-        public void TestEscrowUpdateOverflow()
+        /// <returns>The value of the escrow column.</returns>
+        private int RetrieveEscrowColumn()
         {
-            Api.JetBeginTransaction(this.sesid);
-
-            Api.EscrowUpdate(this.sesid, this.tableid, this.columnidLong, int.MaxValue);
-            Api.EscrowUpdate(this.sesid, this.tableid, this.columnidLong, 1);
-            Assert.AreEqual(int.MinValue, Api.RetrieveColumnAsInt32(this.sesid, this.tableid, this.columnidLong).Value);
-
-            Api.EscrowUpdate(this.sesid, this.tableid, this.columnidLongLong, long.MaxValue);
-            Api.EscrowUpdate(this.sesid, this.tableid, this.columnidLongLong, 1L);
-            Assert.AreEqual(long.MinValue, Api.RetrieveColumnAsInt64(this.sesid, this.tableid, this.columnidLongLong).Value);
-
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-        }
-
-        /// <summary>
-        /// Test underflow on escrow updates. Underflow should cause the column value to roll over.
-        /// </summary>
-        [TestMethod]
-        [Priority(2)]
-        [Description("Test underflow on escrow updates")]
-        public void TestEscrowUpdateUnderflow()
-        {
-            Api.JetBeginTransaction(this.sesid);
-
-            // 32-bit escrow columns don't detect underflow (to confirm with legacy behavior)
-            Api.EscrowUpdate(this.sesid, this.tableid, this.columnidLong, int.MinValue);
-            Api.EscrowUpdate(this.sesid, this.tableid, this.columnidLong, -1);
-            Assert.AreEqual(int.MaxValue, Api.RetrieveColumnAsInt32(this.sesid, this.tableid, this.columnidLong).Value);
-
-            Api.EscrowUpdate(this.sesid, this.tableid, this.columnidLongLong, long.MinValue);
-            Api.EscrowUpdate(this.sesid, this.tableid, this.columnidLongLong, -1L);
-            Assert.AreEqual(long.MaxValue, Api.RetrieveColumnAsInt64(this.sesid, this.tableid, this.columnidLongLong).Value);
-
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            return Api.RetrieveColumnAsInt32(this.sesid, this.tableid, this.columnid).Value;
         }
     }
 }
