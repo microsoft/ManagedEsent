@@ -10,6 +10,7 @@ namespace InteropApiTests
     using System.Collections.Generic;
     using System.Text;
     using Microsoft.Isam.Esent.Interop;
+    using Microsoft.Isam.Esent.Interop.Implementation;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -900,7 +901,7 @@ namespace InteropApiTests
 
             // These characters include surrogate pairs. string.Length counts the
             // surrogate pairs.
-            const string Expected = "☺ś𐐂𐐉𐐯𐑉𝓐𐒀";
+            const string Expected = "☺ś𐐂𐐉𐐯𐑉𝓐𐒀";   
             byte[] data = Encoding.Unicode.GetBytes(Expected);
             this.InsertRecord(columnid, data);
             string actual = Api.RetrieveColumnAsString(this.sesid, this.tableid, columnid, Encoding.Unicode);
@@ -1732,28 +1733,6 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Test setting a ColumnValue with a byte array.
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        [Description("Test modifiying a ColumnValue with a byte array")]
-        public void ResetColumnsWithBytes()
-        {
-            JET_COLUMNID columnid = this.columnidDict["binary"];
-            var value1 = Any.Bytes;
-            this.InsertRecordWithSetColumns(columnid, new BytesColumnValue { Columnid = columnid, Value = value1 });
-            CollectionAssert.AreEqual(value1, Api.RetrieveColumn(this.sesid, this.tableid, columnid));
-
-            var value2 = new byte[] { 0x23, 0x42 };
-            byte[] bookmarkBytes = Api.GetBookmark(this.sesid, this.tableid);
-            this.ModifyRecordWithSetColumns(bookmarkBytes, new BytesColumnValue { Columnid = columnid, Value = value2 });
-
-            byte[] retrieved2 = Api.RetrieveColumn(this.sesid, this.tableid, columnid);
-            CollectionAssert.AreEqual(value2, retrieved2);
-            Assert.AreEqual(value2.Length, retrieved2.Length);
-        }
-
-        /// <summary>
         /// Test setting a binary column from a zero-length array.
         /// </summary>
         [TestMethod]
@@ -2375,7 +2354,7 @@ namespace InteropApiTests
             SetColumnGrbit grbit = (null != data && 0 == data.Length) ? SetColumnGrbit.ZeroLength : SetColumnGrbit.None;
             Api.JetSetColumn(this.sesid, this.tableid, columnid, data, (null == data) ? 0 : data.Length, grbit, null);
             this.UpdateAndGotoBookmark();
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);      
         }
 
         /// <summary>
@@ -2388,26 +2367,6 @@ namespace InteropApiTests
         {
             Api.JetBeginTransaction(this.sesid);
             Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
-            Api.SetColumns(this.sesid, this.tableid, values);
-            this.UpdateAndGotoBookmark();
-            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
-        }
-
-        /// <summary>
-        /// Modifies a record with the given column set to the specified value.
-        /// The tableid is positioned on the modified record.
-        /// </summary>
-        /// <param name="bookmark">The bookmark of the row.</param>
-        /// <param name="values">The data to set.</param>
-        private void ModifyRecordWithSetColumns(byte[] bookmark, params ColumnValue[] values)
-        {
-            Api.JetBeginTransaction(this.sesid);
-            if (!Api.TryGotoBookmark(this.sesid, this.tableid, bookmark, bookmark.Length))
-            {
-                Assert.Fail("Record not found!");
-            }
-
-            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Replace);
             Api.SetColumns(this.sesid, this.tableid, values);
             this.UpdateAndGotoBookmark();
             Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);

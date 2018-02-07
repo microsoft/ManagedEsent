@@ -94,7 +94,7 @@ namespace Microsoft.Isam.Esent.Interop
         private int separateLvThresholdHint;
 
         /// <summary>
-        /// Returned tableid.
+        /// Returned tabledid.
         /// </summary>
         [NonSerialized]
         private JET_TABLEID tableIdentifier;
@@ -246,7 +246,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Gets or sets the returned tableid.
+        /// Gets or sets the returned tabledid.
         /// </summary>
         public JET_TABLEID tableid
         {
@@ -470,7 +470,7 @@ namespace Microsoft.Isam.Esent.Interop
             /// Size of the structure.
             /// </summary>
             public uint cbStruct;
-
+            
             /// <summary>
             /// Name of the table to create.
             /// </summary>
@@ -530,7 +530,7 @@ namespace Microsoft.Isam.Esent.Interop
             public uint grbit;
 
             /// <summary>
-            /// Returned tableid.
+            /// Returned tabledid.
             /// </summary>
             public IntPtr tableid;
 
@@ -633,7 +633,7 @@ namespace Microsoft.Isam.Esent.Interop
             public uint cbSeparateLV;
 
             /// <summary>
-            /// Returned tableid.
+            /// Returned tabledid.
             /// </summary>
             public IntPtr tableid;
 

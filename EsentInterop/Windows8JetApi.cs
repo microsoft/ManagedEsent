@@ -105,9 +105,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="grbit">Resize options.</param>
         /// <returns>An error code.</returns>
         public int JetResizeDatabase(
-            JET_SESID sesid,
-            JET_DBID dbid,
-            int desiredPages,
+            JET_SESID sesid, 
+            JET_DBID dbid, 
+            int desiredPages, 
             out int actualPages,
             ResizeDatabaseGrbit grbit)
         {
@@ -208,7 +208,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     return err;
                 }
             }
-        }
+        }      
 
         /// <summary>
         /// Creates a table, adds columns, and indices on that table.
@@ -355,148 +355,6 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         #endregion
 
-        #region JetGetIndexInfo overloads
-        /// <summary>
-        /// Retrieves information about indexes on a table.
-        /// </summary>
-        /// <param name="sesid">The session to use.</param>
-        /// <param name="dbid">The database to use.</param>
-        /// <param name="tablename">The name of the table to retrieve index information about.</param>
-        /// <param name="indexname">The name of the index to retrieve information about.</param>
-        /// <param name="result">Filled in with information about indexes on the table.</param>
-        /// <param name="infoLevel">The type of information to retrieve.</param>
-        /// <returns>An error if the call fails.</returns>
-        public int JetGetIndexInfo(
-            JET_SESID sesid,
-            JET_DBID dbid,
-            string tablename,
-            string indexname,
-            out JET_INDEXCREATE result,
-            JET_IdxInfo infoLevel)
-        {
-            TraceFunctionCall("JetGetIndexInfo");
-            CheckNotNull(tablename, "tablename");
-            int err;
-
-            switch (infoLevel)
-            {
-                case Microsoft.Isam.Esent.Interop.Windows7.Windows7IdxInfo.CreateIndex:
-                case Microsoft.Isam.Esent.Interop.Windows7.Windows7IdxInfo.CreateIndex2:
-                case Microsoft.Isam.Esent.Interop.Windows8.Windows8IdxInfo.InfoCreateIndex3:
-                    break;
-                default:
-                    throw new ArgumentException(string.Format("{0} is not a valid value JET_IdxInfo for this JET_INDEXCREATE overload."));
-            }
-
-            if (this.Capabilities.SupportsWindows8Features)
-            {
-                {
-                    int bufferSize = 10 * Marshal.SizeOf(typeof(NATIVE_INDEXCREATE3));
-                    IntPtr unmanagedBuffer = Marshal.AllocHGlobal(bufferSize);
-                    try
-                    {
-                        // var nativeIndexcreate = new NATIVE_INDEXCREATE3();
-                        // nativeIndexcreate.cbStruct = checked((uint)bufferSize);
-                        infoLevel = Windows8IdxInfo.InfoCreateIndex3;
-
-                        err = Err(NativeMethods.JetGetIndexInfoW(
-                            sesid.Value,
-                            dbid.Value,
-                            tablename,
-                            indexname,
-                            unmanagedBuffer,
-                            (uint)bufferSize,
-                            (uint)infoLevel));
-
-                        NATIVE_INDEXCREATE3 nativeIndexcreate = (NATIVE_INDEXCREATE3)Marshal.PtrToStructure(unmanagedBuffer, typeof(NATIVE_INDEXCREATE3));
-
-                        result = new JET_INDEXCREATE();
-                        result.SetAllFromNativeIndexCreate(ref nativeIndexcreate);
-                    }
-                    finally
-                    {
-                        Marshal.FreeHGlobal(unmanagedBuffer);
-                    }
-                }
-            }
-            else
-            {
-                result = null;
-                err = Err((int)JET_err.FeatureNotAvailable);
-            }
-
-            return err;
-        }
-
-        /// <summary>
-        /// Retrieves information about indexes on a table.
-        /// </summary>
-        /// <param name="sesid">The session to use.</param>
-        /// <param name="tableid">The table to retrieve index information about.</param>
-        /// <param name="indexname">The name of the index to retrieve information about.</param>
-        /// <param name="result">Filled in with information about indexes on the table.</param>
-        /// <param name="infoLevel">The type of information to retrieve.</param>
-        /// <returns>An error if the call fails.</returns>
-        public int JetGetTableIndexInfo(
-            JET_SESID sesid,
-            JET_TABLEID tableid,
-            string indexname,
-            out JET_INDEXCREATE result,
-            JET_IdxInfo infoLevel)
-        {
-            TraceFunctionCall("JetGetTableIndexInfo");
-            int err;
-
-            switch (infoLevel)
-            {
-                case Microsoft.Isam.Esent.Interop.Windows7.Windows7IdxInfo.CreateIndex:
-                case Microsoft.Isam.Esent.Interop.Windows7.Windows7IdxInfo.CreateIndex2:
-                case Microsoft.Isam.Esent.Interop.Windows8.Windows8IdxInfo.InfoCreateIndex3:
-                    break;
-                default:
-                    throw new ArgumentException(string.Format("{0} is not a valid value JET_IdxInfo for this JET_INDEXCREATE overload."));
-            }
-
-            if (this.Capabilities.SupportsWindows8Features)
-            {
-                {
-                    int bufferSize = 10 * Marshal.SizeOf(typeof(NATIVE_INDEXCREATE3));
-                    IntPtr unmanagedBuffer = Marshal.AllocHGlobal(bufferSize);
-                    try
-                    {
-                        // var nativeIndexcreate = new NATIVE_INDEXCREATE3();
-                        // nativeIndexcreate.cbStruct = checked((uint)bufferSize);
-                        infoLevel = Windows8IdxInfo.InfoCreateIndex3;
-
-                        err = Err(NativeMethods.JetGetTableIndexInfoW(
-                            sesid.Value,
-                            tableid.Value,
-                            indexname,
-                            unmanagedBuffer,
-                            (uint)bufferSize,
-                            (uint)infoLevel));
-
-                        NATIVE_INDEXCREATE3 nativeIndexcreate = (NATIVE_INDEXCREATE3)Marshal.PtrToStructure(unmanagedBuffer, typeof(NATIVE_INDEXCREATE3));
-
-                        result = new JET_INDEXCREATE();
-                        result.SetAllFromNativeIndexCreate(ref nativeIndexcreate);
-                    }
-                    finally
-                    {
-                        Marshal.FreeHGlobal(unmanagedBuffer);
-                    }
-                }
-            }
-            else
-            {
-                result = null;
-                err = Err((int)JET_err.FeatureNotAvailable);
-            }
-
-            return err;
-        }
-        #endregion
-
         #region prereading
         /// <summary>
         /// If the records with the specified key rangess are not in the buffer
@@ -505,7 +363,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The table to issue the prereads against.</param>
-        /// <param name="indexRanges">The key ranges to preread.</param>
+        /// <param name="indexRanges">The key rangess to preread.</param>
         /// <param name="rangeIndex">The index of the first key range in the array to read.</param>
         /// <param name="rangeCount">The maximum number of key ranges to preread.</param>
         /// <param name="rangesPreread">Returns the number of keys actually preread.</param>
@@ -729,7 +587,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             return nativeIndices;
         }
-
+        
         /// <summary>
         /// Creates indexes over data in an ESE database.
         /// </summary>
@@ -752,7 +610,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 handles.Dispose();
             }
         }
-
+        
         /// <summary>
         /// Creates a table, adds columns, and indices on that table.
         /// </summary>
@@ -806,7 +664,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     {
                         for (int i = 0; i < tablecreate.rgcolumncreate.Length; ++i)
                         {
-                            tablecreate.rgcolumncreate[i].SetFromNativeColumnCreate(ref nativeTableCreate.rgcolumncreate[i]);
+                            tablecreate.rgcolumncreate[i].SetFromNativeColumnCreate(nativeTableCreate.rgcolumncreate[i]);
                         }
                     }
 
@@ -814,12 +672,12 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                     {
                         for (int i = 0; i < tablecreate.rgindexcreate.Length; ++i)
                         {
-                            tablecreate.rgindexcreate[i].SetFromNativeIndexCreate(ref nativeIndexCreates[i]);
+                            tablecreate.rgindexcreate[i].SetFromNativeIndexCreate(nativeIndexCreates[i]);
                         }
                     }
 
                     return Err(err);
-                }
+                } 
                 finally
                 {
                     handles.Dispose();

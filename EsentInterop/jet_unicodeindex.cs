@@ -128,9 +128,7 @@ namespace Microsoft.Isam.Esent.Interop
                 return false;
             }
 
-            return this.localeId == other.localeId
-                && this.mapStringFlags == other.mapStringFlags
-                && string.Compare(this.localeName, other.localeName, StringComparison.OrdinalIgnoreCase) == 0;
+            return this.localeId == other.localeId && this.mapStringFlags == other.mapStringFlags && string.Compare(this.localeName, other.localeName, StringComparison.Ordinal) == 0;
         }
 
         /// <summary>

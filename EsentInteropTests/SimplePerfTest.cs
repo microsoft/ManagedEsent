@@ -62,17 +62,17 @@ namespace InteropApiTests
         /// The instance to use.
         /// </summary>
         private Instance instance;
-
+        
         /// <summary>
         /// The session to use.
         /// </summary>
         private Session session;
-
+        
         /// <summary>
         /// Random number generation object.
         /// </summary>
         private Random random;
-
+        
         /// <summary>
         /// Previous minimum cache size. Used to restore the previous setting.
         /// </summary>
@@ -308,10 +308,10 @@ namespace InteropApiTests
         }
 
         /// <summary>
-        /// Get keys in the range (0, <paramref name="numKeys"/>] in a random order.
+        /// Get keys in the range (0, numKeys] in a random order.
         /// </summary>
         /// <param name="numKeys">The number of keys that are wanted.</param>
-        /// <returns>Keys in the range (0, <paramref name="numKeys"/>] in random order.</returns>
+        /// <returns>Keys in the range (0, numKeys] in random order.</returns>
         private long[] GetRandomKeys(int numKeys)
         {
             long[] keys = (from x in Enumerable.Range(0, numKeys) select (long)x).ToArray();
@@ -435,7 +435,7 @@ namespace InteropApiTests
         /// Worker for the performance test.
         /// </summary>
         internal class PerfTestWorker : IDisposable
-        {
+        {      
             /// <summary>
             /// The next key value to be inserted. Used to insert records.
             /// </summary>
@@ -516,7 +516,7 @@ namespace InteropApiTests
             }
 
             /// <summary>
-            /// Finalizes an instance of the <see cref="PerfTestWorker"/> class.
+            /// Finalizes an instance of the <see cref="PerfTestWorker"/> class. 
             /// </summary>
             ~PerfTestWorker()
             {
@@ -553,6 +553,10 @@ namespace InteropApiTests
                 }
             }
 
+            /// <summary>
+            /// Begins read-only transactions.
+            /// </summary>
+            /// <param name="numRecords">The number of transactions to begin.</param>
             public void RepeatedlyBeginReadTrxSerial(int numRecords)
             {
                 for (int i = 0; i < numRecords; ++i)
@@ -565,6 +569,10 @@ namespace InteropApiTests
                 }
             }
 
+            /// <summary>
+            /// Begins read-only transactions in parallel.
+            /// </summary>
+            /// <param name="numRecords">The number of transactions to begin.</param>
             public void RepeatedlyBeginReadTrxParallel(int numRecords)
             {
                 TaskFactory taskFactory = new TaskFactory();
@@ -704,10 +712,10 @@ namespace InteropApiTests
             }
 
             /// <summary>
-            /// Repeatedly retrieve one record using
-            /// <see cref="Api.JetEnumerateColumns(JET_SESID, JET_TABLEID,
-            /// int, JET_ENUMCOLUMNID[], out int, out JET_ENUMCOLUMN[],
-            /// JET_PFNREALLOC, IntPtr, int, EnumerateColumnsGrbit)"/>.
+            /// Repeatedly retrieve one record using 
+            /// <see cref="Api.JetEnumerateColumns(JET_SESID, JET_TABLEID, 
+            /// int, JET_ENUMCOLUMNID[], out int, out JET_ENUMCOLUMN[], 
+            /// JET_PFNREALLOC, IntPtr, int, EnumerateColumnsGrbit)"/>. 
             /// </summary>
             /// <param name="numRetrieves">The number of times to retrieve the record.</param>
             public void RepeatedlyRetrieveOneRecordWithEnumColumns(int numRetrieves)
@@ -790,7 +798,7 @@ namespace InteropApiTests
             private void SeekToLastRecordInserted()
             {
                 Api.MakeKey(this.session, this.table, this.lastKey, MakeKeyGrbit.NewKey);
-                Api.JetSeek(this.session, this.table, SeekGrbit.SeekEQ);
+                Api.JetSeek(this.session, this.table, SeekGrbit.SeekEQ);                
             }
 
             /// <summary>

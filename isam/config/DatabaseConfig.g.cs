@@ -27,7 +27,7 @@ namespace Microsoft.Database.Isam.Config
         /// <summary>
         /// The exclusive upper bound on JET_param*.
         /// </summary>
-        internal const int ParamMaxValueInvalid = 196; // should be equal to JET_paramMaxValueInvalid
+        internal const int ParamMaxValueInvalid = 212; // should be equal to JET_paramMaxValueInvalid
     
         /// <summary>
         /// Fills the param table from auto-generated code.
@@ -77,6 +77,8 @@ namespace Microsoft.Database.Isam.Config
             DatabaseConfig.ParamTable[52] = new ParamDef(52, false, typeof(bool)); // JET_paramDeleteOutOfRangeLogs
             DatabaseConfig.ParamTable[53] = new ParamDef(53, false, typeof(int)); // JET_paramAccessDeniedRetryPeriod
             DatabaseConfig.ParamTable[54] = new ParamDef(54, false, typeof(bool)); // JET_paramEnableIndexCleanup
+            DatabaseConfig.ParamTable[56] = new ParamDef(56, false, typeof(int)); // JET_paramFlight_ElasticWaypointLatency
+            DatabaseConfig.ParamTable[57] = new ParamDef(57, false, typeof(bool)); // JET_paramFlight_SynchronousLVCleanup
             DatabaseConfig.ParamTable[60] = new ParamDef(60, false, typeof(int)); // JET_paramCacheSizeMin
             DatabaseConfig.ParamTable[63] = new ParamDef(63, false, typeof(int)); // JET_paramPreferredVerPages
             DatabaseConfig.ParamTable[64] = new ParamDef(64, true, typeof(int)); // JET_paramDatabasePageSize
@@ -89,6 +91,10 @@ namespace Microsoft.Database.Isam.Config
             DatabaseConfig.ParamTable[79] = new ParamDef(79, false, typeof(int)); // JET_paramRecoveryCurrentLogfile
             DatabaseConfig.ParamTable[81] = new ParamDef(81, true, typeof(int)); // JET_paramGlobalMinVerPages
             DatabaseConfig.ParamTable[82] = new ParamDef(82, false, typeof(int)); // JET_paramOSSnapshotTimeout
+            DatabaseConfig.ParamTable[84] = new ParamDef(84, false, typeof(int)); // JET_paramFlight_NewQueueOptions
+            DatabaseConfig.ParamTable[85] = new ParamDef(85, false, typeof(int)); // JET_paramFlight_ConcurrentMetedOps
+            DatabaseConfig.ParamTable[86] = new ParamDef(86, false, typeof(int)); // JET_paramFlight_LowMetedOpsThreshold
+            DatabaseConfig.ParamTable[87] = new ParamDef(87, false, typeof(int)); // JET_paramFlight_MetedOpStarvedThreshold
             DatabaseConfig.ParamTable[98] = new ParamDef(98, false, typeof(JET_ExceptionAction)); // JET_paramExceptionAction
             DatabaseConfig.ParamTable[99] = new ParamDef(99, true, typeof(int)); // JET_paramEventLogCache
             DatabaseConfig.ParamTable[100] = new ParamDef(100, false, typeof(bool)); // JET_paramCreatePathIfNotExist
@@ -678,6 +684,24 @@ namespace Microsoft.Database.Isam.Config
         }
 
         /// <summary>
+        /// Gets or sets Flight_ElasticWaypointLatency of type int
+        /// </summary>
+        public int Flight_ElasticWaypointLatency
+        {
+            get { return this.GetParam<int>(56); }
+            set { this.SetParam(56, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets Flight_SynchronousLVCleanup of type bool
+        /// </summary>
+        public bool Flight_SynchronousLVCleanup
+        {
+            get { return this.GetParam<bool>(57); }
+            set { this.SetParam(57, value); }
+        }
+
+        /// <summary>
         /// This parameter configures the minimum size of the database page cache. The size is in database pages.
         /// </summary>
         public int CacheSizeMin
@@ -811,6 +835,42 @@ namespace Microsoft.Database.Isam.Config
         {
             get { return this.GetParam<int>(82); }
             set { this.SetParam(82, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets Flight_NewQueueOptions of type int
+        /// </summary>
+        public int Flight_NewQueueOptions
+        {
+            get { return this.GetParam<int>(84); }
+            set { this.SetParam(84, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets Flight_ConcurrentMetedOps of type int
+        /// </summary>
+        public int Flight_ConcurrentMetedOps
+        {
+            get { return this.GetParam<int>(85); }
+            set { this.SetParam(85, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets Flight_LowMetedOpsThreshold of type int
+        /// </summary>
+        public int Flight_LowMetedOpsThreshold
+        {
+            get { return this.GetParam<int>(86); }
+            set { this.SetParam(86, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets Flight_MetedOpStarvedThreshold of type int
+        /// </summary>
+        public int Flight_MetedOpStarvedThreshold
+        {
+            get { return this.GetParam<int>(87); }
+            set { this.SetParam(87, value); }
         }
 
         /// <summary>
