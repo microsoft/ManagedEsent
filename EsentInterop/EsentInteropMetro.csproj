@@ -38,7 +38,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <DefaultLanguage>en-us</DefaultLanguage>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <VisualStudioVersion>11.0</VisualStudioVersion>
+    <VisualStudioVersion>15.0</VisualStudioVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <!-- The .snk file won't be published to codeplex. -->
