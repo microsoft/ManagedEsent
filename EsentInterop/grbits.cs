@@ -64,6 +64,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// background at run time is abandoned.
         /// </summary>
         Abrupt = 2,
+        
+        /// <summary>
+        /// Interrupts and fails any on-going backup.
+        /// </summary>
+        StopBackup = 4,
     }
 
     /// <summary>
@@ -1295,7 +1300,7 @@ namespace Microsoft.Isam.Esent.Interop
         ColumnMaybeNull = 0x2000,
 
         /// <summary>
-        /// When the escrow-update column reaches a value of zero, the callback function will be invoked.
+        /// DEPRECATED / Not Fully Implemented: use ColumnDeleteOnZero <see cref="Server2003.Server2003Grbits.ColumnDeleteOnZero"/> instead.
         /// </summary>
         ColumnFinalize = 0x4000,
 

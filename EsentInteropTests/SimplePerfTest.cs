@@ -595,6 +595,55 @@ namespace InteropApiTests
             }
 
             /// <summary>
+            /// Begins read-only transactions.
+            /// </summary>
+            /// <param name="numRecords">The number of transactions to begin.</param>
+            public void RepeatedlyBeginReadTrxSerial(int numRecords)
+            {
+                for (int i = 0; i < numRecords; ++i)
+                {
+                    JET_SESID sesid;
+                    Api.BeginSession(this.instance, out sesid);
+                    Api.JetBeginTransaction2(sesid, BeginTransactionGrbit.ReadOnly);
+                    Api.JetCommitTransaction(sesid, CommitTransactionGrbit.None);
+                    Api.JetEndSession(sesid, EndSessionGrbit.None);
+                }
+            }
+
+            /// <summary>
+            /// Begins read-only transactions in parallel.
+            /// </summary>
+            /// <param name="numRecords">The number of transactions to begin.</param>
+            public void RepeatedlyBeginReadTrxParallel(int numRecords)
+            {
+                TaskFactory taskFactory = new TaskFactory();
+
+                ConcurrentBag<Task> allTasks = new ConcurrentBag<Task>();
+                {
+                    for (int i = 0; i < numRecords; ++i)
+                    {
+                        Task newTask = taskFactory.StartNew(() =>
+                        {
+                            JET_SESID sesid;
+                            Api.BeginSession(this.instance, out sesid);
+                            Api.JetBeginTransaction2(sesid, BeginTransactionGrbit.ReadOnly);
+                            Api.JetCommitTransaction(sesid, CommitTransactionGrbit.None);
+                            Api.JetEndSession(sesid, EndSessionGrbit.None);
+                        });
+                        allTasks.Add(newTask);
+                    }
+
+                    Task taskToWait;
+                    while (allTasks.TryTake(out taskToWait))
+                    {
+                        taskToWait.Wait();
+                    }
+
+                    Assert.IsTrue(allTasks.IsEmpty);
+                }
+            }
+
+            /// <summary>
             /// Insert multiple records with the <see cref="Api.SetColumns"/> API.
             /// </summary>
             /// <param name="numRecords">The number of records to insert.</param>

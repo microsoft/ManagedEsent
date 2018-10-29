@@ -112,7 +112,6 @@ namespace InteropApiTests
             this.database = Path.Combine(this.directory, "database.edb");
             this.instance = SetupHelper.CreateNewInstance(this.directory);
 
-////            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, UnpublishedParam.EnablePeriodicShrinkDatabase, 0, null);
             this.callback = new DurableCommitCallback(this.instance, this.TestCallback);
 
             Api.JetInit(ref this.instance);
