@@ -553,47 +553,6 @@ namespace InteropApiTests
                 }
             }
 
-            public void RepeatedlyBeginReadTrxSerial(int numRecords)
-            {
-                for (int i = 0; i < numRecords; ++i)
-                {
-                    JET_SESID sesid;
-                    Api.BeginSession(this.instance, out sesid);
-                    Api.JetBeginTransaction2(sesid, BeginTransactionGrbit.ReadOnly);
-                    Api.JetCommitTransaction(sesid, CommitTransactionGrbit.None);
-                    Api.JetEndSession(sesid, EndSessionGrbit.None);
-                }
-            }
-
-            public void RepeatedlyBeginReadTrxParallel(int numRecords)
-            {
-                TaskFactory taskFactory = new TaskFactory();
-
-                ConcurrentBag<Task> allTasks = new ConcurrentBag<Task>();
-                {
-                    for (int i = 0; i < numRecords; ++i)
-                    {
-                        Task newTask = taskFactory.StartNew(() =>
-                        {
-                            JET_SESID sesid;
-                            Api.BeginSession(this.instance, out sesid);
-                            Api.JetBeginTransaction2(sesid, BeginTransactionGrbit.ReadOnly);
-                            Api.JetCommitTransaction(sesid, CommitTransactionGrbit.None);
-                            Api.JetEndSession(sesid, EndSessionGrbit.None);
-                        });
-                        allTasks.Add(newTask);
-                    }
-
-                    Task taskToWait;
-                    while (allTasks.TryTake(out taskToWait))
-                    {
-                        taskToWait.Wait();
-                    }
-
-                    Assert.IsTrue(allTasks.IsEmpty);
-                }
-            }
-
             /// <summary>
             /// Begins read-only transactions.
             /// </summary>
