@@ -2253,6 +2253,35 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Counts the number of entries in the current index from the current position forward.
+        /// The current position is included in the count. The count can be greater than the
+        /// total number of records in the table if the current index is over a multi-valued
+        /// column and instances of the column have multiple-values. If the table is empty,
+        /// then 0 will be returned for the count. 
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to count the records in.</param>
+        /// <param name="numRecords">Returns the number of records.</param>
+        /// <param name="maxRecordsToCount">
+        /// The maximum number of records to count. A value of 0 indicates that the count
+        /// is unlimited.
+        /// </param>
+        public static void JetIndexRecordCount2(JET_SESID sesid, JET_TABLEID tableid, out long numRecords, long maxRecordsToCount)
+        {
+            if (0 == maxRecordsToCount)
+            {
+                // BUG: Older versions of esent (e.g. Windows XP) don't use 0 as an unlimited count,
+                // instead they simply count zero records (which isn't very useful). To make
+                // sure this API works as advertised we will increase the maximum record count.
+                // This will also prevent an overflow as the underlying API works with unsigned
+                // numbers
+                maxRecordsToCount = long.MaxValue;
+            }
+
+            Api.Check(Impl.JetIndexRecordCount2(sesid, tableid, out numRecords, maxRecordsToCount));
+        }
+
+        /// <summary>
         /// Notifies the database engine that the application is scanning the entire
         /// index that the cursor is positioned on. Consequently, the methods that
         /// are used to access the index data will be tuned to make this scenario as
@@ -2740,7 +2769,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Performs an atomic addition operation on one column. This function allows
         /// multiple sessions to update the same record concurrently without conflicts.
-        /// Also see <seealso cref="EscrowUpdate"/>.
+        /// Also see
+        /// <seealso cref="EscrowUpdate(Microsoft.Isam.Esent.Interop.JET_SESID,Microsoft.Isam.Esent.Interop.JET_TABLEID,Microsoft.Isam.Esent.Interop.JET_COLUMNID,int)"/>.
+        /// <seealso cref="EscrowUpdate(Microsoft.Isam.Esent.Interop.JET_SESID,Microsoft.Isam.Esent.Interop.JET_TABLEID,Microsoft.Isam.Esent.Interop.JET_COLUMNID,long)"/>.
         /// </summary>
         /// <param name="sesid">
         /// The session to use. The session must be in a transaction.

@@ -123,7 +123,7 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(4)]
         [Description("Run a basic multithreaded stress test")]
-        [Timeout(40 * 60 * 1000)]
+        [Timeout(1 * 60 * 60 * 1000)]
         public void BasicMultithreadedStressTest()
         {
             CheckMemoryUsage(this.MultithreadedStress);
@@ -135,7 +135,7 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(4)]
         [Description("Run a basic multithreaded stress test with string records")]
-        [Timeout(40 * 60 * 1000)]
+        [Timeout(1 * 60 * 60 * 1000)]
         public void BasicMultithreadedStringStressTest()
         {
             System.Console.WriteLine("BasicMultithreadedStringStressTest begun.");

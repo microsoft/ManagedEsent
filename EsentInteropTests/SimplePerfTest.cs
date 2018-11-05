@@ -553,6 +553,10 @@ namespace InteropApiTests
                 }
             }
 
+            /// <summary>
+            /// Begins read-only transactions.
+            /// </summary>
+            /// <param name="numRecords">The number of transactions to begin.</param>
             public void RepeatedlyBeginReadTrxSerial(int numRecords)
             {
                 for (int i = 0; i < numRecords; ++i)
@@ -565,6 +569,10 @@ namespace InteropApiTests
                 }
             }
 
+            /// <summary>
+            /// Begins read-only transactions in parallel.
+            /// </summary>
+            /// <param name="numRecords">The number of transactions to begin.</param>
             public void RepeatedlyBeginReadTrxParallel(int numRecords)
             {
                 TaskFactory taskFactory = new TaskFactory();

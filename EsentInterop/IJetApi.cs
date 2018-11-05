@@ -1946,6 +1946,22 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         int JetIndexRecordCount(JET_SESID sesid, JET_TABLEID tableid, out int numRecords, int maxRecordsToCount);
 
         /// <summary>
+        /// Counts the number of entries in the current index from the current position forward.
+        /// The current position is included in the count. The count can be greater than the
+        /// total number of records in the table if the current index is over a multi-valued
+        /// column and instances of the column have multiple-values. If the table is empty,
+        /// then 0 will be returned for the count. 
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to count the records in.</param>
+        /// <param name="numRecords">Returns the number of records.</param>
+        /// <param name="maxRecordsToCount">
+        /// The maximum number of records to count.
+        /// </param>
+        /// <returns>An error if the call fails.</returns>
+        int JetIndexRecordCount2(JET_SESID sesid, JET_TABLEID tableid, out long numRecords, long maxRecordsToCount);
+
+        /// <summary>
         /// Notifies the database engine that the application is scanning the entire
         /// index that the cursor is positioned on. Consequently, the methods that
         /// are used to access the index data will be tuned to make this scenario as

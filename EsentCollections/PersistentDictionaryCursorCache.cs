@@ -12,6 +12,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 {
     using System;
     using System.Diagnostics;
+    using System.Threading;
     using Microsoft.Isam.Esent.Interop;
 
     /// <summary>
@@ -54,11 +55,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         private readonly PersistentDictionaryCursor<TKey, TValue>[] cursors;
 
         /// <summary>
-        /// Lock objects used to serialize access to the cursors.
-        /// </summary>
-        private readonly object lockObject;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="PersistentDictionaryCursorCache{TKey,TValue}"/>
         /// class.
         /// </summary>
@@ -77,7 +73,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             this.config = config;
             this.database = database;
             this.cursors = new PersistentDictionaryCursor<TKey, TValue>[MaxCachedCursors];
-            this.lockObject = new object();
         }
 
         /// <summary>
@@ -85,7 +80,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         public void Dispose()
         {
-            for (int i = 0; i < this.cursors.Length; ++i)
+            for (int i = 0; i < MaxCachedCursors; ++i)
             {
                 if (null != this.cursors[i])
                 {
@@ -104,14 +99,15 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <returns>A new cursor.</returns>
         public PersistentDictionaryCursor<TKey, TValue> GetCursor()
         {
-            lock (this.lockObject)
+            int offset = this.GetStartingOffset();
+            for (int i = 0; i < MaxCachedCursors; ++i)
             {
-                for (int i = 0; i < this.cursors.Length; ++i)
+                int index = (i + offset) % MaxCachedCursors;
+                if (null != this.cursors[index])
                 {
-                    if (null != this.cursors[i])
+                    var cursor = Interlocked.Exchange(ref this.cursors[index], null);
+                    if (cursor != null)
                     {
-                        var cursor = this.cursors[i];
-                        this.cursors[i] = null;
                         return cursor;
                     }
                 }
@@ -136,15 +132,13 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                     string.Format("Freeing a cursor with an outstanding transaction (level={0}).", transactionLevel));
             }
 
-            lock (this.lockObject)
+            int offset = this.GetStartingOffset();
+            for (int i = 0; i < MaxCachedCursors; ++i)
             {
-                for (int i = 0; i < this.cursors.Length; ++i)
+                int index = (i + offset) % MaxCachedCursors;
+                if (null == Interlocked.CompareExchange(ref this.cursors[index], cursor, null))
                 {
-                    if (null == this.cursors[i])
-                    {
-                        this.cursors[i] = cursor;
-                        return;
-                    }
+                    return;
                 }
             }
 
@@ -160,6 +154,19 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             return new PersistentDictionaryCursor<TKey, TValue>(
                 this.instance, this.database, this.converters, this.config);
+        }
+
+        /// <summary>
+        /// Get the offset in the cached buffers array to start allocating or freeing 
+        /// buffers to. This is done so that all threads don't start operating on
+        /// slot zero, which would increase contention.
+        /// </summary>
+        /// <returns>The starting offset for Allocate/Free operations.</returns>
+        private int GetStartingOffset()
+        {
+            // Using the current CPU number would be ideal, but there doesn't seem to 
+            // be a cheap way to get that information in managed code.
+            return Environment.CurrentManagedThreadId % MaxCachedCursors;
         }
     }
 }

@@ -152,7 +152,7 @@ namespace InteropApiTests
             {
                 JET_OPERATIONCONTEXT operationcontext = session.GetOperationContext();
 
-                Assert.AreEqual(0, operationcontext.UserID);
+                Assert.AreEqual(int.MinValue, operationcontext.UserID);
                 Assert.AreEqual(0, operationcontext.OperationID);
                 Assert.AreEqual(0, operationcontext.OperationType);
                 Assert.AreEqual(0, operationcontext.ClientType);
@@ -199,7 +199,7 @@ namespace InteropApiTests
                 // A new session shouldn't re-use the old value.
                 var retrieved = session.GetOperationContext();
 
-                Assert.AreEqual(0, retrieved.UserID);
+                Assert.AreEqual(int.MinValue, retrieved.UserID);
                 Assert.AreEqual(0, retrieved.OperationID);
                 Assert.AreEqual(0, retrieved.OperationType);
                 Assert.AreEqual(0, retrieved.ClientType);

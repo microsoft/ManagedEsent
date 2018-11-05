@@ -28,12 +28,12 @@ namespace InteropApiTests
         /// <summary>
         /// Length of data column
         /// </summary>
-        private const int PageSize = 4096;
+        private const int PageSize = 8192;
 
         /// <summary>
         /// Length of data column
         /// </summary>
-        private const int DataLength = 750;
+        private const int DataLength = 1500;
 
         /// <summary>
         /// Table name to create.
@@ -1637,7 +1637,7 @@ namespace InteropApiTests
 
             Api.JetSetCurrentIndex(this.sesId, this.tableId, this.secIndexWithPrimaryName);
 
-            // secondary index has 12 records on first page, 11 on rest
+            // secondary index has 24 records on first page, 23 on rest
             // (verified with JetPageViewer)
             JET_INDEX_COLUMN[] startColumn = new JET_INDEX_COLUMN[1];
             startColumn[0] = this.CreateKeyColumn(this.columnIdKey2, 160, JetRelop.Equals);
@@ -1662,7 +1662,7 @@ namespace InteropApiTests
             JET_THREADSTATS stat2;
             VistaApi.JetGetThreadStats(out stat2);
 
-            Assert.AreEqual(stat2.cPagePreread - stat1.cPagePreread, 6, string.Format("stat2.cPagePreread = {0}, stat1.cPagePreread = {1}", stat2.cPagePreread, stat1.cPagePreread));
+            Assert.AreEqual(stat2.cPagePreread - stat1.cPagePreread, 4, string.Format("stat2.cPagePreread = {0}, stat1.cPagePreread = {1}", stat2.cPagePreread, stat1.cPagePreread));
         }
 
         /// <summary>

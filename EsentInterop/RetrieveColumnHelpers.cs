@@ -226,6 +226,12 @@ namespace Microsoft.Isam.Esent.Interop
         public static byte[] RetrieveColumn(
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit, JET_RETINFO retinfo)
         {
+            // We cannot support this request when there is no way to indicate that a column reference is returned.
+            if ((grbit & (RetrieveColumnGrbit)0x00020000) != 0)  // UnpublishedGrbits.RetrieveAsRefIfNotInRecord
+            {
+                throw new EsentInvalidGrbitException();
+            }
+
             // We expect most column values retrieved this way to be small (retrieving a 1GB LV as one
             // chunk is a bit extreme!). Allocate a cached buffer and use that, allocating a larger one
             // if needed.
@@ -334,6 +340,12 @@ namespace Microsoft.Isam.Esent.Interop
         public static string RetrieveColumnAsString(
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, Encoding encoding, RetrieveColumnGrbit grbit)
         {
+            // We cannot support this request when there is no way to indicate that a column reference is returned.
+            if ((grbit & (RetrieveColumnGrbit)0x00020000) != 0)  // UnpublishedGrbits.RetrieveAsRefIfNotInRecord
+            {
+                throw new EsentInvalidGrbitException();
+            }
+
             // This is an optimization for retrieving Unicode strings
             if (Encoding.Unicode == encoding)
             {
@@ -1014,7 +1026,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="actualDataSize">The size of the retrieved data.</param>
         private static void CheckDataSize(int expectedDataSize, int actualDataSize)
         {
-            if (actualDataSize < expectedDataSize)
+            if (actualDataSize != expectedDataSize)
             {
                 throw new EsentInvalidColumnException();
             }

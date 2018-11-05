@@ -1664,6 +1664,20 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Check that an exception is thrown when JetIndexRecordCount2 gets a 
+        /// negative max record count.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that an exception is thrown when JetIndexRecordCount gets a negative max record count")]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void JetIndexRecordCount2ThrowsExceptionWhenMaxRecordsIsNegative()
+        {
+            long numRecords;
+            Api.JetIndexRecordCount2(this.sesid, this.tableid, out numRecords, -1);
+        }
+
+        /// <summary>
         /// Check that an exception is thrown when passing in NULL as the 
         /// ranges to JetIntersectIndexes.
         /// </summary>
