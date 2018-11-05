@@ -9,9 +9,8 @@ if %version%.==. goto :usage
 @rem  -Compiles binaries
 @rem  -Copies binaries to tosign-version
 @rem
-@rem Manual
-@rem  -Sign the binaries (DLLs only!) using https://codesign.gtm.microsoft.com/
-@rem  -Copy the signed DLLs to signed-version
+@rem signbinaries.bat
+@rem  -Sign the binaries (DLLs only!) using ESRP
 @rem
 @rem processsignedbinaries.bat
 @rem  -Copies (PDBs from tosign, and DLLs from signed) to tozip-version and nuget-version.
@@ -67,15 +66,13 @@ for %%i in ( esedb.py esedbshelve.py ) do (
 
 @echo =-=-=-=-=-=-=-=
 @echo.
-@echo The next step is to sign the binaries (DLLs only!) using https://codesign.gtm.microsoft.com/
+@echo The next step is to sign the binaries (DLLs only!) using signbinaries.bat
 @echo The source dir for the signing is %dest%
 @echo Use both Strong Naming (72) and an Authenticode certificate (10006).
 @echo DisplayName =
 @echo ManagedEsent-%version%
 @echo URL =
-@echo http://managedesent.codeplex.com
-@echo.
-@echo Wait for the mail, and then copy the files to %~dp0signed-%version%
+@echo http://github.com/Microsoft/ManagedEsent
 @echo.
 @echo And then run processsignedbinaries.bat %version%
 @echo.
