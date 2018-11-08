@@ -58,7 +58,7 @@ A more sophisticated [sample application](SystemStats.md) that tracks some perf 
 
 ## Quick Start
 To get started with PersistentDictionary you should:
-1. Download the latest version of the PersistentDictionary project. [latest release](https://github.com/ESEDevTeam/ManagedEsent/releases/latest).
+1. Download the latest version of the PersistentDictionary project. [latest release](https://github.com/Microsoft/ManagedEsent/releases/latest).
 2. Copy Esent.Interop.dll and Esent.Collections.dll to your project.
 3. Add a reference to Esent.Collections.dll.
 4. Use the namespace 'Microsoft.Isam.Esent.Collections.Generic'.
