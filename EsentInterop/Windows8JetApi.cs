@@ -385,7 +385,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 case Microsoft.Isam.Esent.Interop.Windows8.Windows8IdxInfo.InfoCreateIndex3:
                     break;
                 default:
-                    throw new ArgumentException(string.Format("{0} is not a valid value JET_IdxInfo for this JET_INDEXCREATE overload."));
+                    throw new ArgumentException(string.Format("{0} is not a valid value JET_IdxInfo for this JET_INDEXCREATE overload.", infoLevel));
             }
 
             if (this.Capabilities.SupportsWindows8Features)
