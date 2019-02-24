@@ -98,16 +98,9 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="other">An object to compare with this object.</param>
         /// <returns>true if the current object is equal to the other parameter; otherwise, false.</returns>
         public bool Equals(PersistentBlob other)
-        {
-            // Null checks.
-            if ((this == null) && (other == null))
+        {           
+            if (other == null)
             {
-                // True if they're both null.
-                return true;
-            }
-            else if ((this == null) || (other == null))
-            {
-                // False if one is null, and the other isn't.
                 return false;
             }
 
@@ -115,7 +108,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             {
                 return true;
             }
-            else if ((object)this.blobData == null || (object)other.blobData == null)
+            if ((object)this.blobData == null || (object)other.blobData == null)
             {
                 return false;
             }
