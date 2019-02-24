@@ -308,8 +308,8 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentOutOfRangeException("cbVarSegMac", this.cbVarSegMac, "cannot be negative");
             }
 
-            if ((this.cConditionalColumn > 0 && null == this.rgconditionalcolumn)
-                || (this.cConditionalColumn > 0 && this.cConditionalColumn > this.rgconditionalcolumn.Length))
+            if (this.cConditionalColumn > 0
+                && (null == this.rgconditionalcolumn || this.cConditionalColumn > this.rgconditionalcolumn.Length))
             {
                 throw new ArgumentOutOfRangeException("cConditionalColumn", this.cConditionalColumn, "cannot be greater than the length of rgconditionalcolumn");
             }
