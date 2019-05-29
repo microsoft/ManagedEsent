@@ -315,7 +315,6 @@ namespace InteropApiTests
         {
             const string ColumnKey1Name = "columnkey1";
             string clustIndexKey = string.Format("+{0}\0\0", ColumnKey1Name);
-            string secIndexWithPrimaryKey = string.Format("+{0}\0\0", ColumnKey1Name);
 
             JET_COLUMNCREATE[] columnCreates =
             {
