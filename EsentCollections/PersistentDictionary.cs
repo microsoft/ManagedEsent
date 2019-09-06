@@ -1104,8 +1104,8 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                     throw new InvalidDataException("globals table is empty");
                 }
 
-                Type keyType = (Type)Api.DeserializeObjectFromColumn(session, tableid, keyTypeColumnid);
-                Type valueType = (Type)Api.DeserializeObjectFromColumn(session, tableid, valueTypeColumnid);
+                Type keyType = Type.GetType(Convert.ToString(Api.DeserializeObjectFromColumn(session, tableid, keyTypeColumnid)));
+                Type valueType = Type.GetType(Convert.ToString(Api.DeserializeObjectFromColumn(session, tableid, valueTypeColumnid)));
                 if (keyType != typeof(TKey) || valueType != typeof(TValue))
                 {
                     var error = string.Format(
@@ -1223,8 +1223,8 @@ namespace Microsoft.Isam.Esent.Collections.Generic
 
             using (var update = new Update(session, tableid, JET_prep.Insert))
             {
-                Api.SerializeObjectToColumn(session, tableid, keyTypeColumnid, typeof(TKey));
-                Api.SerializeObjectToColumn(session, tableid, valueTypeColumnid, typeof(TValue));
+                Api.SerializeObjectToColumn(session, tableid, keyTypeColumnid, typeof(TKey).FullName);
+                Api.SerializeObjectToColumn(session, tableid, valueTypeColumnid, typeof(TValue).FullName);
                 Api.SetColumn(session, tableid, versionColumnid, this.schema.Version, Encoding.Unicode);
                 update.Save();
             }
