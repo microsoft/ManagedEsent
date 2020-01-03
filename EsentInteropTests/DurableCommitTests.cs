@@ -339,7 +339,8 @@ namespace InteropApiTests
             object nativeSign = sign.GetType().GetMethod("GetNativeSignature", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(sign, null);
 
             string assemblyName = sign.GetType().Assembly.FullName;
-            object nativeCommitId = Activator.CreateInstance(assemblyName, "Microsoft.Isam.Esent.Interop.Windows8.NATIVE_COMMIT_ID").Unwrap();
+            //object nativeCommitId = Activator.CreateInstance(sign.GetType(), true);
+            object nativeCommitId = Activator.CreateInstance(assemblyName, "Microsoft.Isam.Esent.Interop.Windows8.NATIVE_COMMIT_ID", null).Unwrap();
             nativeCommitId.GetType().GetField("signLog").SetValue(nativeCommitId, nativeSign);
             nativeCommitId.GetType().GetField("commitId").SetValue(nativeCommitId, commitId);
             object[] args = { nativeCommitId };

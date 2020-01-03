@@ -591,6 +591,7 @@ namespace InteropApiTests
         }
 
 #if !MANAGEDESENT_ON_CORECLR
+#if !NETCOREAPP3_0
         /// <summary>
         /// Verify AppDomain unload terminates the Instance.
         /// </summary>
@@ -616,6 +617,7 @@ namespace InteropApiTests
             var instanceWrapper = new InstanceWrapper();
             instanceWrapper.Cleanup();
         }
+#endif // !NETCOREAPP3_0
 
 #if !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
         /// <summary>
