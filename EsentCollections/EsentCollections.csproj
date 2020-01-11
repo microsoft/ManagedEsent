@@ -5,11 +5,18 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 
     <!-- 
-         ColumnConverter.cs has some Dynamic stuff that is not supported in .NET Standard 2.0. 
+     1.  EsentCollections is not yet supported in .NET Core. The reason is that serialization of System.RuntimeType
+         (which happens in the Globals table to save the type of the dictionary) is not supported as of .NET Core 3.1.
+         There is a change coming soon that supports saving the type name as opposed to the serialized type (in fact
+         all serialization is disabled in that version) and once that lands, this will get a secondary release as 
+         .NET Standard 2.1 library. At that point, it will be usable by .NET Core 3.0 apps as long as they don't need
+         any serialization.
+         
+     2.  ColumnConverter.cs has some Dynamic stuff that is not supported in .NET Standard 2.0. 
          It was included in .NET Standard 2.1 but the .NET Standard was removed from .NET Framework
          as of v2.1 so we need to include a .NET Framework version of this library
     -->
-    <TargetFrameworks>net462;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net462<!--netstandard21--></TargetFrameworks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>

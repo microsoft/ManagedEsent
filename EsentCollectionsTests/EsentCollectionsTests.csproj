@@ -8,7 +8,16 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EsentCollectionsTests</RootNamespace>
     <AssemblyName>EsentCollectionsTests</AssemblyName>
-    <TargetFrameworks>net462;netcoreapp3.0</TargetFrameworks>
+
+    <!-- 
+     1.  EsentCollections is not yet supported in .NET Core. The reason is that serialization of System.RuntimeType
+         (which happens in the Globals table to save the type of the dictionary) is not supported as of .NET Core 3.1.
+         There is a change coming soon that supports saving the type name as opposed to the serialized type (in fact
+         all serialization is disabled in that version) and once that lands, this will get a secondary release as 
+         .NET Standard 2.1 library. At that point, it will be usable by .NET Core 3.0 apps as long as they don't need
+         any serialization.
+    -->
+    <TargetFrameworks>net462<!--;netcoreapp3.0--></TargetFrameworks>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SignAssembly>true</SignAssembly>
