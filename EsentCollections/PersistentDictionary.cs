@@ -1120,6 +1120,76 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 }
 #endif
 
+                var versionColumnid = Api.GetTableColumnid(session, tableid, this.schema.VersionColumnName);
+                bool upgradeNeeded = false;
+
+                JET_COLUMNID keyTypeNameColumnid = JET_COLUMNID.Nil;
+                JET_COLUMNID valueTypeNameColumnid = JET_COLUMNID.Nil;
+
+                // Try to get the columns - if they don't exist this is an old version
+                // and needs an upgrade
+                try
+                {
+                    keyTypeNameColumnid = Api.GetTableColumnid(session, tableid, this.schema.KeyTypeNameColumnName);
+                    valueTypeNameColumnid = Api.GetTableColumnid(session, tableid, this.schema.ValueTypeNameColumnName);
+                }
+                catch (EsentColumnNotFoundException)
+                {
+                    upgradeNeeded = true;
+                }
+
+                if (upgradeNeeded)
+                {
+                    Api.JetAddColumn(
+                        session,
+                        tableid,
+                        this.schema.KeyTypeNameColumnName,
+                        new JET_COLUMNDEF { coltyp = JET_coltyp.LongText },
+                        null,
+                        0,
+                        out keyTypeNameColumnid);
+
+                    Api.JetAddColumn(
+                        session,
+                        tableid,
+                        this.schema.ValueTypeNameColumnName,
+                        new JET_COLUMNDEF { coltyp = JET_coltyp.LongText },
+                        null,
+                        0,
+                        out valueTypeNameColumnid);
+
+                    // Re-establish currency
+                    Api.TryMoveFirst(session, tableid);
+
+                    using (var transaction = new Transaction(session))
+                    using (var update = new Update(session, tableid, JET_prep.Replace))
+                    {
+                        Api.SetColumn(session, tableid, versionColumnid, this.schema.Version, Encoding.Unicode);
+                        Api.SetColumn(session, tableid, keyTypeNameColumnid, typeof(TKey).ToString(), Encoding.Unicode);
+                        Api.SetColumn(session, tableid, valueTypeNameColumnid, typeof(TValue).ToString(), Encoding.Unicode);
+
+                        update.Save();
+                        transaction.Commit(CommitTransactionGrbit.None);
+                    }
+                }
+                else
+                {
+                    string keyTypeName = Api.RetrieveColumnAsString(session, tableid, keyTypeNameColumnid);
+                    string valueTypeName = Api.RetrieveColumnAsString(session, tableid, valueTypeNameColumnid);
+
+                    if (keyTypeName != typeof(TKey).ToString() || valueTypeName != typeof(TValue).ToString())
+                    {
+                        var error = string.Format(
+                            CultureInfo.InvariantCulture,
+                            "Database is of type <{0}, {1}>, not <{2}, {3}>",
+                            keyTypeName,
+                            valueTypeName,
+                            typeof(TKey).ToString(),
+                            typeof(TValue).ToString());
+                        throw new ArgumentException(error);
+                    }
+                }
+
                 Api.JetCloseTable(session, tableid);
 
                 // Data table
@@ -1174,6 +1244,8 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             JET_COLUMNID countColumnid;
             JET_COLUMNID keyTypeColumnid;
             JET_COLUMNID valueTypeColumnid;
+            JET_COLUMNID keyTypeNameColumnid = JET_COLUMNID.Nil;
+            JET_COLUMNID valueTypeNameColumnid = JET_COLUMNID.Nil;
 
             Api.JetCreateTable(session, dbid, this.schema.GlobalsTableName, 1, 100, out tableid);
             Api.JetAddColumn(
@@ -1223,6 +1295,24 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 0,
                 out valueTypeColumnid);
 
+            Api.JetAddColumn(
+                session,
+                tableid,
+                this.schema.KeyTypeNameColumnName,
+                new JET_COLUMNDEF { coltyp = JET_coltyp.LongText },
+                null,
+                0,
+                out keyTypeNameColumnid);
+
+            Api.JetAddColumn(
+                session,
+                tableid,
+                this.schema.ValueTypeNameColumnName,
+                new JET_COLUMNDEF { coltyp = JET_coltyp.LongText },
+                null,
+                0,
+                out valueTypeNameColumnid);
+
             using (var update = new Update(session, tableid, JET_prep.Insert))
             {
 #if ESENTCOLLECTIONS_SUPPORTS_SERIALIZATION
@@ -1230,6 +1320,9 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 Api.SerializeObjectToColumn(session, tableid, valueTypeColumnid, typeof(TValue));
 #endif
                 Api.SetColumn(session, tableid, versionColumnid, this.schema.Version, Encoding.Unicode);
+                Api.SetColumn(session, tableid, keyTypeNameColumnid, typeof(TKey).ToString(), Encoding.Unicode);
+                Api.SetColumn(session, tableid, valueTypeNameColumnid, typeof(TValue).ToString(), Encoding.Unicode);
+
                 update.Save();
             }
 

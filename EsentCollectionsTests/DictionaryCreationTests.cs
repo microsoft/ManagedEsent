@@ -240,6 +240,57 @@ namespace EsentCollectionsTests
         }
 
         /// <summary>
+        /// Creating new PD loads V2 Globals table.
+        /// </summary>
+        [TestMethod]
+        [Priority(1)]
+        public void VerifyNewPersistentDictionaryHasUpgradedGlobalsTable()
+        {
+            string directory = InteropApiTests.SetupHelper.CreateRandomDirectory();
+
+            var dict = new PersistentDictionary<ulong, bool>(directory);
+            dict.Dispose();
+            Assert.IsTrue(this.CheckGlobalsTableIsUpgrdaded(directory));
+        }
+
+        /// <summary>
+        /// Check if Globals table is upgraded
+        /// </summary>
+        /// <param name="dictionaryLocation">Location of dictionary</param>
+        /// <returns>True if upgraded, false otherwise</returns>
+        public bool CheckGlobalsTableIsUpgrdaded(string dictionaryLocation)
+        {
+            bool columnsExist = false;
+
+            JET_INSTANCE instance;
+            JET_SESID sesid;
+            JET_DBID dbid;
+            Api.JetCreateInstance(out instance, "DictionaryUpgrade");
+            string dbpath = Path.Combine(dictionaryLocation, "PersistentDictionary.edb");
+
+            Api.JetInit(ref instance);
+            Api.JetBeginSession(instance, out sesid, string.Empty, string.Empty);
+            Api.JetAttachDatabase(sesid, dbpath, AttachDatabaseGrbit.None);
+            Api.JetOpenDatabase(sesid, dbpath, null, out dbid, OpenDatabaseGrbit.None);
+
+            try
+            {
+                JET_COLUMNBASE columnbase;
+                Api.JetGetColumnInfo(sesid, dbid, "Globals", "ValueTypeName" /*PersistentDictionaryConfig.ValueTypeNameColumnName*/, out columnbase);
+                Api.JetGetColumnInfo(sesid, dbid, "Globals", "KeyTypeName" /*PersistentDictionaryConfig.KeyTypeNameColumnName*/, out columnbase);
+                columnsExist = true;
+            }
+            catch (EsentColumnNotFoundException)
+            {
+            }
+
+            Api.JetEndSession(sesid, EndSessionGrbit.None);
+            Api.JetTerm(instance);
+
+            return columnsExist;
+        }
+
+        /// <summary>
         /// PersistentDictionaryFile.DeleteFiles removes all database files.
         /// </summary>
         [TestMethod]
@@ -283,9 +334,7 @@ namespace EsentCollectionsTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-#if ESENTCOLLECTIONS_SUPPORTS_SERIALIZATION   
         [ExpectedException(typeof(ArgumentException))]
-#endif
         public void VerifyOpenFailsOnMismatchedKeyTypes()
         {
             const string DictionaryLocation = "IntIntDictionary";
@@ -301,9 +350,7 @@ namespace EsentCollectionsTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
-#if ESENTCOLLECTIONS_SUPPORTS_SERIALIZATION   
         [ExpectedException(typeof(ArgumentException))]
-#endif
         public void VerifyOpenFailsOnMismatchedValueTypes()
         {
             const string DictionaryLocation = "IntIntDictionary";
