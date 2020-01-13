@@ -1926,7 +1926,7 @@ namespace InteropApiTests
         /// <param name="grbit">The grbit.</param>
         private void AttachDatabase(JET_SESID session, string databasePath, AttachDatabaseGrbit grbit)
         {
-#if MANAGEDESENT_ON_WSA
+#if MANAGEDESENT_ON_WSA || MANAGEDESENT_EXTERNAL_RELEASE
             Api.JetAttachDatabase(session, databasePath, grbit);
 #else
             this.AttachDatabaseInternal(session, databasePath, grbit);

@@ -1096,7 +1096,11 @@ namespace InteropApiTests
             }
             catch (EsentDatabaseFileReadOnlyException)
             {
-                // Expected.
+                // Expected on Windows 10 20H1 and beyond.
+            }
+            catch (EsentPermissionDeniedException)
+            {
+                // Expected on Windows 10 19H2 and below.
             }
             finally
             {
