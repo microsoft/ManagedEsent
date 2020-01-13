@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EsentCollectionsTests</RootNamespace>
     <AssemblyName>EsentCollectionsTests</AssemblyName>
-
+    
     <!-- 
      1.  EsentCollections is not yet supported in .NET Core. The reason is that serialization of System.RuntimeType
          (which happens in the Globals table to save the type of the dictionary) is not supported as of .NET Core 3.1.
@@ -17,7 +17,9 @@
          .NET Standard 2.1 library. At that point, it will be usable by .NET Core 3.0 apps as long as they don't need
          any serialization.
     -->
-    <TargetFrameworks>net462<!--;netcoreapp3.0--></TargetFrameworks>
+    <TargetFrameworks>net462;netcoreapp3.0</TargetFrameworks>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SignAssembly>true</SignAssembly>
@@ -25,12 +27,14 @@
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
+
   <!-- The .snk file won't be published to codeplex. -->
   <PropertyGroup Condition="Exists('$(PublicKeyFile)')">
     <DefineConstants>$(DefineConstants);STRONG_NAMED</DefineConstants>
     <DelaySign>true</DelaySign>
     <AssemblyOriginatorKeyFile>$(PublicKeyFile)</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -42,6 +46,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
@@ -59,20 +64,12 @@
     <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
     <PackageReference Include="coverlet.collector" Version="1.0.1" />
   </ItemGroup>
-<!--
-  <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-  </ItemGroup>
--->
 
   <ItemGroup>
     <Compile Include="*.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\EsentCollections\EsentCollections.csproj">
       <Project>{CF2D4EE4-0D11-404D-B800-C4DCFEC42588}</Project>
@@ -91,7 +88,7 @@
       <Name>EsentInterop</Name>
     </ProjectReference>
   </ItemGroup>
-  <!--<Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />-->
+  
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

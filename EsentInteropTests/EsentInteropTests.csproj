@@ -3,23 +3,30 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <TargetFrameworks>net462;netcoreapp3.0</TargetFrameworks>
+    <DefineConstants>$(DefineConstants);MANAGEDESENT_SUPPORTS_ANSI</DefineConstants>
+    <ProjectGuid>{85B2B7BB-BF95-42DF-8CBF-348AEF63BD1F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>InteropApiTests</RootNamespace>
     <AssemblyName>InteropApiTests</AssemblyName>
-    <IsPackable>false</IsPackable>
-    <DefineConstants>$(DefineConstants);MANAGEDESENT_SUPPORTS_ANSI</DefineConstants>
+    <TargetFrameworks>net462;netcoreapp3.0</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <DefineConstants>$(DefineConstants);MANAGEDESENT_EXTERNAL_RELEASE</DefineConstants>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SignAssembly>true</SignAssembly>
     <PublicKeyFile>..\scripts\internal\35MSSharedLib1024.snk</PublicKeyFile>
   </PropertyGroup>
+
   <!-- The .snk file won't be published to codeplex. -->
   <PropertyGroup Condition="Exists('$(PublicKeyFile)')">
     <DefineConstants>$(DefineConstants);STRONG_NAMED</DefineConstants>
     <DelaySign>true</DelaySign>
     <AssemblyOriginatorKeyFile>$(PublicKeyFile)</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -33,6 +40,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
@@ -83,4 +91,11 @@
     </ProjectReference>
   </ItemGroup>
 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>

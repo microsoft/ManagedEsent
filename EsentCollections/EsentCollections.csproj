@@ -3,27 +3,23 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-
+    <ProjectGuid>{CF2D4EE4-0D11-404D-B800-C4DCFEC42588}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EsentCollections</RootNamespace>
+    <AssemblyName>Esent.Collections</AssemblyName>    
+    
     <!-- 
-     1.  EsentCollections is not yet supported in .NET Core. The reason is that serialization of System.RuntimeType
-         (which happens in the Globals table to save the type of the dictionary) is not supported as of .NET Core 3.1.
-         There is a change coming soon that supports saving the type name as opposed to the serialized type (in fact
-         all serialization is disabled in that version) and once that lands, this will get a secondary release as 
-         .NET Standard 2.1 library. At that point, it will be usable by .NET Core 3.0 apps as long as they don't need
-         any serialization.
-         
-     2.  ColumnConverter.cs has some Dynamic stuff that is not supported in .NET Standard 2.0. 
+         ColumnConverter.cs has some Dynamic stuff that is not supported in .NET Standard 2.0. 
          It was included in .NET Standard 2.1 but the .NET Standard was removed from .NET Framework
          as of v2.1 so we need to include a .NET Framework version of this library
     -->
-    <TargetFrameworks>net462<!--netstandard21--></TargetFrameworks>
+    <TargetFrameworks>net462;netstandard2.1</TargetFrameworks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <ProjectGuid>{CF2D4EE4-0D11-404D-B800-C4DCFEC42588}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <PublicKeyFile>..\scripts\internal\35MSSharedLib1024.snk</PublicKeyFile>
     <PublishUrl>publish\</PublishUrl>
@@ -49,6 +45,7 @@
     <DelaySign>true</DelaySign>
     <AssemblyOriginatorKeyFile>$(PublicKeyFile)</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -61,6 +58,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
@@ -72,10 +70,12 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  
   <ItemGroup>
     <Compile Include="*.cs" />
     <Compile Include="properties\assemblyinfo.cs" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\EsentInterop\EsentInterop.csproj">
       <Project>{E929E163-52A0-4AAC-917B-6D7FAF70C45E}</Project>
@@ -86,4 +86,12 @@
       <Name>EsentInterop</Name>
     </ProjectReference>
   </ItemGroup>
+  
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>

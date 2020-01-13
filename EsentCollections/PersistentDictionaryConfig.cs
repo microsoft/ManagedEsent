@@ -20,9 +20,9 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         public string Version
         {
-            get
-            {
-                return "PersistentDictionary 1.0.0";
+            get 
+            { 
+                return "PersistentDictionary 1.1.0"; 
             }
         }
 
@@ -85,6 +85,18 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
+        /// Gets the name of the key type-name column in the globals table.
+        /// This column stores the type of the key in the dictionary.
+        /// </summary>
+        public string KeyTypeNameColumnName
+        {
+            get
+            {
+                return "KeyTypeName";
+            }
+        }
+
+        /// <summary>
         /// Gets the name of the value type column in the globals table.
         /// This column stores the type of the value in the dictionary.
         /// </summary>
@@ -93,6 +105,18 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             get
             {
                 return "ValueType";
+            }
+        }
+
+        /// <summary>
+        /// Gets the name of the value type-name column in the globals table.
+        /// This column stores the name of the type of the value in the dictionary.
+        /// </summary>
+        public string ValueTypeNameColumnName
+        {
+            get
+            {
+                return "ValueTypeName";
             }
         }
 

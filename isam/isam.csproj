@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -7,8 +8,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EsentIsam</RootNamespace>
     <AssemblyName>Esent.Isam</AssemblyName>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <PublicKeyFile>..\scripts\internal\35MSSharedLib1024.snk</PublicKeyFile>
     <PublishUrl>publish\</PublishUrl>
@@ -34,6 +37,7 @@
     <DelaySign>true</DelaySign>
     <AssemblyOriginatorKeyFile>$(PublicKeyFile)</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -46,6 +50,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
@@ -57,15 +62,25 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  
   <ItemGroup>
     <Compile Include="*.cs" Exclude="assemblyinfo.cs" />
     <Compile Include="properties\assemblyinfo.cs" />
     <Compile Include="config\*.cs" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\EsentInterop\EsentInterop.csproj">
       <Project>{E929E163-52A0-4AAC-917B-6D7FAF70C45E}</Project>
       <Name>EsentInterop</Name>
     </ProjectReference>
   </ItemGroup>
+  
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>
