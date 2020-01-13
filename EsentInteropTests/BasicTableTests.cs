@@ -20,7 +20,7 @@ namespace InteropApiTests
     /// Basic Api tests
     /// </summary>
     [TestClass]
-    public class BasicTableTests
+    public partial class BasicTableTests
     {
         /// <summary>
         /// The directory being used for the database and its files.
@@ -77,7 +77,7 @@ namespace InteropApiTests
             this.table = "table";
             this.instance = SetupHelper.CreateNewInstance(this.directory);
 
-            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
+            Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "on");
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.MaxTemporaryTables, 0, null);
             Api.JetInit(ref this.instance);
             Api.JetBeginSession(this.instance, out this.sesid, string.Empty, string.Empty);
@@ -1056,6 +1056,78 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Test starting legacy OLD on read-only database.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Start legacy OLD on read-only database must fail")]
+        public void TestStartLegacyOldReadOnlyDbMustFail()
+        {
+            this.ReattachDatabase(AttachDatabaseGrbit.ReadOnly);
+            try
+            {
+                Api.Defragment(this.sesid, this.dbid, null, DefragGrbit.BatchStart);
+                Assert.Fail("Starting legacy OLD should have failed with EsentDatabaseFileReadOnlyException, but succeeded.");
+            }
+            catch (EsentDatabaseFileReadOnlyException)
+            {
+                // Expected.
+            }
+            finally
+            {
+                this.ReattachDatabase(AttachDatabaseGrbit.None);
+            }
+        }
+
+        /// <summary>
+        /// Test starting OLD2 with DefragmentBTree on read-only database.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Start OLD2 with DefragmentBTree on read-only database must fail")]
+        public void TestStartOld2WithDefragmentBTreeReadOnlyDbMustFail()
+        {
+            this.ReattachDatabase(AttachDatabaseGrbit.ReadOnly);
+            try
+            {
+                DefragGrbit defragGrbit = Windows7Grbits.DefragmentBTree;
+                Api.Defragment(this.sesid, this.dbid, this.table, defragGrbit);
+                Assert.Fail("Starting OLD2 with {0} should have failed with EsentDatabaseFileReadOnlyException, but succeeded.", defragGrbit);
+            }
+            catch (EsentDatabaseFileReadOnlyException)
+            {
+                // Expected.
+            }
+            finally
+            {
+                this.ReattachDatabase(AttachDatabaseGrbit.None);
+            }
+        }
+
+        /// <summary>
+        /// Test starting attach-time OLD2 with DefragmentSequentialBTrees on read-only database.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Start attach-time OLD2 with DefragmentSequentialBTrees on read-only database must not fail attach")]
+        public void TestStartAttachTimeOld2WithDefragmentSequentialBTreesReadOnlyDbMustNotFail()
+        {
+            IntPtr defragParam = IntPtr.Zero;
+            try
+            {
+                string dummy;
+                Api.JetGetSystemParameter(this.instance, JET_SESID.Nil, Windows7Param.DefragmentSequentialBTrees, ref defragParam, out dummy, 0);
+                Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, Windows7Param.DefragmentSequentialBTrees, 1, null);
+                this.ReattachDatabase(AttachDatabaseGrbit.ReadOnly);
+            }
+            finally
+            {
+                Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, Windows7Param.DefragmentSequentialBTrees, defragParam, null);
+                this.ReattachDatabase(AttachDatabaseGrbit.None);
+            }
+        }
+
+        /// <summary>
         /// Test starting and stopping OLD with JetDefragment2.
         /// </summary>
         [TestMethod]
@@ -1203,6 +1275,20 @@ namespace InteropApiTests
         private string RetrieveColumnAsString()
         {
             return Api.RetrieveColumnAsString(this.sesid, this.tableid, this.columnidLongText, Encoding.Unicode);
+        }
+
+        /// <summary>
+        /// Reattaches the database.
+        /// </summary>
+        /// <param name="attachGrbit">The attach grbit.</param>
+        private void ReattachDatabase(AttachDatabaseGrbit attachGrbit)
+        {
+            Api.JetCloseTable(this.sesid, this.tableid);
+            Api.JetCloseDatabase(this.sesid, this.dbid, CloseDatabaseGrbit.None);
+            Api.JetDetachDatabase(this.sesid, this.database);
+            Api.JetAttachDatabase(this.sesid, this.database, attachGrbit);
+            Api.JetOpenDatabase(this.sesid, this.database, null, out this.dbid, OpenDatabaseGrbit.None);
+            Api.JetOpenTable(this.sesid, this.dbid, this.table, null, 0, OpenTableGrbit.None, out this.tableid);
         }
 
         #endregion HelperMethods
