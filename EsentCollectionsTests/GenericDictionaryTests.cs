@@ -288,7 +288,8 @@ namespace EsentCollectionsTests
             }
             catch (ArgumentOutOfRangeException ex)
             {
-                Assert.AreEqual("Not supported for SetColumn\r\nParameter name: TColumn\r\nActual value was EsentCollectionsTests.GenericDictionaryTests+ContainingStruct.", ex.Message);
+                var expectedMessage = (new ArgumentOutOfRangeException("TColumn", typeof(ContainingStruct), "Not supported for SetColumn")).Message;
+                Assert.AreEqual(expectedMessage, ex.Message);
             }
         }
 
