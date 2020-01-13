@@ -157,7 +157,7 @@ namespace InteropApiTests
             this.CreateAndPopulateTable();
             Api.JetCloseDatabase(this.sesId, this.dbId, CloseDatabaseGrbit.None);
             Api.JetDetachDatabase(this.sesId, this.database);
-            Api.JetAttachDatabase(this.sesId, this.database, Windows8Grbits.PurgeCacheOnAttach);
+            this.AttachDatabase(this.sesId, this.database, Windows8Grbits.PurgeCacheOnAttach);
             Api.JetOpenDatabase(this.sesId, this.database, null, out this.dbId, OpenDatabaseGrbit.None);
             Api.JetOpenTable(this.sesId, this.dbId, this.tableName, null, 0, OpenTableGrbit.None, out this.tableId);
 
@@ -1919,6 +1919,21 @@ namespace InteropApiTests
         #region Helpers
 
         /// <summary>
+        /// Attaches a database
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <param name="databasePath">The database path.</param>
+        /// <param name="grbit">The grbit.</param>
+        private void AttachDatabase(JET_SESID session, string databasePath, AttachDatabaseGrbit grbit)
+        {
+#if MANAGEDESENT_ON_WSA
+            Api.JetAttachDatabase(session, databasePath, grbit);
+#else
+            this.AttachDatabaseInternal(session, databasePath, grbit);
+#endif
+        }
+
+        /// <summary>
         /// Create table with 4 records per page
         /// </summary>
         private void CreateAndPopulateTable()
@@ -2307,7 +2322,7 @@ namespace InteropApiTests
             Api.JetCloseTable(this.sesId, this.tableId);
             Api.JetCloseDatabase(this.sesId, this.dbId, CloseDatabaseGrbit.None);
             Api.JetDetachDatabase(this.sesId, this.database);
-            Api.JetAttachDatabase(this.sesId, this.database, Windows8Grbits.PurgeCacheOnAttach);
+            this.AttachDatabase(this.sesId, this.database, Windows8Grbits.PurgeCacheOnAttach);
             Api.JetOpenDatabase(this.sesId, this.database, null, out this.dbId, OpenDatabaseGrbit.None);
             Api.JetOpenTable(this.sesId, this.dbId, this.tableName, null, 0, OpenTableGrbit.None, out this.tableId);
 
