@@ -2220,7 +2220,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogBufferTooSmallException class.
         /// </summary>
         public EsentLogBufferTooSmallException() :
-            base("Log buffer is too small for recovery", JET_err.LogBufferTooSmall)
+            base("An operation generated a log record which was too large to fit in the log buffer or in a single log file", JET_err.LogBufferTooSmall)
         {
         }
 

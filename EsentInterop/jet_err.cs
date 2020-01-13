@@ -289,7 +289,7 @@ namespace Microsoft.Isam.Esent.Interop
         LoggingDisabled = -516,
 
         /// <summary>
-        /// Log buffer is too small for recovery
+        /// An operation generated a log record which was too large to fit in the log buffer or in a single log file
         /// </summary>
         LogBufferTooSmall = -517,
 
