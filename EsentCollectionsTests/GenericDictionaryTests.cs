@@ -202,6 +202,9 @@ namespace EsentCollectionsTests
         [TestMethod]
         [Priority(3)]
         [Description("Test a String => Decimal dictionary")]
+#if !ESENTCOLLECTIONS_SUPPORTS_SERIALIZATION   
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+#endif
         public void TestGenericStringDecimalDictionary()
         {
             using (var dictionary = new PersistentDictionary<string, decimal?>(DictionaryPath))
@@ -216,6 +219,9 @@ namespace EsentCollectionsTests
         [TestMethod]
         [Priority(3)]
         [Description("Test a String => IPAddress dictionary")]
+#if !ESENTCOLLECTIONS_SUPPORTS_SERIALIZATION   
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+#endif
         public void TestGenericStringIpAddressDictionary()
         {
             using (var dictionary = new PersistentDictionary<string, IPAddress>(DictionaryPath))
@@ -230,6 +236,9 @@ namespace EsentCollectionsTests
         [TestMethod]
         [Priority(3)]
         [Description("Test a String => Uri dictionary")]
+#if !ESENTCOLLECTIONS_SUPPORTS_SERIALIZATION   
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+#endif
         public void TestGenericStringUriDictionary()
         {
             using (var dictionary = new PersistentDictionary<string, Uri>(DictionaryPath))

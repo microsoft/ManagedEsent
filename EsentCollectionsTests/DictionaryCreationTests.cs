@@ -276,20 +276,23 @@ namespace EsentCollectionsTests
             PersistentDictionaryFile.DeleteFiles(DictionaryLocation);
             Assert.IsFalse(PersistentDictionaryFile.Exists(DictionaryLocation));
             Directory.Delete(DictionaryLocation, false);
-        }
+        }    
 
         /// <summary>
         /// Opening a dictionary fails if the types of the keys don't match.
         /// </summary>
         [TestMethod]
         [Priority(2)]
+#if ESENTCOLLECTIONS_SUPPORTS_SERIALIZATION   
         [ExpectedException(typeof(ArgumentException))]
+#endif
         public void VerifyOpenFailsOnMismatchedKeyTypes()
         {
             const string DictionaryLocation = "IntIntDictionary";
             var dict = new PersistentDictionary<int, int>(DictionaryLocation);
             dict.Dispose();
             var wrongDict = new PersistentDictionary<long, int>(DictionaryLocation);
+            wrongDict.Dispose();
             Cleanup.DeleteDirectoryWithRetry(DictionaryLocation);
         }
 
@@ -298,13 +301,16 @@ namespace EsentCollectionsTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+#if ESENTCOLLECTIONS_SUPPORTS_SERIALIZATION   
         [ExpectedException(typeof(ArgumentException))]
+#endif
         public void VerifyOpenFailsOnMismatchedValueTypes()
         {
             const string DictionaryLocation = "IntIntDictionary";
             var dict = new PersistentDictionary<int, int>(DictionaryLocation);
             dict.Dispose();
             var wrongDict = new PersistentDictionary<int, string>(DictionaryLocation);
+            wrongDict.Dispose();
             Cleanup.DeleteDirectoryWithRetry(DictionaryLocation);
         }
 
