@@ -1868,7 +1868,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentBackupDirectoryNotEmptyException class.
         /// </summary>
         public EsentBackupDirectoryNotEmptyException() :
-            base("The backup directory is not emtpy", JET_err.BackupDirectoryNotEmpty)
+            base("The backup directory is not empty", JET_err.BackupDirectoryNotEmpty)
         {
         }
 
@@ -2028,7 +2028,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogDisabledDueToRecoveryFailureException class.
         /// </summary>
         public EsentLogDisabledDueToRecoveryFailureException() :
-            base("Try to log something after recovery faild", JET_err.LogDisabledDueToRecoveryFailure)
+            base("Try to log something after recovery failed", JET_err.LogDisabledDueToRecoveryFailure)
         {
         }
 
@@ -2220,7 +2220,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogBufferTooSmallException class.
         /// </summary>
         public EsentLogBufferTooSmallException() :
-            base("Log buffer is too small for recovery", JET_err.LogBufferTooSmall)
+            base("An operation generated a log record which was too large to fit in the log buffer or in a single log file", JET_err.LogBufferTooSmall)
         {
         }
 
@@ -7404,7 +7404,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSessionWriteConflictException class.
         /// </summary>
         public EsentSessionWriteConflictException() :
-            base("Attempt to replace the same record by two diffrerent cursors in the same session", JET_err.SessionWriteConflict)
+            base("Attempt to replace the same record by two different cursors in the same session", JET_err.SessionWriteConflict)
         {
         }
 
@@ -12332,7 +12332,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSessionContextNotSetByThisThreadException class.
         /// </summary>
         public EsentSessionContextNotSetByThisThreadException() :
-            base("Tried to reset session context, but current thread did not orignally set the session context", JET_err.SessionContextNotSetByThisThread)
+            base("Tried to reset session context, but current thread did not originally set the session context", JET_err.SessionContextNotSetByThisThread)
         {
         }
 

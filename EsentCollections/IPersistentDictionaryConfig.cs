@@ -68,6 +68,12 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         string KeyTypeColumnName { get; }
 
         /// <summary>
+        /// Gets the name of the key type column in the globals table.
+        /// This column stores the type of the key in the dictionary.
+        /// </summary>
+        string KeyTypeNameColumnName { get; }
+
+        /// <summary>
         /// Gets the name of the value type column in the globals table.
         /// </summary>
         /// <value>
@@ -75,6 +81,12 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// This column stores the type of the value in the dictionary.
         /// </value>
         string ValueTypeColumnName { get; }
+
+        /// <summary>
+        /// Gets the name of the value type name column in the globals table.
+        /// This column stores the name of the type of the value in the dictionary.
+        /// </summary>
+        string ValueTypeNameColumnName { get; }
 
         /// <summary>
         /// Gets the name of the data table.

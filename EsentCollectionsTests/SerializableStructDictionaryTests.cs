@@ -37,7 +37,6 @@ namespace EsentCollectionsTests
         [TestInitialize]
         public void Setup()
         {
-            this.dictionary = new PersistentDictionary<int, Bar>(DictionaryLocation);
         }
 
         /// <summary>
@@ -46,7 +45,11 @@ namespace EsentCollectionsTests
         [TestCleanup]
         public void Teardown()
         {
-            this.dictionary.Dispose();
+            if (this.dictionary != null)
+            {
+                this.dictionary.Dispose();
+            }
+
             if (Directory.Exists(DictionaryLocation))
             {
                 Cleanup.DeleteDirectoryWithRetry(DictionaryLocation);
@@ -58,8 +61,13 @@ namespace EsentCollectionsTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+#if !ESENTCOLLECTIONS_SUPPORTS_SERIALIZATION
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+#endif
         public void InsertAndRetrieveSerializableObject()
         {
+            this.dictionary = new PersistentDictionary<int, Bar>(DictionaryLocation);
+
             var expected = new Bar
             {
                 V = new Uri("http://www.microsoft.com"),
@@ -85,8 +93,13 @@ namespace EsentCollectionsTests
         /// </summary>
         [TestMethod]
         [Priority(2)]
+#if !ESENTCOLLECTIONS_SUPPORTS_SERIALIZATION
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+#endif
         public void UpdateSerializableObject()
         {
+            this.dictionary = new PersistentDictionary<int, Bar>(DictionaryLocation);
+
             var expected = new Bar
             {
                 V = new Uri("http://www.contoso.com"),
