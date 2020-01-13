@@ -102,12 +102,14 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 this.columnRetriever = CreateRetrieveColumnDelegate();
                 this.coltyp = ColumnTypeMap[underlyingType];
             }
+#if ESENTCOLLECTIONS_SUPPORTS_SERIALIZATION
             else if (IsSerializable(typeof(TColumn)))
             {
                 this.columnSetter = (s, t, c, o) => Api.SerializeObjectToColumn(s, t, c, o);
                 this.columnRetriever = (s, t, c) => (TColumn)Api.DeserializeObjectFromColumn(s, t, c);
                 this.coltyp = JET_coltyp.LongBinary;
             }
+#endif
             else
             {
                 throw new ArgumentOutOfRangeException("TColumn", typeof(TColumn), "Not supported for SetColumn");                    
