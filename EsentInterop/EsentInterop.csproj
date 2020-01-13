@@ -11,7 +11,7 @@
     <TargetFrameworks>net462</TargetFrameworks>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <DefineConstants>MANAGEDESENT_SUPPORTS_SERIALIZATION</DefineConstants>
+    <DefineConstants></DefineConstants>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <PublicKeyFile>..\scripts\internal\35MSSharedLib1024.snk</PublicKeyFile>
