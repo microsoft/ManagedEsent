@@ -30,7 +30,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetBeginTransaction3(JET_SESID sesid, long userTransactionId, BeginTransactionGrbit grbit)
         {
-            TraceFunctionCall("JetBeginTransaction3");
+            TraceFunctionCall();
             return Err(NativeMethods.JetBeginTransaction3(sesid.Value, userTransactionId, unchecked((uint)grbit)));
         }
 
@@ -47,7 +47,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetCommitTransaction2(JET_SESID sesid, CommitTransactionGrbit grbit, TimeSpan durableCommit, out JET_COMMIT_ID commitId)
         {
-            TraceFunctionCall("JetCommitTransaction2");
+            TraceFunctionCall();
             this.CheckSupportsWindows8Features("JetCommitTransaction2");
             int err;
             uint cmsecDurableCommit = (uint)durableCommit.TotalMilliseconds;
@@ -75,7 +75,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_err error,
             out JET_ERRINFOBASIC errinfo)
         {
-            TraceFunctionCall("JetGetErrorInfo");
+            TraceFunctionCall();
             this.CheckSupportsWindows8Features("JetGetErrorInfo");
 
             NATIVE_ERRINFOBASIC nativeErrinfobasic = new NATIVE_ERRINFOBASIC();
@@ -111,7 +111,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out int actualPages,
             ResizeDatabaseGrbit grbit)
         {
-            TraceFunctionCall("JetResizeDatabase");
+            TraceFunctionCall();
             this.CheckSupportsWindows8Features("JetResizeDatabase");
             CheckNotNegative(desiredPages, "desiredPages");
 
@@ -147,7 +147,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_INDEXCREATE[] indexcreates,
             int numIndexCreates)
         {
-            TraceFunctionCall("JetCreateIndex4");
+            TraceFunctionCall();
             this.CheckSupportsWindows8Features("JetCreateIndex4");
             CheckNotNull(indexcreates, "indexcreates");
             CheckNotNegative(numIndexCreates, "numIndexCreates");
@@ -177,7 +177,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error code.</returns>
         public int JetOpenTemporaryTable2(JET_SESID sesid, JET_OPENTEMPORARYTABLE temporarytable)
         {
-            TraceFunctionCall("JetOpenTemporaryTable2");
+            TraceFunctionCall();
             this.CheckSupportsWindows8Features("JetOpenTemporaryTable2");
             CheckNotNull(temporarytable, "temporarytable");
 
@@ -222,7 +222,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_DBID dbid,
             JET_TABLECREATE tablecreate)
         {
-            TraceFunctionCall("JetCreateTableColumnIndex4");
+            TraceFunctionCall();
             this.CheckSupportsWindows8Features("JetCreateTableColumnIndex4");
             CheckNotNull(tablecreate, "tablecreate");
 
@@ -244,7 +244,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_sesparam sesparamid,
             out int value)
         {
-            TraceFunctionCall("JetGetSessionParameter");
+            TraceFunctionCall();
             this.CheckSupportsWindows8Features("JetGetSessionParameter");
             int err;
 
@@ -290,7 +290,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             int length,
             out int actualDataSize)
         {
-            TraceFunctionCall("JetGetSessionParameter");
+            TraceFunctionCall();
             this.CheckSupportsWindows8Features("JetGetSessionParameter");
             CheckDataSize(data, length, "length");
 
@@ -318,7 +318,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_sesparam sesparamid,
             int valueToSet)
         {
-            TraceFunctionCall("JetSetSessionParameter");
+            TraceFunctionCall();
             this.CheckSupportsWindows8Features("JetSetSessionParameter");
             int err;
 
@@ -341,7 +341,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             byte[] data,
             int dataSize)
         {
-            TraceFunctionCall("JetSetSessionParameter");
+            TraceFunctionCall();
             this.CheckSupportsWindows8Features("JetSetSessionParameter");
             CheckNotNegative(dataSize, "dataSize");
             CheckDataSize(data, dataSize, "dataSize");
@@ -374,7 +374,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out JET_INDEXCREATE result,
             JET_IdxInfo infoLevel)
         {
-            TraceFunctionCall("JetGetIndexInfo");
+            TraceFunctionCall();
             CheckNotNull(tablename, "tablename");
             int err;
 
@@ -444,7 +444,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             out JET_INDEXCREATE result,
             JET_IdxInfo infoLevel)
         {
-            TraceFunctionCall("JetGetTableIndexInfo");
+            TraceFunctionCall();
             int err;
 
             switch (infoLevel)
@@ -524,7 +524,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_COLUMNID[] columnsPreread,
             PrereadIndexRangesGrbit grbit)
         {
-            TraceFunctionCall("JetPrereadIndexRanges");
+            TraceFunctionCall();
             this.CheckSupportsWindows8Features("JetPrereadIndexRanges");
             CheckNotNull(indexRanges, "indexRanges");
             CheckDataSize(indexRanges, rangeIndex, "rangeIndex", rangeCount, "rangeCount");
@@ -589,7 +589,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             JET_COLUMNID[] columnsPreread,
             PrereadIndexRangesGrbit grbit)
         {
-            TraceFunctionCall("JetPrereadKeyRanges");
+            TraceFunctionCall();
             this.CheckSupportsWindows8Features("JetPrereadKeyRanges");
             CheckDataSize(keysStart, rangeIndex, "rangeIndex", rangeCount, "rangeCount");
             CheckDataSize(keyStartLengths, rangeIndex, "rangeIndex", rangeCount, "rangeCount");
@@ -657,7 +657,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <returns>An error if the call fails.</returns>
         public int JetSetCursorFilter(JET_SESID sesid, JET_TABLEID tableid, JET_INDEX_COLUMN[] filters, CursorFilterGrbit grbit)
         {
-            TraceFunctionCall("JetSetCursorFilter");
+            TraceFunctionCall();
             this.CheckSupportsWindows8Features("JetSetCursorFilter");
 
             if (filters == null || filters.Length == 0)
