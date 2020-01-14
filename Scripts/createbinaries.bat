@@ -23,7 +23,8 @@ if %version%.==. goto :usage
 
 
 @rem Moving build to VS2017
-@set msbuildpath="%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\MSBuild.exe"
+@rem @set msbuildpath="%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\MSBuild.exe"
+@set msbuildpath="%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\amd64\MSBuild.exe"
 @if not exist %msbuildpath% set @set msbuildpath="%ProgramFiles(x86)%\MSBuild\12.0\Bin\MSBuild.exe"
 @if not exist %msbuildpath% set msbuildpath=%windir%\microsoft.net\framework\v4.0.30319\msbuild.exe
 @rem verbosity=minimal;Summary would be better, but
@@ -49,16 +50,16 @@ if errorlevel 1 goto :eof
 set dest=%~dp0tosign-%version%
 
 for %%i in ( esent.collections.dll esent.collections.pdb esent.collections.xml ) do (
-  xcopy /d ..\EsentCollections\bin\release\%%i %dest%\
+  robocopy /S ..\EsentCollections\bin\release\ %dest%\ %%i
 )
 
-REM for %%i in ( esent.interop.dll esent.interop.pdb esent.interop.wsa.dll esent.interop.wsa.pdb esent.interop.xml esent.interop.wsa.xml ) do (
+@rem for %%i in ( esent.interop.dll esent.interop.pdb esent.interop.wsa.dll esent.interop.wsa.pdb esent.interop.xml esent.interop.wsa.xml ) do (
 for %%i in ( esent.interop.dll esent.interop.pdb esent.interop.xml ) do (
-  xcopy /d ..\EsentInterop\bin\release\%%i %dest%\
+  robocopy /S ..\EsentInterop\bin\release\ %dest%\ %%i
 )
 
 for %%i in ( esent.isam.dll esent.isam.pdb esent.isam.xml ) do (
-  xcopy /d ..\isam\bin\release\%%i %dest%\
+  robocopy /S ..\isam\bin\release\ %dest%\ %%i
 )
 
 for %%i in ( esedb.py esedbshelve.py ) do (
