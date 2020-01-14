@@ -35,8 +35,8 @@ set msbuildexe=%msbuildpath% /nologo /property:Configuration=Release
 %msbuildexe% ..\EsentInterop\EsentInterop.csproj
 if errorlevel 1 goto :eof
 
-%msbuildexe% ..\EsentInterop\EsentInteropMetro.csproj
-if errorlevel 1 goto :eof
+REM %msbuildexe% ..\EsentInterop\EsentInteropMetro.csproj
+REM if errorlevel 1 goto :eof
 
 %msbuildexe% ..\EsentCollections\EsentCollections.csproj
 if errorlevel 1 goto :eof
@@ -52,7 +52,8 @@ for %%i in ( esent.collections.dll esent.collections.pdb esent.collections.xml )
   xcopy /d ..\EsentCollections\bin\release\%%i %dest%\
 )
 
-for %%i in ( esent.interop.dll esent.interop.pdb esent.interop.wsa.dll esent.interop.wsa.pdb esent.interop.xml esent.interop.wsa.xml ) do (
+REM for %%i in ( esent.interop.dll esent.interop.pdb esent.interop.wsa.dll esent.interop.wsa.pdb esent.interop.xml esent.interop.wsa.xml ) do (
+for %%i in ( esent.interop.dll esent.interop.pdb esent.interop.xml ) do (
   xcopy /d ..\EsentInterop\bin\release\%%i %dest%\
 )
 
