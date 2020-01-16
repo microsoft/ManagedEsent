@@ -7,14 +7,8 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EsentCollections</RootNamespace>
-    <AssemblyName>Esent.Collections</AssemblyName>    
-    
-    <!-- 
-         ColumnConverter.cs has some Dynamic stuff that is not supported in .NET Standard 2.0. 
-         It was included in .NET Standard 2.1 but the .NET Standard was removed from .NET Framework
-         as of v2.1 so we need to include a .NET Framework version of this library
-    -->
-    <TargetFrameworks>net462;netstandard2.1</TargetFrameworks>
+    <AssemblyName>Esent.Collections</AssemblyName>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
