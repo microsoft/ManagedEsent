@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>{2868467E-F985-45A3-AD65-DEC9E16259CC}</ProjectGuid>
+    <ProjectGuid>{B1427E8D-9175-42BE-8B90-A5A9CB4AAD51}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UniversalWindowsDB</RootNamespace>
-    <AssemblyName>UniversalWindowsDB</AssemblyName>
+    <RootNamespace>UWPSample</RootNamespace>
+    <AssemblyName>UWPSample</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.18362.0</TargetPlatformVersion>

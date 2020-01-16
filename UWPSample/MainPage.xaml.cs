@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -19,7 +18,7 @@ using Microsoft.Isam.Esent.Collections.Generic;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
-namespace UniversalWindowsDB
+namespace UWPSample
 {
     /// <summary>
     /// A basic sample UWP application to make sure that Esent.Collections, Esent.Interop and Isam are
