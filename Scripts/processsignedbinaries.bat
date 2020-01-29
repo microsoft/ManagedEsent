@@ -12,8 +12,14 @@ for %%i in ( esent.collections.dll esent.interop.dll esent.isam.dll ) do (
   )
 )
 
-for %%i in ( esent.collections.pdb esent.collections.xml esent.interop.pdb esedb.py esedbshelve.py esent.isam.pdb ) do (
+for %%i in ( esent.collections.xml esedb.py esedbshelve.py ) do (
   if not exist %~dp0tosign-%version%\%%i (
+    echo Error: Prereq file %%i does not exist!
+  )
+)
+
+for %%i in ( esent.collections.pdb esent.interop.pdb esent.isam.pdb ) do (
+  if not exist %~dp0tosign-%version%\netstandard2.0\%%i (
     echo Error: Prereq file %%i does not exist!
   )
 )
@@ -68,7 +74,7 @@ echo    ^<id^>ManagedEsent^</id^> >>%target%
 echo    ^<version^>%version%^</version^> >>%target%
 echo    ^<authors^>Microsoft^</authors^> >>%target%
 echo    ^<owners^>Microsoft, nugetese, mthorp^</owners^> >>%target%
-echo    ^<licenseUrl^>https://github.com/microsoft/ManagedEsent/blob/master/LICENSE.md^</licenseUrl^> >>%target%
+echo    ^<license type="expression"^>MIT^</license^> >>%target%
 echo    ^<projectUrl^>https://github.com/microsoft/ManagedEsent^</projectUrl^> >>%target%
 echo    ^<requireLicenseAcceptance^>true^</requireLicenseAcceptance^> >>%target%
 echo    ^<description^> >>%target%
@@ -77,11 +83,9 @@ echo    ^</description^> >>%target%
 echo    ^<releaseNotes^>Release %version% from %date%.^</releaseNotes^> >>%target%
 echo    ^<copyright^>Copyright (c) Microsoft. All Rights Reserved.^</copyright^> >>%target%
 echo    ^<tags^>ManagedEsent NoSql ISAM Database Storage DatabaseEngine^</tags^> >>%target%
-echo    ^<!-- >>%target%
 echo    ^<dependencies^> >>%target%
-echo      ^<dependency id="SampleDependency" version="1.0" /^> >>%target%
+echo      ^<group targetFramework=".NETStandard2.0" /^> >>%target%
 echo    ^</dependencies^> >>%target%
-echo    --^> >>%target%
 echo  ^</metadata^> >>%target%
 echo ^</package^> >>%target%
 
@@ -99,7 +103,7 @@ echo    ^<id^>Microsoft.Database.Collections.Generic^</id^> >>%target%
 echo    ^<version^>%version%^</version^> >>%target%
 echo    ^<authors^>Microsoft^</authors^> >>%target%
 echo    ^<owners^>Microsoft, nugetese, mthorp^</owners^> >>%target%
-echo    ^<licenseUrl^>https://github.com/microsoft/ManagedEsent/blob/master/LICENSE.md^</licenseUrl^> >>%target%
+echo    ^<license type="expression"^>MIT^</license^> >>%target%
 echo    ^<projectUrl^>https://github.com/microsoft/ManagedEsent^</projectUrl^> >>%target%
 echo    ^<requireLicenseAcceptance^>true^</requireLicenseAcceptance^> >>%target%
 echo    ^<description^> >>%target%
@@ -111,8 +115,10 @@ echo    ^<releaseNotes^>Release %version% from %date%.^</releaseNotes^> >>%targe
 echo    ^<copyright^>Copyright (c) Microsoft. All Rights Reserved.^</copyright^> >>%target%
 echo    ^<tags^>ManagedEsent NoSql PersistentDictionary Persistent Dictionary Key-Value Store ^</tags^> >>%target%
 echo    ^<dependencies^> >>%target%
-echo      ^<dependency id="ManagedEsent" version="%version%" /^> >>%target%
-echo      ^<dependency id="Microsoft.Database.Isam" version="%version%" /^> >>%target%
+echo      ^<group targetFramework=".NETStandard2.0"^> >>%target%
+echo        ^<dependency id="ManagedEsent" version="%version%" /^> >>%target%
+echo        ^<dependency id="Microsoft.Database.Isam" version="%version%" /^> >>%target%
+echo      ^</group^> >>%target%
 echo    ^</dependencies^> >>%target%
 echo  ^</metadata^> >>%target%
 echo ^</package^> >>%target%
@@ -131,12 +137,12 @@ echo    ^<id^>Microsoft.Database.Isam^</id^> >>%target%
 echo    ^<version^>%version%^</version^> >>%target%
 echo    ^<authors^>Microsoft^</authors^> >>%target%
 echo    ^<owners^>Microsoft, nugetese, mthorp^</owners^> >>%target%
-echo    ^<licenseUrl^>https://github.com/microsoft/ManagedEsent/blob/master/LICENSE.md^</licenseUrl^> >>%target%
+echo    ^<license type="expression"^>MIT^</license^> >>%target%
 echo    ^<projectUrl^>https://github.com/microsoft/ManagedEsent^</projectUrl^> >>%target%
 echo    ^<requireLicenseAcceptance^>true^</requireLicenseAcceptance^> >>%target%
 echo    ^<description^> >>%target%
 echo      The ManagedEsentIsam project provides a simpler object model interface to create and access databases, using ManagedEsent (esent.dll). >>%target%
-echo      As of mid-2014, the interface is still under development (for example, we should combine the 'Instance' and 'Database' classes), and may be broken
+echo      As of mid-2014, the interface is still under development (for example, we should combine the 'Instance' and 'Database' classes), and may be broken >>%target%
 echo      in the future. We are releasing it to see if>>%target%
 echo      anyone finds it useful. Please keep the feedback coming!>>%target%
 echo    ^</description^> >>%target%
@@ -144,7 +150,9 @@ echo    ^<releaseNotes^>Release %version% from %date%.^</releaseNotes^> >>%targe
 echo    ^<copyright^>Copyright (c) Microsoft. All Rights Reserved.^</copyright^> >>%target%
 echo    ^<tags^>ManagedEsent NoSql ISAM Database Storage DatabaseEngine^</tags^> >>%target%
 echo    ^<dependencies^> >>%target%
-echo      ^<dependency id="ManagedEsent" version="%version%" /^> >>%target%
+echo      ^<group targetFramework=".NETStandard2.0"^> >>%target%
+echo        ^<dependency id="ManagedEsent" version="%version%" /^> >>%target%
+echo      ^</group^> >>%target%
 echo    ^</dependencies^> >>%target%
 echo  ^</metadata^> >>%target%
 echo ^</package^> >>%target%
@@ -158,15 +166,19 @@ for %%i in ( esent.collections.dll esent.interop.dll esent.isam.dll ) do (
   xcopy /d %~dp0signed-%version%\netstandard2.0\%%i %dest%\
 )
 
-for %%i in ( esent.collections.pdb esent.collections.xml esent.interop.pdb esent.interop.xml esent.isam.pdb esent.isam.xml esedb.py esedbshelve.py ) do (
+for %%i in ( esent.collections.pdb esent.collections.xml esent.interop.pdb esent.interop.xml esent.isam.pdb esent.isam.xml ) do (
   xcopy /d %~dp0tosign-%version%\netstandard2.0\%%i %dest%\
+)
+
+for %%i in ( esedb.py esedbshelve.py ) do (
+  xcopy /d %~dp0tosign-%version%\%%i %dest%\
 )
 
 @echo =-=-=-=-=-=-=-=
 @echo Zipping files...
 
 pushd %~dp0signed-%version%
-..\..\zip.exe ManagedEsent%version%.zip *.dll *.pdb *.xml *.py
+zip.exe ManagedEsent%version%.zip *.dll *.pdb *.xml *.py
 
 @if errorlevel 1 (
   echo zip.exe returned %errorlevel%. Have you installed/downloaded it?
