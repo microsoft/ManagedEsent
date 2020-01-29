@@ -22,8 +22,7 @@ if %version%.==. goto :usage
 @rem ==============
 
 
-@rem Moving build to VS2017
-@rem @set msbuildpath="%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\MSBuild.exe"
+@rem Moving build to VS2019
 @set msbuildpath="%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\amd64\MSBuild.exe"
 @if not exist %msbuildpath% set @set msbuildpath="%ProgramFiles(x86)%\MSBuild\12.0\Bin\MSBuild.exe"
 @if not exist %msbuildpath% set msbuildpath=%windir%\microsoft.net\framework\v4.0.30319\msbuild.exe
@@ -36,13 +35,10 @@ set msbuildexe=%msbuildpath% /nologo /property:Configuration=Release
 %msbuildexe% ..\EsentInterop\EsentInterop.csproj
 if errorlevel 1 goto :eof
 
-REM %msbuildexe% ..\EsentInterop\EsentInteropMetro.csproj
-REM if errorlevel 1 goto :eof
-
-%msbuildexe% ..\EsentCollections\EsentCollections.csproj
+%msbuildexe% ..\isam\Isam.csproj
 if errorlevel 1 goto :eof
 
-%msbuildexe% ..\isam\Isam.csproj
+%msbuildexe% ..\EsentCollections\EsentCollections.csproj
 if errorlevel 1 goto :eof
 
 @echo =-=-=-=-=-=-=-=
