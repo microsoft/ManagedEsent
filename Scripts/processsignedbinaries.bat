@@ -202,9 +202,9 @@ popd
 @echo.
 @echo And if that was successful (verify with nuget package explorer)
 @echo run nuget_push-%version%.bat
-@echo nuget push %managedesentdestdir%\ManagedEsent.%version%.nupkg > nuget_push-%version%.bat
-@echo nuget push %collectionsdestdir%\Microsoft.Database.Collections.Generic.%version%.nupkg >> nuget_push-%version%.bat
-@echo nuget push %isamdestdir%\Microsoft.Database.Isam.%version%.nupkg >> nuget_push-%version%.bat
+@echo nuget push %managedesentdestdir%\ManagedEsent.%version%.nupkg -Source nuget.org > nuget_push-%version%.bat
+@echo nuget push %collectionsdestdir%\Microsoft.Database.Collections.Generic.%version%.nupkg -Source nuget.org >> nuget_push-%version%.bat
+@echo nuget push %isamdestdir%\Microsoft.Database.Isam.%version%.nupkg -Source nuget.org >> nuget_push-%version%.bat
 @echo.
 @echo You should also upload %~dp0signed-%version%\ManagedEsent%version%.zip to http://github.com/microsoft/managedesent
 @goto :eof
