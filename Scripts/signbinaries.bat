@@ -6,8 +6,8 @@ if %version%.==. goto :usage
 
 @echo =-=-=-=-=-=-=-=
 @echo Checking for files...
-for %%i in ( esent.collections.dll esent.interop.dll esent.interop.wsa.dll esent.isam.dll ) do (
-  if not exist %~dp0tosign-%version%\%%i (
+for %%i in ( esent.collections.dll esent.interop.dll esent.isam.dll ) do (
+  if not exist %~dp0tosign-%version%\netstandard2.0\%%i (
     echo Error: Prereq file %%i does not exist!
   )
 )
@@ -29,8 +29,8 @@ start "" /B /WAIT notepad.exe output.json
 if errorlevel 1 goto :eof
 
 @echo Checking for signed files...
-for %%i in ( esent.collections.dll esent.interop.dll esent.interop.wsa.dll esent.isam.dll ) do (
-  if not exist %~dp0signed-%version%\%%i (
+for %%i in ( esent.collections.dll esent.interop.dll esent.isam.dll ) do (
+  if not exist %~dp0signed-%version%\netstandard2.0\%%i (
     echo Error: Prereq file %%i does not exist!
   )
 )

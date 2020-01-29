@@ -288,7 +288,11 @@ namespace EsentCollectionsTests
             }
             catch (ArgumentOutOfRangeException ex)
             {
+#if NETCOREAPP3_0
+                Assert.AreEqual("Not supported for SetColumn (Parameter 'TColumn')\r\nActual value was EsentCollectionsTests.GenericDictionaryTests+ContainingStruct.", ex.Message);
+#else
                 Assert.AreEqual("Not supported for SetColumn\r\nParameter name: TColumn\r\nActual value was EsentCollectionsTests.GenericDictionaryTests+ContainingStruct.", ex.Message);
+#endif
             }
         }
 

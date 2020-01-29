@@ -2,18 +2,18 @@
 <package >
   <metadata>
     <id>ManagedEsent</id>
-    <version>1.8.3</version>
-    <authors>martinc</authors>
-    <owners>martinc</owners>
-    <licenseUrl>http://managedesent.codeplex.com/license</licenseUrl>
-    <projectUrl>http://managedesent.codeplex.com</projectUrl>
+    <version>2.0.0</version>
+    <authors>mthorp</authors>
+    <owners>mthorp</owners>
+    <licenseUrl>https://github.com/microsoft/ManagedEsent/blob/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/microsoft/ManagedEsent/</projectUrl>
     <!-- <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl> -->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
       ManagedEsent provides managed access to ESENT, the embeddable database engine native to Windows. ManagedEsent uses the esent.dll that is part of Microsoft Windows so there are no extra unmanaged binaries to download and install.
     </description>
-    <releaseNotes>Release 1.8.3 from Nov 19 2012. No source code changes. Now strong named, and includes Windows Store App (WSA) version.</releaseNotes>
-    <copyright>Copyright 2013</copyright>
+    <releaseNotes>Release 2.0.0 from January, 2020. Now with support for .NET Standard, which allows use in Universal Windows Platform (UWP) apps as well as traditional apps.</releaseNotes>
+    <copyright>Copyright 2020</copyright>
     <tags>ManagedEsent NoSql ISAM</tags>
     <!--
     <dependencies>

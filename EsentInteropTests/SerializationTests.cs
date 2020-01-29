@@ -103,6 +103,7 @@ namespace InteropApiTests
             SerializeAndCompare(expected);
         }
 
+#if !MANAGEDESENT_NETCORE
         /// <summary>
         /// Verify that an IndexInfo can be serialized.
         /// </summary>
@@ -127,6 +128,7 @@ namespace InteropApiTests
             Assert.AreEqual(expected.CultureInfo, actual.CultureInfo);
             Assert.AreEqual(expected.IndexSegments[0].ColumnName, actual.IndexSegments[0].ColumnName);
         }
+#endif
 
         /// <summary>
         /// Verify that a JET_COLUMNDEF can be serialized.
