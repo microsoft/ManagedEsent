@@ -51,7 +51,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         };
 
         /// <summary>
-        /// A mapping of types to RetrieveColumn function names.
+        /// A mapping of types to RetrieveColumn function names for non-nullable versions.
         /// </summary>
         private static readonly IDictionary<Type, string> RetrieveColumnMethodNonNullableNamesMap = new Dictionary<Type, string>
         {
@@ -66,10 +66,10 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             { typeof(float), "RetrieveColumnAsNonNullableFloat" },
             { typeof(double), "RetrieveColumnAsNonNullableDouble" },
             { typeof(Guid), "RetrieveColumnAsNonNullableGuid" },
-            { typeof(string), "RetrieveColumnAsNonNullableString" },
+            { typeof(string), "RetrieveColumnAsString" },
             { typeof(DateTime), "RetrieveColumnAsNonNullableDateTime" },
             { typeof(TimeSpan), "RetrieveColumnAsNonNullableTimeSpan" },
-            { typeof(PersistentBlob), "RetrieveColumnAsNonNullablePersistentBlob" },
+            { typeof(PersistentBlob), "RetrieveColumnAsPersistentBlob" },
         };
 
         /// <summary>
@@ -191,7 +191,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         {
             get
             {
-
                 return this.columnRetriever;
             }
         }
@@ -618,6 +617,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="tableid">The table to retrieve the value from.</param>
         /// <param name="columnid">The column containing the value.</param>
         /// <returns>A non-nullable Int16 constructed from the column.</returns>
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Matches EsentInterop style.")]
         private static Int16 RetrieveColumnAsNonNullableInt16(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
             return UnwrapNullableColumnValue<Int16>(Api.RetrieveColumnAsInt16(sesid, tableid, columnid));
@@ -630,6 +630,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="tableid">The table to retrieve the value from.</param>
         /// <param name="columnid">The column containing the value.</param>
         /// <returns>A non-nullable UInt16 constructed from the column.</returns>
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Matches EsentInterop style.")]
         private static UInt16 RetrieveColumnAsNonNullableUInt16(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
             return UnwrapNullableColumnValue<UInt16>(Api.RetrieveColumnAsUInt16(sesid, tableid, columnid));
@@ -642,6 +643,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="tableid">The table to retrieve the value from.</param>
         /// <param name="columnid">The column containing the value.</param>
         /// <returns>A non-nullable Int32 constructed from the column.</returns>
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Matches EsentInterop style.")]
         private static Int32 RetrieveColumnAsNonNullableInt32(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
             return UnwrapNullableColumnValue<Int32>(Api.RetrieveColumnAsInt32(sesid, tableid, columnid));
@@ -654,6 +656,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="tableid">The table to retrieve the value from.</param>
         /// <param name="columnid">The column containing the value.</param>
         /// <returns>A non-nullable UInt32 constructed from the column.</returns>
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Matches EsentInterop style.")]
         private static UInt32 RetrieveColumnAsNonNullableUInt32(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
             return UnwrapNullableColumnValue<UInt32>(Api.RetrieveColumnAsUInt32(sesid, tableid, columnid));
@@ -666,6 +669,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="tableid">The table to retrieve the value from.</param>
         /// <param name="columnid">The column containing the value.</param>
         /// <returns>A non-nullable Int64 constructed from the column.</returns>
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Matches EsentInterop style.")]
         private static Int64 RetrieveColumnAsNonNullableInt64(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
             return UnwrapNullableColumnValue<Int64>(Api.RetrieveColumnAsInt64(sesid, tableid, columnid));
@@ -678,6 +682,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="tableid">The table to retrieve the value from.</param>
         /// <param name="columnid">The column containing the value.</param>
         /// <returns>A non-nullable UInt64 constructed from the column.</returns>
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Matches EsentInterop style.")]
         private static UInt64 RetrieveColumnAsNonNullableUInt64(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
         {
             return UnwrapNullableColumnValue<UInt64>(Api.RetrieveColumnAsUInt64(sesid, tableid, columnid));
@@ -719,21 +724,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             return UnwrapNullableColumnValue<Guid>(Api.RetrieveColumnAsGuid(sesid, tableid, columnid));
         }
 
-        /* 
-         * String's can't be nullable
-                /// <summary>
-                /// Retrieve a non-nullable String
-                /// </summary>
-                /// <param name="sesid">The session to use.</param>
-                /// <param name="tableid">The table to retrieve the value from.</param>
-                /// <param name="columnid">The column containing the value.</param>
-                /// <returns>A non-nullable String constructed from the column.</returns>
-                private static string RetrieveColumnAsNonNullableString(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
-                {
-                    return UnwrapNullableColumnValue<string>(Api.RetrieveColumnAsString(sesid, tableid, columnid));
-                }
-        */
-
         /// <summary>
         /// Retrieve a non-nullable DateTime
         /// </summary>
@@ -759,6 +749,19 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
+        /// Unwraps a nullable column value when used with a dictionary that is not
+        /// using nullable types
+        /// </summary>
+        /// <typeparam name="T">Type of value</typeparam>
+        /// <param name="val">Value to unwrap</param>
+        /// <returns>Unwrapped value</returns>
+        private static T UnwrapNullableColumnValue<T>(T? val)
+            where T : struct
+        {
+            return val.Value;
+        }
+
+        /// <summary>
         /// Set the column to null, if the nullable value is null.
         /// </summary>
         /// <typeparam name="T">The underlying type.</typeparam>
@@ -781,61 +784,10 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         }
 
         /// <summary>
-        /// Unwraps a nullable column value when used with a dictionary that is not
-        /// using nullable types
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="val"></param>
-        /// <returns></returns>
-        private static T UnwrapNullableColumnValue<T>(T? val)
-            where T : struct
-        {
-            return val.Value;
-        }
-
-/*
-        /// <summary>
-        /// Given a retrieve column delegate that returns a nullable type return a 
-        /// delegate that retrieves the column and returns the value of the nullable
-        /// type.
-        /// </summary>
-        /// <param name="arguments">The arguments that the delegate should take.</param>
-        /// <param name="method">The retrieve column delegate.</param>
-        /// <returns>
-        /// A delegate that retrieves the column and returns the value of the nullable type.
-        /// </returns>
-        private static RetrieveColumnDelegate CreateGetValueDelegate(Type[] arguments, MethodInfo method)
-        {
-            PropertyInfo value = method.ReturnType.GetProperty("Value");
-
-            DynamicMethod dynamicMethod = new DynamicMethod(
-                "RetrieveColumnDynamic",
-                MethodAttributes.Static | MethodAttributes.Public,
-                CallingConventions.Standard,
-                typeof(TColumn),
-                arguments,
-                typeof(ColumnConverter<TColumn>),
-                false);
-            ILGenerator generator = dynamicMethod.GetILGenerator();
-            generator.Emit(OpCodes.Ldarg_0);
-            generator.Emit(OpCodes.Ldarg_1);
-            generator.Emit(OpCodes.Ldarg_2);
-            generator.Emit(OpCodes.Call, method);
-            LocalBuilder local = generator.DeclareLocal(method.ReturnType);
-            generator.Emit(OpCodes.Stloc, local);
-            generator.Emit(OpCodes.Ldloca, local);
-            generator.Emit(OpCodes.Call, value.GetGetMethod());
-            generator.Emit(OpCodes.Ret);
-
-            return (RetrieveColumnDelegate)dynamicMethod.CreateDelegate(typeof(RetrieveColumnDelegate));
-        }
-*/
-
-        /// <summary>
         /// Get the retrieve column delegate for the type.
         /// </summary>
         /// <returns>The retrieve column delegate for the type.</returns>
-        private RetrieveColumnDelegate CreateRetrieveColumnDelegate()
+        private static RetrieveColumnDelegate CreateRetrieveColumnDelegate()
         {
             // Look for a method called "RetrieveColumnAs{Type}", which will return a
             // nullable version of the type (except for strings, which are are ready 
