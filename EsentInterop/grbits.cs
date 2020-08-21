@@ -317,6 +317,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// backup will be backed up.
         /// </summary>
         Incremental = 0x1,
+
+        /// <summary>
+        /// It's a internal copy
+        /// </summary>
+        InternalCopy = 0x40,
     }
 
     /// <summary>
