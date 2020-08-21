@@ -1703,7 +1703,7 @@ namespace InteropApiTests
             JET_THREADSTATS stat2;
             VistaApi.JetGetThreadStats(out stat2);
 
-            Assert.IsTrue(stat2.cPageRead - stat1.cPageRead <= 1, string.Format("stat2.cPagePreread = {0}, stat1.cPagePreread = {1}", stat2.cPagePreread, stat1.cPagePreread));
+            Assert.IsTrue(stat2.cPageRead - stat1.cPageRead <= 1, string.Format("stat2.cPageRead = {0}, stat1.cPageRead = {1}", stat2.cPageRead, stat1.cPageRead));
         }
 
         /// <summary>
