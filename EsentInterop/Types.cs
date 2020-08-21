@@ -1033,17 +1033,17 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Internal use only.
         /// </summary>
-        internal IntPtr IndexId1;
+        internal uint ObjidFDP;
 
         /// <summary>
         /// Internal use only.
         /// </summary>
-        internal uint IndexId2;
+        internal IntPtr PfcbIndex;
 
         /// <summary>
         /// Internal use only.
         /// </summary>
-        internal uint IndexId3;
+        internal uint PgnoFDP;
 
         /// <summary>
         /// The size of a JET_INDEXID structure.
@@ -1107,10 +1107,10 @@ namespace Microsoft.Isam.Esent.Interop
         {
             return string.Format(
                 CultureInfo.InvariantCulture,
-                "JET_INDEXID(0x{0:x}:0x{1:x}:0x{2:x})",
-                this.IndexId1,
-                this.IndexId2,
-                this.IndexId3);
+                "JET_INDEXID(0x{0}:0x{1}:0x{2})",
+                this.ObjidFDP.ToString("x"),
+                this.PfcbIndex.ToString("x"),
+                this.PgnoFDP.ToString("x"));
         }
 
         /// <summary>
@@ -1120,9 +1120,9 @@ namespace Microsoft.Isam.Esent.Interop
         public override int GetHashCode()
         {
             return this.CbStruct.GetHashCode()
-                   ^ this.IndexId1.GetHashCode()
-                   ^ this.IndexId2.GetHashCode()
-                   ^ this.IndexId3.GetHashCode();
+                   ^ this.ObjidFDP.GetHashCode()
+                   ^ this.PfcbIndex.GetHashCode()
+                   ^ this.PgnoFDP.GetHashCode();
         }
 
         /// <summary>
@@ -1134,9 +1134,9 @@ namespace Microsoft.Isam.Esent.Interop
         public bool Equals(JET_INDEXID other)
         {
             return this.CbStruct == other.CbStruct
-                   && this.IndexId1 == other.IndexId1
-                   && this.IndexId2 == other.IndexId2
-                   && this.IndexId3 == other.IndexId3;
+                   && this.ObjidFDP == other.ObjidFDP
+                   && this.PfcbIndex == other.PfcbIndex
+                   && this.PgnoFDP == other.PgnoFDP;
         }
     }
 }

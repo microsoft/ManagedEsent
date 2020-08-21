@@ -288,8 +288,8 @@ namespace InteropApiTests
         [Description("Check that JET_INDEXID structures can be compared for equality")]
         public void VerifyJetIndexIdEquality()
         {
-            var x = new JET_INDEXID { IndexId1 = (IntPtr)0x1, IndexId2 = 0x2, IndexId3 = 0x3 };
-            var y = new JET_INDEXID { IndexId1 = (IntPtr)0x1, IndexId2 = 0x2, IndexId3 = 0x3 };
+            var x = new JET_INDEXID { ObjidFDP = 0x1, PfcbIndex = (IntPtr)0x2, PgnoFDP = 0x3 };
+            var y = new JET_INDEXID { ObjidFDP = 0x1, PfcbIndex = (IntPtr)0x2, PgnoFDP = 0x3 };
             TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
@@ -304,9 +304,9 @@ namespace InteropApiTests
         [Description("Check that JET_INDEXID structures can be compared for inequality")]
         public void VerifyJetIndexIdInequality()
         {
-            var x = new JET_INDEXID { IndexId1 = (IntPtr)0x1, IndexId2 = 0x2, IndexId3 = 0x3 };
-            var y = new JET_INDEXID { IndexId1 = (IntPtr)0x1, IndexId2 = 0x22, IndexId3 = 0x3 };
-            var z = new JET_INDEXID { IndexId1 = (IntPtr)0x1, IndexId2 = 0x2, IndexId3 = 0x33 };
+            var x = new JET_INDEXID { ObjidFDP = 0x1, PfcbIndex = (IntPtr)0x2, PgnoFDP = 0x3 };
+            var y = new JET_INDEXID { ObjidFDP = 0x1, PfcbIndex = (IntPtr)0x22, PgnoFDP = 0x3 };
+            var z = new JET_INDEXID { ObjidFDP = 0x1, PfcbIndex = (IntPtr)0x2, PgnoFDP = 0x33 };
 
             TestNotEquals(x, y);
             TestNotEquals(x, z);
