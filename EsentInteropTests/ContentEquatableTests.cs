@@ -1065,6 +1065,7 @@ namespace InteropApiTests
         public void VerifyJetRstinfoInequality()
         {
             DateTime now = DateTime.Now;
+            JET_LGPOS lgpos = new JET_LGPOS { ib = 1, isec = 2, lGeneration = 3 };
             JET_PFNSTATUS status = (sesid, snp, snt, data) => JET_err.Success;
 
             var values = new JET_RSTINFO[7];
@@ -1073,7 +1074,7 @@ namespace InteropApiTests
                 values[i] = new JET_RSTINFO
                 {
                     crstmap = 1,
-                    lgposStop = new JET_LGPOS { ib = 1, isec = 2, lGeneration = 3 },
+                    lgposStop = lgpos,
                     logtimeStop = new JET_LOGTIME(now),
                     pfnStatus = status,
                     rgrstmap = new[] { new JET_RSTMAP { szDatabaseName = "foo", szNewDatabaseName = "bar" } },
@@ -1082,8 +1083,8 @@ namespace InteropApiTests
 
             int j = 1;
             values[j++].crstmap--;
-            values[j++].lgposStop = Any.Lgpos;
-            values[j++].logtimeStop = Any.Logtime;
+            values[j++].lgposStop = new JET_LGPOS { ib = lgpos.ib, isec = lgpos.isec, lGeneration = lgpos.lGeneration + 1 };
+            values[j++].logtimeStop = new JET_LOGTIME(now.AddSeconds(1.0));
             values[j++].pfnStatus = (sesid, snp, snt, data) => JET_err.OutOfMemory;
             values[j++].rgrstmap = new[] { new JET_RSTMAP { szDatabaseName = "foo", szNewDatabaseName = "baz" } };
             values[j++] = new JET_RSTINFO();

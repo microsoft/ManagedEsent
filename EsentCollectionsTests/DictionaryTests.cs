@@ -529,14 +529,34 @@ namespace EsentCollectionsTests
         {
             int pagesize = this.dictionary.Database.Config.DatabasePageSize;
             int currMinCacheSize = this.dictionary.Database.Config.CacheSizeMin;
+            int currMaxCacheSize = this.dictionary.Database.Config.CacheSizeMax;
             int currCacheSize = this.dictionary.Database.Config.CacheSize;
-            int newCacheSize = (256 * 1024 * 1024) / pagesize;
-            Assert.IsTrue(currCacheSize < newCacheSize);
+            int newCacheSize1 = (256 * 1024 * 1024) / pagesize;
+            int newCacheSize2 = (264 * 1024 * 1024) / pagesize;
+            Assert.IsTrue(currCacheSize < newCacheSize1);
 
-            this.dictionary.Database.Config.CacheSizeMin = newCacheSize;
+            // Measure the delta because there could be dehydrated pages.
+            this.dictionary.Database.Config.CacheSizeMax = newCacheSize1;
+            this.dictionary.Database.Config.CacheSizeMin = newCacheSize1;
+            int afterCacheSize1 = this.dictionary.Database.Config.CacheSizeMin;
+            this.dictionary.Database.Config.CacheSizeMax = newCacheSize2;
+            this.dictionary.Database.Config.CacheSizeMin = newCacheSize2;
+            int afterCacheSize2 = this.dictionary.Database.Config.CacheSizeMin;
+            int actualCacheDelta = afterCacheSize2 - afterCacheSize1;
+            int expectedCacheDelta = afterCacheSize2 - afterCacheSize1;
+
+            // Do not expect too much dehydration though.
             Assert.IsTrue(
-                this.dictionary.Database.Config.CacheSize >= newCacheSize - 1,
-                string.Format("Actual = {0}, Expected = {1}", this.dictionary.Database.Config.CacheSize, newCacheSize - 1));
+                afterCacheSize1 >= newCacheSize1 - 10,
+                string.Format("Actual = {0}, Expected >= {1}", afterCacheSize1, newCacheSize1 - 10));
+
+            // Delta must be consistent.
+            Assert.AreEqual(
+                actualCacheDelta,
+                expectedCacheDelta,
+                string.Format("Actual = {0}, Expected = {1}", actualCacheDelta, expectedCacheDelta));
+
+            this.dictionary.Database.Config.CacheSizeMax = currMaxCacheSize;
             this.dictionary.Database.Config.CacheSizeMin = currMinCacheSize;
         }
 
