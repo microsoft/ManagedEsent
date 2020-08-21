@@ -73,28 +73,6 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         };
 
         /// <summary>
-        /// A mapping of types to RetrieveColumn function names for non-nullable versions.
-        /// </summary>
-        private static readonly IDictionary<Type, string> RetrieveColumnMethodNonNullableNamesMap = new Dictionary<Type, string>
-        {
-            { typeof(bool), "RetrieveColumnAsNonNullableBoolean" },
-            { typeof(byte), "RetrieveColumnAsNonNullableByte" },
-            { typeof(short), "RetrieveColumnAsNonNullableInt16" },
-            { typeof(ushort), "RetrieveColumnAsNonNullableUInt16" },
-            { typeof(int), "RetrieveColumnAsNonNullableInt32" },
-            { typeof(uint), "RetrieveColumnAsNonNullableUInt32" },
-            { typeof(long), "RetrieveColumnAsNonNullableInt64" },
-            { typeof(ulong), "RetrieveColumnAsNonNullableUInt64" },
-            { typeof(float), "RetrieveColumnAsNonNullableFloat" },
-            { typeof(double), "RetrieveColumnAsNonNullableDouble" },
-            { typeof(Guid), "RetrieveColumnAsNonNullableGuid" },
-            { typeof(string), "RetrieveColumnAsString" },
-            { typeof(DateTime), "RetrieveColumnAsNonNullableDateTime" },
-            { typeof(TimeSpan), "RetrieveColumnAsNonNullableTimeSpan" },
-            { typeof(PersistentBlob), "RetrieveColumnAsPersistentBlob" },
-        };
-
-        /// <summary>
         /// A mapping of types to ESENT column types.
         /// </summary>
         private static readonly IDictionary<Type, JET_coltyp> ColumnTypeMap = new Dictionary<Type, JET_coltyp>
