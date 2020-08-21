@@ -1205,6 +1205,7 @@ namespace InteropApiTests
             }
 
             Assert.IsTrue(callbackWasCalled, "callback was not called");
+            GC.KeepAlive(callback);
         }
 
         /// <summary>
