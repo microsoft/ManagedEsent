@@ -81,6 +81,7 @@ namespace Microsoft.Database.Isam.Config
             DatabaseConfig.ParamTable[63] = new ParamDef(63, false, typeof(int)); // JET_paramPreferredVerPages
             DatabaseConfig.ParamTable[64] = new ParamDef(64, true, typeof(int)); // JET_paramDatabasePageSize
             DatabaseConfig.ParamTable[65] = new ParamDef(65, false, typeof(bool)); // JET_paramDisableCallbacks
+            DatabaseConfig.ParamTable[68] = new ParamDef(68, false, typeof(int)); // JET_paramFlight_SequentialPrereadPages
             DatabaseConfig.ParamTable[69] = new ParamDef(69, false, typeof(bool)); // JET_paramLogFileCreateAsynch
             DatabaseConfig.ParamTable[71] = new ParamDef(71, false, typeof(bool)); // JET_paramZeroDatabaseDuringBackup
             DatabaseConfig.ParamTable[72] = new ParamDef(72, false, typeof(JET_UNICODEINDEX)); // JET_paramUnicodeIndexDefault
@@ -723,6 +724,15 @@ namespace Microsoft.Database.Isam.Config
         {
             get { return this.GetParam<bool>(65); }
             set { this.SetParam(65, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets Flight_SequentialPrereadPages of type int
+        /// </summary>
+        public int Flight_SequentialPrereadPages
+        {
+            get { return this.GetParam<int>(68); }
+            set { this.SetParam(68, value); }
         }
 
         /// <summary>
