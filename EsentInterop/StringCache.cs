@@ -40,6 +40,16 @@ namespace Microsoft.Isam.Esent.Interop
             // new Windows UI Core CLR does not support string interning.
             return s;
 #else
+            if (s == null)
+            {
+                return null;
+            }
+
+            if (s.Length == 0)
+            {
+                return string.Empty;
+            }
+
             return string.IsInterned(s) ?? s;
 #endif
         }

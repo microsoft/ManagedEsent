@@ -526,29 +526,32 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// a ref parameter and not an out parameter.
         /// </remarks>
         /// <returns>An error or warning.</returns>
-        public int JetGetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, ref IntPtr paramValue, out string paramString, int maxParam)
+        public unsafe int JetGetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, JET_param paramid, ref IntPtr paramValue, out string paramString, int maxParam)
         {
             TraceFunctionCall();
             CheckNotNegative(maxParam, "maxParam");
 
             uint bytesMax = checked((uint)(this.Capabilities.SupportsUnicodePaths ? maxParam * sizeof(char) : maxParam));
 
-            var sb = new StringBuilder(maxParam);
             int err;
             if (this.Capabilities.SupportsUnicodePaths)
             {
-                err = Err(NativeMethods.JetGetSystemParameterW(instance.Value, sesid.Value, (uint)paramid, ref paramValue, sb, bytesMax));
+                char* buffer = stackalloc char[maxParam];
+                err = Err(NativeMethods.JetGetSystemParameterW(instance.Value, sesid.Value, (uint)paramid, ref paramValue, new IntPtr(buffer), bytesMax));
+                paramString = new string(buffer);
             }
             else
             {
 #if MANAGEDESENT_ON_WSA
                 err = Err((int)JET_err.FeatureNotAvailable);
+                paramString = null;
 #else
+                var sb = new StringBuilder(maxParam);
                 err = Err(NativeMethods.JetGetSystemParameter(instance.Value, sesid.Value, (uint)paramid, ref paramValue, sb, bytesMax));
+                paramString = sb.ToString();
 #endif
             }
 
-            paramString = sb.ToString();
             paramString = StringCache.TryToIntern(paramString);
             return err;
         }

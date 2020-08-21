@@ -121,7 +121,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #endif // !MANAGEDESENT_ON_WSA
 
         [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
-        public static extern int JetGetSystemParameterW(IntPtr instance, IntPtr sesid, uint paramid, ref IntPtr plParam, [Out] StringBuilder szParam, uint cbMax);
+        public static extern int JetGetSystemParameterW(IntPtr instance, IntPtr sesid, uint paramid, ref IntPtr plParam, IntPtr szParam, uint cbMax);
 
 #if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         [DllImport(EsentDll, ExactSpelling = true)]
