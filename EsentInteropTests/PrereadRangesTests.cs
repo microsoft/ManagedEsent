@@ -141,8 +141,8 @@ namespace InteropApiTests
             SystemParameters.EnableViewCache = false;
             this.savedCacheSizeMin = SystemParameters.CacheSizeMin;
             this.savedCacheSizeMax = SystemParameters.CacheSizeMax;
-            SystemParameters.CacheSizeMin = 128;
-            SystemParameters.CacheSizeMax = 128;
+            SystemParameters.CacheSizeMin = 1024;
+            SystemParameters.CacheSizeMax = 1024;
 
             this.instance = SetupHelper.CreateNewInstance(this.directory);
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
@@ -1883,9 +1883,6 @@ namespace InteropApiTests
             // Force flush cache
             this.ForceFlushCache();
 
-            // Increase cache size so the complete range can fit in
-            this.SetCacheSize(1024);
-
              JET_INDEX_COLUMN[] startColumn = new JET_INDEX_COLUMN[1];
             startColumn[0] = this.CreateKeyColumn(this.columnIdKey1, 0, JetRelop.Equals);
             JET_INDEX_COLUMN[] endColumn = new JET_INDEX_COLUMN[1];
@@ -2327,20 +2324,6 @@ namespace InteropApiTests
             Api.JetOpenTable(this.sesId, this.dbId, this.tableName, null, 0, OpenTableGrbit.None, out this.tableId);
 
             Api.JetBeginTransaction(this.sesId);
-        }
-
-        /// <summary>
-        /// Sets the cache size to a fixed number
-        /// </summary>
-        /// <param name="cacheSize">Cache size in pages</param>
-        private void SetCacheSize(int cacheSize)
-        {
-            SystemParameters.CacheSizeMin = cacheSize;
-            SystemParameters.CacheSizeMax = cacheSize;
-            while (SystemParameters.CacheSize != cacheSize)
-            {
-                EseInteropTestHelper.ThreadSleep(1);
-            }
         }
 
         #endregion Helpers
