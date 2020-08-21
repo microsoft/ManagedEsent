@@ -1503,6 +1503,70 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
+    /// Base class for JET_err.PageTagCorrupted exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentPageTagCorruptedException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentPageTagCorruptedException class.
+        /// </summary>
+        public EsentPageTagCorruptedException() :
+            base("A tag / line on page is logically corrupted, offset or size is bad, or tag count on page is bad.", JET_err.PageTagCorrupted)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentPageTagCorruptedException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentPageTagCorruptedException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.NodeCorrupted exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentNodeCorruptedException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentNodeCorruptedException class.
+        /// </summary>
+        public EsentNodeCorruptedException() :
+            base("A node or prefix node is logically corrupted, the key suffix size is larger than the node or line's size.", JET_err.NodeCorrupted)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentNodeCorruptedException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentNodeCorruptedException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
     /// Base class for JET_err.KeyTooBig exceptions.
     /// </summary>
     [SuppressMessage(
@@ -13288,6 +13352,10 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentBadEmptyPageException();
             case JET_err.BadLineCount:
                 return new EsentBadLineCountException();
+            case JET_err.PageTagCorrupted:
+                return new EsentPageTagCorruptedException();
+            case JET_err.NodeCorrupted:
+                return new EsentNodeCorruptedException();
             case JET_err.KeyTooBig:
                 return new EsentKeyTooBigException();
             case JET_err.CannotSeparateIntrinsicLV:

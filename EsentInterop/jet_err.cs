@@ -179,6 +179,16 @@ namespace Microsoft.Isam.Esent.Interop
         BadLineCount = -354,
 
         /// <summary>
+        /// A tag / line on page is logically corrupted, offset or size is bad, or tag count on page is bad.
+        /// </summary>
+        PageTagCorrupted = -357,
+
+        /// <summary>
+        /// A node or prefix node is logically corrupted, the key suffix size is larger than the node or line's size.
+        /// </summary>
+        NodeCorrupted = -358,
+
+        /// <summary>
         /// Key is too large
         /// </summary>
         KeyTooBig = -408,
