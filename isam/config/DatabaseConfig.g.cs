@@ -86,6 +86,7 @@ namespace Microsoft.Database.Isam.Config
             DatabaseConfig.ParamTable[71] = new ParamDef(71, false, typeof(bool)); // JET_paramZeroDatabaseDuringBackup
             DatabaseConfig.ParamTable[72] = new ParamDef(72, false, typeof(JET_UNICODEINDEX)); // JET_paramUnicodeIndexDefault
             DatabaseConfig.ParamTable[73] = new ParamDef(73, false, typeof(IntPtr)); // JET_paramRuntimeCallback
+            DatabaseConfig.ParamTable[74] = new ParamDef(74, false, typeof(bool)); // JET_paramFlight_EnableReattachRaceBugFix
             DatabaseConfig.ParamTable[77] = new ParamDef(77, false, typeof(bool)); // JET_paramCleanupMismatchedLogFiles
             DatabaseConfig.ParamTable[79] = new ParamDef(79, false, typeof(int)); // JET_paramRecoveryCurrentLogfile
             DatabaseConfig.ParamTable[81] = new ParamDef(81, true, typeof(int)); // JET_paramGlobalMinVerPages
@@ -778,6 +779,15 @@ namespace Microsoft.Database.Isam.Config
             set { this.SetParam(73, value); }
         }
 #endif
+
+        /// <summary>
+        /// Gets or sets Flight_EnableReattachRaceBugFix of type bool
+        /// </summary>
+        public bool Flight_EnableReattachRaceBugFix
+        {
+            get { return this.GetParam<bool>(74); }
+            set { this.SetParam(74, value); }
+        }
 
         /// <summary>
         /// This parameter controls the outcome of JetInit when the database
