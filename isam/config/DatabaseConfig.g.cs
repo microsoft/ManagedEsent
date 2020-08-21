@@ -159,6 +159,7 @@ namespace Microsoft.Database.Isam.Config
             DatabaseConfig.ParamTable[189] = new ParamDef(189, false, typeof(string)); // JET_paramConfigStoreSpec
             DatabaseConfig.ParamTable[193] = new ParamDef(193, false, typeof(int)); // JET_paramPersistedLostFlushDetection
             DatabaseConfig.ParamTable[194] = new ParamDef(194, false, typeof(int)); // JET_paramEngineFormatVersion
+            DatabaseConfig.ParamTable[214] = new ParamDef(214, false, typeof(bool)); // JET_paramUseFlushForWriteDurability
         }
 
         /// <summary>
@@ -1530,6 +1531,15 @@ namespace Microsoft.Database.Isam.Config
         {
             get { return this.GetParam<int>(194); }
             set { this.SetParam(194, value); }
+        }
+
+        /// <summary>
+        /// This controls whether ESE uses Flush or FUA to make sure a write to disk is durable.
+        /// </summary>
+        public bool UseFlushForWriteDurability
+        {
+            get { return this.GetParam<bool>(214); }
+            set { this.SetParam(214, value); }
         }
 
     }
