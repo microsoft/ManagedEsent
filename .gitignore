@@ -21,6 +21,7 @@
 .vs/
 .vscode/
 CustomBuild.properties
+*.userosscache
 
 # Test files
 testresults/
