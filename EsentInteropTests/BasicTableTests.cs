@@ -1079,35 +1079,34 @@ namespace InteropApiTests
             }
         }
 
-        // MT_TODO: Temporarily turning off as it fails and makes other tests fail
-        ///// <summary>
-        ///// Test starting OLD2 with DefragmentBTree on read-only database.
-        ///// </summary>
-        //[TestMethod]
-        //[Priority(2)]
-        //[Description("Start OLD2 with DefragmentBTree on read-only database must fail")]
-        //public void TestStartOld2WithDefragmentBTreeReadOnlyDbMustFail()
-        //{
-        //    this.ReattachDatabase(AttachDatabaseGrbit.ReadOnly);
-        //    try
-        //    {
-        //        DefragGrbit defragGrbit = Windows7Grbits.DefragmentBTree;
-        //        Api.Defragment(this.sesid, this.dbid, this.table, defragGrbit);
-        //        Assert.Fail("Starting OLD2 with {0} should have failed with EsentDatabaseFileReadOnlyException, but succeeded.", defragGrbit);
-        //    }
-        //    catch (EsentDatabaseFileReadOnlyException)
-        //    {
-        //        // Expected on Windows 10 20H1 and beyond.
-        //    }
-        //    catch (EsentPermissionDeniedException)
-        //    {
-        //        // Expected on Windows 10 19H2 and below.
-        //    }
-        //    finally
-        //    {
-        //        this.ReattachDatabase(AttachDatabaseGrbit.None);
-        //    }
-        //}
+        /// <summary>
+        /// Test starting OLD2 with DefragmentBTree on read-only database.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Start OLD2 with DefragmentBTree on read-only database must fail")]
+        public void TestStartOld2WithDefragmentBTreeReadOnlyDbMustFail()
+        {
+            this.ReattachDatabase(AttachDatabaseGrbit.ReadOnly);
+            try
+            {
+                DefragGrbit defragGrbit = Windows7Grbits.DefragmentBTree;
+                Api.Defragment(this.sesid, this.dbid, this.table, defragGrbit);
+                Assert.Fail("Starting OLD2 with {0} should have failed with EsentDatabaseFileReadOnlyException, but succeeded.", defragGrbit);
+            }
+            catch (EsentDatabaseFileReadOnlyException)
+            {
+                // Expected on Windows 10 20H1 and beyond.
+            }
+            catch (EsentPermissionDeniedException)
+            {
+                // Expected on Windows 10 19H2 and below.
+            }
+            finally
+            {
+                this.ReattachDatabase(AttachDatabaseGrbit.None);
+            }
+        }
 
         /// <summary>
         /// Test starting attach-time OLD2 with DefragmentSequentialBTrees on read-only database.
