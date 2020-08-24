@@ -27,7 +27,7 @@ namespace Microsoft.Database.Isam.Config
         /// <summary>
         /// The exclusive upper bound on JET_param*.
         /// </summary>
-        internal const int ParamMaxValueInvalid = 196; // should be equal to JET_paramMaxValueInvalid
+        internal const int ParamMaxValueInvalid = 215; // should be equal to JET_paramMaxValueInvalid
     
         /// <summary>
         /// Fills the param table from auto-generated code.
