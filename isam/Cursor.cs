@@ -1695,7 +1695,7 @@ namespace Microsoft.Database.Isam
         /// <summary>
         /// Checks if the cursor is in the index range specified.
         /// </summary>
-        /// <returns>Whether the cursor is currently in the index range.</returns>
+        /// <returns>True if the cursor is currently in the index range, false otherwise.</returns>
         private bool CheckRange()
         {
             lock (this.isamSession)
