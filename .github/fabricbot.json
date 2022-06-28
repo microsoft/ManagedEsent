@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "tasks": [
+    {
+      "taskType": "trigger",
+      "capabilityId": "CodeFlowLink",
+      "subCapability": "CodeFlowLink",
+      "version": "1.0",
+      "id": "L3XrjV5cQ",
+      "config": {
+        "taskName": "ManagedESENT-PullRequest"
+      }
+    }
+  ],
+  "userGroups": []
+}
