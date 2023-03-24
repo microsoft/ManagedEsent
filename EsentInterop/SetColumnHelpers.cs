@@ -171,7 +171,8 @@ namespace Microsoft.Isam.Esent.Interop
                 grbit |= SetColumnGrbit.ZeroLength;
             }
 
-            JetSetColumn(sesid, tableid, columnid, data, dataSize, grbit, null);
+            int dataLength = (null == data) ? 0 : dataSize;
+            JetSetColumn(sesid, tableid, columnid, data, dataLength, grbit, null);
         }
 
         /// <summary>
