@@ -115,7 +115,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="directory">
         /// The directory in which to create the database.
         /// </param>
-        public PersistentDictionary(string directory) : this(directory, null, null)
+        public PersistentDictionary(string directory) : this(directory, null, null, null)
         {
             if (null == directory)
             {
@@ -127,7 +127,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// Initializes a new instance of the PersistentDictionary class.
         /// </summary>
         /// <param name="customConfig">The custom config to use for creating the PersistentDictionary.</param>
-        public PersistentDictionary(IConfigSet customConfig) : this(null, customConfig, null)
+        public PersistentDictionary(IConfigSet customConfig) : this(null, customConfig, null, null)
         {
             if (null == customConfig)
             {
@@ -140,7 +140,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         /// <param name="directory">The directory in which to create the database.</param>
         /// <param name="customConfig">The custom config to use for creating the PersistentDictionary.</param>
-        public PersistentDictionary(string directory, IConfigSet customConfig) : this(directory, customConfig, null)
+        public PersistentDictionary(string directory, IConfigSet customConfig) : this(directory, customConfig, null, null)
         {
             if (directory == null && customConfig == null)
             {
