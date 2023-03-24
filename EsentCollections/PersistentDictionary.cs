@@ -147,6 +147,25 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 throw new ArgumentException("Must specify a valid directory or customConfig");
             }
         }
+        
+        /// <summary>
+        /// Initializes a new instance of the PersistentDictionary class.
+        /// </summary>
+        /// <param name="directory">The directory in which to create the database.</param>
+        /// <param name="customConfig">The custom config to use for creating the PersistentDictionary.</param>
+        /// <param name="valueColumnConverter">The custom converter for database value column.</param>
+        public PersistentDictionary(string directory, IConfigSet customConfig, IColumnConverter<TValue> valueColumnConverter) : this(directory, customConfig, null, valueColumnConverter)
+        {
+            if (directory == null && customConfig == null)
+            {
+                throw new ArgumentException("Must specify a valid directory or customConfig");
+            }
+
+            if (valueColumnConverter == null)
+            {
+                throw new ArgumentNullException("valueColumnConverter");
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the PersistentDictionary class.
@@ -157,7 +176,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="directory">
         /// The directory in which to create the database.
         /// </param>
-        public PersistentDictionary(IEnumerable<KeyValuePair<TKey, TValue>> dictionary, string directory) : this(directory, null, dictionary)
+        public PersistentDictionary(IEnumerable<KeyValuePair<TKey, TValue>> dictionary, string directory) : this(directory, null, dictionary, null)
         {
             if (null == directory)
             {
@@ -176,7 +195,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         /// <param name="dictionary">The IDictionary whose contents are copied to the new dictionary.</param>
         /// <param name="customConfig">The custom config to use for creating the PersistentDictionary.</param>
-        public PersistentDictionary(IEnumerable<KeyValuePair<TKey, TValue>> dictionary, IConfigSet customConfig) : this(null, customConfig, dictionary)
+        public PersistentDictionary(IEnumerable<KeyValuePair<TKey, TValue>> dictionary, IConfigSet customConfig) : this(null, customConfig, dictionary, null)
         {
             if (null == customConfig)
             {
@@ -200,7 +219,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             IEnumerable<KeyValuePair<TKey, TValue>> dictionary,
             string directory,
             IConfigSet customConfig)
-            : this(directory, customConfig, dictionary)
+            : this(directory, customConfig, dictionary, null)
         {
             if (directory == null && customConfig == null)
             {
@@ -220,11 +239,13 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="directory">The directory to create the database in.</param>
         /// <param name="customConfig">The custom config to use for creating the PersistentDictionary.</param>
         /// <param name="dictionary">The IDictionary whose contents are copied to the new dictionary.</param>
+        /// <param name="valueColumnConverter">The custom converter for database value column.</param>
         /// <remarks>The constructor can either intialize PersistentDictionary from a directory string, or a full custom config set. But not both.</remarks>
         private PersistentDictionary(
             string directory,
             IConfigSet customConfig,
-            IEnumerable<KeyValuePair<TKey, TValue>> dictionary)
+            IEnumerable<KeyValuePair<TKey, TValue>> dictionary,
+            IColumnConverter<TValue> valueColumnConverter)
         {
             Contract.Requires(directory != null || customConfig != null); // At least 1 of the two arguments should be set
             if (directory == null && customConfig == null)
@@ -232,7 +253,10 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 return; // The calling constructor will throw an error
             }
 
-            this.converters = new PersistentDictionaryConverters<TKey, TValue>();
+            this.converters = valueColumnConverter == null ? 
+                new PersistentDictionaryConverters<TKey, TValue>() : 
+                new PersistentDictionaryConverters<TKey, TValue>(valueColumnConverter);
+            
             this.schema = new PersistentDictionaryConfig();
             var defaultConfig = PersistentDictionaryDefaultConfig.GetDefaultDatabaseConfig();
             var databaseConfig = new DatabaseConfig();
