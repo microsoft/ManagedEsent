@@ -171,8 +171,17 @@ namespace Microsoft.Isam.Esent.Interop
                 grbit |= SetColumnGrbit.ZeroLength;
             }
 
-            int dataLength = (null == data) ? 0 : dataSize;
-            JetSetColumn(sesid, tableid, columnid, data, dataLength, grbit, null);
+            if (data == null && dataSize > 0)
+            {
+                throw new ArgumentException(string.Format("data is null, but dataSize is: {0}", dataSize));
+            }
+
+            if (data != null && data.Length < dataSize)
+            {
+                throw new ArgumentException(string.Format("data.Length is less, than dataSize: data.Length={0}, dataSize={1}", data.Length, dataSize));
+            }
+            
+            JetSetColumn(sesid, tableid, columnid, data, dataSize, grbit, null);
         }
 
         /// <summary>

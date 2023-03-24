@@ -460,5 +460,32 @@ namespace EsentCollectionsTests
             Assert.AreEqual(1, PooledPersistentBlob.ArrayPool.arrayReturnedCounter);
             Assert.AreEqual(1, PooledPersistentBlob.ArrayPool.GetNumberOfCurrentArraysInPool());
         }
+        
+        /// <summary>
+        /// Cannot add an element, when data is null, but lenght is more than 0.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [ExpectedException(typeof(ArgumentException))]
+        public void AddWhenDataIsNullAndLenghtIsNot0Test()
+        {
+            string key = "key";
+            this.dictionary[key] = new PooledPersistentBlob(null, 1);
+            this.dictionary.Flush();
+        }
+        
+        /// <summary>
+        /// Cannot add an element, when data lenght is less than dataSize.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [ExpectedException(typeof(ArgumentException))]
+        public void AddWhenDataLenghtIsLessThanDataSizeTest()
+        {
+            string key = "key";
+            byte[] data = new byte[]{1, 2, 3, 4, 5};
+            this.dictionary[key] = new PooledPersistentBlob(data, data.Length + 1);
+            this.dictionary.Flush();
+        }
     }
 }
