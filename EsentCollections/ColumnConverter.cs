@@ -26,7 +26,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
     /// database.
     /// </summary>
     /// <typeparam name="TColumn">The type of the column.</typeparam>
-    internal class ColumnConverter<TColumn>
+    internal class ColumnConverter<TColumn> : IColumnConverter<TColumn>
     {
         /// <summary>
         /// A mapping of types to RetrieveColumn function names.
@@ -97,12 +97,12 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <summary>
         /// The SetColumn delegate for this object.
         /// </summary>
-        private readonly SetColumnDelegate columnSetter;
+        private readonly SetColumnDelegate<TColumn> columnSetter;
 
         /// <summary>
         /// The RetrieveColumn delegate for this object.
         /// </summary>
-        private readonly RetrieveColumnDelegate columnRetriever;
+        private readonly RetrieveColumnDelegate<TColumn> columnRetriever;
 
         /// <summary>
         /// The column type for this object.
@@ -141,25 +141,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             RuntimeHelpers.PrepareDelegate(this.columnSetter);
             RuntimeHelpers.PrepareDelegate(this.columnRetriever);
         }
-
-        /// <summary>
-        /// Represents a SetColumn operation.
-        /// </summary>
-        /// <param name="sesid">The session to use.</param>
-        /// <param name="tableid">The cursor to set the value in. An update should be prepared.</param>
-        /// <param name="columnid">The column to set.</param>
-        /// <param name="value">The value to set.</param>
-        public delegate void SetColumnDelegate(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, TColumn value);
-
-        /// <summary>
-        /// Represents a RetrieveColumn operation.
-        /// </summary>
-        /// <param name="sesid">The session to use.</param>
-        /// <param name="tableid">The cursor to retrieve the value from.</param>
-        /// <param name="columnid">The column to retrieve.</param>
-        /// <returns>The retrieved value.</returns>
-        public delegate TColumn RetrieveColumnDelegate(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid);
-
+        
         /// <summary>
         /// Gets the type of database column the value should be stored in.
         /// </summary>
@@ -175,7 +157,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// Gets a delegate that can be used to set the Key column with an object of
         /// type <see cref="Type"/>.
         /// </summary>
-        public SetColumnDelegate ColumnSetter
+        public SetColumnDelegate<TColumn> ColumnSetter
         {
             get
             {
@@ -187,7 +169,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// Gets a delegate that can be used to retrieve the Key column, returning
         /// type <see cref="Type"/>.
         /// </summary>
-        public RetrieveColumnDelegate ColumnRetriever
+        public RetrieveColumnDelegate<TColumn> ColumnRetriever
         {
             get
             {
@@ -787,7 +769,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// Get the retrieve column delegate for the type.
         /// </summary>
         /// <returns>The retrieve column delegate for the type.</returns>
-        private static RetrieveColumnDelegate CreateRetrieveColumnDelegate()
+        private static RetrieveColumnDelegate<TColumn> CreateRetrieveColumnDelegate()
         {
             // Look for a method called "RetrieveColumnAs{Type}", which will return a
             // nullable version of the type (except for strings, which are are ready 
@@ -813,7 +795,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                                                                null);
 
                 // Return the string/nullable type.
-                return (RetrieveColumnDelegate)Delegate.CreateDelegate(typeof(RetrieveColumnDelegate), retrieveColumnMethod);
+                return (RetrieveColumnDelegate<TColumn>)Delegate.CreateDelegate(typeof(RetrieveColumnDelegate<TColumn>), retrieveColumnMethod);
             }
             else
             {
@@ -829,7 +811,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                                                                retrieveColumnArguments,
                                                                null);
 
-                return (RetrieveColumnDelegate)Delegate.CreateDelegate(typeof(RetrieveColumnDelegate), retrieveNonNullableColumnMethod);
+                return (RetrieveColumnDelegate<TColumn>)Delegate.CreateDelegate(typeof(RetrieveColumnDelegate<TColumn>), retrieveNonNullableColumnMethod);
             }
         }
 
@@ -837,7 +819,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// Create the set column delegate.
         /// </summary>
         /// <returns>The set column delegate.</returns>
-        private static SetColumnDelegate CreateSetColumnDelegate()
+        private static SetColumnDelegate<TColumn> CreateSetColumnDelegate()
         {
             // Look for a method called "SetColumn", which takes a TColumn.
             // First look for a private method in this class that takes the
@@ -855,7 +837,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                                                           null,
                                                           setColumnArguments,
                                                           null);
-            return (SetColumnDelegate)Delegate.CreateDelegate(typeof(SetColumnDelegate), setColumnMethod);
+            return (SetColumnDelegate<TColumn>)Delegate.CreateDelegate(typeof(SetColumnDelegate<TColumn>), setColumnMethod);
         }
     }
 }

@@ -288,6 +288,42 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Retrieves a single column value from the current record. The record is that
         /// record associated with the index entry at the current position of the cursor.
+        /// Alternatively, this function can retrieve a column from a record being created
+        /// in the cursor copy buffer. This function can also retrieve column data from an
+        /// index entry that references the current record. In addition to retrieving the
+        /// actual column value, JetRetrieveColumn can also be used to retrieve the size
+        /// of a column, before retrieving the column data itself so that application
+        /// buffers can be sized appropriately.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the column from.</param>
+        /// <param name="columnid">The columnid to retrieve.</param>
+        /// <param name="data">The data buffer to be retrieved into.</param>
+        /// <param name="dataSize">The size of the data buffer.</param>
+        /// <param name="actualDataSize">Returns the actual size of the data buffer.</param>         
+        /// <param name="grbit">Retrieve column options.</param>
+        /// <param name="retinfo">
+        /// If pretinfo is give as NULL then the function behaves as though an itagSequence
+        /// of 1 and an ibLongValue of 0 (zero) were given. This causes column retrieval to
+        /// retrieve the first value of a multi-valued column, and to retrieve long data at
+        /// offset 0 (zero).
+        /// </param>
+        /// <returns>The data retrieved from the column. Null if the column is null.</returns>
+        public static JET_wrn RetrieveColumn(
+            JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, out int actualDataSize, RetrieveColumnGrbit grbit, JET_RETINFO retinfo)
+        {
+            // We cannot support this request when there is no way to indicate that a column reference is returned.
+            if ((grbit & (RetrieveColumnGrbit)0x00020000) != 0)  // UnpublishedGrbits.RetrieveAsRefIfNotInRecord
+            {
+                throw new EsentInvalidGrbitException();
+            }
+            
+            return JetRetrieveColumn(sesid, tableid, columnid, data, dataSize, out actualDataSize, grbit, retinfo);
+        }
+
+        /// <summary>
+        /// Retrieves a single column value from the current record. The record is that
+        /// record associated with the index entry at the current position of the cursor.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to retrieve the column from.</param>
