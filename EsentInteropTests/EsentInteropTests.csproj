@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>InteropApiTests</RootNamespace>
     <AssemblyName>InteropApiTests</AssemblyName>
-    <TargetFrameworks>net462;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -17,7 +17,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SignAssembly>true</SignAssembly>
-    <PublicKeyFile>..\scripts\internal\35MSSharedLib1024.snk</PublicKeyFile>
+    <PublicKeyFile>D:\EX3\src\build\codesign\MSSharedLibSN1024.snk</PublicKeyFile>
   </PropertyGroup>
 
   <!-- The .snk file won't be published to codeplex. -->
@@ -77,18 +77,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\isam\isam.csproj">
-      <Project>{21cc632c-b09a-4db7-bd6e-7f7d2716f58f}</Project>
-      <Name>EsentInterop</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EsentInteropSamples\DbUtil\DbUtil.csproj">
-      <Project>{E0B163B0-5AC6-4304-B932-BFC1F6A2A4EB}</Project>
-      <Name>DbUtil</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EsentInterop\EsentInterop.csproj">
-      <Project>{E929E163-52A0-4AAC-917B-6D7FAF70C45E}</Project>
-      <Name>EsentInterop</Name>
-    </ProjectReference>
+    <Reference Include="d:\EX3\src\target\dev\ese\esentinterop\bin\Debug\net8.0\Esent.Interop.dll" />
+	<Reference Include="d:\EX3\src\target\dev\ese\esent.isam\bin\Debug\net8.0\Esent.Isam.dll" />
   </ItemGroup>
 
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

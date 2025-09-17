@@ -318,7 +318,7 @@ namespace InteropApiTests
         [Description("Test JET_INDEXID.ToString()")]
         public void JetIndexIdToString()
         {
-            var indexid = new JET_INDEXID { IndexId1 = (IntPtr)0x1, IndexId2 = 0x2, IndexId3 = 0x3 };
+            var indexid = new JET_INDEXID { ObjidFDP = 0x1, PfcbIndex = (IntPtr)0x2, PgnoFDP = 0x3 };
             Assert.AreEqual("JET_INDEXID(0x1:0x2:0x3)", indexid.ToString());
         }
 
