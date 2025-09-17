@@ -13,6 +13,8 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Globalization;
     using System.Runtime.InteropServices;
 
+    using JET_LGEN = global::System.Int32;
+
     /// <summary>
     /// The native version of the JET_DBINFOMISC structure.
     /// </summary>
@@ -158,12 +160,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// The minimum log generation required for replaying the logs.
         /// Typically the checkpoint generation.
         /// </summary>
-        public uint genMinRequired;
+        public JET_LGEN genMinRequired;
 
         /// <summary>
         /// The maximum log generation required for replaying the logs.
         /// </summary>
-        public uint genMaxRequired;
+        public JET_LGEN genMaxRequired;
 
         /// <summary>
         /// Creation time of the <see cref="genMaxRequired"/> logfile.
@@ -235,7 +237,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// The maximum log generation committed to the database. Typically the current log generation.
         /// </summary>
-        public uint genCommitted;
+        public JET_LGEN genCommitted;
 
         // Fields added in JET_DBINFOMISC4
 
@@ -380,12 +382,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// The minimum log generation required for replaying the logs.
         /// Typically the checkpoint generation.
         /// </summary>
-        private int _genMinRequired;
+        private JET_LGEN _genMinRequired;
 
         /// <summary>
         /// The maximum log generation required for replaying the logs.
         /// </summary>
-        private int _genMaxRequired;
+        private JET_LGEN _genMaxRequired;
 
         /// <summary>
         /// Creation time of the <see cref="_genMaxRequired"/> logfile.
@@ -455,7 +457,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// The maximum log generation committed to the database. Typically the current log generation.
         /// </summary>
-        private int _genCommitted;
+        private JET_LGEN _genCommitted;
 
         /// <summary>
         /// Last successful copy backup.
@@ -691,7 +693,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Gets the minimum log generation required for replaying the logs.
         /// Typically the checkpoint generation.
         /// </summary>
-        public int genMinRequired
+        public JET_LGEN genMinRequired
         {
             [DebuggerStepThrough]
             get { return this._genMinRequired; }
@@ -701,7 +703,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets the maximum log generation required for replaying the logs.
         /// </summary>
-        public int genMaxRequired
+        public JET_LGEN genMaxRequired
         {
             [DebuggerStepThrough]
             get { return this._genMaxRequired; }
@@ -841,7 +843,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets the maximum log generation committed to the database. Typically the current log generation.
         /// </summary>
-        public int genCommitted
+        public JET_LGEN genCommitted
         {
             [DebuggerStepThrough]
             get { return this._genCommitted; }
@@ -1053,8 +1055,8 @@ namespace Microsoft.Isam.Esent.Interop
 
             unchecked
             {
-                this._genMinRequired = (int)native.genMinRequired;
-                this._genMaxRequired = (int)native.genMaxRequired;
+                this._genMinRequired = native.genMinRequired;
+                this._genMaxRequired = native.genMaxRequired;
                 this._logtimeGenMaxCreate = native.logtimeGenMaxCreate;
                 this._ulRepairCount = (int)native.ulRepairCount;
                 this._logtimeRepair = native.logtimeRepair;
@@ -1068,7 +1070,7 @@ namespace Microsoft.Isam.Esent.Interop
                 this._ulBadChecksum = (int)native.ulBadChecksum;
                 this._logtimeBadChecksum = native.logtimeBadChecksum;
                 this._ulBadChecksumOld = (int)native.ulBadChecksumOld;
-                this._genCommitted = (int)native.genCommitted;
+                this._genCommitted = native.genCommitted;
                 this._bkinfoCopyPrev = native.bkinfoCopyPrev;
                 this._bkinfoDiffPrev = native.bkinfoDiffPrev;
             }
@@ -1122,8 +1124,8 @@ namespace Microsoft.Isam.Esent.Interop
 
             unchecked
             {
-                native.genMinRequired = (uint)this._genMinRequired;
-                native.genMaxRequired = (uint)this._genMaxRequired;
+                native.genMinRequired = this._genMinRequired;
+                native.genMaxRequired = this._genMaxRequired;
                 native.logtimeGenMaxCreate = this._logtimeGenMaxCreate;
                 native.ulRepairCount = (uint)this._ulRepairCount;
                 native.logtimeRepair = this._logtimeRepair;
@@ -1137,7 +1139,7 @@ namespace Microsoft.Isam.Esent.Interop
                 native.ulBadChecksum = (uint)this._ulBadChecksum;
                 native.logtimeBadChecksum = this._logtimeBadChecksum;
                 native.ulBadChecksumOld = (uint)this._ulBadChecksumOld;
-                native.genCommitted = (uint)this._genCommitted;
+                native.genCommitted = this._genCommitted;
                 native.bkinfoCopyPrev = this._bkinfoCopyPrev;
                 native.bkinfoDiffPrev = this._bkinfoDiffPrev;
             }

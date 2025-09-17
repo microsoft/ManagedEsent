@@ -12,6 +12,8 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Globalization;
     using System.Runtime.InteropServices;
 
+    using JET_LGEN = global::System.Int32;
+
     /// <summary>
     /// Describes an offset in the log sequence.
     /// </summary>
@@ -36,7 +38,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Generation number.
         /// </summary>
-        private int generation;
+        private JET_LGEN generation;
 
         /// <summary>
         /// Gets or sets the byte offset represented by this log position. This
@@ -62,7 +64,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets or sets the generation of this log position.
         /// </summary>
-        public int lGeneration
+        public JET_LGEN lGeneration
         {
             [DebuggerStepThrough]
             get { return this.generation; }

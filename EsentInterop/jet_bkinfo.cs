@@ -12,6 +12,8 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Globalization;
     using System.Runtime.InteropServices;
 
+    using JET_LGEN = global::System.Int32;
+
     /// <summary>
     /// Holds a collection of data about a specific backup event.
     /// </summary>
@@ -36,12 +38,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Low log generation when the backup was made.
         /// </summary>
-        private uint lowGeneration;
+        private JET_LGEN lowGeneration;
 
         /// <summary>
         /// High log generation when the backup was made.
         /// </summary>
-        private uint highGeneration;
+        private JET_LGEN highGeneration;
 
         /// <summary>
         /// Gets the log position of the backup.
@@ -66,21 +68,35 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets the low generation of the backup.
         /// </summary>
-        public int genLow
+        public JET_LGEN genLow
         {
             [DebuggerStepThrough]
-            get { return (int)this.lowGeneration; }
-            internal set { this.lowGeneration = checked((uint)value); }
+            get
+            { 
+                return this.lowGeneration;
+            }
+
+            internal set
+            {
+                this.lowGeneration = value;
+            }
         }
 
         /// <summary>
         /// Gets or sets the high generation of the backup.
         /// </summary>
-        public int genHigh
+        public JET_LGEN genHigh
         {
             [DebuggerStepThrough]
-            get { return (int)this.highGeneration; }
-            set { this.highGeneration = checked((uint)value); }
+            get
+            {
+                return this.highGeneration;
+            }
+
+            set
+            {
+                this.highGeneration = value;
+            }
         }
 
         /// <summary>
@@ -160,9 +176,9 @@ namespace Microsoft.Isam.Esent.Interop
         {
             return this.logPosition.GetHashCode()
                    ^ this.backupTime.GetHashCode()
-                   ^ unchecked((int)this.lowGeneration << 16)
-                   ^ unchecked((int)this.lowGeneration >> 16)
-                   ^ unchecked((int)this.highGeneration);
+                   ^ unchecked(this.lowGeneration << 16)
+                   ^ unchecked(this.lowGeneration >> 16)
+                   ^ unchecked(this.highGeneration);
         }
 
         /// <summary>
