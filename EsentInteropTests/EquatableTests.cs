@@ -518,6 +518,22 @@ namespace InteropApiTests
         }
 
         /// <summary>
+        /// Check that JET_LGEN structures can be
+        /// compared for equality.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_LGEN structures can be compared for equality")]
+        public void VerifyJetLgenEquality()
+        {
+            var x = (JET_LGEN)55555;
+            var y = (JET_LGEN)55555;
+            TestEquals(x, y);
+            Assert.IsTrue(x == y);
+            Assert.IsFalse(x != y);
+        }
+
+        /// <summary>
         /// Check that JET_LGPOS structures can be
         /// compared for equality.
         /// </summary>
@@ -526,8 +542,8 @@ namespace InteropApiTests
         [Description("Check that JET_LGPOS structures can be compared for equality")]
         public void VerifyJetLgposEquality()
         {
-            var x = new JET_LGPOS { lGeneration = 1, isec = 2, ib = 3 };
-            var y = new JET_LGPOS { lGeneration = 1, isec = 2, ib = 3 };
+            var x = new JET_LGPOS { lgen = (JET_LGEN)1, isec = 2, ib = 3 };
+            var y = new JET_LGPOS { lgen = (JET_LGEN)1, isec = 2, ib = 3 };
             TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
@@ -546,10 +562,10 @@ namespace InteropApiTests
             // first object. We will compare them all against each other.
             var positions = new[]
             {
-                new JET_LGPOS { lGeneration = 1, isec = 2, ib = 3 },
-                new JET_LGPOS { lGeneration = 1, isec = 2, ib = 999 },
-                new JET_LGPOS { lGeneration = 1, isec = 999, ib = 3 },
-                new JET_LGPOS { lGeneration = 999, isec = 2, ib = 3 },
+                new JET_LGPOS { lgen = (JET_LGEN)1, isec = 2, ib = 3 },
+                new JET_LGPOS { lgen = (JET_LGEN)1, isec = 2, ib = 999 },
+                new JET_LGPOS { lgen = (JET_LGEN)1, isec = 999, ib = 3 },
+                new JET_LGPOS { lgen = (JET_LGEN)999, isec = 2, ib = 3 },
             };
 
             // It would be nice if this was a generic helper method, but that won't
@@ -576,10 +592,10 @@ namespace InteropApiTests
         public void VerifyJetBkinfoEquality()
         {
             var bklogtime = new JET_BKLOGTIME(DateTime.Now, true);
-            var lgpos = new JET_LGPOS { lGeneration = 1, isec = 2, ib = 3 };
+            var lgpos = new JET_LGPOS { lgen = (JET_LGEN)1, isec = 2, ib = 3 };
 
-            var x = new JET_BKINFO { bklogtimeMark = bklogtime, genHigh = 11, genLow = 3, lgposMark = lgpos };
-            var y = new JET_BKINFO { bklogtimeMark = bklogtime, genHigh = 11, genLow = 3, lgposMark = lgpos };
+            var x = new JET_BKINFO { bklogtimeMark = bklogtime, lgenHigh = (JET_LGEN)11, lgenLow = (JET_LGEN)3, lgposMark = lgpos };
+            var y = new JET_BKINFO { bklogtimeMark = bklogtime, lgenHigh = (JET_LGEN)11, lgenLow = (JET_LGEN)3, lgposMark = lgpos };
             TestEquals(x, y);
             Assert.IsTrue(x == y);
             Assert.IsFalse(x != y);
@@ -598,18 +614,18 @@ namespace InteropApiTests
         {
             var bklogtime1 = new JET_BKLOGTIME(DateTime.Now, false);
             var bklogtime2 = new JET_BKLOGTIME(DateTime.Now, true);
-            var lgpos1 = new JET_LGPOS { lGeneration = 7, isec = 8, ib = 5 };
-            var lgpos2 = new JET_LGPOS { lGeneration = 7, isec = 8, ib = 9 };
+            var lgpos1 = new JET_LGPOS { lgen = (JET_LGEN)7, isec = 8, ib = 5 };
+            var lgpos2 = new JET_LGPOS { lgen = (JET_LGEN)7, isec = 8, ib = 9 };
 
             // None of these objects are equal, most differ in only one member from the
             // first object. We will compare them all against each other.
             var positions = new[]
             {
-                new JET_BKINFO { bklogtimeMark = bklogtime1, genHigh = 11, genLow = 3, lgposMark = lgpos1 },
-                new JET_BKINFO { bklogtimeMark = bklogtime1, genHigh = 11, genLow = 3, lgposMark = lgpos2 },
-                new JET_BKINFO { bklogtimeMark = bklogtime1, genHigh = 11, genLow = 4, lgposMark = lgpos1 },
-                new JET_BKINFO { bklogtimeMark = bklogtime1, genHigh = 12, genLow = 3, lgposMark = lgpos1 },
-                new JET_BKINFO { bklogtimeMark = bklogtime2, genHigh = 11, genLow = 3, lgposMark = lgpos1 },
+                new JET_BKINFO { bklogtimeMark = bklogtime1, lgenHigh = (JET_LGEN)11, lgenLow = (JET_LGEN)3, lgposMark = lgpos1 },
+                new JET_BKINFO { bklogtimeMark = bklogtime1, lgenHigh = (JET_LGEN)11, lgenLow = (JET_LGEN)3, lgposMark = lgpos2 },
+                new JET_BKINFO { bklogtimeMark = bklogtime1, lgenHigh = (JET_LGEN)11, lgenLow = (JET_LGEN)4, lgposMark = lgpos1 },
+                new JET_BKINFO { bklogtimeMark = bklogtime1, lgenHigh = (JET_LGEN)12, lgenLow = (JET_LGEN)3, lgposMark = lgpos1 },
+                new JET_BKINFO { bklogtimeMark = bklogtime2, lgenHigh = (JET_LGEN)11, lgenLow = (JET_LGEN)3, lgposMark = lgpos1 },
             };
 
             // It would be nice if this was a generic helper method, but that won't
@@ -1143,8 +1159,8 @@ namespace InteropApiTests
             values[j++].dwBuildNumber++;
             values[j++].lSPNumber++;
             values[j++].cbPageSize++;
-            values[j++].genMinRequired++;
-            values[j++].genMaxRequired++;
+            values[j++].lgenMinRequired += 1;
+            values[j++].lgenMaxRequired += 1;
             values[j++].logtimeGenMaxCreate = new JET_LOGTIME(DateTime.UtcNow);
             values[j++].ulRepairCount++;
             values[j++].logtimeRepair = new JET_LOGTIME(DateTime.UtcNow);
@@ -1158,7 +1174,7 @@ namespace InteropApiTests
             values[j++].ulBadChecksum++;
             values[j++].logtimeBadChecksum = new JET_LOGTIME(DateTime.UtcNow);
             values[j++].ulBadChecksumOld++;
-            values[j++].genCommitted++;
+            values[j++].lgenCommitted += 1;
             values[j++].bkinfoCopyPrev = new JET_BKINFO();
             values[j++].bkinfoDiffPrev = new JET_BKINFO();
             values[j++] = new JET_DBINFOMISC();
@@ -1368,9 +1384,9 @@ namespace InteropApiTests
             Func<JET_BKINFO> bkinfo = () => new JET_BKINFO
             {
                 bklogtimeMark = new JET_BKLOGTIME(epoch + TimeSpan.FromSeconds(++i), true),
-                genHigh = ++i,
-                genLow = ++i,
-                lgposMark = new JET_LGPOS { ib = ++i, isec = ++i, lGeneration = ++i },
+                lgenHigh = (JET_LGEN)(++i),
+                lgenLow = (JET_LGEN)(++i),
+                lgposMark = new JET_LGPOS { ib = ++i, isec = ++i, lgen = (JET_LGEN)(++i) },
             };
 
             var native = new NATIVE_DBINFOMISC4
@@ -1385,12 +1401,12 @@ namespace InteropApiTests
                         ulRandom = ++i,
                     },
                     dbstate = (int)JET_dbstate.DirtyShutdown,
-                    lgposConsistent = new JET_LGPOS { ib = ++i, isec = ++i, lGeneration = ++i },
+                    lgposConsistent = new JET_LGPOS { ib = ++i, isec = ++i, lgen = (JET_LGEN)(++i) },
                     logtimeConsistent = new JET_LOGTIME(epoch + TimeSpan.FromSeconds(++i)),
                     logtimeAttach = new JET_LOGTIME(epoch + TimeSpan.FromSeconds(++i)),
-                    lgposAttach = new JET_LGPOS { ib = ++i, isec = ++i, lGeneration = ++i },
+                    lgposAttach = new JET_LGPOS { ib = ++i, isec = ++i, lgen = (JET_LGEN)(++i) },
                     logtimeDetach = new JET_LOGTIME(epoch + TimeSpan.FromSeconds(++i)),
-                    lgposDetach = new JET_LGPOS { ib = ++i, isec = ++i, lGeneration = ++i },
+                    lgposDetach = new JET_LGPOS { ib = ++i, isec = ++i, lgen = (JET_LGEN)(++i) },
                     signLog = new NATIVE_SIGNATURE
                     {
                         logtimeCreate = new JET_LOGTIME(epoch + TimeSpan.FromSeconds(++i)),
@@ -1407,8 +1423,8 @@ namespace InteropApiTests
                     lSPNumber = ++i,
                     cbPageSize = ++i,
                 },
-                genMinRequired = ++i,
-                genMaxRequired = ++i,
+                genMinRequired = (JET_LGEN)(++i),
+                genMaxRequired = (JET_LGEN)(++i),
                 logtimeGenMaxCreate = new JET_LOGTIME(epoch + TimeSpan.FromSeconds(++i)),
                 ulRepairCount = ++i,
                 logtimeRepair = new JET_LOGTIME(epoch + TimeSpan.FromSeconds(++i)),
@@ -1422,7 +1438,7 @@ namespace InteropApiTests
                 ulBadChecksum = ++i,
                 logtimeBadChecksum = new JET_LOGTIME(epoch + TimeSpan.FromSeconds(++i)),
                 ulBadChecksumOld = ++i,
-                genCommitted = ++i,
+                genCommitted = (JET_LGEN)(++i),
                 bkinfoCopyPrev = bkinfo(),
                 bkinfoDiffPrev = bkinfo(),
             };

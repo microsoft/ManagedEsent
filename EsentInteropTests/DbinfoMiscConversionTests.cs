@@ -65,8 +65,8 @@ namespace InteropApiTests
                     lSPNumber = Any.UInt16,
                     cbPageSize = Any.UInt16,
                 },
-                genMinRequired = Any.UInt16,
-                genMaxRequired = Any.UInt16,
+                genMinRequired = Any.Lgen,
+                genMaxRequired = Any.Lgen,
                 logtimeGenMaxCreate = Any.Logtime,
                 ulRepairCount = Any.UInt16,
                 logtimeRepair = Any.Logtime,
@@ -80,7 +80,7 @@ namespace InteropApiTests
                 ulBadChecksum = Any.UInt16,
                 logtimeBadChecksum = Any.Logtime,
                 ulBadChecksumOld = Any.UInt16,
-                genCommitted = Any.UInt16,
+                genCommitted = Any.Lgen,
                 bkinfoCopyPrev = Any.Bkinfo,
                 bkinfoDiffPrev = Any.Bkinfo,
             };
@@ -330,7 +330,7 @@ namespace InteropApiTests
         [Description("Verify that genMinRequired is set")]
         public void VerifyGenMinRequired()
         {
-            Assert.AreEqual((int)this.native.genMinRequired, this.managed.genMinRequired);
+            Assert.AreEqual(this.native.genMinRequired, this.managed.lgenMinRequired);
         }
 
         /// <summary>
@@ -341,7 +341,7 @@ namespace InteropApiTests
         [Description("Verify that genMaxRequired is set")]
         public void VerifyGenMaxRequired()
         {
-            Assert.AreEqual((int)this.native.genMaxRequired, this.managed.genMaxRequired);
+            Assert.AreEqual(this.native.genMaxRequired, this.managed.lgenMaxRequired);
         }
 
         /// <summary>
@@ -495,7 +495,7 @@ namespace InteropApiTests
         [Description("Verify that genCommitted is set")]
         public void VerifyGenCommitted()
         {
-            Assert.AreEqual((int)this.native.genCommitted, this.managed.genCommitted);
+            Assert.AreEqual(this.native.genCommitted, this.managed.lgenCommitted);
         }
 
         /// <summary>

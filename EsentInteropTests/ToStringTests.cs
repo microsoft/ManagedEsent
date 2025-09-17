@@ -379,7 +379,7 @@ namespace InteropApiTests
         [Description("Test JET_LGPOS.ToString()")]
         public void JetLgposToString()
         {
-            var lgpos = new JET_LGPOS { lGeneration = 1, isec = 0x1F, ib = 3 };
+            var lgpos = new JET_LGPOS { lgen = (JET_LGEN)1, isec = 0x1F, ib = 3 };
             Assert.AreEqual("JET_LGPOS(0x1,1F,3)", lgpos.ToString());
         }
 
@@ -392,9 +392,9 @@ namespace InteropApiTests
         public void JetBkinfoToString()
         {
             var bklogtime = new JET_BKLOGTIME(new DateTime(2010, 5, 31, 4, 44, 17, 678, DateTimeKind.Utc), true);
-            var lgpos = new JET_LGPOS { lGeneration = 1, isec = 2, ib = 3 };
-            var bkinfo = new JET_BKINFO { bklogtimeMark = bklogtime, genHigh = 57, genLow = 36, lgposMark = lgpos };
-            Assert.AreEqual("JET_BKINFO(36-57:JET_LGPOS(0x1,2,3):JET_BKLOGTIME(17:44:4:31:5:110:0x4d:0xb))", bkinfo.ToString());
+            var lgpos = new JET_LGPOS { lgen = (JET_LGEN)1, isec = 2, ib = 3 };
+            var bkinfo = new JET_BKINFO { bklogtimeMark = bklogtime, lgenHigh = (JET_LGEN)57, lgenLow = (JET_LGEN)36, lgposMark = lgpos };
+            Assert.AreEqual("JET_BKINFO(0x24-0x39:JET_LGPOS(0x1,2,3):JET_BKLOGTIME(17:44:4:31:5:110:0x4d:0xb))", bkinfo.ToString());
         }
 
         /// <summary>
@@ -865,6 +865,18 @@ namespace InteropApiTests
                 Bytes = new byte[18] { 0x55, 0xAA, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
             };
             Assert.AreEqual("EnumeratedColumn.Value(11: ColumnTruncated Bytes[18] = {55-AA-00-00-00-00-00-00-00-00-00-00-00-00-00-00...})", value.ToString());
+        }
+
+        /// <summary>
+        /// Test JET_LGEN.ToString().
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test JET_LGEN.ToString().")]
+        public void JetLgenToString()
+        {
+            JET_LGEN lgen = (JET_LGEN)0x12345678;
+            Assert.AreEqual("0x12345678", lgen.ToString());
         }
 
         /// <summary>

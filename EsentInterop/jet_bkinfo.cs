@@ -12,8 +12,6 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Globalization;
     using System.Runtime.InteropServices;
 
-    using JET_LGEN = global::System.Int32;
-
     /// <summary>
     /// Holds a collection of data about a specific backup event.
     /// </summary>
@@ -51,8 +49,15 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_LGPOS lgposMark
         {
             [DebuggerStepThrough]
-            get { return this.logPosition; }
-            internal set { this.logPosition = value; }
+            get
+            {
+                return this.logPosition;
+            }
+
+            internal set
+            {
+                this.logPosition = value;
+            }
         }
 
         /// <summary>
@@ -61,18 +66,63 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_BKLOGTIME bklogtimeMark
         {
             [DebuggerStepThrough]
-            get { return this.backupTime; }
-            internal set { this.backupTime = value; }
+            get
+            {
+                return this.backupTime;
+            }
+
+            internal set
+            {
+                this.backupTime = value;
+            }
         }
+
+#if ESENT
+        /// <summary>
+        /// Gets the low generation of the backup.
+        /// </summary>
+        [Obsolete("Use lgenLow instead.")]
+        public Int32 genLow
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                return (Int32)this.lowGeneration;
+            }
+
+            internal set
+            {
+                this.lowGeneration = (JET_LGEN)value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the high generation of the backup.
+        /// </summary>
+        [Obsolete("Use lgenHigh instead.")]
+        public Int32 genHigh
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                return (Int32)this.highGeneration;
+            }
+
+            set
+            {
+                this.highGeneration = (JET_LGEN)value;
+            }
+        }
+#endif
 
         /// <summary>
         /// Gets the low generation of the backup.
         /// </summary>
-        public JET_LGEN genLow
+        public JET_LGEN lgenLow
         {
             [DebuggerStepThrough]
             get
-            { 
+            {
                 return this.lowGeneration;
             }
 
@@ -85,7 +135,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Gets or sets the high generation of the backup.
         /// </summary>
-        public JET_LGEN genHigh
+        public JET_LGEN lgenHigh
         {
             [DebuggerStepThrough]
             get
@@ -108,8 +158,8 @@ namespace Microsoft.Isam.Esent.Interop
             {
                 return this.lgposMark.HasValue
                        && this.backupTime.HasValue
-                       && 0 != this.lowGeneration
-                       && 0 != this.highGeneration;
+                       && JET_LGEN.Nil != this.lowGeneration
+                       && JET_LGEN.Nil != this.highGeneration;
             }
         }
 
@@ -146,8 +196,8 @@ namespace Microsoft.Isam.Esent.Interop
             return string.Format(
                 CultureInfo.InvariantCulture,
                 "JET_BKINFO({0}-{1}:{2}:{3})",
-                this.genLow,
-                this.genHigh,
+                this.lgenLow,
+                this.lgenHigh,
                 this.lgposMark,
                 this.bklogtimeMark);
         }
@@ -176,9 +226,9 @@ namespace Microsoft.Isam.Esent.Interop
         {
             return this.logPosition.GetHashCode()
                    ^ this.backupTime.GetHashCode()
-                   ^ unchecked(this.lowGeneration << 16)
-                   ^ unchecked(this.lowGeneration >> 16)
-                   ^ unchecked(this.highGeneration);
+                   ^ unchecked(this.lowGeneration.GetHashCode() << 16)
+                   ^ unchecked(this.lowGeneration.GetHashCode() >> 16)
+                   ^ unchecked(this.highGeneration.GetHashCode());
         }
 
         /// <summary>

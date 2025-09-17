@@ -12,8 +12,6 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Globalization;
     using System.Runtime.InteropServices;
 
-    using JET_LGEN = global::System.Int32;
-
     /// <summary>
     /// Describes an offset in the log sequence.
     /// </summary>
@@ -47,8 +45,15 @@ namespace Microsoft.Isam.Esent.Interop
         public int ib
         {
             [DebuggerStepThrough]
-            get { return this.offset; }
-            set { this.offset = checked((ushort)value); }
+            get
+            {
+                return this.offset;
+            }
+
+            set
+            {
+                this.offset = checked((ushort)value);
+            }
         }
 
         /// <summary>
@@ -57,18 +62,51 @@ namespace Microsoft.Isam.Esent.Interop
         public int isec
         {
             [DebuggerStepThrough]
-            get { return this.sector; }
-            set { this.sector = checked((ushort)value); }
+            get
+            {
+                return this.sector;
+            }
+
+            set
+            {
+                this.sector = checked((ushort)value);
+            }
         }
+
+#if ESENT
+        /// <summary>
+        /// Gets or sets the generation of this log position.
+        /// </summary>
+        [Obsolete("Use Generation instead.")]
+        public Int32 lGeneration
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                return (Int32)this.generation;
+            }
+
+            set
+            {
+                this.generation = (JET_LGEN)value;
+            }
+        }
+#endif
 
         /// <summary>
         /// Gets or sets the generation of this log position.
         /// </summary>
-        public JET_LGEN lGeneration
+        public JET_LGEN lgen
         {
             [DebuggerStepThrough]
-            get { return this.generation; }
-            set { this.generation = value; }
+            get
+            {
+                return this.generation;
+            }
+            set
+            {
+                this.generation = value;
+            }
         }
 
         /// <summary>
@@ -78,7 +116,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             get
             {
-                return 0 != this.lGeneration;
+                return JET_LGEN.Nil != this.generation;
             }
         }
 
@@ -161,7 +199,7 @@ namespace Microsoft.Isam.Esent.Interop
             return string.Format(
                 CultureInfo.InvariantCulture,
                 "JET_LGPOS(0x{0:X},{1:X},{2:X})",
-                this.lGeneration,
+                (int)this.generation,
                 this.isec,
                 this.ib);
         }
@@ -188,7 +226,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>The hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            return this.generation ^ (this.sector << 16) ^ this.offset;
+            return this.generation.GetHashCode() ^ (this.sector << 16) ^ this.offset;
         }
 
         /// <summary>

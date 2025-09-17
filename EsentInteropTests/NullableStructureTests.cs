@@ -29,18 +29,18 @@ namespace InteropApiTests
         /// <summary>
         /// Non-empty lgpos used for testing.
         /// </summary>
-        private static readonly JET_LGPOS Lgpos = new JET_LGPOS { lGeneration = 1 };
+        private static readonly JET_LGPOS Lgpos = new JET_LGPOS { lgen = (JET_LGEN)1 };
 
         /// <summary>
         /// Non-empty bkinfo used for testing.
         /// </summary>
         private static readonly JET_BKINFO Bkinfo = new JET_BKINFO
-                                                        {
-                                                            bklogtimeMark = Bklogtime,
-                                                            genHigh = 10,
-                                                            genLow = 8,
-                                                            lgposMark = Lgpos
-                                                        };
+        {
+            bklogtimeMark = Bklogtime,
+            lgenHigh = (JET_LGEN)10,
+            lgenLow = (JET_LGEN)8,
+            lgposMark = Lgpos
+        };
 
         /// <summary>
         /// Verify an empty JET_LOGTIME has no value.

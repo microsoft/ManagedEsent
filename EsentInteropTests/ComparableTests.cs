@@ -18,6 +18,44 @@ namespace InteropApiTests
     public partial class ComparableTests
     {
         /// <summary>
+        /// Check that JET_LGEN structures can be compared.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_LGEN structures can be compared")]
+        public void VerifyJetLgenComparison()
+        {
+            // These positions are in ascending order
+            var lgens = new[]
+            {
+                (JET_LGEN)1,
+                (JET_LGEN)2,
+                (JET_LGEN)3,
+                (JET_LGEN)4,
+                (JET_LGEN)5,
+                (JET_LGEN)6,
+            };
+
+            // It would be nice if this was a generic helper method, but that won't
+            // work for the operators.
+            for (int i = 0; i < lgens.Length - 1; ++i)
+            {
+                TestEqualObjects(lgens[i], lgens[i]);
+                Assert.IsTrue(lgens[i] <= lgens[i], "<=");
+                Assert.IsTrue(lgens[i] >= lgens[i], ">=");
+
+                for (int j = i + 1; j < lgens.Length; ++j)
+                {
+                    TestOrderedObjects(lgens[i], lgens[j]);
+                    Assert.IsTrue(lgens[i] < lgens[j], "<");
+                    Assert.IsTrue(lgens[i] <= lgens[j], "<=");
+                    Assert.IsTrue(lgens[j] > lgens[i], ">");
+                    Assert.IsTrue(lgens[j] >= lgens[i], ">=");
+                }
+            }
+        }
+
+        /// <summary>
         /// Check that JET_LGPOS structures can be compared.
         /// </summary>
         [TestMethod]
@@ -28,12 +66,12 @@ namespace InteropApiTests
             // These positions are in ascending order
             var positions = new[]
             {
-                new JET_LGPOS { lGeneration = 1, isec = 3, ib = 5 },
-                new JET_LGPOS { lGeneration = 1, isec = 3, ib = 6 },
-                new JET_LGPOS { lGeneration = 1, isec = 4, ib = 4 },
-                new JET_LGPOS { lGeneration = 1, isec = 4, ib = 5 },
-                new JET_LGPOS { lGeneration = 2, isec = 2, ib = 2 },
-                new JET_LGPOS { lGeneration = 2, isec = 3, ib = 5 },
+                new JET_LGPOS { lgen = (JET_LGEN)1, isec = 3, ib = 5 },
+                new JET_LGPOS { lgen = (JET_LGEN)1, isec = 3, ib = 6 },
+                new JET_LGPOS { lgen = (JET_LGEN)1, isec = 4, ib = 4 },
+                new JET_LGPOS { lgen = (JET_LGEN)1, isec = 4, ib = 5 },
+                new JET_LGPOS { lgen = (JET_LGEN)2, isec = 2, ib = 2 },
+                new JET_LGPOS { lgen = (JET_LGEN)2, isec = 3, ib = 5 },
             };
 
             // It would be nice if this was a generic helper method, but that won't

@@ -300,7 +300,7 @@ namespace InteropApiTests
         [CLSCompliant(false)]
         public static JET_LGPOS Lgpos
         {
-            get { return new JET_LGPOS { ib = Any.UInt16, isec = Any.UInt16, lGeneration = Any.UInt16 }; }
+            get { return new JET_LGPOS { ib = Any.UInt16, isec = Any.UInt16, lgen = Any.Lgen }; }
         }
 
         /// <summary>
@@ -314,10 +314,22 @@ namespace InteropApiTests
                 return new JET_BKINFO
                 {
                     bklogtimeMark = new JET_BKLOGTIME(DateTime.UtcNow, Any.Boolean),
-                    genHigh = Any.UInt16,
-                    genLow = Any.UInt16,
+                    lgenHigh = Any.Lgen,
+                    lgenLow = Any.Lgen,
                     lgposMark = Any.Lgpos,
                 };
+            }
+        }
+
+        /// <summary>
+        /// Get a random JET_LGEN.
+        /// </summary>
+        [CLSCompliant(false)]
+        public static JET_LGEN Lgen
+        {
+            get
+            {
+                return (JET_LGEN)Any.Int32;
             }
         }
 

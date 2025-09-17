@@ -57,7 +57,7 @@ namespace InteropApiTests
         [Description("Verify that a JET_LGPOS can be serialized")]
         public void VerifyLgposCanBeSerialized()
         {
-            var expected = new JET_LGPOS { lGeneration = 13 };
+            var expected = new JET_LGPOS { lgen = (JET_LGEN)13 };
             SerializeAndCompare(expected);
         }
 
@@ -84,9 +84,9 @@ namespace InteropApiTests
             var expected = new JET_BKINFO
             {
                 bklogtimeMark = new JET_BKLOGTIME(DateTime.UtcNow, Any.Boolean),
-                genHigh = 1,
-                genLow = 2,
-                lgposMark = new JET_LGPOS { ib = 7, isec = 8, lGeneration = 9 },
+                lgenHigh = (JET_LGEN)1,
+                lgenLow = (JET_LGEN)2,
+                lgposMark = new JET_LGPOS { ib = 7, isec = 8, lgen = (JET_LGEN)9 },
             };
             SerializeAndCompare(expected);
         }
