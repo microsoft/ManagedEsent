@@ -7,6 +7,7 @@
 namespace InteropApiTests
 {
     using System;
+    using System.Collections.Generic;
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Windows8;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -52,6 +53,86 @@ namespace InteropApiTests
                     Assert.IsTrue(lgens[j] > lgens[i], ">");
                     Assert.IsTrue(lgens[j] >= lgens[i], ">=");
                 }
+            }
+        }
+
+        /// <summary>
+        /// Check that JET_LGEN operators are correct.
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Check that JET_LGEN operators are correct")]
+        public void VerifyJetLgenOperators()
+        {
+            for (int i = 0; i < 1000; ++i)
+            {
+                // int conversion
+                JET_LGEN lgen = (JET_LGEN)i;
+                Assert.AreEqual(i, (int)lgen);
+                Assert.AreEqual(lgen, (JET_LGEN)(int)lgen);
+
+                // comparison
+                for (int j = 0; j < 1000; ++j)
+                {
+                    JET_LGEN lgen2 = (JET_LGEN)j;
+
+                    Assert.AreEqual(i == j, lgen == lgen2);
+                    Assert.AreEqual(i != j, lgen != lgen2);
+                    Assert.AreEqual(i >= j, lgen >= lgen2);
+                    Assert.AreEqual(i <= j, lgen <= lgen2);
+                    Assert.AreEqual(i > j, lgen > lgen2);
+                    Assert.AreEqual(i < j, lgen < lgen2);
+                }
+
+                // arithmetic
+                for (int num = 0 - i; num <= i; ++num)
+                {
+                    JET_LGEN jlgen3 = lgen + num;
+                    Assert.AreEqual(i + num, (int)jlgen3);
+                    Assert.AreEqual(i, (int)(jlgen3 - num));
+                }
+
+                // max / min
+                Assert.AreEqual(lgen, JET_LGEN.Min(lgen, lgen + 1));
+                Assert.AreEqual(lgen + 1, JET_LGEN.Max(lgen, lgen + 1));
+
+                // ++ operator
+                JET_LGEN lgent1 = lgen++;
+                Assert.AreEqual(i, (int)lgent1);
+                Assert.AreEqual(i + 1, (int)lgen);
+                JET_LGEN lgent2 = ++lgen;
+                Assert.AreEqual(i + 2, (int)lgent2);
+                Assert.AreEqual(i + 2, (int)lgen);
+
+                // -- operator
+                JET_LGEN lgent3 = lgen--;
+                Assert.AreEqual(i + 2, (int)lgent3);
+                Assert.AreEqual(i + 1, (int)lgen);
+                JET_LGEN lgent4 = --lgen;
+                Assert.AreEqual(i, (int)lgent4);
+                Assert.AreEqual(i, (int)lgen);
+            }
+
+            // eqauls to differnt type
+            Assert.IsFalse(JET_LGEN.Nil.Equals(null));
+            Assert.IsFalse(JET_LGEN.Nil.Equals(JET_HANDLE.Nil));
+            Assert.IsFalse(JET_LGEN.Nil.Equals(JET_LGEN.Invalid));
+
+            // Dictionary
+            Dictionary<JET_LGEN, int> map = new Dictionary<JET_LGEN, int>();
+            for (int i = 0; i < 100; ++i)
+            {
+                map[(JET_LGEN)i] = i;
+            }
+
+            for (int i = 0; i < 100; ++i)
+            {
+                map[(JET_LGEN)i] = map[(JET_LGEN)i] * i;
+            }
+
+            for (int i = 0; i < 100; ++i)
+            {
+                Assert.AreEqual(i * i, map[(JET_LGEN)i]);
             }
         }
 
