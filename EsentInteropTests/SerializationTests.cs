@@ -23,7 +23,7 @@ namespace InteropApiTests
     [TestClass]
     public partial class SerializationTests
     {
-#if MANAGEDESENT_ON_CORECLR
+#if MANAGEDESENT_ON_CORECLR || NET
 #else
         /// <summary>
         /// Verify that a JET_LOGTIME can be serialized.

@@ -590,8 +590,7 @@ namespace InteropApiTests
             instance.Term();
         }
 
-#if !MANAGEDESENT_ON_CORECLR
-#if !NETCOREAPP3_0
+#if !MANAGEDESENT_ON_CORECLR && !NET
         /// <summary>
         /// Verify AppDomain unload terminates the Instance.
         /// </summary>
@@ -617,7 +616,6 @@ namespace InteropApiTests
             var instanceWrapper = new InstanceWrapper();
             instanceWrapper.Cleanup();
         }
-#endif // !NETCOREAPP3_0
 
 #if !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
         /// <summary>
@@ -764,7 +762,7 @@ namespace InteropApiTests
                 Assert.Fail("Got exception {0}", ex);
             }
         }
-#endif // !MANAGEDESENT_ON_WSA
+#endif // !MANAGEDESENT_ON_WSA && !NET
 
         /// <summary>
         /// Create an instance and abandon it. Garbage collection should

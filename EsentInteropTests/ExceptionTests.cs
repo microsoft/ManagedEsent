@@ -54,7 +54,7 @@ namespace InteropApiTests
             Assert.AreEqual(expected, ex.Message);
         }
 
-#if MANAGEDESENT_ON_CORECLR
+#if MANAGEDESENT_ON_CORECLR || NET
 #else
         /// <summary>
         /// Verify that an EsentErrorException can be serialized and deserialized.
@@ -103,7 +103,7 @@ namespace InteropApiTests
                     Assert.IsNotNull(ex.Message);
                     Assert.AreNotEqual(string.Empty, ex.Message);
 
-#if MANAGEDESENT_ON_CORECLR
+#if MANAGEDESENT_ON_CORECLR || NET
 #else
                     EsentErrorException deserialized = SerializeDeserialize(ex);
                     Assert.AreEqual(err, deserialized.Error);
@@ -208,7 +208,7 @@ namespace InteropApiTests
             }
         }
 
-#if MANAGEDESENT_ON_CORECLR
+#if MANAGEDESENT_ON_CORECLR || NET
 #else
         /// <summary>
         /// Serialize an object to an in-memory stream then deserialize it.

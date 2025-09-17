@@ -102,7 +102,7 @@ namespace InteropApiTests
             }
         }
 
-#if MANAGEDESENT_ON_CORECLR || NETCOREAPP3_0
+#if MANAGEDESENT_ON_CORECLR || NET
         // CoreCLR does not have Thread.ResetAbort().
         // .NET Core doesn't support Thread.Abort()
 #else

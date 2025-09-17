@@ -537,7 +537,7 @@ namespace InteropApiTests
             }
         }
 
-#if MANAGEDESENT_ON_CORECLR
+#if MANAGEDESENT_ON_CORECLR || NET
         // BufferedStream is not available.
 #else
         /// <summary>
