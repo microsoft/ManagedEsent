@@ -1048,23 +1048,23 @@ namespace Microsoft.Database.Isam
             {
                 case MatchCriteria.LessThan:
                 this.FindRecordsBetween(Key.Start, BoundCriteria.Inclusive, key, BoundCriteria.Exclusive);
-                    break;
+                break;
 
                 case MatchCriteria.LessThanOrEqualTo:
-                    this.FindRecordsBetween(Key.Start, BoundCriteria.Inclusive, key, BoundCriteria.Inclusive);
-                    break;
+                this.FindRecordsBetween(Key.Start, BoundCriteria.Inclusive, key, BoundCriteria.Inclusive);
+                break;
 
                 case MatchCriteria.EqualTo:
-                    this.FindRecordsBetween(key, BoundCriteria.Inclusive, key, BoundCriteria.Inclusive);
-                    break;
+                this.FindRecordsBetween(key, BoundCriteria.Inclusive, key, BoundCriteria.Inclusive);
+                break;
 
                 case MatchCriteria.GreaterThanOrEqualTo:
-                    this.FindRecordsBetween(key, BoundCriteria.Inclusive, Key.End, BoundCriteria.Inclusive);
-                    break;
+                this.FindRecordsBetween(key, BoundCriteria.Inclusive, Key.End, BoundCriteria.Inclusive);
+                break;
 
                 case MatchCriteria.GreaterThan:
-                    this.FindRecordsBetween(key, BoundCriteria.Exclusive, Key.End, BoundCriteria.Inclusive);
-                    break;
+                this.FindRecordsBetween(key, BoundCriteria.Exclusive, Key.End, BoundCriteria.Inclusive);
+                break;
             }
         }
 

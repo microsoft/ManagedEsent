@@ -177,7 +177,9 @@ namespace Microsoft.Database.Isam
                 }
 
                 // create the TT
+                #pragma warning disable SA1129 // Do not use default value type constructor
                 JET_TABLEID tableid = new JET_TABLEID();
+                #pragma warning restore SA1129 // Do not use default value type constructor
 
                 if (DatabaseCommon.CheckEngineVersion(
                     this.IsamSession,

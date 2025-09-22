@@ -294,7 +294,11 @@ namespace Microsoft.Database.Isam
                         // if JETInit throws then we must not call JETTerm
                         // and we must not use the instance anymore
                         this.cleanupInstance = false;
+
+                        #pragma warning disable SA1129 // Do not use default value type constructor
                         this.instance = new JET_INSTANCE();
+                        #pragma warning restore SA1129 // Do not use default value type constructor
+
                         throw;
                     }
 

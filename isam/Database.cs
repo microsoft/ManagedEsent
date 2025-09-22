@@ -97,7 +97,8 @@ namespace Microsoft.Database.Isam
         /// Initializes a new instance of the Database class.
         /// </summary>
         /// <param name="databaseFilename">Specifies a path to use for creating or opening a database file to use with the engine.</param>
-        public Database(string databaseFilename) : this(databaseFilename, null)
+        public Database(string databaseFilename)
+            : this(databaseFilename, null)
         {
         }
 
@@ -105,7 +106,8 @@ namespace Microsoft.Database.Isam
         /// Initializes a new instance of the Database class.
         /// </summary>
         /// <param name="customConfig">A custom config set to use with the engine.</param>
-        public Database(IConfigSet customConfig) : this(null, customConfig)
+        public Database(IConfigSet customConfig)
+            : this(null, customConfig)
         {
         }
 

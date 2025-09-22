@@ -75,7 +75,8 @@ namespace Microsoft.Database.Isam.Config
         /// <param name="mergeSource">The MergeSource config set.</param>
         /// <param name="mergeDest">The destination config set.</param>
         /// <param name="message">The exception message.</param>
-        public ConfigSetMergeException(IConfigSet mergeSource, IConfigSet mergeDest, string message) : this(mergeSource, mergeDest, message, null)
+        public ConfigSetMergeException(IConfigSet mergeSource, IConfigSet mergeDest, string message)
+            : this(mergeSource, mergeDest, message, null)
         {
         }
 
@@ -86,7 +87,8 @@ namespace Microsoft.Database.Isam.Config
         /// <param name="mergeDest">The destination config set.</param>
         /// <param name="message">The exception message.</param>
         /// <param name="inner">The inner exception.</param>
-        public ConfigSetMergeException(IConfigSet mergeSource, IConfigSet mergeDest, string message, Exception inner) : base(message, inner)
+        public ConfigSetMergeException(IConfigSet mergeSource, IConfigSet mergeDest, string message, Exception inner)
+            : base(message, inner)
         {
             this.MergeSource = mergeSource;
             this.MergeDest = mergeDest;
