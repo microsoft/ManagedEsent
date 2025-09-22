@@ -115,7 +115,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="directory">
         /// The directory in which to create the database.
         /// </param>
-        public PersistentDictionary(string directory) : this(directory, null, null, null)
+        public PersistentDictionary(string directory) : this(directory, null, null)
         {
             if (null == directory)
             {
@@ -127,7 +127,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// Initializes a new instance of the PersistentDictionary class.
         /// </summary>
         /// <param name="customConfig">The custom config to use for creating the PersistentDictionary.</param>
-        public PersistentDictionary(IConfigSet customConfig) : this(null, customConfig, null, null)
+        public PersistentDictionary(IConfigSet customConfig) : this(null, customConfig, null)
         {
             if (null == customConfig)
             {
@@ -140,30 +140,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         /// <param name="directory">The directory in which to create the database.</param>
         /// <param name="customConfig">The custom config to use for creating the PersistentDictionary.</param>
-        public PersistentDictionary(string directory, IConfigSet customConfig) : this(directory, customConfig, null, null)
+        public PersistentDictionary(string directory, IConfigSet customConfig) : this(directory, customConfig, null)
         {
             if (directory == null && customConfig == null)
             {
                 throw new ArgumentException("Must specify a valid directory or customConfig");
-            }
-        }
-        
-        /// <summary>
-        /// Initializes a new instance of the PersistentDictionary class.
-        /// </summary>
-        /// <param name="directory">The directory in which to create the database.</param>
-        /// <param name="customConfig">The custom config to use for creating the PersistentDictionary.</param>
-        /// <param name="valueColumnConverter">The custom converter for database value column.</param>
-        public PersistentDictionary(string directory, IConfigSet customConfig, IColumnConverter<TValue> valueColumnConverter) : this(directory, customConfig, null, valueColumnConverter)
-        {
-            if (directory == null && customConfig == null)
-            {
-                throw new ArgumentException("Must specify a valid directory or customConfig");
-            }
-
-            if (valueColumnConverter == null)
-            {
-                throw new ArgumentNullException("valueColumnConverter");
             }
         }
 
@@ -176,7 +157,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="directory">
         /// The directory in which to create the database.
         /// </param>
-        public PersistentDictionary(IEnumerable<KeyValuePair<TKey, TValue>> dictionary, string directory) : this(directory, null, dictionary, null)
+        public PersistentDictionary(IEnumerable<KeyValuePair<TKey, TValue>> dictionary, string directory) : this(directory, null, dictionary)
         {
             if (null == directory)
             {
@@ -195,7 +176,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// </summary>
         /// <param name="dictionary">The IDictionary whose contents are copied to the new dictionary.</param>
         /// <param name="customConfig">The custom config to use for creating the PersistentDictionary.</param>
-        public PersistentDictionary(IEnumerable<KeyValuePair<TKey, TValue>> dictionary, IConfigSet customConfig) : this(null, customConfig, dictionary, null)
+        public PersistentDictionary(IEnumerable<KeyValuePair<TKey, TValue>> dictionary, IConfigSet customConfig) : this(null, customConfig, dictionary)
         {
             if (null == customConfig)
             {
@@ -219,7 +200,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
             IEnumerable<KeyValuePair<TKey, TValue>> dictionary,
             string directory,
             IConfigSet customConfig)
-            : this(directory, customConfig, dictionary, null)
+            : this(directory, customConfig, dictionary)
         {
             if (directory == null && customConfig == null)
             {
@@ -239,13 +220,11 @@ namespace Microsoft.Isam.Esent.Collections.Generic
         /// <param name="directory">The directory to create the database in.</param>
         /// <param name="customConfig">The custom config to use for creating the PersistentDictionary.</param>
         /// <param name="dictionary">The IDictionary whose contents are copied to the new dictionary.</param>
-        /// <param name="valueColumnConverter">The custom converter for database value column.</param>
         /// <remarks>The constructor can either intialize PersistentDictionary from a directory string, or a full custom config set. But not both.</remarks>
         private PersistentDictionary(
             string directory,
             IConfigSet customConfig,
-            IEnumerable<KeyValuePair<TKey, TValue>> dictionary,
-            IColumnConverter<TValue> valueColumnConverter)
+            IEnumerable<KeyValuePair<TKey, TValue>> dictionary)
         {
             Contract.Requires(directory != null || customConfig != null); // At least 1 of the two arguments should be set
             if (directory == null && customConfig == null)
@@ -253,10 +232,7 @@ namespace Microsoft.Isam.Esent.Collections.Generic
                 return; // The calling constructor will throw an error
             }
 
-            this.converters = valueColumnConverter == null ? 
-                new PersistentDictionaryConverters<TKey, TValue>() : 
-                new PersistentDictionaryConverters<TKey, TValue>(valueColumnConverter);
-            
+            this.converters = new PersistentDictionaryConverters<TKey, TValue>();
             this.schema = new PersistentDictionaryConfig();
             var defaultConfig = PersistentDictionaryDefaultConfig.GetDefaultDatabaseConfig();
             var databaseConfig = new DatabaseConfig();
