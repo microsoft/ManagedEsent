@@ -621,7 +621,7 @@ namespace Microsoft.Database.Isam
         }
 
         /// <summary>
-        /// Gets a system parameter which is an integer type (int).
+        /// Gets or sets a system parameter which is an integer type (int).
         /// </summary>
         public int DatabasePageSize
         {
@@ -631,6 +631,11 @@ namespace Microsoft.Database.Isam
                 string ignored;
                 Api.JetGetSystemParameter(this.instance.Inst, JET_SESID.Nil, JET_param.DatabasePageSize, ref val, out ignored, 0);
                 return unchecked((int)val);
+            }
+
+            set
+            {
+                Api.JetSetSystemParameter(this.instance.Inst, JET_SESID.Nil, JET_param.DatabasePageSize, new IntPtr(value), null);
             }
         }
 
