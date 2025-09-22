@@ -118,7 +118,7 @@ namespace Microsoft.Database.Isam.Config
   <xsl:template match="Param" mode="ParamTable">
     <xsl:param name="id"/>
     <xsl:if test="@Macro = 'NormalParam' or @Macro = 'NormalParam2' or @Macro = 'CustomParam' or @Macro = 'CustomParam2' or @Macro = 'CustomParam3' or @Macro = 'ReadonlyParam'">
-      <xsl:text>&#10;            DatabaseConfig.ParamTable[</xsl:text><xsl:value-of select="$id"/>] = new ParamDef(<xsl:value-of select="$id"/>, <xsl:call-template name="valueOrDefault"><xsl:with-param name="value" select="@StaticAfterGlobalInit"/><xsl:with-param name="default" select="'false'"/></xsl:call-template>, typeof(<xsl:apply-templates select="@Type"/>)); // <xsl:value-of select="@Name"/>
+      <xsl:text>&#10;            DatabaseConfig.ParamTable[</xsl:text><xsl:value-of select="$id"/>] = new ParamDef(<xsl:value-of select="$id"/>, <xsl:call-template name="valueOrDefault"><xsl:with-param name="value" select="@StaticAfterGlobalInit"/><xsl:with-param name="default" select="'false'"/></xsl:call-template>, <xsl:call-template name="valueOrDefault"><xsl:with-param name="value" select="@LegacyGlobalToInstanceParam"/><xsl:with-param name="default" select="'false'"/></xsl:call-template>, typeof(<xsl:apply-templates select="@Type"/>)); // <xsl:value-of select="@Name"/>
     </xsl:if>
   </xsl:template>
 

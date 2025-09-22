@@ -32,6 +32,13 @@ namespace Microsoft.Database.Isam.Config
         public bool StaticAfterGlobalInit;
 
         /// <summary>
+        /// This param was a StaticAfterGlobalInit param in previous builds.
+        /// Now it isn't but we still need to set it as one to interoperate with older builds.
+        /// And we need to allow setting it before instance init to enable correct behavior on newer builds.
+        /// </summary>
+        public bool LegacyGlobalInit;
+
+        /// <summary>
         /// Managed type of the parameter.
         /// </summary>
         public Type ParamType;
@@ -42,10 +49,11 @@ namespace Microsoft.Database.Isam.Config
         /// <param name="id"><see cref="JET_param"/> Id.</param>
         /// <param name="staticAfterGlobalInit">Can be set after global init?</param>
         /// <param name="paramType">Managed type of the param.</param>
-        public ParamDef(int id, bool staticAfterGlobalInit, Type paramType)
+        public ParamDef(int id, bool staticAfterGlobalInit, bool legacyGlobalInit, Type paramType)
         {
             this.Id = id;
             this.StaticAfterGlobalInit = staticAfterGlobalInit;
+            this.LegacyGlobalInit = legacyGlobalInit;
             this.ParamType = paramType;
         }
     }
@@ -180,7 +188,7 @@ namespace Microsoft.Database.Isam.Config
                     // This protects instance params from being set before instance init. Setting them here would change the defaults for these params
                     // for all future instances. That would be really bad because the settings contained in the current config set would 'spill over'
                     // into future config sets.
-                    if (DatabaseConfig.ParamTable[i].StaticAfterGlobalInit)
+                    if (DatabaseConfig.ParamTable[i].StaticAfterGlobalInit || DatabaseConfig.ParamTable[i].LegacyGlobalInit)
                     {
                         object valueToSet;
                         if (this.ParamStore.TryGetValue(i, out valueToSet))
@@ -232,7 +240,15 @@ namespace Microsoft.Database.Isam.Config
                     && i != (int)VistaParam.EnableAdvanced
                     && i != (int)VistaParam.Configuration)
                 {
-                    setParamIfExists(this, instance, i);
+                    try
+                    {
+                        setParamIfExists(this, instance, i);
+                    }
+                    catch (EsentAlreadyInitializedException) when (DatabaseConfig.ParamTable[i].LegacyGlobalInit)
+                    {
+                        // Ignore the exception because trying to set this param failed with JET_errAlreadyInitialized.
+                        // Since this used to be a global param, it is expected on older ese builds.
+                    }
                 }
             }
         }
