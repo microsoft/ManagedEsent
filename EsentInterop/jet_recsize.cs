@@ -25,7 +25,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [Serializable]
-    public struct JET_RECSIZE : IEquatable<JET_RECSIZE>
+    public partial struct JET_RECSIZE : IEquatable<JET_RECSIZE>
     {
         /// <summary>
         /// User data in the record.
@@ -208,7 +208,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         {
             checked
             {
-                return new JET_RECSIZE
+                var recsize = new JET_RECSIZE
                 {
                     cbData = s1.cbData + s2.cbData,
                     cbDataCompressed = s1.cbDataCompressed + s2.cbDataCompressed,
@@ -222,6 +222,9 @@ namespace Microsoft.Isam.Esent.Interop.Vista
                     cNonTaggedColumns = s1.cNonTaggedColumns + s2.cNonTaggedColumns,
                     cTaggedColumns = s1.cTaggedColumns + s2.cTaggedColumns,                    
                 };
+
+                AddPartial(ref recsize, s1, s2);
+                return recsize;
             }
         }
 
@@ -246,7 +249,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         {
             checked
             {
-                return new JET_RECSIZE
+                var recsize = new JET_RECSIZE
                 {
                     cbData = s1.cbData - s2.cbData,
                     cbDataCompressed = s1.cbDataCompressed - s2.cbDataCompressed,
@@ -260,6 +263,9 @@ namespace Microsoft.Isam.Esent.Interop.Vista
                     cNonTaggedColumns = s1.cNonTaggedColumns - s2.cNonTaggedColumns,
                     cTaggedColumns = s1.cTaggedColumns - s2.cTaggedColumns,
                 };
+
+                SubtractPartial(ref recsize, s1, s2);
+                return recsize;
             }
         }
 
@@ -347,7 +353,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// <returns>True if the two instances are equal.</returns>
         public bool Equals(JET_RECSIZE other)
         {
-            return this.cbData == other.cbData
+            bool result = this.cbData == other.cbData
                    && this.cbLongValueData == other.cbLongValueData
                    && this.cbOverhead == other.cbOverhead
                    && this.cbLongValueOverhead == other.cbLongValueOverhead
@@ -358,6 +364,9 @@ namespace Microsoft.Isam.Esent.Interop.Vista
                    && this.cCompressedColumns == other.cCompressedColumns
                    && this.cbDataCompressed == other.cbDataCompressed
                    && this.cbLongValueDataCompressed == other.cbLongValueDataCompressed;
+
+            this.EqualsPartial(ref result, other);
+            return result;
         }
 
         /// <summary>
@@ -461,6 +470,29 @@ namespace Microsoft.Isam.Esent.Interop.Vista
                 };
             }
         }
+
+        /// <summary>
+        /// Extension point for adding members defined in other partial definitions.
+        /// </summary>
+        /// <param name="result">The result of the addition.</param>
+        /// <param name="s1">The first JET_RECSIZE.</param>
+        /// <param name="s2">The second JET_RECSIZE.</param>
+        static partial void AddPartial(ref JET_RECSIZE result, JET_RECSIZE s1, JET_RECSIZE s2);
+
+        /// <summary>
+        /// Extension point for subtracting members defined in other partial definitions.
+        /// </summary>
+        /// <param name="result">The result of the subtraction.</param>
+        /// <param name="s1">The first JET_RECSIZE.</param>
+        /// <param name="s2">The second JET_RECSIZE.</param>
+        static partial void SubtractPartial(ref JET_RECSIZE result, JET_RECSIZE s1, JET_RECSIZE s2);
+
+        /// <summary>
+        /// Extension point for doing equality comparison with members defined in other partial definitions.
+        /// </summary>
+        /// <param name="result">The result of the comparison.</param>
+        /// <param name="other">An object to compare with this instance.</param>
+        partial void EqualsPartial(ref bool result, JET_RECSIZE other);
     }
 
     /// <summary>

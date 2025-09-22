@@ -7,6 +7,7 @@
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
+    using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Runtime.InteropServices;
@@ -53,7 +54,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="bytes">The serialized representation of a JET_SIGNATURE from ToBytes().</param>
         public JET_SIGNATURE(byte[] bytes)
         {
-            var nativeSignature = new NATIVE_SIGNATURE();
+            var nativeSignature = default(NATIVE_SIGNATURE);
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(nativeSignature));
             Marshal.Copy(bytes, 0, ptr, Marshal.SizeOf(nativeSignature));
             for (int i = bytes.Length; i < Marshal.SizeOf(nativeSignature); i++)
@@ -78,7 +79,7 @@ namespace Microsoft.Isam.Esent.Interop
         internal JET_SIGNATURE(int random, DateTime? time, string computerName)
         {
             this.ulRandom = unchecked((uint)random);
-            this.logtimeCreate = time.HasValue ? new JET_LOGTIME(time.Value) : new JET_LOGTIME();
+            this.logtimeCreate = time.HasValue ? new JET_LOGTIME(time.Value) : default(JET_LOGTIME);
             this.szComputerName = computerName;
         }
 
@@ -162,7 +163,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the two instances are equal.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
+            if (obj == null || this.GetType() != obj.GetType())
             {
                 return false;
             }
@@ -198,6 +199,26 @@ namespace Microsoft.Isam.Esent.Interop
             return namesAreEqual
                    && this.ulRandom == other.ulRandom
                    && this.logtimeCreate == other.logtimeCreate;
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this is a set / filled signature.
+        /// </summary>
+        /// <returns>True if the signature is initialized.</returns>
+        public bool HasValue
+        {
+            get
+            {
+                // Always empty, does not determine HasValue'ness.
+                // bool fCompEmpty = string.IsNullOrEmpty(this.szComputerName);
+                // 1 in 4 B ^ 3 chance to go off now!
+                Debug.Assert((this.ulRandom != 0) == this.logtimeCreate.HasValue, "We have suppressed this case by massively low probability, so we should not see it.");
+                // Unfortunately, there is no guarantee the ulRandom != 0 accidentally, so can only use 
+                // logtime - which given all the potential parsing problems with UTC adjustment and the
+                // fact that empty time is printed as 00/00/1900 b/c of JET's byte year from 1900, etc 
+                // is a dubious choice.  But the JET_LOGTIME.HasValue uses month/day which start at 1.
+                return this.logtimeCreate.HasValue;
+            }
         }
 
         /// <summary>

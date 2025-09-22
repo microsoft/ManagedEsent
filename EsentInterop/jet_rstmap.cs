@@ -16,7 +16,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native version of the JET_RSTMAP structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
@@ -71,8 +72,15 @@ namespace Microsoft.Isam.Esent.Interop
         public string szDatabaseName
         {
             [DebuggerStepThrough]
-            get { return this.databaseName; }
-            set { this.databaseName = value; }
+            get
+            {
+                return this.databaseName;
+            }
+
+            set
+            {
+                this.databaseName = value;
+            }
         }
 
         /// <summary>
@@ -81,8 +89,15 @@ namespace Microsoft.Isam.Esent.Interop
         public string szNewDatabaseName
         {
             [DebuggerStepThrough]
-            get { return this.newDatabaseName; }
-            set { this.newDatabaseName = value; }
+            get
+            {
+                return this.newDatabaseName;
+            }
+
+            set
+            {
+                this.newDatabaseName = value;
+            }
         }
 
         /// <summary>

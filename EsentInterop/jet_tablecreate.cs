@@ -110,8 +110,15 @@ namespace Microsoft.Isam.Esent.Interop
         public string szTableName
         {
             [DebuggerStepThrough]
-            get { return this.tableName; }
-            set { this.tableName = value; }
+            get
+            {
+                return this.tableName;
+            }
+
+            set
+            {
+                this.tableName = value;
+            }
         }
 
         /// <summary>
@@ -120,8 +127,15 @@ namespace Microsoft.Isam.Esent.Interop
         public string szTemplateTableName
         {
             [DebuggerStepThrough]
-            get { return this.templateTableName; }
-            set { this.templateTableName = value; }
+            get
+            {
+                return this.templateTableName;
+            }
+
+            set
+            {
+                this.templateTableName = value;
+            }
         }
 
         /// <summary>
@@ -130,8 +144,15 @@ namespace Microsoft.Isam.Esent.Interop
         public int ulPages
         {
             [DebuggerStepThrough]
-            get { return this.initialPageAllocation; }
-            set { this.initialPageAllocation = value; }
+            get
+            {
+                return this.initialPageAllocation;
+            }
+
+            set
+            {
+                this.initialPageAllocation = value;
+            }
         }
 
         /// <summary>
@@ -140,8 +161,15 @@ namespace Microsoft.Isam.Esent.Interop
         public int ulDensity
         {
             [DebuggerStepThrough]
-            get { return this.tableDensity; }
-            set { this.tableDensity = value; }
+            get
+            {
+                return this.tableDensity;
+            }
+
+            set
+            {
+                this.tableDensity = value;
+            }
         }
 
         /// <summary>
@@ -150,8 +178,15 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_COLUMNCREATE[] rgcolumncreate
         {
             [DebuggerStepThrough]
-            get { return this.columnCreates; }
-            set { this.columnCreates = value; }
+            get
+            {
+                return this.columnCreates;
+            }
+
+            set
+            {
+                this.columnCreates = value;
+            }
         }
 
         /// <summary>
@@ -160,8 +195,15 @@ namespace Microsoft.Isam.Esent.Interop
         public int cColumns
         {
             [DebuggerStepThrough]
-            get { return this.columnCreateCount; }
-            set { this.columnCreateCount = value; }
+            get
+            {
+                return this.columnCreateCount;
+            }
+
+            set
+            {
+                this.columnCreateCount = value;
+            }
         }
 
         /// <summary>
@@ -170,8 +212,15 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_INDEXCREATE[] rgindexcreate
         {
             [DebuggerStepThrough]
-            get { return this.indexCreates; }
-            set { this.indexCreates = value; }
+            get
+            {
+                return this.indexCreates;
+            }
+
+            set
+            {
+                this.indexCreates = value;
+            }
         }
 
         /// <summary>
@@ -180,8 +229,15 @@ namespace Microsoft.Isam.Esent.Interop
         public int cIndexes
         {
             [DebuggerStepThrough]
-            get { return this.indexCreateCount; }
-            set { this.indexCreateCount = value; }
+            get
+            {
+                return this.indexCreateCount;
+            }
+
+            set
+            {
+                this.indexCreateCount = value;
+            }
         }
 
         /// <summary>
@@ -191,8 +247,15 @@ namespace Microsoft.Isam.Esent.Interop
         public string szCallback
         {
             [DebuggerStepThrough]
-            get { return this.callbackFunction; }
-            set { this.callbackFunction = value; }
+            get
+            {
+                return this.callbackFunction;
+            }
+
+            set
+            {
+                this.callbackFunction = value;
+            }
         }
 
         /// <summary>
@@ -201,8 +264,15 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_cbtyp cbtyp
         {
             [DebuggerStepThrough]
-            get { return this.callbackType; }
-            set { this.callbackType = value; }
+            get
+            {
+                return this.callbackType;
+            }
+
+            set
+            {
+                this.callbackType = value;
+            }
         }
 
         /// <summary>
@@ -211,8 +281,15 @@ namespace Microsoft.Isam.Esent.Interop
         public CreateTableColumnIndexGrbit grbit
         {
             [DebuggerStepThrough]
-            get { return this.options; }
-            set { this.options = value; }
+            get
+            {
+                return this.options;
+            }
+
+            set
+            {
+                this.options = value;
+            }
         }
 
         /// <summary>
@@ -221,8 +298,15 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_SPACEHINTS pSeqSpacehints
         {
             [DebuggerStepThrough]
-            get { return this.seqSpacehints; }
-            set { this.seqSpacehints = value; }
+            get
+            {
+                return this.seqSpacehints;
+            }
+
+            set
+            {
+                this.seqSpacehints = value;
+            }
         }
 
         /// <summary>
@@ -231,8 +315,15 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_SPACEHINTS pLVSpacehints
         {
             [DebuggerStepThrough]
-            get { return this.longValueSpacehints; }
-            set { this.longValueSpacehints = value; }
+            get
+            {
+                return this.longValueSpacehints;
+            }
+
+            set
+            {
+                this.longValueSpacehints = value;
+            }
         }
 
         /// <summary>
@@ -241,8 +332,15 @@ namespace Microsoft.Isam.Esent.Interop
         public int cbSeparateLV
         {
             [DebuggerStepThrough]
-            get { return this.separateLvThresholdHint; }
-            set { this.separateLvThresholdHint = value; }
+            get
+            {
+                return this.separateLvThresholdHint;
+            }
+
+            set
+            {
+                this.separateLvThresholdHint = value;
+            }
         }
 
         /// <summary>
@@ -251,8 +349,15 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_TABLEID tableid
         {
             [DebuggerStepThrough]
-            get { return this.tableIdentifier; }
-            set { this.tableIdentifier = value; }
+            get
+            {
+                return this.tableIdentifier;
+            }
+
+            set
+            {
+                this.tableIdentifier = value;
+            }
         }
 
         /// <summary>
@@ -261,8 +366,15 @@ namespace Microsoft.Isam.Esent.Interop
         public int cCreated
         {
             [DebuggerStepThrough]
-            get { return this.objectsCreated; }
-            set { this.objectsCreated = value; }
+            get
+            {
+                return this.objectsCreated;
+            }
+
+            set
+            {
+                this.objectsCreated = value;
+            }
         }
 
         #region IContentEquatable

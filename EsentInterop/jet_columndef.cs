@@ -16,7 +16,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native version of the JET_COLUMNDEF structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
@@ -117,8 +118,15 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_coltyp coltyp
         {
             [DebuggerStepThrough]
-            get { return this.columnType; }
-            set { this.columnType = value; }
+            get
+            {
+                return this.columnType;
+            }
+
+            set
+            {
+                this.columnType = value;
+            }
         }
 
         /// <summary>
@@ -128,8 +136,15 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_CP cp
         {
             [DebuggerStepThrough]
-            get { return this.codePage; }
-            set { this.codePage = value; }
+            get
+            {
+                return this.codePage;
+            }
+
+            set
+            {
+                this.codePage = value;
+            }
         }
 
         /// <summary>
@@ -140,8 +155,15 @@ namespace Microsoft.Isam.Esent.Interop
         public int cbMax
         {
             [DebuggerStepThrough]
-            get { return this.maxSize; }
-            set { this.maxSize = value; }
+            get
+            {
+                return this.maxSize;
+            }
+
+            set
+            {
+                this.maxSize = value;
+            }
         }
 
         /// <summary>
@@ -150,8 +172,15 @@ namespace Microsoft.Isam.Esent.Interop
         public ColumndefGrbit grbit
         {
             [DebuggerStepThrough]
-            get { return this.options; }
-            set { this.options = value; }
+            get
+            {
+                return this.options;
+            }
+
+            set
+            {
+                this.options = value;
+            }
         }
 
         /// <summary>
@@ -160,8 +189,15 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_COLUMNID columnid
         {
             [DebuggerStepThrough]
-            get { return this.id; }
-            internal set { this.id = value; }
+            get
+            {
+                return this.id;
+            }
+
+            internal set
+            {
+                this.id = value;
+            }
         }
 
         /// <summary>
@@ -210,7 +246,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>A native (interop) version of the JET_COLUMNDEF.</returns>
         internal NATIVE_COLUMNDEF GetNativeColumndef()
         {
-            var columndef = new NATIVE_COLUMNDEF();
+            var columndef = default(NATIVE_COLUMNDEF);
             columndef.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_COLUMNDEF)));
             columndef.cp = (ushort)this.cp;
             columndef.cbMax = checked((uint)this.cbMax);

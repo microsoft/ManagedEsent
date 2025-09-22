@@ -1,8 +1,9 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="Api.cs" company="Microsoft Corporation">
-//     Copyright (c) Microsoft Corporation.
+// ---------------------------------------------------------------------------
+// <copyright file="Api.cs" company="Microsoft">
+//     Copyright (c) Microsoft Corporation.  All rights reserved.
 // </copyright>
-//-----------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+
 // The Microsoft.Isam.Esent.Interop namespace will be developed with these principles:
 //  -   Any program written with this Api should work with the ESENT.dll from either
 //      Windows XP, Windows Server 2003, Windows Vista, Windows Server 2008 or
@@ -19,6 +20,7 @@
 //  -   Provide helper methods/objects for common operations. These will be layered
 //      on top of the ESENT Api.
 //  -   Minimize the interop overhead.
+//
 //  Changes that will be made are:
 //  -   Convert JET_coltyp etc. into real enumerations
 //  -   Removing cbStruct from structures
@@ -28,24 +30,30 @@
 //  -   Removing common API confusion where possible (e.g. always setting the columnid
 //      in the JET_COLUMNDEF)
 //  -   Throwing exceptions instead of returning errors
+//
 //  The Api has four layers:
+//
 //  -   NativeMethods (internal): this is the P/Invoke interop layer. This layer deals
 //      with IntPtr and other basic types as opposed to the managed types
-//      such as JET_TABLEID.
-//  -   JetApi (internal): this layer turns managed objects into
+//      such as ManagedEsent\JET_TABLEID.
+//
+//  -   [I]JetApi (internal): this layer turns managed objects into
 //      objects which can be passed into the P/Invoke interop layer.
 //      Methods at this level return an error instead of throwing an exception.
 //      This layer is implemented as an object with an interface. This allows
 //      the actual implementation to be replaced at runtime, either for testing
 //      or to use a different DLL.
+//
 //  -   Api (public): this layer provides error-handling, turning errors
 //      returned by lower layers into exceptions and warnings.
-//  -   Helper methods (public): this layer provides data conversion and
-//      iteration for common API activities. These methods do not start
-//      with 'Jet' but are implemented using the Jet methods.
-//  -   Disposable objects (public): these disposable object automatically
-//      release esent resources (instances, sessions, tables and transactions).
-
+//
+//  -   Helper methods and objects (public): 
+//         o  Simpler methods: this layer provides data conversion and simpler
+//            contracts for common API activities. These methods do not start
+//            with 'Jet' but are implemented using the Jet methods.
+//         o  Disposable objects (public): these disposable object automatically
+//            release esent resources (instances, sessions, tables and transactions).
+//
 namespace Microsoft.Isam.Esent.Interop
 {
     using System;
@@ -53,6 +61,7 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Diagnostics;
     using System.Runtime.InteropServices;
     using System.Security.Permissions;
+
     using Microsoft.Isam.Esent.Interop.Implementation;
 
     /// <summary>
@@ -749,7 +758,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// the backup file set. Only databases that are currently attached to the instance
         /// using <see cref="JetAttachDatabase"/> will be considered. These files may
         /// subsequently be opened using <see cref="JetOpenFileInstance"/> and read
-        /// using <see cref="JetReadFileInstance"/>.
+        /// using JetReadFileInstance.
         /// </summary>
         /// <remarks>
         /// It is important to note that this API does not return an error or warning if
@@ -779,7 +788,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Used during a backup initiated by <see cref="JetBeginExternalBackupInstance"/>
         /// to query an instance for the names of database patch files and logfiles that
         /// should become part of the backup file set. These files may subsequently be
-        /// opened using <see cref="JetOpenFileInstance"/> and read using <see cref="JetReadFileInstance"/>.
+        /// opened using <see cref="JetOpenFileInstance"/> and read using JetReadFileInstance.
         /// </summary>
         /// <remarks>
         /// It is important to note that this API does not return an error or warning if
@@ -852,6 +861,28 @@ namespace Microsoft.Isam.Esent.Interop
         {
             Api.Check(Impl.JetOpenFileInstance(instance, file, out handle, out fileSizeLow, out fileSizeHigh));
         }
+
+#if !ESENT
+        /// <summary>
+        /// Retrieves the contents of a file opened with <see cref="Api.JetOpenFileInstance"/>.
+        /// </summary>
+        /// <param name="instance">The instance to use.</param>
+        /// <param name="file">The file to read from.</param>
+        /// <param name="buffer">The buffer to read into, needs to be aligned.</param>
+        /// <param name="bytesRead">Returns the amount of data read into the buffer.</param>
+        public static void JetReadFileInstance(
+            JET_INSTANCE instance,
+            JET_HANDLE file,
+#if NETCOREAPP
+            in Span<byte> buffer,
+#else // !NETCOREAPP
+            Span<byte> buffer,
+#endif // !NETCOREAPP
+            out int bytesRead)
+        {
+            Api.Check(Impl.JetReadFileInstance(instance, file, buffer, out bytesRead));
+        }
+#endif // !ESENT
 
         /// <summary>
         /// Retrieves the contents of a file opened with <see cref="Api.JetOpenFileInstance"/>.
@@ -1671,8 +1702,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// Retrieves various pieces of information about a table in a database.
         /// </summary>
         /// <remarks>
-        /// This overload is used with <see cref="JET_TblInfo.SpaceOwned"/> and
-        /// <see cref="JET_TblInfo.SpaceAvailable"/>.
+        /// This overload is used with <see cref="JET_TblInfo.SpaceOwned"/>,
+        /// <see cref="JET_TblInfo.SpaceAvailable"/>, <see cref="JET_TblInfo.SpaceOwnedLV"/>, and
+        /// <see cref="JET_TblInfo.SpaceAvailableLV"/>.
         /// </remarks>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The table to retrieve information about.</param>
@@ -1989,7 +2021,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// specified secondary index bookmark. The secondary index bookmark
         /// must be used with the same index over the same table from which it
         /// was originally retrieved. The secondary index bookmark for an index
-        /// entry can be retrieved using <see cref="JetGotoSecondaryIndexBookmark"/>.
+        /// entry can be retrieved using <see cref="JetGetSecondaryIndexBookmark"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The table cursor to position.</param>
@@ -2011,6 +2043,32 @@ namespace Microsoft.Isam.Esent.Interop
                 Impl.JetGotoSecondaryIndexBookmark(
                     sesid, tableid, secondaryKey, secondaryKeySize, primaryKey, primaryKeySize, grbit));
         }
+
+#if !ESENT && !MANAGEDESENT_ON_WSA
+        /// <summary>
+        /// Positions a cursor to an index entry that is associated with the
+        /// specified secondary index bookmark. The secondary index bookmark
+        /// must be used with the same index over the same table from which it
+        /// was originally retrieved. The secondary index bookmark for an index
+        /// entry can be retrieved using <see cref="JetGetSecondaryIndexBookmark"/>.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table cursor to position.</param>
+        /// <param name="secondaryKey">The buffer that contains the secondary key.</param>
+        /// <param name="primaryKey">The buffer that contains the primary key.</param>
+        /// <param name="grbit">Options for positioning the bookmark.</param>
+        public static void JetGotoSecondaryIndexBookmark(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+            in ReadOnlySpan<byte> secondaryKey,
+            in ReadOnlySpan<byte> primaryKey,
+            GotoSecondaryIndexBookmarkGrbit grbit)
+        {
+            Api.Check(
+                Impl.JetGotoSecondaryIndexBookmark(
+                    sesid, tableid, secondaryKey, primaryKey, grbit));
+        }
+#endif
 
         /// <summary>
         /// Navigate through an index. The cursor can be positioned at the start or
@@ -2073,6 +2131,36 @@ namespace Microsoft.Isam.Esent.Interop
                 }
             }
         }
+
+#if !ESENT && !MANAGEDESENT_ON_WSA
+        /// <summary>
+        /// Constructs search keys that may then be used by <see cref="JetSeek"/> and <see cref="JetSetIndexRange"/>.
+        /// </summary>
+        /// <remarks>
+        /// The MakeKey functions provide datatype-specific make key functionality.
+        /// </remarks>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to create the key on.</param>
+        /// <param name="data">Column data for the current key column of the current index.</param>
+        /// <param name="grbit">Key options.</param>
+        public static void JetMakeKey(JET_SESID sesid, JET_TABLEID tableid, in ReadOnlySpan<byte> data, MakeKeyGrbit grbit)
+        {
+            void MakeKey(in byte buffer, int length)
+            {
+                unsafe
+                {
+                    fixed (byte* pointer = &buffer)
+                    {
+                        Api.JetMakeKey(sesid, tableid, new IntPtr(pointer), length, grbit);
+                    }
+                }
+            }
+
+            // It's not possible to pass a Span<T> where the bounds/length mismatch the buffer pointer. Checks
+            // like the above override are not required.
+            MakeKey(MemoryMarshal.GetReference(data), data.Length);
+        }
+#endif
 
         /// <summary>
         /// Efficiently positions a cursor to an index entry that matches the search
@@ -2257,7 +2345,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// The current position is included in the count. The count can be greater than the
         /// total number of records in the table if the current index is over a multi-valued
         /// column and instances of the column have multiple-values. If the table is empty,
-        /// then 0 will be returned for the count. 
+        /// then 0 will be returned for the count.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to count the records in.</param>
@@ -2312,7 +2400,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Returns the fractional position of the current record in the current index
         /// in the form of a <see cref="JET_RECPOS"/> structure.
-        /// Also see <seealso cref="JetGotoPosition"/>.
+        /// Also see <seealso cref="JetGotoPosition(JET_SESID,JET_TABLEID,JET_RECPOS)"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor positioned on the record.</param>
@@ -2323,14 +2411,40 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Returns the fractional position of the current record in the current index
+        /// in the form of a <see cref="JET_RECPOS2"/> structure.
+        /// Also see <seealso cref="JetGotoPosition(JET_SESID,JET_TABLEID,JET_RECPOS2)"/>.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor positioned on the record.</param>
+        /// <param name="recpos">Returns the approximate fractional position of the record.</param>
+        public static void JetGetRecordPosition(JET_SESID sesid, JET_TABLEID tableid, out JET_RECPOS2 recpos)
+        {
+            Api.Check(Impl.JetGetRecordPosition(sesid, tableid, out recpos));
+        }
+
+        /// <summary>
         /// Moves a cursor to a new location that is a fraction of the way through
         /// the current index.
-        /// Also see <seealso cref="JetGetRecordPosition"/>.
+        /// Also see <seealso cref="JetGetRecordPosition(JET_SESID,JET_TABLEID,out JET_RECPOS)"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to position.</param>
         /// <param name="recpos">The approximate position to move to.</param>
         public static void JetGotoPosition(JET_SESID sesid, JET_TABLEID tableid, JET_RECPOS recpos)
+        {
+            Api.Check(Impl.JetGotoPosition(sesid, tableid, recpos));
+        }
+
+        /// <summary>
+        /// Moves a cursor to a new location that is a fraction of the way through
+        /// the current index.
+        /// Also see <seealso cref="JetGetRecordPosition(JET_SESID,JET_TABLEID,out JET_RECPOS2)"/>.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to position.</param>
+        /// <param name="recpos">The approximate position to move to.</param>
+        public static void JetGotoPosition(JET_SESID sesid, JET_TABLEID tableid, JET_RECPOS2 recpos)
         {
             Api.Check(Impl.JetGotoPosition(sesid, tableid, recpos));
         }
@@ -2690,7 +2804,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// A warning. If the last column set has a warning, then
         /// this warning will be returned from JetSetColumns itself.
         /// </returns>
+#if NETFRAMEWORK
         [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
+#endif
         public static JET_wrn JetSetColumns(JET_SESID sesid, JET_TABLEID tableid, JET_SETCOLUMN[] setcolumns, int numColumns)
         {
             if (null == setcolumns)
@@ -2703,7 +2819,7 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentOutOfRangeException("numColumns", numColumns, "cannot be negative or greater than setcolumns.Length");
             }
 
-            using (var gchandles = new GCHandleCollection())
+            using (var gchandles = default(GCHandleCollection))
             {
                 unsafe
                 {

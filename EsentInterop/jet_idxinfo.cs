@@ -83,5 +83,15 @@ namespace Microsoft.Isam.Esent.Interop
         /// index was created with.
         /// </summary>
         KeyMost = 10,
+
+        /// <summary>
+        /// Gets the number of owned pages in the index.
+        /// </summary>
+        SpaceOwned = 18,
+
+        /// <summary>
+        /// Gets the number of available pages in the index.
+        /// </summary>
+        SpaceAvailable = 19,
     }
 }

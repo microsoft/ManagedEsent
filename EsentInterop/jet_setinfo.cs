@@ -15,7 +15,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native version of the JET_SETINFO structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
@@ -133,7 +134,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>A NATIVE_SETINFO structure whose fields match the class.</returns>
         internal NATIVE_SETINFO GetNativeSetinfo()
         {
-            var setinfo = new NATIVE_SETINFO();
+            var setinfo = default(NATIVE_SETINFO);
             setinfo.cbStruct = checked((uint)NATIVE_SETINFO.Size);
             setinfo.ibLongValue = checked((uint)this.ibLongValue);
             setinfo.itagSequence = checked((uint)this.itagSequence);

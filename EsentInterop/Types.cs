@@ -27,7 +27,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static JET_INSTANCE Nil
         {
             [DebuggerStepThrough]
-            get { return new JET_INSTANCE(); }
+            get { return default(JET_INSTANCE); }
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the two instances are equal.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
+            if (obj == null || this.GetType() != obj.GetType())
             {
                 return false;
             }
@@ -143,7 +143,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static JET_SESID Nil
         {
             [DebuggerStepThrough]
-            get { return new JET_SESID(); }
+            get { return default(JET_SESID); }
         }
 
         /// <summary>
@@ -214,7 +214,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the two instances are equal.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
+            if (obj == null || this.GetType() != obj.GetType())
             {
                 return false;
             }
@@ -260,7 +260,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static JET_TABLEID Nil
         {
             [DebuggerStepThrough]
-            get { return new JET_TABLEID(); }
+            get { return default(JET_TABLEID); }
         }
 
         /// <summary>
@@ -331,7 +331,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the two instances are equal.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
+            if (obj == null || this.GetType() != obj.GetType())
             {
                 return false;
             }
@@ -442,7 +442,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the two instances are equal.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
+            if (obj == null || this.GetType() != obj.GetType())
             {
                 return false;
             }
@@ -487,7 +487,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static JET_COLUMNID Nil
         {
             [DebuggerStepThrough]
-            get { return new JET_COLUMNID(); }
+            get { return default(JET_COLUMNID); }
         }
 
         /// <summary>
@@ -604,7 +604,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the two instances are equal.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
+            if (obj == null || this.GetType() != obj.GetType())
             {
                 return false;
             }
@@ -796,7 +796,7 @@ namespace Microsoft.Isam.Esent.Interop
         public static JET_HANDLE Nil
         {
             [DebuggerStepThrough]
-            get { return new JET_HANDLE(); }
+            get { return default(JET_HANDLE); }
         }
 
         /// <summary>
@@ -867,7 +867,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the two instances are equal.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
+            if (obj == null || this.GetType() != obj.GetType())
             {
                 return false;
             }
@@ -1091,7 +1091,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the two instances are equal.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
+            if (obj == null || this.GetType() != obj.GetType())
             {
                 return false;
             }

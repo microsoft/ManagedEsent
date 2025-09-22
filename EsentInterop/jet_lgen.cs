@@ -112,7 +112,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// < operator
+        /// &lt; operator
         /// </summary>
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
@@ -134,7 +134,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// <= operator
+        /// &lt;= operator
         /// </summary>
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>
@@ -180,8 +180,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// - operator
         /// </summary>
-        /// <param name="lgen"></param>
-        /// <param name="offset"></param>
+        /// <param name="lgenA"></param>
+        /// <param name="lgenB"></param>
         /// <returns></returns>
         public static int operator -(JET_LGEN lgenA, JET_LGEN lgenB)
         {

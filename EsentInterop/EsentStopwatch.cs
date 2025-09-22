@@ -105,7 +105,7 @@ namespace Microsoft.Isam.Esent.Interop
         public void Reset()
         {
             this.stopwatch = null;
-            this.ThreadStats = new JET_THREADSTATS();
+            this.ThreadStats = default(JET_THREADSTATS);
             this.Elapsed = TimeSpan.Zero;
             this.IsRunning = false;
         }

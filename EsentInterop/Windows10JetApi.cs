@@ -36,7 +36,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             int err;
             int actualDataSize;
 
-            NATIVE_OPERATIONCONTEXT nativeContext = new NATIVE_OPERATIONCONTEXT();
+            NATIVE_OPERATIONCONTEXT nativeContext = default(NATIVE_OPERATIONCONTEXT);
             int dataSize = Marshal.SizeOf(nativeContext);
 
             err = NativeMethods.JetGetSessionParameter(

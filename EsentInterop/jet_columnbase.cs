@@ -15,7 +15,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native ANSI version of the JET_COLUMNBASE structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
@@ -94,7 +95,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native Unicode version of the JET_COLUMNBASE structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
@@ -299,7 +301,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>True if the two instances are equal.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
+            if (obj == null || this.GetType() != obj.GetType())
             {
                 return false;
             }

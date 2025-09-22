@@ -11,9 +11,6 @@ namespace Microsoft.Isam.Esent.Interop
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
-#if MANAGEDESENT_SUPPORTS_SERIALIZATION
-    using System.Runtime.Serialization.Formatters.Binary;
-#endif
     using System.Text;
 
     /// <summary>
@@ -185,10 +182,7 @@ namespace Microsoft.Isam.Esent.Interop
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, int itagSequence, RetrieveColumnGrbit grbit)
         {
             // We cannot support this request when there is no way to indicate that a column reference is returned.
-            if ((grbit & (RetrieveColumnGrbit)0x00020000) != 0)  // UnpublishedGrbits.RetrieveAsRefIfNotInRecord
-            {
-                throw new EsentInvalidGrbitException();
-            }
+            ColumnHelper.IsValidRetrieveColumnGrbit(grbit);
 
             var retinfo = new JET_RETINFO { itagSequence = itagSequence };
             int dataSize;
@@ -227,10 +221,7 @@ namespace Microsoft.Isam.Esent.Interop
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit, JET_RETINFO retinfo)
         {
             // We cannot support this request when there is no way to indicate that a column reference is returned.
-            if ((grbit & (RetrieveColumnGrbit)0x00020000) != 0)  // UnpublishedGrbits.RetrieveAsRefIfNotInRecord
-            {
-                throw new EsentInvalidGrbitException();
-            }
+            ColumnHelper.IsValidRetrieveColumnGrbit(grbit);
 
             // We expect most column values retrieved this way to be small (retrieving a 1GB LV as one
             // chunk is a bit extreme!). Allocate a cached buffer and use that, allocating a larger one
@@ -283,42 +274,6 @@ namespace Microsoft.Isam.Esent.Interop
             }
 
             return data;
-        }
-
-        /// <summary>
-        /// Retrieves a single column value from the current record. The record is that
-        /// record associated with the index entry at the current position of the cursor.
-        /// Alternatively, this function can retrieve a column from a record being created
-        /// in the cursor copy buffer. This function can also retrieve column data from an
-        /// index entry that references the current record. In addition to retrieving the
-        /// actual column value, JetRetrieveColumn can also be used to retrieve the size
-        /// of a column, before retrieving the column data itself so that application
-        /// buffers can be sized appropriately.
-        /// </summary>
-        /// <param name="sesid">The session to use.</param>
-        /// <param name="tableid">The cursor to retrieve the column from.</param>
-        /// <param name="columnid">The columnid to retrieve.</param>
-        /// <param name="data">The data buffer to be retrieved into.</param>
-        /// <param name="dataSize">The size of the data buffer.</param>
-        /// <param name="actualDataSize">Returns the actual size of the data buffer.</param>         
-        /// <param name="grbit">Retrieve column options.</param>
-        /// <param name="retinfo">
-        /// If pretinfo is give as NULL then the function behaves as though an itagSequence
-        /// of 1 and an ibLongValue of 0 (zero) were given. This causes column retrieval to
-        /// retrieve the first value of a multi-valued column, and to retrieve long data at
-        /// offset 0 (zero).
-        /// </param>
-        /// <returns>The data retrieved from the column. Null if the column is null.</returns>
-        public static JET_wrn RetrieveColumn(
-            JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, byte[] data, int dataSize, out int actualDataSize, RetrieveColumnGrbit grbit, JET_RETINFO retinfo)
-        {
-            // We cannot support this request when there is no way to indicate that a column reference is returned.
-            if ((grbit & (RetrieveColumnGrbit)0x00020000) != 0)  // UnpublishedGrbits.RetrieveAsRefIfNotInRecord
-            {
-                throw new EsentInvalidGrbitException();
-            }
-            
-            return JetRetrieveColumn(sesid, tableid, columnid, data, dataSize, out actualDataSize, grbit, retinfo);
         }
 
         /// <summary>
@@ -377,10 +332,7 @@ namespace Microsoft.Isam.Esent.Interop
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, Encoding encoding, RetrieveColumnGrbit grbit)
         {
             // We cannot support this request when there is no way to indicate that a column reference is returned.
-            if ((grbit & (RetrieveColumnGrbit)0x00020000) != 0)  // UnpublishedGrbits.RetrieveAsRefIfNotInRecord
-            {
-                throw new EsentInvalidGrbitException();
-            }
+            ColumnHelper.IsValidRetrieveColumnGrbit(grbit);
 
             // This is an optimization for retrieving Unicode strings
             if (Encoding.Unicode == encoding)
@@ -424,11 +376,11 @@ namespace Microsoft.Isam.Esent.Interop
                 }
 
 #if MANAGEDESENT_SUPPORTS_ANSI
-                // If we are about to decode ASCII data then use the UTF8 decoder instead. This
-                // is done because the UTF8 decoder is faster and will produce the same results
-                // on ASCII data. Different results will be produced on invalid data, but that
-                // behaviour can be considered undefined.
-                Encoding decoder = (encoding is ASCIIEncoding) ? AsciiDecoder : encoding;
+            // If we are about to decode ASCII data then use the UTF8 decoder instead. This
+            // is done because the UTF8 decoder is faster and will produce the same results
+            // on ASCII data. Different results will be produced on invalid data, but that
+            // behaviour can be considered undefined.
+            Encoding decoder = (encoding is ASCIIEncoding) ? AsciiDecoder : encoding;
 #else
                 Encoding decoder = encoding;
 #endif
@@ -472,10 +424,7 @@ namespace Microsoft.Isam.Esent.Interop
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {
             // We cannot support this request when there is no way to indicate that a column reference is returned.
-            if ((grbit & (RetrieveColumnGrbit)0x00020000) != 0)  // UnpublishedGrbits.RetrieveAsRefIfNotInRecord
-            {
-                throw new EsentInvalidGrbitException();
-            }
+            ColumnHelper.IsValidRetrieveColumnGrbit(grbit);
 
             unsafe
             {
@@ -515,10 +464,7 @@ namespace Microsoft.Isam.Esent.Interop
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {
             // We cannot support this request when there is no way to indicate that a column reference is returned.
-            if ((grbit & (RetrieveColumnGrbit)0x00020000) != 0)  // UnpublishedGrbits.RetrieveAsRefIfNotInRecord
-            {
-                throw new EsentInvalidGrbitException();
-            }
+            ColumnHelper.IsValidRetrieveColumnGrbit(grbit);
 
             unsafe
             {
@@ -558,10 +504,7 @@ namespace Microsoft.Isam.Esent.Interop
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {
             // We cannot support this request when there is no way to indicate that a column reference is returned.
-            if ((grbit & (RetrieveColumnGrbit)0x00020000) != 0)  // UnpublishedGrbits.RetrieveAsRefIfNotInRecord
-            {
-                throw new EsentInvalidGrbitException();
-            }
+            ColumnHelper.IsValidRetrieveColumnGrbit(grbit);
 
             unsafe
             {
@@ -601,10 +544,7 @@ namespace Microsoft.Isam.Esent.Interop
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {
             // We cannot support this request when there is no way to indicate that a column reference is returned.
-            if ((grbit & (RetrieveColumnGrbit)0x00020000) != 0)  // UnpublishedGrbits.RetrieveAsRefIfNotInRecord
-            {
-                throw new EsentInvalidGrbitException();
-            }
+            ColumnHelper.IsValidRetrieveColumnGrbit(grbit);
 
             unsafe
             {
@@ -644,10 +584,7 @@ namespace Microsoft.Isam.Esent.Interop
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {
             // We cannot support this request when there is no way to indicate that a column reference is returned.
-            if ((grbit & (RetrieveColumnGrbit)0x00020000) != 0)  // UnpublishedGrbits.RetrieveAsRefIfNotInRecord
-            {
-                throw new EsentInvalidGrbitException();
-            }
+            ColumnHelper.IsValidRetrieveColumnGrbit(grbit);
 
             unsafe
             {
@@ -692,7 +629,7 @@ namespace Microsoft.Isam.Esent.Interop
                 return 0 != b.Value;
             }
 
-            return new bool?();
+            return default(bool?);
         }
 
         /// <summary>
@@ -721,10 +658,7 @@ namespace Microsoft.Isam.Esent.Interop
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {
             // We cannot support this request when there is no way to indicate that a column reference is returned.
-            if ((grbit & (RetrieveColumnGrbit)0x00020000) != 0)  // UnpublishedGrbits.RetrieveAsRefIfNotInRecord
-            {
-                throw new EsentInvalidGrbitException();
-            }
+            ColumnHelper.IsValidRetrieveColumnGrbit(grbit);
 
             unsafe
             {
@@ -764,10 +698,7 @@ namespace Microsoft.Isam.Esent.Interop
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {
             // We cannot support this request when there is no way to indicate that a column reference is returned.
-            if ((grbit & (RetrieveColumnGrbit)0x00020000) != 0)  // UnpublishedGrbits.RetrieveAsRefIfNotInRecord
-            {
-                throw new EsentInvalidGrbitException();
-            }
+            ColumnHelper.IsValidRetrieveColumnGrbit(grbit);
 
             unsafe
             {
@@ -813,7 +744,7 @@ namespace Microsoft.Isam.Esent.Interop
                 return Conversions.ConvertDoubleToDateTime(oadate.Value);
             }
 
-            return new DateTime?();
+            return default(DateTime?);
         }
 
         /// <summary>
@@ -844,10 +775,7 @@ namespace Microsoft.Isam.Esent.Interop
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {
             // We cannot support this request when there is no way to indicate that a column reference is returned.
-            if ((grbit & (RetrieveColumnGrbit)0x00020000) != 0)  // UnpublishedGrbits.RetrieveAsRefIfNotInRecord
-            {
-                throw new EsentInvalidGrbitException();
-            }
+            ColumnHelper.IsValidRetrieveColumnGrbit(grbit);
 
             unsafe
             {
@@ -889,10 +817,7 @@ namespace Microsoft.Isam.Esent.Interop
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {
             // We cannot support this request when there is no way to indicate that a column reference is returned.
-            if ((grbit & (RetrieveColumnGrbit)0x00020000) != 0)  // UnpublishedGrbits.RetrieveAsRefIfNotInRecord
-            {
-                throw new EsentInvalidGrbitException();
-            }
+            ColumnHelper.IsValidRetrieveColumnGrbit(grbit);
 
             unsafe
             {
@@ -934,10 +859,7 @@ namespace Microsoft.Isam.Esent.Interop
             JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
         {
             // We cannot support this request when there is no way to indicate that a column reference is returned.
-            if ((grbit & (RetrieveColumnGrbit)0x00020000) != 0)  // UnpublishedGrbits.RetrieveAsRefIfNotInRecord
-            {
-                throw new EsentInvalidGrbitException();
-            }
+            ColumnHelper.IsValidRetrieveColumnGrbit(grbit);
 
             unsafe
             {
@@ -950,50 +872,6 @@ namespace Microsoft.Isam.Esent.Interop
                 return CreateReturnValue(data, DataSize, wrn, actualDataSize);
             }
         }
-
-#if MANAGEDESENT_SUPPORTS_SERIALIZATION
-        /// <summary>
-        /// Deserialize an object from a column.
-        /// </summary>
-        /// <param name="sesid">The session to use.</param>
-        /// <param name="tableid">The table to read from.</param>
-        /// <param name="columnid">The column to read from.</param>
-        /// <returns>The deserialized object. Null if the column was null.</returns>
-        public static object DeserializeObjectFromColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid)
-        {
-            return DeserializeObjectFromColumn(sesid, tableid, columnid, RetrieveColumnGrbit.None);
-        }
-
-        /// <summary>
-        /// Deserialize an object from a column.
-        /// </summary>
-        /// <param name="sesid">The session to use.</param>
-        /// <param name="tableid">The table to read from.</param>
-        /// <param name="columnid">The column to read from.</param>
-        /// <param name="grbit">The retrieval options to use.</param>
-        /// <returns>The deserialized object. Null if the column was null.</returns>
-        [SuppressMessage("Exchange.Security", "EX0043:DoNotUseBinarySoapFormatter", Justification = "Suppress warning in current code base.The usage has already been verified.")]
-        public static object DeserializeObjectFromColumn(JET_SESID sesid, JET_TABLEID tableid, JET_COLUMNID columnid, RetrieveColumnGrbit grbit)
-        {
-            // We cannot support this request when there is no way to indicate that a column reference is returned.
-            if ((grbit & (RetrieveColumnGrbit)0x00020000) != 0)  // UnpublishedGrbits.RetrieveAsRefIfNotInRecord
-            {
-                throw new EsentInvalidGrbitException();
-            }
-
-            int actualSize;
-            if (JET_wrn.ColumnNull == Api.JetRetrieveColumn(sesid, tableid, columnid, null, 0, out actualSize, grbit, null))
-            {
-                return null;
-            }
-
-            using (var stream = new ColumnStream(sesid, tableid, columnid))
-            {
-                var deseriaizer = new BinaryFormatter();
-                return deseriaizer.Deserialize(stream);
-            }
-        }
-#endif
 
         /// <summary>
         /// Retrieves columns into ColumnValue objects.
@@ -1043,11 +921,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="wrn">The warning code from esent.</param>
         /// <param name="actualDataSize">The actual size of the data retireved fomr esent.</param>
         /// <returns>A nullable struct of type T.</returns>
-        private static T? CreateReturnValue<T>(T data, int dataSize, JET_wrn wrn, int actualDataSize) where T : struct
+        private static T? CreateReturnValue<T>(T data, int dataSize, JET_wrn wrn, int actualDataSize)
+            where T : struct
         {
             if (JET_wrn.ColumnNull == wrn)
             {
-                return new T?();
+                return default(T?);
             }
 
             CheckDataSize(dataSize, actualDataSize);

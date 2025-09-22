@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------
-// <copyright file="IJetApi.cs" company="Microsoft Corporation">
-//     Copyright (c) Microsoft Corporation.
+// ---------------------------------------------------------------------------
+// <copyright file="IJetApi.cs" company="Microsoft">
+//     Copyright (c) Microsoft Corporation.  All rights reserved.
 // </copyright>
-//-----------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 namespace Microsoft.Isam.Esent.Interop.Implementation
 {
     using System;
     using System.Collections.Generic;
+
     using Microsoft.Isam.Esent.Interop.Server2003;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Isam.Esent.Interop.Windows7;
@@ -644,7 +645,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// the backup file set. Only databases that are currently attached to the instance
         /// using <see cref="JetAttachDatabase"/> will be considered. These files may
         /// subsequently be opened using <see cref="JetOpenFileInstance"/> and read
-        /// using <see cref="JetReadFileInstance"/>.
+        /// using JetReadFileInstance.
         /// </summary>
         /// <remarks>
         /// It is important to note that this API does not return an error or warning if
@@ -672,7 +673,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// Used during a backup initiated by <see cref="JetBeginExternalBackupInstance"/>
         /// to query an instance for the names of database patch files and logfiles that
         /// should become part of the backup file set. These files may subsequently be
-        /// opened using <see cref="JetOpenFileInstance"/> and read using <see cref="JetReadFileInstance"/>.
+        /// opened using <see cref="JetOpenFileInstance"/> and read using JetReadFileInstance.
         /// </summary>
         /// <remarks>
         /// It is important to note that this API does not return an error or warning if
@@ -739,6 +740,26 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="fileSizeHigh">Returns the most significant 32 bits of the file size.</param>
         /// <returns>An error code if the call fails.</returns>
         int JetOpenFileInstance(JET_INSTANCE instance, string file, out JET_HANDLE handle, out long fileSizeLow, out long fileSizeHigh);
+
+#if !ESENT
+        /// <summary>
+        /// Retrieves the contents of a file opened with <see cref="Api.JetOpenFileInstance"/>.
+        /// </summary>
+        /// <param name="instance">The instance to use.</param>
+        /// <param name="file">The file to read from.</param>
+        /// <param name="buffer">The buffer to read into, needs to be aligned.</param>
+        /// <param name="bytesRead">Returns the amount of data read into the buffer.</param>
+        /// <returns>An error code if the call fails.</returns>
+        int JetReadFileInstance(
+            JET_INSTANCE instance,
+            JET_HANDLE file,
+#if NETCOREAPP
+            in Span<byte> buffer,
+#else
+            Span<byte> buffer,
+#endif
+            out int bytesRead);
+#endif //!ESENT
 
         /// <summary>
         /// Retrieves the contents of a file opened with <see cref="Api.JetOpenFileInstance"/>.
@@ -1471,8 +1492,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// Retrieves various pieces of information about a table in a database.
         /// </summary>
         /// <remarks>
-        /// This overload is used with <see cref="JET_TblInfo.SpaceOwned"/> and
-        /// <see cref="JET_TblInfo.SpaceAvailable"/>.
+        /// This overload is used with <see cref="JET_TblInfo.SpaceOwned"/>,
+        /// <see cref="JET_TblInfo.SpaceAvailable"/>, <see cref="JET_TblInfo.SpaceOwnedLV"/>, and
+        /// <see cref="JET_TblInfo.SpaceAvailableLV"/>.
         /// </remarks>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The table to retrieve information about.</param>
@@ -1752,7 +1774,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// specified secondary index bookmark. The secondary index bookmark
         /// must be used with the same index over the same table from which it
         /// was originally retrieved. The secondary index bookmark for an index
-        /// entry can be retrieved using <see cref="JetGotoSecondaryIndexBookmark"/>.
+        /// entry can be retrieved using <see cref="JetGetSecondaryIndexBookmark"/>.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The table cursor to position.</param>
@@ -1770,6 +1792,33 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             byte[] primaryKey,
             int primaryKeySize,
             GotoSecondaryIndexBookmarkGrbit grbit);
+
+#if !ESENT && !MANAGEDESENT_ON_WSA
+        /// <summary>
+        /// Positions a cursor to an index entry that is associated with the
+        /// specified secondary index bookmark. The secondary index bookmark
+        /// must be used with the same index over the same table from which it
+        /// was originally retrieved. The secondary index bookmark for an index
+        /// entry can be retrieved using <see cref="JetGetSecondaryIndexBookmark"/>.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The table cursor to position.</param>
+        /// <param name="secondaryKey">The buffer that contains the secondary key.</param>
+        /// <param name="primaryKey">The buffer that contains the primary key.</param>
+        /// <param name="grbit">Options for positioning the bookmark.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetGotoSecondaryIndexBookmark(
+            JET_SESID sesid,
+            JET_TABLEID tableid,
+#if NETCOREAPP
+            in ReadOnlySpan<byte> secondaryKey,
+            in ReadOnlySpan<byte> primaryKey,
+#else
+            ReadOnlySpan<byte> secondaryKey,
+            ReadOnlySpan<byte> primaryKey,
+#endif
+            GotoSecondaryIndexBookmarkGrbit grbit);
+#endif
 
         /// <summary>
         /// Navigate through an index. The cursor can be positioned at the start or
@@ -1950,7 +1999,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// The current position is included in the count. The count can be greater than the
         /// total number of records in the table if the current index is over a multi-valued
         /// column and instances of the column have multiple-values. If the table is empty,
-        /// then 0 will be returned for the count. 
+        /// then 0 will be returned for the count.
         /// </summary>
         /// <param name="sesid">The session to use.</param>
         /// <param name="tableid">The cursor to count the records in.</param>
@@ -1995,6 +2044,16 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         int JetGetRecordPosition(JET_SESID sesid, JET_TABLEID tableid, out JET_RECPOS recpos);
 
         /// <summary>
+        /// Returns the fractional position of the current record in the current index
+        /// in the form of a JET_RECPOS2 structure.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor positioned on the record.</param>
+        /// <param name="recpos">Returns the approximate fractional position of the record.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetGetRecordPosition(JET_SESID sesid, JET_TABLEID tableid, out JET_RECPOS2 recpos);
+
+        /// <summary>
         /// Moves a cursor to a new location that is a fraction of the way through
         /// the current index.
         /// </summary>
@@ -2003,6 +2062,16 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         /// <param name="recpos">The approximate position to move to.</param>
         /// <returns>An error if the call fails.</returns>
         int JetGotoPosition(JET_SESID sesid, JET_TABLEID tableid, JET_RECPOS recpos);
+
+        /// <summary>
+        /// Moves a cursor to a new location that is a fraction of the way through
+        /// the current index.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to position.</param>
+        /// <param name="recpos">The approximate position to move to.</param>
+        /// <returns>An error if the call fails.</returns>
+        int JetGotoPosition(JET_SESID sesid, JET_TABLEID tableid, JET_RECPOS2 recpos);
 
         /// <summary>
         /// If the records with the specified keys are not in the buffer cache

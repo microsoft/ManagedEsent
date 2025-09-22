@@ -15,7 +15,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native version of the JET_INDEXCREATE3 structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
@@ -105,7 +106,7 @@ namespace Microsoft.Isam.Esent.Interop
         internal NATIVE_INDEXCREATE3 GetNativeIndexcreate3()
         {
             this.CheckMembersAreValid();
-            var native = new NATIVE_INDEXCREATE3();
+            var native = default(NATIVE_INDEXCREATE3);
 
             native.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_INDEXCREATE3)));
 
@@ -174,7 +175,7 @@ namespace Microsoft.Isam.Esent.Interop
             int sizeofConditionalColumn = Marshal.SizeOf(typeof(NATIVE_CONDITIONALCOLUMN));
             for (int i = 0; i < this.cConditionalColumn; ++i)
             {
-                IntPtr addressOfElement = value.rgconditionalcolumn + i * sizeofConditionalColumn;
+                IntPtr addressOfElement = value.rgconditionalcolumn + (i * sizeofConditionalColumn);
                 NATIVE_CONDITIONALCOLUMN nativeConditionalColumn =
                     (NATIVE_CONDITIONALCOLUMN)Marshal.PtrToStructure(addressOfElement, typeof(NATIVE_CONDITIONALCOLUMN));
                 this.rgconditionalcolumn[i] = new JET_CONDITIONALCOLUMN(ref nativeConditionalColumn);

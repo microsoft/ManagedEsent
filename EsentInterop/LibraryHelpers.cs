@@ -134,18 +134,18 @@ namespace Microsoft.Isam.Esent.Interop
 #endif
         }
 
+#if NETFRAMEWORK
         /// <summary>
         /// Cancels an <see cref="M:System.Threading.Thread.Abort(System.Object)"/> requested for the current thread.
         /// </summary>
         /// <exception cref="T:System.Threading.ThreadStateException">Abort was not invoked on the current thread. </exception><exception cref="T:System.Security.SecurityException">The caller does not have the required security permission for the current thread. </exception><filterpriority>2</filterpriority><PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="ControlThread"/></PermissionSet>
         public static void ThreadResetAbort()
         {
-#if MANAGEDESENT_ON_CORECLR
-            // Do nothing.
-#else
+#if !MANAGEDESENT_ON_CORECLR
             Thread.ResetAbort();
 #endif
         }
+#endif
 
         // FUTURE-2013/12/16-martinc. It appears that all of this hacking for running on Core CLR may no longer be necessary.
         // We initially ported to an early version of Core CLR that had a lot of functionality missing. By the time

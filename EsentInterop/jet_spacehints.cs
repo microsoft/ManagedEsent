@@ -16,7 +16,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native version of the JET_SPACEHINTS structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
@@ -117,8 +118,15 @@ namespace Microsoft.Isam.Esent.Interop
         public int ulInitialDensity
         {
             [DebuggerStepThrough]
-            get { return this.initialDensity; }
-            set { this.initialDensity = value; }
+            get
+            {
+                return this.initialDensity;
+            }
+
+            set
+            {
+                this.initialDensity = value;
+            }
         }
 
         /// <summary>
@@ -127,8 +135,15 @@ namespace Microsoft.Isam.Esent.Interop
         public int cbInitial
         {
             [DebuggerStepThrough]
-            get { return this.initialSize; }
-            set { this.initialSize = value; }
+            get
+            {
+                return this.initialSize;
+            }
+
+            set
+            {
+                this.initialSize = value;
+            }
         }
 
         /// <summary>
@@ -137,8 +152,15 @@ namespace Microsoft.Isam.Esent.Interop
         public SpaceHintsGrbit grbit
         {
             [DebuggerStepThrough]
-            get { return this.options; }
-            set { this.options = value; }
+            get
+            {
+                return this.options;
+            }
+
+            set
+            {
+                this.options = value;
+            }
         }
 
         /// <summary>
@@ -147,8 +169,15 @@ namespace Microsoft.Isam.Esent.Interop
         public int ulMaintDensity
         {
             [DebuggerStepThrough]
-            get { return this.maintenanceDensity; }
-            set { this.maintenanceDensity = value; }
+            get
+            {
+                return this.maintenanceDensity;
+            }
+
+            set
+            {
+                this.maintenanceDensity = value;
+            }
         }
 
         /// <summary>
@@ -159,8 +188,15 @@ namespace Microsoft.Isam.Esent.Interop
         public int ulGrowth
         {
             [DebuggerStepThrough]
-            get { return this.growthPercent; }
-            set { this.growthPercent = value; }
+            get
+            {
+                return this.growthPercent;
+            }
+
+            set
+            {
+                this.growthPercent = value;
+            }
         }
 
         /// <summary>
@@ -169,8 +205,15 @@ namespace Microsoft.Isam.Esent.Interop
         public int cbMinExtent
         {
             [DebuggerStepThrough]
-            get { return this.minimumExtent; }
-            set { this.minimumExtent = value; }
+            get
+            {
+                return this.minimumExtent;
+            }
+
+            set
+            {
+                this.minimumExtent = value;
+            }
         }
 
         /// <summary>
@@ -179,8 +222,15 @@ namespace Microsoft.Isam.Esent.Interop
         public int cbMaxExtent
         {
             [DebuggerStepThrough]
-            get { return this.maximumExtent; }
-            set { this.maximumExtent = value; }
+            get
+            {
+                return this.maximumExtent;
+            }
+
+            set
+            {
+                this.maximumExtent = value;
+            }
         }
 
         #region IContentEquatable
@@ -234,7 +284,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>A native (interop) version of the JET_SPACEHINTS.</returns>
         internal NATIVE_SPACEHINTS GetNativeSpaceHints()
         {
-            var native = new NATIVE_SPACEHINTS();
+            var native = default(NATIVE_SPACEHINTS);
             native.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_SPACEHINTS)));
 
             native.ulInitialDensity = checked((uint)this.ulInitialDensity);

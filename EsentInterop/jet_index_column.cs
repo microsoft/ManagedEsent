@@ -67,7 +67,8 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
     /// The native version of the <see cref="JET_INDEX_COLUMN"/> structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
@@ -149,7 +150,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
         /// <returns>The NATIVE_indexcolumn structure.</returns>
         internal NATIVE_INDEX_COLUMN GetNativeIndexColumn(ref GCHandleCollection handles)
         {
-            NATIVE_INDEX_COLUMN indexColumn = new NATIVE_INDEX_COLUMN();
+            NATIVE_INDEX_COLUMN indexColumn = default(NATIVE_INDEX_COLUMN);
             indexColumn.columnid = this.columnid.Value;
             indexColumn.relop = (uint)this.relop;
             indexColumn.grbit = (uint)this.grbit;

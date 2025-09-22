@@ -1,4 +1,4 @@
-﻿//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="JetCallbackWrapper.cs" company="Microsoft Corporation">
 //     Copyright (c) Microsoft Corporation.
 // </copyright>
@@ -40,7 +40,7 @@ namespace Microsoft.Isam.Esent.Interop
     /// Wraps a NATIVE_CALLBACK callback around a JET_CALLBACK. This is
     /// used to catch exceptions and provide argument conversion.
     /// </summary>
-    internal sealed class JetCallbackWrapper
+    internal sealed partial class JetCallbackWrapper
     {
         /// <summary>
         /// API call tracing.
@@ -146,12 +146,16 @@ namespace Microsoft.Isam.Esent.Interop
             IntPtr nativeContext,
             IntPtr unused)
         {
+#if NETFRAMEWORK
             RuntimeHelpers.PrepareConstrainedRegions();
+#endif
             try
             {
                 var sesid = new JET_SESID { Value = nativeSesid };
                 var dbid = new JET_DBID { Value = nativeDbid };
                 var tableid = new JET_TABLEID { Value = nativeTableid };
+                object object1 = null;
+                
                 JET_cbtyp cbtyp = (JET_cbtyp)nativeCbtyp;
 
                 Debug.Assert(this.wrappedCallback.IsAlive, "Wrapped callback has been garbage collected");
@@ -159,7 +163,20 @@ namespace Microsoft.Isam.Esent.Interop
                 // This will throw an exception if the wrapped callback has been collected. The exception
                 // will be handled below.
                 JET_CALLBACK callback = (JET_CALLBACK)this.wrappedCallback.Target;
-                return callback(sesid, dbid, tableid, cbtyp, null, null, nativeContext, IntPtr.Zero);
+
+                switch (cbtyp)
+                {
+                    default:
+                        // Currently, none of the published callbacks use arg1.
+                        object1 = null;
+
+                        // But some unpublished ones do.
+                        this.UnpublishedCallbackUnmarshalArg1(cbtyp, arg1, ref object1);
+                        break;
+                }
+
+                // No callbacks currently use arg2; use the constant "null".
+                return callback(sesid, dbid, tableid, cbtyp, object1, null, nativeContext, IntPtr.Zero);
             }
             catch (Exception ex)
             {                
@@ -171,5 +188,17 @@ namespace Microsoft.Isam.Esent.Interop
                 return JET_err.CallbackFailed;
             }
         }
+
+        /// <summary>
+        /// Provides a hook to unmarshal an IntPtr to an object to be used as the first argument for a callback function
+        /// whose type has not yet been published.
+        /// </summary>
+        /// <param name="cbtyp">The callback type whose first argument is being unmarshaled.</param>
+        /// <param name="arg1">The IntPtr holding the argument.</param>
+        /// <param name="object1">The object holding the unmarshaled argument.</param>
+        partial void UnpublishedCallbackUnmarshalArg1(
+            JET_cbtyp cbtyp,
+            IntPtr arg1,
+            ref object object1);
     }
 }

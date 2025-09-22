@@ -14,14 +14,16 @@ namespace Microsoft.Isam.Esent.Interop.Windows10
     /// A structure that can be used with <see cref="Microsoft.Isam.Esent.Interop.Windows10.Windows10Sesparam.OperationContext"/> to set a client context on a session.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1307:AccessibleFieldsMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.OrderingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.OrderingRules",
         "SA1202:ElementsMustBeOrderedByAccess",
         Justification = "Ordering matches the rest of the codebase.")]
     internal struct NATIVE_OPERATIONCONTEXT
@@ -136,7 +138,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows10
         /// <returns>True if the two instances are equal.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
+            if (obj == null || this.GetType() != obj.GetType())
             {
                 return false;
             }
@@ -200,7 +202,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows10
         /// </returns>
         internal NATIVE_OPERATIONCONTEXT GetNativeOperationContext()
         {
-            var native = new NATIVE_OPERATIONCONTEXT();
+            var native = default(NATIVE_OPERATIONCONTEXT);
             native.ulUserID = this.UserID;
             native.nOperationID = this.OperationID;
             native.nOperationType = this.OperationType;

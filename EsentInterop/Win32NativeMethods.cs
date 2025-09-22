@@ -126,7 +126,9 @@ namespace Microsoft.Isam.Esent.Interop.Win32
         public static extern bool VirtualFree(IntPtr lpAddress, UIntPtr dwSize, uint dwFreeType);
 
         [DllImport(HeapObsolete)]
+#if NETFRAMEWORK
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
+#endif
         public static extern IntPtr LocalAlloc(int uFlags, UIntPtr sizetdwBytes);
 
         [DllImport(HeapObsolete)]

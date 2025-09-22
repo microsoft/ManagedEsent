@@ -95,7 +95,7 @@ namespace Microsoft.Isam.Esent.Interop
                 }
             }
 
-           return new byte[this.bufferSize];
+            return new byte[this.bufferSize];
         }
 
         /// <summary>

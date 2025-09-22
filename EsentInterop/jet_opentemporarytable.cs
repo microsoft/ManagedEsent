@@ -15,7 +15,8 @@ namespace Microsoft.Isam.Esent.Interop.Vista
     /// The native version of the JET_OPENTEMPORARYTABLE structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
@@ -172,7 +173,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         internal NATIVE_OPENTEMPORARYTABLE GetNativeOpenTemporaryTable()
         {
             this.CheckDataSize();
-            var openTemporaryTable = new NATIVE_OPENTEMPORARYTABLE();
+            var openTemporaryTable = default(NATIVE_OPENTEMPORARYTABLE);
             openTemporaryTable.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_OPENTEMPORARYTABLE)));
             openTemporaryTable.ccolumn = checked((uint)this.ccolumn);
             openTemporaryTable.grbit = (uint)this.grbit;

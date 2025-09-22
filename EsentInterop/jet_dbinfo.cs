@@ -44,7 +44,7 @@ namespace Microsoft.Isam.Esent.Interop
         Version = 8,
 
         /// <summary>
-        /// Returns the filesize of the database, in pages (Int32).
+        /// Returns the filesize of the database, in pages (Int32) for JetGetDatabaseInfo and in bytes (Int64) for JetGetDatabaseFileInfo.
         /// </summary>
         Filesize = 10,
 

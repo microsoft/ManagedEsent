@@ -23,7 +23,8 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [Serializable]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     public struct JET_THREADSTATS : IEquatable<JET_THREADSTATS>
@@ -80,8 +81,15 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         public int cPageReferenced
         {
             [DebuggerStepThrough]
-            get { return this.pagesReferenced; }
-            internal set { this.pagesReferenced = value; }
+            get
+            {
+                return this.pagesReferenced;
+            }
+
+            internal set
+            {
+                this.pagesReferenced = value;
+            }
         }
 
         /// <summary>
@@ -91,8 +99,15 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         public int cPageRead
         {
             [DebuggerStepThrough]
-            get { return this.pagesRead; }
-            internal set { this.pagesRead = value; }
+            get
+            {
+                return this.pagesRead;
+            }
+
+            internal set
+            {
+                this.pagesRead = value;
+            }
         }
 
         /// <summary>
@@ -102,8 +117,15 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         public int cPagePreread
         {
             [DebuggerStepThrough]
-            get { return this.pagesPreread; }
-            internal set { this.pagesPreread = value; }
+            get
+            {
+                return this.pagesPreread;
+            }
+
+            internal set
+            {
+                this.pagesPreread = value;
+            }
         }
 
         /// <summary>
@@ -113,8 +135,15 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         public int cPageDirtied
         {
             [DebuggerStepThrough]
-            get { return this.pagesDirtied; }
-            internal set { this.pagesDirtied = value; }
+            get
+            {
+                return this.pagesDirtied;
+            }
+
+            internal set
+            {
+                this.pagesDirtied = value;
+            }
         }
 
         /// <summary>
@@ -124,8 +153,15 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         public int cPageRedirtied
         {
             [DebuggerStepThrough]
-            get { return this.pagesRedirtied; }
-            internal set { this.pagesRedirtied = value; }
+            get
+            {
+                return this.pagesRedirtied;
+            }
+
+            internal set
+            {
+                this.pagesRedirtied = value;
+            }
         }
 
         /// <summary>
@@ -135,8 +171,15 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         public int cLogRecord
         {
             [DebuggerStepThrough]
-            get { return this.numLogRecords; }
-            internal set { this.numLogRecords = value; }
+            get
+            {
+                return this.numLogRecords;
+            }
+
+            internal set
+            {
+                this.numLogRecords = value;
+            }
         }
 
         /// <summary>
@@ -146,8 +189,15 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         public int cbLogRecord
         {
             [DebuggerStepThrough]
-            get { return this.loggedBytes; }
-            internal set { this.loggedBytes = value; }
+            get
+            {
+                return this.loggedBytes;
+            }
+
+            internal set
+            {
+                this.loggedBytes = value;
+            }
         }
 
         /// <summary>
@@ -339,7 +389,7 @@ namespace Microsoft.Isam.Esent.Interop.Vista
         /// <returns>True if the two instances are equal.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
+            if (obj == null || this.GetType() != obj.GetType())
             {
                 return false;
             }

@@ -9,10 +9,11 @@ namespace Microsoft.Isam.Esent.Interop
     using System;
 
     /// <summary>
-    /// Set a column of a struct type (e.g. <see cref="Int32"/>/<see cref="Guid"/>).
+    /// Set a column of a struct type (e.g. <see cref="int"/>/<see cref="Guid"/>).
     /// </summary>
     /// <typeparam name="T">Type to set.</typeparam>
-    public abstract class ColumnValueOfStruct<T> : ColumnValue where T : struct, IEquatable<T>
+    public abstract class ColumnValueOfStruct<T> : ColumnValue
+        where T : struct, IEquatable<T>
     {
         /// <summary>
         /// Internal value.

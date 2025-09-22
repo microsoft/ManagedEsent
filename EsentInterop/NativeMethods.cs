@@ -10,6 +10,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
     using System.Runtime.InteropServices;
     using System.Security;
     using System.Text;
+
     using Microsoft.Isam.Esent.Interop.Vista;
 
     /// <summary>
@@ -121,7 +122,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #endif // !MANAGEDESENT_ON_WSA
 
         [DllImport(EsentDll, CharSet = CharSet.Unicode, ExactSpelling = true)]
-        public static extern int JetGetSystemParameterW(IntPtr instance, IntPtr sesid, uint paramid, ref IntPtr plParam, [Out] StringBuilder szParam, uint cbMax);
+        public static extern int JetGetSystemParameterW(IntPtr instance, IntPtr sesid, uint paramid, ref IntPtr plParam, IntPtr szParam, uint cbMax);
 
 #if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         [DllImport(EsentDll, ExactSpelling = true)]
@@ -573,7 +574,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 #if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         // Introduced in Windows Vista
         [DllImport(EsentDll, ExactSpelling = true)]
-        public static extern int JetOpenTemporaryTable(IntPtr sesid, [In] [Out] ref NATIVE_OPENTEMPORARYTABLE popentemporarytable);
+        public static extern int JetOpenTemporaryTable(IntPtr sesid, [In][Out] ref NATIVE_OPENTEMPORARYTABLE popentemporarytable);
 #endif // !MANAGEDESENT_ON_WSA
 
         // Overload to allow for null pidxunicode
@@ -667,7 +668,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             uint objtyp,
             string szContainerName,
             string szObjectName,
-            [In] [Out] ref NATIVE_OBJECTLIST objectlist,
+            [In][Out] ref NATIVE_OBJECTLIST objectlist,
             uint cbMax,
             uint InfoLevel);
 #endif // !MANAGEDESENT_ON_WSA
@@ -679,7 +680,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             uint objtyp,
             string szContainerName,
             string szObjectName,
-            [In] [Out] ref NATIVE_OBJECTLIST objectlist,
+            [In][Out] ref NATIVE_OBJECTLIST objectlist,
             uint cbMax,
             uint InfoLevel);
 
@@ -691,7 +692,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             uint objtyp,
             string szContainerName,
             string szObjectName,
-            [In] [Out] ref NATIVE_OBJECTINFO objectinfo,
+            [In][Out] ref NATIVE_OBJECTINFO objectinfo,
             uint cbMax,
             uint InfoLevel);
 #endif // !MANAGEDESENT_ON_WSA
@@ -703,7 +704,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             uint objtyp,
             string szContainerName,
             string szObjectName,
-            [In] [Out] ref NATIVE_OBJECTINFO objectinfo,
+            [In][Out] ref NATIVE_OBJECTINFO objectinfo,
             uint cbMax,
             uint InfoLevel);
 
@@ -824,7 +825,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             uint dbid,
             string szTableName,
             string szIndexName,
-            [In] [Out] ref NATIVE_INDEXLIST result,
+            [In][Out] ref NATIVE_INDEXLIST result,
             uint cbResult,
             uint InfoLevel);
 #endif // !MANAGEDESENT_ON_WSA
@@ -865,7 +866,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             uint dbid,
             string szTableName,
             string szIndexName,
-            [In] [Out] ref NATIVE_INDEXLIST result,
+            [In][Out] ref NATIVE_INDEXLIST result,
             uint cbResult,
             uint InfoLevel);
 
@@ -927,7 +928,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             IntPtr sesid,
             IntPtr tableid,
             string szIndexName,
-            [In] [Out] ref NATIVE_INDEXLIST result,
+            [In][Out] ref NATIVE_INDEXLIST result,
             uint cbResult,
             uint InfoLevel);
 #endif // !MANAGEDESENT_ON_WSA
@@ -964,7 +965,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             IntPtr sesid,
             IntPtr tableid,
             string szIndexName,
-            [In] [Out] ref NATIVE_INDEXLIST result,
+            [In][Out] ref NATIVE_INDEXLIST result,
             uint cbResult,
             uint InfoLevel);
 
@@ -1021,9 +1022,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern int JetGotoSecondaryIndexBookmark(
             IntPtr sesid,
             IntPtr tableid,
-            [In] byte[] pvSecondaryKey,
+            IntPtr pvSecondaryKey,
             uint cbSecondaryKey,
-            [In] byte[] pvPrimaryBookmark,
+            IntPtr pvPrimaryBookmark,
             uint cbPrimaryBookmark,
             uint grbit);
 
@@ -1045,7 +1046,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             IntPtr sesid,
             [In] NATIVE_INDEXRANGE[] rgindexrange,
             uint cindexrange,
-            [In] [Out] ref NATIVE_RECORDLIST recordlist,
+            [In][Out] ref NATIVE_RECORDLIST recordlist,
             uint grbit);
 
 #if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
@@ -1085,7 +1086,13 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         public static extern int JetGetRecordPosition(IntPtr sesid, IntPtr tableid, out NATIVE_RECPOS precpos, uint cbRecpos);
 
         [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetGetRecordPosition(IntPtr sesid, IntPtr tableid, out NATIVE_RECPOS2 precpos, uint cbRecpos);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetGotoPosition(IntPtr sesid, IntPtr tableid, [In] ref NATIVE_RECPOS precpos);
+
+        [DllImport(EsentDll, ExactSpelling = true)]
+        public static extern int JetGotoPosition(IntPtr sesid, IntPtr tableid, [In] ref NATIVE_RECPOS2 precpos);
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static unsafe extern int JetPrereadKeys(
@@ -1122,11 +1129,11 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             uint cbData,
             out uint cbActual,
             uint grbit,
-            [In] [Out] ref NATIVE_RETINFO pretinfo);
+            [In][Out] ref NATIVE_RETINFO pretinfo);
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static unsafe extern int JetRetrieveColumns(
-            IntPtr sesid, IntPtr tableid, [In] [Out] NATIVE_RETRIEVECOLUMN* psetcolumn, uint csetcolumn);
+            IntPtr sesid, IntPtr tableid, [In][Out] NATIVE_RETRIEVECOLUMN* psetcolumn, uint csetcolumn);
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static extern int JetRetrieveKey(IntPtr sesid, IntPtr tableid, [Out] byte[] pvData, uint cbMax, out uint cbActual, uint grbit);
@@ -1181,7 +1188,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
         [DllImport(EsentDll, ExactSpelling = true)]
         public static unsafe extern int JetSetColumns(
-            IntPtr sesid, IntPtr tableid, [In] [Out] NATIVE_SETCOLUMN* psetcolumn, uint csetcolumn);
+            IntPtr sesid, IntPtr tableid, [In][Out] NATIVE_SETCOLUMN* psetcolumn, uint csetcolumn);
 
 #if !MANAGEDESENT_ON_WSA // Not exposed in MSDK
         [DllImport(EsentDll, ExactSpelling = true)]

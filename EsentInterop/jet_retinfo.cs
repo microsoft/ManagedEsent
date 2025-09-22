@@ -15,7 +15,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native version of the JET_RETINFO structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
@@ -128,7 +129,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>A NATIVE_RETINFO whose members match the class.</returns>
         internal NATIVE_RETINFO GetNativeRetinfo()
         {
-            var retinfo = new NATIVE_RETINFO();
+            var retinfo = default(NATIVE_RETINFO);
             retinfo.cbStruct = checked((uint)NATIVE_RETINFO.Size);
             retinfo.ibLongValue = checked((uint)this.ibLongValue);
             retinfo.itagSequence = checked((uint)this.itagSequence);

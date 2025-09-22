@@ -211,6 +211,35 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Retrieves the bookmark for the record that is associated with the index entry
+        /// at the current position of a cursor. This bookmark can then be used to
+        /// reposition that cursor back to the same record using <see cref="JetGotoBookmark"/>.
+        /// The bookmark will be no longer than <see cref="SystemParameters.BookmarkMost"/>
+        /// bytes.
+        /// Also see <seealso cref="GetBookmark"/>.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to retrieve the bookmark from.</param>
+        /// <param name="bookmark">Buffer to contain the bookmark.</param>
+        /// <param name="bookmarkSize">Size of the bookmark buffer.</param>
+        /// <param name="actualBookmarkSize">Returns the actual size of the bookmark.</param>
+        /// <returns>True if a record matching the bookmark was found.</returns>
+        public static bool TryGetBookmark(JET_SESID sesid, JET_TABLEID tableid, byte[] bookmark, int bookmarkSize, out int actualBookmarkSize)
+        {
+            JET_err err = (JET_err)Impl.JetGetBookmark(sesid, tableid, bookmark, bookmarkSize, out actualBookmarkSize);
+
+            // Return false if there is no entry for this record on the current (secondary) index.
+            if (JET_err.NoCurrentRecord == err)
+            {
+                return false;
+            }
+
+            Api.Check((int)err);
+            Debug.Assert(err >= JET_err.Success, "Exception should have been thrown in case of error");
+            return true;
+        }
+
+        /// <summary>
         /// Positions a cursor to an index entry for the record that is associated with
         /// the specified bookmark. The bookmark can be used with any index defined over
         /// a table. The bookmark for a record can be retrieved using <see cref="JetGetBookmark"/>.

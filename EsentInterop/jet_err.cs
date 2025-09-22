@@ -114,7 +114,7 @@ namespace Microsoft.Isam.Esent.Interop
         KeyBoundary = -324,
 
         /// <summary>
-        /// Database corrupted
+        /// Database corrupted - a B+ Tree link between leaf pages does not link to a correct page (could be backlink does not match, could be an empty page which is unexpected, or could be a page in another tree/table/index).
         /// </summary>
         BadPageLink = -327,
 
@@ -129,7 +129,7 @@ namespace Microsoft.Isam.Esent.Interop
         NTSystemCallFailed = -334,
 
         /// <summary>
-        /// Database corrupted
+        /// Database corrupted - a B+ Tree link from parent to children does not link to a correct page (could be an empty page which is unexpected, or could be a page in another tree/table/index, or some other element of correctness).
         /// </summary>
         BadParentPageLink = -338,
 
@@ -179,6 +179,31 @@ namespace Microsoft.Isam.Esent.Interop
         BadLineCount = -354,
 
         /// <summary>
+        /// A tag / line on page is logically corrupted, offset or size is bad, or tag count on page is bad.
+        /// </summary>
+        PageTagCorrupted = -357,
+
+        /// <summary>
+        /// A node or prefix node is logically corrupted, the key suffix size is larger than the node or line's size.
+        /// </summary>
+        NodeCorrupted = -358,
+
+        /// <summary>
+        /// A property of the BBT node is logically corrupted. Or the BBT node isn't valid.
+        /// </summary>
+        BBTNodeCorrupted = -364,
+
+        /// <summary>
+        /// A BBT buff is logically corrupted. The nodes are out of sequence or the BBT header is corrupt.
+        /// </summary>
+        BBTBuffCorrupted = -365,
+
+        /// <summary>
+        /// Database corrupted - a B+ Tree link from parent to children does not link to a correct page (could be an empty page which is unexpected, or could be a page in another tree/table/index, or some other element of correctness).
+        /// </summary>
+        BadRootPageLink = -366,
+
+        /// <summary>
         /// Key is too large
         /// </summary>
         KeyTooBig = -408,
@@ -217,6 +242,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// A compression integrity check failed. Decompressing data failed the integrity checksum indicating a data corruption in the compress/decompress pipeline.
         /// </summary>
         CompressionIntegrityCheckFailed = -431,
+
+        /// <summary>
+        /// Populating a deferred populate index is not allowed at this time.
+        /// </summary>
+        IndexDeferredPopulateCurrentlyUnavailable = -434,
 
         /// <summary>
         /// Logged operation cannot be redone
@@ -509,7 +539,7 @@ namespace Microsoft.Isam.Esent.Interop
         DbTimeTooOld = -566,
 
         /// <summary>
-        /// dbtime on page in advance of the dbtimeBefore in record
+        /// dbtime on page in advance of the dbtimeBefore and below dbtimeAfter in record
         /// </summary>
         DbTimeTooNew = -567,
 
@@ -591,7 +621,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Database divergence mismatch. Page was uninitialized on remote node, but initialized on local node.
         /// </summary>
-        PageInitializedMismatch = -596,
+        PageInitializedMismatchUninitRemote = -596,
+
+        /// <summary>
+        /// Database divergence mismatch. Page was initialized on remote node, but uninitialized on local node.
+        /// </summary>
+        PageInitializedMismatchUninitLocal = -597,
 
         /// <summary>
         /// Unicode translation buffer too small
@@ -679,9 +714,29 @@ namespace Microsoft.Isam.Esent.Interop
         EngineFormatVersionSpecifiedTooLowForDatabaseVersion = -623,
 
         /// <summary>
+        /// dbtime on page greater than or equal to dbtimeAfter in record, but record is outside required range for the database
+        /// </summary>
+        DbTimeBeyondMaxRequired = -625,
+
+        /// <summary>
+        /// Log record in the log is inconsistent with the current state of the database and cannot be applied
+        /// </summary>
+        LogOperationInconsistentWithDatabase = -626,
+
+        /// <summary>
+        /// The insert attempted was not placed in correct key order.  Possibly indicates transient memory issues.
+        /// </summary>
+        InsertKeyOutOfOrder = -627,
+
+        /// <summary>
         /// Backup was aborted by server by calling JetTerm with JET_bitTermStopBackup or by calling JetStopBackup
         /// </summary>
         BackupAbortByServer = -801,
+
+        /// <summary>
+        /// Similar to invalid parameter but specifically for if the page patch token seems valid, but is of an unknown (presumably future) version / size.  Allows client code to react less aggressively if a future version of the token ends up being provided to an older code base (such as in distributed systems patching between servers).
+        /// </summary>
+        PatchTokenUnknownVersion = -803,
 
         /// <summary>
         /// Invalid flags parameter
@@ -1339,7 +1394,7 @@ namespace Microsoft.Isam.Esent.Interop
         DatabaseNotReady = -1230,
 
         /// <summary>
-        /// Database is attached but only for recovery.  It must be explicitly attached before it can be opened. 
+        /// Database is attached but only for recovery.  It must be explicitly attached before it can be opened.
         /// </summary>
         DatabaseAttachedForRecovery = -1231,
 
@@ -1347,6 +1402,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// Recovery has not seen any Begin0/Commit0 records and so does not know what trxBegin0 to assign to this transaction
         /// </summary>
         TransactionsNotReadyDuringRecovery = -1232,
+
+        /// <summary>
+        /// The DB header is marked corrupted due to a logical or coherent corruption of some kind. The operation attempted (such as recovery, attach db, or backup) is being blocked by policy. The policy can be controlled by JET_param settings.
+        /// </summary>
+        BlockedByCorruptionMark = -1233,
 
         /// <summary>
         /// Table is exclusively locked
@@ -1527,6 +1587,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// Illegal index id
         /// </summary>
         InvalidIndexId = -1416,
+
+        /// <summary>
+        /// A deferred population index may not be used until completely populated
+        /// </summary>
+        CantUseDeferredPopulateIndex = -1419,
 
         /// <summary>
         /// tuple index can only be on a secondary index
@@ -1784,6 +1849,16 @@ namespace Microsoft.Isam.Esent.Interop
         EncryptionBadItag = -1623,
 
         /// <summary>
+        /// The auto-increment value that the user tried to set explicitly is too high .
+        /// </summary>
+        SetAutoIncrementTooHigh = -1624,
+
+        /// <summary>
+        /// The user must have explicitly set the auto-increment column for this table.
+        /// </summary>
+        AutoIncrementNotSet = -1625,
+
+        /// <summary>
         /// Too many sort processes
         /// </summary>
         TooManySorts = -1701,
@@ -1909,9 +1984,144 @@ namespace Microsoft.Isam.Esent.Interop
         FlushMapUnrecoverable = -1920,
 
         /// <summary>
+        /// RBS file is corrupt
+        /// </summary>
+        RBSFileCorrupt = -1921,
+
+        /// <summary>
+        /// RBS header is corrupt
+        /// </summary>
+        RBSHeaderCorrupt = -1922,
+
+        /// <summary>
+        /// RBS is out of sync with the database file
+        /// </summary>
+        RBSDbMismatch = -1923,
+
+        /// <summary>
+        /// Version of revert snapshot file is not compatible with Jet version
+        /// </summary>
+        BadRBSVersion = -1925,
+
+        /// <summary>
+        /// Revert snapshot file has reached its maximum size
+        /// </summary>
+        OutOfRBSSpace = -1926,
+
+        /// <summary>
+        /// RBS signature is not set in the RBS header
+        /// </summary>
+        RBSInvalidSign = -1927,
+
+        /// <summary>
+        /// Invalid RBS record found in the revert snapshot
+        /// </summary>
+        RBSInvalidRecord = -1928,
+
+        /// <summary>
+        /// The database cannot be reverted to the expected time as there are some invalid revert snapshots to revert to that time.
+        /// </summary>
+        RBSRCInvalidRBS = -1929,
+
+        /// <summary>
+        /// The database cannot be reverted to the expected time as there no revert snapshots to revert to that time.
+        /// </summary>
+        RBSRCNoRBSFound = -1930,
+
+        /// <summary>
+        /// The database revert to the expected time failed as the database has a bad dbstate.
+        /// </summary>
+        RBSRCBadDbState = -1931,
+
+        /// <summary>
+        /// The required logs for the revert snapshot are missing.
+        /// </summary>
+        RBSMissingReqLogs = -1932,
+
+        /// <summary>
+        /// The required logs for the revert snapshot are diverged with logs in the log directory.
+        /// </summary>
+        RBSLogDivergenceFailed = -1933,
+
+        /// <summary>
+        /// The database cannot be reverted to the expected time as we are in copying logs stage from previous revert request and a further revert in the past is requested which might leave logs in corrupt state.
+        /// </summary>
+        RBSRCCopyLogsRevertState = -1934,
+
+        /// <summary>
+        /// The database cannot be attached because it is currently being reverted using revert snapshot.
+        /// </summary>
+        DatabaseIncompleteRevert = -1935,
+
+        /// <summary>
+        /// The database revert has been cancelled.
+        /// </summary>
+        RBSRCRevertCancelled = -1936,
+
+        /// <summary>
+        /// The database format version for the databases to be reverted doesn't support applying the revert snapshot.
+        /// </summary>
+        RBSRCInvalidDbFormatVersion = -1937,
+
+        /// <summary>
+        /// The required logs for the revert snapshot are missing in log directory and hence we cannot determine if those logs are diverged with the logs in snapshot directory.
+        /// </summary>
+        RBSCannotDetermineDivergence = -1938,
+
+        /// <summary>
+        /// The table being deleted is bigger than the configured max size to delete while activated on RBS copy, retry delete when activated on another copy
+        /// </summary>
+        RBSDeleteTableTooBig = -1941,
+
+        /// <summary>
+        /// The table was created or the root page of table being deleted was moved in the last few days and hence a non-revertable delete cannot be attempted right now.
+        /// </summary>
+        RBSDeleteTableTooSoon = -1942,
+
+        /// <summary>
+        /// The FDP is about to be deleted. The table was originally deleted using non-revertable flag and the database was then reverted to a previous state using RBS causing the table's pages to not be reverted but table root page and space tree pages were reverted to assist in catalog cleanup.
+        /// </summary>
+        RBSFDPToBeDeleted = -1943,
+
+        /// <summary>
+        /// The table being deleted with revertable delete flag is not possible as this table was previously deleted with non-revertable flag and partially reverted by RBS.
+        /// </summary>
+        RBSRevertableDeleteNotPossible = -1944,
+
+        /// <summary>
+        /// Indicates that the reverted table marked with delete flag is unexpected.
+        /// </summary>
+        RBSRedeleteFDPUnexpected = -1947,
+
+        /// <summary>
+        /// The database cannot be reverted to the expected time as we are in apply root page records state but the corresponding file to init the page state is corrupt
+        /// </summary>
+        RBSRCPageFDPDeleteFileCorrupt = -1948,
+
+        /// <summary>
+        /// Indicates that the reverted table is expected to be marked with delete flag.
+        /// </summary>
+        RBSRedeleteFDPExpected = -1949,
+
+        /// <summary>
         /// The operation did not complete successfully because the database is already running maintenance on specified database
         /// </summary>
         DatabaseAlreadyRunningMaintenance = -2004,
+
+        /// <summary>
+        /// The operation did not complete successfully because root space leak estimation is already running on the specified database
+        /// </summary>
+        RootSpaceLeakEstimationAlreadyRunning = -2006,
+
+        /// <summary>
+        /// Database Shrink priming is already running
+        /// </summary>
+        DatabaseShrinkPrimingAlreadyRunning = -2007,
+
+        /// <summary>
+        /// Database Shrink priming cannot start because it has been blocked from running
+        /// </summary>
+        DatabaseShrinkPrimingBlocked = -2008,
 
         /// <summary>
         /// A callback failed
@@ -1964,6 +2174,66 @@ namespace Microsoft.Isam.Esent.Interop
         InvalidLogDataSequence = -2601,
 
         /// <summary>
+        /// Vote rejected - the fixed number voter caucus slots have been filled.  Expand capacity, or fix hardware.
+        /// </summary>
+        TooManyCaucuses = -2701,
+
+        /// <summary>
+        /// Vote rejected - we allow only a limited number of votes for a given pgno, we have voted too many times for this pgno.
+        /// </summary>
+        TooManyVotesForPgno = -2702,
+
+        /// <summary>
+        /// Vote rejected - Already 3 votes were presented or the vote timed out, and the vote was tallied.
+        /// </summary>
+        VoteTooLateAlreadyTallied = -2703,
+
+        /// <summary>
+        /// Vote rejected - the page vote had no page image CRC signatures provided.
+        /// </summary>
+        NoBallotCrcSignatureProvided = -2704,
+
+        /// <summary>
+        /// Vote rejected - the page sender's vote CRC signature of the page image, does not match the recomputed one for vote recording.  Corruption in transit maybe?
+        /// </summary>
+        BallotCrcSignatureMismatch = -2705,
+
+        /// <summary>
+        /// Vote rejected - the page sender's log signature does not match the active's log signature.  Did stream get restarted? 
+        /// </summary>
+        VoterLogSignatureMismatch = -2706,
+
+        /// <summary>
+        /// Vote rejected - the page number provided in the vote token was too high.  Token corruption?
+        /// </summary>
+        VotePgnoImpossiblyHigh = -2707,
+
+        /// <summary>
+        /// Vote rejected - the log generation of record / ID in the vote token was impossibly high.  Token corruption?
+        /// </summary>
+        VoteLogGenImpossiblyHigh = -2708,
+
+        /// <summary>
+        /// Vote rejected - the DBTIME of record / ID in the vote token was impossibly high.  Handling shrunk or RBS page?
+        /// </summary>
+        VoteDbtimeUnacceptable = -2709,
+
+        /// <summary>
+        /// Vote rejected - the lgpos of record / ID was higher than the newest lgpos of the active.
+        /// </summary>
+        VoteLgposTooHighForLog = -2710,
+
+        /// <summary>
+        /// Vote rejected - the page number was higher than the databases size.  Handling shrunk or RBS page?
+        /// </summary>
+        VotePgnoTooHighForDb = -2711,
+
+        /// <summary>
+        /// Vote rejected - this voter already voted in this page caucus.  Can not vote twice.
+        /// </summary>
+        VoterFraud = -2712,
+
+        /// <summary>
         /// Attempted to use Local Storage without a callback function being specified
         /// </summary>
         LSCallbackNotSpecified = -3000,
@@ -2007,6 +2277,21 @@ namespace Microsoft.Isam.Esent.Interop
         /// read/write access is not supported on compressed files
         /// </summary>
         FileCompressed = -4005,
+
+        /// <summary>
+        /// Source file modified inbetween copy attempts.  Continuing would give a franken-copy of file with a mix of updates.  You must delete the destination file, and restart your copy.
+        /// </summary>
+        CopySignatureMismatchCannotRestart = -8003,
+
+        /// <summary>
+        /// Begin of the error space reserved for JET client use
+        /// </summary>
+        ClientSpaceBegin = -10000,
+
+        /// <summary>
+        /// End of the error space reserved for JET client use
+        /// </summary>
+        ClientSpaceEnd = -11999,
 
         #endregion
     }

@@ -114,11 +114,13 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         private Exception SavedException { get; set; }
 
+#if NETFRAMEWORK
         /// <summary>
         /// Gets or sets a value indicating whether the thread was aborted during
         /// the callback.
         /// </summary>
         private bool ThreadWasAborted { get; set; }
+#endif
 
         /// <summary>
         /// If an exception was generated during a callback throw it.
@@ -126,10 +128,12 @@ namespace Microsoft.Isam.Esent.Interop
         public void ThrowSavedException()
         {
 #if !MANAGEDESENT_ON_WSA // Thread model has changed in Windows store apps.
+#if NETFRAMEWORK
             if (this.ThreadWasAborted)
             {
                 Thread.CurrentThread.Abort();
             }
+#endif
 #endif
 
             if (null != this.SavedException)
@@ -153,7 +157,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>An error code.</returns>
         private JET_err CallbackImpl(IntPtr nativeSesid, uint nativeSnp, uint nativeSnt, IntPtr nativeData)
         {
+#if NETFRAMEWORK
             RuntimeHelpers.PrepareConstrainedRegions();
+#endif
             try
             {
                 var sesid = new JET_SESID { Value = nativeSesid };
@@ -163,6 +169,7 @@ namespace Microsoft.Isam.Esent.Interop
                 return this.wrappedCallback(sesid, snp, snt, data);
             }
 #if !MANAGEDESENT_ON_WSA // Thread model has changed in windows store apps.
+#if NETFRAMEWORK
             catch (ThreadAbortException)
             {
                 Trace.WriteLineIf(TraceSwitch.TraceWarning, "Caught ThreadAbortException");
@@ -173,6 +180,7 @@ namespace Microsoft.Isam.Esent.Interop
                 LibraryHelpers.ThreadResetAbort();
                 return JET_err.CallbackFailed;
             }
+#endif
 #endif
             catch (Exception ex)
             {

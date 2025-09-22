@@ -16,7 +16,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native version of the JET_RETINFO structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
@@ -78,8 +79,15 @@ namespace Microsoft.Isam.Esent.Interop
         public long centriesLT
         {
             [DebuggerStepThrough]
-            get { return this.entriesBeforeKey; }
-            set { this.entriesBeforeKey = value; }
+            get
+            {
+                return this.entriesBeforeKey;
+            }
+
+            set
+            {
+                this.entriesBeforeKey = value;
+            }
         }
 
         /// <summary>
@@ -88,8 +96,15 @@ namespace Microsoft.Isam.Esent.Interop
         public long centriesTotal
         {
             [DebuggerStepThrough]
-            get { return this.totalEntries; }
-            set { this.totalEntries = value; }
+            get
+            {
+                return this.totalEntries;
+            }
+
+            set
+            {
+                this.totalEntries = value;
+            }
         }
 
         /// <summary>
@@ -132,7 +147,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>A NATIVE_RECPOS whose members match the class.</returns>
         internal NATIVE_RECPOS GetNativeRecpos()
         {
-            var recpos = new NATIVE_RECPOS();
+            var recpos = default(NATIVE_RECPOS);
             recpos.cbStruct = checked((uint)NATIVE_RECPOS.Size);
             recpos.centriesLT = checked((uint)this.centriesLT);
             recpos.centriesTotal = checked((uint)this.centriesTotal);
@@ -145,8 +160,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="value">The NATIVE_RECPOS which will be used to set the fields.</param>
         internal void SetFromNativeRecpos(NATIVE_RECPOS value)
         {
-            this.centriesLT = checked((int)value.centriesLT);
-            this.centriesTotal = checked((int)value.centriesTotal);
+            this.centriesLT = value.centriesLT;
+            this.centriesTotal = value.centriesTotal;
         }
     }
 }

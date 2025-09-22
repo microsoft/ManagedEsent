@@ -54,13 +54,13 @@ namespace Microsoft.Isam.Esent.Interop
         SpaceAlloc = 9,
 
         /// <summary>
-        /// Gets the number of owned pages in the table. Use this option with
+        /// Gets the number of owned pages in the table, including all secondary indices and long values. Use this option with
         /// <see cref="Api.JetGetTableInfo(Microsoft.Isam.Esent.Interop.JET_SESID,Microsoft.Isam.Esent.Interop.JET_TABLEID,out int,Microsoft.Isam.Esent.Interop.JET_TblInfo)"/>.
         /// </summary>
         SpaceOwned = 10,
 
         /// <summary>
-        /// Gets the number of available pages in the table. Use this option with
+        /// Gets the number of availabe pages in the table, including all secondary indices and long values. Use this option with
         /// <see cref="Api.JetGetTableInfo(Microsoft.Isam.Esent.Interop.JET_SESID,Microsoft.Isam.Esent.Interop.JET_TABLEID,out int,Microsoft.Isam.Esent.Interop.JET_TblInfo)"/>.
         /// </summary>
         SpaceAvailable = 11,
@@ -73,5 +73,23 @@ namespace Microsoft.Isam.Esent.Interop
         /// <see cref="Api.JetGetTableInfo(Microsoft.Isam.Esent.Interop.JET_SESID,Microsoft.Isam.Esent.Interop.JET_TABLEID,out string,Microsoft.Isam.Esent.Interop.JET_TblInfo)"/>.
         /// </summary>
         TemplateTableName = 12,
+
+        /// <summary>
+        /// Gets the number of owned pages in the long value tree associated with the table or 0 if there is no such tree. Use this option with
+        /// <see cref="Api.JetGetTableInfo(Microsoft.Isam.Esent.Interop.JET_SESID,Microsoft.Isam.Esent.Interop.JET_TABLEID,out int,Microsoft.Isam.Esent.Interop.JET_TblInfo)"/>.
+        /// </summary>
+        SpaceOwnedLV = 17,
+
+        /// <summary>
+        /// Gets the number of available pages in the long value tree associated with the table or 0 if there is no such tree. Use this option with
+        /// <see cref="Api.JetGetTableInfo(Microsoft.Isam.Esent.Interop.JET_SESID,Microsoft.Isam.Esent.Interop.JET_TABLEID,out int,Microsoft.Isam.Esent.Interop.JET_TblInfo)"/>.
+        /// </summary>
+        SpaceAvailableLV = 18,
+
+        /// <summary>
+        /// Gets the internal object ID assigned to the table.
+        /// <see cref="Api.JetGetTableInfo(Microsoft.Isam.Esent.Interop.JET_SESID,Microsoft.Isam.Esent.Interop.JET_TABLEID,out int,Microsoft.Isam.Esent.Interop.JET_TblInfo)"/>.
+        /// </summary>
+        ObjectId = 19,
     }
 }

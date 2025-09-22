@@ -12,9 +12,39 @@ namespace Microsoft.Isam.Esent.Interop
     /// <summary>
     /// Helper methods for the ESENT API. These do data conversion for
     /// JetMakeKey.
-        /// </summary>
+    /// </summary>
     public static partial class Api
     {
+#if !ESENT && !MANAGEDESENT_ON_WSA
+        /// <summary>
+        /// Constructs a search key that may then be used by <see cref="JetSeek"/>
+        /// and <see cref="JetSetIndexRange"/>.
+        /// </summary>
+        /// <param name="sesid">The session to use.</param>
+        /// <param name="tableid">The cursor to create the key on.</param>
+        /// <param name="data">Column data for the current key column of the current index.</param>
+        /// <param name="grbit">Key options.</param>
+#if NETCOREAPP
+        public static void MakeKey(JET_SESID sesid, JET_TABLEID tableid, in ReadOnlySpan<byte> data, MakeKeyGrbit grbit)
+#else
+        public static void MakeKeyFromSpan(JET_SESID sesid, JET_TABLEID tableid, in ReadOnlySpan<byte> data, MakeKeyGrbit grbit)
+#endif
+        {
+            if (default(ReadOnlySpan<byte>) == data) // null check
+            {
+                Api.JetMakeKey(sesid, tableid, null, 0, grbit);
+            }
+            else if (0 == data.Length)
+            {
+                Api.JetMakeKey(sesid, tableid, data, grbit | MakeKeyGrbit.KeyDataZeroLength);
+            }
+            else
+            {
+                Api.JetMakeKey(sesid, tableid, data, grbit);
+            }
+        }
+#endif
+
         /// <summary>
         /// Constructs a search key that may then be used by <see cref="JetSeek"/>
         /// and <see cref="JetSetIndexRange"/>.
@@ -31,7 +61,7 @@ namespace Microsoft.Isam.Esent.Interop
             }
             else if (0 == data.Length)
             {
-                Api.JetMakeKey(sesid, tableid, data, data.Length, grbit | MakeKeyGrbit.KeyDataZeroLength);                
+                Api.JetMakeKey(sesid, tableid, data, data.Length, grbit | MakeKeyGrbit.KeyDataZeroLength);
             }
             else
             {

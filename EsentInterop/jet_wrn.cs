@@ -49,6 +49,16 @@ namespace Microsoft.Isam.Esent.Interop
         NoMoreRecords = 428,
 
         /// <summary>
+        /// Populating a deferred populate index did not complete.
+        /// </summary>
+        IndexDeferredPopulateIncomplete = 432,
+
+        /// <summary>
+        /// Populating a deferred populate index was unexpectedly halted.
+        /// </summary>
+        IndexDeferredPopulateHalted = 433,
+
+        /// <summary>
         /// Existing log file has bad signature
         /// </summary>
         ExistingLogFileHasBadSignature = 558,
@@ -282,6 +292,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// The log data provided jumped to the next log suddenly, we have deleted the incomplete log file as a precautionary measure
         /// </summary>
         PreviousLogFileIncomplete = 2602,
+
+        /// <summary>
+        /// This file has a regular header matching the source file, and so probably a already completed copy.
+        /// </summary>
+        CopyCompletedAlready = 8002,
 
         #endregion
     }

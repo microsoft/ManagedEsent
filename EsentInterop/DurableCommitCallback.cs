@@ -19,6 +19,9 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
 #endif
 
     using Microsoft.Isam.Esent.Interop.Implementation;
+#if MANAGEDESENT_ON_CORECLR
+    using Trace = Microsoft.Isam.Esent.Interop.Implementation.Trace;
+#endif
 
     /// <summary>
     /// A class which wraps the callback dealing with durable commits.
@@ -135,7 +138,9 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
             ref NATIVE_COMMIT_ID commitIdSeen,
             uint grbit)
         {
+#if NETFRAMEWORK
             RuntimeHelpers.PrepareConstrainedRegions();
+#endif
             try
             {
                 JET_INSTANCE jetInstance = new JET_INSTANCE()

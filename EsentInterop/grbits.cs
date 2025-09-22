@@ -64,7 +64,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// background at run time is abandoned.
         /// </summary>
         Abrupt = 2,
-        
+
         /// <summary>
         /// Interrupts and fails any on-going backup.
         /// </summary>
@@ -125,7 +125,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// If <see cref="ForceCloseAndDetach"/> is used, <see cref="EsentForceDetachNotAllowedException"/> will be returned.
         /// </summary>
         [Obsolete("ForceCloseAndDetach is no longer used.")]
-        ForceCloseAndDetach = (0x2 | 0x1 /*ForceDetach*/),
+        ForceCloseAndDetach = 0x2 | 0x1 /*ForceDetach*/,
     }
 
     /// <summary>
@@ -146,6 +146,12 @@ namespace Microsoft.Isam.Esent.Interop
         ///  Prevents modifications to the database.
         /// </summary>
         ReadOnly = 0x1,
+
+        /// <summary>
+        /// Turns off logging. Setting this bit loses the ability to replay log files
+        /// and recover the database to a consistent usable state after a crash.
+        /// </summary>
+        RecoveryOff = 0x8,
 
         /// <summary>
         /// If JET_paramEnableIndexChecking has been set, all indexes over Unicode
@@ -317,6 +323,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// backup will be backed up.
         /// </summary>
         Incremental = 0x1,
+
+        /// <summary>
+        /// It's a internal copy
+        /// </summary>
+        InternalCopy = 0x40,
     }
 
     /// <summary>
@@ -692,6 +703,12 @@ namespace Microsoft.Isam.Esent.Interop
         /// separation size.
         /// </summary>
         IntrinsicLV = 0x400,
+
+        /// <summary>
+        /// Forces separate lv and skips the possible optimization which Jet does by storing the data as intrinsic LV
+        /// when the amount of LV data is lower than sizeof(LID=8).
+        /// </summary>
+        ForceSeparateLV = 0x80000
     }
 
     /// <summary>
@@ -871,9 +888,16 @@ namespace Microsoft.Isam.Esent.Interop
         None = 0,
     }
 
+#if !ESENT && !MANAGEDESENT_ON_WSA
     /// <summary>
-    /// Options for <see cref="Api.JetGotoSecondaryIndexBookmark"/>.
+    /// Options for <see cref="Api.JetGotoSecondaryIndexBookmark(JET_SESID, JET_TABLEID, byte[], int, byte[], int, GotoSecondaryIndexBookmarkGrbit)"/>
+    /// and <see cref="Api.JetGotoSecondaryIndexBookmark(JET_SESID, JET_TABLEID, in ReadOnlySpan{byte}, in ReadOnlySpan{byte}, GotoSecondaryIndexBookmarkGrbit)"/>.
     /// </summary>
+#else
+    /// <summary>
+    /// Options for <see cref="Api.JetGotoSecondaryIndexBookmark(JET_SESID, JET_TABLEID, byte[], int, byte[], int, GotoSecondaryIndexBookmarkGrbit)"/>
+    /// </summary>
+#endif
     [Flags]
     public enum GotoSecondaryIndexBookmarkGrbit
     {
@@ -1383,7 +1407,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// Duplicate index entries (keys) are disallowed. This is enforced when JetUpdate is called,
         /// not when JetSetColumn is called.
         /// </summary>
-        IndexUnique  = 0x1,
+        IndexUnique = 0x1,
 
         /// <summary>
         /// The index is a primary (clustered) index. Every table must have exactly one primary index.
@@ -1542,7 +1566,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// request it. If this functionality is not requested then the temporary
         /// table manager may be able to choose a strategy for managing the
         /// temporary table that will result in improved performance.
-         /// </summary>
+        /// </summary>
         Scrollable = 0x8,
 
         /// <summary>

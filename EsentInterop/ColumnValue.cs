@@ -292,11 +292,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">The retrieve options to validate.</param>
         protected virtual void ValidateRetrieveGrbit(RetrieveColumnGrbit grbit)
         {
-            // We cannot support this request when there is no way to indicate that a column reference is returned.
-            if ((grbit & (RetrieveColumnGrbit)0x00020000) != 0)  // UnpublishedGrbits.RetrieveAsRefIfNotInRecord
-            {
-                throw new EsentInvalidGrbitException();
-            }
+            ColumnHelper.IsValidRetrieveColumnGrbit(grbit);
         }
 
         /// <summary>

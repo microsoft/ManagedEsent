@@ -52,7 +52,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             int err;
             uint cmsecDurableCommit = (uint)durableCommit.TotalMilliseconds;
 
-            NATIVE_COMMIT_ID nativeCommitId = new NATIVE_COMMIT_ID();
+            NATIVE_COMMIT_ID nativeCommitId = default(NATIVE_COMMIT_ID);
             unsafe
             {
                 err = Err(NativeMethods.JetCommitTransaction2(sesid.Value, unchecked((uint)grbit), cmsecDurableCommit, ref nativeCommitId));
@@ -78,7 +78,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             TraceFunctionCall();
             this.CheckSupportsWindows8Features("JetGetErrorInfo");
 
-            NATIVE_ERRINFOBASIC nativeErrinfobasic = new NATIVE_ERRINFOBASIC();
+            NATIVE_ERRINFOBASIC nativeErrinfobasic = default(NATIVE_ERRINFOBASIC);
             errinfo = new JET_ERRINFOBASIC();
 
             nativeErrinfobasic.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_ERRINFOBASIC)));
@@ -186,7 +186,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             NATIVE_COLUMNDEF[] nativecolumndefs = GetNativecolumndefs(temporarytable.prgcolumndef, temporarytable.ccolumn);
             unsafe
             {
-                using (var gchandlecollection = new GCHandleCollection())
+                using (var gchandlecollection = default(GCHandleCollection))
                 {
                     // Pin memory
                     nativetemporarytable.prgcolumndef = (NATIVE_COLUMNDEF*)gchandlecollection.Add(nativecolumndefs);
@@ -529,7 +529,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             CheckNotNull(indexRanges, "indexRanges");
             CheckDataSize(indexRanges, rangeIndex, "rangeIndex", rangeCount, "rangeCount");
 
-            var handles = new GCHandleCollection();
+            var handles = default(GCHandleCollection);
             try
             {
                 NATIVE_INDEX_RANGE[] nativeRanges = new NATIVE_INDEX_RANGE[rangeCount];
@@ -608,7 +608,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             grbit = grbit | PrereadIndexRangesGrbit.NormalizedKey;
 
-            using (var handles = new GCHandleCollection())
+            using (var handles = default(GCHandleCollection))
             {
                 NATIVE_INDEX_COLUMN[] startColumn;
                 NATIVE_INDEX_COLUMN[] endColumn;
@@ -665,7 +665,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
                 return Err(NativeMethods.JetSetCursorFilter(sesid.Value, tableid.Value, null, 0, checked((uint)grbit)));
             }
 
-            var handles = new GCHandleCollection();
+            var handles = default(GCHandleCollection);
             try
             {
                 NATIVE_INDEX_COLUMN[] nativeFilters = new NATIVE_INDEX_COLUMN[filters.Length];
@@ -741,7 +741,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
         private static int CreateIndexes3(JET_SESID sesid, JET_TABLEID tableid, IList<JET_INDEXCREATE> indexcreates, int numIndexCreates)
         {
             // pin the memory
-            var handles = new GCHandleCollection();
+            var handles = default(GCHandleCollection);
             try
             {
                 NATIVE_INDEXCREATE3[] nativeIndexcreates = GetNativeIndexCreate3s(indexcreates, ref handles);
@@ -769,7 +769,7 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
 
             unsafe
             {
-                var handles = new GCHandleCollection();
+                var handles = default(GCHandleCollection);
                 try
                 {
                     // Convert/pin the column definitions.

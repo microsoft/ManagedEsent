@@ -16,7 +16,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native version of the JET_UNICODEINDEX structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
@@ -67,8 +68,15 @@ namespace Microsoft.Isam.Esent.Interop
         public int lcid
         {
             [DebuggerStepThrough]
-            get { return this.localeId; }
-            set { this.localeId = value; }
+            get
+            {
+                return this.localeId;
+            }
+
+            set
+            {
+                this.localeId = value;
+            }
         }
 
         /// <summary>
@@ -77,8 +85,15 @@ namespace Microsoft.Isam.Esent.Interop
         public string szLocaleName
         {
             [DebuggerStepThrough]
-            get { return this.localeName; }
-            set { this.localeName = value; }
+            get
+            {
+                return this.localeName;
+            }
+
+            set
+            {
+                this.localeName = value;
+            }
         }
 
         /// <summary>
@@ -88,8 +103,15 @@ namespace Microsoft.Isam.Esent.Interop
         public uint dwMapFlags
         {
             [DebuggerStepThrough]
-            get { return this.mapStringFlags; }
-            set { this.mapStringFlags = value; }
+            get
+            {
+                return this.mapStringFlags;
+            }
+
+            set
+            {
+                this.mapStringFlags = value;
+            }
         }
 
         /// <summary>

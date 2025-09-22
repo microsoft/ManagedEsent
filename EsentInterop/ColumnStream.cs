@@ -18,7 +18,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// (i.e. a column of type <see cref="JET_coltyp.LongBinary"/> or
     /// <see cref="JET_coltyp.LongText"/>).
     /// </summary>
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     public class ColumnStream : Stream

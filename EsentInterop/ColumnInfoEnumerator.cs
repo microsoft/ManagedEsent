@@ -21,7 +21,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="sesid">
         /// The session to use.
         /// </param>
-        protected ColumnInfoEnumerator(JET_SESID sesid) : base(sesid)
+        protected ColumnInfoEnumerator(JET_SESID sesid)
+            : base(sesid)
         {            
         }
 

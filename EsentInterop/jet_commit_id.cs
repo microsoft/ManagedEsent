@@ -213,7 +213,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
         /// <returns>true if the two instances are equal.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || GetType() != obj.GetType())
+            if (obj == null || this.GetType() != obj.GetType())
             {
                 return false;
             }
@@ -237,7 +237,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
         /// <returns>A NATIVE_COMMIT_ID structure.</returns>
         internal NATIVE_COMMIT_ID GetNativeCommitId()
         {
-            NATIVE_COMMIT_ID native = new NATIVE_COMMIT_ID();
+            NATIVE_COMMIT_ID native = default(NATIVE_COMMIT_ID);
 
             native.signLog = this.signLog.GetNativeSignature();
             native.commitId = checked((long)this.commitId);

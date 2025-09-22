@@ -47,8 +47,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        protected EsentOperationException(string description, JET_err err) :
-            base(description, err)
+        protected EsentOperationException(string description, JET_err err)
+            : base(description, err)
         {
         }
 
@@ -59,8 +59,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
-        protected EsentOperationException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
+        protected EsentOperationException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
 #endif
@@ -81,8 +81,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        protected EsentDataException(string description, JET_err err) :
-            base(description, err)
+        protected EsentDataException(string description, JET_err err)
+            : base(description, err)
         {
         }
 
@@ -93,8 +93,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
-        protected EsentDataException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
+        protected EsentDataException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
 #endif
@@ -115,8 +115,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        protected EsentApiException(string description, JET_err err) :
-            base(description, err)
+        protected EsentApiException(string description, JET_err err)
+            : base(description, err)
         {
         }
 
@@ -127,8 +127,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
-        protected EsentApiException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
+        protected EsentApiException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
 #endif
@@ -149,8 +149,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        protected EsentFatalException(string description, JET_err err) :
-            base(description, err)
+        protected EsentFatalException(string description, JET_err err)
+            : base(description, err)
         {
         }
 
@@ -161,8 +161,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
-        protected EsentFatalException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
+        protected EsentFatalException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
 #endif
@@ -183,8 +183,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        protected EsentIOException(string description, JET_err err) :
-            base(description, err)
+        protected EsentIOException(string description, JET_err err)
+            : base(description, err)
         {
         }
 
@@ -195,8 +195,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
-        protected EsentIOException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
+        protected EsentIOException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
 #endif
@@ -217,8 +217,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        protected EsentResourceException(string description, JET_err err) :
-            base(description, err)
+        protected EsentResourceException(string description, JET_err err)
+            : base(description, err)
         {
         }
 
@@ -229,8 +229,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
-        protected EsentResourceException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
+        protected EsentResourceException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
 #endif
@@ -251,8 +251,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        protected EsentMemoryException(string description, JET_err err) :
-            base(description, err)
+        protected EsentMemoryException(string description, JET_err err)
+            : base(description, err)
         {
         }
 
@@ -263,8 +263,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
-        protected EsentMemoryException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
+        protected EsentMemoryException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
 #endif
@@ -285,8 +285,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        protected EsentQuotaException(string description, JET_err err) :
-            base(description, err)
+        protected EsentQuotaException(string description, JET_err err)
+            : base(description, err)
         {
         }
 
@@ -297,8 +297,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
-        protected EsentQuotaException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
+        protected EsentQuotaException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
 #endif
@@ -319,8 +319,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        protected EsentDiskException(string description, JET_err err) :
-            base(description, err)
+        protected EsentDiskException(string description, JET_err err)
+            : base(description, err)
         {
         }
 
@@ -331,8 +331,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
-        protected EsentDiskException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
+        protected EsentDiskException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
 #endif
@@ -353,8 +353,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        protected EsentCorruptionException(string description, JET_err err) :
-            base(description, err)
+        protected EsentCorruptionException(string description, JET_err err)
+            : base(description, err)
         {
         }
 
@@ -365,8 +365,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
-        protected EsentCorruptionException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
+        protected EsentCorruptionException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
 #endif
@@ -387,8 +387,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        protected EsentInconsistentException(string description, JET_err err) :
-            base(description, err)
+        protected EsentInconsistentException(string description, JET_err err)
+            : base(description, err)
         {
         }
 
@@ -399,8 +399,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
-        protected EsentInconsistentException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
+        protected EsentInconsistentException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
 #endif
@@ -421,8 +421,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        protected EsentFragmentationException(string description, JET_err err) :
-            base(description, err)
+        protected EsentFragmentationException(string description, JET_err err)
+            : base(description, err)
         {
         }
 
@@ -433,8 +433,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
-        protected EsentFragmentationException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
+        protected EsentFragmentationException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
 #endif
@@ -455,8 +455,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        protected EsentUsageException(string description, JET_err err) :
-            base(description, err)
+        protected EsentUsageException(string description, JET_err err)
+            : base(description, err)
         {
         }
 
@@ -467,8 +467,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
-        protected EsentUsageException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
+        protected EsentUsageException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
 #endif
@@ -489,8 +489,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        protected EsentStateException(string description, JET_err err) :
-            base(description, err)
+        protected EsentStateException(string description, JET_err err)
+            : base(description, err)
         {
         }
 
@@ -501,8 +501,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
-        protected EsentStateException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
+        protected EsentStateException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
 #endif
@@ -523,8 +523,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="description">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        protected EsentObsoleteException(string description, JET_err err) :
-            base(description, err)
+        protected EsentObsoleteException(string description, JET_err err)
+            : base(description, err)
         {
         }
 
@@ -535,8 +535,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
-        protected EsentObsoleteException(SerializationInfo info, StreamingContext context) :
-            base(info, context)
+        protected EsentObsoleteException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
 #endif
@@ -556,7 +556,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentRfsFailureException class.
         /// </summary>
         public EsentRfsFailureException() :
-            base("Resource Failure Simulator failure", JET_err.RfsFailure)
+            this("Resource Failure Simulator failure")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRfsFailureException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRfsFailureException(string description) :
+            base(description, JET_err.RfsFailure)
         {
         }
 
@@ -588,7 +597,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentRfsNotArmedException class.
         /// </summary>
         public EsentRfsNotArmedException() :
-            base("Resource Failure Simulator not initialized", JET_err.RfsNotArmed)
+            this("Resource Failure Simulator not initialized")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRfsNotArmedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRfsNotArmedException(string description) :
+            base(description, JET_err.RfsNotArmed)
         {
         }
 
@@ -620,7 +638,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentFileCloseException class.
         /// </summary>
         public EsentFileCloseException() :
-            base("Could not close file", JET_err.FileClose)
+            this("Could not close file")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentFileCloseException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentFileCloseException(string description) :
+            base(description, JET_err.FileClose)
         {
         }
 
@@ -652,7 +679,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentOutOfThreadsException class.
         /// </summary>
         public EsentOutOfThreadsException() :
-            base("Could not start thread", JET_err.OutOfThreads)
+            this("Could not start thread")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentOutOfThreadsException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentOutOfThreadsException(string description) :
+            base(description, JET_err.OutOfThreads)
         {
         }
 
@@ -684,7 +720,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTooManyIOException class.
         /// </summary>
         public EsentTooManyIOException() :
-            base("System busy due to too many IOs", JET_err.TooManyIO)
+            this("System busy due to too many IOs")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManyIOException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTooManyIOException(string description) :
+            base(description, JET_err.TooManyIO)
         {
         }
 
@@ -716,7 +761,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTaskDroppedException class.
         /// </summary>
         public EsentTaskDroppedException() :
-            base("A requested async task could not be executed", JET_err.TaskDropped)
+            this("A requested async task could not be executed")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTaskDroppedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTaskDroppedException(string description) :
+            base(description, JET_err.TaskDropped)
         {
         }
 
@@ -748,7 +802,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInternalErrorException class.
         /// </summary>
         public EsentInternalErrorException() :
-            base("Fatal internal error", JET_err.InternalError)
+            this("Fatal internal error")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInternalErrorException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInternalErrorException(string description) :
+            base(description, JET_err.InternalError)
         {
         }
 
@@ -780,7 +843,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDisabledFunctionalityException class.
         /// </summary>
         public EsentDisabledFunctionalityException() :
-            base("You are running MinESE, that does not have all features compiled in.  This functionality is only supported in a full version of ESE.", JET_err.DisabledFunctionality)
+            this("You are running MinESE, that does not have all features compiled in.  This functionality is only supported in a full version of ESE.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDisabledFunctionalityException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDisabledFunctionalityException(string description) :
+            base(description, JET_err.DisabledFunctionality)
         {
         }
 
@@ -812,7 +884,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentUnloadableOSFunctionalityException class.
         /// </summary>
         public EsentUnloadableOSFunctionalityException() :
-            base("The desired OS functionality could not be located and loaded / linked.", JET_err.UnloadableOSFunctionality)
+            this("The desired OS functionality could not be located and loaded / linked.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentUnloadableOSFunctionalityException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentUnloadableOSFunctionalityException(string description) :
+            base(description, JET_err.UnloadableOSFunctionality)
         {
         }
 
@@ -844,7 +925,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDeviceMissingException class.
         /// </summary>
         public EsentDeviceMissingException() :
-            base("A required hardware device or functionality was missing.", JET_err.DeviceMissing)
+            this("A required hardware device or functionality was missing.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDeviceMissingException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDeviceMissingException(string description) :
+            base(description, JET_err.DeviceMissing)
         {
         }
 
@@ -876,7 +966,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDeviceMisconfiguredException class.
         /// </summary>
         public EsentDeviceMisconfiguredException() :
-            base("A required hardware device was misconfigured externally.", JET_err.DeviceMisconfigured)
+            this("A required hardware device was misconfigured externally.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDeviceMisconfiguredException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDeviceMisconfiguredException(string description) :
+            base(description, JET_err.DeviceMisconfigured)
         {
         }
 
@@ -908,7 +1007,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDeviceTimeoutException class.
         /// </summary>
         public EsentDeviceTimeoutException() :
-            base("Timeout occurred while waiting for a hardware device to respond.", JET_err.DeviceTimeout)
+            this("Timeout occurred while waiting for a hardware device to respond.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDeviceTimeoutException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDeviceTimeoutException(string description) :
+            base(description, JET_err.DeviceTimeout)
         {
         }
 
@@ -940,7 +1048,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDeviceFailureException class.
         /// </summary>
         public EsentDeviceFailureException() :
-            base("A required hardware device didn't function as expected.", JET_err.DeviceFailure)
+            this("A required hardware device didn't function as expected.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDeviceFailureException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDeviceFailureException(string description) :
+            base(description, JET_err.DeviceFailure)
         {
         }
 
@@ -972,7 +1089,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseBufferDependenciesCorruptedException class.
         /// </summary>
         public EsentDatabaseBufferDependenciesCorruptedException() :
-            base("Buffer dependencies improperly set. Recovery failure", JET_err.DatabaseBufferDependenciesCorrupted)
+            this("Buffer dependencies improperly set. Recovery failure")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseBufferDependenciesCorruptedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseBufferDependenciesCorruptedException(string description) :
+            base(description, JET_err.DatabaseBufferDependenciesCorrupted)
         {
         }
 
@@ -1004,7 +1130,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentPreviousVersionException class.
         /// </summary>
         public EsentPreviousVersionException() :
-            base("Version already existed. Recovery failure", JET_err.PreviousVersion)
+            this("Version already existed. Recovery failure")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentPreviousVersionException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentPreviousVersionException(string description) :
+            base(description, JET_err.PreviousVersion)
         {
         }
 
@@ -1036,7 +1171,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentPageBoundaryException class.
         /// </summary>
         public EsentPageBoundaryException() :
-            base("Reached Page Boundary", JET_err.PageBoundary)
+            this("Reached Page Boundary")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentPageBoundaryException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentPageBoundaryException(string description) :
+            base(description, JET_err.PageBoundary)
         {
         }
 
@@ -1068,7 +1212,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentKeyBoundaryException class.
         /// </summary>
         public EsentKeyBoundaryException() :
-            base("Reached Key Boundary", JET_err.KeyBoundary)
+            this("Reached Key Boundary")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentKeyBoundaryException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentKeyBoundaryException(string description) :
+            base(description, JET_err.KeyBoundary)
         {
         }
 
@@ -1100,7 +1253,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentBadPageLinkException class.
         /// </summary>
         public EsentBadPageLinkException() :
-            base("Database corrupted", JET_err.BadPageLink)
+            this("Database corrupted - a B+ Tree link between leaf pages does not link to a correct page (could be backlink does not match, could be an empty page which is unexpected, or could be a page in another tree/table/index).")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBadPageLinkException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBadPageLinkException(string description) :
+            base(description, JET_err.BadPageLink)
         {
         }
 
@@ -1132,7 +1294,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentBadBookmarkException class.
         /// </summary>
         public EsentBadBookmarkException() :
-            base("Bookmark has no corresponding address in database", JET_err.BadBookmark)
+            this("Bookmark has no corresponding address in database")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBadBookmarkException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBadBookmarkException(string description) :
+            base(description, JET_err.BadBookmark)
         {
         }
 
@@ -1164,7 +1335,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentNTSystemCallFailedException class.
         /// </summary>
         public EsentNTSystemCallFailedException() :
-            base("A call to the operating system failed", JET_err.NTSystemCallFailed)
+            this("A call to the operating system failed")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentNTSystemCallFailedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentNTSystemCallFailedException(string description) :
+            base(description, JET_err.NTSystemCallFailed)
         {
         }
 
@@ -1196,7 +1376,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentBadParentPageLinkException class.
         /// </summary>
         public EsentBadParentPageLinkException() :
-            base("Database corrupted", JET_err.BadParentPageLink)
+            this("Database corrupted - a B+ Tree link from parent to children does not link to a correct page (could be an empty page which is unexpected, or could be a page in another tree/table/index, or some other element of correctness).")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBadParentPageLinkException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBadParentPageLinkException(string description) :
+            base(description, JET_err.BadParentPageLink)
         {
         }
 
@@ -1228,7 +1417,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSPAvailExtCacheOutOfSyncException class.
         /// </summary>
         public EsentSPAvailExtCacheOutOfSyncException() :
-            base("AvailExt cache doesn't match btree", JET_err.SPAvailExtCacheOutOfSync)
+            this("AvailExt cache doesn't match btree")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSPAvailExtCacheOutOfSyncException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentSPAvailExtCacheOutOfSyncException(string description) :
+            base(description, JET_err.SPAvailExtCacheOutOfSync)
         {
         }
 
@@ -1260,7 +1458,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSPAvailExtCorruptedException class.
         /// </summary>
         public EsentSPAvailExtCorruptedException() :
-            base("AvailExt space tree is corrupt", JET_err.SPAvailExtCorrupted)
+            this("AvailExt space tree is corrupt")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSPAvailExtCorruptedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentSPAvailExtCorruptedException(string description) :
+            base(description, JET_err.SPAvailExtCorrupted)
         {
         }
 
@@ -1292,7 +1499,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSPAvailExtCacheOutOfMemoryException class.
         /// </summary>
         public EsentSPAvailExtCacheOutOfMemoryException() :
-            base("Out of memory allocating an AvailExt cache node", JET_err.SPAvailExtCacheOutOfMemory)
+            this("Out of memory allocating an AvailExt cache node")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSPAvailExtCacheOutOfMemoryException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentSPAvailExtCacheOutOfMemoryException(string description) :
+            base(description, JET_err.SPAvailExtCacheOutOfMemory)
         {
         }
 
@@ -1324,7 +1540,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSPOwnExtCorruptedException class.
         /// </summary>
         public EsentSPOwnExtCorruptedException() :
-            base("OwnExt space tree is corrupt", JET_err.SPOwnExtCorrupted)
+            this("OwnExt space tree is corrupt")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSPOwnExtCorruptedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentSPOwnExtCorruptedException(string description) :
+            base(description, JET_err.SPOwnExtCorrupted)
         {
         }
 
@@ -1356,7 +1581,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDbTimeCorruptedException class.
         /// </summary>
         public EsentDbTimeCorruptedException() :
-            base("Dbtime on current page is greater than global database dbtime", JET_err.DbTimeCorrupted)
+            this("Dbtime on current page is greater than global database dbtime")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDbTimeCorruptedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDbTimeCorruptedException(string description) :
+            base(description, JET_err.DbTimeCorrupted)
         {
         }
 
@@ -1388,7 +1622,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentKeyTruncatedException class.
         /// </summary>
         public EsentKeyTruncatedException() :
-            base("key truncated on index that disallows key truncation", JET_err.KeyTruncated)
+            this("key truncated on index that disallows key truncation")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentKeyTruncatedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentKeyTruncatedException(string description) :
+            base(description, JET_err.KeyTruncated)
         {
         }
 
@@ -1420,7 +1663,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseLeakInSpaceException class.
         /// </summary>
         public EsentDatabaseLeakInSpaceException() :
-            base("Some database pages have become unreachable even from the avail tree, only an offline defragmentation can return the lost space.", JET_err.DatabaseLeakInSpace)
+            this("Some database pages have become unreachable even from the avail tree, only an offline defragmentation can return the lost space.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseLeakInSpaceException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseLeakInSpaceException(string description) :
+            base(description, JET_err.DatabaseLeakInSpace)
         {
         }
 
@@ -1452,7 +1704,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentBadEmptyPageException class.
         /// </summary>
         public EsentBadEmptyPageException() :
-            base("Database corrupted. Searching an unexpectedly empty page.", JET_err.BadEmptyPage)
+            this("Database corrupted. Searching an unexpectedly empty page.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBadEmptyPageException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBadEmptyPageException(string description) :
+            base(description, JET_err.BadEmptyPage)
         {
         }
 
@@ -1484,7 +1745,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentBadLineCountException class.
         /// </summary>
         public EsentBadLineCountException() :
-            base("Number of lines on the page is too few compared to the line being operated on", JET_err.BadLineCount)
+            this("Number of lines on the page is too few compared to the line being operated on")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBadLineCountException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBadLineCountException(string description) :
+            base(description, JET_err.BadLineCount)
         {
         }
 
@@ -1496,6 +1766,211 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
         private EsentBadLineCountException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.PageTagCorrupted exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentPageTagCorruptedException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentPageTagCorruptedException class.
+        /// </summary>
+        public EsentPageTagCorruptedException() :
+            this("A tag / line on page is logically corrupted, offset or size is bad, or tag count on page is bad.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentPageTagCorruptedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentPageTagCorruptedException(string description) :
+            base(description, JET_err.PageTagCorrupted)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentPageTagCorruptedException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentPageTagCorruptedException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.NodeCorrupted exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentNodeCorruptedException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentNodeCorruptedException class.
+        /// </summary>
+        public EsentNodeCorruptedException() :
+            this("A node or prefix node is logically corrupted, the key suffix size is larger than the node or line's size.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentNodeCorruptedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentNodeCorruptedException(string description) :
+            base(description, JET_err.NodeCorrupted)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentNodeCorruptedException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentNodeCorruptedException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.BBTNodeCorrupted exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentBBTNodeCorruptedException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentBBTNodeCorruptedException class.
+        /// </summary>
+        public EsentBBTNodeCorruptedException() :
+            this("A property of the BBT node is logically corrupted. Or the BBT node isn't valid.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBBTNodeCorruptedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBBTNodeCorruptedException(string description) :
+            base(description, JET_err.BBTNodeCorrupted)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentBBTNodeCorruptedException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentBBTNodeCorruptedException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.BBTBuffCorrupted exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentBBTBuffCorruptedException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentBBTBuffCorruptedException class.
+        /// </summary>
+        public EsentBBTBuffCorruptedException() :
+            this("A BBT buff is logically corrupted. The nodes are out of sequence or the BBT header is corrupt.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBBTBuffCorruptedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBBTBuffCorruptedException(string description) :
+            base(description, JET_err.BBTBuffCorrupted)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentBBTBuffCorruptedException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentBBTBuffCorruptedException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.BadRootPageLink exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentBadRootPageLinkException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentBadRootPageLinkException class.
+        /// </summary>
+        public EsentBadRootPageLinkException() :
+            this("Database corrupted - a B+ Tree link from parent to children does not link to a correct page (could be an empty page which is unexpected, or could be a page in another tree/table/index, or some other element of correctness).")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBadRootPageLinkException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBadRootPageLinkException(string description) :
+            base(description, JET_err.BadRootPageLink)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentBadRootPageLinkException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentBadRootPageLinkException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
         }
@@ -1516,7 +1991,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentKeyTooBigException class.
         /// </summary>
         public EsentKeyTooBigException() :
-            base("Key is too large", JET_err.KeyTooBig)
+            this("Key is too large")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentKeyTooBigException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentKeyTooBigException(string description) :
+            base(description, JET_err.KeyTooBig)
         {
         }
 
@@ -1548,7 +2032,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCannotSeparateIntrinsicLVException class.
         /// </summary>
         public EsentCannotSeparateIntrinsicLVException() :
-            base("illegal attempt to separate an LV which must be intrinsic", JET_err.CannotSeparateIntrinsicLV)
+            this("illegal attempt to separate an LV which must be intrinsic")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCannotSeparateIntrinsicLVException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCannotSeparateIntrinsicLVException(string description) :
+            base(description, JET_err.CannotSeparateIntrinsicLV)
         {
         }
 
@@ -1580,7 +2073,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSeparatedLongValueException class.
         /// </summary>
         public EsentSeparatedLongValueException() :
-            base("Operation not supported on separated long-value", JET_err.SeparatedLongValue)
+            this("Operation not supported on separated long-value")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSeparatedLongValueException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentSeparatedLongValueException(string description) :
+            base(description, JET_err.SeparatedLongValue)
         {
         }
 
@@ -1612,7 +2114,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentMustBeSeparateLongValueException class.
         /// </summary>
         public EsentMustBeSeparateLongValueException() :
-            base("Can only preread long value columns that can be separate, e.g. not size constrained so that they are fixed or variable columns", JET_err.MustBeSeparateLongValue)
+            this("Can only preread long value columns that can be separate, e.g. not size constrained so that they are fixed or variable columns")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentMustBeSeparateLongValueException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentMustBeSeparateLongValueException(string description) :
+            base(description, JET_err.MustBeSeparateLongValue)
         {
         }
 
@@ -1644,7 +2155,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidPrereadException class.
         /// </summary>
         public EsentInvalidPrereadException() :
-            base("Cannot preread long values when current index secondary", JET_err.InvalidPreread)
+            this("Cannot preread long values when current index secondary")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidPrereadException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidPrereadException(string description) :
+            base(description, JET_err.InvalidPreread)
         {
         }
 
@@ -1676,7 +2196,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidColumnReferenceException class.
         /// </summary>
         public EsentInvalidColumnReferenceException() :
-            base("Column reference is invalid", JET_err.InvalidColumnReference)
+            this("Column reference is invalid")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidColumnReferenceException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidColumnReferenceException(string description) :
+            base(description, JET_err.InvalidColumnReference)
         {
         }
 
@@ -1708,7 +2237,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentStaleColumnReferenceException class.
         /// </summary>
         public EsentStaleColumnReferenceException() :
-            base("Column reference is stale", JET_err.StaleColumnReference)
+            this("Column reference is stale")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentStaleColumnReferenceException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentStaleColumnReferenceException(string description) :
+            base(description, JET_err.StaleColumnReference)
         {
         }
 
@@ -1740,7 +2278,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCompressionIntegrityCheckFailedException class.
         /// </summary>
         public EsentCompressionIntegrityCheckFailedException() :
-            base("A compression integrity check failed. Decompressing data failed the integrity checksum indicating a data corruption in the compress/decompress pipeline.", JET_err.CompressionIntegrityCheckFailed)
+            this("A compression integrity check failed. Decompressing data failed the integrity checksum indicating a data corruption in the compress/decompress pipeline.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCompressionIntegrityCheckFailedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCompressionIntegrityCheckFailedException(string description) :
+            base(description, JET_err.CompressionIntegrityCheckFailed)
         {
         }
 
@@ -1752,6 +2299,47 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
         private EsentCompressionIntegrityCheckFailedException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.IndexDeferredPopulateCurrentlyUnavailable exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentIndexDeferredPopulateCurrentlyUnavailableException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentIndexDeferredPopulateCurrentlyUnavailableException class.
+        /// </summary>
+        public EsentIndexDeferredPopulateCurrentlyUnavailableException() :
+            this("Populating a deferred populate index is not allowed at this time.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentIndexDeferredPopulateCurrentlyUnavailableException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentIndexDeferredPopulateCurrentlyUnavailableException(string description) :
+            base(description, JET_err.IndexDeferredPopulateCurrentlyUnavailable)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentIndexDeferredPopulateCurrentlyUnavailableException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentIndexDeferredPopulateCurrentlyUnavailableException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
         }
@@ -1772,7 +2360,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidLoggedOperationException class.
         /// </summary>
         public EsentInvalidLoggedOperationException() :
-            base("Logged operation cannot be redone", JET_err.InvalidLoggedOperation)
+            this("Logged operation cannot be redone")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidLoggedOperationException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidLoggedOperationException(string description) :
+            base(description, JET_err.InvalidLoggedOperation)
         {
         }
 
@@ -1804,7 +2401,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogFileCorruptException class.
         /// </summary>
         public EsentLogFileCorruptException() :
-            base("Log file is corrupt", JET_err.LogFileCorrupt)
+            this("Log file is corrupt")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLogFileCorruptException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLogFileCorruptException(string description) :
+            base(description, JET_err.LogFileCorrupt)
         {
         }
 
@@ -1836,7 +2442,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentNoBackupDirectoryException class.
         /// </summary>
         public EsentNoBackupDirectoryException() :
-            base("No backup directory given", JET_err.NoBackupDirectory)
+            this("No backup directory given")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentNoBackupDirectoryException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentNoBackupDirectoryException(string description) :
+            base(description, JET_err.NoBackupDirectory)
         {
         }
 
@@ -1868,7 +2483,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentBackupDirectoryNotEmptyException class.
         /// </summary>
         public EsentBackupDirectoryNotEmptyException() :
-            base("The backup directory is not empty", JET_err.BackupDirectoryNotEmpty)
+            this("The backup directory is not empty")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBackupDirectoryNotEmptyException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBackupDirectoryNotEmptyException(string description) :
+            base(description, JET_err.BackupDirectoryNotEmpty)
         {
         }
 
@@ -1900,7 +2524,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentBackupInProgressException class.
         /// </summary>
         public EsentBackupInProgressException() :
-            base("Backup is active already", JET_err.BackupInProgress)
+            this("Backup is active already")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBackupInProgressException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBackupInProgressException(string description) :
+            base(description, JET_err.BackupInProgress)
         {
         }
 
@@ -1932,7 +2565,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentRestoreInProgressException class.
         /// </summary>
         public EsentRestoreInProgressException() :
-            base("Restore in progress", JET_err.RestoreInProgress)
+            this("Restore in progress")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRestoreInProgressException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRestoreInProgressException(string description) :
+            base(description, JET_err.RestoreInProgress)
         {
         }
 
@@ -1964,7 +2606,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentMissingPreviousLogFileException class.
         /// </summary>
         public EsentMissingPreviousLogFileException() :
-            base("Missing the log file for check point", JET_err.MissingPreviousLogFile)
+            this("Missing the log file for check point")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentMissingPreviousLogFileException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentMissingPreviousLogFileException(string description) :
+            base(description, JET_err.MissingPreviousLogFile)
         {
         }
 
@@ -1996,7 +2647,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogWriteFailException class.
         /// </summary>
         public EsentLogWriteFailException() :
-            base("Failure writing to log file", JET_err.LogWriteFail)
+            this("Failure writing to log file")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLogWriteFailException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLogWriteFailException(string description) :
+            base(description, JET_err.LogWriteFail)
         {
         }
 
@@ -2028,7 +2688,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogDisabledDueToRecoveryFailureException class.
         /// </summary>
         public EsentLogDisabledDueToRecoveryFailureException() :
-            base("Try to log something after recovery failed", JET_err.LogDisabledDueToRecoveryFailure)
+            this("Try to log something after recovery failed")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLogDisabledDueToRecoveryFailureException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLogDisabledDueToRecoveryFailureException(string description) :
+            base(description, JET_err.LogDisabledDueToRecoveryFailure)
         {
         }
 
@@ -2060,7 +2729,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCannotLogDuringRecoveryRedoException class.
         /// </summary>
         public EsentCannotLogDuringRecoveryRedoException() :
-            base("Try to log something during recovery redo", JET_err.CannotLogDuringRecoveryRedo)
+            this("Try to log something during recovery redo")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCannotLogDuringRecoveryRedoException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCannotLogDuringRecoveryRedoException(string description) :
+            base(description, JET_err.CannotLogDuringRecoveryRedo)
         {
         }
 
@@ -2092,7 +2770,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogGenerationMismatchException class.
         /// </summary>
         public EsentLogGenerationMismatchException() :
-            base("Name of logfile does not match internal generation number", JET_err.LogGenerationMismatch)
+            this("Name of logfile does not match internal generation number")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLogGenerationMismatchException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLogGenerationMismatchException(string description) :
+            base(description, JET_err.LogGenerationMismatch)
         {
         }
 
@@ -2124,7 +2811,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentBadLogVersionException class.
         /// </summary>
         public EsentBadLogVersionException() :
-            base("Version of log file is not compatible with Jet version", JET_err.BadLogVersion)
+            this("Version of log file is not compatible with Jet version")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBadLogVersionException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBadLogVersionException(string description) :
+            base(description, JET_err.BadLogVersion)
         {
         }
 
@@ -2156,7 +2852,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidLogSequenceException class.
         /// </summary>
         public EsentInvalidLogSequenceException() :
-            base("Timestamp in next log does not match expected", JET_err.InvalidLogSequence)
+            this("Timestamp in next log does not match expected")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidLogSequenceException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidLogSequenceException(string description) :
+            base(description, JET_err.InvalidLogSequence)
         {
         }
 
@@ -2188,7 +2893,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLoggingDisabledException class.
         /// </summary>
         public EsentLoggingDisabledException() :
-            base("Log is not active", JET_err.LoggingDisabled)
+            this("Log is not active")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLoggingDisabledException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLoggingDisabledException(string description) :
+            base(description, JET_err.LoggingDisabled)
         {
         }
 
@@ -2220,7 +2934,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogBufferTooSmallException class.
         /// </summary>
         public EsentLogBufferTooSmallException() :
-            base("An operation generated a log record which was too large to fit in the log buffer or in a single log file", JET_err.LogBufferTooSmall)
+            this("An operation generated a log record which was too large to fit in the log buffer or in a single log file")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLogBufferTooSmallException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLogBufferTooSmallException(string description) :
+            base(description, JET_err.LogBufferTooSmall)
         {
         }
 
@@ -2252,7 +2975,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogSequenceEndException class.
         /// </summary>
         public EsentLogSequenceEndException() :
-            base("Maximum log file number exceeded", JET_err.LogSequenceEnd)
+            this("Maximum log file number exceeded")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLogSequenceEndException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLogSequenceEndException(string description) :
+            base(description, JET_err.LogSequenceEnd)
         {
         }
 
@@ -2284,7 +3016,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentNoBackupException class.
         /// </summary>
         public EsentNoBackupException() :
-            base("No backup in progress", JET_err.NoBackup)
+            this("No backup in progress")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentNoBackupException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentNoBackupException(string description) :
+            base(description, JET_err.NoBackup)
         {
         }
 
@@ -2316,7 +3057,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidBackupSequenceException class.
         /// </summary>
         public EsentInvalidBackupSequenceException() :
-            base("Backup call out of sequence", JET_err.InvalidBackupSequence)
+            this("Backup call out of sequence")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidBackupSequenceException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidBackupSequenceException(string description) :
+            base(description, JET_err.InvalidBackupSequence)
         {
         }
 
@@ -2348,7 +3098,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentBackupNotAllowedYetException class.
         /// </summary>
         public EsentBackupNotAllowedYetException() :
-            base("Cannot do backup now", JET_err.BackupNotAllowedYet)
+            this("Cannot do backup now")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBackupNotAllowedYetException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBackupNotAllowedYetException(string description) :
+            base(description, JET_err.BackupNotAllowedYet)
         {
         }
 
@@ -2380,7 +3139,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDeleteBackupFileFailException class.
         /// </summary>
         public EsentDeleteBackupFileFailException() :
-            base("Could not delete backup file", JET_err.DeleteBackupFileFail)
+            this("Could not delete backup file")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDeleteBackupFileFailException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDeleteBackupFileFailException(string description) :
+            base(description, JET_err.DeleteBackupFileFail)
         {
         }
 
@@ -2412,7 +3180,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentMakeBackupDirectoryFailException class.
         /// </summary>
         public EsentMakeBackupDirectoryFailException() :
-            base("Could not make backup temp directory", JET_err.MakeBackupDirectoryFail)
+            this("Could not make backup temp directory")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentMakeBackupDirectoryFailException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentMakeBackupDirectoryFailException(string description) :
+            base(description, JET_err.MakeBackupDirectoryFail)
         {
         }
 
@@ -2444,7 +3221,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidBackupException class.
         /// </summary>
         public EsentInvalidBackupException() :
-            base("Cannot perform incremental backup when circular logging enabled", JET_err.InvalidBackup)
+            this("Cannot perform incremental backup when circular logging enabled")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidBackupException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidBackupException(string description) :
+            base(description, JET_err.InvalidBackup)
         {
         }
 
@@ -2476,7 +3262,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentRecoveredWithErrorsException class.
         /// </summary>
         public EsentRecoveredWithErrorsException() :
-            base("Restored with errors", JET_err.RecoveredWithErrors)
+            this("Restored with errors")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRecoveredWithErrorsException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRecoveredWithErrorsException(string description) :
+            base(description, JET_err.RecoveredWithErrors)
         {
         }
 
@@ -2508,7 +3303,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentMissingLogFileException class.
         /// </summary>
         public EsentMissingLogFileException() :
-            base("Current log file missing", JET_err.MissingLogFile)
+            this("Current log file missing")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentMissingLogFileException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentMissingLogFileException(string description) :
+            base(description, JET_err.MissingLogFile)
         {
         }
 
@@ -2540,7 +3344,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogDiskFullException class.
         /// </summary>
         public EsentLogDiskFullException() :
-            base("Log disk full", JET_err.LogDiskFull)
+            this("Log disk full")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLogDiskFullException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLogDiskFullException(string description) :
+            base(description, JET_err.LogDiskFull)
         {
         }
 
@@ -2572,7 +3385,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentBadLogSignatureException class.
         /// </summary>
         public EsentBadLogSignatureException() :
-            base("Bad signature for a log file", JET_err.BadLogSignature)
+            this("Bad signature for a log file")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBadLogSignatureException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBadLogSignatureException(string description) :
+            base(description, JET_err.BadLogSignature)
         {
         }
 
@@ -2604,7 +3426,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentBadDbSignatureException class.
         /// </summary>
         public EsentBadDbSignatureException() :
-            base("Bad signature for a db file", JET_err.BadDbSignature)
+            this("Bad signature for a db file")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBadDbSignatureException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBadDbSignatureException(string description) :
+            base(description, JET_err.BadDbSignature)
         {
         }
 
@@ -2636,7 +3467,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentBadCheckpointSignatureException class.
         /// </summary>
         public EsentBadCheckpointSignatureException() :
-            base("Bad signature for a checkpoint file", JET_err.BadCheckpointSignature)
+            this("Bad signature for a checkpoint file")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBadCheckpointSignatureException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBadCheckpointSignatureException(string description) :
+            base(description, JET_err.BadCheckpointSignature)
         {
         }
 
@@ -2668,7 +3508,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCheckpointCorruptException class.
         /// </summary>
         public EsentCheckpointCorruptException() :
-            base("Checkpoint file not found or corrupt", JET_err.CheckpointCorrupt)
+            this("Checkpoint file not found or corrupt")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCheckpointCorruptException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCheckpointCorruptException(string description) :
+            base(description, JET_err.CheckpointCorrupt)
         {
         }
 
@@ -2700,7 +3549,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentMissingPatchPageException class.
         /// </summary>
         public EsentMissingPatchPageException() :
-            base("Patch file page not found during recovery", JET_err.MissingPatchPage)
+            this("Patch file page not found during recovery")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentMissingPatchPageException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentMissingPatchPageException(string description) :
+            base(description, JET_err.MissingPatchPage)
         {
         }
 
@@ -2726,13 +3584,22 @@ namespace Microsoft.Isam.Esent.Interop
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentBadPatchPageException : EsentObsoleteException
+    public sealed class EsentBadPatchPageException : EsentInconsistentException
     {
         /// <summary>
         /// Initializes a new instance of the EsentBadPatchPageException class.
         /// </summary>
         public EsentBadPatchPageException() :
-            base("Patch file page is not valid", JET_err.BadPatchPage)
+            this("Patch file page is not valid")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBadPatchPageException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBadPatchPageException(string description) :
+            base(description, JET_err.BadPatchPage)
         {
         }
 
@@ -2764,7 +3631,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentRedoAbruptEndedException class.
         /// </summary>
         public EsentRedoAbruptEndedException() :
-            base("Redo abruptly ended due to sudden failure in reading logs from log file", JET_err.RedoAbruptEnded)
+            this("Redo abruptly ended due to sudden failure in reading logs from log file")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRedoAbruptEndedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRedoAbruptEndedException(string description) :
+            base(description, JET_err.RedoAbruptEnded)
         {
         }
 
@@ -2796,7 +3672,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentPatchFileMissingException class.
         /// </summary>
         public EsentPatchFileMissingException() :
-            base("Hard restore detected that patch file is missing from backup set", JET_err.PatchFileMissing)
+            this("Hard restore detected that patch file is missing from backup set")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentPatchFileMissingException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentPatchFileMissingException(string description) :
+            base(description, JET_err.PatchFileMissing)
         {
         }
 
@@ -2828,7 +3713,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseLogSetMismatchException class.
         /// </summary>
         public EsentDatabaseLogSetMismatchException() :
-            base("Database does not belong with the current set of log files", JET_err.DatabaseLogSetMismatch)
+            this("Database does not belong with the current set of log files")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseLogSetMismatchException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseLogSetMismatchException(string description) :
+            base(description, JET_err.DatabaseLogSetMismatch)
         {
         }
 
@@ -2860,7 +3754,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseStreamingFileMismatchException class.
         /// </summary>
         public EsentDatabaseStreamingFileMismatchException() :
-            base("Database and streaming file do not match each other", JET_err.DatabaseStreamingFileMismatch)
+            this("Database and streaming file do not match each other")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseStreamingFileMismatchException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseStreamingFileMismatchException(string description) :
+            base(description, JET_err.DatabaseStreamingFileMismatch)
         {
         }
 
@@ -2892,7 +3795,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogFileSizeMismatchException class.
         /// </summary>
         public EsentLogFileSizeMismatchException() :
-            base("actual log file size does not match JET_paramLogFileSize", JET_err.LogFileSizeMismatch)
+            this("actual log file size does not match JET_paramLogFileSize")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLogFileSizeMismatchException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLogFileSizeMismatchException(string description) :
+            base(description, JET_err.LogFileSizeMismatch)
         {
         }
 
@@ -2924,7 +3836,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCheckpointFileNotFoundException class.
         /// </summary>
         public EsentCheckpointFileNotFoundException() :
-            base("Could not locate checkpoint file", JET_err.CheckpointFileNotFound)
+            this("Could not locate checkpoint file")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCheckpointFileNotFoundException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCheckpointFileNotFoundException(string description) :
+            base(description, JET_err.CheckpointFileNotFound)
         {
         }
 
@@ -2956,7 +3877,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentRequiredLogFilesMissingException class.
         /// </summary>
         public EsentRequiredLogFilesMissingException() :
-            base("The required log files for recovery is missing.", JET_err.RequiredLogFilesMissing)
+            this("The required log files for recovery is missing.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRequiredLogFilesMissingException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRequiredLogFilesMissingException(string description) :
+            base(description, JET_err.RequiredLogFilesMissing)
         {
         }
 
@@ -2988,7 +3918,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSoftRecoveryOnBackupDatabaseException class.
         /// </summary>
         public EsentSoftRecoveryOnBackupDatabaseException() :
-            base("Soft recovery is intended on a backup database. Restore should be used instead", JET_err.SoftRecoveryOnBackupDatabase)
+            this("Soft recovery is intended on a backup database. Restore should be used instead")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSoftRecoveryOnBackupDatabaseException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentSoftRecoveryOnBackupDatabaseException(string description) :
+            base(description, JET_err.SoftRecoveryOnBackupDatabase)
         {
         }
 
@@ -3020,7 +3959,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogFileSizeMismatchDatabasesConsistentException class.
         /// </summary>
         public EsentLogFileSizeMismatchDatabasesConsistentException() :
-            base("databases have been recovered, but the log file size used during recovery does not match JET_paramLogFileSize", JET_err.LogFileSizeMismatchDatabasesConsistent)
+            this("databases have been recovered, but the log file size used during recovery does not match JET_paramLogFileSize")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLogFileSizeMismatchDatabasesConsistentException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLogFileSizeMismatchDatabasesConsistentException(string description) :
+            base(description, JET_err.LogFileSizeMismatchDatabasesConsistent)
         {
         }
 
@@ -3052,7 +4000,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogSectorSizeMismatchException class.
         /// </summary>
         public EsentLogSectorSizeMismatchException() :
-            base("the log file sector size does not match the current volume's sector size", JET_err.LogSectorSizeMismatch)
+            this("the log file sector size does not match the current volume's sector size")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLogSectorSizeMismatchException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLogSectorSizeMismatchException(string description) :
+            base(description, JET_err.LogSectorSizeMismatch)
         {
         }
 
@@ -3084,7 +4041,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogSectorSizeMismatchDatabasesConsistentException class.
         /// </summary>
         public EsentLogSectorSizeMismatchDatabasesConsistentException() :
-            base("databases have been recovered, but the log file sector size (used during recovery) does not match the current volume's sector size", JET_err.LogSectorSizeMismatchDatabasesConsistent)
+            this("databases have been recovered, but the log file sector size (used during recovery) does not match the current volume's sector size")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLogSectorSizeMismatchDatabasesConsistentException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLogSectorSizeMismatchDatabasesConsistentException(string description) :
+            base(description, JET_err.LogSectorSizeMismatchDatabasesConsistent)
         {
         }
 
@@ -3116,7 +4082,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogSequenceEndDatabasesConsistentException class.
         /// </summary>
         public EsentLogSequenceEndDatabasesConsistentException() :
-            base("databases have been recovered, but all possible log generations in the current sequence are used; delete all log files and the checkpoint file and backup the databases before continuing", JET_err.LogSequenceEndDatabasesConsistent)
+            this("databases have been recovered, but all possible log generations in the current sequence are used; delete all log files and the checkpoint file and backup the databases before continuing")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLogSequenceEndDatabasesConsistentException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLogSequenceEndDatabasesConsistentException(string description) :
+            base(description, JET_err.LogSequenceEndDatabasesConsistent)
         {
         }
 
@@ -3148,7 +4123,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentStreamingDataNotLoggedException class.
         /// </summary>
         public EsentStreamingDataNotLoggedException() :
-            base("Illegal attempt to replay a streaming file operation where the data wasn't logged. Probably caused by an attempt to roll-forward with circular logging enabled", JET_err.StreamingDataNotLogged)
+            this("Illegal attempt to replay a streaming file operation where the data wasn't logged. Probably caused by an attempt to roll-forward with circular logging enabled")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentStreamingDataNotLoggedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentStreamingDataNotLoggedException(string description) :
+            base(description, JET_err.StreamingDataNotLogged)
         {
         }
 
@@ -3180,7 +4164,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseDirtyShutdownException class.
         /// </summary>
         public EsentDatabaseDirtyShutdownException() :
-            base("Database was not shutdown cleanly. Recovery must first be run to properly complete database operations for the previous shutdown.", JET_err.DatabaseDirtyShutdown)
+            this("Database was not shutdown cleanly. Recovery must first be run to properly complete database operations for the previous shutdown.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseDirtyShutdownException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseDirtyShutdownException(string description) :
+            base(description, JET_err.DatabaseDirtyShutdown)
         {
         }
 
@@ -3212,7 +4205,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentConsistentTimeMismatchException class.
         /// </summary>
         public EsentConsistentTimeMismatchException() :
-            base("Database last consistent time unmatched", JET_err.ConsistentTimeMismatch)
+            this("Database last consistent time unmatched")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentConsistentTimeMismatchException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentConsistentTimeMismatchException(string description) :
+            base(description, JET_err.ConsistentTimeMismatch)
         {
         }
 
@@ -3244,7 +4246,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabasePatchFileMismatchException class.
         /// </summary>
         public EsentDatabasePatchFileMismatchException() :
-            base("Patch file is not generated from this backup", JET_err.DatabasePatchFileMismatch)
+            this("Patch file is not generated from this backup")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabasePatchFileMismatchException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabasePatchFileMismatchException(string description) :
+            base(description, JET_err.DatabasePatchFileMismatch)
         {
         }
 
@@ -3276,7 +4287,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentEndingRestoreLogTooLowException class.
         /// </summary>
         public EsentEndingRestoreLogTooLowException() :
-            base("The starting log number too low for the restore", JET_err.EndingRestoreLogTooLow)
+            this("The starting log number too low for the restore")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentEndingRestoreLogTooLowException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentEndingRestoreLogTooLowException(string description) :
+            base(description, JET_err.EndingRestoreLogTooLow)
         {
         }
 
@@ -3308,7 +4328,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentStartingRestoreLogTooHighException class.
         /// </summary>
         public EsentStartingRestoreLogTooHighException() :
-            base("The starting log number too high for the restore", JET_err.StartingRestoreLogTooHigh)
+            this("The starting log number too high for the restore")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentStartingRestoreLogTooHighException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentStartingRestoreLogTooHighException(string description) :
+            base(description, JET_err.StartingRestoreLogTooHigh)
         {
         }
 
@@ -3340,7 +4369,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentGivenLogFileHasBadSignatureException class.
         /// </summary>
         public EsentGivenLogFileHasBadSignatureException() :
-            base("Restore log file has bad signature", JET_err.GivenLogFileHasBadSignature)
+            this("Restore log file has bad signature")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentGivenLogFileHasBadSignatureException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentGivenLogFileHasBadSignatureException(string description) :
+            base(description, JET_err.GivenLogFileHasBadSignature)
         {
         }
 
@@ -3372,7 +4410,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentGivenLogFileIsNotContiguousException class.
         /// </summary>
         public EsentGivenLogFileIsNotContiguousException() :
-            base("Restore log file is not contiguous", JET_err.GivenLogFileIsNotContiguous)
+            this("Restore log file is not contiguous")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentGivenLogFileIsNotContiguousException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentGivenLogFileIsNotContiguousException(string description) :
+            base(description, JET_err.GivenLogFileIsNotContiguous)
         {
         }
 
@@ -3404,7 +4451,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentMissingRestoreLogFilesException class.
         /// </summary>
         public EsentMissingRestoreLogFilesException() :
-            base("Some restore log files are missing", JET_err.MissingRestoreLogFiles)
+            this("Some restore log files are missing")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentMissingRestoreLogFilesException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentMissingRestoreLogFilesException(string description) :
+            base(description, JET_err.MissingRestoreLogFiles)
         {
         }
 
@@ -3436,7 +4492,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentMissingFullBackupException class.
         /// </summary>
         public EsentMissingFullBackupException() :
-            base("The database missed a previous full backup before incremental backup", JET_err.MissingFullBackup)
+            this("The database missed a previous full backup before incremental backup")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentMissingFullBackupException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentMissingFullBackupException(string description) :
+            base(description, JET_err.MissingFullBackup)
         {
         }
 
@@ -3468,7 +4533,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentBadBackupDatabaseSizeException class.
         /// </summary>
         public EsentBadBackupDatabaseSizeException() :
-            base("The backup database size is not in 4k", JET_err.BadBackupDatabaseSize)
+            this("The backup database size is not in 4k")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBadBackupDatabaseSizeException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBadBackupDatabaseSizeException(string description) :
+            base(description, JET_err.BadBackupDatabaseSize)
         {
         }
 
@@ -3500,7 +4574,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseAlreadyUpgradedException class.
         /// </summary>
         public EsentDatabaseAlreadyUpgradedException() :
-            base("Attempted to upgrade a database that is already current", JET_err.DatabaseAlreadyUpgraded)
+            this("Attempted to upgrade a database that is already current")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseAlreadyUpgradedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseAlreadyUpgradedException(string description) :
+            base(description, JET_err.DatabaseAlreadyUpgraded)
         {
         }
 
@@ -3532,7 +4615,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseIncompleteUpgradeException class.
         /// </summary>
         public EsentDatabaseIncompleteUpgradeException() :
-            base("Attempted to use a database which was only partially converted to the current format -- must restore from backup", JET_err.DatabaseIncompleteUpgrade)
+            this("Attempted to use a database which was only partially converted to the current format -- must restore from backup")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseIncompleteUpgradeException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseIncompleteUpgradeException(string description) :
+            base(description, JET_err.DatabaseIncompleteUpgrade)
         {
         }
 
@@ -3564,7 +4656,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentMissingCurrentLogFilesException class.
         /// </summary>
         public EsentMissingCurrentLogFilesException() :
-            base("Some current log files are missing for continuous restore", JET_err.MissingCurrentLogFiles)
+            this("Some current log files are missing for continuous restore")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentMissingCurrentLogFilesException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentMissingCurrentLogFilesException(string description) :
+            base(description, JET_err.MissingCurrentLogFiles)
         {
         }
 
@@ -3596,7 +4697,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDbTimeTooOldException class.
         /// </summary>
         public EsentDbTimeTooOldException() :
-            base("dbtime on page smaller than dbtimeBefore in record", JET_err.DbTimeTooOld)
+            this("dbtime on page smaller than dbtimeBefore in record")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDbTimeTooOldException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDbTimeTooOldException(string description) :
+            base(description, JET_err.DbTimeTooOld)
         {
         }
 
@@ -3628,7 +4738,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDbTimeTooNewException class.
         /// </summary>
         public EsentDbTimeTooNewException() :
-            base("dbtime on page in advance of the dbtimeBefore in record", JET_err.DbTimeTooNew)
+            this("dbtime on page in advance of the dbtimeBefore and below dbtimeAfter in record")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDbTimeTooNewException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDbTimeTooNewException(string description) :
+            base(description, JET_err.DbTimeTooNew)
         {
         }
 
@@ -3660,7 +4779,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentMissingFileToBackupException class.
         /// </summary>
         public EsentMissingFileToBackupException() :
-            base("Some log or patch files are missing during backup", JET_err.MissingFileToBackup)
+            this("Some log or patch files are missing during backup")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentMissingFileToBackupException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentMissingFileToBackupException(string description) :
+            base(description, JET_err.MissingFileToBackup)
         {
         }
 
@@ -3692,7 +4820,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogTornWriteDuringHardRestoreException class.
         /// </summary>
         public EsentLogTornWriteDuringHardRestoreException() :
-            base("torn-write was detected in a backup set during hard restore", JET_err.LogTornWriteDuringHardRestore)
+            this("torn-write was detected in a backup set during hard restore")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLogTornWriteDuringHardRestoreException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLogTornWriteDuringHardRestoreException(string description) :
+            base(description, JET_err.LogTornWriteDuringHardRestore)
         {
         }
 
@@ -3724,7 +4861,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogTornWriteDuringHardRecoveryException class.
         /// </summary>
         public EsentLogTornWriteDuringHardRecoveryException() :
-            base("torn-write was detected during hard recovery (log was not part of a backup set)", JET_err.LogTornWriteDuringHardRecovery)
+            this("torn-write was detected during hard recovery (log was not part of a backup set)")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLogTornWriteDuringHardRecoveryException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLogTornWriteDuringHardRecoveryException(string description) :
+            base(description, JET_err.LogTornWriteDuringHardRecovery)
         {
         }
 
@@ -3756,7 +4902,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogCorruptDuringHardRestoreException class.
         /// </summary>
         public EsentLogCorruptDuringHardRestoreException() :
-            base("corruption was detected in a backup set during hard restore", JET_err.LogCorruptDuringHardRestore)
+            this("corruption was detected in a backup set during hard restore")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLogCorruptDuringHardRestoreException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLogCorruptDuringHardRestoreException(string description) :
+            base(description, JET_err.LogCorruptDuringHardRestore)
         {
         }
 
@@ -3788,7 +4943,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogCorruptDuringHardRecoveryException class.
         /// </summary>
         public EsentLogCorruptDuringHardRecoveryException() :
-            base("corruption was detected during hard recovery (log was not part of a backup set)", JET_err.LogCorruptDuringHardRecovery)
+            this("corruption was detected during hard recovery (log was not part of a backup set)")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLogCorruptDuringHardRecoveryException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLogCorruptDuringHardRecoveryException(string description) :
+            base(description, JET_err.LogCorruptDuringHardRecovery)
         {
         }
 
@@ -3820,7 +4984,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentMustDisableLoggingForDbUpgradeException class.
         /// </summary>
         public EsentMustDisableLoggingForDbUpgradeException() :
-            base("Cannot have logging enabled while attempting to upgrade db", JET_err.MustDisableLoggingForDbUpgrade)
+            this("Cannot have logging enabled while attempting to upgrade db")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentMustDisableLoggingForDbUpgradeException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentMustDisableLoggingForDbUpgradeException(string description) :
+            base(description, JET_err.MustDisableLoggingForDbUpgrade)
         {
         }
 
@@ -3852,7 +5025,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentBadRestoreTargetInstanceException class.
         /// </summary>
         public EsentBadRestoreTargetInstanceException() :
-            base("TargetInstance specified for restore is not found or log files don't match", JET_err.BadRestoreTargetInstance)
+            this("TargetInstance specified for restore is not found or log files don't match")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBadRestoreTargetInstanceException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBadRestoreTargetInstanceException(string description) :
+            base(description, JET_err.BadRestoreTargetInstance)
         {
         }
 
@@ -3884,7 +5066,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentRecoveredWithoutUndoException class.
         /// </summary>
         public EsentRecoveredWithoutUndoException() :
-            base("Soft recovery successfully replayed all operations, but the Undo phase of recovery was skipped", JET_err.RecoveredWithoutUndo)
+            this("Soft recovery successfully replayed all operations, but the Undo phase of recovery was skipped")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRecoveredWithoutUndoException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRecoveredWithoutUndoException(string description) :
+            base(description, JET_err.RecoveredWithoutUndo)
         {
         }
 
@@ -3916,7 +5107,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabasesNotFromSameSnapshotException class.
         /// </summary>
         public EsentDatabasesNotFromSameSnapshotException() :
-            base("Databases to be restored are not from the same shadow copy backup", JET_err.DatabasesNotFromSameSnapshot)
+            this("Databases to be restored are not from the same shadow copy backup")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabasesNotFromSameSnapshotException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabasesNotFromSameSnapshotException(string description) :
+            base(description, JET_err.DatabasesNotFromSameSnapshot)
         {
         }
 
@@ -3948,7 +5148,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSoftRecoveryOnSnapshotException class.
         /// </summary>
         public EsentSoftRecoveryOnSnapshotException() :
-            base("Soft recovery on a database from a shadow copy backup set", JET_err.SoftRecoveryOnSnapshot)
+            this("Soft recovery on a database from a shadow copy backup set")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSoftRecoveryOnSnapshotException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentSoftRecoveryOnSnapshotException(string description) :
+            base(description, JET_err.SoftRecoveryOnSnapshot)
         {
         }
 
@@ -3980,7 +5189,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCommittedLogFilesMissingException class.
         /// </summary>
         public EsentCommittedLogFilesMissingException() :
-            base("One or more logs that were committed to this database, are missing.  These log files are required to maintain durable ACID semantics, but not required to maintain consistency if the JET_bitReplayIgnoreLostLogs bit is specified during recovery.", JET_err.CommittedLogFilesMissing)
+            this("One or more logs that were committed to this database, are missing.  These log files are required to maintain durable ACID semantics, but not required to maintain consistency if the JET_bitReplayIgnoreLostLogs bit is specified during recovery.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCommittedLogFilesMissingException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCommittedLogFilesMissingException(string description) :
+            base(description, JET_err.CommittedLogFilesMissing)
         {
         }
 
@@ -4012,7 +5230,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSectorSizeNotSupportedException class.
         /// </summary>
         public EsentSectorSizeNotSupportedException() :
-            base("The physical sector size reported by the disk subsystem, is unsupported by ESE for a specific file type.", JET_err.SectorSizeNotSupported)
+            this("The physical sector size reported by the disk subsystem, is unsupported by ESE for a specific file type.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSectorSizeNotSupportedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentSectorSizeNotSupportedException(string description) :
+            base(description, JET_err.SectorSizeNotSupported)
         {
         }
 
@@ -4044,7 +5271,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentRecoveredWithoutUndoDatabasesConsistentException class.
         /// </summary>
         public EsentRecoveredWithoutUndoDatabasesConsistentException() :
-            base("Soft recovery successfully replayed all operations and intended to skip the Undo phase of recovery, but the Undo phase was not required", JET_err.RecoveredWithoutUndoDatabasesConsistent)
+            this("Soft recovery successfully replayed all operations and intended to skip the Undo phase of recovery, but the Undo phase was not required")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRecoveredWithoutUndoDatabasesConsistentException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRecoveredWithoutUndoDatabasesConsistentException(string description) :
+            base(description, JET_err.RecoveredWithoutUndoDatabasesConsistent)
         {
         }
 
@@ -4076,7 +5312,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCommittedLogFileCorruptException class.
         /// </summary>
         public EsentCommittedLogFileCorruptException() :
-            base("One or more logs were found to be corrupt during recovery.  These log files are required to maintain durable ACID semantics, but not required to maintain consistency if the JET_bitIgnoreLostLogs bit and JET_paramDeleteOutOfRangeLogs is specified during recovery.", JET_err.CommittedLogFileCorrupt)
+            this("One or more logs were found to be corrupt during recovery.  These log files are required to maintain durable ACID semantics, but not required to maintain consistency if the JET_bitIgnoreLostLogs bit and JET_paramDeleteOutOfRangeLogs is specified during recovery.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCommittedLogFileCorruptException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCommittedLogFileCorruptException(string description) :
+            base(description, JET_err.CommittedLogFileCorrupt)
         {
         }
 
@@ -4108,7 +5353,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogSequenceChecksumMismatchException class.
         /// </summary>
         public EsentLogSequenceChecksumMismatchException() :
-            base("The previous log's accumulated segment checksum doesn't match the next log", JET_err.LogSequenceChecksumMismatch)
+            this("The previous log's accumulated segment checksum doesn't match the next log")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLogSequenceChecksumMismatchException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLogSequenceChecksumMismatchException(string description) :
+            base(description, JET_err.LogSequenceChecksumMismatch)
         {
         }
 
@@ -4127,31 +5381,81 @@ namespace Microsoft.Isam.Esent.Interop
     }
 
     /// <summary>
-    /// Base class for JET_err.PageInitializedMismatch exceptions.
+    /// Base class for JET_err.PageInitializedMismatchUninitRemote exceptions.
     /// </summary>
     [SuppressMessage(
         "Microsoft.StyleCop.CSharp.MaintainabilityRules",
         "SA1402:FileMayOnlyContainASingleClass",
         Justification = "Auto-generated code.")]
     [Serializable]
-    public sealed class EsentPageInitializedMismatchException : EsentCorruptionException
+    public sealed class EsentPageInitializedMismatchUninitRemoteException : EsentCorruptionException
     {
         /// <summary>
-        /// Initializes a new instance of the EsentPageInitializedMismatchException class.
+        /// Initializes a new instance of the EsentPageInitializedMismatchUninitRemoteException class.
         /// </summary>
-        public EsentPageInitializedMismatchException() :
-            base("Database divergence mismatch. Page was uninitialized on remote node, but initialized on local node.", JET_err.PageInitializedMismatch)
+        public EsentPageInitializedMismatchUninitRemoteException() :
+            this("Database divergence mismatch. Page was uninitialized on remote node, but initialized on local node.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentPageInitializedMismatchUninitRemoteException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentPageInitializedMismatchUninitRemoteException(string description) :
+            base(description, JET_err.PageInitializedMismatchUninitRemote)
         {
         }
 
 #if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
         /// <summary>
-        /// Initializes a new instance of the EsentPageInitializedMismatchException class. This constructor
+        /// Initializes a new instance of the EsentPageInitializedMismatchUninitRemoteException class. This constructor
         /// is used to deserialize a serialized exception.
         /// </summary>
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
-        private EsentPageInitializedMismatchException(SerializationInfo info, StreamingContext context) :
+        private EsentPageInitializedMismatchUninitRemoteException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.PageInitializedMismatchUninitLocal exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentPageInitializedMismatchUninitLocalException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentPageInitializedMismatchUninitLocalException class.
+        /// </summary>
+        public EsentPageInitializedMismatchUninitLocalException() :
+            this("Database divergence mismatch. Page was initialized on remote node, but uninitialized on local node.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentPageInitializedMismatchUninitLocalException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentPageInitializedMismatchUninitLocalException(string description) :
+            base(description, JET_err.PageInitializedMismatchUninitLocal)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentPageInitializedMismatchUninitLocalException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentPageInitializedMismatchUninitLocalException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
         }
@@ -4172,7 +5476,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentUnicodeTranslationBufferTooSmallException class.
         /// </summary>
         public EsentUnicodeTranslationBufferTooSmallException() :
-            base("Unicode translation buffer too small", JET_err.UnicodeTranslationBufferTooSmall)
+            this("Unicode translation buffer too small")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentUnicodeTranslationBufferTooSmallException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentUnicodeTranslationBufferTooSmallException(string description) :
+            base(description, JET_err.UnicodeTranslationBufferTooSmall)
         {
         }
 
@@ -4204,7 +5517,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentUnicodeTranslationFailException class.
         /// </summary>
         public EsentUnicodeTranslationFailException() :
-            base("Unicode normalization failed", JET_err.UnicodeTranslationFail)
+            this("Unicode normalization failed")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentUnicodeTranslationFailException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentUnicodeTranslationFailException(string description) :
+            base(description, JET_err.UnicodeTranslationFail)
         {
         }
 
@@ -4236,7 +5558,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentUnicodeNormalizationNotSupportedException class.
         /// </summary>
         public EsentUnicodeNormalizationNotSupportedException() :
-            base("OS does not provide support for Unicode normalisation (and no normalisation callback was specified)", JET_err.UnicodeNormalizationNotSupported)
+            this("OS does not provide support for Unicode normalisation (and no normalisation callback was specified)")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentUnicodeNormalizationNotSupportedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentUnicodeNormalizationNotSupportedException(string description) :
+            base(description, JET_err.UnicodeNormalizationNotSupported)
         {
         }
 
@@ -4268,7 +5599,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentUnicodeLanguageValidationFailureException class.
         /// </summary>
         public EsentUnicodeLanguageValidationFailureException() :
-            base("Can not validate the language", JET_err.UnicodeLanguageValidationFailure)
+            this("Can not validate the language")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentUnicodeLanguageValidationFailureException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentUnicodeLanguageValidationFailureException(string description) :
+            base(description, JET_err.UnicodeLanguageValidationFailure)
         {
         }
 
@@ -4300,7 +5640,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentExistingLogFileHasBadSignatureException class.
         /// </summary>
         public EsentExistingLogFileHasBadSignatureException() :
-            base("Existing log file has bad signature", JET_err.ExistingLogFileHasBadSignature)
+            this("Existing log file has bad signature")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentExistingLogFileHasBadSignatureException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentExistingLogFileHasBadSignatureException(string description) :
+            base(description, JET_err.ExistingLogFileHasBadSignature)
         {
         }
 
@@ -4332,7 +5681,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentExistingLogFileIsNotContiguousException class.
         /// </summary>
         public EsentExistingLogFileIsNotContiguousException() :
-            base("Existing log file is not contiguous", JET_err.ExistingLogFileIsNotContiguous)
+            this("Existing log file is not contiguous")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentExistingLogFileIsNotContiguousException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentExistingLogFileIsNotContiguousException(string description) :
+            base(description, JET_err.ExistingLogFileIsNotContiguous)
         {
         }
 
@@ -4364,7 +5722,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogReadVerifyFailureException class.
         /// </summary>
         public EsentLogReadVerifyFailureException() :
-            base("Checksum error in log file during backup", JET_err.LogReadVerifyFailure)
+            this("Checksum error in log file during backup")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLogReadVerifyFailureException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLogReadVerifyFailureException(string description) :
+            base(description, JET_err.LogReadVerifyFailure)
         {
         }
 
@@ -4396,7 +5763,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCheckpointDepthTooDeepException class.
         /// </summary>
         public EsentCheckpointDepthTooDeepException() :
-            base("too many outstanding generations between checkpoint and current generation", JET_err.CheckpointDepthTooDeep)
+            this("too many outstanding generations between checkpoint and current generation")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCheckpointDepthTooDeepException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCheckpointDepthTooDeepException(string description) :
+            base(description, JET_err.CheckpointDepthTooDeep)
         {
         }
 
@@ -4428,7 +5804,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentRestoreOfNonBackupDatabaseException class.
         /// </summary>
         public EsentRestoreOfNonBackupDatabaseException() :
-            base("hard recovery attempted on a database that wasn't a backup database", JET_err.RestoreOfNonBackupDatabase)
+            this("hard recovery attempted on a database that wasn't a backup database")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRestoreOfNonBackupDatabaseException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRestoreOfNonBackupDatabaseException(string description) :
+            base(description, JET_err.RestoreOfNonBackupDatabase)
         {
         }
 
@@ -4460,7 +5845,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogFileNotCopiedException class.
         /// </summary>
         public EsentLogFileNotCopiedException() :
-            base("log truncation attempted but not all required logs were copied", JET_err.LogFileNotCopied)
+            this("log truncation attempted but not all required logs were copied")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLogFileNotCopiedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLogFileNotCopiedException(string description) :
+            base(description, JET_err.LogFileNotCopied)
         {
         }
 
@@ -4492,7 +5886,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSurrogateBackupInProgressException class.
         /// </summary>
         public EsentSurrogateBackupInProgressException() :
-            base("A surrogate backup is in progress.", JET_err.SurrogateBackupInProgress)
+            this("A surrogate backup is in progress.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSurrogateBackupInProgressException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentSurrogateBackupInProgressException(string description) :
+            base(description, JET_err.SurrogateBackupInProgress)
         {
         }
 
@@ -4524,7 +5927,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTransactionTooLongException class.
         /// </summary>
         public EsentTransactionTooLongException() :
-            base("Too many outstanding generations between JetBeginTransaction and current generation.", JET_err.TransactionTooLong)
+            this("Too many outstanding generations between JetBeginTransaction and current generation.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTransactionTooLongException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTransactionTooLongException(string description) :
+            base(description, JET_err.TransactionTooLong)
         {
         }
 
@@ -4556,7 +5968,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentEngineFormatVersionNoLongerSupportedTooLowException class.
         /// </summary>
         public EsentEngineFormatVersionNoLongerSupportedTooLowException() :
-            base("The specified JET_ENGINEFORMATVERSION value is too low to be supported by this version of ESE.", JET_err.EngineFormatVersionNoLongerSupportedTooLow)
+            this("The specified JET_ENGINEFORMATVERSION value is too low to be supported by this version of ESE.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentEngineFormatVersionNoLongerSupportedTooLowException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentEngineFormatVersionNoLongerSupportedTooLowException(string description) :
+            base(description, JET_err.EngineFormatVersionNoLongerSupportedTooLow)
         {
         }
 
@@ -4588,7 +6009,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentEngineFormatVersionNotYetImplementedTooHighException class.
         /// </summary>
         public EsentEngineFormatVersionNotYetImplementedTooHighException() :
-            base("The specified JET_ENGINEFORMATVERSION value is too high, higher than this version of ESE knows about.", JET_err.EngineFormatVersionNotYetImplementedTooHigh)
+            this("The specified JET_ENGINEFORMATVERSION value is too high, higher than this version of ESE knows about.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentEngineFormatVersionNotYetImplementedTooHighException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentEngineFormatVersionNotYetImplementedTooHighException(string description) :
+            base(description, JET_err.EngineFormatVersionNotYetImplementedTooHigh)
         {
         }
 
@@ -4620,7 +6050,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentEngineFormatVersionParamTooLowForRequestedFeatureException class.
         /// </summary>
         public EsentEngineFormatVersionParamTooLowForRequestedFeatureException() :
-            base("Thrown by a format feature (not at JetSetSystemParameter) if the client requests a feature that requires a version higher than that set for the JET_paramEngineFormatVersion.", JET_err.EngineFormatVersionParamTooLowForRequestedFeature)
+            this("Thrown by a format feature (not at JetSetSystemParameter) if the client requests a feature that requires a version higher than that set for the JET_paramEngineFormatVersion.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentEngineFormatVersionParamTooLowForRequestedFeatureException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentEngineFormatVersionParamTooLowForRequestedFeatureException(string description) :
+            base(description, JET_err.EngineFormatVersionParamTooLowForRequestedFeature)
         {
         }
 
@@ -4652,7 +6091,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentEngineFormatVersionSpecifiedTooLowForLogVersionException class.
         /// </summary>
         public EsentEngineFormatVersionSpecifiedTooLowForLogVersionException() :
-            base("The specified JET_ENGINEFORMATVERSION is set too low for this log stream, the log files have already been upgraded to a higher version.  A higher JET_ENGINEFORMATVERSION value must be set in the param.", JET_err.EngineFormatVersionSpecifiedTooLowForLogVersion)
+            this("The specified JET_ENGINEFORMATVERSION is set too low for this log stream, the log files have already been upgraded to a higher version.  A higher JET_ENGINEFORMATVERSION value must be set in the param.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentEngineFormatVersionSpecifiedTooLowForLogVersionException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentEngineFormatVersionSpecifiedTooLowForLogVersionException(string description) :
+            base(description, JET_err.EngineFormatVersionSpecifiedTooLowForLogVersion)
         {
         }
 
@@ -4684,7 +6132,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentEngineFormatVersionSpecifiedTooLowForDatabaseVersionException class.
         /// </summary>
         public EsentEngineFormatVersionSpecifiedTooLowForDatabaseVersionException() :
-            base("The specified JET_ENGINEFORMATVERSION is set too low for this database file, the database file has already been upgraded to a higher version.  A higher JET_ENGINEFORMATVERSION value must be set in the param.", JET_err.EngineFormatVersionSpecifiedTooLowForDatabaseVersion)
+            this("The specified JET_ENGINEFORMATVERSION is set too low for this database file, the database file has already been upgraded to a higher version.  A higher JET_ENGINEFORMATVERSION value must be set in the param.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentEngineFormatVersionSpecifiedTooLowForDatabaseVersionException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentEngineFormatVersionSpecifiedTooLowForDatabaseVersionException(string description) :
+            base(description, JET_err.EngineFormatVersionSpecifiedTooLowForDatabaseVersion)
         {
         }
 
@@ -4696,6 +6153,129 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
         private EsentEngineFormatVersionSpecifiedTooLowForDatabaseVersionException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.DbTimeBeyondMaxRequired exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentDbTimeBeyondMaxRequiredException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentDbTimeBeyondMaxRequiredException class.
+        /// </summary>
+        public EsentDbTimeBeyondMaxRequiredException() :
+            this("dbtime on page greater than or equal to dbtimeAfter in record, but record is outside required range for the database")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDbTimeBeyondMaxRequiredException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDbTimeBeyondMaxRequiredException(string description) :
+            base(description, JET_err.DbTimeBeyondMaxRequired)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentDbTimeBeyondMaxRequiredException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentDbTimeBeyondMaxRequiredException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.LogOperationInconsistentWithDatabase exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentLogOperationInconsistentWithDatabaseException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentLogOperationInconsistentWithDatabaseException class.
+        /// </summary>
+        public EsentLogOperationInconsistentWithDatabaseException() :
+            this("Log record in the log is inconsistent with the current state of the database and cannot be applied")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLogOperationInconsistentWithDatabaseException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLogOperationInconsistentWithDatabaseException(string description) :
+            base(description, JET_err.LogOperationInconsistentWithDatabase)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentLogOperationInconsistentWithDatabaseException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentLogOperationInconsistentWithDatabaseException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.InsertKeyOutOfOrder exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentInsertKeyOutOfOrderException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentInsertKeyOutOfOrderException class.
+        /// </summary>
+        public EsentInsertKeyOutOfOrderException() :
+            this("The insert attempted was not placed in correct key order.  Possibly indicates transient memory issues.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInsertKeyOutOfOrderException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInsertKeyOutOfOrderException(string description) :
+            base(description, JET_err.InsertKeyOutOfOrder)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentInsertKeyOutOfOrderException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentInsertKeyOutOfOrderException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
         }
@@ -4716,7 +6296,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentBackupAbortByServerException class.
         /// </summary>
         public EsentBackupAbortByServerException() :
-            base("Backup was aborted by server by calling JetTerm with JET_bitTermStopBackup or by calling JetStopBackup", JET_err.BackupAbortByServer)
+            this("Backup was aborted by server by calling JetTerm with JET_bitTermStopBackup or by calling JetStopBackup")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBackupAbortByServerException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBackupAbortByServerException(string description) :
+            base(description, JET_err.BackupAbortByServer)
         {
         }
 
@@ -4728,6 +6317,47 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
         private EsentBackupAbortByServerException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.PatchTokenUnknownVersion exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentPatchTokenUnknownVersionException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentPatchTokenUnknownVersionException class.
+        /// </summary>
+        public EsentPatchTokenUnknownVersionException() :
+            this("Similar to invalid parameter but specifically for if the page patch token seems valid, but is of an unknown (presumably future) version / size.  Allows client code to react less aggressively if a future version of the token ends up being provided to an older code base (such as in distributed systems patching between servers).")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentPatchTokenUnknownVersionException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentPatchTokenUnknownVersionException(string description) :
+            base(description, JET_err.PatchTokenUnknownVersion)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentPatchTokenUnknownVersionException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentPatchTokenUnknownVersionException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
         }
@@ -4748,7 +6378,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidGrbitException class.
         /// </summary>
         public EsentInvalidGrbitException() :
-            base("Invalid flags parameter", JET_err.InvalidGrbit)
+            this("Invalid flags parameter")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidGrbitException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidGrbitException(string description) :
+            base(description, JET_err.InvalidGrbit)
         {
         }
 
@@ -4780,7 +6419,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTermInProgressException class.
         /// </summary>
         public EsentTermInProgressException() :
-            base("Termination in progress", JET_err.TermInProgress)
+            this("Termination in progress")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTermInProgressException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTermInProgressException(string description) :
+            base(description, JET_err.TermInProgress)
         {
         }
 
@@ -4812,7 +6460,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentFeatureNotAvailableException class.
         /// </summary>
         public EsentFeatureNotAvailableException() :
-            base("API not supported", JET_err.FeatureNotAvailable)
+            this("API not supported")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentFeatureNotAvailableException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentFeatureNotAvailableException(string description) :
+            base(description, JET_err.FeatureNotAvailable)
         {
         }
 
@@ -4844,7 +6501,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidNameException class.
         /// </summary>
         public EsentInvalidNameException() :
-            base("Invalid name", JET_err.InvalidName)
+            this("Invalid name")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidNameException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidNameException(string description) :
+            base(description, JET_err.InvalidName)
         {
         }
 
@@ -4876,7 +6542,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidParameterException class.
         /// </summary>
         public EsentInvalidParameterException() :
-            base("Invalid API parameter", JET_err.InvalidParameter)
+            this("Invalid API parameter")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidParameterException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidParameterException(string description) :
+            base(description, JET_err.InvalidParameter)
         {
         }
 
@@ -4908,7 +6583,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseFileReadOnlyException class.
         /// </summary>
         public EsentDatabaseFileReadOnlyException() :
-            base("Tried to attach a read-only database file for read/write operations", JET_err.DatabaseFileReadOnly)
+            this("Tried to attach a read-only database file for read/write operations")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseFileReadOnlyException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseFileReadOnlyException(string description) :
+            base(description, JET_err.DatabaseFileReadOnly)
         {
         }
 
@@ -4940,7 +6624,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidDatabaseIdException class.
         /// </summary>
         public EsentInvalidDatabaseIdException() :
-            base("Invalid database id", JET_err.InvalidDatabaseId)
+            this("Invalid database id")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidDatabaseIdException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidDatabaseIdException(string description) :
+            base(description, JET_err.InvalidDatabaseId)
         {
         }
 
@@ -4972,7 +6665,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentOutOfMemoryException class.
         /// </summary>
         public EsentOutOfMemoryException() :
-            base("Out of Memory", JET_err.OutOfMemory)
+            this("Out of Memory")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentOutOfMemoryException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentOutOfMemoryException(string description) :
+            base(description, JET_err.OutOfMemory)
         {
         }
 
@@ -5004,7 +6706,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentOutOfDatabaseSpaceException class.
         /// </summary>
         public EsentOutOfDatabaseSpaceException() :
-            base("Maximum database size reached", JET_err.OutOfDatabaseSpace)
+            this("Maximum database size reached")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentOutOfDatabaseSpaceException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentOutOfDatabaseSpaceException(string description) :
+            base(description, JET_err.OutOfDatabaseSpace)
         {
         }
 
@@ -5036,7 +6747,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentOutOfCursorsException class.
         /// </summary>
         public EsentOutOfCursorsException() :
-            base("Out of table cursors", JET_err.OutOfCursors)
+            this("Out of table cursors")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentOutOfCursorsException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentOutOfCursorsException(string description) :
+            base(description, JET_err.OutOfCursors)
         {
         }
 
@@ -5068,7 +6788,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentOutOfBuffersException class.
         /// </summary>
         public EsentOutOfBuffersException() :
-            base("Out of database page buffers", JET_err.OutOfBuffers)
+            this("Out of database page buffers")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentOutOfBuffersException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentOutOfBuffersException(string description) :
+            base(description, JET_err.OutOfBuffers)
         {
         }
 
@@ -5100,7 +6829,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTooManyIndexesException class.
         /// </summary>
         public EsentTooManyIndexesException() :
-            base("Too many indexes", JET_err.TooManyIndexes)
+            this("Too many indexes")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManyIndexesException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTooManyIndexesException(string description) :
+            base(description, JET_err.TooManyIndexes)
         {
         }
 
@@ -5132,7 +6870,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTooManyKeysException class.
         /// </summary>
         public EsentTooManyKeysException() :
-            base("Too many columns in an index", JET_err.TooManyKeys)
+            this("Too many columns in an index")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManyKeysException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTooManyKeysException(string description) :
+            base(description, JET_err.TooManyKeys)
         {
         }
 
@@ -5164,7 +6911,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentRecordDeletedException class.
         /// </summary>
         public EsentRecordDeletedException() :
-            base("Record has been deleted", JET_err.RecordDeleted)
+            this("Record has been deleted")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRecordDeletedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRecordDeletedException(string description) :
+            base(description, JET_err.RecordDeleted)
         {
         }
 
@@ -5196,7 +6952,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentReadVerifyFailureException class.
         /// </summary>
         public EsentReadVerifyFailureException() :
-            base("Checksum error on a database page", JET_err.ReadVerifyFailure)
+            this("Checksum error on a database page")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentReadVerifyFailureException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentReadVerifyFailureException(string description) :
+            base(description, JET_err.ReadVerifyFailure)
         {
         }
 
@@ -5228,7 +6993,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentPageNotInitializedException class.
         /// </summary>
         public EsentPageNotInitializedException() :
-            base("Blank database page", JET_err.PageNotInitialized)
+            this("Blank database page")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentPageNotInitializedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentPageNotInitializedException(string description) :
+            base(description, JET_err.PageNotInitialized)
         {
         }
 
@@ -5260,7 +7034,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentOutOfFileHandlesException class.
         /// </summary>
         public EsentOutOfFileHandlesException() :
-            base("Out of file handles", JET_err.OutOfFileHandles)
+            this("Out of file handles")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentOutOfFileHandlesException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentOutOfFileHandlesException(string description) :
+            base(description, JET_err.OutOfFileHandles)
         {
         }
 
@@ -5292,7 +7075,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDiskReadVerificationFailureException class.
         /// </summary>
         public EsentDiskReadVerificationFailureException() :
-            base("The OS returned ERROR_CRC from file IO", JET_err.DiskReadVerificationFailure)
+            this("The OS returned ERROR_CRC from file IO")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDiskReadVerificationFailureException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDiskReadVerificationFailureException(string description) :
+            base(description, JET_err.DiskReadVerificationFailure)
         {
         }
 
@@ -5324,7 +7116,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDiskIOException class.
         /// </summary>
         public EsentDiskIOException() :
-            base("Disk IO error", JET_err.DiskIO)
+            this("Disk IO error")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDiskIOException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDiskIOException(string description) :
+            base(description, JET_err.DiskIO)
         {
         }
 
@@ -5356,7 +7157,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidPathException class.
         /// </summary>
         public EsentInvalidPathException() :
-            base("Invalid file path", JET_err.InvalidPath)
+            this("Invalid file path")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidPathException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidPathException(string description) :
+            base(description, JET_err.InvalidPath)
         {
         }
 
@@ -5388,7 +7198,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidSystemPathException class.
         /// </summary>
         public EsentInvalidSystemPathException() :
-            base("Invalid system path", JET_err.InvalidSystemPath)
+            this("Invalid system path")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidSystemPathException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidSystemPathException(string description) :
+            base(description, JET_err.InvalidSystemPath)
         {
         }
 
@@ -5420,7 +7239,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidLogDirectoryException class.
         /// </summary>
         public EsentInvalidLogDirectoryException() :
-            base("Invalid log directory", JET_err.InvalidLogDirectory)
+            this("Invalid log directory")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidLogDirectoryException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidLogDirectoryException(string description) :
+            base(description, JET_err.InvalidLogDirectory)
         {
         }
 
@@ -5452,7 +7280,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentRecordTooBigException class.
         /// </summary>
         public EsentRecordTooBigException() :
-            base("Record larger than maximum size", JET_err.RecordTooBig)
+            this("Record larger than maximum size")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRecordTooBigException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRecordTooBigException(string description) :
+            base(description, JET_err.RecordTooBig)
         {
         }
 
@@ -5484,7 +7321,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTooManyOpenDatabasesException class.
         /// </summary>
         public EsentTooManyOpenDatabasesException() :
-            base("Too many open databases", JET_err.TooManyOpenDatabases)
+            this("Too many open databases")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManyOpenDatabasesException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTooManyOpenDatabasesException(string description) :
+            base(description, JET_err.TooManyOpenDatabases)
         {
         }
 
@@ -5516,7 +7362,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidDatabaseException class.
         /// </summary>
         public EsentInvalidDatabaseException() :
-            base("Not a database file", JET_err.InvalidDatabase)
+            this("Not a database file")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidDatabaseException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidDatabaseException(string description) :
+            base(description, JET_err.InvalidDatabase)
         {
         }
 
@@ -5548,7 +7403,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentNotInitializedException class.
         /// </summary>
         public EsentNotInitializedException() :
-            base("Database engine not initialized", JET_err.NotInitialized)
+            this("Database engine not initialized")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentNotInitializedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentNotInitializedException(string description) :
+            base(description, JET_err.NotInitialized)
         {
         }
 
@@ -5580,7 +7444,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentAlreadyInitializedException class.
         /// </summary>
         public EsentAlreadyInitializedException() :
-            base("Database engine already initialized", JET_err.AlreadyInitialized)
+            this("Database engine already initialized")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentAlreadyInitializedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentAlreadyInitializedException(string description) :
+            base(description, JET_err.AlreadyInitialized)
         {
         }
 
@@ -5612,7 +7485,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInitInProgressException class.
         /// </summary>
         public EsentInitInProgressException() :
-            base("Database engine is being initialized", JET_err.InitInProgress)
+            this("Database engine is being initialized")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInitInProgressException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInitInProgressException(string description) :
+            base(description, JET_err.InitInProgress)
         {
         }
 
@@ -5644,7 +7526,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentFileAccessDeniedException class.
         /// </summary>
         public EsentFileAccessDeniedException() :
-            base("Cannot access file, the file is locked or in use", JET_err.FileAccessDenied)
+            this("Cannot access file, the file is locked or in use")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentFileAccessDeniedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentFileAccessDeniedException(string description) :
+            base(description, JET_err.FileAccessDenied)
         {
         }
 
@@ -5676,7 +7567,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentQueryNotSupportedException class.
         /// </summary>
         public EsentQueryNotSupportedException() :
-            base("Query support unavailable", JET_err.QueryNotSupported)
+            this("Query support unavailable")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentQueryNotSupportedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentQueryNotSupportedException(string description) :
+            base(description, JET_err.QueryNotSupported)
         {
         }
 
@@ -5708,7 +7608,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSQLLinkNotSupportedException class.
         /// </summary>
         public EsentSQLLinkNotSupportedException() :
-            base("SQL Link support unavailable", JET_err.SQLLinkNotSupported)
+            this("SQL Link support unavailable")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSQLLinkNotSupportedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentSQLLinkNotSupportedException(string description) :
+            base(description, JET_err.SQLLinkNotSupported)
         {
         }
 
@@ -5740,7 +7649,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentBufferTooSmallException class.
         /// </summary>
         public EsentBufferTooSmallException() :
-            base("Buffer is too small", JET_err.BufferTooSmall)
+            this("Buffer is too small")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBufferTooSmallException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBufferTooSmallException(string description) :
+            base(description, JET_err.BufferTooSmall)
         {
         }
 
@@ -5772,7 +7690,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTooManyColumnsException class.
         /// </summary>
         public EsentTooManyColumnsException() :
-            base("Too many columns defined", JET_err.TooManyColumns)
+            this("Too many columns defined")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManyColumnsException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTooManyColumnsException(string description) :
+            base(description, JET_err.TooManyColumns)
         {
         }
 
@@ -5804,7 +7731,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentContainerNotEmptyException class.
         /// </summary>
         public EsentContainerNotEmptyException() :
-            base("Container is not empty", JET_err.ContainerNotEmpty)
+            this("Container is not empty")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentContainerNotEmptyException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentContainerNotEmptyException(string description) :
+            base(description, JET_err.ContainerNotEmpty)
         {
         }
 
@@ -5836,7 +7772,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidFilenameException class.
         /// </summary>
         public EsentInvalidFilenameException() :
-            base("Filename is invalid", JET_err.InvalidFilename)
+            this("Filename is invalid")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidFilenameException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidFilenameException(string description) :
+            base(description, JET_err.InvalidFilename)
         {
         }
 
@@ -5868,7 +7813,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidBookmarkException class.
         /// </summary>
         public EsentInvalidBookmarkException() :
-            base("Invalid bookmark", JET_err.InvalidBookmark)
+            this("Invalid bookmark")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidBookmarkException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidBookmarkException(string description) :
+            base(description, JET_err.InvalidBookmark)
         {
         }
 
@@ -5900,7 +7854,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentColumnInUseException class.
         /// </summary>
         public EsentColumnInUseException() :
-            base("Column used in an index", JET_err.ColumnInUse)
+            this("Column used in an index")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentColumnInUseException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentColumnInUseException(string description) :
+            base(description, JET_err.ColumnInUse)
         {
         }
 
@@ -5932,7 +7895,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidBufferSizeException class.
         /// </summary>
         public EsentInvalidBufferSizeException() :
-            base("Data buffer doesn't match column size", JET_err.InvalidBufferSize)
+            this("Data buffer doesn't match column size")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidBufferSizeException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidBufferSizeException(string description) :
+            base(description, JET_err.InvalidBufferSize)
         {
         }
 
@@ -5964,7 +7936,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentColumnNotUpdatableException class.
         /// </summary>
         public EsentColumnNotUpdatableException() :
-            base("Cannot set column value", JET_err.ColumnNotUpdatable)
+            this("Cannot set column value")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentColumnNotUpdatableException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentColumnNotUpdatableException(string description) :
+            base(description, JET_err.ColumnNotUpdatable)
         {
         }
 
@@ -5996,7 +7977,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentIndexInUseException class.
         /// </summary>
         public EsentIndexInUseException() :
-            base("Index is in use", JET_err.IndexInUse)
+            this("Index is in use")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentIndexInUseException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentIndexInUseException(string description) :
+            base(description, JET_err.IndexInUse)
         {
         }
 
@@ -6028,7 +8018,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLinkNotSupportedException class.
         /// </summary>
         public EsentLinkNotSupportedException() :
-            base("Link support unavailable", JET_err.LinkNotSupported)
+            this("Link support unavailable")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLinkNotSupportedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLinkNotSupportedException(string description) :
+            base(description, JET_err.LinkNotSupported)
         {
         }
 
@@ -6060,7 +8059,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentNullKeyDisallowedException class.
         /// </summary>
         public EsentNullKeyDisallowedException() :
-            base("Null keys are disallowed on index", JET_err.NullKeyDisallowed)
+            this("Null keys are disallowed on index")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentNullKeyDisallowedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentNullKeyDisallowedException(string description) :
+            base(description, JET_err.NullKeyDisallowed)
         {
         }
 
@@ -6092,7 +8100,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentNotInTransactionException class.
         /// </summary>
         public EsentNotInTransactionException() :
-            base("Operation must be within a transaction", JET_err.NotInTransaction)
+            this("Operation must be within a transaction")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentNotInTransactionException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentNotInTransactionException(string description) :
+            base(description, JET_err.NotInTransaction)
         {
         }
 
@@ -6124,7 +8141,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentMustRollbackException class.
         /// </summary>
         public EsentMustRollbackException() :
-            base("Transaction must rollback because failure of unversioned update", JET_err.MustRollback)
+            this("Transaction must rollback because failure of unversioned update")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentMustRollbackException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentMustRollbackException(string description) :
+            base(description, JET_err.MustRollback)
         {
         }
 
@@ -6156,7 +8182,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTooManyActiveUsersException class.
         /// </summary>
         public EsentTooManyActiveUsersException() :
-            base("Too many active database users", JET_err.TooManyActiveUsers)
+            this("Too many active database users")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManyActiveUsersException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTooManyActiveUsersException(string description) :
+            base(description, JET_err.TooManyActiveUsers)
         {
         }
 
@@ -6188,7 +8223,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidCountryException class.
         /// </summary>
         public EsentInvalidCountryException() :
-            base("Invalid or unknown country/region code", JET_err.InvalidCountry)
+            this("Invalid or unknown country/region code")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidCountryException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidCountryException(string description) :
+            base(description, JET_err.InvalidCountry)
         {
         }
 
@@ -6220,7 +8264,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidLanguageIdException class.
         /// </summary>
         public EsentInvalidLanguageIdException() :
-            base("Invalid or unknown language id", JET_err.InvalidLanguageId)
+            this("Invalid or unknown language id")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidLanguageIdException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidLanguageIdException(string description) :
+            base(description, JET_err.InvalidLanguageId)
         {
         }
 
@@ -6252,7 +8305,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidCodePageException class.
         /// </summary>
         public EsentInvalidCodePageException() :
-            base("Invalid or unknown code page", JET_err.InvalidCodePage)
+            this("Invalid or unknown code page")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidCodePageException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidCodePageException(string description) :
+            base(description, JET_err.InvalidCodePage)
         {
         }
 
@@ -6284,7 +8346,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidLCMapStringFlagsException class.
         /// </summary>
         public EsentInvalidLCMapStringFlagsException() :
-            base("Invalid flags for LCMapString()", JET_err.InvalidLCMapStringFlags)
+            this("Invalid flags for LCMapString()")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidLCMapStringFlagsException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidLCMapStringFlagsException(string description) :
+            base(description, JET_err.InvalidLCMapStringFlags)
         {
         }
 
@@ -6316,7 +8387,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentVersionStoreEntryTooBigException class.
         /// </summary>
         public EsentVersionStoreEntryTooBigException() :
-            base("Attempted to create a version store entry (RCE) larger than a version bucket", JET_err.VersionStoreEntryTooBig)
+            this("Attempted to create a version store entry (RCE) larger than a version bucket")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentVersionStoreEntryTooBigException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentVersionStoreEntryTooBigException(string description) :
+            base(description, JET_err.VersionStoreEntryTooBig)
         {
         }
 
@@ -6348,7 +8428,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentVersionStoreOutOfMemoryAndCleanupTimedOutException class.
         /// </summary>
         public EsentVersionStoreOutOfMemoryAndCleanupTimedOutException() :
-            base("Version store out of memory (and cleanup attempt failed to complete)", JET_err.VersionStoreOutOfMemoryAndCleanupTimedOut)
+            this("Version store out of memory (and cleanup attempt failed to complete)")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentVersionStoreOutOfMemoryAndCleanupTimedOutException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentVersionStoreOutOfMemoryAndCleanupTimedOutException(string description) :
+            base(description, JET_err.VersionStoreOutOfMemoryAndCleanupTimedOut)
         {
         }
 
@@ -6380,7 +8469,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentVersionStoreOutOfMemoryException class.
         /// </summary>
         public EsentVersionStoreOutOfMemoryException() :
-            base("Version store out of memory (cleanup already attempted)", JET_err.VersionStoreOutOfMemory)
+            this("Version store out of memory (cleanup already attempted)")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentVersionStoreOutOfMemoryException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentVersionStoreOutOfMemoryException(string description) :
+            base(description, JET_err.VersionStoreOutOfMemory)
         {
         }
 
@@ -6412,7 +8510,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCurrencyStackOutOfMemoryException class.
         /// </summary>
         public EsentCurrencyStackOutOfMemoryException() :
-            base("UNUSED: lCSRPerfFUCB * g_lCursorsMax exceeded (XJET only)", JET_err.CurrencyStackOutOfMemory)
+            this("UNUSED: lCSRPerfFUCB * g_lCursorsMax exceeded (XJET only)")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCurrencyStackOutOfMemoryException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCurrencyStackOutOfMemoryException(string description) :
+            base(description, JET_err.CurrencyStackOutOfMemory)
         {
         }
 
@@ -6444,7 +8551,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCannotIndexException class.
         /// </summary>
         public EsentCannotIndexException() :
-            base("Cannot index escrow column", JET_err.CannotIndex)
+            this("Cannot index escrow column")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCannotIndexException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCannotIndexException(string description) :
+            base(description, JET_err.CannotIndex)
         {
         }
 
@@ -6476,7 +8592,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentRecordNotDeletedException class.
         /// </summary>
         public EsentRecordNotDeletedException() :
-            base("Record has not been deleted", JET_err.RecordNotDeleted)
+            this("Record has not been deleted")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRecordNotDeletedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRecordNotDeletedException(string description) :
+            base(description, JET_err.RecordNotDeleted)
         {
         }
 
@@ -6508,7 +8633,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTooManyMempoolEntriesException class.
         /// </summary>
         public EsentTooManyMempoolEntriesException() :
-            base("Too many mempool entries requested", JET_err.TooManyMempoolEntries)
+            this("Too many mempool entries requested")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManyMempoolEntriesException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTooManyMempoolEntriesException(string description) :
+            base(description, JET_err.TooManyMempoolEntries)
         {
         }
 
@@ -6540,7 +8674,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentOutOfObjectIDsException class.
         /// </summary>
         public EsentOutOfObjectIDsException() :
-            base("Out of btree ObjectIDs (perform offline defrag to reclaim freed/unused ObjectIds)", JET_err.OutOfObjectIDs)
+            this("Out of btree ObjectIDs (perform offline defrag to reclaim freed/unused ObjectIds)")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentOutOfObjectIDsException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentOutOfObjectIDsException(string description) :
+            base(description, JET_err.OutOfObjectIDs)
         {
         }
 
@@ -6572,7 +8715,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentOutOfLongValueIDsException class.
         /// </summary>
         public EsentOutOfLongValueIDsException() :
-            base("Long-value ID counter has reached maximum value. (perform offline defrag to reclaim free/unused LongValueIDs)", JET_err.OutOfLongValueIDs)
+            this("Long-value ID counter has reached maximum value. (perform offline defrag to reclaim free/unused LongValueIDs)")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentOutOfLongValueIDsException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentOutOfLongValueIDsException(string description) :
+            base(description, JET_err.OutOfLongValueIDs)
         {
         }
 
@@ -6604,7 +8756,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentOutOfAutoincrementValuesException class.
         /// </summary>
         public EsentOutOfAutoincrementValuesException() :
-            base("Auto-increment counter has reached maximum value (offline defrag WILL NOT be able to reclaim free/unused Auto-increment values).", JET_err.OutOfAutoincrementValues)
+            this("Auto-increment counter has reached maximum value (offline defrag WILL NOT be able to reclaim free/unused Auto-increment values).")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentOutOfAutoincrementValuesException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentOutOfAutoincrementValuesException(string description) :
+            base(description, JET_err.OutOfAutoincrementValues)
         {
         }
 
@@ -6636,7 +8797,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentOutOfDbtimeValuesException class.
         /// </summary>
         public EsentOutOfDbtimeValuesException() :
-            base("Dbtime counter has reached maximum value (perform offline defrag to reclaim free/unused Dbtime values)", JET_err.OutOfDbtimeValues)
+            this("Dbtime counter has reached maximum value (perform offline defrag to reclaim free/unused Dbtime values)")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentOutOfDbtimeValuesException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentOutOfDbtimeValuesException(string description) :
+            base(description, JET_err.OutOfDbtimeValues)
         {
         }
 
@@ -6668,7 +8838,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentOutOfSequentialIndexValuesException class.
         /// </summary>
         public EsentOutOfSequentialIndexValuesException() :
-            base("Sequential index counter has reached maximum value (perform offline defrag to reclaim free/unused SequentialIndex values)", JET_err.OutOfSequentialIndexValues)
+            this("Sequential index counter has reached maximum value (perform offline defrag to reclaim free/unused SequentialIndex values)")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentOutOfSequentialIndexValuesException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentOutOfSequentialIndexValuesException(string description) :
+            base(description, JET_err.OutOfSequentialIndexValues)
         {
         }
 
@@ -6700,7 +8879,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentRunningInOneInstanceModeException class.
         /// </summary>
         public EsentRunningInOneInstanceModeException() :
-            base("Multi-instance call with single-instance mode enabled", JET_err.RunningInOneInstanceMode)
+            this("Multi-instance call with single-instance mode enabled")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRunningInOneInstanceModeException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRunningInOneInstanceModeException(string description) :
+            base(description, JET_err.RunningInOneInstanceMode)
         {
         }
 
@@ -6732,7 +8920,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentRunningInMultiInstanceModeException class.
         /// </summary>
         public EsentRunningInMultiInstanceModeException() :
-            base("Single-instance call with multi-instance mode enabled", JET_err.RunningInMultiInstanceMode)
+            this("Single-instance call with multi-instance mode enabled")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRunningInMultiInstanceModeException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRunningInMultiInstanceModeException(string description) :
+            base(description, JET_err.RunningInMultiInstanceMode)
         {
         }
 
@@ -6764,7 +8961,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSystemParamsAlreadySetException class.
         /// </summary>
         public EsentSystemParamsAlreadySetException() :
-            base("Global system parameters have already been set", JET_err.SystemParamsAlreadySet)
+            this("Global system parameters have already been set")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSystemParamsAlreadySetException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentSystemParamsAlreadySetException(string description) :
+            base(description, JET_err.SystemParamsAlreadySet)
         {
         }
 
@@ -6796,7 +9002,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSystemPathInUseException class.
         /// </summary>
         public EsentSystemPathInUseException() :
-            base("System path already used by another database instance", JET_err.SystemPathInUse)
+            this("System path already used by another database instance")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSystemPathInUseException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentSystemPathInUseException(string description) :
+            base(description, JET_err.SystemPathInUse)
         {
         }
 
@@ -6828,7 +9043,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogFilePathInUseException class.
         /// </summary>
         public EsentLogFilePathInUseException() :
-            base("Logfile path already used by another database instance", JET_err.LogFilePathInUse)
+            this("Logfile path already used by another database instance")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLogFilePathInUseException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLogFilePathInUseException(string description) :
+            base(description, JET_err.LogFilePathInUse)
         {
         }
 
@@ -6860,7 +9084,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTempPathInUseException class.
         /// </summary>
         public EsentTempPathInUseException() :
-            base("Temp path already used by another database instance", JET_err.TempPathInUse)
+            this("Temp path already used by another database instance")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTempPathInUseException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTempPathInUseException(string description) :
+            base(description, JET_err.TempPathInUse)
         {
         }
 
@@ -6892,7 +9125,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInstanceNameInUseException class.
         /// </summary>
         public EsentInstanceNameInUseException() :
-            base("Instance Name already in use", JET_err.InstanceNameInUse)
+            this("Instance Name already in use")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInstanceNameInUseException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInstanceNameInUseException(string description) :
+            base(description, JET_err.InstanceNameInUse)
         {
         }
 
@@ -6924,7 +9166,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSystemParameterConflictException class.
         /// </summary>
         public EsentSystemParameterConflictException() :
-            base("Global system parameters have already been set, but to a conflicting or disagreeable state to the specified values.", JET_err.SystemParameterConflict)
+            this("Global system parameters have already been set, but to a conflicting or disagreeable state to the specified values.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSystemParameterConflictException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentSystemParameterConflictException(string description) :
+            base(description, JET_err.SystemParameterConflict)
         {
         }
 
@@ -6956,7 +9207,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInstanceUnavailableException class.
         /// </summary>
         public EsentInstanceUnavailableException() :
-            base("This instance cannot be used because it encountered a fatal error", JET_err.InstanceUnavailable)
+            this("This instance cannot be used because it encountered a fatal error")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInstanceUnavailableException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInstanceUnavailableException(string description) :
+            base(description, JET_err.InstanceUnavailable)
         {
         }
 
@@ -6988,7 +9248,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseUnavailableException class.
         /// </summary>
         public EsentDatabaseUnavailableException() :
-            base("This database cannot be used because it encountered a fatal error", JET_err.DatabaseUnavailable)
+            this("This database cannot be used because it encountered a fatal error")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseUnavailableException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseUnavailableException(string description) :
+            base(description, JET_err.DatabaseUnavailable)
         {
         }
 
@@ -7020,7 +9289,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInstanceUnavailableDueToFatalLogDiskFullException class.
         /// </summary>
         public EsentInstanceUnavailableDueToFatalLogDiskFullException() :
-            base("This instance cannot be used because it encountered a log-disk-full error performing an operation (likely transaction rollback) that could not tolerate failure", JET_err.InstanceUnavailableDueToFatalLogDiskFull)
+            this("This instance cannot be used because it encountered a log-disk-full error performing an operation (likely transaction rollback) that could not tolerate failure")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInstanceUnavailableDueToFatalLogDiskFullException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInstanceUnavailableDueToFatalLogDiskFullException(string description) :
+            base(description, JET_err.InstanceUnavailableDueToFatalLogDiskFull)
         {
         }
 
@@ -7052,7 +9330,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidSesparamIdException class.
         /// </summary>
         public EsentInvalidSesparamIdException() :
-            base("This JET_sesparam* identifier is not known to the ESE engine.", JET_err.InvalidSesparamId)
+            this("This JET_sesparam* identifier is not known to the ESE engine.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidSesparamIdException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidSesparamIdException(string description) :
+            base(description, JET_err.InvalidSesparamId)
         {
         }
 
@@ -7084,7 +9371,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTooManyRecordsException class.
         /// </summary>
         public EsentTooManyRecordsException() :
-            base("There are too many records to enumerate, switch to an API that handles 64-bit numbers", JET_err.TooManyRecords)
+            this("There are too many records to enumerate, switch to an API that handles 64-bit numbers")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManyRecordsException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTooManyRecordsException(string description) :
+            base(description, JET_err.TooManyRecords)
         {
         }
 
@@ -7116,7 +9412,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidDbparamIdException class.
         /// </summary>
         public EsentInvalidDbparamIdException() :
-            base("This JET_dbparam* identifier is not known to the ESE engine.", JET_err.InvalidDbparamId)
+            this("This JET_dbparam* identifier is not known to the ESE engine.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidDbparamIdException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidDbparamIdException(string description) :
+            base(description, JET_err.InvalidDbparamId)
         {
         }
 
@@ -7148,7 +9453,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentOutOfSessionsException class.
         /// </summary>
         public EsentOutOfSessionsException() :
-            base("Out of sessions", JET_err.OutOfSessions)
+            this("Out of sessions")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentOutOfSessionsException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentOutOfSessionsException(string description) :
+            base(description, JET_err.OutOfSessions)
         {
         }
 
@@ -7180,7 +9494,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentWriteConflictException class.
         /// </summary>
         public EsentWriteConflictException() :
-            base("Write lock failed due to outstanding write lock", JET_err.WriteConflict)
+            this("Write lock failed due to outstanding write lock")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentWriteConflictException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentWriteConflictException(string description) :
+            base(description, JET_err.WriteConflict)
         {
         }
 
@@ -7212,7 +9535,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTransTooDeepException class.
         /// </summary>
         public EsentTransTooDeepException() :
-            base("Transactions nested too deeply", JET_err.TransTooDeep)
+            this("Transactions nested too deeply")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTransTooDeepException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTransTooDeepException(string description) :
+            base(description, JET_err.TransTooDeep)
         {
         }
 
@@ -7244,7 +9576,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidSesidException class.
         /// </summary>
         public EsentInvalidSesidException() :
-            base("Invalid session handle", JET_err.InvalidSesid)
+            this("Invalid session handle")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidSesidException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidSesidException(string description) :
+            base(description, JET_err.InvalidSesid)
         {
         }
 
@@ -7276,7 +9617,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentWriteConflictPrimaryIndexException class.
         /// </summary>
         public EsentWriteConflictPrimaryIndexException() :
-            base("Update attempted on uncommitted primary index", JET_err.WriteConflictPrimaryIndex)
+            this("Update attempted on uncommitted primary index")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentWriteConflictPrimaryIndexException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentWriteConflictPrimaryIndexException(string description) :
+            base(description, JET_err.WriteConflictPrimaryIndex)
         {
         }
 
@@ -7308,7 +9658,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInTransactionException class.
         /// </summary>
         public EsentInTransactionException() :
-            base("Operation not allowed within a transaction", JET_err.InTransaction)
+            this("Operation not allowed within a transaction")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInTransactionException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInTransactionException(string description) :
+            base(description, JET_err.InTransaction)
         {
         }
 
@@ -7340,7 +9699,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentRollbackRequiredException class.
         /// </summary>
         public EsentRollbackRequiredException() :
-            base("Must rollback current transaction -- cannot commit or begin a new one", JET_err.RollbackRequired)
+            this("Must rollback current transaction -- cannot commit or begin a new one")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRollbackRequiredException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRollbackRequiredException(string description) :
+            base(description, JET_err.RollbackRequired)
         {
         }
 
@@ -7372,7 +9740,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTransReadOnlyException class.
         /// </summary>
         public EsentTransReadOnlyException() :
-            base("Read-only transaction tried to modify the database", JET_err.TransReadOnly)
+            this("Read-only transaction tried to modify the database")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTransReadOnlyException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTransReadOnlyException(string description) :
+            base(description, JET_err.TransReadOnly)
         {
         }
 
@@ -7404,7 +9781,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSessionWriteConflictException class.
         /// </summary>
         public EsentSessionWriteConflictException() :
-            base("Attempt to replace the same record by two different cursors in the same session", JET_err.SessionWriteConflict)
+            this("Attempt to replace the same record by two different cursors in the same session")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSessionWriteConflictException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentSessionWriteConflictException(string description) :
+            base(description, JET_err.SessionWriteConflict)
         {
         }
 
@@ -7436,7 +9822,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentRecordTooBigForBackwardCompatibilityException class.
         /// </summary>
         public EsentRecordTooBigForBackwardCompatibilityException() :
-            base("record would be too big if represented in a database format from a previous version of Jet", JET_err.RecordTooBigForBackwardCompatibility)
+            this("record would be too big if represented in a database format from a previous version of Jet")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRecordTooBigForBackwardCompatibilityException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRecordTooBigForBackwardCompatibilityException(string description) :
+            base(description, JET_err.RecordTooBigForBackwardCompatibility)
         {
         }
 
@@ -7468,7 +9863,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCannotMaterializeForwardOnlySortException class.
         /// </summary>
         public EsentCannotMaterializeForwardOnlySortException() :
-            base("The temp table could not be created due to parameters that conflict with JET_bitTTForwardOnly", JET_err.CannotMaterializeForwardOnlySort)
+            this("The temp table could not be created due to parameters that conflict with JET_bitTTForwardOnly")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCannotMaterializeForwardOnlySortException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCannotMaterializeForwardOnlySortException(string description) :
+            base(description, JET_err.CannotMaterializeForwardOnlySort)
         {
         }
 
@@ -7500,7 +9904,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSesidTableIdMismatchException class.
         /// </summary>
         public EsentSesidTableIdMismatchException() :
-            base("This session handle can't be used with this table id", JET_err.SesidTableIdMismatch)
+            this("This session handle can't be used with this table id")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSesidTableIdMismatchException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentSesidTableIdMismatchException(string description) :
+            base(description, JET_err.SesidTableIdMismatch)
         {
         }
 
@@ -7532,7 +9945,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidInstanceException class.
         /// </summary>
         public EsentInvalidInstanceException() :
-            base("Invalid instance handle", JET_err.InvalidInstance)
+            this("Invalid instance handle")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidInstanceException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidInstanceException(string description) :
+            base(description, JET_err.InvalidInstance)
         {
         }
 
@@ -7564,7 +9986,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDirtyShutdownException class.
         /// </summary>
         public EsentDirtyShutdownException() :
-            base("The instance was shutdown successfully but all the attached databases were left in a dirty state by request via JET_bitTermDirty", JET_err.DirtyShutdown)
+            this("The instance was shutdown successfully but all the attached databases were left in a dirty state by request via JET_bitTermDirty")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDirtyShutdownException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDirtyShutdownException(string description) :
+            base(description, JET_err.DirtyShutdown)
         {
         }
 
@@ -7596,7 +10027,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentReadPgnoVerifyFailureException class.
         /// </summary>
         public EsentReadPgnoVerifyFailureException() :
-            base("The database page read from disk had the wrong page number.", JET_err.ReadPgnoVerifyFailure)
+            this("The database page read from disk had the wrong page number.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentReadPgnoVerifyFailureException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentReadPgnoVerifyFailureException(string description) :
+            base(description, JET_err.ReadPgnoVerifyFailure)
         {
         }
 
@@ -7628,7 +10068,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentReadLostFlushVerifyFailureException class.
         /// </summary>
         public EsentReadLostFlushVerifyFailureException() :
-            base("The database page read from disk had a previous write not represented on the page.", JET_err.ReadLostFlushVerifyFailure)
+            this("The database page read from disk had a previous write not represented on the page.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentReadLostFlushVerifyFailureException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentReadLostFlushVerifyFailureException(string description) :
+            base(description, JET_err.ReadLostFlushVerifyFailure)
         {
         }
 
@@ -7660,7 +10109,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentFileSystemCorruptionException class.
         /// </summary>
         public EsentFileSystemCorruptionException() :
-            base("File system operation failed with an error indicating the file system is corrupt.", JET_err.FileSystemCorruption)
+            this("File system operation failed with an error indicating the file system is corrupt.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentFileSystemCorruptionException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentFileSystemCorruptionException(string description) :
+            base(description, JET_err.FileSystemCorruption)
         {
         }
 
@@ -7692,7 +10150,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentRecoveryVerifyFailureException class.
         /// </summary>
         public EsentRecoveryVerifyFailureException() :
-            base("One or more database pages read from disk during recovery do not match the expected state.", JET_err.RecoveryVerifyFailure)
+            this("One or more database pages read from disk during recovery do not match the expected state.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRecoveryVerifyFailureException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRecoveryVerifyFailureException(string description) :
+            base(description, JET_err.RecoveryVerifyFailure)
         {
         }
 
@@ -7724,7 +10191,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentFilteredMoveNotSupportedException class.
         /// </summary>
         public EsentFilteredMoveNotSupportedException() :
-            base("Attempted to provide a filter to JetSetCursorFilter() in an unsupported scenario.", JET_err.FilteredMoveNotSupported)
+            this("Attempted to provide a filter to JetSetCursorFilter() in an unsupported scenario.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentFilteredMoveNotSupportedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentFilteredMoveNotSupportedException(string description) :
+            base(description, JET_err.FilteredMoveNotSupported)
         {
         }
 
@@ -7756,7 +10232,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentMustCommitDistributedTransactionToLevel0Exception class.
         /// </summary>
         public EsentMustCommitDistributedTransactionToLevel0Exception() :
-            base("Attempted to PrepareToCommit a distributed transaction to non-zero level", JET_err.MustCommitDistributedTransactionToLevel0)
+            this("Attempted to PrepareToCommit a distributed transaction to non-zero level")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentMustCommitDistributedTransactionToLevel0Exception class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentMustCommitDistributedTransactionToLevel0Exception(string description) :
+            base(description, JET_err.MustCommitDistributedTransactionToLevel0)
         {
         }
 
@@ -7788,7 +10273,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDistributedTransactionAlreadyPreparedToCommitException class.
         /// </summary>
         public EsentDistributedTransactionAlreadyPreparedToCommitException() :
-            base("Attempted a write-operation after a distributed transaction has called PrepareToCommit", JET_err.DistributedTransactionAlreadyPreparedToCommit)
+            this("Attempted a write-operation after a distributed transaction has called PrepareToCommit")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDistributedTransactionAlreadyPreparedToCommitException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDistributedTransactionAlreadyPreparedToCommitException(string description) :
+            base(description, JET_err.DistributedTransactionAlreadyPreparedToCommit)
         {
         }
 
@@ -7820,7 +10314,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentNotInDistributedTransactionException class.
         /// </summary>
         public EsentNotInDistributedTransactionException() :
-            base("Attempted to PrepareToCommit a non-distributed transaction", JET_err.NotInDistributedTransaction)
+            this("Attempted to PrepareToCommit a non-distributed transaction")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentNotInDistributedTransactionException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentNotInDistributedTransactionException(string description) :
+            base(description, JET_err.NotInDistributedTransaction)
         {
         }
 
@@ -7852,7 +10355,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDistributedTransactionNotYetPreparedToCommitException class.
         /// </summary>
         public EsentDistributedTransactionNotYetPreparedToCommitException() :
-            base("Attempted to commit a distributed transaction, but PrepareToCommit has not yet been called", JET_err.DistributedTransactionNotYetPreparedToCommit)
+            this("Attempted to commit a distributed transaction, but PrepareToCommit has not yet been called")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDistributedTransactionNotYetPreparedToCommitException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDistributedTransactionNotYetPreparedToCommitException(string description) :
+            base(description, JET_err.DistributedTransactionNotYetPreparedToCommit)
         {
         }
 
@@ -7884,7 +10396,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCannotNestDistributedTransactionsException class.
         /// </summary>
         public EsentCannotNestDistributedTransactionsException() :
-            base("Attempted to begin a distributed transaction when not at level 0", JET_err.CannotNestDistributedTransactions)
+            this("Attempted to begin a distributed transaction when not at level 0")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCannotNestDistributedTransactionsException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCannotNestDistributedTransactionsException(string description) :
+            base(description, JET_err.CannotNestDistributedTransactions)
         {
         }
 
@@ -7916,7 +10437,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDTCMissingCallbackException class.
         /// </summary>
         public EsentDTCMissingCallbackException() :
-            base("Attempted to begin a distributed transaction but no callback for DTC coordination was specified on initialisation", JET_err.DTCMissingCallback)
+            this("Attempted to begin a distributed transaction but no callback for DTC coordination was specified on initialisation")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDTCMissingCallbackException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDTCMissingCallbackException(string description) :
+            base(description, JET_err.DTCMissingCallback)
         {
         }
 
@@ -7948,7 +10478,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDTCMissingCallbackOnRecoveryException class.
         /// </summary>
         public EsentDTCMissingCallbackOnRecoveryException() :
-            base("Attempted to recover a distributed transaction but no callback for DTC coordination was specified on initialisation", JET_err.DTCMissingCallbackOnRecovery)
+            this("Attempted to recover a distributed transaction but no callback for DTC coordination was specified on initialisation")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDTCMissingCallbackOnRecoveryException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDTCMissingCallbackOnRecoveryException(string description) :
+            base(description, JET_err.DTCMissingCallbackOnRecovery)
         {
         }
 
@@ -7980,7 +10519,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDTCCallbackUnexpectedErrorException class.
         /// </summary>
         public EsentDTCCallbackUnexpectedErrorException() :
-            base("Unexpected error code returned from DTC callback", JET_err.DTCCallbackUnexpectedError)
+            this("Unexpected error code returned from DTC callback")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDTCCallbackUnexpectedErrorException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDTCCallbackUnexpectedErrorException(string description) :
+            base(description, JET_err.DTCCallbackUnexpectedError)
         {
         }
 
@@ -8012,7 +10560,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseDuplicateException class.
         /// </summary>
         public EsentDatabaseDuplicateException() :
-            base("Database already exists", JET_err.DatabaseDuplicate)
+            this("Database already exists")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseDuplicateException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseDuplicateException(string description) :
+            base(description, JET_err.DatabaseDuplicate)
         {
         }
 
@@ -8044,7 +10601,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseInUseException class.
         /// </summary>
         public EsentDatabaseInUseException() :
-            base("Database in use", JET_err.DatabaseInUse)
+            this("Database in use")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseInUseException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseInUseException(string description) :
+            base(description, JET_err.DatabaseInUse)
         {
         }
 
@@ -8076,7 +10642,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseNotFoundException class.
         /// </summary>
         public EsentDatabaseNotFoundException() :
-            base("No such database", JET_err.DatabaseNotFound)
+            this("No such database")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseNotFoundException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseNotFoundException(string description) :
+            base(description, JET_err.DatabaseNotFound)
         {
         }
 
@@ -8108,7 +10683,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseInvalidNameException class.
         /// </summary>
         public EsentDatabaseInvalidNameException() :
-            base("Invalid database name", JET_err.DatabaseInvalidName)
+            this("Invalid database name")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseInvalidNameException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseInvalidNameException(string description) :
+            base(description, JET_err.DatabaseInvalidName)
         {
         }
 
@@ -8140,7 +10724,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseInvalidPagesException class.
         /// </summary>
         public EsentDatabaseInvalidPagesException() :
-            base("Invalid number of pages", JET_err.DatabaseInvalidPages)
+            this("Invalid number of pages")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseInvalidPagesException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseInvalidPagesException(string description) :
+            base(description, JET_err.DatabaseInvalidPages)
         {
         }
 
@@ -8172,7 +10765,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseCorruptedException class.
         /// </summary>
         public EsentDatabaseCorruptedException() :
-            base("Non database file or corrupted db", JET_err.DatabaseCorrupted)
+            this("Non database file or corrupted db")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseCorruptedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseCorruptedException(string description) :
+            base(description, JET_err.DatabaseCorrupted)
         {
         }
 
@@ -8204,7 +10806,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseLockedException class.
         /// </summary>
         public EsentDatabaseLockedException() :
-            base("Database exclusively locked", JET_err.DatabaseLocked)
+            this("Database exclusively locked")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseLockedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseLockedException(string description) :
+            base(description, JET_err.DatabaseLocked)
         {
         }
 
@@ -8236,7 +10847,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCannotDisableVersioningException class.
         /// </summary>
         public EsentCannotDisableVersioningException() :
-            base("Cannot disable versioning for this database", JET_err.CannotDisableVersioning)
+            this("Cannot disable versioning for this database")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCannotDisableVersioningException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCannotDisableVersioningException(string description) :
+            base(description, JET_err.CannotDisableVersioning)
         {
         }
 
@@ -8268,7 +10888,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidDatabaseVersionException class.
         /// </summary>
         public EsentInvalidDatabaseVersionException() :
-            base("Database engine is incompatible with database", JET_err.InvalidDatabaseVersion)
+            this("Database engine is incompatible with database")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidDatabaseVersionException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidDatabaseVersionException(string description) :
+            base(description, JET_err.InvalidDatabaseVersion)
         {
         }
 
@@ -8300,7 +10929,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabase200FormatException class.
         /// </summary>
         public EsentDatabase200FormatException() :
-            base("The database is in an older (200) format", JET_err.Database200Format)
+            this("The database is in an older (200) format")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabase200FormatException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabase200FormatException(string description) :
+            base(description, JET_err.Database200Format)
         {
         }
 
@@ -8332,7 +10970,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabase400FormatException class.
         /// </summary>
         public EsentDatabase400FormatException() :
-            base("The database is in an older (400) format", JET_err.Database400Format)
+            this("The database is in an older (400) format")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabase400FormatException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabase400FormatException(string description) :
+            base(description, JET_err.Database400Format)
         {
         }
 
@@ -8364,7 +11011,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabase500FormatException class.
         /// </summary>
         public EsentDatabase500FormatException() :
-            base("The database is in an older (500) format", JET_err.Database500Format)
+            this("The database is in an older (500) format")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabase500FormatException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabase500FormatException(string description) :
+            base(description, JET_err.Database500Format)
         {
         }
 
@@ -8396,7 +11052,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentPageSizeMismatchException class.
         /// </summary>
         public EsentPageSizeMismatchException() :
-            base("The database page size does not match the engine", JET_err.PageSizeMismatch)
+            this("The database page size does not match the engine")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentPageSizeMismatchException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentPageSizeMismatchException(string description) :
+            base(description, JET_err.PageSizeMismatch)
         {
         }
 
@@ -8428,7 +11093,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTooManyInstancesException class.
         /// </summary>
         public EsentTooManyInstancesException() :
-            base("Cannot start any more database instances", JET_err.TooManyInstances)
+            this("Cannot start any more database instances")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManyInstancesException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTooManyInstancesException(string description) :
+            base(description, JET_err.TooManyInstances)
         {
         }
 
@@ -8460,7 +11134,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseSharingViolationException class.
         /// </summary>
         public EsentDatabaseSharingViolationException() :
-            base("A different database instance is using this database", JET_err.DatabaseSharingViolation)
+            this("A different database instance is using this database")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseSharingViolationException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseSharingViolationException(string description) :
+            base(description, JET_err.DatabaseSharingViolation)
         {
         }
 
@@ -8492,7 +11175,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentAttachedDatabaseMismatchException class.
         /// </summary>
         public EsentAttachedDatabaseMismatchException() :
-            base("An outstanding database attachment has been detected at the start or end of recovery, but database is missing or does not match attachment info", JET_err.AttachedDatabaseMismatch)
+            this("An outstanding database attachment has been detected at the start or end of recovery, but database is missing or does not match attachment info")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentAttachedDatabaseMismatchException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentAttachedDatabaseMismatchException(string description) :
+            base(description, JET_err.AttachedDatabaseMismatch)
         {
         }
 
@@ -8524,7 +11216,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseInvalidPathException class.
         /// </summary>
         public EsentDatabaseInvalidPathException() :
-            base("Specified path to database file is illegal", JET_err.DatabaseInvalidPath)
+            this("Specified path to database file is illegal")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseInvalidPathException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseInvalidPathException(string description) :
+            base(description, JET_err.DatabaseInvalidPath)
         {
         }
 
@@ -8556,7 +11257,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseIdInUseException class.
         /// </summary>
         public EsentDatabaseIdInUseException() :
-            base("A database is being assigned an id already in use", JET_err.DatabaseIdInUse)
+            this("A database is being assigned an id already in use")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseIdInUseException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseIdInUseException(string description) :
+            base(description, JET_err.DatabaseIdInUse)
         {
         }
 
@@ -8588,7 +11298,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentForceDetachNotAllowedException class.
         /// </summary>
         public EsentForceDetachNotAllowedException() :
-            base("Force Detach allowed only after normal detach errored out", JET_err.ForceDetachNotAllowed)
+            this("Force Detach allowed only after normal detach errored out")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentForceDetachNotAllowedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentForceDetachNotAllowedException(string description) :
+            base(description, JET_err.ForceDetachNotAllowed)
         {
         }
 
@@ -8620,7 +11339,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCatalogCorruptedException class.
         /// </summary>
         public EsentCatalogCorruptedException() :
-            base("Corruption detected in catalog", JET_err.CatalogCorrupted)
+            this("Corruption detected in catalog")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCatalogCorruptedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCatalogCorruptedException(string description) :
+            base(description, JET_err.CatalogCorrupted)
         {
         }
 
@@ -8652,7 +11380,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentPartiallyAttachedDBException class.
         /// </summary>
         public EsentPartiallyAttachedDBException() :
-            base("Database is partially attached. Cannot complete attach operation", JET_err.PartiallyAttachedDB)
+            this("Database is partially attached. Cannot complete attach operation")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentPartiallyAttachedDBException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentPartiallyAttachedDBException(string description) :
+            base(description, JET_err.PartiallyAttachedDB)
         {
         }
 
@@ -8684,7 +11421,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseSignInUseException class.
         /// </summary>
         public EsentDatabaseSignInUseException() :
-            base("Database with same signature in use", JET_err.DatabaseSignInUse)
+            this("Database with same signature in use")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseSignInUseException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseSignInUseException(string description) :
+            base(description, JET_err.DatabaseSignInUse)
         {
         }
 
@@ -8716,7 +11462,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseCorruptedNoRepairException class.
         /// </summary>
         public EsentDatabaseCorruptedNoRepairException() :
-            base("Corrupted db but repair not allowed", JET_err.DatabaseCorruptedNoRepair)
+            this("Corrupted db but repair not allowed")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseCorruptedNoRepairException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseCorruptedNoRepairException(string description) :
+            base(description, JET_err.DatabaseCorruptedNoRepair)
         {
         }
 
@@ -8748,7 +11503,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidCreateDbVersionException class.
         /// </summary>
         public EsentInvalidCreateDbVersionException() :
-            base("recovery tried to replay a database creation, but the database was originally created with an incompatible (likely older) version of the database engine", JET_err.InvalidCreateDbVersion)
+            this("recovery tried to replay a database creation, but the database was originally created with an incompatible (likely older) version of the database engine")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidCreateDbVersionException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidCreateDbVersionException(string description) :
+            base(description, JET_err.InvalidCreateDbVersion)
         {
         }
 
@@ -8780,7 +11544,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseIncompleteIncrementalReseedException class.
         /// </summary>
         public EsentDatabaseIncompleteIncrementalReseedException() :
-            base("The database cannot be attached because it is currently being rebuilt as part of an incremental reseed.", JET_err.DatabaseIncompleteIncrementalReseed)
+            this("The database cannot be attached because it is currently being rebuilt as part of an incremental reseed.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseIncompleteIncrementalReseedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseIncompleteIncrementalReseedException(string description) :
+            base(description, JET_err.DatabaseIncompleteIncrementalReseed)
         {
         }
 
@@ -8812,7 +11585,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseInvalidIncrementalReseedException class.
         /// </summary>
         public EsentDatabaseInvalidIncrementalReseedException() :
-            base("The database is not a valid state to perform an incremental reseed.", JET_err.DatabaseInvalidIncrementalReseed)
+            this("The database is not a valid state to perform an incremental reseed.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseInvalidIncrementalReseedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseInvalidIncrementalReseedException(string description) :
+            base(description, JET_err.DatabaseInvalidIncrementalReseed)
         {
         }
 
@@ -8844,7 +11626,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseFailedIncrementalReseedException class.
         /// </summary>
         public EsentDatabaseFailedIncrementalReseedException() :
-            base("The incremental reseed being performed on the specified database cannot be completed due to a fatal error.  A full reseed is required to recover this database.", JET_err.DatabaseFailedIncrementalReseed)
+            this("The incremental reseed being performed on the specified database cannot be completed due to a fatal error.  A full reseed is required to recover this database.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseFailedIncrementalReseedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseFailedIncrementalReseedException(string description) :
+            base(description, JET_err.DatabaseFailedIncrementalReseed)
         {
         }
 
@@ -8876,7 +11667,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentNoAttachmentsFailedIncrementalReseedException class.
         /// </summary>
         public EsentNoAttachmentsFailedIncrementalReseedException() :
-            base("The incremental reseed being performed on the specified database cannot be completed because the min required log contains no attachment info.  A full reseed is required to recover this database.", JET_err.NoAttachmentsFailedIncrementalReseed)
+            this("The incremental reseed being performed on the specified database cannot be completed because the min required log contains no attachment info.  A full reseed is required to recover this database.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentNoAttachmentsFailedIncrementalReseedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentNoAttachmentsFailedIncrementalReseedException(string description) :
+            base(description, JET_err.NoAttachmentsFailedIncrementalReseed)
         {
         }
 
@@ -8908,7 +11708,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseNotReadyException class.
         /// </summary>
         public EsentDatabaseNotReadyException() :
-            base("Recovery on this database has not yet completed enough to permit access.", JET_err.DatabaseNotReady)
+            this("Recovery on this database has not yet completed enough to permit access.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseNotReadyException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseNotReadyException(string description) :
+            base(description, JET_err.DatabaseNotReady)
         {
         }
 
@@ -8940,7 +11749,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseAttachedForRecoveryException class.
         /// </summary>
         public EsentDatabaseAttachedForRecoveryException() :
-            base("Database is attached but only for recovery.  It must be explicitly attached before it can be opened. ", JET_err.DatabaseAttachedForRecovery)
+            this("Database is attached but only for recovery.  It must be explicitly attached before it can be opened.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseAttachedForRecoveryException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseAttachedForRecoveryException(string description) :
+            base(description, JET_err.DatabaseAttachedForRecovery)
         {
         }
 
@@ -8972,7 +11790,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTransactionsNotReadyDuringRecoveryException class.
         /// </summary>
         public EsentTransactionsNotReadyDuringRecoveryException() :
-            base("Recovery has not seen any Begin0/Commit0 records and so does not know what trxBegin0 to assign to this transaction", JET_err.TransactionsNotReadyDuringRecovery)
+            this("Recovery has not seen any Begin0/Commit0 records and so does not know what trxBegin0 to assign to this transaction")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTransactionsNotReadyDuringRecoveryException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTransactionsNotReadyDuringRecoveryException(string description) :
+            base(description, JET_err.TransactionsNotReadyDuringRecovery)
         {
         }
 
@@ -8984,6 +11811,47 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
         private EsentTransactionsNotReadyDuringRecoveryException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.BlockedByCorruptionMark exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentBlockedByCorruptionMarkException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentBlockedByCorruptionMarkException class.
+        /// </summary>
+        public EsentBlockedByCorruptionMarkException() :
+            this("The DB header is marked corrupted due to a logical or coherent corruption of some kind. The operation attempted (such as recovery, attach db, or backup) is being blocked by policy. The policy can be controlled by JET_param settings.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBlockedByCorruptionMarkException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBlockedByCorruptionMarkException(string description) :
+            base(description, JET_err.BlockedByCorruptionMark)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentBlockedByCorruptionMarkException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentBlockedByCorruptionMarkException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
         }
@@ -9004,7 +11872,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTableLockedException class.
         /// </summary>
         public EsentTableLockedException() :
-            base("Table is exclusively locked", JET_err.TableLocked)
+            this("Table is exclusively locked")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTableLockedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTableLockedException(string description) :
+            base(description, JET_err.TableLocked)
         {
         }
 
@@ -9036,7 +11913,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTableDuplicateException class.
         /// </summary>
         public EsentTableDuplicateException() :
-            base("Table already exists", JET_err.TableDuplicate)
+            this("Table already exists")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTableDuplicateException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTableDuplicateException(string description) :
+            base(description, JET_err.TableDuplicate)
         {
         }
 
@@ -9068,7 +11954,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTableInUseException class.
         /// </summary>
         public EsentTableInUseException() :
-            base("Table is in use, cannot lock", JET_err.TableInUse)
+            this("Table is in use, cannot lock")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTableInUseException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTableInUseException(string description) :
+            base(description, JET_err.TableInUse)
         {
         }
 
@@ -9100,7 +11995,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentObjectNotFoundException class.
         /// </summary>
         public EsentObjectNotFoundException() :
-            base("No such table or object", JET_err.ObjectNotFound)
+            this("No such table or object")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentObjectNotFoundException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentObjectNotFoundException(string description) :
+            base(description, JET_err.ObjectNotFound)
         {
         }
 
@@ -9132,7 +12036,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDensityInvalidException class.
         /// </summary>
         public EsentDensityInvalidException() :
-            base("Bad file/index density", JET_err.DensityInvalid)
+            this("Bad file/index density")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDensityInvalidException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDensityInvalidException(string description) :
+            base(description, JET_err.DensityInvalid)
         {
         }
 
@@ -9164,7 +12077,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTableNotEmptyException class.
         /// </summary>
         public EsentTableNotEmptyException() :
-            base("Table is not empty", JET_err.TableNotEmpty)
+            this("Table is not empty")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTableNotEmptyException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTableNotEmptyException(string description) :
+            base(description, JET_err.TableNotEmpty)
         {
         }
 
@@ -9196,7 +12118,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidTableIdException class.
         /// </summary>
         public EsentInvalidTableIdException() :
-            base("Invalid table id", JET_err.InvalidTableId)
+            this("Invalid table id")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidTableIdException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidTableIdException(string description) :
+            base(description, JET_err.InvalidTableId)
         {
         }
 
@@ -9228,7 +12159,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTooManyOpenTablesException class.
         /// </summary>
         public EsentTooManyOpenTablesException() :
-            base("Cannot open any more tables (cleanup already attempted)", JET_err.TooManyOpenTables)
+            this("Cannot open any more tables (cleanup already attempted)")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManyOpenTablesException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTooManyOpenTablesException(string description) :
+            base(description, JET_err.TooManyOpenTables)
         {
         }
 
@@ -9260,7 +12200,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentIllegalOperationException class.
         /// </summary>
         public EsentIllegalOperationException() :
-            base("Oper. not supported on table", JET_err.IllegalOperation)
+            this("Oper. not supported on table")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentIllegalOperationException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentIllegalOperationException(string description) :
+            base(description, JET_err.IllegalOperation)
         {
         }
 
@@ -9292,7 +12241,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTooManyOpenTablesAndCleanupTimedOutException class.
         /// </summary>
         public EsentTooManyOpenTablesAndCleanupTimedOutException() :
-            base("Cannot open any more tables (cleanup attempt failed to complete)", JET_err.TooManyOpenTablesAndCleanupTimedOut)
+            this("Cannot open any more tables (cleanup attempt failed to complete)")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManyOpenTablesAndCleanupTimedOutException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTooManyOpenTablesAndCleanupTimedOutException(string description) :
+            base(description, JET_err.TooManyOpenTablesAndCleanupTimedOut)
         {
         }
 
@@ -9324,7 +12282,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentObjectDuplicateException class.
         /// </summary>
         public EsentObjectDuplicateException() :
-            base("Table or object name in use", JET_err.ObjectDuplicate)
+            this("Table or object name in use")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentObjectDuplicateException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentObjectDuplicateException(string description) :
+            base(description, JET_err.ObjectDuplicate)
         {
         }
 
@@ -9356,7 +12323,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidObjectException class.
         /// </summary>
         public EsentInvalidObjectException() :
-            base("Object is invalid for operation", JET_err.InvalidObject)
+            this("Object is invalid for operation")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidObjectException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidObjectException(string description) :
+            base(description, JET_err.InvalidObject)
         {
         }
 
@@ -9388,7 +12364,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCannotDeleteTempTableException class.
         /// </summary>
         public EsentCannotDeleteTempTableException() :
-            base("Use CloseTable instead of DeleteTable to delete temp table", JET_err.CannotDeleteTempTable)
+            this("Use CloseTable instead of DeleteTable to delete temp table")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCannotDeleteTempTableException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCannotDeleteTempTableException(string description) :
+            base(description, JET_err.CannotDeleteTempTable)
         {
         }
 
@@ -9420,7 +12405,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCannotDeleteSystemTableException class.
         /// </summary>
         public EsentCannotDeleteSystemTableException() :
-            base("Illegal attempt to delete a system table", JET_err.CannotDeleteSystemTable)
+            this("Illegal attempt to delete a system table")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCannotDeleteSystemTableException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCannotDeleteSystemTableException(string description) :
+            base(description, JET_err.CannotDeleteSystemTable)
         {
         }
 
@@ -9452,7 +12446,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCannotDeleteTemplateTableException class.
         /// </summary>
         public EsentCannotDeleteTemplateTableException() :
-            base("Illegal attempt to delete a template table", JET_err.CannotDeleteTemplateTable)
+            this("Illegal attempt to delete a template table")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCannotDeleteTemplateTableException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCannotDeleteTemplateTableException(string description) :
+            base(description, JET_err.CannotDeleteTemplateTable)
         {
         }
 
@@ -9484,7 +12487,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentExclusiveTableLockRequiredException class.
         /// </summary>
         public EsentExclusiveTableLockRequiredException() :
-            base("Must have exclusive lock on table.", JET_err.ExclusiveTableLockRequired)
+            this("Must have exclusive lock on table.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentExclusiveTableLockRequiredException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentExclusiveTableLockRequiredException(string description) :
+            base(description, JET_err.ExclusiveTableLockRequired)
         {
         }
 
@@ -9516,7 +12528,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentFixedDDLException class.
         /// </summary>
         public EsentFixedDDLException() :
-            base("DDL operations prohibited on this table", JET_err.FixedDDL)
+            this("DDL operations prohibited on this table")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentFixedDDLException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentFixedDDLException(string description) :
+            base(description, JET_err.FixedDDL)
         {
         }
 
@@ -9548,7 +12569,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentFixedInheritedDDLException class.
         /// </summary>
         public EsentFixedInheritedDDLException() :
-            base("On a derived table, DDL operations are prohibited on inherited portion of DDL", JET_err.FixedInheritedDDL)
+            this("On a derived table, DDL operations are prohibited on inherited portion of DDL")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentFixedInheritedDDLException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentFixedInheritedDDLException(string description) :
+            base(description, JET_err.FixedInheritedDDL)
         {
         }
 
@@ -9580,7 +12610,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCannotNestDDLException class.
         /// </summary>
         public EsentCannotNestDDLException() :
-            base("Nesting of hierarchical DDL is not currently supported.", JET_err.CannotNestDDL)
+            this("Nesting of hierarchical DDL is not currently supported.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCannotNestDDLException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCannotNestDDLException(string description) :
+            base(description, JET_err.CannotNestDDL)
         {
         }
 
@@ -9612,7 +12651,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDDLNotInheritableException class.
         /// </summary>
         public EsentDDLNotInheritableException() :
-            base("Tried to inherit DDL from a table not marked as a template table.", JET_err.DDLNotInheritable)
+            this("Tried to inherit DDL from a table not marked as a template table.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDDLNotInheritableException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDDLNotInheritableException(string description) :
+            base(description, JET_err.DDLNotInheritable)
         {
         }
 
@@ -9644,7 +12692,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidSettingsException class.
         /// </summary>
         public EsentInvalidSettingsException() :
-            base("System parameters were set improperly", JET_err.InvalidSettings)
+            this("System parameters were set improperly")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidSettingsException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidSettingsException(string description) :
+            base(description, JET_err.InvalidSettings)
         {
         }
 
@@ -9676,7 +12733,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentClientRequestToStopJetServiceException class.
         /// </summary>
         public EsentClientRequestToStopJetServiceException() :
-            base("Client has requested stop service", JET_err.ClientRequestToStopJetService)
+            this("Client has requested stop service")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentClientRequestToStopJetServiceException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentClientRequestToStopJetServiceException(string description) :
+            base(description, JET_err.ClientRequestToStopJetService)
         {
         }
 
@@ -9708,7 +12774,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCannotAddFixedVarColumnToDerivedTableException class.
         /// </summary>
         public EsentCannotAddFixedVarColumnToDerivedTableException() :
-            base("Template table was created with NoFixedVarColumnsInDerivedTables", JET_err.CannotAddFixedVarColumnToDerivedTable)
+            this("Template table was created with NoFixedVarColumnsInDerivedTables")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCannotAddFixedVarColumnToDerivedTableException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCannotAddFixedVarColumnToDerivedTableException(string description) :
+            base(description, JET_err.CannotAddFixedVarColumnToDerivedTable)
         {
         }
 
@@ -9740,7 +12815,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentIndexCantBuildException class.
         /// </summary>
         public EsentIndexCantBuildException() :
-            base("Index build failed", JET_err.IndexCantBuild)
+            this("Index build failed")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentIndexCantBuildException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentIndexCantBuildException(string description) :
+            base(description, JET_err.IndexCantBuild)
         {
         }
 
@@ -9772,7 +12856,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentIndexHasPrimaryException class.
         /// </summary>
         public EsentIndexHasPrimaryException() :
-            base("Primary index already defined", JET_err.IndexHasPrimary)
+            this("Primary index already defined")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentIndexHasPrimaryException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentIndexHasPrimaryException(string description) :
+            base(description, JET_err.IndexHasPrimary)
         {
         }
 
@@ -9804,7 +12897,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentIndexDuplicateException class.
         /// </summary>
         public EsentIndexDuplicateException() :
-            base("Index is already defined", JET_err.IndexDuplicate)
+            this("Index is already defined")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentIndexDuplicateException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentIndexDuplicateException(string description) :
+            base(description, JET_err.IndexDuplicate)
         {
         }
 
@@ -9836,7 +12938,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentIndexNotFoundException class.
         /// </summary>
         public EsentIndexNotFoundException() :
-            base("No such index", JET_err.IndexNotFound)
+            this("No such index")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentIndexNotFoundException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentIndexNotFoundException(string description) :
+            base(description, JET_err.IndexNotFound)
         {
         }
 
@@ -9868,7 +12979,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentIndexMustStayException class.
         /// </summary>
         public EsentIndexMustStayException() :
-            base("Cannot delete clustered index", JET_err.IndexMustStay)
+            this("Cannot delete clustered index")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentIndexMustStayException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentIndexMustStayException(string description) :
+            base(description, JET_err.IndexMustStay)
         {
         }
 
@@ -9900,7 +13020,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentIndexInvalidDefException class.
         /// </summary>
         public EsentIndexInvalidDefException() :
-            base("Illegal index definition", JET_err.IndexInvalidDef)
+            this("Illegal index definition")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentIndexInvalidDefException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentIndexInvalidDefException(string description) :
+            base(description, JET_err.IndexInvalidDef)
         {
         }
 
@@ -9932,7 +13061,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidCreateIndexException class.
         /// </summary>
         public EsentInvalidCreateIndexException() :
-            base("Invalid create index description", JET_err.InvalidCreateIndex)
+            this("Invalid create index description")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidCreateIndexException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidCreateIndexException(string description) :
+            base(description, JET_err.InvalidCreateIndex)
         {
         }
 
@@ -9964,7 +13102,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTooManyOpenIndexesException class.
         /// </summary>
         public EsentTooManyOpenIndexesException() :
-            base("Out of index description blocks", JET_err.TooManyOpenIndexes)
+            this("Out of index description blocks")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManyOpenIndexesException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTooManyOpenIndexesException(string description) :
+            base(description, JET_err.TooManyOpenIndexes)
         {
         }
 
@@ -9996,7 +13143,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentMultiValuedIndexViolationException class.
         /// </summary>
         public EsentMultiValuedIndexViolationException() :
-            base("Non-unique inter-record index keys generated for a multivalued index", JET_err.MultiValuedIndexViolation)
+            this("Non-unique inter-record index keys generated for a multivalued index")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentMultiValuedIndexViolationException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentMultiValuedIndexViolationException(string description) :
+            base(description, JET_err.MultiValuedIndexViolation)
         {
         }
 
@@ -10028,7 +13184,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentIndexBuildCorruptedException class.
         /// </summary>
         public EsentIndexBuildCorruptedException() :
-            base("Failed to build a secondary index that properly reflects primary index", JET_err.IndexBuildCorrupted)
+            this("Failed to build a secondary index that properly reflects primary index")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentIndexBuildCorruptedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentIndexBuildCorruptedException(string description) :
+            base(description, JET_err.IndexBuildCorrupted)
         {
         }
 
@@ -10060,7 +13225,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentPrimaryIndexCorruptedException class.
         /// </summary>
         public EsentPrimaryIndexCorruptedException() :
-            base("Primary index is corrupt. The database must be defragmented or the table deleted.", JET_err.PrimaryIndexCorrupted)
+            this("Primary index is corrupt. The database must be defragmented or the table deleted.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentPrimaryIndexCorruptedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentPrimaryIndexCorruptedException(string description) :
+            base(description, JET_err.PrimaryIndexCorrupted)
         {
         }
 
@@ -10092,7 +13266,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSecondaryIndexCorruptedException class.
         /// </summary>
         public EsentSecondaryIndexCorruptedException() :
-            base("Secondary index is corrupt. The database must be defragmented or the affected index must be deleted. If the corrupt index is over Unicode text, a likely cause is a sort-order change.", JET_err.SecondaryIndexCorrupted)
+            this("Secondary index is corrupt. The database must be defragmented or the affected index must be deleted. If the corrupt index is over Unicode text, a likely cause is a sort-order change.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSecondaryIndexCorruptedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentSecondaryIndexCorruptedException(string description) :
+            base(description, JET_err.SecondaryIndexCorrupted)
         {
         }
 
@@ -10124,7 +13307,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidIndexIdException class.
         /// </summary>
         public EsentInvalidIndexIdException() :
-            base("Illegal index id", JET_err.InvalidIndexId)
+            this("Illegal index id")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidIndexIdException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidIndexIdException(string description) :
+            base(description, JET_err.InvalidIndexId)
         {
         }
 
@@ -10136,6 +13328,47 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
         private EsentInvalidIndexIdException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.CantUseDeferredPopulateIndex exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentCantUseDeferredPopulateIndexException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentCantUseDeferredPopulateIndexException class.
+        /// </summary>
+        public EsentCantUseDeferredPopulateIndexException() :
+            this("A deferred population index may not be used until completely populated")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCantUseDeferredPopulateIndexException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCantUseDeferredPopulateIndexException(string description) :
+            base(description, JET_err.CantUseDeferredPopulateIndex)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentCantUseDeferredPopulateIndexException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentCantUseDeferredPopulateIndexException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
         }
@@ -10156,7 +13389,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentIndexTuplesSecondaryIndexOnlyException class.
         /// </summary>
         public EsentIndexTuplesSecondaryIndexOnlyException() :
-            base("tuple index can only be on a secondary index", JET_err.IndexTuplesSecondaryIndexOnly)
+            this("tuple index can only be on a secondary index")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentIndexTuplesSecondaryIndexOnlyException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentIndexTuplesSecondaryIndexOnlyException(string description) :
+            base(description, JET_err.IndexTuplesSecondaryIndexOnly)
         {
         }
 
@@ -10188,7 +13430,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentIndexTuplesTooManyColumnsException class.
         /// </summary>
         public EsentIndexTuplesTooManyColumnsException() :
-            base("tuple index may only have eleven columns in the index", JET_err.IndexTuplesTooManyColumns)
+            this("tuple index may only have eleven columns in the index")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentIndexTuplesTooManyColumnsException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentIndexTuplesTooManyColumnsException(string description) :
+            base(description, JET_err.IndexTuplesTooManyColumns)
         {
         }
 
@@ -10220,7 +13471,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentIndexTuplesNonUniqueOnlyException class.
         /// </summary>
         public EsentIndexTuplesNonUniqueOnlyException() :
-            base("tuple index must be a non-unique index", JET_err.IndexTuplesNonUniqueOnly)
+            this("tuple index must be a non-unique index")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentIndexTuplesNonUniqueOnlyException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentIndexTuplesNonUniqueOnlyException(string description) :
+            base(description, JET_err.IndexTuplesNonUniqueOnly)
         {
         }
 
@@ -10252,7 +13512,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentIndexTuplesTextBinaryColumnsOnlyException class.
         /// </summary>
         public EsentIndexTuplesTextBinaryColumnsOnlyException() :
-            base("tuple index must be on a text/binary column", JET_err.IndexTuplesTextBinaryColumnsOnly)
+            this("tuple index must be on a text/binary column")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentIndexTuplesTextBinaryColumnsOnlyException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentIndexTuplesTextBinaryColumnsOnlyException(string description) :
+            base(description, JET_err.IndexTuplesTextBinaryColumnsOnly)
         {
         }
 
@@ -10284,7 +13553,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentIndexTuplesVarSegMacNotAllowedException class.
         /// </summary>
         public EsentIndexTuplesVarSegMacNotAllowedException() :
-            base("tuple index does not allow setting cbVarSegMac", JET_err.IndexTuplesVarSegMacNotAllowed)
+            this("tuple index does not allow setting cbVarSegMac")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentIndexTuplesVarSegMacNotAllowedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentIndexTuplesVarSegMacNotAllowedException(string description) :
+            base(description, JET_err.IndexTuplesVarSegMacNotAllowed)
         {
         }
 
@@ -10316,7 +13594,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentIndexTuplesInvalidLimitsException class.
         /// </summary>
         public EsentIndexTuplesInvalidLimitsException() :
-            base("invalid min/max tuple length or max characters to index specified", JET_err.IndexTuplesInvalidLimits)
+            this("invalid min/max tuple length or max characters to index specified")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentIndexTuplesInvalidLimitsException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentIndexTuplesInvalidLimitsException(string description) :
+            base(description, JET_err.IndexTuplesInvalidLimits)
         {
         }
 
@@ -10348,7 +13635,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentIndexTuplesCannotRetrieveFromIndexException class.
         /// </summary>
         public EsentIndexTuplesCannotRetrieveFromIndexException() :
-            base("cannot call RetrieveColumn() with RetrieveFromIndex on a tuple index", JET_err.IndexTuplesCannotRetrieveFromIndex)
+            this("cannot call RetrieveColumn() with RetrieveFromIndex on a tuple index")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentIndexTuplesCannotRetrieveFromIndexException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentIndexTuplesCannotRetrieveFromIndexException(string description) :
+            base(description, JET_err.IndexTuplesCannotRetrieveFromIndex)
         {
         }
 
@@ -10380,7 +13676,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentIndexTuplesKeyTooSmallException class.
         /// </summary>
         public EsentIndexTuplesKeyTooSmallException() :
-            base("specified key does not meet minimum tuple length", JET_err.IndexTuplesKeyTooSmall)
+            this("specified key does not meet minimum tuple length")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentIndexTuplesKeyTooSmallException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentIndexTuplesKeyTooSmallException(string description) :
+            base(description, JET_err.IndexTuplesKeyTooSmall)
         {
         }
 
@@ -10412,7 +13717,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidLVChunkSizeException class.
         /// </summary>
         public EsentInvalidLVChunkSizeException() :
-            base("Specified LV chunk size is not supported", JET_err.InvalidLVChunkSize)
+            this("Specified LV chunk size is not supported")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidLVChunkSizeException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidLVChunkSizeException(string description) :
+            base(description, JET_err.InvalidLVChunkSize)
         {
         }
 
@@ -10444,7 +13758,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentColumnCannotBeEncryptedException class.
         /// </summary>
         public EsentColumnCannotBeEncryptedException() :
-            base("Only JET_coltypLongText and JET_coltypLongBinary columns without default values can be encrypted", JET_err.ColumnCannotBeEncrypted)
+            this("Only JET_coltypLongText and JET_coltypLongBinary columns without default values can be encrypted")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentColumnCannotBeEncryptedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentColumnCannotBeEncryptedException(string description) :
+            base(description, JET_err.ColumnCannotBeEncrypted)
         {
         }
 
@@ -10476,7 +13799,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCannotIndexOnEncryptedColumnException class.
         /// </summary>
         public EsentCannotIndexOnEncryptedColumnException() :
-            base("Cannot index encrypted column", JET_err.CannotIndexOnEncryptedColumn)
+            this("Cannot index encrypted column")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCannotIndexOnEncryptedColumnException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCannotIndexOnEncryptedColumnException(string description) :
+            base(description, JET_err.CannotIndexOnEncryptedColumn)
         {
         }
 
@@ -10508,7 +13840,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentColumnLongException class.
         /// </summary>
         public EsentColumnLongException() :
-            base("Column value is long", JET_err.ColumnLong)
+            this("Column value is long")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentColumnLongException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentColumnLongException(string description) :
+            base(description, JET_err.ColumnLong)
         {
         }
 
@@ -10540,7 +13881,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentColumnNoChunkException class.
         /// </summary>
         public EsentColumnNoChunkException() :
-            base("No such chunk in long value", JET_err.ColumnNoChunk)
+            this("No such chunk in long value")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentColumnNoChunkException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentColumnNoChunkException(string description) :
+            base(description, JET_err.ColumnNoChunk)
         {
         }
 
@@ -10572,7 +13922,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentColumnDoesNotFitException class.
         /// </summary>
         public EsentColumnDoesNotFitException() :
-            base("Field will not fit in record", JET_err.ColumnDoesNotFit)
+            this("Field will not fit in record")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentColumnDoesNotFitException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentColumnDoesNotFitException(string description) :
+            base(description, JET_err.ColumnDoesNotFit)
         {
         }
 
@@ -10604,7 +13963,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentNullInvalidException class.
         /// </summary>
         public EsentNullInvalidException() :
-            base("Null not valid", JET_err.NullInvalid)
+            this("Null not valid")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentNullInvalidException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentNullInvalidException(string description) :
+            base(description, JET_err.NullInvalid)
         {
         }
 
@@ -10636,7 +14004,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentColumnIndexedException class.
         /// </summary>
         public EsentColumnIndexedException() :
-            base("Column indexed, cannot delete", JET_err.ColumnIndexed)
+            this("Column indexed, cannot delete")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentColumnIndexedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentColumnIndexedException(string description) :
+            base(description, JET_err.ColumnIndexed)
         {
         }
 
@@ -10668,7 +14045,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentColumnTooBigException class.
         /// </summary>
         public EsentColumnTooBigException() :
-            base("Field length is greater than maximum", JET_err.ColumnTooBig)
+            this("Field length is greater than maximum")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentColumnTooBigException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentColumnTooBigException(string description) :
+            base(description, JET_err.ColumnTooBig)
         {
         }
 
@@ -10700,7 +14086,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentColumnNotFoundException class.
         /// </summary>
         public EsentColumnNotFoundException() :
-            base("No such column", JET_err.ColumnNotFound)
+            this("No such column")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentColumnNotFoundException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentColumnNotFoundException(string description) :
+            base(description, JET_err.ColumnNotFound)
         {
         }
 
@@ -10732,7 +14127,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentColumnDuplicateException class.
         /// </summary>
         public EsentColumnDuplicateException() :
-            base("Field is already defined", JET_err.ColumnDuplicate)
+            this("Field is already defined")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentColumnDuplicateException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentColumnDuplicateException(string description) :
+            base(description, JET_err.ColumnDuplicate)
         {
         }
 
@@ -10764,7 +14168,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentMultiValuedColumnMustBeTaggedException class.
         /// </summary>
         public EsentMultiValuedColumnMustBeTaggedException() :
-            base("Attempted to create a multi-valued column, but column was not Tagged", JET_err.MultiValuedColumnMustBeTagged)
+            this("Attempted to create a multi-valued column, but column was not Tagged")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentMultiValuedColumnMustBeTaggedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentMultiValuedColumnMustBeTaggedException(string description) :
+            base(description, JET_err.MultiValuedColumnMustBeTagged)
         {
         }
 
@@ -10796,7 +14209,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentColumnRedundantException class.
         /// </summary>
         public EsentColumnRedundantException() :
-            base("Second autoincrement or version column", JET_err.ColumnRedundant)
+            this("Second autoincrement or version column")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentColumnRedundantException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentColumnRedundantException(string description) :
+            base(description, JET_err.ColumnRedundant)
         {
         }
 
@@ -10828,7 +14250,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidColumnTypeException class.
         /// </summary>
         public EsentInvalidColumnTypeException() :
-            base("Invalid column data type", JET_err.InvalidColumnType)
+            this("Invalid column data type")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidColumnTypeException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidColumnTypeException(string description) :
+            base(description, JET_err.InvalidColumnType)
         {
         }
 
@@ -10860,7 +14291,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTaggedNotNULLException class.
         /// </summary>
         public EsentTaggedNotNULLException() :
-            base("No non-NULL tagged columns", JET_err.TaggedNotNULL)
+            this("No non-NULL tagged columns")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTaggedNotNULLException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTaggedNotNULLException(string description) :
+            base(description, JET_err.TaggedNotNULL)
         {
         }
 
@@ -10892,7 +14332,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentNoCurrentIndexException class.
         /// </summary>
         public EsentNoCurrentIndexException() :
-            base("Invalid w/o a current index", JET_err.NoCurrentIndex)
+            this("Invalid w/o a current index")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentNoCurrentIndexException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentNoCurrentIndexException(string description) :
+            base(description, JET_err.NoCurrentIndex)
         {
         }
 
@@ -10924,7 +14373,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentKeyIsMadeException class.
         /// </summary>
         public EsentKeyIsMadeException() :
-            base("The key is completely made", JET_err.KeyIsMade)
+            this("The key is completely made")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentKeyIsMadeException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentKeyIsMadeException(string description) :
+            base(description, JET_err.KeyIsMade)
         {
         }
 
@@ -10956,7 +14414,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentBadColumnIdException class.
         /// </summary>
         public EsentBadColumnIdException() :
-            base("Column Id Incorrect", JET_err.BadColumnId)
+            this("Column Id Incorrect")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBadColumnIdException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBadColumnIdException(string description) :
+            base(description, JET_err.BadColumnId)
         {
         }
 
@@ -10988,7 +14455,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentBadItagSequenceException class.
         /// </summary>
         public EsentBadItagSequenceException() :
-            base("Bad itagSequence for tagged column", JET_err.BadItagSequence)
+            this("Bad itagSequence for tagged column")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBadItagSequenceException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBadItagSequenceException(string description) :
+            base(description, JET_err.BadItagSequence)
         {
         }
 
@@ -11020,7 +14496,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentColumnInRelationshipException class.
         /// </summary>
         public EsentColumnInRelationshipException() :
-            base("Cannot delete, column participates in relationship", JET_err.ColumnInRelationship)
+            this("Cannot delete, column participates in relationship")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentColumnInRelationshipException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentColumnInRelationshipException(string description) :
+            base(description, JET_err.ColumnInRelationship)
         {
         }
 
@@ -11052,7 +14537,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCannotBeTaggedException class.
         /// </summary>
         public EsentCannotBeTaggedException() :
-            base("AutoIncrement and Version cannot be tagged", JET_err.CannotBeTagged)
+            this("AutoIncrement and Version cannot be tagged")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCannotBeTaggedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCannotBeTaggedException(string description) :
+            base(description, JET_err.CannotBeTagged)
         {
         }
 
@@ -11084,7 +14578,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDefaultValueTooBigException class.
         /// </summary>
         public EsentDefaultValueTooBigException() :
-            base("Default value exceeds maximum size", JET_err.DefaultValueTooBig)
+            this("Default value exceeds maximum size")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDefaultValueTooBigException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDefaultValueTooBigException(string description) :
+            base(description, JET_err.DefaultValueTooBig)
         {
         }
 
@@ -11116,7 +14619,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentMultiValuedDuplicateException class.
         /// </summary>
         public EsentMultiValuedDuplicateException() :
-            base("Duplicate detected on a unique multi-valued column", JET_err.MultiValuedDuplicate)
+            this("Duplicate detected on a unique multi-valued column")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentMultiValuedDuplicateException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentMultiValuedDuplicateException(string description) :
+            base(description, JET_err.MultiValuedDuplicate)
         {
         }
 
@@ -11148,7 +14660,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLVCorruptedException class.
         /// </summary>
         public EsentLVCorruptedException() :
-            base("Corruption encountered in long-value tree", JET_err.LVCorrupted)
+            this("Corruption encountered in long-value tree")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLVCorruptedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLVCorruptedException(string description) :
+            base(description, JET_err.LVCorrupted)
         {
         }
 
@@ -11180,7 +14701,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentMultiValuedDuplicateAfterTruncationException class.
         /// </summary>
         public EsentMultiValuedDuplicateAfterTruncationException() :
-            base("Duplicate detected on a unique multi-valued column after data was normalized, and normalizing truncated the data before comparison", JET_err.MultiValuedDuplicateAfterTruncation)
+            this("Duplicate detected on a unique multi-valued column after data was normalized, and normalizing truncated the data before comparison")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentMultiValuedDuplicateAfterTruncationException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentMultiValuedDuplicateAfterTruncationException(string description) :
+            base(description, JET_err.MultiValuedDuplicateAfterTruncation)
         {
         }
 
@@ -11212,7 +14742,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDerivedColumnCorruptionException class.
         /// </summary>
         public EsentDerivedColumnCorruptionException() :
-            base("Invalid column in derived table", JET_err.DerivedColumnCorruption)
+            this("Invalid column in derived table")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDerivedColumnCorruptionException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDerivedColumnCorruptionException(string description) :
+            base(description, JET_err.DerivedColumnCorruption)
         {
         }
 
@@ -11244,7 +14783,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidPlaceholderColumnException class.
         /// </summary>
         public EsentInvalidPlaceholderColumnException() :
-            base("Tried to convert column to a primary index placeholder, but column doesn't meet necessary criteria", JET_err.InvalidPlaceholderColumn)
+            this("Tried to convert column to a primary index placeholder, but column doesn't meet necessary criteria")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidPlaceholderColumnException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidPlaceholderColumnException(string description) :
+            base(description, JET_err.InvalidPlaceholderColumn)
         {
         }
 
@@ -11276,7 +14824,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentColumnCannotBeCompressedException class.
         /// </summary>
         public EsentColumnCannotBeCompressedException() :
-            base("Only JET_coltypLongText and JET_coltypLongBinary columns can be compressed", JET_err.ColumnCannotBeCompressed)
+            this("Only JET_coltypLongText and JET_coltypLongBinary columns can be compressed")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentColumnCannotBeCompressedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentColumnCannotBeCompressedException(string description) :
+            base(description, JET_err.ColumnCannotBeCompressed)
         {
         }
 
@@ -11308,7 +14865,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentColumnNoEncryptionKeyException class.
         /// </summary>
         public EsentColumnNoEncryptionKeyException() :
-            base("Cannot retrieve/set encrypted column without an encryption key", JET_err.ColumnNoEncryptionKey)
+            this("Cannot retrieve/set encrypted column without an encryption key")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentColumnNoEncryptionKeyException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentColumnNoEncryptionKeyException(string description) :
+            base(description, JET_err.ColumnNoEncryptionKey)
         {
         }
 
@@ -11340,7 +14906,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentRecordNotFoundException class.
         /// </summary>
         public EsentRecordNotFoundException() :
-            base("The key was not found", JET_err.RecordNotFound)
+            this("The key was not found")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRecordNotFoundException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRecordNotFoundException(string description) :
+            base(description, JET_err.RecordNotFound)
         {
         }
 
@@ -11372,7 +14947,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentRecordNoCopyException class.
         /// </summary>
         public EsentRecordNoCopyException() :
-            base("No working buffer", JET_err.RecordNoCopy)
+            this("No working buffer")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRecordNoCopyException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRecordNoCopyException(string description) :
+            base(description, JET_err.RecordNoCopy)
         {
         }
 
@@ -11404,7 +14988,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentNoCurrentRecordException class.
         /// </summary>
         public EsentNoCurrentRecordException() :
-            base("Currency not on a record", JET_err.NoCurrentRecord)
+            this("Currency not on a record")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentNoCurrentRecordException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentNoCurrentRecordException(string description) :
+            base(description, JET_err.NoCurrentRecord)
         {
         }
 
@@ -11436,7 +15029,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentRecordPrimaryChangedException class.
         /// </summary>
         public EsentRecordPrimaryChangedException() :
-            base("Primary key may not change", JET_err.RecordPrimaryChanged)
+            this("Primary key may not change")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRecordPrimaryChangedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRecordPrimaryChangedException(string description) :
+            base(description, JET_err.RecordPrimaryChanged)
         {
         }
 
@@ -11468,7 +15070,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentKeyDuplicateException class.
         /// </summary>
         public EsentKeyDuplicateException() :
-            base("Illegal duplicate key", JET_err.KeyDuplicate)
+            this("Illegal duplicate key")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentKeyDuplicateException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentKeyDuplicateException(string description) :
+            base(description, JET_err.KeyDuplicate)
         {
         }
 
@@ -11500,7 +15111,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentAlreadyPreparedException class.
         /// </summary>
         public EsentAlreadyPreparedException() :
-            base("Attempted to update record when record update was already in progress", JET_err.AlreadyPrepared)
+            this("Attempted to update record when record update was already in progress")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentAlreadyPreparedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentAlreadyPreparedException(string description) :
+            base(description, JET_err.AlreadyPrepared)
         {
         }
 
@@ -11532,7 +15152,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentKeyNotMadeException class.
         /// </summary>
         public EsentKeyNotMadeException() :
-            base("No call to JetMakeKey", JET_err.KeyNotMade)
+            this("No call to JetMakeKey")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentKeyNotMadeException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentKeyNotMadeException(string description) :
+            base(description, JET_err.KeyNotMade)
         {
         }
 
@@ -11564,7 +15193,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentUpdateNotPreparedException class.
         /// </summary>
         public EsentUpdateNotPreparedException() :
-            base("No call to JetPrepareUpdate", JET_err.UpdateNotPrepared)
+            this("No call to JetPrepareUpdate")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentUpdateNotPreparedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentUpdateNotPreparedException(string description) :
+            base(description, JET_err.UpdateNotPrepared)
         {
         }
 
@@ -11596,7 +15234,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDataHasChangedException class.
         /// </summary>
         public EsentDataHasChangedException() :
-            base("Data has changed, operation aborted", JET_err.DataHasChanged)
+            this("Data has changed, operation aborted")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDataHasChangedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDataHasChangedException(string description) :
+            base(description, JET_err.DataHasChanged)
         {
         }
 
@@ -11628,7 +15275,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLanguageNotSupportedException class.
         /// </summary>
         public EsentLanguageNotSupportedException() :
-            base("Windows installation does not support language", JET_err.LanguageNotSupported)
+            this("Windows installation does not support language")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLanguageNotSupportedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLanguageNotSupportedException(string description) :
+            base(description, JET_err.LanguageNotSupported)
         {
         }
 
@@ -11660,7 +15316,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDecompressionFailedException class.
         /// </summary>
         public EsentDecompressionFailedException() :
-            base("Internal error: data could not be decompressed", JET_err.DecompressionFailed)
+            this("Internal error: data could not be decompressed")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDecompressionFailedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDecompressionFailedException(string description) :
+            base(description, JET_err.DecompressionFailed)
         {
         }
 
@@ -11692,7 +15357,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentUpdateMustVersionException class.
         /// </summary>
         public EsentUpdateMustVersionException() :
-            base("No version updates only for uncommitted tables", JET_err.UpdateMustVersion)
+            this("No version updates only for uncommitted tables")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentUpdateMustVersionException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentUpdateMustVersionException(string description) :
+            base(description, JET_err.UpdateMustVersion)
         {
         }
 
@@ -11724,7 +15398,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDecryptionFailedException class.
         /// </summary>
         public EsentDecryptionFailedException() :
-            base("Data could not be decrypted", JET_err.DecryptionFailed)
+            this("Data could not be decrypted")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDecryptionFailedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDecryptionFailedException(string description) :
+            base(description, JET_err.DecryptionFailed)
         {
         }
 
@@ -11756,7 +15439,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentEncryptionBadItagException class.
         /// </summary>
         public EsentEncryptionBadItagException() :
-            base("Cannot encrypt tagged columns with itag>1", JET_err.EncryptionBadItag)
+            this("Cannot encrypt tagged columns with itag>1")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentEncryptionBadItagException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentEncryptionBadItagException(string description) :
+            base(description, JET_err.EncryptionBadItag)
         {
         }
 
@@ -11768,6 +15460,88 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
         private EsentEncryptionBadItagException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.SetAutoIncrementTooHigh exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentSetAutoIncrementTooHighException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentSetAutoIncrementTooHighException class.
+        /// </summary>
+        public EsentSetAutoIncrementTooHighException() :
+            this("The auto-increment value that the user tried to set explicitly is too high .")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSetAutoIncrementTooHighException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentSetAutoIncrementTooHighException(string description) :
+            base(description, JET_err.SetAutoIncrementTooHigh)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentSetAutoIncrementTooHighException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentSetAutoIncrementTooHighException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.AutoIncrementNotSet exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentAutoIncrementNotSetException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentAutoIncrementNotSetException class.
+        /// </summary>
+        public EsentAutoIncrementNotSetException() :
+            this("The user must have explicitly set the auto-increment column for this table.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentAutoIncrementNotSetException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentAutoIncrementNotSetException(string description) :
+            base(description, JET_err.AutoIncrementNotSet)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentAutoIncrementNotSetException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentAutoIncrementNotSetException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
         }
@@ -11788,7 +15562,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTooManySortsException class.
         /// </summary>
         public EsentTooManySortsException() :
-            base("Too many sort processes", JET_err.TooManySorts)
+            this("Too many sort processes")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManySortsException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTooManySortsException(string description) :
+            base(description, JET_err.TooManySorts)
         {
         }
 
@@ -11820,7 +15603,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidOnSortException class.
         /// </summary>
         public EsentInvalidOnSortException() :
-            base("Invalid operation on Sort", JET_err.InvalidOnSort)
+            this("Invalid operation on Sort")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidOnSortException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidOnSortException(string description) :
+            base(description, JET_err.InvalidOnSort)
         {
         }
 
@@ -11852,7 +15644,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTempFileOpenErrorException class.
         /// </summary>
         public EsentTempFileOpenErrorException() :
-            base("Temp file could not be opened", JET_err.TempFileOpenError)
+            this("Temp file could not be opened")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTempFileOpenErrorException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTempFileOpenErrorException(string description) :
+            base(description, JET_err.TempFileOpenError)
         {
         }
 
@@ -11884,7 +15685,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTooManyAttachedDatabasesException class.
         /// </summary>
         public EsentTooManyAttachedDatabasesException() :
-            base("Too many open databases", JET_err.TooManyAttachedDatabases)
+            this("Too many open databases")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManyAttachedDatabasesException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTooManyAttachedDatabasesException(string description) :
+            base(description, JET_err.TooManyAttachedDatabases)
         {
         }
 
@@ -11916,7 +15726,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDiskFullException class.
         /// </summary>
         public EsentDiskFullException() :
-            base("No space left on disk", JET_err.DiskFull)
+            this("No space left on disk")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDiskFullException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDiskFullException(string description) :
+            base(description, JET_err.DiskFull)
         {
         }
 
@@ -11948,7 +15767,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentPermissionDeniedException class.
         /// </summary>
         public EsentPermissionDeniedException() :
-            base("Permission denied", JET_err.PermissionDenied)
+            this("Permission denied")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentPermissionDeniedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentPermissionDeniedException(string description) :
+            base(description, JET_err.PermissionDenied)
         {
         }
 
@@ -11980,7 +15808,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentFileNotFoundException class.
         /// </summary>
         public EsentFileNotFoundException() :
-            base("File not found", JET_err.FileNotFound)
+            this("File not found")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentFileNotFoundException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentFileNotFoundException(string description) :
+            base(description, JET_err.FileNotFound)
         {
         }
 
@@ -12012,7 +15849,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentFileInvalidTypeException class.
         /// </summary>
         public EsentFileInvalidTypeException() :
-            base("Invalid file type", JET_err.FileInvalidType)
+            this("Invalid file type")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentFileInvalidTypeException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentFileInvalidTypeException(string description) :
+            base(description, JET_err.FileInvalidType)
         {
         }
 
@@ -12044,7 +15890,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentFileAlreadyExistsException class.
         /// </summary>
         public EsentFileAlreadyExistsException() :
-            base("File already exists", JET_err.FileAlreadyExists)
+            this("File already exists")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentFileAlreadyExistsException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentFileAlreadyExistsException(string description) :
+            base(description, JET_err.FileAlreadyExists)
         {
         }
 
@@ -12076,7 +15931,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentAfterInitializationException class.
         /// </summary>
         public EsentAfterInitializationException() :
-            base("Cannot Restore after init.", JET_err.AfterInitialization)
+            this("Cannot Restore after init.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentAfterInitializationException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentAfterInitializationException(string description) :
+            base(description, JET_err.AfterInitialization)
         {
         }
 
@@ -12108,7 +15972,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLogCorruptedException class.
         /// </summary>
         public EsentLogCorruptedException() :
-            base("Logs could not be interpreted", JET_err.LogCorrupted)
+            this("Logs could not be interpreted")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLogCorruptedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLogCorruptedException(string description) :
+            base(description, JET_err.LogCorrupted)
         {
         }
 
@@ -12140,7 +16013,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidOperationException class.
         /// </summary>
         public EsentInvalidOperationException() :
-            base("Invalid operation", JET_err.InvalidOperation)
+            this("Invalid operation")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidOperationException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidOperationException(string description) :
+            base(description, JET_err.InvalidOperation)
         {
         }
 
@@ -12172,7 +16054,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentAccessDeniedException class.
         /// </summary>
         public EsentAccessDeniedException() :
-            base("Access denied", JET_err.AccessDenied)
+            this("Access denied")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentAccessDeniedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentAccessDeniedException(string description) :
+            base(description, JET_err.AccessDenied)
         {
         }
 
@@ -12204,7 +16095,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTooManySplitsException class.
         /// </summary>
         public EsentTooManySplitsException() :
-            base("Infinite split", JET_err.TooManySplits)
+            this("Infinite split")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManySplitsException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTooManySplitsException(string description) :
+            base(description, JET_err.TooManySplits)
         {
         }
 
@@ -12236,7 +16136,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSessionSharingViolationException class.
         /// </summary>
         public EsentSessionSharingViolationException() :
-            base("Multiple threads are using the same session", JET_err.SessionSharingViolation)
+            this("Multiple threads are using the same session")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSessionSharingViolationException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentSessionSharingViolationException(string description) :
+            base(description, JET_err.SessionSharingViolation)
         {
         }
 
@@ -12268,7 +16177,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentEntryPointNotFoundException class.
         /// </summary>
         public EsentEntryPointNotFoundException() :
-            base("An entry point in a DLL we require could not be found", JET_err.EntryPointNotFound)
+            this("An entry point in a DLL we require could not be found")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentEntryPointNotFoundException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentEntryPointNotFoundException(string description) :
+            base(description, JET_err.EntryPointNotFound)
         {
         }
 
@@ -12300,7 +16218,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSessionContextAlreadySetException class.
         /// </summary>
         public EsentSessionContextAlreadySetException() :
-            base("Specified session already has a session context set", JET_err.SessionContextAlreadySet)
+            this("Specified session already has a session context set")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSessionContextAlreadySetException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentSessionContextAlreadySetException(string description) :
+            base(description, JET_err.SessionContextAlreadySet)
         {
         }
 
@@ -12332,7 +16259,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSessionContextNotSetByThisThreadException class.
         /// </summary>
         public EsentSessionContextNotSetByThisThreadException() :
-            base("Tried to reset session context, but current thread did not originally set the session context", JET_err.SessionContextNotSetByThisThread)
+            this("Tried to reset session context, but current thread did not originally set the session context")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSessionContextNotSetByThisThreadException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentSessionContextNotSetByThisThreadException(string description) :
+            base(description, JET_err.SessionContextNotSetByThisThread)
         {
         }
 
@@ -12364,7 +16300,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSessionInUseException class.
         /// </summary>
         public EsentSessionInUseException() :
-            base("Tried to terminate session in use", JET_err.SessionInUse)
+            this("Tried to terminate session in use")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSessionInUseException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentSessionInUseException(string description) :
+            base(description, JET_err.SessionInUse)
         {
         }
 
@@ -12396,7 +16341,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentRecordFormatConversionFailedException class.
         /// </summary>
         public EsentRecordFormatConversionFailedException() :
-            base("Internal error during dynamic record format conversion", JET_err.RecordFormatConversionFailed)
+            this("Internal error during dynamic record format conversion")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRecordFormatConversionFailedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRecordFormatConversionFailedException(string description) :
+            base(description, JET_err.RecordFormatConversionFailed)
         {
         }
 
@@ -12428,7 +16382,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentOneDatabasePerSessionException class.
         /// </summary>
         public EsentOneDatabasePerSessionException() :
-            base("Just one open user database per session is allowed (JET_paramOneDatabasePerSession)", JET_err.OneDatabasePerSession)
+            this("Just one open user database per session is allowed (JET_paramOneDatabasePerSession)")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentOneDatabasePerSessionException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentOneDatabasePerSessionException(string description) :
+            base(description, JET_err.OneDatabasePerSession)
         {
         }
 
@@ -12460,7 +16423,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentRollbackErrorException class.
         /// </summary>
         public EsentRollbackErrorException() :
-            base("error during rollback", JET_err.RollbackError)
+            this("error during rollback")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRollbackErrorException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRollbackErrorException(string description) :
+            base(description, JET_err.RollbackError)
         {
         }
 
@@ -12492,7 +16464,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentFlushMapVersionUnsupportedException class.
         /// </summary>
         public EsentFlushMapVersionUnsupportedException() :
-            base("The version of the persisted flush map is not supported by this version of the engine.", JET_err.FlushMapVersionUnsupported)
+            this("The version of the persisted flush map is not supported by this version of the engine.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentFlushMapVersionUnsupportedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentFlushMapVersionUnsupportedException(string description) :
+            base(description, JET_err.FlushMapVersionUnsupported)
         {
         }
 
@@ -12524,7 +16505,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentFlushMapDatabaseMismatchException class.
         /// </summary>
         public EsentFlushMapDatabaseMismatchException() :
-            base("The persisted flush map and the database do not match.", JET_err.FlushMapDatabaseMismatch)
+            this("The persisted flush map and the database do not match.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentFlushMapDatabaseMismatchException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentFlushMapDatabaseMismatchException(string description) :
+            base(description, JET_err.FlushMapDatabaseMismatch)
         {
         }
 
@@ -12556,7 +16546,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentFlushMapUnrecoverableException class.
         /// </summary>
         public EsentFlushMapUnrecoverableException() :
-            base("The persisted flush map cannot be reconstructed.", JET_err.FlushMapUnrecoverable)
+            this("The persisted flush map cannot be reconstructed.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentFlushMapUnrecoverableException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentFlushMapUnrecoverableException(string description) :
+            base(description, JET_err.FlushMapUnrecoverable)
         {
         }
 
@@ -12568,6 +16567,990 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
         private EsentFlushMapUnrecoverableException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RBSFileCorrupt exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRBSFileCorruptException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSFileCorruptException class.
+        /// </summary>
+        public EsentRBSFileCorruptException() :
+            this("RBS file is corrupt")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSFileCorruptException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRBSFileCorruptException(string description) :
+            base(description, JET_err.RBSFileCorrupt)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSFileCorruptException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRBSFileCorruptException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RBSHeaderCorrupt exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRBSHeaderCorruptException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSHeaderCorruptException class.
+        /// </summary>
+        public EsentRBSHeaderCorruptException() :
+            this("RBS header is corrupt")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSHeaderCorruptException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRBSHeaderCorruptException(string description) :
+            base(description, JET_err.RBSHeaderCorrupt)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSHeaderCorruptException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRBSHeaderCorruptException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RBSDbMismatch exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRBSDbMismatchException : EsentInconsistentException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSDbMismatchException class.
+        /// </summary>
+        public EsentRBSDbMismatchException() :
+            this("RBS is out of sync with the database file")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSDbMismatchException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRBSDbMismatchException(string description) :
+            base(description, JET_err.RBSDbMismatch)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSDbMismatchException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRBSDbMismatchException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.BadRBSVersion exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentBadRBSVersionException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentBadRBSVersionException class.
+        /// </summary>
+        public EsentBadRBSVersionException() :
+            this("Version of revert snapshot file is not compatible with Jet version")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBadRBSVersionException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBadRBSVersionException(string description) :
+            base(description, JET_err.BadRBSVersion)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentBadRBSVersionException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentBadRBSVersionException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.OutOfRBSSpace exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentOutOfRBSSpaceException : EsentFragmentationException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentOutOfRBSSpaceException class.
+        /// </summary>
+        public EsentOutOfRBSSpaceException() :
+            this("Revert snapshot file has reached its maximum size")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentOutOfRBSSpaceException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentOutOfRBSSpaceException(string description) :
+            base(description, JET_err.OutOfRBSSpace)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentOutOfRBSSpaceException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentOutOfRBSSpaceException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RBSInvalidSign exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRBSInvalidSignException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSInvalidSignException class.
+        /// </summary>
+        public EsentRBSInvalidSignException() :
+            this("RBS signature is not set in the RBS header")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSInvalidSignException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRBSInvalidSignException(string description) :
+            base(description, JET_err.RBSInvalidSign)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSInvalidSignException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRBSInvalidSignException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RBSInvalidRecord exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRBSInvalidRecordException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSInvalidRecordException class.
+        /// </summary>
+        public EsentRBSInvalidRecordException() :
+            this("Invalid RBS record found in the revert snapshot")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSInvalidRecordException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRBSInvalidRecordException(string description) :
+            base(description, JET_err.RBSInvalidRecord)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSInvalidRecordException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRBSInvalidRecordException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RBSRCInvalidRBS exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRBSRCInvalidRBSException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRCInvalidRBSException class.
+        /// </summary>
+        public EsentRBSRCInvalidRBSException() :
+            this("The database cannot be reverted to the expected time as there are some invalid revert snapshots to revert to that time.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRCInvalidRBSException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRBSRCInvalidRBSException(string description) :
+            base(description, JET_err.RBSRCInvalidRBS)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRCInvalidRBSException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRBSRCInvalidRBSException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RBSRCNoRBSFound exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRBSRCNoRBSFoundException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRCNoRBSFoundException class.
+        /// </summary>
+        public EsentRBSRCNoRBSFoundException() :
+            this("The database cannot be reverted to the expected time as there no revert snapshots to revert to that time.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRCNoRBSFoundException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRBSRCNoRBSFoundException(string description) :
+            base(description, JET_err.RBSRCNoRBSFound)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRCNoRBSFoundException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRBSRCNoRBSFoundException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RBSRCBadDbState exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRBSRCBadDbStateException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRCBadDbStateException class.
+        /// </summary>
+        public EsentRBSRCBadDbStateException() :
+            this("The database revert to the expected time failed as the database has a bad dbstate.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRCBadDbStateException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRBSRCBadDbStateException(string description) :
+            base(description, JET_err.RBSRCBadDbState)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRCBadDbStateException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRBSRCBadDbStateException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RBSMissingReqLogs exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRBSMissingReqLogsException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSMissingReqLogsException class.
+        /// </summary>
+        public EsentRBSMissingReqLogsException() :
+            this("The required logs for the revert snapshot are missing.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSMissingReqLogsException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRBSMissingReqLogsException(string description) :
+            base(description, JET_err.RBSMissingReqLogs)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSMissingReqLogsException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRBSMissingReqLogsException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RBSLogDivergenceFailed exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRBSLogDivergenceFailedException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSLogDivergenceFailedException class.
+        /// </summary>
+        public EsentRBSLogDivergenceFailedException() :
+            this("The required logs for the revert snapshot are diverged with logs in the log directory.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSLogDivergenceFailedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRBSLogDivergenceFailedException(string description) :
+            base(description, JET_err.RBSLogDivergenceFailed)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSLogDivergenceFailedException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRBSLogDivergenceFailedException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RBSRCCopyLogsRevertState exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRBSRCCopyLogsRevertStateException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRCCopyLogsRevertStateException class.
+        /// </summary>
+        public EsentRBSRCCopyLogsRevertStateException() :
+            this("The database cannot be reverted to the expected time as we are in copying logs stage from previous revert request and a further revert in the past is requested which might leave logs in corrupt state.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRCCopyLogsRevertStateException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRBSRCCopyLogsRevertStateException(string description) :
+            base(description, JET_err.RBSRCCopyLogsRevertState)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRCCopyLogsRevertStateException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRBSRCCopyLogsRevertStateException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.DatabaseIncompleteRevert exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentDatabaseIncompleteRevertException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseIncompleteRevertException class.
+        /// </summary>
+        public EsentDatabaseIncompleteRevertException() :
+            this("The database cannot be attached because it is currently being reverted using revert snapshot.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseIncompleteRevertException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseIncompleteRevertException(string description) :
+            base(description, JET_err.DatabaseIncompleteRevert)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseIncompleteRevertException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentDatabaseIncompleteRevertException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RBSRCRevertCancelled exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRBSRCRevertCancelledException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRCRevertCancelledException class.
+        /// </summary>
+        public EsentRBSRCRevertCancelledException() :
+            this("The database revert has been cancelled.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRCRevertCancelledException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRBSRCRevertCancelledException(string description) :
+            base(description, JET_err.RBSRCRevertCancelled)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRCRevertCancelledException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRBSRCRevertCancelledException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RBSRCInvalidDbFormatVersion exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRBSRCInvalidDbFormatVersionException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRCInvalidDbFormatVersionException class.
+        /// </summary>
+        public EsentRBSRCInvalidDbFormatVersionException() :
+            this("The database format version for the databases to be reverted doesn't support applying the revert snapshot.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRCInvalidDbFormatVersionException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRBSRCInvalidDbFormatVersionException(string description) :
+            base(description, JET_err.RBSRCInvalidDbFormatVersion)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRCInvalidDbFormatVersionException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRBSRCInvalidDbFormatVersionException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RBSCannotDetermineDivergence exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRBSCannotDetermineDivergenceException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSCannotDetermineDivergenceException class.
+        /// </summary>
+        public EsentRBSCannotDetermineDivergenceException() :
+            this("The required logs for the revert snapshot are missing in log directory and hence we cannot determine if those logs are diverged with the logs in snapshot directory.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSCannotDetermineDivergenceException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRBSCannotDetermineDivergenceException(string description) :
+            base(description, JET_err.RBSCannotDetermineDivergence)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSCannotDetermineDivergenceException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRBSCannotDetermineDivergenceException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RBSDeleteTableTooBig exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRBSDeleteTableTooBigException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSDeleteTableTooBigException class.
+        /// </summary>
+        public EsentRBSDeleteTableTooBigException() :
+            this("The table being deleted is bigger than the configured max size to delete while activated on RBS copy, retry delete when activated on another copy")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSDeleteTableTooBigException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRBSDeleteTableTooBigException(string description) :
+            base(description, JET_err.RBSDeleteTableTooBig)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSDeleteTableTooBigException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRBSDeleteTableTooBigException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RBSDeleteTableTooSoon exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRBSDeleteTableTooSoonException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSDeleteTableTooSoonException class.
+        /// </summary>
+        public EsentRBSDeleteTableTooSoonException() :
+            this("The table was created or the root page of table being deleted was moved in the last few days and hence a non-revertable delete cannot be attempted right now.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSDeleteTableTooSoonException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRBSDeleteTableTooSoonException(string description) :
+            base(description, JET_err.RBSDeleteTableTooSoon)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSDeleteTableTooSoonException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRBSDeleteTableTooSoonException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RBSFDPToBeDeleted exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRBSFDPToBeDeletedException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSFDPToBeDeletedException class.
+        /// </summary>
+        public EsentRBSFDPToBeDeletedException() :
+            this("The FDP is about to be deleted. The table was originally deleted using non-revertable flag and the database was then reverted to a previous state using RBS causing the table's pages to not be reverted but table root page and space tree pages were reverted to assist in catalog cleanup.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSFDPToBeDeletedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRBSFDPToBeDeletedException(string description) :
+            base(description, JET_err.RBSFDPToBeDeleted)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSFDPToBeDeletedException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRBSFDPToBeDeletedException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RBSRevertableDeleteNotPossible exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRBSRevertableDeleteNotPossibleException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRevertableDeleteNotPossibleException class.
+        /// </summary>
+        public EsentRBSRevertableDeleteNotPossibleException() :
+            this("The table being deleted with revertable delete flag is not possible as this table was previously deleted with non-revertable flag and partially reverted by RBS.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRevertableDeleteNotPossibleException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRBSRevertableDeleteNotPossibleException(string description) :
+            base(description, JET_err.RBSRevertableDeleteNotPossible)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRevertableDeleteNotPossibleException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRBSRevertableDeleteNotPossibleException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RBSRedeleteFDPUnexpected exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRBSRedeleteFDPUnexpectedException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRedeleteFDPUnexpectedException class.
+        /// </summary>
+        public EsentRBSRedeleteFDPUnexpectedException() :
+            this("Indicates that the reverted table marked with delete flag is unexpected.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRedeleteFDPUnexpectedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRBSRedeleteFDPUnexpectedException(string description) :
+            base(description, JET_err.RBSRedeleteFDPUnexpected)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRedeleteFDPUnexpectedException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRBSRedeleteFDPUnexpectedException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RBSRCPageFDPDeleteFileCorrupt exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRBSRCPageFDPDeleteFileCorruptException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRCPageFDPDeleteFileCorruptException class.
+        /// </summary>
+        public EsentRBSRCPageFDPDeleteFileCorruptException() :
+            this("The database cannot be reverted to the expected time as we are in apply root page records state but the corresponding file to init the page state is corrupt")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRCPageFDPDeleteFileCorruptException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRBSRCPageFDPDeleteFileCorruptException(string description) :
+            base(description, JET_err.RBSRCPageFDPDeleteFileCorrupt)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRCPageFDPDeleteFileCorruptException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRBSRCPageFDPDeleteFileCorruptException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RBSRedeleteFDPExpected exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRBSRedeleteFDPExpectedException : EsentCorruptionException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRedeleteFDPExpectedException class.
+        /// </summary>
+        public EsentRBSRedeleteFDPExpectedException() :
+            this("Indicates that the reverted table is expected to be marked with delete flag.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRedeleteFDPExpectedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRBSRedeleteFDPExpectedException(string description) :
+            base(description, JET_err.RBSRedeleteFDPExpected)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentRBSRedeleteFDPExpectedException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRBSRedeleteFDPExpectedException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
         }
@@ -12588,7 +17571,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentDatabaseAlreadyRunningMaintenanceException class.
         /// </summary>
         public EsentDatabaseAlreadyRunningMaintenanceException() :
-            base("The operation did not complete successfully because the database is already running maintenance on specified database", JET_err.DatabaseAlreadyRunningMaintenance)
+            this("The operation did not complete successfully because the database is already running maintenance on specified database")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseAlreadyRunningMaintenanceException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseAlreadyRunningMaintenanceException(string description) :
+            base(description, JET_err.DatabaseAlreadyRunningMaintenance)
         {
         }
 
@@ -12600,6 +17592,129 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
         private EsentDatabaseAlreadyRunningMaintenanceException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.RootSpaceLeakEstimationAlreadyRunning exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentRootSpaceLeakEstimationAlreadyRunningException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentRootSpaceLeakEstimationAlreadyRunningException class.
+        /// </summary>
+        public EsentRootSpaceLeakEstimationAlreadyRunningException() :
+            this("The operation did not complete successfully because root space leak estimation is already running on the specified database")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentRootSpaceLeakEstimationAlreadyRunningException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentRootSpaceLeakEstimationAlreadyRunningException(string description) :
+            base(description, JET_err.RootSpaceLeakEstimationAlreadyRunning)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentRootSpaceLeakEstimationAlreadyRunningException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentRootSpaceLeakEstimationAlreadyRunningException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.DatabaseShrinkPrimingAlreadyRunning exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentDatabaseShrinkPrimingAlreadyRunningException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseShrinkPrimingAlreadyRunningException class.
+        /// </summary>
+        public EsentDatabaseShrinkPrimingAlreadyRunningException() :
+            this("Database Shrink priming is already running")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseShrinkPrimingAlreadyRunningException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseShrinkPrimingAlreadyRunningException(string description) :
+            base(description, JET_err.DatabaseShrinkPrimingAlreadyRunning)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseShrinkPrimingAlreadyRunningException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentDatabaseShrinkPrimingAlreadyRunningException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.DatabaseShrinkPrimingBlocked exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentDatabaseShrinkPrimingBlockedException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseShrinkPrimingBlockedException class.
+        /// </summary>
+        public EsentDatabaseShrinkPrimingBlockedException() :
+            this("Database Shrink priming cannot start because it has been blocked from running")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseShrinkPrimingBlockedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentDatabaseShrinkPrimingBlockedException(string description) :
+            base(description, JET_err.DatabaseShrinkPrimingBlocked)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentDatabaseShrinkPrimingBlockedException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentDatabaseShrinkPrimingBlockedException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
         }
@@ -12620,7 +17735,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCallbackFailedException class.
         /// </summary>
         public EsentCallbackFailedException() :
-            base("A callback failed", JET_err.CallbackFailed)
+            this("A callback failed")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCallbackFailedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCallbackFailedException(string description) :
+            base(description, JET_err.CallbackFailed)
         {
         }
 
@@ -12652,7 +17776,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentCallbackNotResolvedException class.
         /// </summary>
         public EsentCallbackNotResolvedException() :
-            base("A callback function could not be found", JET_err.CallbackNotResolved)
+            this("A callback function could not be found")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCallbackNotResolvedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCallbackNotResolvedException(string description) :
+            base(description, JET_err.CallbackNotResolved)
         {
         }
 
@@ -12684,7 +17817,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentSpaceHintsInvalidException class.
         /// </summary>
         public EsentSpaceHintsInvalidException() :
-            base("An element of the JET space hints structure was not correct or actionable.", JET_err.SpaceHintsInvalid)
+            this("An element of the JET space hints structure was not correct or actionable.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentSpaceHintsInvalidException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentSpaceHintsInvalidException(string description) :
+            base(description, JET_err.SpaceHintsInvalid)
         {
         }
 
@@ -12716,7 +17858,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentOSSnapshotInvalidSequenceException class.
         /// </summary>
         public EsentOSSnapshotInvalidSequenceException() :
-            base("OS Shadow copy API used in an invalid sequence", JET_err.OSSnapshotInvalidSequence)
+            this("OS Shadow copy API used in an invalid sequence")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentOSSnapshotInvalidSequenceException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentOSSnapshotInvalidSequenceException(string description) :
+            base(description, JET_err.OSSnapshotInvalidSequence)
         {
         }
 
@@ -12748,7 +17899,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentOSSnapshotTimeOutException class.
         /// </summary>
         public EsentOSSnapshotTimeOutException() :
-            base("OS Shadow copy ended with time-out", JET_err.OSSnapshotTimeOut)
+            this("OS Shadow copy ended with time-out")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentOSSnapshotTimeOutException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentOSSnapshotTimeOutException(string description) :
+            base(description, JET_err.OSSnapshotTimeOut)
         {
         }
 
@@ -12780,7 +17940,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentOSSnapshotNotAllowedException class.
         /// </summary>
         public EsentOSSnapshotNotAllowedException() :
-            base("OS Shadow copy not allowed (backup or recovery in progress)", JET_err.OSSnapshotNotAllowed)
+            this("OS Shadow copy not allowed (backup or recovery in progress)")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentOSSnapshotNotAllowedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentOSSnapshotNotAllowedException(string description) :
+            base(description, JET_err.OSSnapshotNotAllowed)
         {
         }
 
@@ -12812,7 +17981,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentOSSnapshotInvalidSnapIdException class.
         /// </summary>
         public EsentOSSnapshotInvalidSnapIdException() :
-            base("invalid JET_OSSNAPID", JET_err.OSSnapshotInvalidSnapId)
+            this("invalid JET_OSSNAPID")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentOSSnapshotInvalidSnapIdException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentOSSnapshotInvalidSnapIdException(string description) :
+            base(description, JET_err.OSSnapshotInvalidSnapId)
         {
         }
 
@@ -12844,7 +18022,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTooManyTestInjectionsException class.
         /// </summary>
         public EsentTooManyTestInjectionsException() :
-            base("Internal test injection limit hit", JET_err.TooManyTestInjections)
+            this("Internal test injection limit hit")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManyTestInjectionsException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTooManyTestInjectionsException(string description) :
+            base(description, JET_err.TooManyTestInjections)
         {
         }
 
@@ -12876,7 +18063,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentTestInjectionNotSupportedException class.
         /// </summary>
         public EsentTestInjectionNotSupportedException() :
-            base("Test injection not supported", JET_err.TestInjectionNotSupported)
+            this("Test injection not supported")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTestInjectionNotSupportedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTestInjectionNotSupportedException(string description) :
+            base(description, JET_err.TestInjectionNotSupported)
         {
         }
 
@@ -12908,7 +18104,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentInvalidLogDataSequenceException class.
         /// </summary>
         public EsentInvalidLogDataSequenceException() :
-            base("Some how the log data provided got out of sequence with the current state of the instance", JET_err.InvalidLogDataSequence)
+            this("Some how the log data provided got out of sequence with the current state of the instance")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentInvalidLogDataSequenceException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentInvalidLogDataSequenceException(string description) :
+            base(description, JET_err.InvalidLogDataSequence)
         {
         }
 
@@ -12920,6 +18125,498 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
         private EsentInvalidLogDataSequenceException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.TooManyCaucuses exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentTooManyCaucusesException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManyCaucusesException class.
+        /// </summary>
+        public EsentTooManyCaucusesException() :
+            this("Vote rejected - the fixed number voter caucus slots have been filled.  Expand capacity, or fix hardware.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManyCaucusesException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTooManyCaucusesException(string description) :
+            base(description, JET_err.TooManyCaucuses)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManyCaucusesException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentTooManyCaucusesException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.TooManyVotesForPgno exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentTooManyVotesForPgnoException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManyVotesForPgnoException class.
+        /// </summary>
+        public EsentTooManyVotesForPgnoException() :
+            this("Vote rejected - we allow only a limited number of votes for a given pgno, we have voted too many times for this pgno.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManyVotesForPgnoException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentTooManyVotesForPgnoException(string description) :
+            base(description, JET_err.TooManyVotesForPgno)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentTooManyVotesForPgnoException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentTooManyVotesForPgnoException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.VoteTooLateAlreadyTallied exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentVoteTooLateAlreadyTalliedException : EsentStateException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentVoteTooLateAlreadyTalliedException class.
+        /// </summary>
+        public EsentVoteTooLateAlreadyTalliedException() :
+            this("Vote rejected - Already 3 votes were presented or the vote timed out, and the vote was tallied.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentVoteTooLateAlreadyTalliedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentVoteTooLateAlreadyTalliedException(string description) :
+            base(description, JET_err.VoteTooLateAlreadyTallied)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentVoteTooLateAlreadyTalliedException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentVoteTooLateAlreadyTalliedException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.NoBallotCrcSignatureProvided exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentNoBallotCrcSignatureProvidedException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentNoBallotCrcSignatureProvidedException class.
+        /// </summary>
+        public EsentNoBallotCrcSignatureProvidedException() :
+            this("Vote rejected - the page vote had no page image CRC signatures provided.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentNoBallotCrcSignatureProvidedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentNoBallotCrcSignatureProvidedException(string description) :
+            base(description, JET_err.NoBallotCrcSignatureProvided)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentNoBallotCrcSignatureProvidedException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentNoBallotCrcSignatureProvidedException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.BallotCrcSignatureMismatch exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentBallotCrcSignatureMismatchException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentBallotCrcSignatureMismatchException class.
+        /// </summary>
+        public EsentBallotCrcSignatureMismatchException() :
+            this("Vote rejected - the page sender's vote CRC signature of the page image, does not match the recomputed one for vote recording.  Corruption in transit maybe?")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentBallotCrcSignatureMismatchException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentBallotCrcSignatureMismatchException(string description) :
+            base(description, JET_err.BallotCrcSignatureMismatch)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentBallotCrcSignatureMismatchException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentBallotCrcSignatureMismatchException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.VoterLogSignatureMismatch exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentVoterLogSignatureMismatchException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentVoterLogSignatureMismatchException class.
+        /// </summary>
+        public EsentVoterLogSignatureMismatchException() :
+            this("Vote rejected - the page sender's log signature does not match the active's log signature.  Did stream get restarted? ")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentVoterLogSignatureMismatchException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentVoterLogSignatureMismatchException(string description) :
+            base(description, JET_err.VoterLogSignatureMismatch)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentVoterLogSignatureMismatchException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentVoterLogSignatureMismatchException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.VotePgnoImpossiblyHigh exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentVotePgnoImpossiblyHighException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentVotePgnoImpossiblyHighException class.
+        /// </summary>
+        public EsentVotePgnoImpossiblyHighException() :
+            this("Vote rejected - the page number provided in the vote token was too high.  Token corruption?")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentVotePgnoImpossiblyHighException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentVotePgnoImpossiblyHighException(string description) :
+            base(description, JET_err.VotePgnoImpossiblyHigh)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentVotePgnoImpossiblyHighException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentVotePgnoImpossiblyHighException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.VoteLogGenImpossiblyHigh exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentVoteLogGenImpossiblyHighException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentVoteLogGenImpossiblyHighException class.
+        /// </summary>
+        public EsentVoteLogGenImpossiblyHighException() :
+            this("Vote rejected - the log generation of record / ID in the vote token was impossibly high.  Token corruption?")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentVoteLogGenImpossiblyHighException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentVoteLogGenImpossiblyHighException(string description) :
+            base(description, JET_err.VoteLogGenImpossiblyHigh)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentVoteLogGenImpossiblyHighException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentVoteLogGenImpossiblyHighException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.VoteDbtimeUnacceptable exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentVoteDbtimeUnacceptableException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentVoteDbtimeUnacceptableException class.
+        /// </summary>
+        public EsentVoteDbtimeUnacceptableException() :
+            this("Vote rejected - the DBTIME of record / ID in the vote token was impossibly high.  Handling shrunk or RBS page?")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentVoteDbtimeUnacceptableException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentVoteDbtimeUnacceptableException(string description) :
+            base(description, JET_err.VoteDbtimeUnacceptable)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentVoteDbtimeUnacceptableException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentVoteDbtimeUnacceptableException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.VoteLgposTooHighForLog exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentVoteLgposTooHighForLogException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentVoteLgposTooHighForLogException class.
+        /// </summary>
+        public EsentVoteLgposTooHighForLogException() :
+            this("Vote rejected - the lgpos of record / ID was higher than the newest lgpos of the active.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentVoteLgposTooHighForLogException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentVoteLgposTooHighForLogException(string description) :
+            base(description, JET_err.VoteLgposTooHighForLog)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentVoteLgposTooHighForLogException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentVoteLgposTooHighForLogException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.VotePgnoTooHighForDb exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentVotePgnoTooHighForDbException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentVotePgnoTooHighForDbException class.
+        /// </summary>
+        public EsentVotePgnoTooHighForDbException() :
+            this("Vote rejected - the page number was higher than the databases size.  Handling shrunk or RBS page?")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentVotePgnoTooHighForDbException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentVotePgnoTooHighForDbException(string description) :
+            base(description, JET_err.VotePgnoTooHighForDb)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentVotePgnoTooHighForDbException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentVotePgnoTooHighForDbException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.VoterFraud exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentVoterFraudException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentVoterFraudException class.
+        /// </summary>
+        public EsentVoterFraudException() :
+            this("Vote rejected - this voter already voted in this page caucus.  Can not vote twice.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentVoterFraudException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentVoterFraudException(string description) :
+            base(description, JET_err.VoterFraud)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentVoterFraudException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentVoterFraudException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
         }
@@ -12940,7 +18637,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLSCallbackNotSpecifiedException class.
         /// </summary>
         public EsentLSCallbackNotSpecifiedException() :
-            base("Attempted to use Local Storage without a callback function being specified", JET_err.LSCallbackNotSpecified)
+            this("Attempted to use Local Storage without a callback function being specified")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLSCallbackNotSpecifiedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLSCallbackNotSpecifiedException(string description) :
+            base(description, JET_err.LSCallbackNotSpecified)
         {
         }
 
@@ -12972,7 +18678,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLSAlreadySetException class.
         /// </summary>
         public EsentLSAlreadySetException() :
-            base("Attempted to set Local Storage for an object which already had it set", JET_err.LSAlreadySet)
+            this("Attempted to set Local Storage for an object which already had it set")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLSAlreadySetException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLSAlreadySetException(string description) :
+            base(description, JET_err.LSAlreadySet)
         {
         }
 
@@ -13004,7 +18719,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentLSNotSetException class.
         /// </summary>
         public EsentLSNotSetException() :
-            base("Attempted to retrieve Local Storage from an object which didn't have it set", JET_err.LSNotSet)
+            this("Attempted to retrieve Local Storage from an object which didn't have it set")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentLSNotSetException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentLSNotSetException(string description) :
+            base(description, JET_err.LSNotSet)
         {
         }
 
@@ -13036,7 +18760,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentFileIOSparseException class.
         /// </summary>
         public EsentFileIOSparseException() :
-            base("an I/O was issued to a location that was sparse", JET_err.FileIOSparse)
+            this("an I/O was issued to a location that was sparse")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentFileIOSparseException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentFileIOSparseException(string description) :
+            base(description, JET_err.FileIOSparse)
         {
         }
 
@@ -13068,7 +18801,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentFileIOBeyondEOFException class.
         /// </summary>
         public EsentFileIOBeyondEOFException() :
-            base("a read was issued to a location beyond EOF (writes will expand the file)", JET_err.FileIOBeyondEOF)
+            this("a read was issued to a location beyond EOF (writes will expand the file)")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentFileIOBeyondEOFException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentFileIOBeyondEOFException(string description) :
+            base(description, JET_err.FileIOBeyondEOF)
         {
         }
 
@@ -13100,7 +18842,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentFileIOAbortException class.
         /// </summary>
         public EsentFileIOAbortException() :
-            base("instructs the JET_ABORTRETRYFAILCALLBACK caller to abort the specified I/O", JET_err.FileIOAbort)
+            this("instructs the JET_ABORTRETRYFAILCALLBACK caller to abort the specified I/O")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentFileIOAbortException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentFileIOAbortException(string description) :
+            base(description, JET_err.FileIOAbort)
         {
         }
 
@@ -13132,7 +18883,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentFileIORetryException class.
         /// </summary>
         public EsentFileIORetryException() :
-            base("instructs the JET_ABORTRETRYFAILCALLBACK caller to retry the specified I/O", JET_err.FileIORetry)
+            this("instructs the JET_ABORTRETRYFAILCALLBACK caller to retry the specified I/O")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentFileIORetryException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentFileIORetryException(string description) :
+            base(description, JET_err.FileIORetry)
         {
         }
 
@@ -13164,7 +18924,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentFileIOFailException class.
         /// </summary>
         public EsentFileIOFailException() :
-            base("instructs the JET_ABORTRETRYFAILCALLBACK caller to fail the specified I/O", JET_err.FileIOFail)
+            this("instructs the JET_ABORTRETRYFAILCALLBACK caller to fail the specified I/O")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentFileIOFailException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentFileIOFailException(string description) :
+            base(description, JET_err.FileIOFail)
         {
         }
 
@@ -13196,7 +18965,16 @@ namespace Microsoft.Isam.Esent.Interop
         /// Initializes a new instance of the EsentFileCompressedException class.
         /// </summary>
         public EsentFileCompressedException() :
-            base("read/write access is not supported on compressed files", JET_err.FileCompressed)
+            this("read/write access is not supported on compressed files")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentFileCompressedException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentFileCompressedException(string description) :
+            base(description, JET_err.FileCompressed)
         {
         }
 
@@ -13208,6 +18986,129 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
         private EsentFileCompressedException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.CopySignatureMismatchCannotRestart exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentCopySignatureMismatchCannotRestartException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentCopySignatureMismatchCannotRestartException class.
+        /// </summary>
+        public EsentCopySignatureMismatchCannotRestartException() :
+            this("Source file modified inbetween copy attempts.  Continuing would give a franken-copy of file with a mix of updates.  You must delete the destination file, and restart your copy.")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentCopySignatureMismatchCannotRestartException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentCopySignatureMismatchCannotRestartException(string description) :
+            base(description, JET_err.CopySignatureMismatchCannotRestart)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentCopySignatureMismatchCannotRestartException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentCopySignatureMismatchCannotRestartException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.ClientSpaceBegin exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentClientSpaceBeginException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentClientSpaceBeginException class.
+        /// </summary>
+        public EsentClientSpaceBeginException() :
+            this("Begin of the error space reserved for JET client use")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentClientSpaceBeginException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentClientSpaceBeginException(string description) :
+            base(description, JET_err.ClientSpaceBegin)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentClientSpaceBeginException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentClientSpaceBeginException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
+        {
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Base class for JET_err.ClientSpaceEnd exceptions.
+    /// </summary>
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.MaintainabilityRules",
+        "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Auto-generated code.")]
+    [Serializable]
+    public sealed class EsentClientSpaceEndException : EsentUsageException
+    {
+        /// <summary>
+        /// Initializes a new instance of the EsentClientSpaceEndException class.
+        /// </summary>
+        public EsentClientSpaceEndException() :
+            this("End of the error space reserved for JET client use")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the EsentClientSpaceEndException class.
+        /// </summary>
+        /// <param name="description">Custom exception description.</param>
+        public EsentClientSpaceEndException(string description) :
+            base(description, JET_err.ClientSpaceEnd)
+        {
+        }
+
+#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+        /// <summary>
+        /// Initializes a new instance of the EsentClientSpaceEndException class. This constructor
+        /// is used to deserialize a serialized exception.
+        /// </summary>
+        /// <param name="info">The data needed to deserialize the object.</param>
+        /// <param name="context">The deserialization context.</param>
+        private EsentClientSpaceEndException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
         }
@@ -13288,6 +19189,16 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentBadEmptyPageException();
             case JET_err.BadLineCount:
                 return new EsentBadLineCountException();
+            case JET_err.PageTagCorrupted:
+                return new EsentPageTagCorruptedException();
+            case JET_err.NodeCorrupted:
+                return new EsentNodeCorruptedException();
+            case JET_err.BBTNodeCorrupted:
+                return new EsentBBTNodeCorruptedException();
+            case JET_err.BBTBuffCorrupted:
+                return new EsentBBTBuffCorruptedException();
+            case JET_err.BadRootPageLink:
+                return new EsentBadRootPageLinkException();
             case JET_err.KeyTooBig:
                 return new EsentKeyTooBigException();
             case JET_err.CannotSeparateIntrinsicLV:
@@ -13304,6 +19215,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentStaleColumnReferenceException();
             case JET_err.CompressionIntegrityCheckFailed:
                 return new EsentCompressionIntegrityCheckFailedException();
+            case JET_err.IndexDeferredPopulateCurrentlyUnavailable:
+                return new EsentIndexDeferredPopulateCurrentlyUnavailableException();
             case JET_err.InvalidLoggedOperation:
                 return new EsentInvalidLoggedOperationException();
             case JET_err.LogFileCorrupt:
@@ -13452,8 +19365,10 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentCommittedLogFileCorruptException();
             case JET_err.LogSequenceChecksumMismatch:
                 return new EsentLogSequenceChecksumMismatchException();
-            case JET_err.PageInitializedMismatch:
-                return new EsentPageInitializedMismatchException();
+            case JET_err.PageInitializedMismatchUninitRemote:
+                return new EsentPageInitializedMismatchUninitRemoteException();
+            case JET_err.PageInitializedMismatchUninitLocal:
+                return new EsentPageInitializedMismatchUninitLocalException();
             case JET_err.UnicodeTranslationBufferTooSmall:
                 return new EsentUnicodeTranslationBufferTooSmallException();
             case JET_err.UnicodeTranslationFail:
@@ -13488,8 +19403,16 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentEngineFormatVersionSpecifiedTooLowForLogVersionException();
             case JET_err.EngineFormatVersionSpecifiedTooLowForDatabaseVersion:
                 return new EsentEngineFormatVersionSpecifiedTooLowForDatabaseVersionException();
+            case JET_err.DbTimeBeyondMaxRequired:
+                return new EsentDbTimeBeyondMaxRequiredException();
+            case JET_err.LogOperationInconsistentWithDatabase:
+                return new EsentLogOperationInconsistentWithDatabaseException();
+            case JET_err.InsertKeyOutOfOrder:
+                return new EsentInsertKeyOutOfOrderException();
             case JET_err.BackupAbortByServer:
                 return new EsentBackupAbortByServerException();
+            case JET_err.PatchTokenUnknownVersion:
+                return new EsentPatchTokenUnknownVersionException();
             case JET_err.InvalidGrbit:
                 return new EsentInvalidGrbitException();
             case JET_err.TermInProgress:
@@ -13756,6 +19679,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentDatabaseAttachedForRecoveryException();
             case JET_err.TransactionsNotReadyDuringRecovery:
                 return new EsentTransactionsNotReadyDuringRecoveryException();
+            case JET_err.BlockedByCorruptionMark:
+                return new EsentBlockedByCorruptionMarkException();
             case JET_err.TableLocked:
                 return new EsentTableLockedException();
             case JET_err.TableDuplicate:
@@ -13828,6 +19753,8 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentSecondaryIndexCorruptedException();
             case JET_err.InvalidIndexId:
                 return new EsentInvalidIndexIdException();
+            case JET_err.CantUseDeferredPopulateIndex:
+                return new EsentCantUseDeferredPopulateIndexException();
             case JET_err.IndexTuplesSecondaryIndexOnly:
                 return new EsentIndexTuplesSecondaryIndexOnlyException();
             case JET_err.IndexTuplesTooManyColumns:
@@ -13930,6 +19857,10 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentDecryptionFailedException();
             case JET_err.EncryptionBadItag:
                 return new EsentEncryptionBadItagException();
+            case JET_err.SetAutoIncrementTooHigh:
+                return new EsentSetAutoIncrementTooHighException();
+            case JET_err.AutoIncrementNotSet:
+                return new EsentAutoIncrementNotSetException();
             case JET_err.TooManySorts:
                 return new EsentTooManySortsException();
             case JET_err.InvalidOnSort:
@@ -13980,8 +19911,62 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentFlushMapDatabaseMismatchException();
             case JET_err.FlushMapUnrecoverable:
                 return new EsentFlushMapUnrecoverableException();
+            case JET_err.RBSFileCorrupt:
+                return new EsentRBSFileCorruptException();
+            case JET_err.RBSHeaderCorrupt:
+                return new EsentRBSHeaderCorruptException();
+            case JET_err.RBSDbMismatch:
+                return new EsentRBSDbMismatchException();
+            case JET_err.BadRBSVersion:
+                return new EsentBadRBSVersionException();
+            case JET_err.OutOfRBSSpace:
+                return new EsentOutOfRBSSpaceException();
+            case JET_err.RBSInvalidSign:
+                return new EsentRBSInvalidSignException();
+            case JET_err.RBSInvalidRecord:
+                return new EsentRBSInvalidRecordException();
+            case JET_err.RBSRCInvalidRBS:
+                return new EsentRBSRCInvalidRBSException();
+            case JET_err.RBSRCNoRBSFound:
+                return new EsentRBSRCNoRBSFoundException();
+            case JET_err.RBSRCBadDbState:
+                return new EsentRBSRCBadDbStateException();
+            case JET_err.RBSMissingReqLogs:
+                return new EsentRBSMissingReqLogsException();
+            case JET_err.RBSLogDivergenceFailed:
+                return new EsentRBSLogDivergenceFailedException();
+            case JET_err.RBSRCCopyLogsRevertState:
+                return new EsentRBSRCCopyLogsRevertStateException();
+            case JET_err.DatabaseIncompleteRevert:
+                return new EsentDatabaseIncompleteRevertException();
+            case JET_err.RBSRCRevertCancelled:
+                return new EsentRBSRCRevertCancelledException();
+            case JET_err.RBSRCInvalidDbFormatVersion:
+                return new EsentRBSRCInvalidDbFormatVersionException();
+            case JET_err.RBSCannotDetermineDivergence:
+                return new EsentRBSCannotDetermineDivergenceException();
+            case JET_err.RBSDeleteTableTooBig:
+                return new EsentRBSDeleteTableTooBigException();
+            case JET_err.RBSDeleteTableTooSoon:
+                return new EsentRBSDeleteTableTooSoonException();
+            case JET_err.RBSFDPToBeDeleted:
+                return new EsentRBSFDPToBeDeletedException();
+            case JET_err.RBSRevertableDeleteNotPossible:
+                return new EsentRBSRevertableDeleteNotPossibleException();
+            case JET_err.RBSRedeleteFDPUnexpected:
+                return new EsentRBSRedeleteFDPUnexpectedException();
+            case JET_err.RBSRCPageFDPDeleteFileCorrupt:
+                return new EsentRBSRCPageFDPDeleteFileCorruptException();
+            case JET_err.RBSRedeleteFDPExpected:
+                return new EsentRBSRedeleteFDPExpectedException();
             case JET_err.DatabaseAlreadyRunningMaintenance:
                 return new EsentDatabaseAlreadyRunningMaintenanceException();
+            case JET_err.RootSpaceLeakEstimationAlreadyRunning:
+                return new EsentRootSpaceLeakEstimationAlreadyRunningException();
+            case JET_err.DatabaseShrinkPrimingAlreadyRunning:
+                return new EsentDatabaseShrinkPrimingAlreadyRunningException();
+            case JET_err.DatabaseShrinkPrimingBlocked:
+                return new EsentDatabaseShrinkPrimingBlockedException();
             case JET_err.CallbackFailed:
                 return new EsentCallbackFailedException();
             case JET_err.CallbackNotResolved:
@@ -14002,6 +19987,30 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentTestInjectionNotSupportedException();
             case JET_err.InvalidLogDataSequence:
                 return new EsentInvalidLogDataSequenceException();
+            case JET_err.TooManyCaucuses:
+                return new EsentTooManyCaucusesException();
+            case JET_err.TooManyVotesForPgno:
+                return new EsentTooManyVotesForPgnoException();
+            case JET_err.VoteTooLateAlreadyTallied:
+                return new EsentVoteTooLateAlreadyTalliedException();
+            case JET_err.NoBallotCrcSignatureProvided:
+                return new EsentNoBallotCrcSignatureProvidedException();
+            case JET_err.BallotCrcSignatureMismatch:
+                return new EsentBallotCrcSignatureMismatchException();
+            case JET_err.VoterLogSignatureMismatch:
+                return new EsentVoterLogSignatureMismatchException();
+            case JET_err.VotePgnoImpossiblyHigh:
+                return new EsentVotePgnoImpossiblyHighException();
+            case JET_err.VoteLogGenImpossiblyHigh:
+                return new EsentVoteLogGenImpossiblyHighException();
+            case JET_err.VoteDbtimeUnacceptable:
+                return new EsentVoteDbtimeUnacceptableException();
+            case JET_err.VoteLgposTooHighForLog:
+                return new EsentVoteLgposTooHighForLogException();
+            case JET_err.VotePgnoTooHighForDb:
+                return new EsentVotePgnoTooHighForDbException();
+            case JET_err.VoterFraud:
+                return new EsentVoterFraudException();
             case JET_err.LSCallbackNotSpecified:
                 return new EsentLSCallbackNotSpecifiedException();
             case JET_err.LSAlreadySet:
@@ -14020,6 +20029,12 @@ namespace Microsoft.Isam.Esent.Interop
                 return new EsentFileIOFailException();
             case JET_err.FileCompressed:
                 return new EsentFileCompressedException();
+            case JET_err.CopySignatureMismatchCannotRestart:
+                return new EsentCopySignatureMismatchCannotRestartException();
+            case JET_err.ClientSpaceBegin:
+                return new EsentClientSpaceBeginException();
+            case JET_err.ClientSpaceEnd:
+                return new EsentClientSpaceEndException();
             default:
                 // This could be a new error introduced in a newer version of Esent. Try to look up the description.
                 IntPtr errNum = new IntPtr((int)err);

@@ -25,7 +25,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="message">The description of the error.</param>
         /// <param name="err">The error code of the exception.</param>
-        internal EsentErrorException(string message, JET_err err) : base(message)
+        internal EsentErrorException(string message, JET_err err)
+            : base(message)
         {
             this.errorCode = err;
         }
@@ -36,8 +37,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
-        protected EsentErrorException(SerializationInfo info, StreamingContext context) :
-                base(info, context)
+        protected EsentErrorException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
             this.errorCode = (JET_err)info.GetInt32("errorCode");
         }
@@ -53,7 +54,7 @@ namespace Microsoft.Isam.Esent.Interop
             }
         }
 
-#if !MANAGEDESENT_ON_CORECLR // Serialization does not work in Core CLR.
+#if !MANAGEDESENT_ON_CORECLR && !NET // Serialization does not work in Core CLR.
         /// <summary>When overridden in a derived class, sets the <see cref="T:System.Runtime.Serialization.SerializationInfo" /> with information about the exception.</summary>
         /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> that holds the serialized object data about the exception being thrown. </param>
         /// <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" /> that contains contextual information about the source or destination. </param>

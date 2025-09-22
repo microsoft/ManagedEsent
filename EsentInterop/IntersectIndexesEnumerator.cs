@@ -30,7 +30,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="ranges">
         /// The ranges to intersect.
         /// </param>
-        public IntersectIndexesEnumerator(JET_SESID sesid, JET_INDEXRANGE[] ranges) : base(sesid)
+        public IntersectIndexesEnumerator(JET_SESID sesid, JET_INDEXRANGE[] ranges)
+            : base(sesid)
         {
             this.ranges = ranges;
         }

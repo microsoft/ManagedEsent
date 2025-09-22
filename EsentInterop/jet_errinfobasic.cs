@@ -16,7 +16,8 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
     /// The native version of the JET_ERRINFOBASIC structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
@@ -117,8 +118,15 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
         public JET_err errValue
         {
             [DebuggerStepThrough]
-            get { return this.errorValue; }
-            set { this.errorValue = value; }
+            get
+            {
+                return this.errorValue;
+            }
+
+            set
+            {
+                this.errorValue = value;
+            }
         }
 
         /// <summary>
@@ -127,8 +135,15 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
         public JET_ERRCAT errcat
         {
             [DebuggerStepThrough]
-            get { return this.errorcatMostSpecific; }
-            set { this.errorcatMostSpecific = value; }
+            get
+            {
+                return this.errorcatMostSpecific;
+            }
+
+            set
+            {
+                this.errorcatMostSpecific = value;
+            }
         }
 
         /// <summary>
@@ -137,8 +152,15 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
         public JET_ERRCAT[] rgCategoricalHierarchy
         {
             [DebuggerStepThrough]
-            get { return this.arrayCategoricalHierarchy; }
-            set { this.arrayCategoricalHierarchy = value; }
+            get
+            {
+                return this.arrayCategoricalHierarchy;
+            }
+
+            set
+            {
+                this.arrayCategoricalHierarchy = value;
+            }
         }
 
         /// <summary>
@@ -147,8 +169,15 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
         public int lSourceLine
         {
             [DebuggerStepThrough]
-            get { return this.sourceLine; }
-            set { this.sourceLine = value; }
+            get
+            {
+                return this.sourceLine;
+            }
+
+            set
+            {
+                this.sourceLine = value;
+            }
         }
 
         /// <summary>
@@ -157,8 +186,15 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
         public string rgszSourceFile
         {
             [DebuggerStepThrough]
-            get { return this.sourceFile; }
-            set { this.sourceFile = value; }
+            get
+            {
+                return this.sourceFile;
+            }
+
+            set
+            {
+                this.sourceFile = value;
+            }
         }
 
         /// <summary>
@@ -207,7 +243,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
         /// <returns>The native (interop) version of this object.</returns>
         internal NATIVE_ERRINFOBASIC GetNativeErrInfo()
         {
-            var native = new NATIVE_ERRINFOBASIC();
+            var native = default(NATIVE_ERRINFOBASIC);
             native.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_ERRINFOBASIC)));
 
             native.errValue = this.errValue;

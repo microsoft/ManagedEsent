@@ -118,7 +118,9 @@ namespace Microsoft.Isam.Esent.Interop.Implementation
             // This can happen if there are multiple AppDomains.
             string instanceName = string.Format(CultureInfo.InvariantCulture, "GettingEsentVersion{0}", LibraryHelpers.GetCurrentManagedThreadId());
             JET_INSTANCE instance = JET_INSTANCE.Nil;
-            RuntimeHelpers.PrepareConstrainedRegions();            
+#if !NET
+            RuntimeHelpers.PrepareConstrainedRegions();
+#endif
             try
             {
                 this.JetCreateInstance(out instance, instanceName);

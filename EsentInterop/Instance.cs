@@ -50,8 +50,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// The name of the instance. This string must be unique within a
         /// given process hosting the database engine.
         /// </param>
+#if NETFRAMEWORK
         [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
-        public Instance(string name) : this(name, name, TermGrbit.None)
+#endif
+        public Instance(string name)
+            : this(name, name, TermGrbit.None)
         {
         }
 
@@ -67,8 +70,11 @@ namespace Microsoft.Isam.Esent.Interop
         /// A display name for the instance. This will be used in eventlog
         /// entries.
         /// </param>
+#if NETFRAMEWORK
         [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
-        public Instance(string name, string displayName) : this(name, displayName, TermGrbit.None)
+#endif
+        public Instance(string name, string displayName)
+            : this(name, displayName, TermGrbit.None)
         {
         }
 
@@ -87,15 +93,20 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="termGrbit">
         /// The TermGrbit to be used at JetTerm time.
         /// </param>
+#if NETFRAMEWORK
         [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
-        public Instance(string name, string displayName, TermGrbit termGrbit) : base(true)
+#endif
+        public Instance(string name, string displayName, TermGrbit termGrbit)
+            : base(true)
         {
             this.name = name;
             this.displayName = displayName;
             this.termGrbit = termGrbit;
 
             JET_INSTANCE instance;
+#if NETFRAMEWORK
             RuntimeHelpers.PrepareConstrainedRegions();
+#endif
             try
             {
                 this.SetHandle(JET_INSTANCE.Nil.Value);
@@ -126,7 +137,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public JET_INSTANCE JetInstance
         {
+#if NETFRAMEWORK
             [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
+#endif
             get
             {
                 this.CheckObjectIsNotDisposed();
@@ -139,7 +152,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         public InstanceParameters Parameters
         {
+#if NETFRAMEWORK
             [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
+#endif
             get
             {
                 this.CheckObjectIsNotDisposed();
@@ -148,18 +163,37 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
+        /// Checks if the Instance is started / "open" and thus needs .Term() called (to be "disposed" properly) to
+        /// tear down the JET_INSTANCE handle.
+        /// </summary>
+        public bool IsStarted
+        {
+#if NETFRAMEWORK
+            [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
+#endif
+            get
+            {
+                return !this.IsInvalid && !this.IsClosed;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the TermGrbit for this instance. 
         /// </summary>
         public TermGrbit TermGrbit
         {
+#if NETFRAMEWORK
             [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
+#endif
             get
             {
                 this.CheckObjectIsNotDisposed();
                 return this.termGrbit;
             }
 
+#if NETFRAMEWORK
             [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
+#endif
             set
             {
                 this.CheckObjectIsNotDisposed();
@@ -174,7 +208,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// </summary>
         /// <param name="instance">The instance to convert.</param>
         /// <returns>The JET_INSTANCE wrapped by the instance.</returns>
+#if NETFRAMEWORK
         [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
+#endif
         public static implicit operator JET_INSTANCE(Instance instance)
         {
             return instance.JetInstance;
@@ -194,7 +230,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Initialize the JET_INSTANCE.
         /// </summary>
+#if NETFRAMEWORK
         [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
+#endif
         public void Init()
         {
             this.Init(InitGrbit.None);
@@ -206,7 +244,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">
         /// Initialization options.
         /// </param>
+#if NETFRAMEWORK
         [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
+#endif
         public void Init(InitGrbit grbit)
         {
             this.CheckObjectIsNotDisposed();
@@ -214,7 +254,9 @@ namespace Microsoft.Isam.Esent.Interop
 
             // Use a constrained region so that the handle is
             // always set after JetInit2 is called.
+#if NETFRAMEWORK
             RuntimeHelpers.PrepareConstrainedRegions();
+#endif
             try
             {
                 // Remember that a failure in JetInit can zero the handle
@@ -238,7 +280,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="grbit">
         /// Initialization options.
         /// </param>
+#if NETFRAMEWORK
         [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
+#endif
         public void Init(JET_RSTINFO recoveryOptions, InitGrbit grbit)
         {
             this.CheckObjectIsNotDisposed();
@@ -246,7 +290,9 @@ namespace Microsoft.Isam.Esent.Interop
 
             // Use a constrained region so that the handle is
             // always set after JetInit3 is called.
+#if NETFRAMEWORK
             RuntimeHelpers.PrepareConstrainedRegions();
+#endif
             try
             {
                 // Remember that a failure in JetInit can zero the handle
@@ -266,12 +312,16 @@ namespace Microsoft.Isam.Esent.Interop
             "Microsoft.StyleCop.CSharp.MaintainabilityRules",
             "SA1409:RemoveUnnecessaryCode",
             Justification = "CER code belongs in the finally block, so the try clause is empty")]
+#if NETFRAMEWORK
         [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
+#endif
         public void Term()
         {
             // Use a constrained region so that the handle is
             // always set as invalid after JetTerm is called.
+#if NETFRAMEWORK
             RuntimeHelpers.PrepareConstrainedRegions();
+#endif
             try
             {
                 // This try block deliberately left blank.
@@ -325,7 +375,9 @@ namespace Microsoft.Isam.Esent.Interop
         /// <summary>
         /// Check to see if this instance is invalid or closed.
         /// </summary>
+#if NETFRAMEWORK
         [SecurityPermissionAttribute(SecurityAction.LinkDemand)]
+#endif
         private void CheckObjectIsNotDisposed()
         {
             if (this.IsInvalid || this.IsClosed)

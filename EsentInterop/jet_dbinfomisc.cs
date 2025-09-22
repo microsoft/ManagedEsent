@@ -912,7 +912,7 @@ namespace Microsoft.Isam.Esent.Interop
         }
 
         /// <summary>
-        /// Gets the creation time of the <see cref="genMaxRequired"/> logfile.
+        /// Gets the creation time of the <see cref="lgenMaxRequired"/> logfile.
         /// </summary>
         public JET_LOGTIME logtimeGenMaxCreate
         {

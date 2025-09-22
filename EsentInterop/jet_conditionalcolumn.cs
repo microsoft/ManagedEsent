@@ -16,7 +16,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native version of the JET_CONDITIONALCOLUMN structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
@@ -51,7 +52,8 @@ namespace Microsoft.Isam.Esent.Interop
         "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1300:ElementMustBeginWithUpperCaseLetter",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [Serializable]
@@ -73,8 +75,15 @@ namespace Microsoft.Isam.Esent.Interop
         public string szColumnName
         {
             [DebuggerStepThrough]
-            get { return this.columnName; }
-            set { this.columnName = value; }
+            get
+            {
+                return this.columnName;
+            }
+
+            set
+            {
+                this.columnName = value;
+            }
         }
 
         /// <summary>
@@ -83,8 +92,15 @@ namespace Microsoft.Isam.Esent.Interop
         public ConditionalColumnGrbit grbit
         {
             [DebuggerStepThrough]
-            get { return this.option; }
-            set { this.option = value; }
+            get
+            {
+                return this.option;
+            }
+
+            set
+            {
+                this.option = value;
+            }
         }
 
         /// <summary>
@@ -148,7 +164,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>A NATIVE_CONDITIONALCOLUMN for this object.</returns>
         internal NATIVE_CONDITIONALCOLUMN GetNativeConditionalColumn()
         {
-            var native = new NATIVE_CONDITIONALCOLUMN();
+            var native = default(NATIVE_CONDITIONALCOLUMN);
             native.cbStruct = (uint)Marshal.SizeOf(typeof(NATIVE_CONDITIONALCOLUMN));
             native.grbit = (uint)this.grbit;
             return native;

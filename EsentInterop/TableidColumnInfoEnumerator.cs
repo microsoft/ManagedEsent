@@ -25,7 +25,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tableid">
         /// The table to get column information from.
         /// </param>
-        public TableidColumnInfoEnumerator(JET_SESID sesid, JET_TABLEID tableid) : base(sesid)
+        public TableidColumnInfoEnumerator(JET_SESID sesid, JET_TABLEID tableid)
+            : base(sesid)
         {
             this.tableid = tableid;
         }

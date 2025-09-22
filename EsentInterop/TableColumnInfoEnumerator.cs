@@ -33,7 +33,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="tablename">
         /// The name of the table.
         /// </param>
-        public TableColumnInfoEnumerator(JET_SESID sesid, JET_DBID dbid, string tablename) : base(sesid)
+        public TableColumnInfoEnumerator(JET_SESID sesid, JET_DBID dbid, string tablename)
+            : base(sesid)
         {
             this.dbid = dbid;
             this.tablename = tablename;

@@ -16,7 +16,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native version of the JET_SNPROG structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
@@ -75,8 +76,15 @@ namespace Microsoft.Isam.Esent.Interop
         public int cunitDone
         {
             [DebuggerStepThrough]
-            get { return this.completedUnits; }
-            internal set { this.completedUnits = value; }
+            get
+            {
+                return this.completedUnits;
+            }
+
+            internal set
+            {
+                this.completedUnits = value;
+            }
         }
 
         /// <summary>
@@ -86,8 +94,15 @@ namespace Microsoft.Isam.Esent.Interop
         public int cunitTotal
         {
             [DebuggerStepThrough]
-            get { return this.totalUnits; }
-            internal set { this.totalUnits = value; }
+            get
+            {
+                return this.totalUnits;
+            }
+
+            internal set
+            {
+                this.totalUnits = value;
+            }
         }
 
         /// <summary>

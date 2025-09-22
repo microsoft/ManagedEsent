@@ -164,7 +164,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <typeparam name="T">The type of object in the array.</typeparam>
         /// <param name="value">The values to clone.</param>
         /// <returns>A clone of the values.</returns>
-        public static T[] DeepCloneArray<T>(T[] value) where T : class, IDeepCloneable<T>
+        public static T[] DeepCloneArray<T>(T[] value)
+            where T : class, IDeepCloneable<T>
         {
             T[] clone = null;
             if (null != value)

@@ -15,7 +15,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// The native version of the JET_INDEXRANGE structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
@@ -128,7 +129,7 @@ namespace Microsoft.Isam.Esent.Interop
         /// <returns>A NATIVE_INDEXRANGE whose members match the class.</returns>
         internal NATIVE_INDEXRANGE GetNativeIndexRange()
         {
-            var indexrange = new NATIVE_INDEXRANGE();
+            var indexrange = default(NATIVE_INDEXRANGE);
             indexrange.cbStruct = (uint)Marshal.SizeOf(typeof(NATIVE_INDEXRANGE));
             indexrange.tableid = this.tableid.Value;
             indexrange.grbit = (uint)this.grbit;

@@ -16,7 +16,8 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
     /// The native version of the <see cref="JET_INDEX_RANGE"/> structure.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
@@ -83,7 +84,7 @@ namespace Microsoft.Isam.Esent.Interop.Windows8
         /// <returns>The NATIVE_indexcolumn structure.</returns>
         internal NATIVE_INDEX_RANGE GetNativeIndexRange(ref GCHandleCollection handles)
         {
-            NATIVE_INDEX_RANGE indexRange = new NATIVE_INDEX_RANGE();
+            NATIVE_INDEX_RANGE indexRange = default(NATIVE_INDEX_RANGE);
             NATIVE_INDEX_COLUMN[] nativeColumns;
             if (this.startColumns != null)
             {

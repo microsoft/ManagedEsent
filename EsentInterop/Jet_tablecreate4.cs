@@ -18,7 +18,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// space hints, and uses NATIVE_INDEXCREATE4.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    [SuppressMessage("Microsoft.StyleCop.CSharp.NamingRules",
+    [SuppressMessage(
+        "Microsoft.StyleCop.CSharp.NamingRules",
         "SA1305:FieldNamesMustNotUseHungarianNotation",
         Justification = "This should match the unmanaged API, which isn't capitalized.")]
     [SuppressMessage(
@@ -131,7 +132,7 @@ namespace Microsoft.Isam.Esent.Interop
         {
             this.CheckMembersAreValid();
 
-            var native = new NATIVE_TABLECREATE4();
+            var native = default(NATIVE_TABLECREATE4);
             native.cbStruct = checked((uint)Marshal.SizeOf(typeof(NATIVE_TABLECREATE4)));
             native.szTableName = this.szTableName;
             native.szTemplateTableName = this.szTemplateTableName;

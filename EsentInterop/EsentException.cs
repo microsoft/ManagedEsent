@@ -42,7 +42,7 @@ namespace Microsoft.Isam.Esent
         /// <param name="info">The data needed to deserialize the object.</param>
         /// <param name="context">The deserialization context.</param>
         protected EsentException(SerializationInfo info, StreamingContext context)
-#if MANAGEDESENT_SUPPORTS_SERIALIZATION || !MANAGEDESENT_ON_WSA
+#if (MANAGEDESENT_SUPPORTS_SERIALIZATION || !MANAGEDESENT_ON_WSA) && !NET
                 : base(info, context)
 #endif
         {

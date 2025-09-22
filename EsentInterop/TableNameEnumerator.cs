@@ -33,7 +33,8 @@ namespace Microsoft.Isam.Esent.Interop
         /// <param name="dbid">
         /// The database to get the table names from.
         /// </param>
-        public TableNameEnumerator(JET_SESID sesid, JET_DBID dbid) : base(sesid)
+        public TableNameEnumerator(JET_SESID sesid, JET_DBID dbid)
+            : base(sesid)
         {
             this.dbid = dbid;
         }

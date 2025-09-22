@@ -89,8 +89,15 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_err err
         {
             [DebuggerStepThrough]
-            get { return this.errorCode; }
-            set { this.errorCode = value; }
+            get
+            {
+                return this.errorCode;
+            }
+
+            set
+            {
+                this.errorCode = value;
+            }
         }
 
         /// <summary>
@@ -99,8 +106,15 @@ namespace Microsoft.Isam.Esent.Interop
         public string szIndexName
         {
             [DebuggerStepThrough]
-            get { return this.name; }
-            set { this.name = value; }
+            get
+            {
+                return this.name;
+            }
+
+            set
+            {
+                this.name = value;
+            }
         }
 
         /// <summary>
@@ -115,8 +129,15 @@ namespace Microsoft.Isam.Esent.Interop
         public string szKey
         {
             [DebuggerStepThrough]
-            get { return this.key; }
-            set { this.key = value; }
+            get
+            {
+                return this.key;
+            }
+
+            set
+            {
+                this.key = value;
+            }
         }
 
         /// <summary>
@@ -125,8 +146,15 @@ namespace Microsoft.Isam.Esent.Interop
         public int cbKey
         {
             [DebuggerStepThrough]
-            get { return this.keyLength; }
-            set { this.keyLength = value; }
+            get
+            {
+                return this.keyLength;
+            }
+
+            set
+            {
+                this.keyLength = value;
+            }
         }
 
         /// <summary>
@@ -135,8 +163,15 @@ namespace Microsoft.Isam.Esent.Interop
         public CreateIndexGrbit grbit
         {
             [DebuggerStepThrough]
-            get { return this.options; }
-            set { this.options = value; }
+            get
+            {
+                return this.options;
+            }
+
+            set
+            {
+                this.options = value;
+            }
         }
 
         /// <summary>
@@ -145,8 +180,15 @@ namespace Microsoft.Isam.Esent.Interop
         public int ulDensity
         {
             [DebuggerStepThrough]
-            get { return this.density; }
-            set { this.density = value; }
+            get
+            {
+                return this.density;
+            }
+
+            set
+            {
+                this.density = value;
+            }
         }
 
         /// <summary>
@@ -155,8 +197,15 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_UNICODEINDEX pidxUnicode
         {
             [DebuggerStepThrough]
-            get { return this.unicodeOptions; }
-            set { this.unicodeOptions = value; }
+            get
+            {
+                return this.unicodeOptions;
+            }
+
+            set
+            {
+                this.unicodeOptions = value;
+            }
         }
 
         /// <summary>
@@ -165,8 +214,15 @@ namespace Microsoft.Isam.Esent.Interop
         public int cbVarSegMac
         {
             [DebuggerStepThrough]
-            get { return this.maxSegmentLength; }
-            set { this.maxSegmentLength = value; }
+            get
+            {
+                return this.maxSegmentLength;
+            }
+
+            set
+            {
+                this.maxSegmentLength = value;
+            }
         }
 
         /// <summary>
@@ -175,8 +231,15 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_CONDITIONALCOLUMN[] rgconditionalcolumn
         {
             [DebuggerStepThrough]
-            get { return this.conditionalColumns; }
-            set { this.conditionalColumns = value; }
+            get
+            {
+                return this.conditionalColumns;
+            }
+
+            set
+            {
+                this.conditionalColumns = value;
+            }
         }
 
         /// <summary>
@@ -185,8 +248,15 @@ namespace Microsoft.Isam.Esent.Interop
         public int cConditionalColumn
         {
             [DebuggerStepThrough]
-            get { return this.numConditionalColumns; }
-            set { this.numConditionalColumns = value; }
+            get
+            {
+                return this.numConditionalColumns;
+            }
+
+            set
+            {
+                this.numConditionalColumns = value;
+            }
         }
 
         /// <summary>
@@ -206,8 +276,15 @@ namespace Microsoft.Isam.Esent.Interop
         public int cbKeyMost
         {
             [DebuggerStepThrough]
-            get { return this.maximumKeyLength; }
-            set { this.maximumKeyLength = value; }
+            get
+            {
+                return this.maximumKeyLength;
+            }
+
+            set
+            {
+                this.maximumKeyLength = value;
+            }
         }
 
         /// <summary>
@@ -216,8 +293,15 @@ namespace Microsoft.Isam.Esent.Interop
         public JET_SPACEHINTS pSpaceHints
         {
             [DebuggerStepThrough]
-            get { return this.spaceHints; }
-            set { this.spaceHints = value; }
+            get
+            {
+                return this.spaceHints;
+            }
+
+            set
+            {
+                this.spaceHints = value;
+            }
         }
 
         /// <summary>
@@ -278,14 +362,26 @@ namespace Microsoft.Isam.Esent.Interop
                 throw new ArgumentNullException("szIndexName");
             }
 
-            if (null == this.szKey)
-            {
-                throw new ArgumentNullException("szKey");
-            }
+            bool notYetPublishedCheckedKeyParams = false;
 
-            if (this.cbKey > checked(this.szKey.Length + 1))
+            // Give the unpublished check a chance.  It will throw exceptions if necessary.
+            this.NotYetPublishedCheckMembersAreValidCheckKeyParams(ref notYetPublishedCheckedKeyParams);
+
+            if (notYetPublishedCheckedKeyParams)
             {
-                throw new ArgumentOutOfRangeException("cbKey", this.cbKey, "cannot be greater than the length of szKey");
+                // The not-yet-published function in the other file validated the szKey and cbKey parameters.
+            }
+            else
+            {
+                if (null == this.szKey)
+                {
+                    throw new ArgumentNullException("szKey");
+                }
+
+                if (this.cbKey > checked(this.szKey.Length + 1))
+                {
+                    throw new ArgumentOutOfRangeException("cbKey", this.cbKey, "cannot be greater than the length of szKey");
+                }
             }
 
             if (this.cbKey < 0)
@@ -419,6 +515,15 @@ namespace Microsoft.Isam.Esent.Interop
             this.err = (JET_err)value.err;
         }
 #endif // !MANAGEDESENT_ON_WSA
+
+        /// <summary>
+        /// Provides a hook to allow alternative validation of member fields under certain circumstances in
+        /// a different file. These circumstances are based on API elements not yet published 
+        /// on MSDN.
+        /// </summary>
+        /// <param name="notYetPublishedCheckedKeyParams">Whether the alternative validation was performed.</param>
+        partial void NotYetPublishedCheckMembersAreValidCheckKeyParams(
+            ref bool notYetPublishedCheckedKeyParams);
 
         /// <summary>
         /// Returns a value indicating whether the pidxUnicode member of this

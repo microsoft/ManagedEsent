@@ -12,7 +12,8 @@ namespace Microsoft.Isam.Esent.Interop
     /// A cache for boxed values.
     /// </summary>
     /// <typeparam name="T">The type of object to cache.</typeparam>
-    internal static class BoxedValueCache<T> where T : struct, IEquatable<T>
+    internal static class BoxedValueCache<T>
+        where T : struct, IEquatable<T>
     {
         /// <summary>
         /// Number of boxed values to cache.
