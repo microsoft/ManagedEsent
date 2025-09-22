@@ -75,7 +75,7 @@ namespace Microsoft.Database.Isam
         /// Accessor for itag 1 of a column, converted to/from an object
         /// </summary>
         /// <value>
-        /// The <see cref="System.Object"/>.
+        /// The <see cref="object"/>.
         /// </value>
         /// <param name="columnName">Name of the column.</param>
         /// <returns>The value stored within.</returns>
@@ -96,7 +96,7 @@ namespace Microsoft.Database.Isam
         /// Accessor for any itag of a column, converted to/from an object
         /// </summary>
         /// <value>
-        /// The <see cref="System.Object"/>.
+        /// The <see cref="object"/>.
         /// </value>
         /// <param name="columnName">Name of the column.</param>
         /// <param name="index">The index.</param>
@@ -121,7 +121,7 @@ namespace Microsoft.Database.Isam
         /// Accessor for itag 1 of a column, converted to/from an object
         /// </summary>
         /// <value>
-        /// The <see cref="System.Object"/>.
+        /// The <see cref="object"/>.
         /// </value>
         /// <param name="columnid">The columnid.</param>
         /// <returns>The value stored within.</returns>
@@ -142,7 +142,7 @@ namespace Microsoft.Database.Isam
         /// Accessor for any itag of a column, converted to/from an object
         /// </summary>
         /// <value>
-        /// The <see cref="System.Object"/>.
+        /// The <see cref="object"/>.
         /// </value>
         /// <param name="columnid">The columnid.</param>
         /// <param name="index">The index.</param>
