@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29324.140
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36408.4 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{18B3E50E-454E-49DB-A92F-E1D7DAD2AF7D}"
 	ProjectSection(SolutionItems) = preProject
 		CodeCoverage.testrunconfig = CodeCoverage.testrunconfig
+		..\Common.props = ..\Common.props
+		..\Directory.Packages.props = ..\Directory.Packages.props
 		esent.vsmdi = esent.vsmdi
 		Normal.testrunconfig = Normal.testrunconfig
 	EndProjectSection

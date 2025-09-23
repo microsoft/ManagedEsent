@@ -1,0 +1,15 @@
+<Project>
+	<PropertyGroup>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageVersion Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageVersion Include="System.Memory" Version="4.6.0" />
+		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.3.0" />
+		<PackageVersion Include="MSTest.TestAdapter" Version="3.6.1" />
+		<PackageVersion Include="MSTest.TestFramework" Version="3.6.1" />
+		<PackageVersion Include="coverlet.collector" Version="6.0.0" />
+		<PackageVersion Include="RhinoMocks" Version="4.0.0-alpha3" />
+	</ItemGroup>
+</Project>
