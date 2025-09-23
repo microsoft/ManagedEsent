@@ -12,7 +12,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	  <LangVersion>13.0</LangVersion>
+	<LangVersion>13.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

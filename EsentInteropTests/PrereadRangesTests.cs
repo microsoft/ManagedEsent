@@ -165,6 +165,9 @@ namespace InteropApiTests
 
             this.instance = SetupHelper.CreateNewInstance(this.directory);
             Api.JetSetSystemParameter(this.instance, JET_SESID.Nil, JET_param.Recovery, 0, "off");
+            this.isInternalPrereadUsingPrereadContext = true;
+
+            Api.JetSetSystemParameter(JET_INSTANCE.Nil, JET_SESID.Nil, (JET_param)235, 1, null);
             Api.JetInit(ref this.instance);
             Api.JetBeginSession(this.instance, out this.sesId, string.Empty, string.Empty);
 
