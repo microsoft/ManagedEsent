@@ -4,9 +4,6 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <DefineConstants>$(DefineConstants);MANAGEDESENT_SUPPORTS_ANSI</DefineConstants>
-    <ProductVersion>9.0.21022</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6AC9C0BE-6BCE-493F-BD80-6F2247CB669D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>IsamUnitTests</RootNamespace>
@@ -14,8 +11,6 @@
     <TargetFrameworks>net8.0;net472</TargetFrameworks>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
   </PropertyGroup>
 
   <ItemGroup>
@@ -42,17 +37,9 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\EsentInterop\EsentInterop.csproj">
-      <Project>{E929E163-52A0-4AAC-917B-6D7FAF70C45E}</Project>
-      <Name>EsentInterop</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\isam\isam.csproj">
-      <Project>{21cc632c-b09a-4db7-bd6e-7f7d2716f58f}</Project>
-      <Name>EsentInterop</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EsentInteropTests\EsentInteropTests.csproj">
-      <Name>EsentInteropTests</Name>
-    </ProjectReference>
+	<ProjectReference Include="..\EsentInterop\EsentInterop.csproj" />
+    <ProjectReference Include="..\isam\isam.csproj" />
+    <ProjectReference Include="..\EsentInteropTests\EsentInteropTests.csproj" />
   </ItemGroup>
   
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

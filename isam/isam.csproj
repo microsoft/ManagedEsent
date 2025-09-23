@@ -10,7 +10,6 @@
     <AssemblyName>Esent.Isam</AssemblyName>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   
   <ItemGroup>
@@ -20,10 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EsentInterop\EsentInterop.csproj">
-      <Project>{E929E163-52A0-4AAC-917B-6D7FAF70C45E}</Project>
-      <Name>EsentInterop</Name>
-    </ProjectReference>
+	<ProjectReference Include="..\EsentInterop\EsentInterop.csproj" />
   </ItemGroup>
   
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

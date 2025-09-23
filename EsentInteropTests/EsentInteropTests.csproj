@@ -3,8 +3,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <DefineConstants>$(DefineConstants);MANAGEDESENT_SUPPORTS_ANSI</DefineConstants>
-    <ProjectGuid>{85B2B7BB-BF95-42DF-8CBF-348AEF63BD1F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>InteropApiTests</RootNamespace>
@@ -13,9 +11,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <DefineConstants>$(DefineConstants);MANAGEDESENT_EXTERNAL_RELEASE</DefineConstants>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <DefineConstants>$(DefineConstants);MANAGEDESENT_EXTERNAL_RELEASE;MANAGEDESENT_SUPPORTS_ANSI</DefineConstants>
 	<LangVersion>13.0</LangVersion>
   </PropertyGroup>
 
@@ -28,10 +24,10 @@
   </ItemGroup>
 
   <!-- Rhino.Mocks only supported on .NET Framework -->
-  <PropertyGroup Condition=" '$(TargetFramework)' != 'net472' ">
+  <PropertyGroup Condition="'$(TargetFramework)' != 'net472'">
     <DefineConstants>$(DefineConstants);MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE;MANAGEDESENT_NETCORE</DefineConstants>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <Reference Include="Rhino.Mocks, Version=3.5.0.1337, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\External Components\Rhino.Mocks\Rhino.Mocks.dll</HintPath>

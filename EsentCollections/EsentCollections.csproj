@@ -3,7 +3,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CF2D4EE4-0D11-404D-B800-C4DCFEC42588}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EsentCollections</RootNamespace>
@@ -13,7 +12,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   
   <ItemGroup>
@@ -22,14 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EsentInterop\EsentInterop.csproj">
-      <Project>{E929E163-52A0-4AAC-917B-6D7FAF70C45E}</Project>
-      <Name>EsentInterop</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\isam\isam.csproj">
-      <Project>{21CC632C-B09A-4DB7-BD6E-7F7D2716F58F}</Project>
-      <Name>EsentInterop</Name>
-    </ProjectReference>
+	  <ProjectReference Include="..\EsentInterop\EsentInterop.csproj" />
+	  <ProjectReference Include="..\isam\isam.csproj" />
   </ItemGroup>
   
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
