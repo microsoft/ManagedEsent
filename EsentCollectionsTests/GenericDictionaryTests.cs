@@ -281,25 +281,45 @@ namespace EsentCollectionsTests
 
                     RunDictionaryTests(dictionary, 1, nestedBlob);
                     RunDictionaryTests(dictionary, 2, new ContainingStruct());
-                    RunDictionaryTests(dictionary,
+                    RunDictionaryTests(
+                        dictionary,
                         3,
                         new ContainingStruct() { Key = 4, Blob = new PersistentBlob(new byte[0]) });
                 }
             }
             catch (ArgumentOutOfRangeException ex)
             {
-#if NETCOREAPP3_0
-                Assert.AreEqual("Not supported for SetColumn (Parameter 'TColumn')\r\nActual value was EsentCollectionsTests.GenericDictionaryTests+ContainingStruct.", ex.Message);
-#else
                 Assert.AreEqual("Not supported for SetColumn\r\nParameter name: TColumn\r\nActual value was EsentCollectionsTests.GenericDictionaryTests+ContainingStruct.", ex.Message);
-#endif
             }
         }
 
-        public struct SimpleStruct { public int Key; }
+        /// <summary>
+        /// Simple struct for testing.
+        /// </summary>
+        public struct SimpleStruct
+        {
+            /// <summary>
+            /// Key of struct.
+            /// </summary>
+            public int Key;
+        }
 
+        /// <summary>
+        /// Wrapper struct for testing.
+        /// </summary>
         [Serializable]
-        public struct ContainingStruct { public int Key; public PersistentBlob Blob; }
+        public struct ContainingStruct
+        {
+            /// <summary>
+            /// Key of struct.
+            /// </summary>
+            public int Key;
+
+            /// <summary>
+            /// Blob of struct.
+            /// </summary>
+            public PersistentBlob Blob;
+        }
 
         /// <summary>
         /// Run a set of tests against a dictionary.

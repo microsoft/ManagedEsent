@@ -1531,7 +1531,10 @@ namespace EsentCollectionsTests
         {
             using (var persistentDictionary = CloneDictionary(this.testDictionary2))
             {
-                Assert.AreEqual(this.testDictionary2.Reverse().Last(), persistentDictionary.Reverse().Last(), null);
+                var node = this.testDictionary2.Reverse().Last();
+                var persistentNode = persistentDictionary.Reverse().Last();
+                Assert.AreEqual(node.Key, persistentNode.Key);
+                Assert.AreEqual(node.Value, persistentNode.Value);
             }
         }
 
