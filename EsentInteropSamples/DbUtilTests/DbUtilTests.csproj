@@ -28,10 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DbUtil\DbUtil.csproj">
-      <Project>{E0B163B0-5AC6-4304-B932-BFC1F6A2A4EB}</Project>
-      <Name>DbUtil</Name>
-    </ProjectReference>
+	  <ProjectReference Include="..\DbUtil\DbUtil.csproj" />
   </ItemGroup>
   
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
