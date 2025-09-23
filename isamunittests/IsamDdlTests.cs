@@ -16,8 +16,6 @@ namespace IsamUnitTests
     using Microsoft.Database.Isam;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using Rhino.Mocks;
-
     using Any = InteropApiTests.Any;
     using Miei = Microsoft.Isam.Esent.Interop;
 
