@@ -121,6 +121,7 @@ namespace InteropApiTests
         [TestMethod]
         [Description("Test the performance of RetrieveColumnAsString with an ASCII column")]
         [Priority(3)]
+        [Timeout(5 * 60 * 1000)]
         public void TimeSetColumnFromStringAscii()
         {
             this.TimeSetColumnFromString("ascii", 512, LibraryHelpers.EncodingASCII);

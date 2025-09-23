@@ -1057,20 +1057,9 @@ namespace InteropApiTests
             CollectionAssert.AreEqual(data, this.RetrieveAllRecordsAsString(opentemporarytable.tableid, columnids[0]).ToArray());
             Api.JetCloseTable(this.sesid, opentemporarytable.tableid);
         }
+
         #endregion DDL Tests
-
         #region Helper Methods
-
-        /// <summary>
-        /// Update the cursor and goto the returned bookmark.
-        /// </summary>
-        private void UpdateAndGotoBookmark()
-        {
-            var bookmark = new byte[SystemParameters.BookmarkMost];
-            int bookmarkSize;
-            Api.JetUpdate(this.sesid, this.tableid, bookmark, bookmark.Length, out bookmarkSize);
-            Api.JetGotoBookmark(this.sesid, this.tableid, bookmark, bookmarkSize);
-        }
 
         /// <summary>
         /// Enumerate all records and retrieve the specified column as a string.

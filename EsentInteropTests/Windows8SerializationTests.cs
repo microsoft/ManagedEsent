@@ -15,7 +15,7 @@ namespace InteropApiTests
     /// </summary>
     public partial class SerializationTests
     {
-#if !MANAGEDESENT_ON_CORECLR && !NET
+#if !MANAGEDESENT_ON_CORECLR
        /// <summary>
         /// Verify that an ErrorInfo can be serialized.
         /// </summary>

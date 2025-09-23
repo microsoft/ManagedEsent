@@ -8,6 +8,7 @@ namespace InteropApiTests
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
 
     /// <summary>
     /// Copied classes to remove dependency on Wstf
@@ -58,6 +59,33 @@ namespace InteropApiTests
         public WttIdAttribute(int id)
         {
             this.Id = id;
+        }
+    }
+
+    /// <summary>
+    /// Copied classes to remove dependency on Wstf
+    /// Enables building under Visual Studio
+    /// </summary>
+    [SuppressMessage("Microsoft.StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass",
+        Justification = "Suppression is OK here because it's a collection of related trivial classes.")]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
+    public class CreationDateAttribute : Attribute
+    {
+        /// <summary>
+        /// Gets or sets the creation date.
+        /// </summary>
+        /// <value>
+        /// The creation date.
+        /// </value>
+        public string CreationDate { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreationDateAttribute"/> class.
+        /// </summary>
+        /// <param name="defaultCreationDate">The default creation date.</param>
+        public CreationDateAttribute(string defaultCreationDate)
+        {
+            this.CreationDate = defaultCreationDate;
         }
     }
 }

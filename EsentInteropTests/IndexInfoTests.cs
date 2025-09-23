@@ -56,6 +56,9 @@ namespace InteropApiTests
         /// </summary>
         private JET_TABLEID tableid;
 
+        /// <summary>
+        /// The indexcreate objects.
+        /// </summary>
         private IList<JET_INDEXCREATE> indexcreates;
 
         #region Setup/Teardown
@@ -241,7 +244,6 @@ namespace InteropApiTests
             Api.JetCloseTable(this.sesid, result.tableid);
         }
 
-
         /// <summary>
         /// Test the obsolete overload of JetGetIndexInfo that returns a JET_INDEXLIST.
         /// </summary>
@@ -274,7 +276,7 @@ namespace InteropApiTests
             Assert.AreEqual("Primary", result.szIndexName);
             Assert.AreEqual(100, result.ulDensity);
             Assert.AreEqual("+C1\0\0", result.szKey);
-            Assert.AreEqual((CreateIndexGrbit.IndexPrimary | CreateIndexGrbit.IndexUnique | VistaGrbits.IndexUnicode), result.grbit);
+            Assert.AreEqual(CreateIndexGrbit.IndexPrimary | CreateIndexGrbit.IndexUnique | VistaGrbits.IndexUnicode, result.grbit);
 
             Api.JetGetIndexInfo(this.sesid, this.dbid, this.table, "Index2", out result, Windows8IdxInfo.InfoCreateIndex3);
             CompareIndexCreateWithOutput(this.indexcreates.ElementAt(0), result);
@@ -472,7 +474,7 @@ namespace InteropApiTests
             Assert.AreEqual("Primary", result.szIndexName);
             Assert.AreEqual(100, result.ulDensity);
             Assert.AreEqual("+C1\0\0", result.szKey);
-            Assert.AreEqual((CreateIndexGrbit.IndexPrimary | CreateIndexGrbit.IndexUnique | VistaGrbits.IndexUnicode), result.grbit);
+            Assert.AreEqual(CreateIndexGrbit.IndexPrimary | CreateIndexGrbit.IndexUnique | VistaGrbits.IndexUnicode, result.grbit);
 
             Api.JetGetTableIndexInfo(this.sesid, this.tableid, "Index2", out result, Windows8IdxInfo.InfoCreateIndex3);
             CompareIndexCreateWithOutput(this.indexcreates.ElementAt(0), result);
@@ -518,6 +520,11 @@ namespace InteropApiTests
         #endregion
 
         #region Helper function
+        /// <summary>
+        /// Check that returned indexcreate object matches created object.
+        /// </summary>
+        /// <param name="orig">Indexcreate object created by test.</param>
+        /// <param name="actual">Indexcreate object returned by API.</param>
         private static void CompareIndexCreateWithOutput(
             JET_INDEXCREATE orig,
             JET_INDEXCREATE actual)

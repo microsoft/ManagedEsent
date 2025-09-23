@@ -10,6 +10,8 @@ namespace InteropApiTests
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
+    using System.Threading;
+    
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -1073,7 +1075,7 @@ namespace InteropApiTests
             try
             {
                 Api.JetOpenTable(this.sesid, this.dbid, TableName, null, 0, OpenTableGrbit.None, out newtable);
-                Assert.Fail("Column is still visible");
+                Assert.Fail("Table is still visible");
             }
             catch (EsentObjectNotFoundException)
             {

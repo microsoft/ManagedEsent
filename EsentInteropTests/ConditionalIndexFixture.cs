@@ -367,7 +367,9 @@ namespace InteropApiTests
             int[] actualKeys = this.GetIndexKeys(index).ToArray();
             if (actualKeys.Length != expectedKeys.Length)
             {
+#if (!MANAGEDESENT_ON_WSA)
                 Console.WriteLine("Expected: [{0}]. Actual: [{1}].", string.Join(", ", expectedKeys), string.Join(", ", actualKeys));
+#endif
             }
 
             CollectionAssert.AreEqual(expectedKeys, actualKeys, "Mismatch on index {0}. Found {1} keys, expected to find {2} keys.", index, actualKeys.Length, expectedKeys.Length);

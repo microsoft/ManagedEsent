@@ -10,6 +10,7 @@ namespace InteropApiTests
     using System.IO;
     using System.Text;
     using System.Threading;
+
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Vista;
     using Microsoft.Isam.Esent.Interop.Windows7;
@@ -828,6 +829,46 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(2)]
         [Description("Insert a record and retrieve its bookmark")]
+        public void TryGetBookmark()
+        {
+            // Make sure no exception is thrown when no current record set
+            var actualBookmark = new byte[256];
+            int actualBookmarkSize;
+            Assert.IsFalse(Api.TryGetBookmark(this.sesid, this.tableid, actualBookmark, actualBookmark.Length, out actualBookmarkSize));
+
+            var expectedBookmark = new byte[256];
+            int expectedBookmarkSize;
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            Api.JetUpdate(this.sesid, this.tableid, expectedBookmark, expectedBookmark.Length, out expectedBookmarkSize);
+            Api.JetGotoBookmark(this.sesid, this.tableid, expectedBookmark, expectedBookmarkSize);
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+
+            Assert.IsTrue(Api.TryGetBookmark(this.sesid, this.tableid, actualBookmark, actualBookmark.Length, out actualBookmarkSize));
+
+            Assert.AreEqual(expectedBookmarkSize, actualBookmarkSize);
+            for (int i = 0; i < expectedBookmarkSize; ++i)
+            {
+                Assert.AreEqual(expectedBookmark[i], actualBookmark[i]);
+            }
+
+            Api.JetBeginTransaction(this.sesid);
+
+            Assert.IsTrue(Api.TryMoveFirst(this.sesid, this.tableid));
+            Assert.IsFalse(Api.TryMovePrevious(this.sesid, this.tableid));
+
+            Assert.IsFalse(Api.TryGetBookmark(this.sesid, this.tableid, actualBookmark, actualBookmark.Length, out actualBookmarkSize));
+
+            Api.JetCommitTransaction(this.sesid, CommitTransactionGrbit.LazyFlush);
+        }
+
+        /// <summary>
+        /// Insert a record and retrieve its bookmark.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Insert a record and retrieve its bookmark")]
         public void GetBookmark()
         {
             var expectedBookmark = new byte[256];
@@ -895,6 +936,51 @@ namespace InteropApiTests
             Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekEQ);
             Assert.AreEqual(expected, this.RetrieveColumnAsString());
         }
+
+#if !ESENT && !MANAGEDESENT_ON_WSA
+        /// <summary>
+        /// Insert a record and retrieve its key.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Insert a record and retrieve its key")]
+        public void JetRetrieveKeyWithSpan()
+        {
+            string expected = Any.String;
+            var key = new byte[8192];
+            Span<byte> keySpan = new Span<byte>(key);
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            this.SetColumnFromString(expected);
+            this.UpdateAndGotoBookmark();
+
+            int keyLength;
+
+            // Ideally, JetRetrieveKey will have an overload that takes a ref Span<byte>.
+            Api.JetRetrieveKey(this.sesid, this.tableid, key, key.Length, out keyLength, RetrieveKeyGrbit.None);
+
+            Api.JetBeginTransaction(this.sesid);
+            Api.JetPrepareUpdate(this.sesid, this.tableid, JET_prep.Insert);
+            this.UpdateAndGotoBookmark();
+
+            // Ideally, JetRetrieveKey will have done this already. Once that API overload exists, this line should be removed.
+            keySpan = keySpan.Slice(0, keyLength);
+
+            Api.JetMakeKey(this.sesid, this.tableid, keySpan, MakeKeyGrbit.NormalizedKey);
+            Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekEQ);
+            Assert.AreEqual(expected, this.RetrieveColumnAsString());
+
+            // Some funny business with the offset in the buffer
+            byte[] newKey = new byte[keySpan.Length * 2];
+            Buffer.BlockCopy(keySpan.ToArray(), 0, newKey, keySpan.Length / 2, keySpan.Length);
+            keySpan = newKey.AsSpan(keySpan.Length / 2, keySpan.Length);
+
+            Api.JetMakeKey(this.sesid, this.tableid, keySpan, MakeKeyGrbit.NormalizedKey);
+            Api.JetSeek(this.sesid, this.tableid, SeekGrbit.SeekEQ);
+            Assert.AreEqual(expected, this.RetrieveColumnAsString());
+        }
+#endif
 
         /// <summary>
         /// Insert a record and retrieve its key.
@@ -1096,11 +1182,7 @@ namespace InteropApiTests
             }
             catch (EsentDatabaseFileReadOnlyException)
             {
-                // Expected on Windows 10 20H1 and beyond.
-            }
-            catch (EsentPermissionDeniedException)
-            {
-                // Expected on Windows 10 19H2 and below.
+                // Expected.
             }
             finally
             {
@@ -1205,6 +1287,7 @@ namespace InteropApiTests
             }
 
             Assert.IsTrue(callbackWasCalled, "callback was not called");
+            GC.KeepAlive(callback);
         }
 
         /// <summary>

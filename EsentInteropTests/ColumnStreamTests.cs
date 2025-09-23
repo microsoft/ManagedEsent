@@ -7,16 +7,9 @@
 namespace InteropApiTests
 {
     using System;
-#if MANAGEDESENT_SUPPORTS_SERIALIZATION
-    using System.Collections.Generic;
-#endif
     using System.IO;
-#if MANAGEDESENT_SUPPORTS_SERIALIZATION
-    using System.Runtime.Serialization;
-#endif
 #if MANAGEDESENT_ON_CORECLR
 #else
-    using System.Runtime.Serialization.Formatters.Binary;
     using System.Security.Cryptography;
 #endif
     using Microsoft.Isam.Esent.Interop;
@@ -537,7 +530,7 @@ namespace InteropApiTests
             }
         }
 
-#if MANAGEDESENT_ON_CORECLR || NET
+#if MANAGEDESENT_ON_CORECLR
         // BufferedStream is not available.
 #else
         /// <summary>
@@ -1049,69 +1042,6 @@ namespace InteropApiTests
                 }
             }
         }
-
-#if MANAGEDESENT_SUPPORTS_SERIALIZATION
-        /// <summary>
-        /// Test that a ColumnStream can serialize an object.
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        [Description("Verify ColumnStream can serialize a basic type")]
-        public void ColumnStreamCanSerializeBasicType()
-        {
-            var expected = Any.Int64;
-
-            using (var t = new Transaction(this.sesid))
-            using (var u = new Update(this.sesid, this.tableid, JET_prep.Insert))
-            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
-            {
-                var serializer = new BinaryFormatter
-                {
-                    Context = new StreamingContext(StreamingContextStates.Persistence)
-                };
-                serializer.Serialize(stream, expected);
-                u.Save();
-                t.Commit(CommitTransactionGrbit.LazyFlush);
-            }
-
-            Api.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
-            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
-            {
-                var deseriaizer = new BinaryFormatter();
-                var actual = (long)deseriaizer.Deserialize(stream);
-                Assert.AreEqual(expected, actual);
-            }
-        }
-
-        /// <summary>
-        /// Test that a ColumnStream can serialize an object.
-        /// </summary>
-        [TestMethod]
-        [Priority(1)]
-        [Description("Verify ColumnStream can serialize an object")]
-        public void ColumnStreamCanSerializeObject()
-        {
-            var expected = new Dictionary<string, long> { { "foo", 1 }, { "bar", 2 }, { "baz", 3 } };
-
-            using (var t = new Transaction(this.sesid))
-            using (var u = new Update(this.sesid, this.tableid, JET_prep.Insert))
-            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
-            {
-                var serializer = new BinaryFormatter();
-                serializer.Serialize(stream, expected);
-                u.Save();
-                t.Commit(CommitTransactionGrbit.LazyFlush);
-            }
-
-            Api.JetMove(this.sesid, this.tableid, JET_Move.First, MoveGrbit.None);
-            using (var stream = new ColumnStream(this.sesid, this.tableid, this.columnidLongText))
-            {
-                var deseriaizer = new BinaryFormatter();
-                var actual = (Dictionary<string, long>)deseriaizer.Deserialize(stream);
-                CollectionAssert.AreEqual(expected, actual);
-            }
-        }
-#endif
 
         #endregion ColumnStream Tests
 

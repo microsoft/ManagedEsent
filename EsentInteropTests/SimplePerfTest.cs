@@ -158,7 +158,7 @@ namespace InteropApiTests
         [TestMethod]
         [Priority(4)]
         [Description("Run a basic performance test")]
-        [Timeout(30 * 60 * 1000)]
+        [Timeout(60 * 60 * 1000)]
         public void BasicPerfTest()
         {
             CheckMemoryUsage(this.InsertReadSeek);

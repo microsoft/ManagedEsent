@@ -8,13 +8,15 @@ namespace InteropApiTests
 {
     using System;
     using System.IO;
-#if MANAGEDESENT_ON_CORECLR
-#else
-    using System.Runtime.Serialization.Formatters.Binary;
-#endif
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.Isam.Esent.Interop.Implementation;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+#if MANAGEDESENT_ON_CORECLR
+#else
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
+    using Newtonsoft.Json.Serialization;
+#endif
 #if !MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE
     using Rhino.Mocks;
     using Rhino.Mocks.Constraints;
@@ -54,7 +56,7 @@ namespace InteropApiTests
             Assert.AreEqual(expected, ex.Message);
         }
 
-#if MANAGEDESENT_ON_CORECLR || NET
+#if MANAGEDESENT_ON_CORECLR
 #else
         /// <summary>
         /// Verify that an EsentErrorException can be serialized and deserialized.
@@ -103,7 +105,7 @@ namespace InteropApiTests
                     Assert.IsNotNull(ex.Message);
                     Assert.AreNotEqual(string.Empty, ex.Message);
 
-#if MANAGEDESENT_ON_CORECLR || NET
+#if MANAGEDESENT_ON_CORECLR
 #else
                     EsentErrorException deserialized = SerializeDeserialize(ex);
                     Assert.AreEqual(err, deserialized.Error);
@@ -208,7 +210,7 @@ namespace InteropApiTests
             }
         }
 
-#if MANAGEDESENT_ON_CORECLR || NET
+#if MANAGEDESENT_ON_CORECLR
 #else
         /// <summary>
         /// Serialize an object to an in-memory stream then deserialize it.
@@ -218,14 +220,8 @@ namespace InteropApiTests
         /// <returns>A deserialized copy of the object.</returns>
         private static T SerializeDeserialize<T>(T obj)
         {
-            using (var stream = new MemoryStream())
-            {
-                var formatter = new BinaryFormatter();
-                formatter.Serialize(stream, obj);
-
-                stream.Position = 0;
-                return (T)formatter.Deserialize(stream);
-            }
+            string jsonOutput = JsonConvert.SerializeObject(obj);
+            return JsonConvert.DeserializeObject<T>(jsonOutput);
         }
 #endif
     }

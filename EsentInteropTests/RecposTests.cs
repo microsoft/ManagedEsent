@@ -83,5 +83,43 @@ namespace InteropApiTests
             Assert.AreEqual(1, recpos.centriesLT);
             Assert.AreEqual(2, recpos.centriesTotal);
         }
+
+        /// <summary>
+        /// Test that SetFromNativeRecpos handles bordercase values
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test that SetFromNativeRecpos handles bordercase values")]
+        public void ConvertRecposFromNativeWithMaxValues()
+        {
+            var native = new NATIVE_RECPOS();
+            native.centriesLT = uint.MaxValue;
+            native.centriesTotal = uint.MaxValue;
+
+            var recpos = new JET_RECPOS();
+            recpos.SetFromNativeRecpos(native);
+
+            Assert.AreEqual(uint.MaxValue, recpos.centriesLT);
+            Assert.AreEqual(uint.MaxValue, recpos.centriesTotal);
+        }
+
+        /// <summary>
+        /// Test that SetFromNativeRecpos2 handles bordercase values
+        /// </summary>
+        [TestMethod]
+        [Priority(0)]
+        [Description("Test that SetFromNativeRecpos2 handles bordercase values")]
+        public void ConvertRecpos2FromNativeWithMaxValues()
+        {
+            var native = new NATIVE_RECPOS2();
+            native.centriesLT = long.MaxValue;
+            native.centriesTotal = long.MaxValue;
+
+            var recpos = new JET_RECPOS2();
+            recpos.SetFromNativeRecpos2(native);
+
+            Assert.AreEqual(long.MaxValue, recpos.centriesLT);
+            Assert.AreEqual(long.MaxValue, recpos.centriesTotal);
+        }
     }
 }

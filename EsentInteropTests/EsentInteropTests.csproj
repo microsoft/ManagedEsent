@@ -9,61 +9,29 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>InteropApiTests</RootNamespace>
     <AssemblyName>InteropApiTests</AssemblyName>
-    <TargetFrameworks>net8.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net472</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DefineConstants>$(DefineConstants);MANAGEDESENT_EXTERNAL_RELEASE</DefineConstants>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <SignAssembly>true</SignAssembly>
-    <PublicKeyFile>D:\EX3\src\build\codesign\MSSharedLibSN1024.snk</PublicKeyFile>
-  </PropertyGroup>
-
-  <!-- The .snk file won't be published to codeplex. -->
-  <PropertyGroup Condition="Exists('$(PublicKeyFile)')">
-    <DefineConstants>$(DefineConstants);STRONG_NAMED</DefineConstants>
-    <DelaySign>true</DelaySign>
-    <AssemblyOriginatorKeyFile>$(PublicKeyFile)</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>bin\Debug\InteropApiTests.XML</DocumentationFile>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
+	<LangVersion>13.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
-    <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
-    <PackageReference Include="coverlet.collector" Version="1.0.1" />
+	<PackageReference Include="Microsoft.NET.Test.Sdk" />
+	<PackageReference Include="MSTest.TestAdapter" />
+	<PackageReference Include="MSTest.TestFramework" />
+	<PackageReference Include="coverlet.collector" />
+	<PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
 
   <!-- Rhino.Mocks only supported on .NET Framework -->
-  <PropertyGroup Condition=" '$(TargetFramework)' != 'net462' ">
+  <PropertyGroup Condition=" '$(TargetFramework)' != 'net472' ">
     <DefineConstants>$(DefineConstants);MANAGEDESENT_RHINO_MOCKS_UNAVAILABLE;MANAGEDESENT_NETCORE</DefineConstants>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
     <Reference Include="Rhino.Mocks, Version=3.5.0.1337, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\External Components\Rhino.Mocks\Rhino.Mocks.dll</HintPath>
@@ -77,8 +45,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="d:\EX3\src\target\dev\ese\esentinterop\bin\Debug\net8.0\Esent.Interop.dll" />
-	<Reference Include="d:\EX3\src\target\dev\ese\esent.isam\bin\Debug\net8.0\Esent.Isam.dll" />
+	<ProjectReference Include="..\EsentInterop\EsentInterop.csproj" />
+	<ProjectReference Include="..\isam\isam.csproj" />
   </ItemGroup>
 
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

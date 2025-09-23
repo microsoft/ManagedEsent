@@ -310,17 +310,7 @@ namespace InteropApiTests
             Api.JetResetTableSequential(this.sesid, this.tableid, ResetTableSequentialGrbit.None);
         }
 
-        #region Helper Methods
-
-        /// <summary>
-        /// Assert that we are currently positioned on the given record.
-        /// </summary>
-        /// <param name="recordId">The expected record ID.</param>
-        private void AssertOnRecord(int recordId)
-        {
-            int actualId = this.GetLongColumn();
-            Assert.AreEqual(recordId, actualId);
-        }
+#region Helper Methods
 
         /// <summary>
         /// Return the value of the columnidLong of the current record.

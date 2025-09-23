@@ -9,6 +9,7 @@ namespace InteropApiTests
     using System;
     using System.IO;
     using System.Text;
+
     using Microsoft.Isam.Esent.Interop;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -291,6 +292,83 @@ namespace InteropApiTests
                 2, (int)Api.RetrieveColumnAsInt32(this.sesid, this.tableid, this.keyColumn), "should have been on the next record");
         }
 
+#if !ESENT && !MANAGEDESENT_ON_WSA
+        /// <summary>
+        /// Test JetGotoSecondaryIndexBookmarkWithSpan.
+        /// </summary>
+        [TestMethod]
+        [Priority(2)]
+        [Description("Test JetGotoSecondaryIndexBookmarkWithSpan")]
+        public void TestJetGotoSecondaryIndexBookmarkWithSpan()
+        {
+            Api.JetSetCurrentIndex(this.sesid, this.tableid, "index");
+
+            this.InsertRecord(0, "a", "b", "c");
+            this.InsertRecord(1, "d", "e", "f");
+            this.InsertRecord(2, "g", "h", "i");
+
+            Api.MakeKey(this.sesid, this.tableid, "f", Encoding.Unicode, MakeKeyGrbit.NewKey);
+            Assert.IsTrue(Api.TrySeek(this.sesid, this.tableid, SeekGrbit.SeekEQ), "Failed to find record");
+
+            var primaryKey = new byte[SystemParameters.KeyMost];
+            int actualPrimaryKeySize;
+            var secondaryKey = new byte[SystemParameters.KeyMost];
+            int actualSecondaryKeySize;
+
+            Span<byte> primaryKeySpan = primaryKey;
+            Span<byte> secondaryKeySpan = secondaryKey;
+
+            // Ideally, there'd be an override that takes ref Span<byte> for the keys.
+            Api.JetGetSecondaryIndexBookmark(
+                this.sesid,
+                this.tableid,
+                secondaryKey,
+                secondaryKey.Length,
+                out actualSecondaryKeySize,
+                primaryKey,
+                primaryKey.Length,
+                out actualPrimaryKeySize,
+                GetSecondaryIndexBookmarkGrbit.None);
+
+            primaryKeySpan = primaryKeySpan.Slice(0, actualPrimaryKeySize);
+            secondaryKeySpan = secondaryKeySpan.Slice(0, actualSecondaryKeySize);
+
+            Api.JetGotoSecondaryIndexBookmark(
+                this.sesid,
+                this.tableid,
+                secondaryKeySpan,
+                primaryKeySpan,
+                GotoSecondaryIndexBookmarkGrbit.None);
+
+            Assert.AreEqual(
+                1, (int)Api.RetrieveColumnAsInt32(this.sesid, this.tableid, this.keyColumn), "landed on wrong record");
+            Assert.IsTrue(Api.TryMoveNext(this.sesid, this.tableid), "unable to move to next record");
+            Assert.AreEqual(
+                2, (int)Api.RetrieveColumnAsInt32(this.sesid, this.tableid, this.keyColumn), "should have been on the next record");
+
+            // Funny business with the buffer
+            byte[] buffer = new byte[actualPrimaryKeySize + actualSecondaryKeySize + 10];
+            Buffer.BlockCopy(primaryKey, 0, buffer, 5, actualPrimaryKeySize);
+            Buffer.BlockCopy(secondaryKey, 0, buffer, 10 + actualPrimaryKeySize, actualSecondaryKeySize);
+
+            primaryKeySpan = buffer.AsSpan(5, actualPrimaryKeySize);
+            secondaryKeySpan = buffer.AsSpan(10 + actualPrimaryKeySize, actualSecondaryKeySize);
+
+            Api.JetGotoSecondaryIndexBookmark(
+                this.sesid,
+                this.tableid,
+                secondaryKeySpan,
+                primaryKeySpan,
+                GotoSecondaryIndexBookmarkGrbit.None);
+
+            Assert.AreEqual(
+                1, (int)Api.RetrieveColumnAsInt32(this.sesid, this.tableid, this.keyColumn), "landed on wrong record");
+            Assert.IsTrue(Api.TryMoveNext(this.sesid, this.tableid), "unable to move to next record");
+            Assert.AreEqual(
+                2, (int)Api.RetrieveColumnAsInt32(this.sesid, this.tableid, this.keyColumn), "should have been on the next record");
+        }
+#endif
+
         /// <summary>
         /// Test JetSetCurrentIndex2.
         /// </summary>
@@ -392,7 +470,7 @@ namespace InteropApiTests
         #region Helper Methods
 
         /// <summary>
-        /// Insert a record with the given column values. After the insert the cursor is 
+        /// Insert a record with the given column values. After the insert the cursor is
         /// positioned on the record.
         /// </summary>
         /// <param name="key">

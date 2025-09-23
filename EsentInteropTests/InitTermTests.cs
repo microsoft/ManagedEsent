@@ -74,7 +74,7 @@ namespace InteropApiTests
 #endif
             Api.JetTerm(instance);
 
-            Assert.AreNotEqual(0, version);
+            Assert.AreNotEqual<uint>(0, version);
             EseInteropTestHelper.ConsoleWriteLine("Version = 0x{0:X}", version);
         }
 

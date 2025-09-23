@@ -7,6 +7,7 @@
 namespace InteropApiTests
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Reflection;
@@ -94,6 +95,11 @@ namespace InteropApiTests
         /// </summary>
         private DateTime lastCallbackTime;
 
+        /// <summary>
+        /// Durable commit event
+        /// </summary>
+        private event Action<JET_COMMIT_ID> DurableCommitEvent;
+
         #region Setup/Teardown
 
         /// <summary>
@@ -111,6 +117,8 @@ namespace InteropApiTests
             this.directory = SetupHelper.CreateRandomDirectory();
             this.database = Path.Combine(this.directory, "database.edb");
             this.instance = SetupHelper.CreateNewInstance(this.directory);
+
+            new InstanceParameters(this.instance).EnableShrinkDatabase = 0;
 
             this.callback = new DurableCommitCallback(this.instance, this.TestCallback);
 
@@ -218,14 +226,39 @@ namespace InteropApiTests
             this.InsertRecord(this.tableid, 2);
             this.InsertRecord(this.tableid, 1);
             this.InsertRecord(this.tableid, 3);
-            JET_COMMIT_ID commitId;
-            Windows8Api.JetCommitTransaction2(this.sesid, CommitTransactionGrbit.LazyFlush, new TimeSpan(0, 0, 2), out commitId);
-            DateTime commitTime = DateTime.Now;
-            Assert.IsTrue(commitId >= this.lastCommitIdFlushed);
-            EseInteropTestHelper.ThreadSleep(2500);
-            Assert.IsTrue(commitId < this.lastCommitIdFlushed);
-            TimeSpan timeToFlush = this.lastCallbackTime - commitTime;
-            Assert.IsTrue(timeToFlush.TotalMilliseconds < 2500);
+
+            var durableCommits = new BlockingCollection<Tuple<JET_COMMIT_ID, DateTime>>();
+
+            var durableCommitEventHandler = (JET_COMMIT_ID id) =>
+            {
+                durableCommits.Add(new Tuple<JET_COMMIT_ID, DateTime>(id, DateTime.Now));
+            };
+
+            this.DurableCommitEvent += durableCommitEventHandler;
+
+            try
+            {
+                var commitDelay = TimeSpan.FromSeconds(2);
+                Windows8Api.JetCommitTransaction2(this.sesid, CommitTransactionGrbit.LazyFlush, commitDelay, out var commitId);
+                var commitRequestTime = DateTime.Now;
+
+                var commitCompleteTime = default(DateTime);
+                while (durableCommits.TryTake(out var durableCommit, TimeSpan.FromSeconds(60)))
+                {
+                    if (durableCommit.Item1 >= commitId)
+                    {
+                        commitCompleteTime = durableCommit.Item2;
+                        break;
+                    }
+                }
+
+                var commitDelayTolerance = TimeSpan.FromMilliseconds(32);
+                Assert.IsTrue(commitCompleteTime - commitRequestTime >= commitDelay - commitDelayTolerance);
+            }
+            finally
+            {
+                this.DurableCommitEvent -= durableCommitEventHandler;
+            }
         }
 
         /// <summary>
@@ -245,19 +278,50 @@ namespace InteropApiTests
             this.InsertRecord(this.tableid, 2);
             this.InsertRecord(this.tableid, 1);
             this.InsertRecord(this.tableid, 3);
-            JET_COMMIT_ID commitId1;
-            Windows8Api.JetCommitTransaction2(this.sesid, CommitTransactionGrbit.LazyFlush, new TimeSpan(0, 0, 5), out commitId1);
-            Api.JetBeginTransaction(this.sesid);
-            this.InsertRecord(this.tableid, 4);
-            this.InsertRecord(this.tableid, 5);
-            JET_COMMIT_ID commitId2;
-            Windows8Api.JetCommitTransaction2(this.sesid, CommitTransactionGrbit.LazyFlush, new TimeSpan(0, 0, 2), out commitId2);
-            DateTime commitTime = DateTime.Now;
-            Assert.IsTrue(commitId2 > commitId1);
-            EseInteropTestHelper.ThreadSleep(2500);
-            TimeSpan timeToFlush = this.lastCallbackTime - commitTime;
-            Assert.IsTrue(commitId2 < this.lastCommitIdFlushed);
-            Assert.IsTrue(timeToFlush.TotalMilliseconds < 2500);
+
+            var durableCommits = new BlockingCollection<Tuple<JET_COMMIT_ID, DateTime>>();
+
+            var durableCommitEventHandler = (JET_COMMIT_ID id) =>
+            {
+                durableCommits.Add(new Tuple<JET_COMMIT_ID, DateTime>(id, DateTime.Now));
+            };
+
+            this.DurableCommitEvent += durableCommitEventHandler;
+
+            try
+            {
+                var commitDelay1 = TimeSpan.FromSeconds(3600);
+                Windows8Api.JetCommitTransaction2(this.sesid, CommitTransactionGrbit.LazyFlush, commitDelay1, out var commitId1);
+                var commitRequestTime1 = DateTime.Now;
+
+                Api.JetBeginTransaction(this.sesid);
+                this.InsertRecord(this.tableid, 4);
+                this.InsertRecord(this.tableid, 5);
+
+                var commitDelay2 = TimeSpan.FromSeconds(2);
+                Windows8Api.JetCommitTransaction2(this.sesid, CommitTransactionGrbit.LazyFlush, commitDelay2, out var commitId2);
+                var commitRequestTime2 = DateTime.Now;
+
+                Assert.IsTrue(commitId2 > commitId1);
+
+                var commitCompleteTime = default(DateTime);
+                while (durableCommits.TryTake(out var durableCommit, TimeSpan.FromSeconds(60)))
+                {
+                    if (durableCommit.Item1 >= commitId2)
+                    {
+                        commitCompleteTime = durableCommit.Item2;
+                        break;
+                    }
+                }
+
+                var commitDelayTolerance = TimeSpan.FromMilliseconds(32);
+                Assert.IsTrue(commitCompleteTime - commitRequestTime2 >= commitDelay2 - commitDelayTolerance);
+                Assert.IsTrue(commitCompleteTime - commitRequestTime1 >= commitDelay2 - commitDelayTolerance);
+            }
+            finally
+            {
+                this.DurableCommitEvent -= durableCommitEventHandler;
+            }
         }
 
         /// <summary>
@@ -339,8 +403,7 @@ namespace InteropApiTests
             object nativeSign = sign.GetType().GetMethod("GetNativeSignature", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(sign, null);
 
             string assemblyName = sign.GetType().Assembly.FullName;
-            //object nativeCommitId = Activator.CreateInstance(sign.GetType(), true);
-            object nativeCommitId = Activator.CreateInstance(assemblyName, "Microsoft.Isam.Esent.Interop.Windows8.NATIVE_COMMIT_ID", null).Unwrap();
+            object nativeCommitId = Activator.CreateInstance(assemblyName, "Microsoft.Isam.Esent.Interop.Windows8.NATIVE_COMMIT_ID").Unwrap();
             nativeCommitId.GetType().GetField("signLog").SetValue(nativeCommitId, nativeSign);
             nativeCommitId.GetType().GetField("commitId").SetValue(nativeCommitId, commitId);
             object[] args = { nativeCommitId };
@@ -362,6 +425,7 @@ namespace InteropApiTests
         {
             this.lastCommitIdFlushed = commitId;
             this.lastCallbackTime = DateTime.Now;
+            this.DurableCommitEvent?.Invoke(commitId);
             return JET_err.Success;
         }
 

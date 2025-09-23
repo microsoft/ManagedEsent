@@ -1114,6 +1114,7 @@ namespace InteropApiTests
                 {
                     // For JetCompact to work the database has to be attached, but not opened
                     Api.JetAttachDatabase(session, this.database, AttachDatabaseGrbit.None);
+
                     if (this.useStatusCallback)
                     {
                         this.statusCallbackWasCalled = false;
