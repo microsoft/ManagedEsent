@@ -140,7 +140,7 @@ namespace Microsoft.Database.Isam
         /// <value>
         /// The sesid.
         /// </value>
-        internal JET_SESID Sesid
+        public JET_SESID Sesid
         {
             get
             {
