@@ -200,7 +200,7 @@ namespace Microsoft.Database.Isam
         /// <value>
         /// The inst.
         /// </value>
-        internal JET_INSTANCE Inst
+        public JET_INSTANCE Inst
         {
             get
             {

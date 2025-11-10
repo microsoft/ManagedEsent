@@ -87,7 +87,7 @@ namespace Microsoft.Database.Isam
         /// <value>
         /// The dbid.
         /// </value>
-        internal JET_DBID Dbid
+        public JET_DBID Dbid
         {
             get
             {

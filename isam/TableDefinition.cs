@@ -132,7 +132,7 @@ namespace Microsoft.Database.Isam
         /// <value>
         /// The session.
         /// </value>
-        internal IsamSession IsamSession
+        public IsamSession IsamSession
         {
             get
             {
@@ -146,7 +146,7 @@ namespace Microsoft.Database.Isam
         /// <value>
         /// The database.
         /// </value>
-        internal IsamDatabase Database
+        public IsamDatabase Database
         {
             get
             {
